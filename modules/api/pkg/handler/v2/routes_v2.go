@@ -914,6 +914,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/openstack/servergroups").
 		Handler(r.listProjectOpenstackServerGroups())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/membersubnets").
+		Handler(r.listProjectOpenstackMemberSubnets())
+
 	// Hetzner endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/hetzner/sizes").
@@ -7424,6 +7428,28 @@ func (r Routing) listProjectOpenstackServerGroups() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/membersubnets openstack listProjectOpenstackMemberSubnets
+//
+// Lists load balancer member subnets from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenStackLoadBalancerPoolMember
+func (r Routing) listProjectOpenstackMemberSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackMemberSubnetsEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectMemberSubnetReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/seeds/{seed_name}/settings seed getSeedSettings
 //
 //	Gets the seed settings.
@@ -11347,7 +11373,8 @@ func (r Routing) listKyvernoPolicyBindings() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.ListEndpoint(r.userInfoGetter)),
 		policybinding.DecodeListPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11372,7 +11399,8 @@ func (r Routing) getKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.GetEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.GetEndpoint(r.userInfoGetter)),
 		policybinding.DecodeGetPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11399,7 +11427,8 @@ func (r Routing) createKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.CreateEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.CreateEndpoint(r.userInfoGetter)),
 		policybinding.DecodeCreatePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11426,7 +11455,8 @@ func (r Routing) patchKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.PatchEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.PatchEndpoint(r.userInfoGetter)),
 		policybinding.DecodePatchPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11448,7 +11478,8 @@ func (r Routing) deleteKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.DeleteEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.DeleteEndpoint(r.userInfoGetter)),
 		policybinding.DecodeDeletePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

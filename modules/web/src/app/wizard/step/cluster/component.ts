@@ -78,12 +78,12 @@ import _ from 'lodash';
 import {combineLatest, merge, Subscription} from 'rxjs';
 import {filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
+import {WizardMode} from '../../types/wizard-mode';
 import {StepBase} from '../base';
 import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {WizardMode} from '../../types/wizard-mode';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -330,7 +330,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           }
 
           if (this.provider === NodeProvider.OPENSTACK) {
-            this.form.addControl(Controls.RouterReconciliation, this._builder.control(false));
+            this.form.addControl(
+              Controls.RouterReconciliation,
+              this._builder.control(
+                this._clusterSpecService?.cluster?.annotations?.[
+                  InternalClusterSpecAnnotations.SkipRouterReconciliation
+                ] === 'true'
+              )
+            );
             this.form
               .get(Controls.RouterReconciliation)
               .valueChanges.pipe(takeUntil(this._unsubscribe))

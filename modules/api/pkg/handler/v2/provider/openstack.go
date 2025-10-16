@@ -19,6 +19,7 @@ package provider
 import (
 	"context"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -27,6 +28,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -376,6 +378,47 @@ func OpenstackSubnetPoolEndpoint(seedsGetter provider.SeedsGetter, presetProvide
 	}
 }
 
+func OpenstackMemberSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectMemberSubnetReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		loadbalancers, err := providercommon.GetOpenstackLoadBalancers(ctx, userInfo, seedsGetter, cred, req.DatacenterName, req.NetworkID, caBundle)
+		if err != nil {
+			return nil, err
+		}
+
+		out := make([]apiv2.OpenStackLoadBalancerPoolMember, 0)
+		for _, lb := range loadbalancers {
+			for _, pool := range lb.Pools {
+				members, err := providercommon.GetOpenstackLoadBalancerPoolMembers(ctx, userInfo, seedsGetter, cred, req.DatacenterName, pool.ID, caBundle)
+				if err != nil {
+					return nil, err
+				}
+				b, err := json.Marshal(members)
+				if err != nil {
+					return nil, err
+				}
+				var m []apiv2.OpenStackLoadBalancerPoolMember
+				if err := json.Unmarshal(b, &m); err != nil {
+					return nil, err
+				}
+				out = append(out, m...)
+			}
+		}
+
+		return out, nil
+	}
+}
+
 // openstackNoCredentialsReq represent a request for openstack
 // swagger:parameters listOpenstackSizesNoCredentialsV2 listOpenstackTenantsNoCredentialsV2 listOpenstackNetworksNoCredentialsV2 listOpenstackSecurityGroupsNoCredentialsV2 listOpenstackAvailabilityZonesNoCredentialsV2 listOpenstackServerGroupsNoCredentials
 type openstackNoCredentialsReq struct {
@@ -581,9 +624,16 @@ type OpenstackSubnetReq struct {
 	NetworkID string `json:"network_id,omitempty"`
 }
 
-// OpenstackProjectSubnetReq represent a request for openstack subnets within the context of a KKP project.
-// swagger:parameters listProjectOpenstackSubnets
+// OpenstackProjectSubnetReq represent a request for openstack subnets (or resources requiring a network_id) within the context of a KKP project.
+// swagger:parameters listProjectOpenstackSubnets listProjectOpenstackSubnetTags
 type OpenstackProjectSubnetReq struct {
+	OpenstackSubnetReq
+	common.ProjectReq
+}
+
+// OpenstackProjectMemberSubnetReq represent a request for openstack subnets members within the context of a KKP project.
+// swagger:parameters listProjectOpenstackMemberSubnets
+type OpenstackProjectMemberSubnetReq struct {
 	OpenstackSubnetReq
 	common.ProjectReq
 }
@@ -698,6 +748,28 @@ func DecodeOpenstackProjectSubnetReq(c context.Context, r *http.Request) (interf
 	}
 
 	return OpenstackProjectSubnetReq{
+		ProjectReq:         projectReq.(common.ProjectReq),
+		OpenstackSubnetReq: openstackReq.(OpenstackSubnetReq),
+	}, nil
+}
+
+func DecodeOpenstackProjectMemberSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackSubnetReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	networkID := r.URL.Query().Get("network_id")
+	if networkID == "" {
+		return nil, fmt.Errorf("'network_id' is a required parameter and may not be empty")
+	}
+
+	return OpenstackProjectMemberSubnetReq{
 		ProjectReq:         projectReq.(common.ProjectReq),
 		OpenstackSubnetReq: openstackReq.(OpenstackSubnetReq),
 	}, nil

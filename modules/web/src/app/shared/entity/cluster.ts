@@ -15,6 +15,7 @@
 import {Application} from '@shared/entity/application';
 import {BackupStorageLocationSpec} from '@shared/entity/backup';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {OpenstackLoadBalancerClass} from '@shared/entity/provider/openstack';
 import {isObjectEmpty} from '@shared/utils/common';
 import _ from 'lodash';
 
@@ -269,6 +270,7 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   ipv6SubnetPool: string;
   enableIngressHostname?: boolean;
   ingressHostnameSuffix?: string;
+  loadBalancerClasses?: OpenstackLoadBalancerClass[];
 
   static isEmpty(spec: OpenstackCloudSpec): boolean {
     return _.difference(
@@ -278,7 +280,9 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   }
 
   private static getKeysToCompare(spec: ExtraCloudSpecOptions): string[] {
-    return Object.keys(spec).filter(key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix');
+    return Object.keys(spec).filter(
+      key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix' && key !== 'loadBalancerClasses'
+    );
   }
 }
 
