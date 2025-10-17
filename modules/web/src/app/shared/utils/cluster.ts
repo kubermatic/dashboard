@@ -40,8 +40,15 @@ export function getClusterMachinesCount(machineDeployments: MachineDeployment[])
 }
 
 export function generateEncryptionKey(): string {
-  const ENCRYPTION_KEY_BYTES = 32;
-  const keyBytes = new Uint8Array(ENCRYPTION_KEY_BYTES);
-  crypto.getRandomValues(keyBytes);
-  return btoa(String.fromCharCode(...keyBytes));
+  const byteLength = 32;
+  const bytes = new Uint8Array(byteLength);
+  crypto.getRandomValues(bytes);
+
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+
+  // Encode to Base64
+  return btoa(binary);
 }

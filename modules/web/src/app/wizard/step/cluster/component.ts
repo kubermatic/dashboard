@@ -539,7 +539,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(value => {
         if (value) {
-          this.form.get(Controls.EncryptionAtRestKey).setValidators([Validators.required]);
+          this.form
+            .get(Controls.EncryptionAtRestKey)
+            .setValidators([Validators.required, KmValidators.encryptionKey()]);
           this.form.get(Controls.EncryptionAtRestKey).updateValueAndValidity();
         } else {
           this.form.get(Controls.EncryptionAtRestKey).clearValidators();
@@ -694,7 +696,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubeLBEnableGatewayAPI]: this._builder.control(clusterSpec?.kubelb?.enableGatewayAPI ?? false),
       [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
       [Controls.EncryptionAtRest]: this._builder.control(clusterSpec?.encryptionConfiguration?.enabled ?? false),
-      [Controls.EncryptionAtRestKey]: this._builder.control(''),
+      [Controls.EncryptionAtRestKey]: this._builder.control('', [KmValidators.encryptionKey()]),
       [Controls.CiliumIngress]: this._builder.control(false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
