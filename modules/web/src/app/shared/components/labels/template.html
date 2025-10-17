@@ -20,9 +20,10 @@ limitations under the License.
     <div #chipListLabels
          *ngFor="let labelKey of labelKeys; let i = index">
       <mat-chip *ngIf="!limit || i < limit">
-        <div>{{labelKey}}</div>
+        <div [matTooltip]="labelKey">{{labelKey}}</div>
         <div class="km-chip-accent"
-             *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
+             *ngIf="!!labels[labelKey]"
+             [matTooltip]="labels[labelKey]">{{labels[labelKey]}}</div>
       </mat-chip>
     </div>
   </mat-chip-set>

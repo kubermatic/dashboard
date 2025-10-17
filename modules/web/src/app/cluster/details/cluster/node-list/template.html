@@ -270,6 +270,10 @@ limitations under the License.
               <div key>Instance Ready Check Timeout</div>
               <div value>{{element.spec.cloud.openstack.instanceReadyCheckTimeout}}</div>
             </km-property>
+            <km-property-boolean *ngIf="element.spec.cloud.openstack"
+                                 label="Config Drive"
+                                 [value]="element.spec.cloud.openstack?.configDrive">
+            </km-property-boolean>
 
             <ng-container *ngIf="element.spec.cloud.kubevirt">
               <km-property *ngIf="element.spec.cloud.kubevirt.cpus">

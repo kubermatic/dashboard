@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <km-dialog-title>
-  Preset Linkages: {{presetName}}
+  Preset Usages
 </km-dialog-title>
 
 <mat-dialog-content>
@@ -28,7 +28,7 @@ limitations under the License.
   </div>
   <!-- Main Content -->
   <div [hidden]="isLoading">
-    <p class="km-dialog-context-description">Displays usage details and associations of the selected preset with clusters and cluster templates.</p>
+    <p class="km-dialog-context-description">Displays usage details and associations of the <strong>{{presetName}}</strong> preset with clusters and cluster templates.</p>
 
     <!-- Empty State -->
     <div [hidden]="!presetLinkages || totalCount > 0"
