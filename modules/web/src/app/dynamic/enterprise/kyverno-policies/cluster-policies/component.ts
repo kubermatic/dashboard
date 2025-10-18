@@ -26,7 +26,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {KyvernoService} from '@app/core/services/kyverno';
 import {NotificationService} from '@app/core/services/notification';
 import {UserService} from '@app/core/services/user';
-import {PolicyTemplate} from '@app/shared/entity/kyverno';
+import {PolicyBinding, PolicyTemplate} from '@app/shared/entity/kyverno';
 import {Group} from '@app/shared/utils/member';
 import {filter, Subject, switchMap, take, takeUntil} from 'rxjs';
 import _ from 'lodash';
@@ -39,10 +39,6 @@ import {
   ConfirmationDialogConfig,
 } from '@app/shared/components/confirmation-dialog/component';
 
-interface templatesBinding {
-  bindingName: string;
-  namespace: string;
-}
 @Component({
   selector: 'km-kyverno-cluster-policies-list',
   templateUrl: './template.html',
@@ -56,14 +52,13 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
-  dataSource = new MatTableDataSource<PolicyTemplate>();
+  dataSource = new MatTableDataSource<PolicyBinding>();
   policyTemplates: PolicyTemplate[] = [];
-  policiesWithBinding: PolicyTemplate[] = [];
+  policyBindings: PolicyBinding[] = [];
   columns = ['name', 'category', 'namespace', 'view'];
   loadingTemplates = false;
   hasOwnerRole = false;
   nameSpaces: string[] = [];
-  policyBindings: Record<string, templatesBinding> = {};
 
   constructor(
     private readonly _kyvernoService: KyvernoService,
@@ -103,12 +98,13 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
   }
 
   openAddPolicyDialog(): void {
-    const noneBindingPolicies = this.policyTemplates.filter(template => !this.policyBindings[template.name]);
+    const templatesToExclude = new Set(this.policyBindings.map(binding => binding.spec.policyTemplateRef.name));
+    const templatesWithNoBinding = this.policyTemplates.filter(template => !templatesToExclude.has(template.name));
     const config: MatDialogConfig = {
       data: {
         projectID: this.projectID,
         clusterID: this.cluster.id,
-        templates: noneBindingPolicies,
+        templates: templatesWithNoBinding,
         namespaces: this.nameSpaces,
       } as AddPolicyDialogConfig,
     };
@@ -120,8 +116,7 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
       .subscribe(_ => this._getPolicyBindings());
   }
 
-  deletePolicyBinding(templateName: string): void {
-    const bindingName = this.policyBindings[templateName].bindingName;
+  deletePolicyBinding(bindingName: string): void {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Policy',
@@ -137,13 +132,26 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._kyvernoService.deletePolicyBinding(bindingName, this.projectID, this.cluster.id)))
       .subscribe(_ => {
         this._notificationService.success(`Deleting the ${bindingName} policy`);
-        delete this.policyBindings[templateName];
-        this.policiesWithBinding = this.policiesWithBinding.filter(template => template.name !== templateName);
-        this.dataSource.data = this.policiesWithBinding;
+        this.policyBindings = this.policyBindings.filter(binding => binding.name !== bindingName);
+        this.dataSource.data = this.policyBindings;
       });
   }
 
-  viewTemplateSpec(template: PolicyTemplate): void {
+  canDeletePolicy(templateName: string): boolean {
+    const template = this.policyTemplates.find(template => template.name === templateName);
+
+    if (!template) {
+      return this.hasOwnerRole && this.isClusterRunning;
+    }
+    return this.hasOwnerRole && !template?.spec.enforced && this.isClusterRunning;
+  }
+
+  viewTemplateSpec(templateName: string): void {
+    const template = this.policyTemplates.find(template => template.name === templateName);
+    if (!template) {
+      return;
+    }
+
     const config: MatDialogConfig = {
       data: {
         template: template,
@@ -152,8 +160,14 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
     this._matDialog.open(ViewTemplateDialogComponent, config);
   }
 
-  canDeletePolicy(enforced: boolean): boolean {
-    return this.hasOwnerRole && !enforced && this.isClusterRunning;
+  canViewTemplate(templateName: string): boolean {
+    const template = this.policyTemplates.find(template => template.name === templateName);
+    return !!template;
+  }
+
+  getCategory(policyTemplateName: string): string {
+    const template = this.policyTemplates.find(template => template.name === policyTemplateName);
+    return template ? template.spec.category : '-';
   }
 
   private _getPolicyBindings(): void {
@@ -161,12 +175,8 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
       .listPolicyBindings(this.projectID, this.cluster.id)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(bindings => {
-        bindings.forEach(binding => {
-          this.policyBindings[binding.spec.policyTemplateRef.name] = {
-            bindingName: binding?.name,
-            namespace: binding?.spec?.kyvernoPolicyNamespace?.name,
-          };
-        });
+        this.policyBindings = bindings;
+        this.dataSource.data = bindings;
         this._getPolicyTemplates();
       });
   }
@@ -180,14 +190,15 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
           if (_.isEmpty(template.spec?.target?.clusterSelector)) {
             return true;
           }
+          if (this.policyBindings.some(binding => binding.spec.policyTemplateRef.name === template.name)) {
+            return true;
+          }
           const labelKeys: string[] = Object.keys(template.spec.target.clusterSelector.matchLabels);
           const hasMatchedLabels = !!labelKeys.find(key =>
             this._isMatchedLabel(key, template.spec.target.clusterSelector.matchLabels[key])
           );
           return hasMatchedLabels;
         });
-        this.policiesWithBinding = this.policyTemplates.filter(template => !!this.policyBindings[template.name]);
-        this.dataSource.data = this.policiesWithBinding;
         this.loadingTemplates = false;
       });
   }

@@ -34,7 +34,7 @@ import {
 import {Project} from '@app/shared/entity/project';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import * as y from 'js-yaml';
-import {Observable, Subject, take} from 'rxjs';
+import {Observable, Subject, take, takeUntil} from 'rxjs';
 
 export interface AddPolicyTemplateDialogConfig {
   mode: PolicyTemplateDialogMode;
@@ -149,6 +149,18 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       this.form.get(Controls.Project).disable();
       this.form.get(Controls.Scope).disable();
     }
+
+    this.form
+      .get(Controls.Enforced)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this.form.get(Controls.NamespacedPolicy).setValue(false);
+          this.form.get(Controls.NamespacedPolicy).disable();
+        } else {
+          this.form.get(Controls.NamespacedPolicy).enable();
+        }
+      });
   }
 
   ngOnDestroy(): void {
