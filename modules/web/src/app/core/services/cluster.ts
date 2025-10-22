@@ -254,7 +254,8 @@ export class ClusterService {
   }
 
   getShareKubeconfigURL(projectID: string, clusterID: string, userID: string, oidcKubeLogin = false): string {
-    return `${this._location}${this._restRoot}/kubeconfig?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}&oidc_kubelogin_enabled=${oidcKubeLogin}`;
+    const location = this._location.endsWith('/') ? this._location : `${this._location}/`;
+    return `${location}${this._restRoot}/kubeconfig?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}&oidc_kubelogin_enabled=${oidcKubeLogin}`;
   }
 
   externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
