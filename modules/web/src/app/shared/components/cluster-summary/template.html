@@ -329,7 +329,7 @@ limitations under the License.
           <div value>{{cluster.credential}}</div>
         </km-property>
 
-        <ng-container *ngIf="!cluster.credential">
+        <ng-container *ngIf="displaySettings()">
           <!-- AWS -->
           <ng-container *ngIf="cluster.spec.cloud?.aws">
             <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
@@ -385,7 +385,7 @@ limitations under the License.
               <div value>{{cluster.spec.cloud?.azure.vnet}}</div>
             </km-property>
 
-            <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet"
+            <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet !== undefined"
                                  label="Assign Availability Set"
                                  [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
             </km-property-boolean>
@@ -413,7 +413,7 @@ limitations under the License.
 
           <!-- Openstack -->
           <ng-container *ngIf="cluster.spec.cloud?.openstack">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud?.openstack.domain">
               <div key>Domain</div>
               <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
             </km-property>
@@ -457,7 +457,8 @@ limitations under the License.
               <div key>IPv6 Subnet Pool</div>
               <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
             </km-property>
-            <km-property-boolean label="Enable Ingress Hostname"
+            <km-property-boolean *ngIf="cluster.spec.cloud?.openstack.enableIngressHostname !== undefined"
+                                 label="Enable Ingress Hostname"
                                  [value]="cluster.spec.cloud?.openstack.enableIngressHostname">
             </km-property-boolean>
             <km-property *ngIf="cluster.spec.cloud?.openstack.ingressHostnameSuffix">
@@ -478,7 +479,7 @@ limitations under the License.
 
           <!-- Nutanix -->
           <ng-container *ngIf="cluster.spec.cloud?.nutanix">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.username">
               <div key>Username</div>
               <div value>{{cluster.spec.cloud.nutanix.username}}</div>
             </km-property>
@@ -486,7 +487,7 @@ limitations under the License.
               <div key>Proxy URL</div>
               <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.clusterName">
               <div key>Cluster Name</div>
               <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
             </km-property>
@@ -495,11 +496,11 @@ limitations under the License.
               <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
             </km-property>
             <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
-              <km-property>
+              <km-property *ngIf="cluster.spec.cloud.nutanix.csi.username">
                 <div key>Prism Element Username</div>
                 <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
               </km-property>
-              <km-property>
+              <km-property *ngIf="cluster.spec.cloud.nutanix.csi.endpoint">
                 <div key>Prism Element Endpoint</div>
                 <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
               </km-property>
@@ -520,7 +521,7 @@ limitations under the License.
 
           <!-- vSphere -->
           <ng-container *ngIf="cluster.spec.cloud?.vsphere">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.username">
               <div key>Username</div>
               <div value>{{cluster.spec.cloud?.vsphere.username}}</div>
             </km-property>
@@ -556,19 +557,19 @@ limitations under the License.
 
           <!-- VMware Cloud Director -->
           <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector as vmwareclouddirector">
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.username">
               <div key>Username</div>
               <div value>{{vmwareclouddirector.username}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.organization">
               <div key>Organization</div>
               <div value>{{vmwareclouddirector.organization}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.vdc">
               <div key>VDC</div>
               <div value>{{vmwareclouddirector.vdc}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.ovdcNetworks">
               <div key>Organization VDC Networks</div>
               <div value>{{vmwareclouddirector.ovdcNetworks}}</div>
             </km-property>
