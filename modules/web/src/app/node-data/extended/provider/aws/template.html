@@ -20,7 +20,7 @@ limitations under the License.
                  [labels]="tags"
                  noValidators="true"
                  (labelsChange)="onTagsChange($event)"
-                 [formControlName]="Controls.Tags"></km-label-form>
+                 [formControlName]="Controls.Tags" />
 
   <mat-checkbox [id]="Controls.IsSpotInstance"
                 [formControlName]="Controls.IsSpotInstance"
@@ -42,8 +42,7 @@ limitations under the License.
                        type="decimal"
                        min="0.0001"
                        [required]="isSpotInstance"
-                       step="0.01">
-    </km-number-stepper>
+                       step="0.01" />
 
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"
                   [formControlName]="Controls.SpotInstancePersistentRequest"

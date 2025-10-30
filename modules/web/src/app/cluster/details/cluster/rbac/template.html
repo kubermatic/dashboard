@@ -29,7 +29,7 @@ limitations under the License.
           <mat-select-trigger fxLayout="row"
                               fxLayoutGap="10px"
                               fxLayoutAlign=" center">
-            <ng-container *ngTemplateOutlet="icons; context: {$implicit: modeControl.value}"></ng-container>
+            <ng-container *ngTemplateOutlet="icons; context: {$implicit: modeControl.value}" />
             <span>{{modeControl.value}}</span>
           </mat-select-trigger>
 
@@ -38,7 +38,7 @@ limitations under the License.
             <div fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
-              <ng-container *ngTemplateOutlet="icons; context: {$implicit: mode}"></ng-container>
+              <ng-container *ngTemplateOutlet="icons; context: {$implicit: mode}" />
               <span>{{mode}}</span>
             </div>
           </mat-option>
@@ -79,11 +79,11 @@ limitations under the License.
       </ng-container>
 
       <ng-container *ngSwitchCase="RBACKind.User">
-        <ng-container *ngTemplateOutlet="userAndGroupBindingButton"></ng-container>
+        <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
       </ng-container>
 
       <ng-container *ngSwitchCase="RBACKind.Group">
-        <ng-container *ngTemplateOutlet="userAndGroupBindingButton"></ng-container>
+        <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
       </ng-container>
     </div>
   </div>
@@ -103,24 +103,23 @@ limitations under the License.
                                [cluster]="cluster"
                                (addBinding)="addServiceAccountBinding($event)"
                                (deleteBinding)="deleteBinding($event)"
-                               (deleteClusterServiceAccount)="deleteServiceAccount($event)">
-      </km-rbac-service-account>
+                               (deleteClusterServiceAccount)="deleteServiceAccount($event)" />
     </ng-container>
 
     <km-rbac-users-or-groups *ngSwitchCase="RBACKind.Group"
                              [projectID]="projectID"
                              [cluster]="cluster"
                              [rbacType]="modeControl.value"
-                             (deleteBinding)="deleteBinding($event)"></km-rbac-users-or-groups>
+                             (deleteBinding)="deleteBinding($event)" />
 
     <km-rbac-users-or-groups *ngSwitchCase="RBACKind.User"
                              [projectID]="projectID"
                              [cluster]="cluster"
                              [rbacType]="modeControl.value"
-                             (deleteBinding)="deleteBinding($event)"></km-rbac-users-or-groups>
+                             (deleteBinding)="deleteBinding($event)" />
   </ng-container>
 </ng-container>
 
 <ng-template #loading>
-  <km-loader></km-loader>
+  <km-loader />
 </ng-template>

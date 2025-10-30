@@ -35,8 +35,8 @@ limitations under the License.
                  [formControlName]="Controls?.ExpireDate">
           <mat-hint>Expiry date MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix
-                                 [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+                                 [for]="picker" />
+          <mat-datepicker #picker />
         </mat-form-field>
         <mat-form-field>
           <mat-label>Time</mat-label>
@@ -57,6 +57,5 @@ limitations under the License.
              [label]="label"
              [disabled]="form?.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

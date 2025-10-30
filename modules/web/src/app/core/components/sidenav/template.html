@@ -317,7 +317,7 @@ limitations under the License.
     </km-side-nav-field>
 
     <ng-container *ngIf="(adminSettings.customLinks| kmLinkLocation: 'Default') as filtered">
-      <mat-divider *ngIf="filtered.length > 0"></mat-divider>
+      <mat-divider *ngIf="filtered.length > 0" />
 
       <div *ngFor="let link of filtered"
            class="menu-item">

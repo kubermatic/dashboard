@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <ng-container *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
-                    [projectID]="projectID"></km-cluster-panel>
+                    [projectID]="projectID" />
 
   <mat-card appearance="outlined">
     <mat-card-header>
@@ -79,7 +79,7 @@ limitations under the License.
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="machineDeployment.creationTimestamp" />
           </div>
         </km-property>
       </div>
@@ -90,14 +90,14 @@ limitations under the License.
                          [nodes]="nodes"
                          [nodesMetrics]="metrics"
                          [projectID]="projectID"
-                         [isInitialized]="areNodesInitialized"></km-external-node-list>
+                         [isInitialized]="areNodesInitialized" />
 
-  <km-event-card [events]="events"></km-event-card>
+  <km-event-card [events]="events" />
 
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
   <mat-spinner [diameter]="25"
                color="accent"
-               class="km-spinner"></mat-spinner>
+               class="km-spinner" />
 </ng-container>

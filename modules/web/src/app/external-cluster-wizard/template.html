@@ -43,24 +43,24 @@ limitations under the License.
            class="wizard-step">
         <ng-container *ngSwitchCase="stepRegistry.Provider">
           <km-select-external-cluster-provider [providers]="externalProviders"
-                                               (providerChange)="onProviderChanged($event)"></km-select-external-cluster-provider>
+                                               (providerChange)="onProviderChanged($event)" />
         </ng-container>
 
         <ng-container *ngSwitchCase="stepRegistry.Settings">
           <km-external-cluster-credentials-step fxFlex="50%"
                                                 fxFlex.sm="100%"
                                                 title="Credentials"
-                                                [hideLogo]="true"></km-external-cluster-credentials-step>
+                                                [hideLogo]="true" />
         </ng-container>
         <ng-container *ngSwitchCase="stepRegistry.ExternalClusterDetails">
           <ng-container *ngIf="isPresetSelected || isCredentialStepValid">
             <km-external-cluster-step [formControl]="form.get(stepRegistry.ExternalClusterDetails)"
-                                      [projectID]="project.id"></km-external-cluster-step>
+                                      [projectID]="project.id" />
           </ng-container>
         </ng-container>
 
         <ng-container *ngSwitchCase="stepRegistry.Summary">
-          <km-external-cluster-summary-step *ngIf="stepperLastIndex"></km-external-cluster-summary-step>
+          <km-external-cluster-summary-step *ngIf="stepperLastIndex" />
         </ng-container>
       </div>
 
@@ -104,8 +104,7 @@ limitations under the License.
                      label="Create External Cluster"
                      [disabled]="isInvalidStep()"
                      [observable]="getObservable()"
-                     (next)="onCreateSuccess($event)">
-          </km-button>
+                     (next)="onCreateSuccess($event)" />
         </ng-template>
       </div>
     </mat-step>

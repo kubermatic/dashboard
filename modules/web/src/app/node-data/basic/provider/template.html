@@ -16,39 +16,32 @@ limitations under the License.
 <form [formGroup]="form"
       [ngSwitch]="provider">
   <km-alibaba-basic-node-data *ngSwitchCase="Provider.ALIBABA"
-                              [formControl]="form.get(Control.ProviderBasic)">
-  </km-alibaba-basic-node-data>
+                              [formControl]="form.get(Control.ProviderBasic)" />
   <km-aws-basic-node-data *ngSwitchCase="Provider.AWS"
-                          [formControl]="form.get(Control.ProviderBasic)">
-  </km-aws-basic-node-data>
+                          [formControl]="form.get(Control.ProviderBasic)" />
   <km-digitalocean-basic-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                   [formControl]="form.get(Control.ProviderBasic)">
-  </km-digitalocean-basic-node-data>
+                                   [formControl]="form.get(Control.ProviderBasic)" />
   <km-vsphere-basic-node-data *ngSwitchCase="Provider.VSPHERE"
-                              [formControl]="form.get(Control.ProviderBasic)">
-  </km-vsphere-basic-node-data>
+                              [formControl]="form.get(Control.ProviderBasic)" />
   <km-kubevirt-basic-node-data *ngSwitchCase="Provider.KUBEVIRT"
-                               [formControl]="form.get(Control.ProviderBasic)">
-  </km-kubevirt-basic-node-data>
+                               [formControl]="form.get(Control.ProviderBasic)" />
   <km-nutanix-basic-node-data *ngSwitchCase="Provider.NUTANIX"
-                              [formControl]="form.get(Control.ProviderBasic)">
-  </km-nutanix-basic-node-data>
+                              [formControl]="form.get(Control.ProviderBasic)" />
   <km-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
-                              [formControl]="form.get(Control.ProviderBasic)">
-  </km-hetzner-basic-node-data>
+                              [formControl]="form.get(Control.ProviderBasic)" />
 
   <km-azure-basic-node-data *ngSwitchCase="Provider.AZURE"
-                            [formControl]="form.get(Control.ProviderBasic)"></km-azure-basic-node-data>
+                            [formControl]="form.get(Control.ProviderBasic)" />
   <km-gcp-basic-node-data *ngSwitchCase="Provider.GCP"
-                          [formControl]="form.get(Control.ProviderBasic)"></km-gcp-basic-node-data>
+                          [formControl]="form.get(Control.ProviderBasic)" />
   <km-openstack-basic-node-data *ngSwitchCase="Provider.OPENSTACK"
-                                [formControl]="form.get(Control.ProviderBasic)"></km-openstack-basic-node-data>
+                                [formControl]="form.get(Control.ProviderBasic)" />
   <km-anexia-basic-node-data *ngSwitchCase="Provider.ANEXIA"
-                             [formControl]="form.get(Control.ProviderBasic)"></km-anexia-basic-node-data>
+                             [formControl]="form.get(Control.ProviderBasic)" />
   <km-vmware-cloud-director-basic-node-data *ngSwitchCase="Provider.VMWARECLOUDDIRECTOR"
-                                            [formControl]="form.get(Control.ProviderBasic)"></km-vmware-cloud-director-basic-node-data>
+                                            [formControl]="form.get(Control.ProviderBasic)" />
   <km-edge-basic-node-data *ngSwitchCase="Provider.EDGE"
-                           [formControl]="form.get(Control.ProviderBasic)"></km-edge-basic-node-data>
+                           [formControl]="form.get(Control.ProviderBasic)" />
   <km-baremetal-basic-node-data *ngSwitchCase="Provider.BAREMETAL"
-                                [formControl]="form.get(Control.ProviderBasic)"></km-baremetal-basic-node-data>
+                                [formControl]="form.get(Control.ProviderBasic)" />
 </form>

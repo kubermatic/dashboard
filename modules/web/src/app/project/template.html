@@ -18,9 +18,9 @@ limitations under the License.
   <ng-container *ngIf="!isInitializing else spinner">
     <div fxLayout
          fxLayoutAlign=" center">
-      <km-search-field (queryChange)="onSearch($event)"></km-search-field>
+      <km-search-field (queryChange)="onSearch($event)" />
       <div fxFlex></div>
-      <ng-container *ngTemplateOutlet="allProjectToggle"></ng-container>
+      <ng-container *ngTemplateOutlet="allProjectToggle" />
       <mat-button-toggle-group class="project-view-switch"
                                group="projectsView"
                                (change)="changeView()">
@@ -34,7 +34,7 @@ limitations under the License.
         </mat-button-toggle>
       </mat-button-toggle-group>
 
-      <ng-container *ngTemplateOutlet="addProjectButton"></ng-container>
+      <ng-container *ngTemplateOutlet="addProjectButton" />
     </div>
 
     <ng-container *ngIf="!isProjectsLoading; else spinner">
@@ -146,7 +146,7 @@ limitations under the License.
                     class="km-project-item-quota">
                   <router-outlet *ngIf="element.status === ProjectStatus.Active"
                                  name="quota-widget"
-                                 (activate)="onActivate($event, element.id, 'table')"></router-outlet>
+                                 (activate)="onActivate($event, element.id, 'table')" />
                 </td>
               </ng-container>
 
@@ -162,7 +162,7 @@ limitations under the License.
                       <ng-container *ngSwitchCase="true">
                         <mat-spinner [diameter]="25"
                                      class="km-spinner"
-                                     color="accent"></mat-spinner>
+                                     color="accent" />
                       </ng-container>
 
                       <ng-container *ngSwitchCase="false">
@@ -210,15 +210,15 @@ limitations under the License.
                  *ngIf="isInitializing">
               <mat-spinner color="accent"
                            class="projects-spinner"
-                           [diameter]="25"></mat-spinner>
+                           [diameter]="25" />
             </div>
 
             <div [hidden]="!isPaginatorVisible || showCards"
                  class="km-paginator-container">
               <div fxLayout="row"
                    fxLayoutAlign="flex-end center">
-                <km-pagination-page-size></km-pagination-page-size>
-                <mat-paginator showFirstLastButtons></mat-paginator>
+                <km-pagination-page-size />
+                <mat-paginator showFirstLastButtons />
               </div>
             </div>
           </mat-card-content>
@@ -264,7 +264,7 @@ limitations under the License.
                 </button>
               </div>
             </mat-card-header>
-            <mat-divider></mat-divider>
+            <mat-divider />
             <mat-card-content fxLayout="column"
                               fxLayoutGap="15px">
               <div fxLayout="row"
@@ -297,7 +297,7 @@ limitations under the License.
                         [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
                   <km-initials-circle *ngIf="project.owners.length > 1"
                                       [owners]="project.owners"
-                                      [limit]="2"></km-initials-circle>
+                                      [limit]="2" />
                 </div>
                 <div fxLayout="row"
                      fxLayoutAlign=" center"
@@ -316,7 +316,7 @@ limitations under the License.
                    fxLayoutAlign="start start">
                 <router-outlet *ngIf="project.status === ProjectStatus.Active"
                                name="quota-widget"
-                               (activate)="onActivate($event, project.id, 'cards')"></router-outlet>
+                               (activate)="onActivate($event, project.id, 'cards')" />
               </div>
             </mat-card-content>
           </mat-card>
@@ -330,13 +330,13 @@ limitations under the License.
     <div class="km-row">
       <mat-spinner color="accent"
                    class="projects-spinner"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
     </div>
   </ng-template>
 </div>
 
 <ng-template #placeholder>
-  <ng-container *ngTemplateOutlet="allProjectToggle"></ng-container>
+  <ng-container *ngTemplateOutlet="allProjectToggle" />
   <div fxLayout="column"
        fxLayoutAlign="center center"
        class="placeholder">
@@ -356,7 +356,7 @@ limitations under the License.
           Learn more in our documentation <i class="km-icon-external-link"></i>
         </a>
       </div>
-      <ng-container *ngTemplateOutlet="addProjectButton"></ng-container>
+      <ng-container *ngTemplateOutlet="addProjectButton" />
     </div>
   </div>
 </ng-template>

@@ -29,15 +29,14 @@ limitations under the License.
     <mat-step [stepControl]="form.get(controls.Name)"
               [label]="registry.Name"
               fxFlex="100%">
-      <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+      <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)" />
     </mat-step>
 
     <mat-step [stepControl]="form.get(controls.Information)"
               [label]="registry.Information"
               fxFlex="100%">
       <km-serviceaccount-token-information-step *ngIf="created"
-                                                [formControl]="form.get(controls.Information)">
-      </km-serviceaccount-token-information-step>
+                                                [formControl]="form.get(controls.Information)" />
     </mat-step>
   </mat-horizontal-stepper>
 </form>
@@ -45,37 +44,35 @@ limitations under the License.
   <mat-spinner fxFlexAlign="center"
                [diameter]="30"
                color="accent"
-               *ngIf="updating"></mat-spinner>
+               *ngIf="updating" />
   <km-button *ngIf="stepperFirstIndex"
              id="km-serviceaccount-token-dialog-update-btn"
              [icon]="getIconClass()"
              [label]="mode+' Token'"
              [disabled]="updating || form.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 
   <ng-container *ngIf="!stepperFirstIndex">
-    <ng-container *ngTemplateOutlet="downloadButton; context: {btnId: 'km-serviceaccount-token-dialog-confirm-btn'}"></ng-container>
+    <ng-container *ngTemplateOutlet="downloadButton; context: {btnId: 'km-serviceaccount-token-dialog-confirm-btn'}" />
   </ng-container>
 </mat-dialog-actions>
 
 <form *ngIf="mode === modes.Edit">
   <mat-dialog-content>
-    <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+    <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)" />
   </mat-dialog-content>
 
   <mat-dialog-actions>
     <mat-spinner fxFlexAlign="center"
                  [diameter]="30"
                  color="accent"
-                 *ngIf="updating"></mat-spinner>
+                 *ngIf="updating" />
     <km-button [icon]="getIconClass()"
                [label]="mode+' Token'"
                [disabled]="updating || form.invalid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </form>
 
@@ -83,16 +80,16 @@ limitations under the License.
   <ng-container *ngIf="updating">
     <mat-spinner class="centered"
                  [diameter]="60"
-                 color="accent"></mat-spinner>
+                 color="accent" />
   </ng-container>
 
   <ng-container *ngIf="!updating">
     <mat-dialog-content>
-      <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)"></km-serviceaccount-token-information-step>
+      <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)" />
     </mat-dialog-content>
 
     <mat-dialog-actions>
-      <ng-container *ngTemplateOutlet="downloadButton"></ng-container>
+      <ng-container *ngTemplateOutlet="downloadButton" />
     </mat-dialog-actions>
   </ng-container>
 </ng-container>

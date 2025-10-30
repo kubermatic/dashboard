@@ -24,9 +24,8 @@ limitations under the License.
                        label="Number of Clusters"
                        min="1"
                        focus
-                       required>
-    </km-number-stepper>
-    <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+                       required />
+    <ng-container *ngTemplateOutlet="quotaWidget" />
   </form>
   <km-cluster-summary class="cluster-summary"
                       [cluster]="template.cluster"
@@ -37,5 +36,5 @@ limitations under the License.
                       [applications]="template.applications"
                       [flipLayout]="true"
                       *ngIf="showDetails"
-                      @shrinkGrow></km-cluster-summary>
+                      @shrinkGrow />
 </div>

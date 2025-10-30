@@ -33,10 +33,10 @@ limitations under the License.
 
   <ng-container *ngIf="credentialsType === CredentialsType.Default">
     <km-openstack-default-credentials [formControl]="form.get(Controls.Credentials)"
-                                      [mode]="mode"></km-openstack-default-credentials>
+                                      [mode]="mode" />
   </ng-container>
 
   <ng-container *ngIf="credentialsType === CredentialsType.Application">
-    <km-openstack-application-credentials [formControl]="form.get(Controls.Credentials)"></km-openstack-application-credentials>
+    <km-openstack-application-credentials [formControl]="form.get(Controls.Credentials)" />
   </ng-container>
 </form>

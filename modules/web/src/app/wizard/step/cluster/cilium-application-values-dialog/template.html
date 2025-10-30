@@ -18,7 +18,7 @@ limitations under the License.
 <mat-dialog-content>
   <div fxLayoutAlign="center center">
     <mat-spinner *ngIf="this.isLoadingDetails"
-                 [diameter]="25"></mat-spinner>
+                 [diameter]="25" />
   </div>
   <div fxLayout="column">
     <p class="application-settings-desc">
@@ -27,11 +27,10 @@ limitations under the License.
     <div class="application-values">
       <km-editor [(model)]="valuesConfig"
                  height="370px"
-                 header="values.yaml">
-      </km-editor>
+                 header="values.yaml" />
       <km-validate-json-or-yaml [data]="valuesConfig"
                                 [isOnlyYAML]="true"
-                                (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
+                                (dataValid)="onValuesConfigValidityChanged($event)" />
     </div>
   </div>
 </mat-dialog-content>

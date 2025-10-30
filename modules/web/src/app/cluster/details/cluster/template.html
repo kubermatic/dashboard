@@ -143,7 +143,7 @@ limitations under the License.
                   (click)="shareConfigDialog(shareKubeconfigDialogMode.Share)">
             <span>Share Cluster</span>
           </button>
-          <mat-divider></mat-divider>
+          <mat-divider />
           <span [matTooltip]="!isDeleteEnabled() ? 'This action is not available for viewer role users.' : ''">
             <button mat-menu-item
                     [ngClass]="{'remove-hover': !isClusterRunning || !isDeleteEnabled()}"
@@ -161,12 +161,12 @@ limitations under the License.
       <div class="km-content-wrap">
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isClusterAPIRunning"
-                           [upgrades]="isEditEnabled() ? upgrades : []"></km-version-picker>
+                           [upgrades]="isEditEnabled() ? upgrades : []" />
 
         <km-cni-version *ngIf="isHavingCNI()"
                         [cluster]="cluster"
                         [isClusterRunning]="isClusterAPIRunning"
-                        [cniVersions]="cniVersions"></km-cni-version>
+                        [cniVersions]="cniVersions" />
         <km-property>
           <div key>Cluster ID</div>
           <div value
@@ -181,7 +181,7 @@ limitations under the License.
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="cluster.creationTimestamp" />
           </div>
         </km-property>
 
@@ -231,30 +231,30 @@ limitations under the License.
         <km-property *ngIf="isUserSshKeyEnabled">
           <div key>SSH Keys</div>
           <div value>
-            <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
+            <km-ssh-key-list [sshKeys]="sshKeys" />
           </div>
         </km-property>
         <km-property-usage *ngIf="metrics?.nodes?.cpuTotalMillicores"
                            name="Nodes CPU Usage"
                            unit="millicores"
                            [used]="metrics?.nodes?.cpuTotalMillicores"
-                           [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+                           [total]="metrics?.nodes?.cpuAvailableMillicores" />
 
         <km-property-usage *ngIf="metrics?.nodes?.memoryTotalBytes"
                            name="Nodes Memory Usage"
                            unit="MiB"
                            [used]="metrics?.nodes?.memoryTotalBytes"
-                           [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+                           [total]="metrics?.nodes?.memoryAvailableBytes" />
 
         <km-property-usage *ngIf="metrics?.controlPlane?.cpuTotalMillicores"
                            name="Control Plane CPU Usage"
                            unit="millicores"
-                           [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+                           [used]="metrics?.controlPlane?.cpuTotalMillicores" />
 
         <km-property-usage *ngIf="metrics?.controlPlane?.memoryTotalBytes"
                            name="Control Plane Memory Usage"
                            unit="MiB"
-                           [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+                           [used]="metrics?.controlPlane?.memoryTotalBytes" />
       </div>
 
       <km-expansion-panel expandLabel="ADDITIONAL CLUSTER INFORMATION"
@@ -266,29 +266,29 @@ limitations under the License.
                class="container-spacing">
             <div class="section-header">Control Plane</div>
             <km-property-health label="API Server"
-                                [healthState]="health?.apiserver"></km-property-health>
+                                [healthState]="health?.apiserver" />
             <km-property-health label="etcd"
-                                [healthState]="health?.etcd"></km-property-health>
+                                [healthState]="health?.etcd" />
             <km-property-health label="Scheduler"
-                                [healthState]="health?.scheduler"></km-property-health>
+                                [healthState]="health?.scheduler" />
             <km-property-health label="Controller"
-                                [healthState]="health?.controller"></km-property-health>
+                                [healthState]="health?.controller" />
             <km-property-health *ngIf="!cluster.spec.cloud.edge"
                                 label="Machine Controller"
-                                [healthState]="health?.machineController"></km-property-health>
+                                [healthState]="health?.machineController" />
             <km-property-health label="Operating System Manager"
-                                [healthState]="health?.operatingSystemManager"></km-property-health>
+                                [healthState]="health?.operatingSystemManager" />
             <km-property-health label="User Controller Manager"
-                                [healthState]="health?.userClusterControllerManager"></km-property-health>
+                                [healthState]="health?.userClusterControllerManager" />
             <km-property-health *ngIf="cluster.spec.kubernetesDashboard?.enabled"
                                 label="Kubernetes Dashboard"
-                                [healthState]="health?.kubernetesDashboard"></km-property-health>
+                                [healthState]="health?.kubernetesDashboard" />
             <km-property-health *ngIf="isEnterpriseEdition && cluster.spec.kubelb?.enabled"
                                 label="Kubermatic KubeLB"
-                                [healthState]="health?.kubelb"></km-property-health>
+                                [healthState]="health?.kubelb" />
             <km-property-health *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled"
                                 label="Kyverno"
-                                [healthState]="health?.kyverno"></km-property-health>
+                                [healthState]="health?.kyverno" />
 
           </div>
 
@@ -309,7 +309,7 @@ limitations under the License.
               <km-property *ngIf="cluster.spec.apiServerAllowedIPRanges?.cidrBlocks?.length">
                 <div key>Allowed IP Ranges for API server</div>
                 <div value>
-                  <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
+                  <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks" />
                 </div>
               </km-property>
 
@@ -355,12 +355,10 @@ limitations under the License.
                 </div>
               </div>
               <km-property-boolean label="Node Local DNS Cache"
-                                   [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled">
-              </km-property-boolean>
+                                   [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled" />
               <km-property-boolean label="Konnectivity"
                                    matTooltip="Konnectivity is a TCP level proxy service for control plane to cluster communication."
-                                   [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
-              </km-property-boolean>
+                                   [value]="cluster.spec.clusterNetwork?.konnectivityEnabled" />
             </div>
           </div>
 
@@ -370,14 +368,14 @@ limitations under the License.
                  class="section-header">OPA</div>
             <km-property-boolean *ngIf="!cluster?.spec?.opaIntegration?.enabled"
                                  label="Policy Control"
-                                 [value]="cluster?.spec?.opaIntegration?.enabled"></km-property-boolean>
+                                 [value]="cluster?.spec?.opaIntegration?.enabled" />
 
             <km-property-health *ngIf="cluster?.spec?.opaIntegration?.enabled"
                                 label="Gatekeeper Controller"
-                                [healthState]="health?.gatekeeperController"></km-property-health>
+                                [healthState]="health?.gatekeeperController" />
             <km-property-health *ngIf="cluster?.spec?.opaIntegration?.enabled"
                                 label="Gatekeeper Audit"
-                                [healthState]="health?.gatekeeperAudit"></km-property-health>
+                                [healthState]="health?.gatekeeperAudit" />
           </div>
 
           <div *ngIf="isMLAEnabledInSeed()"
@@ -386,23 +384,23 @@ limitations under the License.
             <div class="section-header">MLA</div>
             <km-property-boolean *ngIf="!cluster?.spec?.mla?.monitoringEnabled"
                                  label="User Cluster Monitoring"
-                                 [value]="cluster?.spec?.mla?.monitoringEnabled"></km-property-boolean>
+                                 [value]="cluster?.spec?.mla?.monitoringEnabled" />
             <km-property-boolean *ngIf="!cluster?.spec?.mla?.loggingEnabled"
                                  label="User Cluster Logging"
-                                 [value]="cluster?.spec?.mla?.loggingEnabled"></km-property-boolean>
+                                 [value]="cluster?.spec?.mla?.loggingEnabled" />
 
             <km-property-health *ngIf="cluster?.spec?.mla?.monitoringEnabled"
                                 label="Monitoring"
-                                [healthState]="health?.monitoring"></km-property-health>
+                                [healthState]="health?.monitoring" />
             <km-property-health *ngIf="cluster?.spec?.mla?.loggingEnabled"
                                 label="Logging"
-                                [healthState]="health?.logging"></km-property-health>
+                                [healthState]="health?.logging" />
             <km-property-health *ngIf="cluster?.spec?.mla?.loggingEnabled || cluster?.spec?.mla?.monitoringEnabled"
                                 label="Alertmanager Config"
-                                [healthState]="health?.alertmanagerConfig"></km-property-health>
+                                [healthState]="health?.alertmanagerConfig" />
             <km-property-health *ngIf="cluster?.spec?.mla?.loggingEnabled || cluster?.spec?.mla?.monitoringEnabled"
                                 label="Gateway"
-                                [healthState]="health?.mlaGateway"></km-property-health>
+                                [healthState]="health?.mlaGateway" />
           </div>
 
           <div fxFlex="33"
@@ -410,8 +408,7 @@ limitations under the License.
             <div class="section-header">Admission Plugins</div>
             <km-property-boolean *ngFor="let plugin of admissionPlugins"
                                  [label]="getAdmissionPluginName(plugin)"
-                                 [value]="isAdmissionPluginEnabled(plugin)">
-            </km-property-boolean>
+                                 [value]="isAdmissionPluginEnabled(plugin)" />
 
             <km-property *ngIf="cluster?.spec?.eventRateLimitConfig?.namespace">
               <div key>Event Rate Limit Config</div>
@@ -434,7 +431,7 @@ limitations under the License.
               <div key>Pod Node Selector Config</div>
               <div value>
                 <km-labels [labels]="cluster?.spec?.podNodeSelectorAdmissionPluginConfig"
-                           emptyMessage="No assigned labels"></km-labels>
+                           emptyMessage="No assigned labels" />
               </div>
             </km-property>
           </div>
@@ -444,44 +441,36 @@ limitations under the License.
             <div class="section-header">Misc</div>
             <div fxLayout="row">
               <km-property-boolean label="Audit Logging"
-                                   [value]="cluster.spec.auditLogging?.enabled">
-              </km-property-boolean>
+                                   [value]="cluster.spec.auditLogging?.enabled" />
               <span *ngIf="cluster.spec.auditLogging?.enabled"
                     class="km-label-primary secondary">{{cluster.spec.auditLogging.policyPreset || 'custom'}}</span>
             </div>
 
             <km-property-boolean *ngIf="cluster?.spec?.cloud?.azure"
                                  label="Assign Availability Set"
-                                 [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
-            </km-property-boolean>
+                                 [value]="cluster.spec.cloud.azure.assignAvailabilitySet" />
 
             <km-property-boolean label="User SSH Key Agent"
-                                 [value]="cluster.spec.enableUserSSHKeyAgent">
-            </km-property-boolean>
+                                 [value]="cluster.spec.enableUserSSHKeyAgent" />
 
             <km-property-boolean label="Kubermatic KubeLB"
                                  [value]="cluster.spec.kubelb?.enabled"
-                                 *ngIf="cluster.spec.kubelb?.enabled">
-            </km-property-boolean>
+                                 *ngIf="cluster.spec.kubelb?.enabled" />
 
             <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.useLoadBalancerClass"
                                  label="KubeLB: Use LoadBalancer Class"
-                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass" />
 
             <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.enableGatewayAPI"
                                  label="KubeLB: Enable Gateway API"
-                                 [value]="cluster.spec.kubelb?.enableGatewayAPI">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubelb?.enableGatewayAPI" />
 
             <km-property-boolean [label]="cluster.spec.disableCsiDriver ? 'External CCM' : 'External CCM/CSI'"
-                                 [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
-            </km-property-boolean>
+                                 [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded" />
 
             <km-property-boolean label="CSI Storage Driver"
                                  [value]="!cluster.spec.disableCsiDriver"
-                                 *ngIf="cluster.spec.disableCsiDriver">
-            </km-property-boolean>
+                                 *ngIf="cluster.spec.disableCsiDriver" />
 
             <km-property *ngIf="cluster?.status?.externalCCMMigration">
               <div key>External CCM/CSI migration</div>
@@ -503,13 +492,13 @@ limitations under the License.
               <div key>Labels</div>
               <div value>
                 <km-labels [labels]="cluster.labels"
-                           emptyMessage="No assigned labels"></km-labels>
+                           emptyMessage="No assigned labels" />
               </div>
             </km-property>
             <km-property *ngIf="cluster.annotations">
               <div key>Annotations</div>
               <div value>
-                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)" />
               </div>
             </km-property>
           </div>
@@ -520,7 +509,7 @@ limitations under the License.
 
   <km-machine-networks-display [cluster]="cluster"
                                [projectID]="projectID"
-                               [isClusterRunning]="isClusterRunning"></km-machine-networks-display>
+                               [isClusterRunning]="isClusterRunning" />
 
   <km-machine-deployment-list [cluster]="cluster"
                               [machineDeployments]="machineDeployments"
@@ -528,23 +517,23 @@ limitations under the License.
                               [isClusterRunning]="isClusterRunning"
                               [nodeDc]="nodeDc"
                               [quotaWidget]="quotaWidget"
-                              [isInitialized]="areMachineDeploymentsInitialized"></km-machine-deployment-list>
+                              [isInitialized]="areMachineDeploymentsInitialized" />
 
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
                   [nodes]="nodes"
-                  [projectID]="projectID"></km-node-list>
+                  [projectID]="projectID" />
   </div>
 
   <km-tab-card id="km-cluster-details-tab-card">
     <km-tab label="Events">
-      <km-event-list [events]="events"></km-event-list>
+      <km-event-list [events]="events" />
     </km-tab>
     <km-tab label="RBAC"
             *ngIf="isRBACEnabled()">
       <km-rbac [cluster]="cluster"
                [projectID]="projectID"
-               [isClusterRunning]="isClusterRunning"></km-rbac>
+               [isClusterRunning]="isClusterRunning" />
     </km-tab>
     <km-tab label="Addons">
       <div class="addon-tab-content">
@@ -554,7 +543,7 @@ limitations under the License.
                        [canEdit]="isEditEnabled()"
                        (addAddon)="handleAddonCreation($event)"
                        (editAddon)="handleAddonEdition($event)"
-                       (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+                       (deleteAddon)="handleAddonDeletion($event)" />
       </div>
     </km-tab>
     <km-tab label="Applications">
@@ -566,7 +555,7 @@ limitations under the License.
                              [canEdit]="isEditEnabled()"
                              (addApplication)="onApplicationAdded($event)"
                              (editApplication)="onApplicationUpdated($event)"
-                             (deleteApplication)="onApplicationDeleted($event)"></km-application-list>
+                             (deleteApplication)="onApplicationDeleted($event)" />
       </div>
     </km-tab>
     <km-tab label="OPA Constraints"
@@ -574,20 +563,20 @@ limitations under the License.
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
-                          [isClusterRunning]="isClusterRunning && isOPARunning"></km-constraint-list>
+                          [isClusterRunning]="isClusterRunning && isOPARunning" />
     </km-tab>
     <km-tab label="OPA Gatekeeper Config"
             *ngIf="cluster.spec.opaIntegration?.enabled">
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"
                             [projectID]="projectID"
-                            [isClusterRunning]="isClusterRunning && isOPARunning"></km-gatekeeper-config>
+                            [isClusterRunning]="isClusterRunning && isOPARunning" />
     </km-tab>
     <km-tab label="Kyverno Policies"
             *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled">
       <km-kyverno-cluster-policies-list [projectID]="projectID"
                                         [cluster]="cluster"
-                                        [isClusterRunning]="isClusterRunning && isKyvernoHealthy"></km-kyverno-cluster-policies-list>
+                                        [isClusterRunning]="isClusterRunning && isKyvernoHealthy" />
     </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">
@@ -596,7 +585,7 @@ limitations under the License.
               [cluster]="cluster"
               [projectID]="projectID"
               [isClusterRunning]="isClusterRunning"
-              [addons]="addons"></km-mla>
+              [addons]="addons" />
     </km-tab>
   </km-tab-card>
 </div>
@@ -604,13 +593,13 @@ limitations under the License.
 <div *ngIf="!isLoaded()">
   <mat-spinner [diameter]="25"
                color="accent"
-               class="km-spinner"></mat-spinner>
+               class="km-spinner" />
 </div>
 
 <ng-template #quotaWidget>
   <router-outlet name="quota-widget"
-                 (activate)="onActivate($event)"></router-outlet>
+                 (activate)="onActivate($event)" />
 </ng-template>
 
 <km-overlay-terminal *ngIf="showTerminal"
-                     (close)="toggleTerminal()"> </km-overlay-terminal>
+                     (close)="toggleTerminal()" />

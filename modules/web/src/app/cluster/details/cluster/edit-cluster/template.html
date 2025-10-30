@@ -106,10 +106,10 @@ limitations under the License.
                        [labelHint]="CLUSTER_DEFAULT_NODE_SELECTOR_HINT"
                        [labelHintKey]="CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE"
                        (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
-                       fxFlex="100"></km-label-form>
+                       fxFlex="100" />
         <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
           <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"
-                                              [eventRateLimitConfig]="eventRateLimitConfig"></km-wizard-cluster-event-rate-limit>
+                                              [eventRateLimitConfig]="eventRateLimitConfig" />
         </div>
       </div>
 
@@ -118,8 +118,7 @@ limitations under the License.
                     placeholder="IP CIDRs..."
                     [formControlName]="Controls.NodePortsAllowedIPRanges"
                     [kmPattern]="ipv4AndIPv6CidrRegex"
-                    kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
-      </km-chip-list>
+                    kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR" />
 
       <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
                     class="tag-list"
@@ -373,12 +372,11 @@ limitations under the License.
                      [canDeleteDisabledLabel]="true"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]="asyncLabelValidators"
-                     [formControlName]="Controls.Labels"></km-label-form>
+                     [formControlName]="Controls.Labels" />
 
       <km-annotation-form [annotations]="annotations"
                           [formControlName]="Controls.Annotations"
-                          (annotationsChange)="onAnnotationsChange($event)">
-      </km-annotation-form>
+                          (annotationsChange)="onAnnotationsChange($event)" />
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -387,7 +385,6 @@ limitations under the License.
                label="Save Changes"
                [disabled]="!form.valid || !providerSettingsPatch.isValid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

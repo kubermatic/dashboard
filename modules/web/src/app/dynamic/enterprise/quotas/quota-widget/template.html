@@ -22,14 +22,14 @@ END OF TERMS AND CONDITIONS
 <div class="km-quota-widget-container"
      [ngClass]="{'collapsed': isCollapsed}"
      *ngIf="hasQuota()">
-  <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
+  <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget" />
 </div>
 
 <ng-template #quotaWidget>
   <mat-card appearance="outlined"
             *ngIf="showAsCard; else quotaWidgetWithoutCard">
     <mat-card-content>
-      <ng-container *ngTemplateOutlet="quotaWidgetWithoutCard"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidgetWithoutCard" />
     </mat-card-content>
   </mat-card>
 
@@ -48,24 +48,21 @@ END OF TERMS AND CONDITIONS
          class="km-icon-mask km-icon-quota"></i>
 
       <ng-container *ngIf="!isCollapsed"
-                    [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText"></ng-container>
+                    [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText" />
 
       <ng-template #quotaBars>
         <ng-container>
           <ng-container *ngIf="hasCpuQuota"
                         [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
-          </ng-container>
+                        [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}" />
 
           <ng-container *ngIf="hasMemoryQuota"
                         [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
-          </ng-container>
+                        [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}" />
 
           <ng-container *ngIf="hasStorageQuota"
                         [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
-          </ng-container>
+                        [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}" />
         </ng-container>
       </ng-template>
 
@@ -88,7 +85,7 @@ END OF TERMS AND CONDITIONS
           label: 'CPU',
           usage: quotaDetails.status.globalUsage.cpu,
           quota: quotaDetails.quota.cpu,
-          percentage: quotaPercentage.cpu}"></ng-container>
+          percentage: quotaPercentage.cpu}" />
         </ng-container>
 
         <ng-container *ngIf="hasMemoryQuota">
@@ -98,7 +95,7 @@ END OF TERMS AND CONDITIONS
            quota: quotaDetails.quota.memory,
            percentage: quotaPercentage.memory,
            unit: 'GB'
-         }"></ng-container>
+         }" />
         </ng-container>
 
         <ng-container *ngIf="hasStorageQuota">
@@ -108,8 +105,7 @@ END OF TERMS AND CONDITIONS
            quota: quotaDetails.quota.storage,
            percentage: quotaPercentage.storage,
            unit: 'GB'
-           }">
-          </ng-container>
+           }" />
 
         </ng-container>
 
@@ -151,9 +147,7 @@ END OF TERMS AND CONDITIONS
                       percentage: quotaPercentage.cpu,
                       resourceData: quotaDetails.quota.cpu,
                       globalResourceData: quotaDetails.status.globalUsage.cpu ?? 0
-                      }">
-
-        </ng-container>
+                      }" />
 
         <ng-container *ngIf="hasMemoryQuota"
                       [ngTemplateOutlet]="progressBar"
@@ -162,7 +156,7 @@ END OF TERMS AND CONDITIONS
                       percentage: quotaPercentage.memory,
                       resourceData: quotaDetails.quota.memory,
                       globalResourceData: quotaDetails.status.globalUsage.memory ?? 0
-                      }"></ng-container>
+                      }" />
 
         <ng-container *ngIf="hasStorageQuota"
                       [ngTemplateOutlet]="progressBar"
@@ -171,7 +165,7 @@ END OF TERMS AND CONDITIONS
                       percentage: quotaPercentage.storage,
                       resourceData: quotaDetails.quota.storage,
                       globalResourceData: quotaDetails.status.globalUsage.storage ?? 0
-                      }"></ng-container>
+                      }" />
       </mat-card-content>
     </mat-card>
 
@@ -195,7 +189,7 @@ END OF TERMS AND CONDITIONS
                           [ngClass]="{'quota-bars-collapsed': isCollapsed}"
                           [color]="getProgressBarAccent(percentage)"
                           [value]="percentage ?? 1"
-                          [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
+                          [matTooltip]="percentage ? percentage + '%' : ''" />
       </km-property>
     </ng-template>
   </ng-template>
@@ -211,7 +205,7 @@ END OF TERMS AND CONDITIONS
            class="km-quota-heading"
            fxLayoutAlign=" center">
         <mat-spinner *ngIf="calculationInProgress$ | async; else quotaIcon"
-                     [diameter]="25"></mat-spinner>
+                     [diameter]="25" />
         <ng-template #quotaIcon>
           <i class="km-icon-mask km-icon-quota"></i>
         </ng-template>
@@ -230,7 +224,7 @@ END OF TERMS AND CONDITIONS
       percentage: quotaPercentage.cpu,
       buffer: estimatedQuotaPercentage?.cpu,
       estimated: estimatedQuota?.calculatedQuota?.cpu
-      }"></ng-container>
+      }" />
 
         <ng-container *ngIf="hasMemoryQuota"
                       [ngTemplateOutlet]="extendedProgress"
@@ -242,7 +236,7 @@ END OF TERMS AND CONDITIONS
       percentage: quotaPercentage.memory,
       buffer: estimatedQuotaPercentage?.memory,
       estimated: estimatedQuota?.calculatedQuota?.memory
-      }"></ng-container>
+      }" />
 
         <ng-container *ngIf="hasStorageQuota"
                       [ngTemplateOutlet]="extendedProgress"
@@ -254,7 +248,7 @@ END OF TERMS AND CONDITIONS
       percentage: quotaPercentage.storage,
       buffer: estimatedQuotaPercentage?.storage,
       estimated: estimatedQuota?.calculatedQuota?.storage
-      }"></ng-container>
+      }" />
       </div>
     </div>
 
@@ -287,7 +281,7 @@ END OF TERMS AND CONDITIONS
                           [value]="percentage ?? 1"
                           [bufferValue]="buffer"
                           [matTooltip]="getExtendedProgressBarTooltip(percentage, buffer)"
-                          matTooltipClass="km-quota-extended-progress-bar-tooltip"></mat-progress-bar>
+                          matTooltipClass="km-quota-extended-progress-bar-tooltip" />
       </div>
     </km-property>
   </ng-template>

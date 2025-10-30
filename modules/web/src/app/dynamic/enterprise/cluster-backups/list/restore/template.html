@@ -39,7 +39,7 @@ END OF TERMS AND CONDITIONS
       <div *option="let cluster">{{cluster.name}}</div>
     </km-combobox>
     <km-search-field class="search-field"
-                     (queryChange)="onSearch($event)"></km-search-field>
+                     (queryChange)="onSearch($event)" />
     <div fxFlex></div>
     <div *ngIf="selectedRestores.length">
       <button mat-flat-button
@@ -129,7 +129,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-15">Created</th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.spec.createdAt"></km-relative-time>
+          <km-relative-time [date]="element.spec.createdAt" />
         </td>
       </ng-container>
       <ng-container matColumnDef="actions">
@@ -185,15 +185,15 @@ END OF TERMS AND CONDITIONS
          *ngIf="loadingRestores && !clusterRestores?.length">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
     </div>
 
     <div [hidden]="!clusterRestores?.length"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

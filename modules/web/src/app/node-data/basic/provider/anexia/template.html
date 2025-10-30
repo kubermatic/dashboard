@@ -20,15 +20,13 @@ limitations under the License.
                      mode="errors"
                      label="Number of CPUs"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.Memory"
                      mode="errors"
                      label="Memory in MB"
                      min="2048"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <ng-container formArrayName="disks">
     <ng-container *ngFor="let diskForm of disks.controls; let i = index">
@@ -41,15 +39,13 @@ limitations under the License.
                            mode="errors"
                            label="Disk Size in GB"
                            min="0"
-                           fxFlex="45">
-        </km-number-stepper>
+                           fxFlex="45" />
 
         <km-autocomplete label="Disk Type"
                          fxFlex="40"
                          [formControlName]="DiskControls.PerformanceType"
                          [isLoading]="isLoadingDiskTypes"
-                         [options]="diskTypes">
-        </km-autocomplete>
+                         [options]="diskTypes" />
 
         <button mat-icon-button
                 class="delete-button"
@@ -66,14 +62,12 @@ limitations under the License.
                    [isLoading]="isLoadingTemplates"
                    [id]="Controls.Template"
                    [options]="templateNames.concat(templateIDs)"
-                   required>
-  </km-autocomplete>
+                   required />
 
   <km-autocomplete label="VLAN ID"
                    [formControlName]="Controls.VlanID"
                    [isLoading]="isLoadingVlans"
                    [id]="Controls.VlanID"
                    [options]="vlans"
-                   required>
-  </km-autocomplete>
+                   required />
 </form>

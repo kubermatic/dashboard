@@ -39,7 +39,7 @@ limitations under the License.
              (matChipInputTokenEnd)="addTag($event)" />
     </mat-chip-grid>
     <mat-hint *ngIf="!description; else defaultHint">
-      <ng-content select="[hint]"></ng-content>
+      <ng-content select="[hint]" />
     </mat-hint>
     <ng-template #defaultHint>
       <mat-hint>{{description}}</mat-hint>

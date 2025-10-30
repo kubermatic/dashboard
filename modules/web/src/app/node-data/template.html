@@ -52,7 +52,7 @@ limitations under the License.
 
     <div class="quota-widget"
          *ngIf="isEnterpriseEdition && isDialogView()">
-      <ng-template #quotaWidgetContainer></ng-template>
+      <ng-template #quotaWidgetContainer />
     </div>
 
     <div *ngIf="!isProvider(NodeProvider.EDGE)"
@@ -66,17 +66,16 @@ limitations under the License.
                          required
                          [min]="form.get(Controls.MinReplicas).value ?? minReplicasCount"
                          [max]="form.get(Controls.MaxReplicas).value ?? maxReplicasCount"
-                         [formControlName]="Controls.Count">
-      </km-number-stepper>
+                         [formControlName]="Controls.Count" />
 
       <km-node-data-kubelet-version fxFlex="50"
                                     *ngIf="isDialogView()"
-                                    [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+                                    [formControl]="form.get(Controls.Kubelet)" />
     </div>
 
     <ng-container *ngIf="isDialogView()">
       <km-basic-node-data [provider]="provider"
-                          [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
+                          [formControlName]="Controls.ProviderBasic" />
     </ng-container>
 
     <div fxLayout="column">
@@ -190,7 +189,7 @@ limitations under the License.
                       (onChange)="onDNSServerChange($event)"
                       [formControlName]="Controls.StaticNetworkDNSServers"
                       [kmPattern]="ipv4AndIPv6Regex"
-                      kmPatternError="Input has to be a valid IPv4 or IPv6 address"></km-chip-list>
+                      kmPatternError="Input has to be a valid IPv4 or IPv6 address" />
       </div>
 
       <div fxLayout="row"
@@ -226,14 +225,14 @@ limitations under the License.
           <mat-card-title class="provider-options">{{ providerDisplayName }} Settings</mat-card-title>
           <km-extended-node-data [provider]="provider"
                                  [visible]="nodeHasAdvanceSettings"
-                                 [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+                                 [formControlName]="Controls.ProviderExtended" />
         </ng-container>
       </km-expansion-panel>
     </div>
 
     <div *ngIf="displayQuotaInWizard && isEnterpriseEdition && !isDialogView()"
          class="additional-margin">
-      <ng-template #quotaWidgetContainer></ng-template>
+      <ng-template #quotaWidgetContainer />
     </div>
 
     <ng-container *ngIf="!isProvider(NodeProvider.EDGE, NodeProvider.BAREMETAL)">
@@ -290,8 +289,7 @@ limitations under the License.
                          [max]="form.get(Controls.MaxReplicas).value  || maxReplicasCount"
                          [required]="form.get(Controls.MaxReplicas).value"
                          [disabled]="isMinMaxReplicasDisabled()"
-                         [formControlName]="Controls.MinReplicas">
-      </km-number-stepper>
+                         [formControlName]="Controls.MinReplicas" />
 
       <km-number-stepper label="Max Replicas"
                          mode="all"
@@ -300,33 +298,31 @@ limitations under the License.
                          [max]="maxReplicasCount"
                          [required]="form.get(Controls.MinReplicas).value"
                          [disabled]="isMinMaxReplicasDisabled()"
-                         [formControlName]="Controls.MaxReplicas">
-      </km-number-stepper>
+                         [formControlName]="Controls.MaxReplicas" />
     </ng-container>
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
                    [asyncKeyValidators]="asyncLabelValidators"
                    [labels]="labels"
-                   (labelsChange)="onLabelsChange($event)"></km-label-form>
+                   (labelsChange)="onLabelsChange($event)" />
 
     <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                         title="Node Annotations"
                         [infoTooltip]="'Annotations for the nodes created against this machine deployment'"
                         [annotations]="annotations"
-                        (annotationsChange)="onAnnotationsChange($event)"></km-annotation-form>
+                        (annotationsChange)="onAnnotationsChange($event)" />
 
     <km-taint-form *ngIf="!isProvider(NodeProvider.EDGE)"
                    title="Node Taints"
                    [taints]="taints"
-                   (taintsChange)="onTaintsChange($event)"></km-taint-form>
+                   (taintsChange)="onTaintsChange($event)" />
 
     <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                         [annotations]="machineDeploymentAnnotations"
                         [infoTooltip]="'Annotations for the machine deployment object'"
                         title="Machine Deployment Annotations"
-                        (annotationsChange)="onMachineDeploymentAnnotationsChange($event)">
-    </km-annotation-form>
+                        (annotationsChange)="onMachineDeploymentAnnotationsChange($event)" />
   </div>
 
   <div *ngIf="!isDialogView()"
@@ -339,10 +335,10 @@ limitations under the License.
     </mat-card-header>
 
     <km-basic-node-data [provider]="provider"
-                        [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
+                        [formControlName]="Controls.ProviderBasic" />
 
     <km-extended-node-data [provider]="provider"
                            [visible]="true"
-                           [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+                           [formControlName]="Controls.ProviderExtended" />
   </div>
 </form>

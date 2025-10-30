@@ -17,11 +17,11 @@ limitations under the License.
 <ng-container *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
+                    [projectID]="projectID" />
   <br />
 
   <div class="km-web-terminal">
     <km-terminal [layout]="layoutType.page"
-                 (close)="goBack()"></km-terminal>
+                 (close)="goBack()" />
   </div>
 </ng-container>

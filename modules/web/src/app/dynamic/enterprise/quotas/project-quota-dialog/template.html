@@ -43,24 +43,21 @@ END OF TERMS AND CONDITIONS
                            label="CPU"
                            min="0"
                            [formControl]="quotaGroup.controls.cpu"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
 
         <km-number-stepper id="km-memory-input"
                            label="Memory (GB)"
                            min="0"
                            type="decimal"
                            [formControl]="quotaGroup.controls.memory"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
 
         <km-number-stepper id="km-storage-input"
                            label="Disk (GB)"
                            min="0"
                            type="decimal"
                            [formControl]="quotaGroup.controls.storage"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
       </div>
 
       <mat-error class="quotas-error"
@@ -101,6 +98,5 @@ END OF TERMS AND CONDITIONS
              [icon]="selectedQuota ? 'km-icon-save' : 'km-icon-add'"
              label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
              [disabled]="!isQuotaUpdated || form.invalid"
-             [observable]="getObservable()">
-  </km-button>
+             [observable]="getObservable()" />
 </mat-dialog-actions>

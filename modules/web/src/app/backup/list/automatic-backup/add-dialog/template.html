@@ -84,7 +84,7 @@ limitations under the License.
       </div>
 
       <mat-spinner *ngIf="this.isLoadingDestinations"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
 
       <mat-radio-group [formControlName]="Controls.Group"
                        fxLayout="column"
@@ -148,8 +148,7 @@ limitations under the License.
                            label="Number of Backups to Save"
                            hint="How many backups should be saved before deleting the oldest ones."
                            min="1"
-                           required>
-        </km-number-stepper>
+                           required />
       </div>
     </form>
   </mat-dialog-content>
@@ -159,7 +158,6 @@ limitations under the License.
                label="Add Automatic Backup"
                [disabled]="form.invalid"
                [observable]="getObservable()"
-               (next)="onNext()">
-    </km-button>
+               (next)="onNext()" />
   </mat-dialog-actions>
 </div>

@@ -32,7 +32,7 @@ limitations under the License.
   </form>
   <km-editor [(model)]="kubeconfig"
              height="400px"
-             header="Kubeconfig *"></km-editor>
+             header="Kubeconfig *" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="external-cluster-confirm-btn"
@@ -40,6 +40,5 @@ limitations under the License.
              label="Edit Cluster Connection"
              [disabled]="form.invalid || !kubeconfig"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

@@ -38,7 +38,7 @@ limitations under the License.
           </a>
         </p>
         <div class="applications-search">
-          <km-search-field (queryChange)="onSearchQueryChanged($event)"></km-search-field>
+          <km-search-field (queryChange)="onSearchQueryChanged($event)" />
         </div>
         <div fxFlex
              fxLayout="column"
@@ -47,7 +47,7 @@ limitations under the License.
             <km-application-definition-card [applicationDefinition]="installableApplication"
                                             [isSelectable]="true"
                                             [selected]="selectedApplication?.name === installableApplication.name"
-                                            (click)="select(installableApplication)"></km-application-definition-card>
+                                            (click)="select(installableApplication)" />
           </ng-container>
         </div>
         <div *ngIf="!applicationDefsDataSource.filteredData?.length"
@@ -65,7 +65,7 @@ limitations under the License.
     <mat-step [label]="StepRegistry.Settings">
       <ng-container *ngIf="selectedApplication">
         <km-application-definition-card [applicationDefinition]="selectedApplication"
-                                        [displayLinks]="true"></km-application-definition-card>
+                                        [displayLinks]="true" />
         <form *ngIf="form && !isLoadingDetails"
               [formGroup]="form">
           <div fxFlex
@@ -99,7 +99,7 @@ limitations under the License.
                   <div value
                        class="version-icon-value"
                        fxLayoutAlign="center">
-                    <km-application-method-icon [method]="applicationMethod"></km-application-method-icon>
+                    <km-application-method-icon [method]="applicationMethod" />
                   </div>
                 </km-property>
               </div>
@@ -110,7 +110,7 @@ limitations under the License.
                   <div value
                        class="version-icon-value"
                        fxLayoutAlign="center">
-                    <km-application-method-icon [method]="selectedVersionSource"></km-application-method-icon>
+                    <km-application-method-icon [method]="selectedVersionSource" />
                   </div>
                 </km-property>
               </div>
@@ -167,7 +167,7 @@ limitations under the License.
         <mat-spinner *ngIf="isLoadingDetails"
                      [diameter]="25"
                      class="km-spinner"
-                     color="primary"></mat-spinner>
+                     color="primary" />
       </ng-container>
     </mat-step>
     <mat-step [label]="StepRegistry.ApplicationValues">
@@ -180,11 +180,10 @@ limitations under the License.
             <km-editor [(model)]="valuesConfig"
                        (modelChange)="onValuesConfigChanged($event)"
                        height="370px"
-                       header="values.yaml">
-            </km-editor>
+                       header="values.yaml" />
             <km-validate-json-or-yaml [data]="valuesConfig"
                                       [isOnlyYAML]="true"
-                                      (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
+                                      (dataValid)="onValuesConfigValidityChanged($event)" />
           </div>
         </div>
       </ng-container>

@@ -36,10 +36,9 @@ limitations under the License.
           <km-editor [(model)]="manifest"
                      (modelChange)="onManifestChange($event)"
                      height="400px"
-                     header="YAML">
-          </km-editor>
+                     header="YAML" />
           <km-validate-json-or-yaml [data]="manifest"
-                                    [isOnlyYAML]="true"></km-validate-json-or-yaml>
+                                    [isOnlyYAML]="true" />
         </div>
       </div>
     </div>

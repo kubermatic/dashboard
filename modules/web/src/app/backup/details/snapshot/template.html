@@ -17,7 +17,7 @@ limitations under the License.
 <ng-container *ngIf="!isInitialized">
   <mat-spinner color="accent"
                class="km-spinner km-with-spacing"
-               [diameter]="50"></mat-spinner>
+               [diameter]="50" />
 </ng-container>
 
 <ng-container *ngIf="isInitialized">
@@ -67,5 +67,5 @@ limitations under the License.
                   [projectID]="selectedProject.id"
                   [clusterID]="backup.spec.clusterId"
                   [destination]="backup.spec.destination"
-                  [backupHealth]="getStatus(backup).message"></km-backup-list>
+                  [backupHealth]="getStatus(backup).message" />
 </ng-container>

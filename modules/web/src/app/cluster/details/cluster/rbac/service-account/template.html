@@ -72,7 +72,7 @@ limitations under the License.
           <mat-spinner *ngIf="!!element['deletionTimestamp']; else actionButtons"
                        [diameter]="25"
                        class="km-spinner"
-                       color="accent"></mat-spinner>
+                       color="accent" />
 
           <ng-template #actionButtons>
             <button mat-icon-button
@@ -105,8 +105,7 @@ limitations under the License.
           [attr.colspan]="columns.length">
         <div>
           <km-rbac-service-account-details [details]="bindingDetails?.[element.name]"
-                                           (deleteBinding)="deleteServiceAccountBinding($event)">
-          </km-rbac-service-account-details>
+                                           (deleteBinding)="deleteServiceAccountBinding($event)" />
         </div>
       </td>
     </ng-container>
@@ -136,5 +135,5 @@ limitations under the License.
 </ng-container>
 
 <ng-template #loading>
-  <km-loader></km-loader>
+  <km-loader />
 </ng-template>

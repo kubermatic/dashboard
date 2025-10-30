@@ -36,7 +36,7 @@ limitations under the License.
   </mat-form-field>
 
   <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
-                            (onChange)="onCredentialsChange($event)"></km-openstack-credentials>
+                            (onChange)="onCredentialsChange($event)" />
 
   <km-combobox *ngIf="!selectedPresetFloatingIPPool || floatingIPPoolsLabel !== FloatingIPPoolState.Empty; else presetFloatingIPPool"
                #floatingIPPoolCombobox

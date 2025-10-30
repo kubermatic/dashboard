@@ -74,20 +74,20 @@ limitations under the License.
             <km-property>
               <div key>SSH Keys</div>
               <div value>
-                <km-ssh-key-list [sshKeys]="getSSHKeys()"></km-ssh-key-list>
+                <km-ssh-key-list [sshKeys]="getSSHKeys()" />
               </div>
             </km-property>
 
             <km-property *ngIf="displayTags(cluster.labels)">
               <div key>Cluster Labels</div>
               <div value>
-                <km-labels [labels]="cluster.labels"></km-labels>
+                <km-labels [labels]="cluster.labels" />
               </div>
             </km-property>
             <km-property *ngIf="displayTags(cluster.annotations)">
               <div key>Cluster Annotations</div>
               <div value>
-                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)" />
               </div>
             </km-property>
           </div>
@@ -120,19 +120,19 @@ limitations under the License.
             <km-property *ngIf="cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length">
               <div key>Allowed IP Ranges for API server</div>
               <div value>
-                <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
+                <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks" />
               </div>
             </km-property>
 
             <km-property *ngIf="nodePortsAllowedIPRanges as allowedIPRange">
               <div key>Allowed IP Ranges for Node Ports</div>
               <div value>
-                <km-labels [labels]="allowedIPRange"></km-labels>
+                <km-labels [labels]="allowedIPRange" />
               </div>
             </km-property>
 
             <ng-container *ngIf="!showIPv4"
-                          [ngTemplateOutlet]="ipv4Properties"></ng-container>
+                          [ngTemplateOutlet]="ipv4Properties" />
           </div>
 
           <ng-container *ngIf="cluster.spec.clusterNetwork">
@@ -140,7 +140,7 @@ limitations under the License.
               <h4>IPv4</h4>
 
               <div fxLayout="row wrap">
-                <ng-container *ngTemplateOutlet="ipv4Properties"></ng-container>
+                <ng-container *ngTemplateOutlet="ipv4Properties" />
               </div>
             </div>
 
@@ -167,13 +167,11 @@ limitations under the License.
 
             <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled"
                                  label="Node Local DNS Cache"
-                                 [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled" />
 
             <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"
                                  label="Konnectivity"
-                                 [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.clusterNetwork?.konnectivityEnabled" />
           </ng-container>
 
           <ng-template #ipv4Properties>
@@ -201,70 +199,57 @@ limitations under the License.
             <div *ngIf="cluster.spec.auditLogging?.enabled"
                  fxLayout="row">
               <km-property-boolean label="Audit Logging"
-                                   [value]="cluster.spec.auditLogging?.enabled">
-              </km-property-boolean>
+                                   [value]="cluster.spec.auditLogging?.enabled" />
               <span *ngIf="cluster.spec.auditLogging?.enabled"
                     class="km-label-primary secondary">{{cluster.spec.auditLogging.policyPreset || 'custom'}}</span>
             </div>
 
             <km-property-boolean *ngIf="cluster.spec.enableUserSSHKeyAgent"
                                  label="User SSH Key Agent"
-                                 [value]="cluster.spec.enableUserSSHKeyAgent">
-            </km-property-boolean>
+                                 [value]="cluster.spec.enableUserSSHKeyAgent" />
 
             <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled"
                                  label="Kubermatic KubeLB"
-                                 [value]="cluster.spec.kubelb?.enabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubelb?.enabled" />
 
             <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.useLoadBalancerClass"
                                  label="KubeLB: Use LoadBalancer Class"
-                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass" />
 
             <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.enableGatewayAPI"
                                  label="KubeLB: Enable Gateway API"
-                                 [value]="cluster.spec.kubelb?.enableGatewayAPI">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubelb?.enableGatewayAPI" />
 
             <km-property-boolean *ngIf="cluster.spec.opaIntegration?.enabled"
                                  label="OPA Integration"
-                                 [value]="cluster.spec.opaIntegration?.enabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.opaIntegration?.enabled" />
 
             <km-property-boolean *ngIf="cluster.spec.kyverno?.enabled"
                                  label="Kyverno Policy Management"
-                                 [value]="cluster.spec.kyverno.enabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kyverno.enabled" />
 
             <km-property-boolean *ngIf="isMLAEnabled && cluster.spec.mla?.loggingEnabled"
                                  label="User Cluster Logging"
-                                 [value]="cluster.spec.mla?.loggingEnabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.mla?.loggingEnabled" />
 
             <km-property-boolean *ngIf="isMLAEnabled && cluster.spec.mla?.loggingEnabled"
                                  label="User Cluster Monitoring"
-                                 [value]="cluster.spec.mla?.monitoringEnabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.mla?.monitoringEnabled" />
 
             <km-property-boolean *ngIf="cluster.spec.kubernetesDashboard?.enabled"
                                  label="Kubernetes Dashboard"
-                                 [value]="cluster.spec.kubernetesDashboard?.enabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.kubernetesDashboard?.enabled" />
 
             <km-property-boolean *ngIf="cluster.spec.disableCsiDriver"
                                  label="CSI Storage Driver"
-                                 [value]="!cluster.spec.disableCsiDriver">
-            </km-property-boolean>
+                                 [value]="!cluster.spec.disableCsiDriver" />
             <km-property-boolean *ngIf="cluster.spec.backupConfig"
                                  label="Cluster Backup"
-                                 [value]="!!cluster.spec.backupConfig">
-            </km-property-boolean>
+                                 [value]="!!cluster.spec.backupConfig" />
 
             <km-property-boolean *ngIf="cluster.spec.encryptionConfiguration?.enabled"
                                  label="Encryption at Rest"
-                                 [value]="cluster.spec.encryptionConfiguration?.enabled">
-            </km-property-boolean>
+                                 [value]="cluster.spec.encryptionConfiguration?.enabled" />
           </div>
           <div fxLayout="row wrap">
             <ng-container *ngIf="cluster.spec.auditLogging?.webhookBackend as webhookBackend">
@@ -291,8 +276,7 @@ limitations under the License.
           <div fxLayout="row wrap">
             <km-property-boolean *ngFor="let plugin of admissionPlugins"
                                  [label]="getAdmissionPluginName(plugin)"
-                                 [value]="isAdmissionPluginEnabled(plugin)">
-            </km-property-boolean>
+                                 [value]="isAdmissionPluginEnabled(plugin)" />
 
             <km-property *ngIf="cluster?.spec?.eventRateLimitConfig?.namespace as namespace">
               <div key>Event Rate Limit Config</div>
@@ -310,7 +294,7 @@ limitations under the License.
               <div key>Pod Node Selector Config</div>
               <div value>
                 <km-labels [labels]="cluster?.spec?.podNodeSelectorAdmissionPluginConfig"
-                           emptyMessage="No assigned labels"></km-labels>
+                           emptyMessage="No assigned labels" />
               </div>
             </km-property>
           </div>
@@ -387,8 +371,7 @@ limitations under the License.
 
             <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet !== undefined"
                                  label="Assign Availability Set"
-                                 [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
-            </km-property-boolean>
+                                 [value]="cluster.spec.cloud.azure.assignAvailabilitySet" />
           </ng-container>
 
           <!-- GCP -->
@@ -639,28 +622,23 @@ limitations under the License.
 
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu?.distUpgradeOnBoot"
                                  label="Upgrade system on the first boot"
-                                 [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot" />
 
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.amzn2?.distUpgradeOnBoot"
                                  label="Upgrade system on the first boot"
-                                 [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot" />
 
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rhel?.distUpgradeOnBoot"
                                  label="Upgrade system on the first boot"
-                                 [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot" />
 
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rockylinux?.distUpgradeOnBoot"
                                  label="Upgrade system on the first boot"
-                                 [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot" />
 
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar?.disableAutoUpdate"
                                  label="Disable system auto-update"
-                                 [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate" />
 
             <km-property *ngIf="machineDeployment.spec.template.network?.cidr">
               <div key>CIDR</div>
@@ -679,8 +657,7 @@ limitations under the License.
 
             <km-property-boolean *ngIf="machineDeployment.spec.dynamicConfig"
                                  label="Dynamic kubelet Config"
-                                 [value]="machineDeployment.spec.dynamicConfig">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.dynamicConfig" />
 
             <km-property *ngIf="machineDeployment.spec.minReplicas as minReplicas">
               <div key>Min Replicas</div>
@@ -695,28 +672,28 @@ limitations under the License.
             <km-property *ngIf="displayTags(machineDeployment.spec.template.labels)">
               <div key>Node Labels</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.labels"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.labels" />
               </div>
             </km-property>
 
             <km-property *ngIf="machineDeployment.spec.template.taints?.length > 0">
               <div key>Node Taints</div>
               <div value>
-                <km-taints [taints]="machineDeployment.spec.template.taints"></km-taints>
+                <km-taints [taints]="machineDeployment.spec.template.taints" />
               </div>
             </km-property>
 
             <km-property *ngIf="machineDeployment.spec.template.annotations">
               <div key>Node Annotations</div>
               <div value>
-                <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)" />
               </div>
             </km-property>
 
             <km-property *ngIf="machineDeployment.annotations">
               <div key>Machine Deployment Annotations</div>
               <div value>
-                <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)" />
               </div>
             </km-property>
           </div>
@@ -960,14 +937,13 @@ limitations under the License.
               <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud.nutanix.categories)">
                 <div key>Categories</div>
                 <div value>
-                  <km-labels [labels]="machineDeployment.spec.template.cloud.nutanix.categories"></km-labels>
+                  <km-labels [labels]="machineDeployment.spec.template.cloud.nutanix.categories" />
                 </div>
               </km-property>
             </ng-container>
             <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix?.cpuPassthrough"
                                  label="CPU Passthrough"
-                                 [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
-            </km-property-boolean>
+                                 [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough" />
 
             <!-- Openstack Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.openstack">
@@ -1022,8 +998,7 @@ limitations under the License.
                 <div value>{{machineDeployment.spec.template.cloud?.vsphere?.vmGroup}}</div>
               </km-property>
               <km-property-boolean label="VM Anti Affinity"
-                                   [value]="machineDeployment.spec.template.cloud?.vsphere?.vmAntiAffinity">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.vsphere?.vmAntiAffinity" />
             </ng-container>
 
             <!-- Anexia Nodes -->
@@ -1134,66 +1109,55 @@ limitations under the License.
             <ng-container *ngIf="cluster.spec.cloud?.aws">
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance !== undefined"
                                    label="Spot Instance"
-                                   [value]="machineDeployment.spec.template.cloud?.aws?.isSpotInstance">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.aws?.isSpotInstance" />
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
                                    label="Spot Instance Persistent Request"
-                                   [value]="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest" />
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP !== undefined"
                                    label="Assign Public IP"
-                                   [value]="machineDeployment.spec.template.cloud?.aws?.assignPublicIP">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.aws?.assignPublicIP" />
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.ebsVolumeEncrypted !== undefined"
                                    label="EBS Volume Encryption"
-                                   [value]="machineDeployment.spec.template.cloud?.aws?.ebsVolumeEncrypted">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.aws?.ebsVolumeEncrypted" />
             </ng-container>
 
             <!-- Azure Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.azure">
               <km-property-boolean label="Assign Public IP"
-                                   [value]="machineDeployment.spec.template.cloud?.azure?.assignPublicIP">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.azure?.assignPublicIP" />
               <km-property-boolean label="Accelerated Networking"
-                                   [value]="machineDeployment.spec.template.cloud?.azure?.enableAcceleratedNetworking">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.azure?.enableAcceleratedNetworking" />
             </ng-container>
 
             <!-- DigitalOcean Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.digitalocean">
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.digitalocean?.backups"
                                    label="etcd Backups"
-                                   [value]="machineDeployment.spec.template.cloud?.digitalocean?.backups">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.digitalocean?.backups" />
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.digitalocean?.monitoring"
                                    label="Monitoring"
-                                   [value]="machineDeployment.spec.template.cloud?.digitalocean?.monitoring">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.digitalocean?.monitoring" />
             </ng-container>
 
             <!-- GCP Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.gcp">
               <km-property-boolean label="Preemptible"
-                                   [value]="machineDeployment.spec.template.cloud?.gcp?.preemptible">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.gcp?.preemptible" />
             </ng-container>
 
             <!-- Openstack Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.openstack">
               <km-property-boolean label="Allocate Floating IP"
-                                   [value]="machineDeployment.spec.template.cloud?.openstack?.useFloatingIP">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.openstack?.useFloatingIP" />
               <km-property-boolean label="Enable Config Drive"
-                                   [value]="machineDeployment.spec.template.cloud?.openstack?.configDrive">
-              </km-property-boolean>
+                                   [value]="machineDeployment.spec.template.cloud?.openstack?.configDrive" />
             </ng-container>
 
             <!-- AWS Tags -->
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.aws?.tags)">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.aws?.tags"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud?.aws?.tags" />
               </div>
             </km-property>
 
@@ -1201,7 +1165,7 @@ limitations under the License.
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.azure?.tags)">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.azure.tags"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud?.azure.tags" />
               </div>
             </km-property>
 
@@ -1209,7 +1173,7 @@ limitations under the License.
             <km-property *ngIf="machineDeployment.spec.template.cloud?.digitalocean?.tags?.length > 0">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.digitalocean?.tags"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud?.digitalocean?.tags" />
               </div>
             </km-property>
 
@@ -1217,7 +1181,7 @@ limitations under the License.
             <km-property *ngIf="machineDeployment.spec.template.cloud?.gcp?.tags?.length > 0">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.gcp.tags"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud?.gcp.tags" />
               </div>
             </km-property>
 
@@ -1225,7 +1189,7 @@ limitations under the License.
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.openstack?.tags)">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.openstack.tags"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud?.openstack.tags" />
               </div>
             </km-property>
 
@@ -1235,7 +1199,7 @@ limitations under the License.
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.alibaba?.labels)">
               <div key>Provider Labels</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud.alibaba.labels"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud.alibaba.labels" />
               </div>
             </km-property>
 
@@ -1243,7 +1207,7 @@ limitations under the License.
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.gcp?.labels)">
               <div key>Provider Labels</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud.gcp.labels"></km-labels>
+                <km-labels [labels]="machineDeployment.spec.template.cloud.gcp.labels" />
               </div>
             </km-property>
 
@@ -1251,7 +1215,7 @@ limitations under the License.
             <km-property *ngIf="machineDeployment.spec.template.cloud?.vsphere?.tags?.length>0">
               <div key>Provider Tags</div>
               <div value>
-                <km-labels [labels]="convertVSphereTagsIntoObject(machineDeployment.spec.template.cloud?.vsphere?.tags)"></km-labels>
+                <km-labels [labels]="convertVSphereTagsIntoObject(machineDeployment.spec.template.cloud?.vsphere?.tags)" />
               </div>
             </km-property>
           </div>
@@ -1268,7 +1232,7 @@ limitations under the License.
                              [applications]="applications"
                              [canEdit]="false"
                              [cluster]="cluster"
-                             [view]="ApplicationsListView.Summary"></km-application-list>
+                             [view]="ApplicationsListView.Summary" />
         <ng-template #noApplications> No application selected. </ng-template>
       </div>
     </div>

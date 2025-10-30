@@ -30,7 +30,7 @@ limitations under the License.
     <ng-template matStepLabel>{{step.Template}}</ng-template>
     <ng-template matStepContent>
       <km-select-cluster-template [projectId]="data.projectId"
-                                  [templateId]="data.templateId"></km-select-cluster-template>
+                                  [templateId]="data.templateId" />
     </ng-template>
   </mat-step>
 
@@ -41,7 +41,7 @@ limitations under the License.
       <km-cluster-from-template-content [projectId]="data.projectId"
                                         [template]="template"
                                         [quotaWidget]="quotaWidget"
-                                        [showDetails]="showDetails"></km-cluster-from-template-content>
+                                        [showDetails]="showDetails" />
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>
@@ -89,6 +89,5 @@ limitations under the License.
              label="Create Cluster"
              [disabled]="invalid || quotaExceeded"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

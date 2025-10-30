@@ -18,7 +18,7 @@ limitations under the License.
 <ng-container *ngIf="isLoadingDetails">
   <mat-spinner color="accent"
                class="km-spinner km-with-spacing"
-               [diameter]="50"></mat-spinner>
+               [diameter]="50" />
 </ng-container>
 
 
@@ -68,7 +68,7 @@ limitations under the License.
           <km-property>
             <div key>Created</div>
             <div value>
-              <km-relative-time [date]="seedOverviewDatasource?.created"></km-relative-time>
+              <km-relative-time [date]="seedOverviewDatasource?.created" />
             </div>
           </km-property>
         </div>
@@ -157,8 +157,7 @@ limitations under the License.
               *matCellDef="let element"
               [attr.colspan]="displayedColumns.length">
             <div class="km-provider-datacenter-details-wrapper">
-              <km-provider-datacenter-details [datacentersDetail]="datacenterDetailPerProvider[element[Column.Provider]]">
-              </km-provider-datacenter-details>
+              <km-provider-datacenter-details [datacentersDetail]="datacenterDetailPerProvider[element[Column.Provider]]" />
             </div>
           </td>
         </ng-container>

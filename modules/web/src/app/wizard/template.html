@@ -17,7 +17,7 @@ limitations under the License.
 <ng-container *ngIf="loadingClusterTemplate">
   <mat-spinner [diameter]="50"
                class="km-spinner"
-               color="accent"></mat-spinner>
+               color="accent" />
 </ng-container>
 
 <form [formGroup]="form"
@@ -51,31 +51,31 @@ limitations under the License.
              id="{{step.id}}-step"
              class="wizard-step">
           <ng-container *ngSwitchCase="stepRegistry.Provider">
-            <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></km-wizard-provider-step>
+            <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Cluster">
-            <km-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)"></km-wizard-cluster-step>
+            <km-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.ProviderSettings">
-            <km-wizard-provider-settings-step [formControl]="form.get(stepRegistry.ProviderSettings)"></km-wizard-provider-settings-step>
+            <km-wizard-provider-settings-step [formControl]="form.get(stepRegistry.ProviderSettings)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.NodeSettings">
-            <km-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)"></km-wizard-node-settings-step>
+            <km-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.MachineNetwork">
-            <km-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)"></km-wizard-machine-network-step>
+            <km-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Applications">
-            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)"></km-wizard-applications-step>
+            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Summary">
-            <km-wizard-summary-step></km-wizard-summary-step>
+            <km-wizard-summary-step />
           </ng-container>
         </div>
 
@@ -93,7 +93,7 @@ limitations under the License.
           <mat-spinner fxFlexAlign="center"
                        [diameter]="30"
                        color="primary"
-                       *ngIf="creating"></mat-spinner>
+                       *ngIf="creating" />
 
           <div *ngIf="quotaExceededWarning && active?.name === stepRegistry.NodeSettings"
                fxLayoutAlign="start center">
@@ -148,8 +148,7 @@ limitations under the License.
                      [label]="getPrimaryButtonLabel()"
                      [disabled]="creating || quotaExceededWarning"
                      [observable]="getObservable()"
-                     (next)="onNext($event)">
-          </km-button>
+                     (next)="onNext($event)" />
         </div>
       </mat-step>
     </mat-horizontal-stepper>

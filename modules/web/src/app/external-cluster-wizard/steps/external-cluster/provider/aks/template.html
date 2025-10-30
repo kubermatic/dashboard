@@ -121,7 +121,7 @@ limitations under the License.
     </mat-form-field>
 
     <div>
-      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidget" />
     </div>
 
     <km-combobox #vmSizeCombobox
@@ -160,8 +160,7 @@ limitations under the License.
                         'Number of Nodes must be in the range of min and max auto scaling config' :
                         'Number of Nodes' "
                        [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
-                       [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE">
-    </km-number-stepper>
+                       [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE" />
 
     <label class="km-radio-group-label">Select Mode</label>
     <mat-radio-group fxFlex
@@ -199,8 +198,7 @@ limitations under the License.
                          [required]="true"
                          [min]="form.get(Controls.MinCount).value"
                          [max]="AUTOSCALING_MAX_VALUE"
-                         [formControlName]="Controls.MaxCount">
-      </km-number-stepper>
+                         [formControlName]="Controls.MaxCount" />
 
       <km-number-stepper label="Min Count"
                          mode="all"
@@ -208,8 +206,7 @@ limitations under the License.
                          [required]="true"
                          [min]="AUTOSCALING_MIN_VALUE"
                          [max]="form.get(Controls.MaxCount).value"
-                         [formControlName]="Controls.MinCount">
-      </km-number-stepper>
+                         [formControlName]="Controls.MinCount" />
     </ng-container>
   </div>
 </form>

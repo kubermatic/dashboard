@@ -17,7 +17,7 @@ limitations under the License.
      *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
+                    [projectID]="projectID" />
 
   <mat-card appearance="outlined">
     <mat-card-header>
@@ -35,7 +35,7 @@ limitations under the License.
         <km-copy-joining-script-button *ngIf="machineDeployment.spec?.template.cloud?.edge"
                                        [machineDeploymentID]="machineDeploymentID"
                                        [clusterName]="clusterName"
-                                       [projectID]="projectID"></km-copy-joining-script-button>
+                                       [projectID]="projectID" />
         <button mat-icon-button
                 color="tertiary"
                 (click)="showRestartDialog()"
@@ -113,8 +113,7 @@ limitations under the License.
             <km-chip *ngIf="system === 'Container Linux'"
                      text="EOL"
                      type="error"
-                     matTooltip="Container Linux has reached its end of life and is no longer maintained or updated.">
-            </km-chip>
+                     matTooltip="Container Linux has reached its end of life and is no longer maintained or updated." />
           </div>
         </km-property>
 
@@ -148,8 +147,7 @@ limitations under the License.
           </km-property>
           <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
                                label="CPU Passthrough"
-                               [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
-          </km-property-boolean>
+                               [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough" />
           <km-property>
             <div key>Memory</div>
             <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
@@ -161,7 +159,7 @@ limitations under the License.
           <km-property *ngIf="machineDeployment.spec.template.cloud.nutanix.categories as categories">
             <div key>Categories</div>
             <div value>
-              <km-labels [labels]="categories"></km-labels>
+              <km-labels [labels]="categories" />
             </div>
           </km-property>
         </ng-container>
@@ -176,13 +174,13 @@ limitations under the License.
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="machineDeployment.creationTimestamp" />
           </div>
         </km-property>
 
         <div class="quota-widget">
           <router-outlet name="quota-widget"
-                         (activate)="onActivate($event)"></router-outlet>
+                         (activate)="onActivate($event)" />
         </div>
 
         <div fxFlex="100%">
@@ -191,7 +189,7 @@ limitations under the License.
             <div key>Node Labels</div>
             <div value>
               <km-labels [labels]="machineDeployment.spec.template.labels"
-                         emptyMessage="No assigned labels"></km-labels>
+                         emptyMessage="No assigned labels" />
             </div>
           </km-property>
           <km-property fxFlex="50%"
@@ -199,14 +197,14 @@ limitations under the License.
             <div key>Node Annotations</div>
             <div value>
               <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)"
-                         emptyMessage="No assigned annotations"></km-labels>
+                         emptyMessage="No assigned annotations" />
             </div>
           </km-property>
           <km-property fxFlex="50%"
                        *ngIf="machineDeployment.spec.template.taints">
             <div key>Node Taints</div>
             <div value>
-              <km-taints [taints]="machineDeployment.spec.template.taints"></km-taints>
+              <km-taints [taints]="machineDeployment.spec.template.taints" />
             </div>
           </km-property>
 
@@ -214,33 +212,33 @@ limitations under the License.
                        *ngIf="machineDeployment.annotations">
             <div key>Machine Deployment Annotations</div>
             <div value>
-              <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)"></km-labels>
+              <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)" />
             </div>
           </km-property>
         </div>
       </div>
 
       <div class="additional-details">
-        <mat-divider></mat-divider>
+        <mat-divider />
         <div class="km-content-wrap"
              fxFlex
              fxLayout="row wrap"
              fxLayoutAlign=" center">
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu"
                                [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
+                               label="Upgrade system on the first boot" />
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rhel"
                                [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
+                               label="Upgrade system on the first boot" />
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rockylinux"
                                [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
+                               label="Upgrade system on the first boot" />
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar"
                                [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate"
-                               label="Disable auto-update"></km-property-boolean>
+                               label="Disable auto-update" />
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.amzn2"
                                [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
+                               label="Upgrade system on the first boot" />
         </div>
       </div>
 
@@ -252,14 +250,14 @@ limitations under the License.
                 [nodes]="nodes"
                 [nodesMetrics]="metrics"
                 (deleteNode)="loadNodes()"
-                [projectID]="getProjectID()"></km-node-list>
+                [projectID]="getProjectID()" />
 
-  <km-event-card [events]="events"></km-event-card>
+  <km-event-card [events]="events" />
 
 </div>
 
 <ng-container *ngIf="!isInitialized()">
   <mat-spinner [diameter]="25"
                color="accent"
-               class="km-spinner"></mat-spinner>
+               class="km-spinner" />
 </ng-container>

@@ -68,7 +68,7 @@ limitations under the License.
            class="km-icon-check"></i>
         <mat-radio-button *ngSwitchCase="false"
                           [checked]="isSelected(element)"
-                          (change)="select(element)"></mat-radio-button>
+                          (change)="select(element)" />
       </ng-container>
     </td>
   </ng-container>
@@ -90,14 +90,14 @@ limitations under the License.
      *ngIf="!isInitialized">
   <mat-spinner color="accent"
                class="km-spinner km-with-spacing"
-               [diameter]="25"></mat-spinner>
+               [diameter]="25" />
 </div>
 
 <div [hidden]="!hasPaginator"
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
-    <mat-paginator showFirstLastButtons></mat-paginator>
+    <km-pagination-page-size />
+    <mat-paginator showFirstLastButtons />
   </div>
 </div>

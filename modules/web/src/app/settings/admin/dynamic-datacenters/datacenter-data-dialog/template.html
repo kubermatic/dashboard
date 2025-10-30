@@ -127,8 +127,7 @@ limitations under the License.
                   [formControlName]="controls.RequiredEmails"
                   [kmPattern]="domainRegex"
                   kmPatternError="Input has to be a valid domain like kubermatic.com"
-                  fxFlex>
-    </km-chip-list>
+                  fxFlex />
 
     <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy"
                   kmValueChangedIndicator>
@@ -186,7 +185,7 @@ limitations under the License.
 
     <km-machine-flavor-filter class="km-machine-flavor-filter"
                               [formControl]="form.get(controls.MachineFlavorFilter)"
-                              [machineFlavorFilter]="machineFlavorFilter"></km-machine-flavor-filter>
+                              [machineFlavorFilter]="machineFlavorFilter" />
     <mat-card-title class="property-name">Provider Configuration</mat-card-title>
     <ng-container *ngIf="form.get(controls.Provider).value === Provider.OpenStack">
       <mat-checkbox [formControlName]="controls.EnableConfigDrive">
@@ -203,7 +202,7 @@ limitations under the License.
     </ng-container>
   </form>
   <km-editor [(model)]="providerConfig"
-             header="YAML"></km-editor>
+             header="YAML" />
   <mat-hint>If not specified default configuration will be used.</mat-hint>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -212,6 +211,5 @@ limitations under the License.
              [label]="label"
              [disabled]="form.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

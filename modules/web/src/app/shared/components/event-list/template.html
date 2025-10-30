@@ -81,7 +81,7 @@ limitations under the License.
     <td mat-cell
         class="events-long-text events-timestamp"
         *matCellDef="let element">
-      <km-relative-time [date]="element.lastTimestamp"></km-relative-time>
+      <km-relative-time [date]="element.lastTimestamp" />
     </td>
   </ng-container>
 
@@ -103,7 +103,7 @@ limitations under the License.
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
-    <mat-paginator showFirstLastButtons></mat-paginator>
+    <km-pagination-page-size />
+    <mat-paginator showFirstLastButtons />
   </div>
 </div>

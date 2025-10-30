@@ -30,9 +30,9 @@ limitations under the License.
     <div class="km-text view-name">{{currentView}}</div>
     <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
                          [showSidenav]="showSidenav"
-                         class="project-selector"></km-project-selector>
-    <km-help-panel *ngIf="isAuthenticated()"></km-help-panel>
-    <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
-    <km-user-panel *ngIf="isAuthenticated()"></km-user-panel>
+                         class="project-selector" />
+    <km-help-panel *ngIf="isAuthenticated()" />
+    <km-notification-panel *ngIf="isAuthenticated()" />
+    <km-user-panel *ngIf="isAuthenticated()" />
   </div>
 </header>

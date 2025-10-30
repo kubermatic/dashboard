@@ -17,7 +17,7 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="15px">
-  <km-wizard-openstack-provider-extended-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-extended-credentials>
+  <km-wizard-openstack-provider-extended-credentials [formControl]="form.get(Controls.Credentials)" />
 
   <mat-checkbox [formControlName]="Controls.EnableIngressHostname"
                 [name]="Controls.EnableIngressHostname">

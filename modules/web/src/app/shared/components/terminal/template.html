@@ -24,7 +24,7 @@ limitations under the License.
       <i class="km-icon-terminal-placeholder i-60"></i>
       <mat-spinner matSuffix
                    class="cent"
-                   [diameter]="30"></mat-spinner>
+                   [diameter]="30" />
       <p>{{message}}</p>
     </div>
 
@@ -36,7 +36,7 @@ limitations under the License.
     <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
                          [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
                          (openInNewTab)="openInSeparateView()"
-                         (close)="onClose()"></km-terminal-toolbar>
+                         (close)="onClose()" />
 
     <km-terminal-status-bar *ngIf="isConnectionLost || isSessionExpiring || isTokenExpired"
                             [isConnectionLost]="isConnectionLost"
@@ -44,8 +44,7 @@ limitations under the License.
                             [isTokenExpired]="isTokenExpired"
                             (reconnect)="onReconnect()"
                             (extendSession)="onExtendSession()"
-                            (tokenExpired)="onTokenExpired()">
-    </km-terminal-status-bar>
+                            (tokenExpired)="onTokenExpired()" />
 
     <div #terminal></div>
   </div>

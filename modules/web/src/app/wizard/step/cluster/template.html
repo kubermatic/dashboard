@@ -17,7 +17,7 @@ limitations under the License.
 <ng-container *ngIf="loadingClusterDefaults">
   <mat-spinner [diameter]="25"
                class="km-spinner"
-               color="accent"></mat-spinner>
+               color="accent" />
 </ng-container>
 
 <form *ngIf="!loadingClusterDefaults"
@@ -160,8 +160,7 @@ limitations under the License.
                         placeholder="IP CIDRs..."
                         [formControlName]="Controls.NodePortsAllowedIPRanges"
                         [kmPattern]="ipv4AndIPv6CidrRegex"
-                        kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
-          </km-chip-list>
+                        kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR" />
           <div fxLayout="row"
                fxLayoutGap="50px"
                fxFlex="100">
@@ -198,8 +197,7 @@ limitations under the License.
                                  mode="errors"
                                  min="1"
                                  max="32"
-                                 label="Node CIDR Mask Size">
-              </km-number-stepper>
+                                 label="Node CIDR Mask Size" />
             </div>
             <div *ngIf="isDualStackIPFamilySelected()"
                  fxLayout="column"
@@ -235,8 +233,7 @@ limitations under the License.
                                  mode="errors"
                                  min="1"
                                  max="128"
-                                 label="Node CIDR Mask Size">
-              </km-number-stepper>
+                                 label="Node CIDR Mask Size" />
             </div>
           </div>
           <div fxLayout="column"
@@ -268,7 +265,7 @@ limitations under the License.
       </div>
 
       <km-wizard-cluster-ssh-keys *ngIf="isUserSshKeyEnabled"
-                                  [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
+                                  [formControl]="form.get(Controls.SSHKeys)" />
     </div>
 
     <div fxFlex>
@@ -362,9 +359,9 @@ limitations under the License.
                            [labelHint]="CLUSTER_DEFAULT_NODE_SELECTOR_HINT"
                            [labelHintKey]="CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE"
                            (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
-                           fxFlex="100"></km-label-form>
+                           fxFlex="100" />
             <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
-              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
+              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)" />
             </div>
           </div>
 
@@ -593,14 +590,12 @@ limitations under the License.
                            [staticLabels]="adminStaticLabels"
                            [canDeleteDisabledLabel]="true"
                            (labelsChange)="onLabelsChange($event)"
-                           fxFlex="100">
-            </km-label-form>
+                           fxFlex="100" />
 
             <km-annotation-form [annotations]="annotations"
                                 [formControlName]="Controls.Annotations"
                                 (annotationsChange)="onAnnotationsChange($event)"
-                                fxFlex="100">
-            </km-annotation-form>
+                                fxFlex="100" />
           </div>
         </div>
       </div>

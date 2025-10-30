@@ -92,14 +92,13 @@ limitations under the License.
         <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
                    label="Release Channel"
                    [options]="releaseChannelOptions"
-                   [formControlName]="Controls.ReleaseChannelOptions"></km-select>
+                   [formControlName]="Controls.ReleaseChannelOptions" />
 
         <km-select [label]="versionLabel"
                    [options]="kubernetesVersions"
                    required="true"
                    hint="Select the cluster's control plane version."
-                   [formControlName]="Controls.Version">
-        </km-select>
+                   [formControlName]="Controls.Version" />
       </mat-radio-group>
     </ng-container>
 
@@ -133,7 +132,7 @@ limitations under the License.
     </ng-container>
 
     <div>
-      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidget" />
     </div>
 
     <km-combobox #machineTypesCombobox
@@ -165,8 +164,7 @@ limitations under the License.
                        label="Disk Size"
                        [max]="DISK_SIZE_MAX_VALUE"
                        [min]="DISK_SIZE_MIN_VALUE"
-                       [formControlName]="Controls.DiskSize">
-    </km-number-stepper>
+                       [formControlName]="Controls.DiskSize" />
 
     <km-number-stepper hint="Set Number of nodes"
                        mode="all"
@@ -174,8 +172,7 @@ limitations under the License.
                        [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE"
                        [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
                        [required]="true"
-                       [formControlName]="Controls.NodeCount">
-    </km-number-stepper>
+                       [formControlName]="Controls.NodeCount" />
     <mat-checkbox *ngIf="isDialogView()"
                   [formControlName]="Controls.EnableAutoScaling"
                   (change)="onEnableAutoScalingChange($event)">
@@ -191,8 +188,7 @@ limitations under the License.
                          [required]="true"
                          [min]="form.get(Controls.MinCount).value"
                          [max]="1000"
-                         [formControlName]="Controls.MaxCount">
-      </km-number-stepper>
+                         [formControlName]="Controls.MaxCount" />
 
       <km-number-stepper label="Min Count"
                          mode="all"
@@ -200,8 +196,7 @@ limitations under the License.
                          [required]="true"
                          [min]="1"
                          [max]="form.get(Controls.MaxCount).value"
-                         [formControlName]="Controls.MinCount">
-      </km-number-stepper>
+                         [formControlName]="Controls.MinCount" />
     </ng-container>
 
   </div>

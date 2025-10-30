@@ -115,7 +115,7 @@ END OF TERMS AND CONDITIONS
         <ng-template #loadingBackups>
           <mat-spinner color="accent"
                        class="km-spinner km-with-spacing"
-                       [diameter]="25"></mat-spinner>
+                       [diameter]="25" />
         </ng-template>
       </ng-container>
     </form>
@@ -126,7 +126,6 @@ END OF TERMS AND CONDITIONS
                label="Import Backup"
                [disabled]="form.invalid"
                [observable]="getObservable()"
-               (next)="onNext()">
-    </km-button>
+               (next)="onNext()" />
   </mat-dialog-actions>
 </div>

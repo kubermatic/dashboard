@@ -107,18 +107,18 @@ END OF TERMS AND CONDITIONS
                    title="Projects Labels Selector"
                    [(labels)]="projectsLabels"
                    noValidators="true"
-                   [formControlName]="controls.ProjectSelector"></km-label-form>
+                   [formControlName]="controls.ProjectSelector" />
     <km-label-form title="Clusters Labels Selector"
                    [(labels)]="clustersLabels"
                    noValidators="true"
-                   [formControlName]="controls.ClusterSelector"></km-label-form>
+                   [formControlName]="controls.ClusterSelector" />
     <km-editor [(model)]="policySpec"
                height="370px"
                header="policySpec*" />
     <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint>
     <km-validate-json-or-yaml [data]="policySpec"
                               [isOnlyYAML]="true"
-                              (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
+                              (dataValid)="isValidYaml($event)" />
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -126,6 +126,5 @@ END OF TERMS AND CONDITIONS
              [label]="label"
              [disabled]="form.invalid || !isYamlEditorValid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

@@ -27,7 +27,7 @@ limitations under the License.
                       mode="determinate"
                       [color]="color"
                       [value]="getPercentage()"
-                      [matTooltip]="getTooltip()"></mat-progress-bar>
+                      [matTooltip]="getTooltip()" />
     <div *ngIf="!total && used">{{used}} {{unit}}</div>
   </div>
 </km-property>

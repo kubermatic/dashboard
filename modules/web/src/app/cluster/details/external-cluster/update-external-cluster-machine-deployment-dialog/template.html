@@ -29,8 +29,7 @@ limitations under the License.
                        focus
                        required
                        [hint]="disableReplicaControl ? 'To update Replicas you must save or cancel your current changes.' : ''"
-                       [disabled]="disableReplicaControl">
-    </km-number-stepper>
+                       [disabled]="disableReplicaControl" />
 
     <mat-form-field class="kubelet-version">
       <mat-label>{{versionsLabel}}</mat-label>
@@ -56,6 +55,5 @@ limitations under the License.
              label="Save Changes"
              [disabled]="form.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

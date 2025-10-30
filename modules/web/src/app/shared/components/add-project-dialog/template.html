@@ -80,7 +80,7 @@ limitations under the License.
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
-                     [formControlName]="Controls.Labels"></km-label-form>
+                     [formControlName]="Controls.Labels" />
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -89,7 +89,6 @@ limitations under the License.
                label="Add Project"
                [disabled]="!form.valid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

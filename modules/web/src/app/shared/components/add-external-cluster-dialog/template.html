@@ -28,14 +28,14 @@ limitations under the License.
   <mat-step *ngIf="isAvailable(step.Provider)"
             [label]="step.Provider"
             fxFlex="100%">
-    <km-external-cluster-provider-step></km-external-cluster-provider-step>
+    <km-external-cluster-provider-step />
   </mat-step>
 
   <mat-step *ngIf="isAvailable(step.Credentials)"
             fxFlex="100%">
     <ng-template matStepLabel>{{step.Credentials}}</ng-template>
     <ng-template matStepContent>
-      <km-external-cluster-credentials-step></km-external-cluster-credentials-step>
+      <km-external-cluster-credentials-step />
     </ng-template>
   </mat-step>
 
@@ -45,7 +45,7 @@ limitations under the License.
     <ng-template matStepContent>
       <km-external-cluster-cluster-step *ngIf="active === step.Cluster"
                                         [projectID]="projectId"
-                                        [quotaWidget]="quotaWidget"></km-external-cluster-cluster-step>
+                                        [quotaWidget]="quotaWidget" />
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>
@@ -57,7 +57,7 @@ limitations under the License.
   <mat-spinner fxFlexAlign="center"
                [diameter]="25"
                color="accent"
-               *ngIf="externalClusterService.isValidating"></mat-spinner>
+               *ngIf="externalClusterService.isValidating" />
   <button fxLayoutAlign="center center"
           mat-flat-button
           type="button"
@@ -84,6 +84,5 @@ limitations under the License.
              [label]="label"
              [disabled]="invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

@@ -84,11 +84,10 @@ END OF TERMS AND CONDITIONS
     <ng-container *ngIf="form.get(Controls.AddCustomConfig).value">
       <km-editor [(model)]="valuesConfig"
                  height="370px"
-                 header="values.yaml">
-      </km-editor>
+                 header="values.yaml" />
       <km-validate-json-or-yaml [data]="valuesConfig"
                                 [isOnlyYAML]="true"
-                                (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
+                                (dataValid)="isValidYaml($event)" />
     </ng-container>
     <ng-container *ngIf="!form.get(Controls.AddCustomConfig).value">
 
@@ -142,6 +141,5 @@ END OF TERMS AND CONDITIONS
              [label]="label"
              [disabled]="form.invalid || !isYamlEditorValid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

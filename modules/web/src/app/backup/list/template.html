@@ -16,10 +16,10 @@ limitations under the License.
 
 <ng-container *ngIf="enableEtcdBackup">
   <ng-container [ngSwitch]="etcdBackupType">
-    <km-automatic-backup-list *ngSwitchCase="view.Backups"></km-automatic-backup-list>
+    <km-automatic-backup-list *ngSwitchCase="view.Backups" />
 
-    <km-snapshot-list *ngSwitchCase="view.Snapshots"></km-snapshot-list>
+    <km-snapshot-list *ngSwitchCase="view.Snapshots" />
 
-    <km-restore-list *ngSwitchCase="view.Restores"></km-restore-list>
+    <km-restore-list *ngSwitchCase="view.Restores" />
   </ng-container>
 </ng-container>

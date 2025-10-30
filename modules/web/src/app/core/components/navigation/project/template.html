@@ -36,7 +36,7 @@ limitations under the License.
         </mat-option>
       </mat-optgroup>
       <mat-divider *ngIf="externalProjects.length"
-                   class="km-option-divider"></mat-divider>
+                   class="km-option-divider" />
       <mat-optgroup *ngIf="externalProjects.length > 0"
                     label="External Projects">
         <mat-option *ngFor="let project of externalProjects; trackBy: trackByProject"

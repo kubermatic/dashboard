@@ -63,7 +63,7 @@ limitations under the License.
       </km-property>
 
       <km-property-boolean label="AutoScaling"
-                           [value]="setting.enableAutoScaling"> </km-property-boolean>
+                           [value]="setting.enableAutoScaling" />
 
       <ng-container *ngIf="setting.enableAutoScaling && setting.scalingConfig as scalingConfig">
         <km-property>

@@ -23,12 +23,12 @@ limitations under the License.
     <div *ngIf="!hideLogo"
          class="km-provider-logo km-provider-logo-{{provider}}"></div>
 
-    <km-credentials-presets></km-credentials-presets>
+    <km-credentials-presets />
   </ng-container>
   <div [ngSwitch]="provider">
-    <km-custom-credentials *ngSwitchCase="Provider.Custom"></km-custom-credentials>
-    <km-aks-credentials *ngSwitchCase="Provider.AKS"></km-aks-credentials>
-    <km-eks-credentials *ngSwitchCase="Provider.EKS"></km-eks-credentials>
-    <km-gke-credentials *ngSwitchCase="Provider.GKE"></km-gke-credentials>
+    <km-custom-credentials *ngSwitchCase="Provider.Custom" />
+    <km-aks-credentials *ngSwitchCase="Provider.AKS" />
+    <km-eks-credentials *ngSwitchCase="Provider.EKS" />
+    <km-gke-credentials *ngSwitchCase="Provider.GKE" />
   </div>
 </div>

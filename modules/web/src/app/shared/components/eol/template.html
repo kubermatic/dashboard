@@ -20,12 +20,12 @@ limitations under the License.
     <km-chip *ngIf="isAfter()"
              text="EOL"
              type="error"
-             matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}"></km-chip>
+             matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}" />
 
     <km-chip *ngIf="isBefore()"
              text="EOL"
              type="warning"
-             matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}."></km-chip>
+             matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}." />
   </div>
 
   <div *ngIf="type === displayType.Badge"

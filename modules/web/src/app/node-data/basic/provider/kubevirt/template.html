@@ -72,8 +72,7 @@ limitations under the License.
                      label="CPUs"
                      min="1"
                      [disabled]="form.get(Controls.CPUs).disabled"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <ng-template #disabledCPUs>
     <mat-form-field fxFlex>
@@ -94,8 +93,7 @@ limitations under the License.
                      min="1000"
                      step="100"
                      [disabled]="form.get(Controls.Memory).disabled"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <ng-template #disabledMemory>
     <mat-form-field fxFlex>
@@ -158,8 +156,7 @@ limitations under the License.
                      label="Size (GB)"
                      min="10"
                      step="10"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-expansion-panel expandLabel="ADVANCED SCHEDULING SETTINGS"
                       collapseLabel="ADVANCED SCHEDULING SETTINGS">
@@ -167,8 +164,7 @@ limitations under the License.
                                       context: {label: 'Node Affinity Preset Type',
                                       controlName: Controls.NodeAffinityPreset,
                                       resetCallback: resetNodeAffinityPresetControl.bind(this),
-                                      hint: 'Ensures that tenant nodes are hosted on particular nodes.'}">
-    </ng-container>
+                                      hint: 'Ensures that tenant nodes are hosted on particular nodes.'}" />
 
     <mat-form-field fxFlex>
       <mat-label>Node Affinity Preset Key</mat-label>
@@ -191,7 +187,7 @@ limitations under the License.
                   placeholder="Add values..."
                   [kmPattern]="nodeAffinityPresetValuesPattern"
                   [kmPatternError]="nodeAffinityPresetValuesPatternError"
-                  fxFlex></km-chip-list>
+                  fxFlex />
 
     <ng-template #selectAffinityPreset
                  let-label="label"
@@ -228,6 +224,6 @@ limitations under the License.
 
     <km-topology-spread-constraint-form [formControlName]="Controls.TopologySpreadConstraints"
                                         [constraints]="topologySpreadConstraints"
-                                        (constraintsChange)="onTopologySpreadConstraintsChange($event)"></km-topology-spread-constraint-form>
+                                        (constraintsChange)="onTopologySpreadConstraintsChange($event)" />
   </km-expansion-panel>
 </form>

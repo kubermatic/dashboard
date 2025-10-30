@@ -17,26 +17,19 @@ limitations under the License.
       [formGroup]="form"
       [ngSwitch]="provider">
   <km-alibaba-extended-node-data *ngSwitchCase="Provider.ALIBABA"
-                                 [formControl]="form.get(Control.ProviderExtended)">
-  </km-alibaba-extended-node-data>
+                                 [formControl]="form.get(Control.ProviderExtended)" />
   <km-aws-extended-node-data *ngSwitchCase="Provider.AWS"
-                             [formControl]="form.get(Control.ProviderExtended)">
-  </km-aws-extended-node-data>
+                             [formControl]="form.get(Control.ProviderExtended)" />
   <km-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                      [formControl]="form.get(Control.ProviderExtended)">
-  </km-digitalocean-extended-node-data>
+                                      [formControl]="form.get(Control.ProviderExtended)" />
 
   <km-azure-extended-node-data *ngSwitchCase="Provider.AZURE"
-                               [formControl]="form.get(Control.ProviderExtended)">
-  </km-azure-extended-node-data>
+                               [formControl]="form.get(Control.ProviderExtended)" />
   <km-gcp-extended-node-data *ngSwitchCase="Provider.GCP"
-                             [formControl]="form.get(Control.ProviderExtended)">
-  </km-gcp-extended-node-data>
+                             [formControl]="form.get(Control.ProviderExtended)" />
   <km-openstack-extended-node-data *ngSwitchCase="Provider.OPENSTACK"
-                                   [formControl]="form.get(Control.ProviderExtended)">
-  </km-openstack-extended-node-data>
+                                   [formControl]="form.get(Control.ProviderExtended)" />
 
   <km-vsphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
-                                 [formControl]="form.get(Control.ProviderExtended)">
-  </km-vsphere-extended-node-data>
+                                 [formControl]="form.get(Control.ProviderExtended)" />
 </form>

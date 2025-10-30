@@ -33,6 +33,5 @@ limitations under the License.
 <km-editor [(model)]="kubeconfig"
            (modelChange)="update()"
            height="400px"
-           header="Kubeconfig *">
-</km-editor>
-<km-validate-json-or-yaml [data]="kubeconfig"></km-validate-json-or-yaml>
+           header="Kubeconfig *" />
+<km-validate-json-or-yaml [data]="kubeconfig" />

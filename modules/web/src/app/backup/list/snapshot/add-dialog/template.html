@@ -82,7 +82,7 @@ limitations under the License.
       </div>
 
       <mat-spinner *ngIf="this.isLoadingDestinations"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
 
     </form>
   </mat-dialog-content>
@@ -92,7 +92,6 @@ limitations under the License.
                label="Add Snapshot"
                [disabled]="form.invalid"
                [observable]="getObservable()"
-               (next)="onNext()">
-    </km-button>
+               (next)="onNext()" />
   </mat-dialog-actions>
 </div>

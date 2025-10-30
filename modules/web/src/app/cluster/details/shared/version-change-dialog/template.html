@@ -23,7 +23,7 @@ limitations under the License.
       <span>Update Available</span>
     </div>
     <km-cluster-type-eol [version]="cluster.spec?.version"
-                         type="badge"></km-cluster-type-eol>
+                         type="badge" />
   </div>
 </km-dialog-title>
 <mat-dialog-content>
@@ -65,6 +65,5 @@ limitations under the License.
              label="Change Version"
              [disabled]="!selectedVersion"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

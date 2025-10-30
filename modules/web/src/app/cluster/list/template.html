@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-cluster-list *ngIf="resourcesType === view.Clusters"></km-cluster-list>
+<km-cluster-list *ngIf="resourcesType === view.Clusters" />
 
-<km-external-cluster-list *ngIf="(resourcesType === view.ExternalClusters) && areExternalClustersEnabled"></km-external-cluster-list>
+<km-external-cluster-list *ngIf="(resourcesType === view.ExternalClusters) && areExternalClustersEnabled" />
 
-<km-kubeone-cluster-list *ngIf="(resourcesType === view.KubeOneClusters) && areExternalClustersEnabled"></km-kubeone-cluster-list>
+<km-kubeone-cluster-list *ngIf="(resourcesType === view.KubeOneClusters) && areExternalClustersEnabled" />

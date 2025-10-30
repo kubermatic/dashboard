@@ -18,16 +18,16 @@ limitations under the License.
      fxLayoutAlign="space-between center">
   <div class="km-provider-logo km-provider-logo-{{provider}}"></div>
   <div class="quota-widget">
-    <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+    <ng-container *ngTemplateOutlet="quotaWidget" />
   </div>
 </div>
 
 <div [ngSwitch]="provider"
      fxLayout="column">
   <km-aks-cluster-select *ngSwitchCase="Provider.AKS"
-                         [projectID]="projectID"></km-aks-cluster-select>
+                         [projectID]="projectID" />
   <km-eks-cluster-select *ngSwitchCase="Provider.EKS"
-                         [projectID]="projectID"></km-eks-cluster-select>
+                         [projectID]="projectID" />
   <km-gke-cluster-select *ngSwitchCase="Provider.GKE"
-                         [projectID]="projectID"></km-gke-cluster-select>
+                         [projectID]="projectID" />
 </div>

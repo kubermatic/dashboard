@@ -42,15 +42,13 @@ limitations under the License.
                      mode="errors"
                      label="CPUs"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.CPUCores"
                      mode="errors"
                      label="Cores per CPU"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <mat-checkbox [formControlName]="Controls.CPUPassthrough"
                 fxFlex
@@ -62,15 +60,13 @@ limitations under the License.
                      mode="errors"
                      label="Memory (MB)"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.DiskSize"
                      mode="errors"
                      label="Disk Size (GB)"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <mat-card-header class="km-no-padding"
                    fxLayoutAlign=" center">

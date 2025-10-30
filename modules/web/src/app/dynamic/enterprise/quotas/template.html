@@ -27,7 +27,7 @@ END OF TERMS AND CONDITIONS
       <mat-card-title>
         <div fxFlex>Project Quotas</div>
       </mat-card-title>
-      <km-default-project-quota class="default-project-quota"></km-default-project-quota>
+      <km-default-project-quota class="default-project-quota" />
 
       <div fxLayout="row"
            fxLayoutAlign="center center">
@@ -37,7 +37,7 @@ END OF TERMS AND CONDITIONS
              fxLayoutGap="16px">
           <km-search-field fxFlex
                            class="search"
-                           (queryChange)="onSearch($event)"></km-search-field>
+                           (queryChange)="onSearch($event)" />
         </div>
         <div fxFlex></div>
         <button mat-flat-button
@@ -92,7 +92,7 @@ END OF TERMS AND CONDITIONS
                               class="property-usage-bar"
                               mode="determinate"
                               [color]="getProgressBarData(element.subjectName, resourceType.Memory).color"
-                              [value]="getProgressBarData(element.subjectName, resourceType.Memory).value"></mat-progress-bar>
+                              [value]="getProgressBarData(element.subjectName, resourceType.Memory).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.Memory).usageQuota}}</span>
           </div>
         </td>
@@ -113,7 +113,7 @@ END OF TERMS AND CONDITIONS
                               class="property-usage-bar"
                               mode="determinate"
                               [color]="getProgressBarData(element.subjectName, resourceType.CPU).color"
-                              [value]="getProgressBarData(element.subjectName, resourceType.CPU).value"></mat-progress-bar>
+                              [value]="getProgressBarData(element.subjectName, resourceType.CPU).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.CPU).usageQuota}}</span>
           </div>
         </td>
@@ -134,7 +134,7 @@ END OF TERMS AND CONDITIONS
                               class="property-usage-bar"
                               mode="determinate"
                               [color]="getProgressBarData(element.subjectName, resourceType.Storage).color"
-                              [value]="getProgressBarData(element.subjectName, resourceType.Storage).value"></mat-progress-bar>
+                              [value]="getProgressBarData(element.subjectName, resourceType.Storage).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.Storage).usageQuota}}</span>
           </div>
         </td>
@@ -178,7 +178,7 @@ END OF TERMS AND CONDITIONS
         <mat-spinner id="quotas-loading-spinner"
                      color="accent"
                      class="km-spinner"
-                     [diameter]="25"></mat-spinner>
+                     [diameter]="25" />
       </div>
     </ng-container>
 
@@ -193,8 +193,8 @@ END OF TERMS AND CONDITIONS
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

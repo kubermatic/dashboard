@@ -86,7 +86,7 @@ limitations under the License.
                            [upgrades]="canEdit() ? upgrades : []"
                            [hasUpgradeOptions]="isRunning()"
                            [isClusterExternal]="true"
-                           *ngIf="cluster?.spec?.version"></km-version-picker>
+                           *ngIf="cluster?.spec?.version" />
         <km-property>
           <div key>Cluster ID</div>
           <div value
@@ -138,7 +138,7 @@ limitations under the License.
           <km-property *ngIf="cluster.spec?.aksclusterSpec?.networkProfile">
             <div key>Network Profile</div>
             <div value>
-              <km-labels [labels]="cluster.spec?.aksclusterSpec?.networkProfile"></km-labels>
+              <km-labels [labels]="cluster.spec?.aksclusterSpec?.networkProfile" />
             </div>
           </km-property>
         </ng-container>
@@ -180,7 +180,7 @@ limitations under the License.
           <km-property *ngIf="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig">
             <div key>Kubernetes Network Config</div>
             <div value>
-              <km-labels [labels]="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig"></km-labels>
+              <km-labels [labels]="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig" />
             </div>
           </km-property>
         </ng-container>
@@ -208,29 +208,29 @@ limitations under the License.
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
           <div value>
-            <km-labels [labels]="cluster.labels"></km-labels>
+            <km-labels [labels]="cluster.labels" />
           </div>
         </km-property>
         <km-property *ngIf="provider !== Provider.AKS">
           <div key>Created</div>
           <div *ngIf="provider === Provider.GKE"
                value>
-            <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime"></km-relative-time>
+            <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime" />
           </div>
           <div *ngIf="provider === Provider.EKS"
                value>
-            <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt"></km-relative-time>
+            <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt" />
           </div>
         </km-property>
         <km-property *ngIf="isImportedCluster">
           <div key>Imported</div>
           <div value>
-            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="cluster.creationTimestamp" />
           </div>
         </km-property>
       </div>
 
-      <km-cluster-metrics [clusterMetrics]="clusterMetrics"></km-cluster-metrics>
+      <km-cluster-metrics [clusterMetrics]="clusterMetrics" />
     </mat-card-content>
   </mat-card>
 
@@ -239,19 +239,19 @@ limitations under the License.
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectID"
                                        [isClusterRunning]="isRunning()"
-                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
+                                       [isInitialized]="areMachineDeploymentsInitialized" />
 
   <km-external-node-list *ngIf="provider === Provider.Custom || provider === Provider.KubeOne"
                          [cluster]="cluster"
                          [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
                          [projectID]="projectID"
-                         [isInitialized]="areNodesInitialized"></km-external-node-list>
+                         [isInitialized]="areNodesInitialized" />
 
-  <km-event-card [events]="events"></km-event-card>
+  <km-event-card [events]="events" />
 </ng-container>
 
 <mat-spinner [diameter]="25"
              *ngIf="!cluster"
              color="accent"
-             class="km-spinner"></mat-spinner>
+             class="km-spinner" />

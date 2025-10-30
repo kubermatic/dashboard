@@ -84,16 +84,14 @@ END OF TERMS AND CONDITIONS
                            mode="all"
                            label="Report Retention"
                            hint="Number of days each report is saved, leave the field empty to store reports forever."
-                           min="1">
-        </km-number-stepper>
+                           min="1" />
 
         <km-number-stepper [formControlName]="controls.Interval"
                            mode="all"
                            label="Report Scope"
                            hint="Number of days captured in each report."
                            min="1"
-                           required>
-        </km-number-stepper>
+                           required />
 
         <mat-form-field>
           <mat-label>Cron Expression</mat-label>
@@ -139,7 +137,6 @@ END OF TERMS AND CONDITIONS
                label="Create Schedule"
                [observable]="getObservable()"
                (next)="onNext()"
-               [disabled]="form.invalid">
-    </km-button>
+               [disabled]="form.invalid" />
   </mat-dialog-actions>
 </div>

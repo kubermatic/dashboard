@@ -38,8 +38,7 @@ limitations under the License.
                        label="Disk Size in GB"
                        min="10"
                        max="16000"
-                       required>
-    </km-number-stepper>
+                       required />
   </div>
 
   <km-combobox #instanceTypeCombobox
@@ -62,16 +61,14 @@ limitations under the License.
                    [formControlName]="Controls.VSwitchID"
                    [isLoading]="isLoadingVSwitches"
                    [options]="vSwitches"
-                   required="true">
-  </km-autocomplete>
+                   required="true" />
 
   <km-number-stepper [formControlName]="Controls.InternetMaxBandwidthOut"
                      mode="errors"
                      label="Internet Max Bandwidth Out"
                      min="10"
                      max="16000"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-combobox #zoneCombobox
                [required]="true"

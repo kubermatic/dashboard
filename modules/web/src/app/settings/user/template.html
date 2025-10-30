@@ -43,7 +43,7 @@ limitations under the License.
           <div key
                class="user-groups-key">OIDC Groups</div>
           <div value>
-            <km-labels [labels]="user.groups"></km-labels>
+            <km-labels [labels]="user.groups" />
           </div>
         </km-property>
         <ng-template #noGroups>
@@ -82,11 +82,11 @@ limitations under the License.
           </mat-select>
         </mat-form-field>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
-                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
+                                      fxFlexAlign=" center" />
       </div>
 
       <!-- Load the theming module -->
-      <router-outlet name="theming"></router-outlet>
+      <router-outlet name="theming" />
 
       <div fxLayout="row">
         <div class="entry-label"
@@ -111,7 +111,7 @@ limitations under the License.
           </mat-select>
         </mat-form-field>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectID, apiSettings.selectedProjectID)"
-                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
+                                      fxFlexAlign=" center" />
       </div>
       <div fxLayout="row">
         <div class="entry-label"
@@ -132,7 +132,7 @@ limitations under the License.
           </mat-button-toggle>
         </mat-button-toggle-group>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.useClustersView, apiSettings.useClustersView)"
-                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
+                                      fxFlexAlign=" center" />
       </div>
     </div>
   </mat-card-content>

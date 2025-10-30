@@ -53,7 +53,7 @@ limitations under the License.
 
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
-             header="YAML"></km-editor>
+             header="YAML" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-constraint-dialog-btn"
@@ -61,6 +61,5 @@ limitations under the License.
              [label]="label"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

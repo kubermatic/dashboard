@@ -32,7 +32,7 @@ limitations under the License.
             [stepControl]="form.get(stepRegistry.Preset)"
             [label]="stepRegistry.Preset"
             fxFlex="100%">
-    <km-preset-step [formControl]="form.get(stepRegistry.Preset)"></km-preset-step>
+    <km-preset-step [formControl]="form.get(stepRegistry.Preset)" />
   </mat-step>
 
   <mat-step *ngIf="isEnabled(stepRegistry.Provider)"
@@ -41,7 +41,7 @@ limitations under the License.
             fxFlex="100%">
     <km-preset-provider-step [existingProviders]="data.preset?.providers"
                              [mode]="data.mode"
-                             [formControl]="form.get(stepRegistry.Provider)"></km-preset-provider-step>
+                             [formControl]="form.get(stepRegistry.Provider)" />
   </mat-step>
 
   <mat-step *ngIf="isEnabled(stepRegistry.Settings)"
@@ -49,14 +49,14 @@ limitations under the License.
             [label]="stepRegistry.Settings"
             fxFlex="100%">
     <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"
-                             [mode]="data.mode"></km-preset-settings-step>
+                             [mode]="data.mode" />
   </mat-step>
 </mat-horizontal-stepper>
 
 <mat-dialog-actions class="preset-dialog-action">
   <mat-spinner [diameter]="30"
                color="accent"
-               *ngIf="creating"></mat-spinner>
+               *ngIf="creating" />
   <button mat-flat-button
           type="button"
           color="tertiary"
@@ -84,6 +84,5 @@ limitations under the License.
              [label]="label"
              [disabled]="creating || invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

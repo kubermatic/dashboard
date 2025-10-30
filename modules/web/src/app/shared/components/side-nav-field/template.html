@@ -32,7 +32,7 @@ limitations under the License.
   </div>
   <div *ngIf="expanded"
        @shrinkGrow>
-    <ng-container *ngTemplateOutlet="content"></ng-container>
+    <ng-container *ngTemplateOutlet="content" />
   </div>
   <div *ngIf="lastItem"
        class="side-nav-end"></div>
@@ -52,8 +52,8 @@ limitations under the License.
             [class]="'side-nav-sub-menu-item'">
     <mat-label class="menu-label">{{label}}</mat-label>
     <hr />
-    <ng-container *ngTemplateOutlet="content"></ng-container>
+    <ng-container *ngTemplateOutlet="content" />
   </mat-menu>
 </div>
 
-<ng-template #content><ng-content></ng-content></ng-template>
+<ng-template #content><ng-content /></ng-template>

@@ -17,16 +17,16 @@ limitations under the License.
      fxLayout="column">
   <km-aks-cluster-settings *ngSwitchCase="Provider.AKS"
                            [quotaWidget]="quotaWidget"
-                           [formControl]="form.get(Controls.AKSExternalCluster)"></km-aks-cluster-settings>
+                           [formControl]="form.get(Controls.AKSExternalCluster)" />
   <km-eks-cluster-settings *ngSwitchCase="Provider.EKS"
                            [quotaWidget]="quotaWidget"
-                           [formControl]="form.get(Controls.EKSExternalCluster)"></km-eks-cluster-settings>
+                           [formControl]="form.get(Controls.EKSExternalCluster)" />
   <km-gke-cluster-settings *ngSwitchCase="Provider.GKE"
                            [quotaWidget]="quotaWidget"
-                           [formControl]="form.get(Controls.GKEExternalCluster)"></km-gke-cluster-settings>
+                           [formControl]="form.get(Controls.GKEExternalCluster)" />
 </div>
 
 <ng-template #quotaWidget>
   <router-outlet name="quota-widget"
-                 (activate)="onActivate($event)"></router-outlet>
+                 (activate)="onActivate($event)" />
 </ng-template>

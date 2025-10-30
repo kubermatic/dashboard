@@ -23,7 +23,7 @@ limitations under the License.
     </p>
     <km-application-definition-card *ngIf="applicationDefinition"
                                     [applicationDefinition]="applicationDefinition"
-                                    [displayLinks]="true"></km-application-definition-card>
+                                    [displayLinks]="true" />
     <form *ngIf="form && !isLoadingDetails"
           [formGroup]="form">
       <div fxLayout="column"
@@ -56,11 +56,11 @@ limitations under the License.
               </km-property>
             </div>
           </div>
-          <ng-container *ngTemplateOutlet="versions"></ng-container>
+          <ng-container *ngTemplateOutlet="versions" />
         </ng-container>
 
         <ng-template #editableFields>
-          <ng-container *ngTemplateOutlet="versions"></ng-container>
+          <ng-container *ngTemplateOutlet="versions" />
 
           <mat-form-field>
             <mat-label>Application Installation Namespace</mat-label>
@@ -115,11 +115,10 @@ limitations under the License.
                      [(model)]="valuesConfig"
                      (modelChange)="onValuesConfigChanged($event)"
                      height="370px"
-                     [header]="isEnforcedApplication() ? 'values.yaml (read only)' : 'values.yaml'">
-          </km-editor>
+                     [header]="isEnforcedApplication() ? 'values.yaml (read only)' : 'values.yaml'" />
           <km-validate-json-or-yaml [data]="valuesConfig"
                                     [isOnlyYAML]="true"
-                                    (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
+                                    (dataValid)="onValuesConfigValidityChanged($event)" />
         </div>
 
         <ng-template #versions>
@@ -156,7 +155,7 @@ limitations under the License.
                   <div value
                        class="version-icon-value"
                        fxLayoutAlign="center">
-                    <km-application-method-icon [method]="applicationMethod"></km-application-method-icon>
+                    <km-application-method-icon [method]="applicationMethod" />
                   </div>
                 </km-property>
               </div>
@@ -167,7 +166,7 @@ limitations under the License.
                   <div value
                        class="version-icon-value"
                        fxLayoutAlign="center">
-                    <km-application-method-icon [method]="selectedVersionSource"></km-application-method-icon>
+                    <km-application-method-icon [method]="selectedVersionSource" />
                   </div>
                 </km-property>
               </div>
@@ -179,7 +178,7 @@ limitations under the License.
     <mat-spinner *ngIf="isLoadingDetails"
                  [diameter]="25"
                  class="km-spinner"
-                 color="primary"></mat-spinner>
+                 color="primary" />
   </ng-container>
 </mat-dialog-content>
 

@@ -156,7 +156,7 @@ limitations under the License.
                                    [settings]="settings"
                                    [constraintName]="element.name"
                                    [projectId]="projectID"
-                                   [clusterId]="cluster.id"></km-violation-details-list>
+                                   [clusterId]="cluster.id" />
       </div>
     </td>
   </ng-container>
@@ -182,13 +182,13 @@ limitations under the License.
   No constraints available.
 </div>
 
-<km-loader *ngIf="isLoadingData(dataSource.data)"></km-loader>
+<km-loader *ngIf="isLoadingData(dataSource.data)" />
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
-    <mat-paginator showFirstLastButtons></mat-paginator>
+    <km-pagination-page-size />
+    <mat-paginator showFirstLastButtons />
   </div>
 </div>

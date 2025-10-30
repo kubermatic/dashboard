@@ -34,7 +34,7 @@ limitations under the License.
 
   <div class="spec">Data</div>
   <km-editor [(model)]="ruleGroupData"
-             header="YAML"></km-editor>
+             header="YAML" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-rule-group-dialog-btn"
@@ -42,6 +42,5 @@ limitations under the License.
              [label]="data.confirmLabel+' Rule Group'"
              [disabled]="!isValid()"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

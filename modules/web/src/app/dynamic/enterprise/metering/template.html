@@ -21,18 +21,17 @@ END OF TERMS AND CONDITIONS
 -->
 
 <ng-container *ngIf="!isLoading()">
-  <km-metering-config [config]="config"></km-metering-config>
-  <km-metering-schedule-config [schedules]="schedules"></km-metering-schedule-config>
+  <km-metering-config [config]="config" />
+  <km-metering-schedule-config [schedules]="schedules" />
 </ng-container>
 
 <ng-container *ngIf="isLoading() || fetchingLegacyReportsInProgress">
   <mat-spinner class="km-spinner"
                [diameter]="50"
-               color="accent"></mat-spinner>
+               color="accent" />
 </ng-container>
 
 <ng-container *ngIf="showLegacyReportsCard">
   <km-metering-legacy-reports-card [reports]="legacyReports"
-                                   [isLoadingReports]="false">
-  </km-metering-legacy-reports-card>
+                                   [isLoadingReports]="false" />
 </ng-container>

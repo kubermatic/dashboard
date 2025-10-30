@@ -82,13 +82,13 @@ limitations under the License.
 
       <ng-container [ngSwitch]="provider">
         <km-eks-cluster-summary *ngSwitchCase="ExternalClusterProvider.EKS"
-                                [cluster]="cluster"></km-eks-cluster-summary>
+                                [cluster]="cluster" />
 
         <km-aks-cluster-summary *ngSwitchCase="ExternalClusterProvider.AKS"
-                                [cluster]="cluster"></km-aks-cluster-summary>
+                                [cluster]="cluster" />
 
         <km-gke-cluster-summary *ngSwitchCase="ExternalClusterProvider.GKE"
-                                [cluster]="cluster"></km-gke-cluster-summary>
+                                [cluster]="cluster" />
       </ng-container>
     </div>
   </div>

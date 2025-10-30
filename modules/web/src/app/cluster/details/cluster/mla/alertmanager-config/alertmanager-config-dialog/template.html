@@ -18,7 +18,7 @@ limitations under the License.
   <p class="km-dialog-context-description">Edit alertmanager config of <b>{{data?.cluster?.name}}</b> cluster</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
-             header="YAML"></km-editor>
+             header="YAML" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-alertmanager-config-dialog-btn"
@@ -26,6 +26,5 @@ limitations under the License.
              [label]="data.confirmLabel+' Alertmanager Config'"
              [disabled]="!isValid"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

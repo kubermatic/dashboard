@@ -42,18 +42,18 @@ limitations under the License.
           <mat-optgroup [label]="group">
             <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
                         [value]="option[selectBy]">
-              <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
+              <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}" />
             </mat-option>
           </mat-optgroup>
           <mat-divider *ngIf="!isLast"
-                       class="km-option-divider"></mat-divider>
+                       class="km-option-divider" />
         </ng-container>
       </ng-container>
 
       <ng-template #ungrouped>
         <mat-option *ngFor="let option of options | filterBy: filterByInput"
                     [value]="option[selectBy]">
-          <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
+          <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}" />
         </mat-option>
       </ng-template>
 
@@ -82,7 +82,7 @@ limitations under the License.
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
 
     <mat-hint *ngIf="!hint">
-      <ng-content select="[hint]"></ng-content>
+      <ng-content select="[hint]" />
     </mat-hint>
 
   </mat-form-field>

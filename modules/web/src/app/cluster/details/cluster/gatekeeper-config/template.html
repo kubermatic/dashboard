@@ -54,8 +54,7 @@ limitations under the License.
     Readiness
     <km-property-boolean class="ready-check"
                          label="Stats Enabled"
-                         [value]="gatekeeperConfig.spec.readiness.statsEnabled">
-    </km-property-boolean>
+                         [value]="gatekeeperConfig.spec.readiness.statsEnabled" />
   </h3>
 
   <h3 *ngIf="hasSection('sync')">Sync</h3>
@@ -193,4 +192,4 @@ limitations under the License.
   No config found.
 </div>
 
-<km-loader *ngIf="isLoadingData()"></km-loader>
+<km-loader *ngIf="isLoadingData()" />

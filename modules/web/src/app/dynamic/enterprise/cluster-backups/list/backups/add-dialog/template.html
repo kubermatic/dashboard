@@ -110,7 +110,7 @@ END OF TERMS AND CONDITIONS
                        [labels]="labels"
                        noValidators="true"
                        (labelsChange)="onLabelsChange($event)"
-                       [formControlName]="Controls.Labels"></km-label-form>
+                       [formControlName]="Controls.Labels" />
       </div>
     </form>
   </mat-dialog-content>
@@ -119,7 +119,6 @@ END OF TERMS AND CONDITIONS
                [label]="btnLabel"
                [disabled]="form.invalid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

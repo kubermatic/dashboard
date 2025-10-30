@@ -19,12 +19,12 @@ limitations under the License.
                           [cluster]="cluster"
                           [projectID]="projectID"
                           [isClusterRunning]="isClusterRunning"
-                          [addons]="addons"></km-alertmanager-config>
+                          [addons]="addons" />
 
   <km-rule-groups [ruleGroups]="ruleGroups"
                   [cluster]="cluster"
                   [projectID]="projectID"
-                  [isClusterRunning]="isClusterRunning"></km-rule-groups>
+                  [isClusterRunning]="isClusterRunning" />
 </ng-container>
 
-<km-loader *ngIf="!isClusterRunning"></km-loader>
+<km-loader *ngIf="!isClusterRunning" />

@@ -16,7 +16,7 @@ limitations under the License.
 
 <ng-container [ngSwitch]="urlPath">
   <router-outlet *ngSwitchCase="view.Groups"
-                 name="groups"></router-outlet>
+                 name="groups" />
 
   <ng-container *ngSwitchCase="view.Members">
     <mat-card appearance="outlined"
@@ -81,7 +81,7 @@ limitations under the License.
                   <ng-container *ngSwitchCase="true">
                     <mat-spinner [diameter]="25"
                                  class="km-spinner"
-                                 color="accent"></mat-spinner>
+                                 color="accent" />
                   </ng-container>
 
                   <ng-container *ngSwitchCase="false">
@@ -125,7 +125,7 @@ limitations under the License.
                *ngIf="isInitializing">
             <mat-spinner color="accent"
                          class="km-spinner km-with-spacing"
-                         [diameter]="25"></mat-spinner>
+                         [diameter]="25" />
           </div>
         </ng-container>
 
@@ -133,8 +133,8 @@ limitations under the License.
              class="km-paginator-container">
           <div fxLayout="row"
                fxLayoutAlign="flex-end center">
-            <km-pagination-page-size></km-pagination-page-size>
-            <mat-paginator showFirstLastButtons></mat-paginator>
+            <km-pagination-page-size />
+            <mat-paginator showFirstLastButtons />
           </div>
         </div>
       </mat-card-content>

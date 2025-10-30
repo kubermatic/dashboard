@@ -45,8 +45,7 @@ limitations under the License.
         <km-button iconButton="true"
                    [icon]="provider.enabled ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-hide'"
                    [observable]="getObservable(provider.name, !provider.enabled)"
-                   (next)="onNext(provider.name, !provider.enabled)">
-        </km-button>
+                   (next)="onNext(provider.name, !provider.enabled)" />
       </div>
     </div>
   </div>

@@ -73,7 +73,7 @@ limitations under the License.
         <mat-spinner *ngIf="!!element['deletionTimestamp']; else deleteButton"
                      [diameter]="25"
                      class="km-spinner"
-                     color="accent"></mat-spinner>
+                     color="accent" />
 
         <ng-template #deleteButton>
           <button mat-icon-button
@@ -103,5 +103,5 @@ limitations under the License.
 </div>
 
 <ng-template #loading>
-  <km-loader></km-loader>
+  <km-loader />
 </ng-template>

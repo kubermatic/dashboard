@@ -39,7 +39,7 @@ limitations under the License.
       <mat-select [formControlName]="Controls.FloatingNetworkID">
         <mat-option *ngIf="isFloatingNetworksLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isFloatingNetworksLoading && !floatingNetworks?.length"
                     disabled>
@@ -59,7 +59,7 @@ limitations under the License.
                   [disabled]="!form.get(Controls.FloatingNetworkID).value">
         <mat-option *ngIf="isFloatingSubnetsLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
                     disabled>
@@ -95,7 +95,7 @@ limitations under the License.
                   panelClass="km-multiple-values-dropdown">
         <mat-option *ngIf="isFloatingSubnetsLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
                     disabled>
@@ -118,7 +118,7 @@ limitations under the License.
       <mat-select [formControlName]="Controls.NetworkID">
         <mat-option *ngIf="isNetworksLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isNetworksLoading && !networks?.length"
                     disabled> No networks available </mat-option>
@@ -136,7 +136,7 @@ limitations under the License.
                   [disabled]="!form.get(Controls.NetworkID).value">
         <mat-option *ngIf="isSubnetsLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isSubnetsLoading && !form.get(Controls.NetworkID).value"
                     disabled>
@@ -158,7 +158,7 @@ limitations under the License.
                   [disabled]="!form.get(Controls.NetworkID).value">
         <mat-option *ngIf="isMemberSubnetsLoading"
                     disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
         <mat-option *ngIf="!isMemberSubnetsLoading && !form.get(Controls.NetworkID).value"
                     disabled>
@@ -201,7 +201,7 @@ limitations under the License.
   <!-- Load balancer Configured Classes -->
   <div class="loadbalancer-classes-section">
     <p class="km-text-muted">Load Balancer Classes ({{openstackConfiguredClasses.length}})</p>
-    <mat-divider></mat-divider>
+    <mat-divider />
     <table class="km-table"
            mat-table
            multiTemplateDataRows

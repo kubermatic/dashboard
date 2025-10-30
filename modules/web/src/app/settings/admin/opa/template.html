@@ -26,12 +26,12 @@ limitations under the License.
 <km-tab-card id="km-admin-opa-card"
              [dynamicTabs]="dynamicTabs">
   <km-tab label="Constraint Templates">
-    <km-constraint-templates-list></km-constraint-templates-list>
+    <km-constraint-templates-list />
   </km-tab>
   <km-tab label="Default Constraints">
-    <km-default-constraint-list></km-default-constraint-list>
+    <km-default-constraint-list />
   </km-tab>
   <!-- Load the allowed registries module -->
   <router-outlet name="allowed-registries"
-                 (activate)="onActivate($event)"></router-outlet>
+                 (activate)="onActivate($event)" />
 </km-tab-card>

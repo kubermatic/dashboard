@@ -44,7 +44,7 @@ END OF TERMS AND CONDITIONS
         <div *option="let cluster">{{cluster.name}}</div>
       </km-combobox>
       <km-search-field class="search-field"
-                       (queryChange)="onSearch($event)"></km-search-field>
+                       (queryChange)="onSearch($event)" />
 
       <div fxFlex></div>
       <div class="action-button">
@@ -137,7 +137,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-25">Labels</th>
         <td mat-cell
             *matCellDef="let element">
-          <km-labels [labels]="element.spec?.labelSelector?.matchLabels"></km-labels>
+          <km-labels [labels]="element.spec?.labelSelector?.matchLabels" />
         </td>
       </ng-container>
 
@@ -219,7 +219,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-15">Created</th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.spec.createdAt"></km-relative-time>
+          <km-relative-time [date]="element.spec.createdAt" />
         </td>
       </ng-container>
 
@@ -251,8 +251,7 @@ END OF TERMS AND CONDITIONS
                        [disabled]="!canAdd || !isRunning(element.spec.status)"
                        [observable]="getObservable(element)"
                        (next)="onNext($event)"
-                       (click)="$event.stopPropagation()">
-            </km-button>
+                       (click)="$event.stopPropagation()" />
           </div>
         </td>
       </ng-container>
@@ -291,15 +290,15 @@ END OF TERMS AND CONDITIONS
          *ngIf="loadingBackups && !clusterBackups.length">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
     </div>
 
     <div [hidden]="!clusterBackups?.length"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

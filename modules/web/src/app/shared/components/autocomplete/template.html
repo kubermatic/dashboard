@@ -26,7 +26,7 @@ limitations under the License.
            kmValueChangedIndicator>
     <mat-spinner matSuffix
                  *ngIf="isLoading && !form.disabled"
-                 [diameter]="20"></mat-spinner>
+                 [diameter]="20" />
     <button *ngIf="!isLoading && options?.length"
             mat-icon-button
             [disabled]="disabled"
@@ -58,7 +58,7 @@ limitations under the License.
       </ng-container>
     </mat-autocomplete>
     <mat-hint>
-      <ng-content select="[hint]"></ng-content>
+      <ng-content select="[hint]" />
     </mat-hint>
 
     <!-- Errors -->
@@ -68,7 +68,7 @@ limitations under the License.
 
     <mat-error *ngIf="form.get(controls.Main).hasError('pattern')">
       <span #patternRef>
-        <ng-content select="[patternError]"></ng-content>
+        <ng-content select="[patternError]" />
       </span>
       <span *ngIf="!patternRef.innerHTML.trim()">{{label}} has invalid pattern.</span>
     </mat-error>

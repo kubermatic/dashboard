@@ -80,7 +80,7 @@ limitations under the License.
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
-                     [formControlName]="Controls.Labels"></km-label-form>
+                     [formControlName]="Controls.Labels" />
 
       <div *ngIf="isEnterpriseEdition && projectQouta && user.isAdmin">
         <mat-card-header>
@@ -93,22 +93,19 @@ limitations under the License.
           <km-number-stepper id="km-cpu-input"
                              label="CPU"
                              min="0"
-                             [formControlName]="Controls.CPUQuota">
-          </km-number-stepper>
+                             [formControlName]="Controls.CPUQuota" />
 
           <km-number-stepper id="km-memory-input"
                              label="Memory (GB)"
                              min="0"
                              type="decimal"
-                             [formControlName]="Controls.MemoryQuota">
-          </km-number-stepper>
+                             [formControlName]="Controls.MemoryQuota" />
 
           <km-number-stepper id="km-storage-input"
                              label="Disk (GB)"
                              min="0"
                              type="decimal"
-                             [formControlName]="Controls.StorageQuota">
-          </km-number-stepper>
+                             [formControlName]="Controls.StorageQuota" />
         </div>
       </div>
     </form>
@@ -119,7 +116,6 @@ limitations under the License.
                label="Save Changes"
                [disabled]="!form.valid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

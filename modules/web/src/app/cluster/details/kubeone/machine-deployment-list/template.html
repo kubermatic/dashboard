@@ -108,7 +108,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
+          <km-relative-time [date]="element.creationTimestamp" />
         </td>
       </ng-container>
 
@@ -147,14 +147,14 @@ limitations under the License.
       No machine deployments available.
     </div>
 
-    <km-loader *ngIf="isLoadingData()"></km-loader>
+    <km-loader *ngIf="isLoadingData()" />
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
 

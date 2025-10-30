@@ -32,7 +32,7 @@ limitations under the License.
                                 (refreshClusters)="clustersChange.next()"
                                 (refreshExternalClusters)="externalClustersChange.next()"
                                 (refreshClusterTemplates)="clusterTemplatesChange.next()"
-                                (refreshBackups)="backupsChange.next()"></km-create-resource-panel>
+                                (refreshBackups)="backupsChange.next()" />
     </mat-card-header>
 
     <mat-card-content fxLayout="row wrap"
@@ -114,7 +114,7 @@ limitations under the License.
           <div key>Labels</div>
           <div value>
             <km-labels [oneLineLimit]="true"
-                       [labels]="project?.labels"></km-labels>
+                       [labels]="project?.labels" />
           </div>
         </km-property>
       </div>
@@ -133,7 +133,7 @@ limitations under the License.
                             [isLoadingClusters]="isLoadingClusters"
                             [externalClusters]="externalClusters"
                             [externalClustersEnabled]="externalClustersEnabled"
-                            [isLoadingExternalClusters]="isLoadingExternalClusters"></km-clusters-overview>
+                            [isLoadingExternalClusters]="isLoadingExternalClusters" />
     </div>
     <div fxLayout="column"
          fxLayoutGap="20px"
@@ -145,15 +145,15 @@ limitations under the License.
         </mat-card-header>
         <mat-card-content>
           <router-outlet name="quota-widget"
-                         (activate)="onActivate($event)"></router-outlet>
+                         (activate)="onActivate($event)" />
         </mat-card-content>
       </mat-card>
       <km-providers-overview [clusters]="clusters"
-                             [externalClusters]="externalClusters"></km-providers-overview>
+                             [externalClusters]="externalClusters" />
       <km-members-overview [project]="project"
                            [members]="members"
                            [groups]="groups"
-                           [showMembersAndGroups]="hasPermission(View.Members)"></km-members-overview>
+                           [showMembersAndGroups]="hasPermission(View.Members)" />
     </div>
   </div>
 </div>

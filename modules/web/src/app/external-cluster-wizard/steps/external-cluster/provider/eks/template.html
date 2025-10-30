@@ -159,8 +159,7 @@ limitations under the License.
                        label="Disk Size in GB"
                        min="1"
                        hint="Enter the size of the attached EBS volume for each node."
-                       required>
-    </km-number-stepper>
+                       required />
   </div>
 
   <div fxFlex="50%"
@@ -229,7 +228,7 @@ limitations under the License.
     </km-combobox>
 
     <div>
-      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidget" />
     </div>
 
     <ng-container *ngIf="isDialogView()">
@@ -242,23 +241,20 @@ limitations under the License.
                          hint="Set the desired number of nodes that the group should launch with initially."
                          [required]="true"
                          [min]="minNodeCount"
-                         [max]="maxNodeCount">
-      </km-number-stepper>
+                         [max]="maxNodeCount" />
       <km-number-stepper [formControlName]="Controls.MaxSize"
                          mode="all"
                          label="Max Count"
                          hint="Set the maximum number of nodes that the group can scale out to."
                          [required]="true"
-                         [min]="minNodeCount">
-      </km-number-stepper>
+                         [min]="minNodeCount" />
       <km-number-stepper [formControlName]="Controls.MinSize"
                          mode="all"
                          label="Min Count"
                          min="1"
                          hint="Set the minimum number of nodes that the group can scale in to"
                          [required]="true"
-                         [max]="maxNodeCount">
-      </km-number-stepper>
+                         [max]="maxNodeCount" />
     </ng-container>
   </div>
 </form>

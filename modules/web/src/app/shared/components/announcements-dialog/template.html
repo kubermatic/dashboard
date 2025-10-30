@@ -35,7 +35,7 @@ limitations under the License.
           class="km-header-cell p-20">Created</th>
       <td mat-cell
           *matCellDef="let element">
-        <km-relative-time [date]="getCreatedAt(element)"></km-relative-time>
+        <km-relative-time [date]="getCreatedAt(element)" />
       </td>
     </ng-container>
     <ng-container [matColumnDef]="Column.Actions">
@@ -51,7 +51,7 @@ limitations under the License.
                 fxLayoutAlign="center center">
           <i class="km-icon-mask km-icon-check"></i>
         </button>
-        <km-spinner-with-confirmation [isSaved]="!markingAnnouncementsAsRead[element]"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="!markingAnnouncementsAsRead[element]" />
       </td>
     </ng-container>
     <tr mat-header-row
@@ -65,5 +65,4 @@ limitations under the License.
   <div class="km-row km-empty-list-msg"
        *ngIf="!hasAnnouncements()">No announcements available.</div>
 </mat-dialog-content>
-<mat-dialog-actions>
-</mat-dialog-actions>
+<mat-dialog-actions />

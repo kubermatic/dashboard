@@ -57,7 +57,7 @@ limitations under the License.
             </div>
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation) && 
                                                       isEqual(settings.restrictProjectDeletion, apiSettings.restrictProjectDeletion) && 
-                                                      isEqual(settings.restrictProjectModification, apiSettings.restrictProjectModification)"></km-spinner-with-confirmation>
+                                                      isEqual(settings.restrictProjectModification, apiSettings.restrictProjectModification)" />
           </div>
         </div>
 
@@ -82,10 +82,9 @@ limitations under the License.
                                  id="km-project-limit-setting"
                                  label="User Projects Limit"
                                  min="0"
-                                 required>
-              </km-number-stepper>
+                                 required />
             </div>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)" />
           </div>
         </div>
 
@@ -111,37 +110,33 @@ limitations under the License.
                                  id="km-cpu-resource-quota-setting"
                                  label="Min CPU"
                                  min="0"
-                                 required>
-              </km-number-stepper>
+                                 required />
 
               <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
                                  (ngModelChange)="onSettingsChange()"
                                  label="Max CPU"
                                  min="0"
-                                 required>
-              </km-number-stepper>
+                                 required />
 
               <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
                                  (ngModelChange)="onSettingsChange()"
                                  id="km-ram-resource-quota-setting"
                                  label="Min RAM (GB)"
                                  min="0"
-                                 required>
-              </km-number-stepper>
+                                 required />
 
               <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
                                  (ngModelChange)="onSettingsChange()"
                                  label="Max RAM (GB)"
                                  min="0"
-                                 required>
-              </km-number-stepper>
+                                 required />
 
               <mat-checkbox [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
                             (change)="onSettingsChange()">Enable GPU
               </mat-checkbox>
             </div>
 
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)" />
           </div>
         </div>
 

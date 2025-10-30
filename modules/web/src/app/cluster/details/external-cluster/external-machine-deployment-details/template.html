@@ -16,7 +16,7 @@ limitations under the License.
 <ng-container *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
+                    [projectID]="projectID" />
 
   <mat-card appearance="outlined">
     <mat-card-header>
@@ -114,7 +114,7 @@ limitations under the License.
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="machineDeployment.creationTimestamp" />
           </div>
         </km-property>
       </div>
@@ -149,23 +149,21 @@ limitations under the License.
 
             <km-labels *ngIf="machineDeployment.cloud.gke.config.labels !== undefined"
                        [labels]="machineDeployment.cloud.gke.config.labels"
-                       [limit]="2"></km-labels>
+                       [limit]="2" />
           </ng-container>
         </ng-container>
       </div>
 
-      <mat-divider *ngIf="machineDeployment?.cloud?.gke?.management"></mat-divider>
+      <mat-divider *ngIf="machineDeployment?.cloud?.gke?.management" />
 
       <div class="km-content-wrap">
         <ng-container *ngIf="!!machineDeployment.cloud.gke?.management">
           <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoUpgrade !== undefined"
                                label="Auto-Upgrade"
-                               [value]="machineDeployment.cloud.gke.management.autoUpgrade">
-          </km-property-boolean>
+                               [value]="machineDeployment.cloud.gke.management.autoUpgrade" />
           <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoRepair !== undefined"
                                label="Auto-Repair"
-                               [value]="machineDeployment.cloud.gke.management.autoRepair">
-          </km-property-boolean>
+                               [value]="machineDeployment.cloud.gke.management.autoRepair" />
         </ng-container>
       </div>
     </mat-card-content>
@@ -175,14 +173,14 @@ limitations under the License.
                          [nodes]="nodes"
                          [nodesMetrics]="metrics"
                          [projectID]="projectID"
-                         [isInitialized]="areNodesInitialized"></km-external-node-list>
+                         [isInitialized]="areNodesInitialized" />
 
-  <km-event-card [events]="events"></km-event-card>
+  <km-event-card [events]="events" />
 
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
   <mat-spinner [diameter]="25"
                color="accent"
-               class="km-spinner"></mat-spinner>
+               class="km-spinner" />
 </ng-container>

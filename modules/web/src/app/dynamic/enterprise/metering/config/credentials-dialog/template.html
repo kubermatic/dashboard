@@ -80,11 +80,10 @@ END OF TERMS AND CONDITIONS
                [diameter]="25"
                @pushToSide
                color="accent"
-               class="spinner"></mat-spinner>
+               class="spinner" />
   <km-button icon="km-icon-save"
              label="Save Credentials"
              [disabled]="form.invalid || saving"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

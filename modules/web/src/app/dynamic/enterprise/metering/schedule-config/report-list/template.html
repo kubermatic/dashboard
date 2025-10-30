@@ -64,7 +64,7 @@ END OF TERMS AND CONDITIONS
     <ng-container *ngIf="isLoadingConfig">
       <mat-spinner [diameter]="25"
                    class="km-spinner"
-                   color="accent"></mat-spinner>
+                   color="accent" />
     </ng-container>
   </mat-card-content>
 
@@ -109,7 +109,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Created</th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.lastModified"></km-relative-time>
+          <km-relative-time [date]="element.lastModified" />
         </td>
       </ng-container>
 
@@ -125,7 +125,7 @@ END OF TERMS AND CONDITIONS
               <mat-spinner color="accent"
                            class="km-spinner"
                            fxFlexAlign=" center"
-                           [diameter]="25"></mat-spinner>
+                           [diameter]="25" />
             </ng-container>
 
             <button id="km-download-report-button"
@@ -156,7 +156,7 @@ END OF TERMS AND CONDITIONS
       <div class="km-row">
         <mat-spinner color="accent"
                      class="km-spinner"
-                     [diameter]="25"></mat-spinner>
+                     [diameter]="25" />
       </div>
     </ng-container>
 
@@ -164,8 +164,8 @@ END OF TERMS AND CONDITIONS
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

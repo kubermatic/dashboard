@@ -121,7 +121,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
+          <km-relative-time [date]="element.creationTimestamp" />
         </td>
       </ng-container>
 
@@ -163,18 +163,18 @@ limitations under the License.
               <km-property-usage name="Nodes CPU Usage"
                                  unit="millicores"
                                  [used]="getMetrics(element.name)?.cpuTotalMillicores"
-                                 [total]="getMetrics(element.name)?.cpuAvailableMillicores"></km-property-usage>
+                                 [total]="getMetrics(element.name)?.cpuAvailableMillicores" />
 
               <km-property-usage name="Nodes Memory Usage"
                                  unit="MiB"
                                  [used]="getMetrics(element.name)?.memoryTotalBytes"
-                                 [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
+                                 [total]="getMetrics(element.name).memoryAvailableBytes" />
             </div>
 
             <km-property *ngIf="element.spec.labels">
               <div key>Labels</div>
               <div value>
-                <km-labels [labels]="element.spec.labels"></km-labels>
+                <km-labels [labels]="element.spec.labels" />
               </div>
             </km-property>
 
@@ -200,14 +200,14 @@ limitations under the License.
       No nodes available.
     </div>
 
-    <km-loader *ngIf="isLoadingData()"></km-loader>
+    <km-loader *ngIf="isLoadingData()" />
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
 

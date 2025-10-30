@@ -64,6 +64,5 @@ limitations under the License.
              label="Delete Cluster"
              [disabled]="inputName !== cluster.name"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

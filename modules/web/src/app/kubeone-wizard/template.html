@@ -45,19 +45,19 @@ limitations under the License.
              id="{{step.id}}-step"
              class="wizard-step">
           <ng-container *ngSwitchCase="StepRegistry.Provider">
-            <km-kubeone-wizard-provider-step [formControl]="form.get(StepRegistry.Provider)"></km-kubeone-wizard-provider-step>
+            <km-kubeone-wizard-provider-step [formControl]="form.get(StepRegistry.Provider)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="StepRegistry.Cluster">
-            <km-kubeone-wizard-cluster-step [formControl]="form.get(StepRegistry.Cluster)"></km-kubeone-wizard-cluster-step>
+            <km-kubeone-wizard-cluster-step [formControl]="form.get(StepRegistry.Cluster)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="StepRegistry.Credentials">
-            <km-kubeone-wizard-credentials-step [formControl]="form.get(StepRegistry.Credentials)"></km-kubeone-wizard-credentials-step>
+            <km-kubeone-wizard-credentials-step [formControl]="form.get(StepRegistry.Credentials)" />
           </ng-container>
 
           <ng-container *ngSwitchCase="StepRegistry.Summary">
-            <km-kubeone-wizard-summary-step *ngIf="last"></km-kubeone-wizard-summary-step>
+            <km-kubeone-wizard-summary-step *ngIf="last" />
           </ng-container>
         </div>
 
@@ -75,7 +75,7 @@ limitations under the License.
           <mat-spinner fxFlexAlign="center"
                        [diameter]="30"
                        color="primary"
-                       *ngIf="creating"></mat-spinner>
+                       *ngIf="creating" />
           <button mat-flat-button
                   type="button"
                   color="tertiary"
@@ -101,8 +101,7 @@ limitations under the License.
                      label="Import KubeOne Cluster"
                      [disabled]="creating"
                      [observable]="getObservable()"
-                     (next)="onNext($event)">
-          </km-button>
+                     (next)="onNext($event)" />
         </div>
       </mat-step>
     </mat-horizontal-stepper>

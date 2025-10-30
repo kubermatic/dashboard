@@ -52,8 +52,7 @@ limitations under the License.
                      [required]="isDiskSizeRequired()"
                      hint="An additional network storage volume will be created and used as the disk for the VM."
                      min="10"
-                     max="16000">
-  </km-number-stepper>
+                     max="16000" />
 
   <km-combobox #availabilityZoneCombobox
                [required]="false"
@@ -118,13 +117,11 @@ limitations under the License.
                      mode="errors"
                      label="Instance Ready Check Period"
                      hint="Time in seconds between running a check for instance ready status."
-                     min="1">
-  </km-number-stepper>
+                     min="1" />
 
   <km-number-stepper [formControlName]="Controls.InstanceReadyCheckTimeout"
                      mode="errors"
                      label="Instance Ready Check Timeout"
                      hint="Time in seconds to wait for instance to be in ready status before timing out. Set to 0 to disable timeout."
-                     min="0">
-  </km-number-stepper>
+                     min="0" />
 </form>

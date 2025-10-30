@@ -19,7 +19,7 @@ limitations under the License.
      class="km-dialog-context-description">Edit <b>{{getCTName()}}</b> constraint template</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
-             header="YAML"></km-editor>
+             header="YAML" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-constraint-template-dialog-btn"
@@ -27,6 +27,5 @@ limitations under the License.
              [label]="label"
              [disabled]="!isValid()"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>
