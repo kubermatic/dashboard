@@ -61,7 +61,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
 	github.com/vmware-tanzu/velero v1.16.0
 	github.com/vmware/go-vcloud-director/v2 v2.26.1
@@ -74,23 +74,23 @@ require (
 	k8c.io/kubeone v1.10.0
 	k8c.io/kubermatic/sdk/v2 v2.29.0-rc.1.0.20251023140643-ae9026233002
 	k8c.io/kubermatic/v2 v2.29.0-rc.1.0.20251023140643-ae9026233002
-	k8c.io/machine-controller/sdk v1.63.1
-	k8c.io/operating-system-manager v1.7.6
+	k8c.io/machine-controller/sdk v1.64.0
+	k8c.io/operating-system-manager v1.8.0
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.33.4
-	k8s.io/apiextensions-apiserver v0.33.4
-	k8s.io/apimachinery v0.33.4
-	k8s.io/apiserver v0.33.4
+	k8s.io/api v0.34.0
+	k8s.io/apiextensions-apiserver v0.34.0
+	k8s.io/apimachinery v0.34.0
+	k8s.io/apiserver v0.34.0
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/code-generator v0.33.4
+	k8s.io/code-generator v0.34.0
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.33.4
 	k8s.io/metrics v0.33.4
 	k8s.io/utils v0.0.0-20250820121507-0af2bda4dd1d
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
-	sigs.k8s.io/controller-runtime v0.21.0
-	sigs.k8s.io/controller-tools v0.18.0
+	sigs.k8s.io/controller-runtime v0.22.0
+	sigs.k8s.io/controller-tools v0.19.0
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -208,7 +208,7 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/fxamacker/cbor/v2 v2.8.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
@@ -234,9 +234,9 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/btree v1.1.3 // indirect
-	github.com/google/cel-go v0.25.0 // indirect
+	github.com/google/cel-go v0.26.0 // indirect
 	github.com/google/certificate-transparency-go v1.3.2-0.20250506133818-bc7acd89f703 // indirect
-	github.com/google/gnostic-models v0.6.9 // indirect
+	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/google/go-containerregistry v0.20.4-0.20250225234217-098045d5e61f // indirect
 	github.com/google/go-github/v55 v55.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
@@ -286,7 +286,7 @@ require (
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/moby/spdystream v0.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/mozillazg/docker-credential-acr-helper v0.4.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
@@ -392,8 +392,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8c.io/kubelb v1.2.0 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
-	k8s.io/component-base v0.33.4 // indirect
-	k8s.io/gengo/v2 v2.0.0-20250207200755-1244d31929d7 // indirect
+	k8s.io/component-base v0.34.0 // indirect
+	k8s.io/gengo/v2 v2.0.0-20250604051438-85fd79dbfd9f // indirect
 	k8s.io/kube-aggregator v0.33.4 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
 	k8s.io/pod-security-admission v0.33.0 // indirect
