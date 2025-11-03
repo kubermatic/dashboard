@@ -33,28 +33,28 @@ limitations under the License.
          matTooltip="Owners"></i>
       <div>{{ownerNames}}</div>
     </div>
-    <ng-container *ngIf="showMembersAndGroups">
-      <div fxLayout="row"
-           fxLayoutAlign=" center"
-           fxLayoutGap="15px">
-        <i class="km-icon-mask km-icon-member"
-           matTooltip="Members"></i>
-        <div>{{memberNames}}</div>
-      </div>
-
-      <div *ngIf="isEnterpriseEdition"
-           fxLayout="row"
-           fxLayoutAlign=" center"
-           fxLayoutGap="15px">
-        <i class="km-icon-mask km-icon-group"
-           matTooltip="Groups"></i>
-        <div>{{groupNames}}</div>
-      </div>
-    </ng-container>
+    @if (showMembersAndGroups) {
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         fxLayoutGap="15px">
+      <i class="km-icon-mask km-icon-member"
+         matTooltip="Members"></i>
+      <div>{{memberNames}}</div>
+    </div>
+    @if (isEnterpriseEdition) {
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         fxLayoutGap="15px">
+      <i class="km-icon-mask km-icon-group"
+         matTooltip="Groups"></i>
+      <div>{{groupNames}}</div>
+    </div>
+    }
+    }
   </mat-card-content>
 
-  <div *ngIf="showMembersAndGroups"
-       fxLayout="row"
+  @if (showMembersAndGroups) {
+  <div fxLayout="row"
        fxLayoutAlign=" center">
     <div class="action-container"
          fxFlex
@@ -67,5 +67,6 @@ limitations under the License.
       </button>
     </div>
   </div>
+  }
 
 </mat-card>

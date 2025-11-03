@@ -37,35 +37,33 @@ END OF TERMS AND CONDITIONS
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="!isLoadingConfig">
-      <div class="content"
-           fxLayout="row">
-        <km-property>
-          <div key>Report Retention</div>
-          <div value>
-            {{ (retention) ? retention + ((retention === 1) ? ' day' : ' days') : 'unconstrained' }}
-          </div>
-        </km-property>
+    @if (!isLoadingConfig) {
+    <div class="content"
+         fxLayout="row">
+      <km-property>
+        <div key>Report Retention</div>
+        <div value>
+          {{ (retention) ? retention + ((retention === 1) ? ' day' : ' days') : 'unconstrained' }}
+        </div>
+      </km-property>
+      <km-property>
+        <div key>Interval</div>
+        <div value>{{interval}} {{interval===1 ? 'day' : 'days'}}</div>
+      </km-property>
+      <km-property>
+        <div key>
+          <span>Schedule</span>
+        </div>
+        <div value>{{schedule}}</div>
+      </km-property>
+    </div>
+    }
 
-        <km-property>
-          <div key>Interval</div>
-          <div value>{{interval}} {{interval===1 ? 'day' : 'days'}}</div>
-        </km-property>
-
-        <km-property>
-          <div key>
-            <span>Schedule</span>
-          </div>
-          <div value>{{schedule}}</div>
-        </km-property>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="isLoadingConfig">
-      <mat-spinner [diameter]="25"
-                   class="km-spinner"
-                   color="accent" />
-    </ng-container>
+    @if (isLoadingConfig) {
+    <mat-spinner [diameter]="25"
+                 class="km-spinner"
+                 color="accent" />
+    }
   </mat-card-content>
 
 </mat-card>
@@ -121,12 +119,12 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div class="km-table-actions"
                fxLayoutAlign="end">
-            <ng-container *ngIf="isProcessingReport(element)">
-              <mat-spinner color="accent"
-                           class="km-spinner"
-                           fxFlexAlign=" center"
-                           [diameter]="25" />
-            </ng-container>
+            @if (isProcessingReport(element)) {
+            <mat-spinner color="accent"
+                         class="km-spinner"
+                         fxFlexAlign=" center"
+                         [diameter]="25" />
+            }
 
             <button id="km-download-report-button"
                     mat-icon-button
@@ -152,13 +150,13 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoadingReports">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isLoadingReports) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

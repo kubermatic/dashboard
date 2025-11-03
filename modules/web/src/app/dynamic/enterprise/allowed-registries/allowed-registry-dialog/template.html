@@ -22,13 +22,14 @@ END OF TERMS AND CONDITIONS
 
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === Mode.Edit"
-     class="km-dialog-context-description">Edit <b>{{data.allowedRegistry.name}}</b> project</p>
+  @if (data.mode === Mode.Edit) {
+  <p class="km-dialog-context-description">Edit <b>{{data.allowedRegistry.name}}</b> project</p>
+  }
 
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex
-                    *ngIf="data.mode === Mode.Add">
+    @if (data.mode === Mode.Add) {
+    <mat-form-field fxFlex>
       <mat-label>Name</mat-label>
       <input required
              matInput
@@ -36,13 +37,18 @@ END OF TERMS AND CONDITIONS
              type="text"
              autocomplete="off"
              cdkFocusInitial>
-      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      @if (form.get(controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      }
+      @if (form.get(controls.Name).hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
+    }
 
     <mat-form-field fxFlex>
       <mat-label>RegistryPrefix</mat-label>
@@ -53,9 +59,11 @@ END OF TERMS AND CONDITIONS
              autocomplete="off"
              cdkFocusInitial
              kmValueChangedIndicator>
-      <mat-error *ngIf="form.get(controls.RegistryPrefix).hasError('required')">
+      @if (form.get(controls.RegistryPrefix).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
   </form>
   <div fxLayoutAlign=" center">

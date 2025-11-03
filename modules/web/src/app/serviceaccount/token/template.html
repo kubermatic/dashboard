@@ -44,9 +44,10 @@ limitations under the License.
            fxLayoutGap="8px"
            id="km-serviceaccount-token-name-{{element.name}}">
         <span>{{element.name}}</span>
-        <div *ngIf="element.invalidated"
-             class="km-icon-warning"
+        @if (element.invalidated) {
+        <div class="km-icon-warning"
              matTooltip="This token is no longer valid. Please regenerate or delete it."></div>
+        }
       </div>
     </td>
   </ng-container>
@@ -83,39 +84,36 @@ limitations under the License.
         *matCellDef="let element">
       <div fxLayoutAlign="end"
            class="km-table-actions">
-        <ng-container [ngSwitch]="!!element.deletionTimestamp">
-          <ng-container *ngSwitchCase="true">
-            <mat-spinner [diameter]="25"
-                         class="km-spinner"
-                         color="accent" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="false">
-            <button mat-icon-button
-                    [attr.id]="'km-regenerate-serviceaccount-token-' + element?.id"
-                    matTooltip="Regenerate Service Account Token"
-                    (click)="regenerateToken(element)"
-                    [disabled]="!isEnabled('edit')">
-              <i class="km-icon-mask km-icon-regenerate"></i>
-            </button>
-
-            <button mat-icon-button
-                    [attr.id]="'km-edit-dialog-token-' + element?.name"
-                    matTooltip="Edit Service Account Token"
-                    (click)="editToken(element)"
-                    [disabled]="!isEnabled('edit') || element.invalidated">
-              <i class="km-icon-mask km-icon-edit"></i>
-            </button>
-
-            <button mat-icon-button
-                    [attr.id]="'km-delete-serviceaccount-token-' + element?.id"
-                    matTooltip="Delete Service Account Token"
-                    (click)="deleteToken(element)"
-                    [disabled]="!isEnabled('delete')">
-              <i class="km-icon-mask km-icon-delete"></i>
-            </button>
-          </ng-container>
-        </ng-container>
+        @switch (!!element.deletionTimestamp) {
+        @case (true) {
+        <mat-spinner [diameter]="25"
+                     class="km-spinner"
+                     color="accent" />
+        }
+        @case (false) {
+        <button mat-icon-button
+                [attr.id]="'km-regenerate-serviceaccount-token-' + element?.id"
+                matTooltip="Regenerate Service Account Token"
+                (click)="regenerateToken(element)"
+                [disabled]="!isEnabled('edit')">
+          <i class="km-icon-mask km-icon-regenerate"></i>
+        </button>
+        <button mat-icon-button
+                [attr.id]="'km-edit-dialog-token-' + element?.name"
+                matTooltip="Edit Service Account Token"
+                (click)="editToken(element)"
+                [disabled]="!isEnabled('edit') || element.invalidated">
+          <i class="km-icon-mask km-icon-edit"></i>
+        </button>
+        <button mat-icon-button
+                [attr.id]="'km-delete-serviceaccount-token-' + element?.id"
+                matTooltip="Delete Service Account Token"
+                (click)="deleteToken(element)"
+                [disabled]="!isEnabled('delete')">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+        }
+        }
       </div>
     </td>
   </ng-container>
@@ -128,16 +126,18 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<ng-container *ngIf="!serviceaccountTokens || serviceaccountTokens.length === 0">
-  <div class="km-row km-empty-list-msg"
-       id="km-serviceaccount-tokens-not-available"
-       *ngIf="!isInitializing">
-    No tokens available.
-  </div>
-  <div class="km-row"
-       *ngIf="isInitializing">
-    <mat-spinner color="accent"
-                 class="km-spinner"
-                 [diameter]="25" />
-  </div>
-</ng-container>
+@if (!serviceaccountTokens || serviceaccountTokens.length === 0) {
+@if (!isInitializing) {
+<div class="km-row km-empty-list-msg"
+     id="km-serviceaccount-tokens-not-available">
+  No tokens available.
+</div>
+}
+@if (isInitializing) {
+<div class="km-row">
+  <mat-spinner color="accent"
+               class="km-spinner"
+               [diameter]="25" />
+</div>
+}
+}

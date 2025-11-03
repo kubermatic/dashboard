@@ -51,13 +51,15 @@ limitations under the License.
     </th>
     <td mat-cell
         *matCellDef="let element">
-      <ng-container [ngSwitch]="element.imported">
-        <i *ngSwitchCase="true"
-           class="km-icon-check"></i>
-        <mat-radio-button *ngSwitchCase="false"
-                          [checked]="isSelected(element)"
-                          (change)="select(element)" />
-      </ng-container>
+      @switch (element.imported) {
+      @case (true) {
+      <i class="km-icon-check"></i>
+      }
+      @case (false) {
+      <mat-radio-button [checked]="isSelected(element)"
+                        (change)="select(element)" />
+      }
+      }
     </td>
   </ng-container>
 
@@ -69,17 +71,19 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="isInitialized && isEmpty">
+@if (isInitialized && isEmpty) {
+<div class="km-row km-empty-list-msg">
   No clusters available.
 </div>
+}
 
-<div class="km-row"
-     *ngIf="!isInitialized">
+@if (!isInitialized) {
+<div class="km-row">
   <mat-spinner color="accent"
                class="km-spinner km-with-spacing"
                [diameter]="25" />
 </div>
+}
 
 <div [hidden]="!hasPaginator"
      class="km-paginator-container">

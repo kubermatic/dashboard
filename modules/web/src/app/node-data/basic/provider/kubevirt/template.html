@@ -66,46 +66,46 @@ limitations under the License.
     </button>
   </div>
 
-  <km-number-stepper *ngIf="!form.get(Controls.CPUs).disabled; else disabledCPUs"
-                     [formControlName]="Controls.CPUs"
+  @if (!form.get(Controls.CPUs).disabled) {
+  <km-number-stepper [formControlName]="Controls.CPUs"
                      mode="errors"
                      label="CPUs"
                      min="1"
                      [disabled]="form.get(Controls.CPUs).disabled"
                      required />
+  } @else {
+  <mat-form-field fxFlex>
+    <mat-label>CPUs</mat-label>
+    <input matInput
+           required
+           [value]="selectedInstanceTypeCpus"
+           type="text"
+           disabled
+           autocomplete="off" />
+  </mat-form-field>
+  }
 
-  <ng-template #disabledCPUs>
-    <mat-form-field fxFlex>
-      <mat-label>CPUs</mat-label>
-      <input matInput
-             required
-             [value]="selectedInstanceTypeCpus"
-             type="text"
-             disabled
-             autocomplete="off" />
-    </mat-form-field>
-  </ng-template>
 
-  <km-number-stepper *ngIf="!form.get(Controls.Memory).disabled; else disabledMemory"
-                     [formControlName]="Controls.Memory"
+  @if (!form.get(Controls.Memory).disabled) {
+  <km-number-stepper [formControlName]="Controls.Memory"
                      mode="errors"
                      label="Memory (MB)"
                      min="1000"
                      step="100"
                      [disabled]="form.get(Controls.Memory).disabled"
                      required />
+  } @else {
+  <mat-form-field fxFlex>
+    <mat-label>Memory</mat-label>
+    <input matInput
+           required
+           [value]="selectedInstanceTypeMemory"
+           type="text"
+           disabled
+           autocomplete="off" />
+  </mat-form-field>
+  }
 
-  <ng-template #disabledMemory>
-    <mat-form-field fxFlex>
-      <mat-label>Memory</mat-label>
-      <input matInput
-             required
-             [value]="selectedInstanceTypeMemory"
-             type="text"
-             disabled
-             autocomplete="off" />
-    </mat-form-field>
-  </ng-template>
 
   <km-combobox #subnetCombobox
                [selected]="selectedSubnet"
@@ -174,9 +174,11 @@ limitations under the License.
              type="text"
              autocomplete="off"
              kmValueChangedIndicator />
-      <mat-error *ngIf="form.get(Controls.NodeAffinityPresetKey).hasError('required')">
+      @if (form.get(Controls.NodeAffinityPresetKey).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <km-chip-list label="Node Affinity Preset Values"
@@ -201,8 +203,9 @@ limitations under the License.
                     class="km-select-ellipsis"
                     disableOptionCentering
                     kmValueChangedIndicator>
-          <mat-option *ngFor="let preset of affinityPresetOptions"
-                      [value]="preset"> {{preset}} </mat-option>
+          @for (preset of affinityPresetOptions; track preset) {
+          <mat-option [value]="preset"> {{preset}} </mat-option>
+          }
           <mat-select-trigger fxLayout="row">
             <div>{{form.get(controlName).value}}</div>
 

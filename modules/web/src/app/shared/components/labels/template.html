@@ -15,31 +15,41 @@ limitations under the License.
 -->
 <div fxLayout="row"
      fxLayoutGap="8px">
-  <mat-chip-set [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
-                *ngIf="labelKeys.length > 0">
-    <div #chipListLabels
-         *ngFor="let labelKey of labelKeys; let i = index">
-      <mat-chip *ngIf="!limit || i < limit">
+  @if (labelKeys.length > 0) {
+  <mat-chip-set [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}">
+    @for (labelKey of labelKeys; track labelKey; let i = $index) {
+    <div #chipListLabels>
+      @if (!limit || i < limit)
+        {
+        <mat-chip>
         <div [matTooltip]="labelKey">{{labelKey}}</div>
+        @if (!!labels[labelKey]) {
         <div class="km-chip-accent"
-             *ngIf="!!labels[labelKey]"
              [matTooltip]="labels[labelKey]">{{labels[labelKey]}}</div>
-      </mat-chip>
+        }
+        </mat-chip>
+        }
     </div>
+    }
   </mat-chip-set>
+  }
 
-  <span *ngIf="checkLabelsHeight()"
-        fxLayoutAlign=" start"
+  @if (checkLabelsHeight()) {
+  <span fxLayoutAlign=" start"
         fxLayoutGap="8px"
         class="show-all-button km-text-muted"
         (click)="toggleHiddenLabels()">{{showHiddenLabels ? 'SHOW LESS' : 'SHOW MORE'}}
     <i class="km-icon-mask km-icon-arrow-{{showHiddenLabels ? 'up' : 'down'}}"></i>
   </span>
+  }
 
-  <span *ngIf="limit && labelKeys.length > limit"
-        [matTooltip]="getHiddenLabels()"
+  @if (limit && labelKeys.length > limit) {
+  <span [matTooltip]="getHiddenLabels()"
         class="km-text">
     +{{labelKeys.length - limit}}
   </span>
-  <div *ngIf="labelKeys.length === 0">{{emptyMessage}}</div>
+  }
+  @if (labelKeys.length === 0) {
+  <div>{{emptyMessage}}</div>
+  }
 </div>

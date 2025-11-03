@@ -37,15 +37,18 @@ limitations under the License.
                   required
                   disableOptionCentering
                   panelClass="km-add-dialog-dropdown">
-        <mat-option *ngFor="let version of versions"
-                    [value]="version">
+        @for (version of versions; track version) {
+        <mat-option [value]="version">
           {{ version }}
         </mat-option>
+        }
       </mat-select>
 
-      <mat-hint *ngIf="form.get(Controls.KubeletVersion).disabled">
+      @if (form.get(Controls.KubeletVersion).disabled) {
+      <mat-hint>
         To update Kubelet Version you must save or cancel your current changes.
       </mat-hint>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>

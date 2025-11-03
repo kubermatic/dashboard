@@ -48,13 +48,14 @@ END OF TERMS AND CONDITIONS
 
       <div fxFlex></div>
       <div class="action-button">
-        <button *ngIf="selectedBackups.length"
-                mat-flat-button
+        @if (selectedBackups.length) {
+        <button mat-flat-button
                 type="button"
                 matTooltip="Delete selected"
                 (click)="deleteBackups(selectedBackups)">
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
+        }
         <button mat-flat-button
                 type="button"
                 (click)="uploadBackups()"
@@ -63,24 +64,24 @@ END OF TERMS AND CONDITIONS
              matButtonIcon></i>
           <span>Upload Backups</span>
         </button>
-        <ng-container *ngIf="clusters?.length">
-          <button mat-flat-button
-                  type="button"
-                  (click)="importBackups()"
-                  [disabled]="!canAdd">
-            <i class="km-icon-mask km-icon-import"
-               matButtonIcon></i>
-            <span>Import External Backups</span>
-          </button>
-          <button mat-flat-button
-                  type="button"
-                  (click)="addBackup()"
-                  [disabled]="!canAdd">
-            <i class="km-icon-mask km-icon-add"
-               matButtonIcon></i>
-            <span>Create Cluster Backup</span>
-          </button>
-        </ng-container>
+        @if (clusters?.length) {
+        <button mat-flat-button
+                type="button"
+                (click)="importBackups()"
+                [disabled]="!canAdd">
+          <i class="km-icon-mask km-icon-import"
+             matButtonIcon></i>
+          <span>Import External Backups</span>
+        </button>
+        <button mat-flat-button
+                type="button"
+                (click)="addBackup()"
+                [disabled]="!canAdd">
+          <i class="km-icon-mask km-icon-add"
+             matButtonIcon></i>
+          <span>Create Cluster Backup</span>
+        </button>
+        }
       </div>
     </div>
   </div>
@@ -261,10 +262,11 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
-                      class="namespaces-label">
+            @for (namespace of element.spec.includedNamespaces; track namespace) {
+            <mat-chip class="namespaces-label">
               <div>{{namespace}}</div>
             </mat-chip>
+            }
           </div>
         </td>
       </ng-container>
@@ -283,15 +285,17 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!clusterBackups.length && !loadingBackups">No backups available.</div>
+    @if (!clusterBackups.length && !loadingBackups) {
+    <div class="km-row km-empty-list-msg">No backups available.</div>
+    }
 
-    <div class="km-row"
-         *ngIf="loadingBackups && !clusterBackups.length">
+    @if (loadingBackups && !clusterBackups.length) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!clusterBackups?.length"
          class="km-paginator-container">

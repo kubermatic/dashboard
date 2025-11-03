@@ -16,18 +16,23 @@ limitations under the License.
 <km-property>
   <div key>
     <span fxFlex>{{name}}</span>
-    <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
+    @if (total && used) {
+    <span>{{used}}/{{total}} {{unit}}</span>
+    }
   </div>
   <div value
        fxFlex="100%"
        fxLayout="column"
        fxLayoutAlign="flex-end">
-    <mat-progress-bar *ngIf="total && used"
-                      class="property-usage-bar"
+    @if (total && used) {
+    <mat-progress-bar class="property-usage-bar"
                       mode="determinate"
                       [color]="color"
                       [value]="getPercentage()"
                       [matTooltip]="getTooltip()" />
-    <div *ngIf="!total && used">{{used}} {{unit}}</div>
+    }
+    @if (!total && used) {
+    <div>{{used}} {{unit}}</div>
+    }
   </div>
 </km-property>

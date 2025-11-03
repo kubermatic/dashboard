@@ -22,10 +22,11 @@ limitations under the License.
   <mat-button-toggle-group group="providerGroup"
                            [formControlName]="controls.Provider"
                            fxLayout="row wrap">
-    <mat-button-toggle *ngFor="let provider of providers;"
-                       value="{{provider}}"
+    @for (provider of providers; track provider) {
+    <mat-button-toggle value="{{provider}}"
                        (click)="next()">
       <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
     </mat-button-toggle>
+    }
   </mat-button-toggle-group>
 </form>

@@ -25,10 +25,11 @@ END OF TERMS AND CONDITIONS
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutAlign="space-between stretch">
-    <p *ngIf="editQuota"
-       class="km-dialog-context-description">
+    @if (editQuota) {
+    <p class="km-dialog-context-description">
       Edit quotas of <b>{{editQuota.subjectHumanReadableName}}</b> project
     </p>
+    }
 
     <form [formGroup]="quotaGroup"
           class="quota-form"
@@ -66,8 +67,8 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </form>
 
-    <div *ngIf="!editQuota"
-         fxLayout="column"
+    @if (!editQuota) {
+    <div fxLayout="column"
          fxLayoutAlign=" stretch">
       <km-combobox label="Project"
                    inputLabel="Project"
@@ -83,14 +84,15 @@ END OF TERMS AND CONDITIONS
              fxLayoutGap="10px"
              fxLayoutAlign=" center">
           <span>{{project.name}}</span>
-
-          <mat-card-subtitle class="km-no-margin km-no-padding"
-                             *ngIf="projectNameCountMap[project.name] > 1">
+          @if (projectNameCountMap[project.name] > 1) {
+          <mat-card-subtitle class="km-no-margin km-no-padding">
             <strong>ID</strong> {{project.id}}
           </mat-card-subtitle>
+          }
         </div>
       </km-combobox>
     </div>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

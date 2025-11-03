@@ -19,8 +19,8 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="taints">
-    <div *ngFor="let taint of taintArray.controls; let i = index;"
-         [formGroupName]="i"
+    @for (taint of taintArray.controls; track taint; let i = $index) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="29">
@@ -30,21 +30,31 @@ limitations under the License.
                name="key"
                formControlName="key"
                [ngClass]="{'km-value-changed':isTaintChanged(i)}">
-        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyUniqueness">
+        @if (taint.get('key').errors?.validLabelKeyUniqueness) {
+        <mat-error>
           Key is not unique.
         </mat-error>
-        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixPattern">
+        }
+        @if (taint.get('key').errors?.validLabelKeyPrefixPattern) {
+        <mat-error>
           Prefix not allowed.
         </mat-error>
-        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNamePattern">
+        }
+        @if (taint.get('key').errors?.validLabelKeyNamePattern) {
+        <mat-error>
           Name not allowed.
         </mat-error>
-        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixLength">
+        }
+        @if (taint.get('key').errors?.validLabelKeyPrefixLength) {
+        <mat-error>
           Prefix is too long.
         </mat-error>
-        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNameLength">
+        }
+        @if (taint.get('key').errors?.validLabelKeyNameLength) {
+        <mat-error>
           Name is too long.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="29">
         <mat-label>Value</mat-label>
@@ -52,15 +62,21 @@ limitations under the License.
                (keyup)="check(i)"
                name="value"
                formControlName="value">
-        <mat-error *ngIf="taint.get('value').errors?.validLabelValuePattern">
+        @if (taint.get('value').errors?.validLabelValuePattern) {
+        <mat-error>
           Value not allowed.
         </mat-error>
-        <mat-error *ngIf="taint.get('value').errors?.validLabelValueLength">
+        }
+        @if (taint.get('value').errors?.validLabelValueLength) {
+        <mat-error>
           Value is too long.
         </mat-error>
-        <mat-error *ngIf="taint.get('value').errors?.required">
+        }
+        @if (taint.get('value').errors?.required) {
+        <mat-error>
           Value is required.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="29">
         <mat-label>Effect</mat-label>
@@ -70,25 +86,31 @@ limitations under the License.
                     (change)="check(i)"
                     (valueChange)="check(i)"
                     (selectionChange)="check(i)">
-          <mat-option *ngFor="let effect of availableEffects"
-                      value="{{ effect }}">
+          @for (effect of availableEffects; track effect) {
+          <mat-option value="{{ effect }}">
             {{ effect }}
           </mat-option>
+          }
         </mat-select>
       </mat-form-field>
+      @if (isRemovable(i)) {
       <button mat-icon-button
               class="delete-button"
-              *ngIf="isRemovable(i)"
               (click)="deleteTaint(i)">
         <i class="km-icon-mask km-icon-delete"></i>
       </button>
+      }
     </div>
+    }
   </div>
 </form>
-<div *ngIf="removedTaints.length"
-     class="removed-taint-form">
+@if (removedTaints.length) {
+<div class="removed-taint-form">
   <p>Removed Node Taint</p>
-  <div *ngFor="let taint of removedTaints">
+  @for (taint of removedTaints; track taint) {
+  <div>
     <p>Key: {{taint?.key}}, Value: {{taint?.value}}, Effect: {{taint?.effect}}</p>
   </div>
+  }
 </div>
+}

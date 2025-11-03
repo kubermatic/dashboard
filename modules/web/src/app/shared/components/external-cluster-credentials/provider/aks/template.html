@@ -26,9 +26,11 @@ limitations under the License.
       Enter Azure Tenant ID. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink" />
     </mat-hint>
-    <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
+    @if (form.get(Controls.TenantID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -37,9 +39,11 @@ limitations under the License.
            [formControlName]="Controls.SubscriptionID"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
+    @if (form.get(Controls.TenantID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
     <mat-hint>
       Enter Azure Subscription ID. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink" />
@@ -56,9 +60,11 @@ limitations under the License.
       Enter Azure Client ID. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink" />
     </mat-hint>
-    <mat-error *ngIf="form.get(Controls.ClientID).hasError('required')">
+    @if (form.get(Controls.ClientID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -72,9 +78,11 @@ limitations under the License.
       Enter Azure Client Client. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink" />
     </mat-hint>
-    <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">
+    @if (form.get(Controls.ClientSecret).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>
 

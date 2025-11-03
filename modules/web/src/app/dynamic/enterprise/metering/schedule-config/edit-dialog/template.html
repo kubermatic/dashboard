@@ -69,17 +69,20 @@ END OF TERMS AND CONDITIONS
                     disableOptionCentering
                     required
                     kmValueChangedIndicator>
-          <mat-option *ngFor="let type of reportTypes"
-                      [value]="type">
+          @for (type of reportTypes; track type) {
+          <mat-option [value]="type">
             {{type}}
           </mat-option>
+          }
         </mat-select>
         <mat-hint>
           Types of reports to generate. By default, all types of reports are generated.
         </mat-hint>
-        <mat-error *ngIf="form.get(controls.Types).hasError('required')">
+        @if (form.get(controls.Types).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
     </div>
   </form>

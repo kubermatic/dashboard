@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="isClusterRunning">
-  <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
-                          [cluster]="cluster"
-                          [projectID]="projectID"
-                          [isClusterRunning]="isClusterRunning"
-                          [addons]="addons" />
+@if (isClusterRunning) {
+<km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
+                        [cluster]="cluster"
+                        [projectID]="projectID"
+                        [isClusterRunning]="isClusterRunning"
+                        [addons]="addons" />
+<km-rule-groups [ruleGroups]="ruleGroups"
+                [cluster]="cluster"
+                [projectID]="projectID"
+                [isClusterRunning]="isClusterRunning" />
+}
 
-  <km-rule-groups [ruleGroups]="ruleGroups"
-                  [cluster]="cluster"
-                  [projectID]="projectID"
-                  [isClusterRunning]="isClusterRunning" />
-</ng-container>
-
-<km-loader *ngIf="!isClusterRunning" />
+@if (!isClusterRunning) {
+<km-loader />
+}

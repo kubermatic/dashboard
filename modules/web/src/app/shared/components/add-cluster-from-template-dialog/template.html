@@ -25,17 +25,18 @@ limitations under the License.
     <i class="km-icon-done"></i>
   </ng-template>
 
-  <mat-step *ngIf="isAvailable(step.Template)"
-            fxFlex="100%">
+  @if (isAvailable(step.Template)) {
+  <mat-step fxFlex="100%">
     <ng-template matStepLabel>{{step.Template}}</ng-template>
     <ng-template matStepContent>
       <km-select-cluster-template [projectId]="data.projectId"
                                   [templateId]="data.templateId" />
     </ng-template>
   </mat-step>
+  }
 
-  <mat-step *ngIf="isAvailable(step.Cluster)"
-            fxFlex="100%">
+  @if (isAvailable(step.Cluster)) {
+  <mat-step fxFlex="100%">
     <ng-template matStepLabel>{{step.Cluster}}</ng-template>
     <ng-template matStepContent>
       <km-cluster-from-template-content [projectId]="data.projectId"
@@ -44,11 +45,12 @@ limitations under the License.
                                         [showDetails]="showDetails" />
     </ng-template>
   </mat-step>
+  }
 </mat-horizontal-stepper>
 
 <mat-dialog-actions>
-  <div *ngIf="active === step.Cluster"
-       (click)="showDetails = !showDetails"
+  @if (active === step.Cluster) {
+  <div (click)="showDetails = !showDetails"
        class="km-pointer km-expand-button"
        fxLayoutAlign="center center"
        fxLayoutGap="8px"
@@ -59,35 +61,40 @@ limitations under the License.
        [ngClass]="showDetails ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
     <hr fxFlex />
   </div>
+  }
+  @if (active === step.Template && !last) {
   <button mat-flat-button
           type="button"
           (click)="openClusterWizard()"
-          [disabled]="invalid"
-          *ngIf="active === step.Template && !last">
+          [disabled]="invalid">
     <i class="km-icon-mask km-icon-edit"
        matButtonIcon></i>
     <span>Customize Template</span>
   </button>
+  }
+  @if (active === step.Template && !last) {
   <button mat-flat-button
           type="button"
           (click)="next()"
-          [disabled]="invalid"
-          *ngIf="active === step.Template && !last">
+          [disabled]="invalid">
     <i class="km-icon-mask km-icon-next"
        matButtonIcon></i>
     <span>Next</span>
   </button>
-  <div *ngIf="quotaExceeded && last"
-       class="warning-message"
+  }
+  @if (quotaExceeded && last) {
+  <div class="warning-message"
        fxLayoutAlign="end center">
     <i class="km-icon-warning"></i>
     <div><strong>Quota exceeded.</strong> <br>Cluster creation is disabled.</div>
   </div>
-  <km-button *ngIf="last"
-             id="cluster-from-template-add-btn"
+  }
+  @if (last) {
+  <km-button id="cluster-from-template-add-btn"
              icon="km-icon-add"
              label="Create Cluster"
              [disabled]="invalid || quotaExceeded"
              [observable]="getObservable()"
              (next)="onNext()" />
+  }
 </mat-dialog-actions>

@@ -87,42 +87,39 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-
-                <button *ngIf="!isTokenVisible(element.id)"
-                        mat-icon-button
-                        fxLayoutAlign="center center"
-                        matTooltip="Add Token"
-                        [attr.id]="'km-add-dialog-' + element?.name"
-                        (click)="createToken(element, $event)"
-                        [disabled]="!isEnabled('create')">
-                  <i class="km-icon-mask km-icon-add"></i>
-                </button>
-
-                <button mat-icon-button
-                        [attr.id]="'km-edit-dialog-' + element?.name"
-                        matTooltip="Edit Service Account"
-                        (click)="editServiceAccount(element, $event)"
-                        [disabled]="!isEnabled('edit')">
-                  <i class="km-icon-mask km-icon-edit"></i>
-                </button>
-
-                <button mat-icon-button
-                        [attr.id]="'km-delete-serviceaccount-' + element?.name"
-                        matTooltip="Delete Service Account"
-                        (click)="deleteServiceAccount(element, $event)"
-                        [disabled]="!isEnabled('delete')">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            @if (!isTokenVisible(element.id)) {
+            <button mat-icon-button
+                    fxLayoutAlign="center center"
+                    matTooltip="Add Token"
+                    [attr.id]="'km-add-dialog-' + element?.name"
+                    (click)="createToken(element, $event)"
+                    [disabled]="!isEnabled('create')">
+              <i class="km-icon-mask km-icon-add"></i>
+            </button>
+            }
+            <button mat-icon-button
+                    [attr.id]="'km-edit-dialog-' + element?.name"
+                    matTooltip="Edit Service Account"
+                    (click)="editServiceAccount(element, $event)"
+                    [disabled]="!isEnabled('edit')">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    [attr.id]="'km-delete-serviceaccount-' + element?.name"
+                    matTooltip="Delete Service Account"
+                    (click)="deleteServiceAccount(element, $event)"
+                    [disabled]="!isEnabled('delete')">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -154,18 +151,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!serviceAccounts || serviceAccounts.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="!isInitializing">
-        No service accounts available.
-      </div>
-      <div class="km-row"
-           *ngIf="isInitializing">
-        <mat-spinner color="accent"
-                     class="km-spinner km-with-spacing"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (!serviceAccounts || serviceAccounts.length === 0) {
+    @if (!isInitializing) {
+    <div class="km-row km-empty-list-msg">
+      No service accounts available.
+    </div>
+    }
+    @if (isInitializing) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+    </div>
+    }
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

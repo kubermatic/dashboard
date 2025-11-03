@@ -24,9 +24,10 @@ END OF TERMS AND CONDITIONS
           class="km-card">
   <mat-card-header>
     <mat-card-title>Policy Templates
+      @if (!projectID) {
       <span class="km-label-primary"
-            *ngIf="!projectID"
             matTooltip="Early access feature - still under development.">Beta</span>
+      }
     </mat-card-title>
   </mat-card-header>
   <div fxLayoutAlign="space-between center"
@@ -47,8 +48,8 @@ END OF TERMS AND CONDITIONS
            mat-table
            matSort
            [dataSource]="dataSource">
-      <ng-container *ngIf="projectID"
-                    matColumnDef="status">
+      @if (projectID) {
+      <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -59,6 +60,7 @@ END OF TERMS AND CONDITIONS
              class="km-vertical-center"></i>
         </td>
       </ng-container>
+      }
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -128,13 +130,14 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <button *ngIf="element.spec.visibility === scopes.Global && !!projectID"
-                    mat-icon-button
+            @if (element.spec.visibility === scopes.Global && !!projectID) {
+            <button mat-icon-button
                     (click)="addTemplate(mode.Copy, element)"
                     [disabled]="!hasOwnerRole"
                     matTooltip="Create a copy of this template in the current project">
               <i class="km-icon-mask km-icon-copy"></i>
             </button>
+            }
             <button mat-icon-button
                     (click)="addTemplate(mode.Edit, element)"
                     [disabled]="isToggleDisabled(element)">
@@ -153,17 +156,19 @@ END OF TERMS AND CONDITIONS
       <tr mat-row
           *matRowDef="let row; columns: columns;"></tr>
     </table>
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!policyTemplates.length && !loadingTemplates">
+    @if (!policyTemplates.length && !loadingTemplates) {
+    <div class="km-row km-empty-list-msg">
       No policy templates are available
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="loadingTemplates && !policyTemplates.length">
+    @if (loadingTemplates && !policyTemplates.length) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!policyTemplates.length"
          class="km-paginator-container">

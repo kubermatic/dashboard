@@ -29,8 +29,8 @@ limitations under the License.
 <mat-card appearance="outlined">
   <mat-card-content fxLayout="row wrap"
                     fxLayoutGap="20px grid">
-    <div *ngIf="user"
-         fxLayout="row"
+    @if (user) {
+    <div fxLayout="row"
          fxFlex="50"
          fxFlex.sm="100"
          fxLayoutGap="30px">
@@ -39,33 +39,34 @@ limitations under the License.
            fxLayoutGap="10px">
         <div class="user-name">{{user.name}}</div>
         <div class="user-email">{{user.email}}</div>
-        <km-property *ngIf="user.groups; else noGroups">
+        @if (user.groups) {
+        <km-property>
           <div key
                class="user-groups-key">OIDC Groups</div>
           <div value>
             <km-labels [labels]="user.groups" />
           </div>
         </km-property>
-        <ng-template #noGroups>
-          <div>
-            No OIDC groups assigned.
-            <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/iam-role-based-access-control/groups-support/"
-               target="_blank"
-               rel="noreferrer noopener"
-               fxLayout="row inline"
-               fxLayoutAlign=" center">Learn more <i class="km-icon-external-link i-18"></i></a>
-          </div>
-        </ng-template>
+        } @else {
+        <div>
+          No OIDC groups assigned.
+          <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/iam-role-based-access-control/groups-support/"
+             target="_blank"
+             rel="noreferrer noopener"
+             fxLayout="row inline"
+             fxLayoutAlign=" center">Learn more <i class="km-icon-external-link i-18"></i></a>
+        </div>
+        }
       </div>
     </div>
+    }
 
-    <div *ngIf="settings"
-         class="account-settings"
+    @if (settings) {
+    <div class="account-settings"
          fxFlex="50"
          fxFlex.sm="100"
          fxLayout="column">
       <div class="account-settings-header">User Settings</div>
-
       <div fxLayout="row">
         <div class="entry-label"
              fxLayoutAlign=" center">Items per page
@@ -75,19 +76,18 @@ limitations under the License.
                       id="km-items-per-page-select"
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
-            <mat-option *ngFor="let itemsPerPageOption of itemsPerPageOptions"
-                        [value]="itemsPerPageOption">
+            @for (itemsPerPageOption of itemsPerPageOptions; track itemsPerPageOption) {
+            <mat-option [value]="itemsPerPageOption">
               {{itemsPerPageOption}}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
                                       fxFlexAlign=" center" />
       </div>
-
       <!-- Load the theming module -->
       <router-outlet name="theming" />
-
       <div fxLayout="row">
         <div class="entry-label"
              fxLayoutAlign=" center">
@@ -104,10 +104,11 @@ limitations under the License.
             <mat-option value=""
                         class="km-text-muted">None
             </mat-option>
-            <mat-option *ngFor="let project of projects"
-                        [value]="project.id">
+            @for (project of projects; track project) {
+            <mat-option [value]="project.id">
               {{project.name}}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectID, apiSettings.selectedProjectID)"
@@ -135,5 +136,6 @@ limitations under the License.
                                       fxFlexAlign=" center" />
       </div>
     </div>
+    }
   </mat-card-content>
 </mat-card>

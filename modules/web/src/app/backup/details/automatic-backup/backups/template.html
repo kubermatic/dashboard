@@ -108,10 +108,11 @@ limitations under the License.
           *matRowDef="let row; columns: columns;"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isEmpty">
+    @if (isEmpty) {
+    <div class="km-row km-empty-list-msg">
       No backups available.
     </div>
+    }
 
     <div [hidden]="!hasPaginator"
          class="km-paginator-container">

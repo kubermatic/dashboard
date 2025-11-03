@@ -27,12 +27,16 @@ limitations under the License.
              type="text"
              autocomplete="off"
              cdkFocusInitial />
-      <mat-error *ngIf="form.controls.email.hasError('required')">
+      @if (form.controls.email.hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.controls.email.hasError('email')">
+      }
+      @if (form.controls.email.hasError('email')) {
+      <mat-error>
         <strong>Invalid email</strong>
       </mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>

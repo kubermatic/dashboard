@@ -17,16 +17,17 @@ limitations under the License.
 <mat-card-header class="km-no-padding">
   <mat-card-title>
     {{title}}
-    <i *ngIf="infoTooltip"
-       class="km-icon-info km-pointer"
+    @if (infoTooltip) {
+    <i class="km-icon-info km-pointer"
        matTooltip='{{infoTooltip}}'></i>
+    }
   </mat-card-title>
 </mat-card-header>
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="annotations">
-    <div *ngFor="let annotation of annotationsArray.controls; let i = index;"
-         [formGroupName]="i"
+    @for (annotation of annotationsArray.controls; track annotation; let i = $index) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="45">
@@ -36,18 +37,34 @@ limitations under the License.
                [readonly]="annotation.get('protected').value"
                [ngClass]="{'km-value-changed': isAnnotationChanged(i)}"
                (keyup)="check(i)" />
-        <mat-error *ngIf="annotation.get('key').errors?.required">
+        @if (annotation.get('key').errors?.required) {
+        <mat-error>
           {{annotation.get('key').value}} Key is required.
         </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyUniqueness"> Key is not unique. </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.forbiddenKey">
+        }
+        @if (annotation.get('key').errors?.validLabelKeyUniqueness) {
+        <mat-error> Key is not unique. </mat-error>
+        }
+        @if (annotation.get('key').errors?.forbiddenKey) {
+        <mat-error>
           Key is restricted and cannot be used.
         </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyPrefixPattern"> Prefix not allowed. </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyNamePattern"> Name not allowed. </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyPrefixLength"> Prefix is too long. </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyNameLength"> Name is too long. </mat-error>
-        <mat-error *ngIf="annotation.get('key').errors?.labelKeyNameRestricted"> Restricted label name. </mat-error>
+        }
+        @if (annotation.get('key').errors?.validLabelKeyPrefixPattern) {
+        <mat-error> Prefix not allowed. </mat-error>
+        }
+        @if (annotation.get('key').errors?.validLabelKeyNamePattern) {
+        <mat-error> Name not allowed. </mat-error>
+        }
+        @if (annotation.get('key').errors?.validLabelKeyPrefixLength) {
+        <mat-error> Prefix is too long. </mat-error>
+        }
+        @if (annotation.get('key').errors?.validLabelKeyNameLength) {
+        <mat-error> Name is too long. </mat-error>
+        }
+        @if (annotation.get('key').errors?.labelKeyNameRestricted) {
+        <mat-error> Restricted label name. </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="45">
         <mat-label>Value</mat-label>
@@ -55,31 +72,44 @@ limitations under the License.
                formControlName="value"
                [readonly]="annotation.get('protected').value"
                (keyup)="check(i)" />
-        <mat-error *ngIf="annotation.get('value').errors?.required"> Value is required. </mat-error>
-        <mat-error *ngIf="annotation.get('value').errors?.validLabelValuePattern">
+        @if (annotation.get('value').errors?.required) {
+        <mat-error> Value is required. </mat-error>
+        }
+        @if (annotation.get('value').errors?.validLabelValuePattern) {
+        <mat-error>
           Value is not allowed.
         </mat-error>
-        <mat-error *ngIf="annotation.get('value').errors?.pattern">
+        }
+        @if (annotation.get('value').errors?.pattern) {
+        <mat-error>
           Must not start with ( or [ or &#125; or ) or |
         </mat-error>
-        <mat-error *ngIf="annotation.get('value').errors?.validLabelValueLength">
+        }
+        @if (annotation.get('value').errors?.validLabelValueLength) {
+        <mat-error>
           Value is too long.
         </mat-error>
+        }
       </mat-form-field>
+      @if (isRemovable(i)) {
       <button mat-icon-button
               class="delete-button"
-              *ngIf="isRemovable(i)"
               [disabled]="annotation.get('protected').value"
               (click)="deleteAnnotation(i)">
         <i class="km-icon-mask km-icon-delete"></i>
       </button>
+      }
     </div>
+    }
   </div>
 </form>
-<div *ngIf="removedAnnotations.length"
-     class="removed-annotation-form">
+@if (removedAnnotations.length) {
+<div class="removed-annotation-form">
   <p>Removed Annotations</p>
-  <div *ngFor="let annotation of removedAnnotations">
+  @for (annotation of removedAnnotations; track annotation) {
+  <div>
     <p>Key: {{annotation?.key}}, Value: {{annotation?.value}}</p>
   </div>
+  }
 </div>
+}

@@ -25,10 +25,11 @@ limitations under the License.
     <mat-select id="km-items-per-page-select"
                 [(ngModel)]="settings.itemsPerPage"
                 (selectionChange)="onSettingsChange()">
-      <mat-option *ngFor="let option of options"
-                  [value]="option">
+      @for (option of options; track option) {
+      <mat-option [value]="option">
         {{option}}
       </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>

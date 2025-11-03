@@ -138,23 +138,22 @@ limitations under the License.
             *matCellDef="let backup">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!backup.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="primary" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        [attr.id]="'km-delete-backup-' + backup.name"
-                        matTooltip="Delete Automatic Backup"
-                        (click)="delete(backup); $event.stopPropagation()"
-                        [disabled]="!canDelete">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!backup.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="primary" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    [attr.id]="'km-delete-backup-' + backup.name"
+                    matTooltip="Delete Automatic Backup"
+                    (click)="delete(backup); $event.stopPropagation()"
+                    [disabled]="!canDelete">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -168,17 +167,19 @@ limitations under the License.
           (click)="goToDetails(element)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && isEmpty">
+    @if (isInitialized && isEmpty) {
+    <div class="km-row km-empty-list-msg">
       No automatic backups available.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="!isInitialized">
+    @if (!isInitialized) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!hasPaginator"
          class="km-paginator-container">

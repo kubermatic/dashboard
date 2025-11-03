@@ -25,21 +25,24 @@ limitations under the License.
            [matAutocomplete]="autoDomain"
            [required]="isRequired(Controls.Domain)">
     <mat-autocomplete #autoDomain="matAutocomplete">
-      <mat-option *ngFor="let domain of domains"
-                  [value]="domain.name">
+      @for (domain of domains; track domain) {
+      <mat-option [value]="domain.name">
         {{domain.name}}
       </mat-option>
+      }
     </mat-autocomplete>
-    <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
+    @if (form.get(Controls.Domain).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
                             (onChange)="onCredentialsChange($event)" />
 
-  <km-combobox *ngIf="!selectedPresetFloatingIPPool || floatingIPPoolsLabel !== FloatingIPPoolState.Empty; else presetFloatingIPPool"
-               #floatingIPPoolCombobox
+  @if (!selectedPresetFloatingIPPool || floatingIPPoolsLabel !== FloatingIPPoolState.Empty) {
+  <km-combobox #floatingIPPoolCombobox
                [required]="isRequired(Controls.FloatingIPPool)"
                [grouped]="false"
                [isDisabled]="form.get(Controls.FloatingIPPool).disabled"
@@ -54,18 +57,18 @@ limitations under the License.
       {{floatingIPPool.name}}
     </div>
   </km-combobox>
-  <ng-template #presetFloatingIPPool>
-    <mat-form-field fxFlex>
-      <mat-label>{{FloatingIPPoolState.Ready}}</mat-label>
-      <input [name]="Controls.FloatingIPPool"
-             [value]="selectedPresetFloatingIPPool"
-             matInput
-             autocomplete="off"
-             disabled
-             required>
-      <mat-hint>
-        No floating IP pools available so floating IP pool from the preset will be used.
-      </mat-hint>
-    </mat-form-field>
-  </ng-template>
+  } @else {
+  <mat-form-field fxFlex>
+    <mat-label>{{FloatingIPPoolState.Ready}}</mat-label>
+    <input [name]="Controls.FloatingIPPool"
+           [value]="selectedPresetFloatingIPPool"
+           matInput
+           autocomplete="off"
+           disabled
+           required>
+    <mat-hint>
+      No floating IP pools available so floating IP pool from the preset will be used.
+    </mat-hint>
+  </mat-form-field>
+  }
 </form>

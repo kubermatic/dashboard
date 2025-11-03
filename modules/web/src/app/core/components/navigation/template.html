@@ -17,22 +17,30 @@ limitations under the License.
   <div fxLayout
        class="navbar"
        fxLayoutAlign=" center">
+    @if (showMenuSwitchAndProjectSelector || hasSecondarySidenav) {
     <button class="collapse-button"
             mat-icon-button
             fxLayoutAlign="center center"
-            *ngIf="showMenuSwitchAndProjectSelector || hasSecondarySidenav"
             (click)="collapseSidenav()">
       <i class="km-icon-mask km-icon-collapse-menu"></i>
     </button>
+    }
     <a class="km-header-logo"
        [ngClass]="{'km-header-logo-border': currentView}"
        routerLink="projects"></a>
     <div class="km-text view-name">{{currentView}}</div>
-    <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
-                         [showSidenav]="showSidenav"
+    @if (isAuthenticated() && showMenuSwitchAndProjectSelector) {
+    <km-project-selector [showSidenav]="showSidenav"
                          class="project-selector" />
-    <km-help-panel *ngIf="isAuthenticated()" />
-    <km-notification-panel *ngIf="isAuthenticated()" />
-    <km-user-panel *ngIf="isAuthenticated()" />
+    }
+    @if (isAuthenticated()) {
+    <km-help-panel />
+    }
+    @if (isAuthenticated()) {
+    <km-notification-panel />
+    }
+    @if (isAuthenticated()) {
+    <km-user-panel />
+    }
   </div>
 </header>

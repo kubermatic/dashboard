@@ -4,15 +4,18 @@
     <mat-form-field>
       <mat-label>{{templateLabel}}</mat-label>
       <mat-select [formControlName]="controls.Template">
-        <mat-option *ngFor="let template of templates"
-                    [value]="template">{{template.name}}</mat-option>
+        @for (template of templates; track template) {
+        <mat-option [value]="template">{{template.name}}</mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="form.get(controls.Template).hasError('required')">
+      @if (form.get(controls.Template).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
-    <km-autocomplete *ngIf="selectedTemplate?.spec?.namespacedPolicy"
-                     label="Namespace"
+    @if (selectedTemplate?.spec?.namespacedPolicy) {
+    <km-autocomplete label="Namespace"
                      required="true"
                      [options]="namespaces"
                      [formControlName]="controls.Namespace">
@@ -20,6 +23,7 @@
         Namespace specifies where the Kyverno policy will be deployed
       </ng-container>
     </km-autocomplete>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

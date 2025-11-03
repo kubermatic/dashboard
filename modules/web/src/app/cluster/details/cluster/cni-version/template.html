@@ -40,10 +40,11 @@ limitations under the License.
           {{cluster.spec.cniPlugin.version}}
         </mat-option>
       </mat-select>
-      <i *ngIf="hasAvailableUpdates()"
-         matSuffix
+      @if (hasAvailableUpdates()) {
+      <i matSuffix
          matTooltip="Updates available"
          class="km-icon-update-available updates-available"></i>
+      }
     </mat-form-field>
 
   </div>

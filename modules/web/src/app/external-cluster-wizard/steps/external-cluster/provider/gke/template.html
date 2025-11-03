@@ -24,18 +24,19 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="10px">
 
-    <mat-card-header *ngIf="!isDialogView()"
-                     class="km-no-padding">
+    @if (!isDialogView()) {
+    <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
+    }
 
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput
              type="text"
              [formControlName]="Controls.Name" />
-      <button *ngIf="!isDialogView()"
-              mat-icon-button
+      @if (!isDialogView()) {
+      <button mat-icon-button
               type="button"
               matSuffix
               class="km-randomize-btn"
@@ -43,93 +44,99 @@ limitations under the License.
               (click)="generateName()">
         <i class="km-icon-randomize"></i>
       </button>
+      }
       <mat-hint>Enter a unique name for this {{isDialogView() ? 'machine deployment.' : 'cluster.'}}</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+      @if (form.get(Controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+      }
+      @if (form.get(Controls.Name).hasError('pattern')) {
+      <mat-error>
         Node pool names must start with a lowercase letter followed by up to 39 lowercase letters,
         numbers, or hyphens. They can't end with a hyphen.
       </mat-error>
+      }
     </mat-form-field>
 
-    <ng-container *ngIf="!isDialogView()">
-      <km-combobox filterBy="name"
-                   inputLabel="Select Zone..."
-                   hint="Select zone in which your cluster is located."
-                   [required]="true"
-                   [label]="zoneLabel"
-                   [options]="zones"
-                   [formControlName]="Controls.Zone">
-        <div *option="let zone">
-          {{zone.name}}
+    @if (!isDialogView()) {
+    <km-combobox filterBy="name"
+                 inputLabel="Select Zone..."
+                 hint="Select zone in which your cluster is located."
+                 [required]="true"
+                 [label]="zoneLabel"
+                 [options]="zones"
+                 [formControlName]="Controls.Zone">
+      <div *option="let zone">
+        {{zone.name}}
+      </div>
+    </km-combobox>
+    <label class="km-radio-group-label"
+           fxLayoutAlign=" center">Kubernetes Version
+      <i class="km-icon-info km-pointer"
+         matTooltip="This version will also be used for initial nodepool"></i>
+    </label>
+    <mat-radio-group fxFlex
+                     fxLayout="column"
+                     class="km-radio-group"
+                     [formControlName]="Controls.KubernetesVersionMode">
+      <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Static Version</div>
+        <div class="km-radio-button-description">Manually manage the version upgrades,
+          GKE will only upgrade the control plane and nodes
+          if it's necessary to maintain security and compatibility.
         </div>
-      </km-combobox>
+      </mat-radio-button>
+      <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Release Channel</div>
+        <div class="km-radio-button-description">Let GKE automatically manage the cluster's control plane version.</div>
+      </mat-radio-button>
+      @if (form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel) {
+      <km-select label="Release Channel"
+                 [options]="releaseChannelOptions"
+                 [formControlName]="Controls.ReleaseChannelOptions" />
+      }
+      <km-select [label]="versionLabel"
+                 [options]="kubernetesVersions"
+                 required="true"
+                 hint="Select the cluster's control plane version."
+                 [formControlName]="Controls.Version" />
+    </mat-radio-group>
+    }
 
-      <label class="km-radio-group-label"
-             fxLayoutAlign=" center">Kubernetes Version
-        <i class="km-icon-info km-pointer"
-           matTooltip="This version will also be used for initial nodepool"></i>
-      </label>
-      <mat-radio-group fxFlex
-                       fxLayout="column"
-                       class="km-radio-group"
-                       [formControlName]="Controls.KubernetesVersionMode">
-        <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
-                          class="km-radio-button">
-          <div class="km-radio-button-title">Static Version</div>
-          <div class="km-radio-button-description">Manually manage the version upgrades,
-            GKE will only upgrade the control plane and nodes
-            if it's necessary to maintain security and compatibility.
-          </div>
-        </mat-radio-button>
-        <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
-                          class="km-radio-button">
-          <div class="km-radio-button-title">Release Channel</div>
-          <div class="km-radio-button-description">Let GKE automatically manage the cluster's control plane version.</div>
-        </mat-radio-button>
-
-        <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
-                   label="Release Channel"
-                   [options]="releaseChannelOptions"
-                   [formControlName]="Controls.ReleaseChannelOptions" />
-
-        <km-select [label]="versionLabel"
-                   [options]="kubernetesVersions"
-                   required="true"
-                   hint="Select the cluster's control plane version."
-                   [formControlName]="Controls.Version" />
-      </mat-radio-group>
-    </ng-container>
-
-    <mat-form-field *ngIf="isDialogView()">
+    @if (isDialogView()) {
+    <mat-form-field>
       <mat-label>Kubernetes Version</mat-label>
       <input matInput
              type="text"
              [formControlName]="Controls.Version" />
       <mat-hint>Selected kubernetes version for the node pool</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
+      @if (form.get(Controls.Version).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
+    }
   </div>
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="10px">
-    <ng-container *ngIf="!isDialogView()">
-      <mat-card-header class="km-no-padding">
-        <mat-card-title>Initial Node Pool</mat-card-title>
-      </mat-card-header>
-
-      <mat-form-field>
-        <mat-label>Node Pool Name</mat-label>
-        <input matInput
-               type="text"
-               [formControlName]="Controls.InitialNodePoolName" />
-        <mat-hint>Initial Node Pool Name can't be changed</mat-hint>
-      </mat-form-field>
-    </ng-container>
+    @if (!isDialogView()) {
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Initial Node Pool</mat-card-title>
+    </mat-card-header>
+    <mat-form-field>
+      <mat-label>Node Pool Name</mat-label>
+      <input matInput
+             type="text"
+             [formControlName]="Controls.InitialNodePoolName" />
+      <mat-hint>Initial Node Pool Name can't be changed</mat-hint>
+    </mat-form-field>
+    }
 
     <div>
       <ng-container *ngTemplateOutlet="quotaWidget" />
@@ -173,31 +180,31 @@ limitations under the License.
                        [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
                        [required]="true"
                        [formControlName]="Controls.NodeCount" />
-    <mat-checkbox *ngIf="isDialogView()"
-                  [formControlName]="Controls.EnableAutoScaling"
+    @if (isDialogView()) {
+    <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
                   (change)="onEnableAutoScalingChange($event)">
       Enable AutoScaling
       <i class="km-icon-info km-pointer"
          matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
     </mat-checkbox>
+    }
 
-    <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
-      <km-number-stepper label="Max Count"
-                         mode="all"
-                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
-                         [required]="true"
-                         [min]="form.get(Controls.MinCount).value"
-                         [max]="1000"
-                         [formControlName]="Controls.MaxCount" />
-
-      <km-number-stepper label="Min Count"
-                         mode="all"
-                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
-                         [required]="true"
-                         [min]="1"
-                         [max]="form.get(Controls.MaxCount).value"
-                         [formControlName]="Controls.MinCount" />
-    </ng-container>
+    @if (form.get(Controls.EnableAutoScaling).value) {
+    <km-number-stepper label="Max Count"
+                       mode="all"
+                       hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
+                       [required]="true"
+                       [min]="form.get(Controls.MinCount).value"
+                       [max]="1000"
+                       [formControlName]="Controls.MaxCount" />
+    <km-number-stepper label="Min Count"
+                       mode="all"
+                       hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
+                       [required]="true"
+                       [min]="1"
+                       [max]="form.get(Controls.MaxCount).value"
+                       [formControlName]="Controls.MinCount" />
+    }
 
   </div>
 </form>

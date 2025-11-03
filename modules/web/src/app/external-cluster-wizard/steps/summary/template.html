@@ -62,12 +62,14 @@ limitations under the License.
             </div>
           </km-property>
 
-          <km-property *ngIf="cluster.cloud.eks?.region">
+          @if (cluster.cloud.eks?.region) {
+          <km-property>
             <div key>Region</div>
             <div value>
               <span>{{ cluster.cloud.eks.region }}</span>
             </div>
           </km-property>
+          }
         </div>
       </div>
     </div>
@@ -80,16 +82,17 @@ limitations under the License.
          class="step">
       <div class="header counter-3">{{ step.ExternalClusterDetails }}</div>
 
-      <ng-container [ngSwitch]="provider">
-        <km-eks-cluster-summary *ngSwitchCase="ExternalClusterProvider.EKS"
-                                [cluster]="cluster" />
-
-        <km-aks-cluster-summary *ngSwitchCase="ExternalClusterProvider.AKS"
-                                [cluster]="cluster" />
-
-        <km-gke-cluster-summary *ngSwitchCase="ExternalClusterProvider.GKE"
-                                [cluster]="cluster" />
-      </ng-container>
+      @switch (provider) {
+      @case (ExternalClusterProvider.EKS) {
+      <km-eks-cluster-summary [cluster]="cluster" />
+      }
+      @case (ExternalClusterProvider.AKS) {
+      <km-aks-cluster-summary [cluster]="cluster" />
+      }
+      @case (ExternalClusterProvider.GKE) {
+      <km-gke-cluster-summary [cluster]="cluster" />
+      }
+      }
     </div>
   </div>
 </div>

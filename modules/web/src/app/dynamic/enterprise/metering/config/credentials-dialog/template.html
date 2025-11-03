@@ -33,9 +33,11 @@ END OF TERMS AND CONDITIONS
              type="text"
              autocomplete="off"
              cdkFocusInitial>
-      <mat-error *ngIf="form.get(controls.AccessKey).hasError('required')">
+      @if (form.get(controls.AccessKey).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -45,9 +47,11 @@ END OF TERMS AND CONDITIONS
              [formControlName]="controls.AccessSecret"
              kmInputPassword
              autocomplete="off">
-      <mat-error *ngIf="form.get(controls.AccessSecret).hasError('required')">
+      @if (form.get(controls.AccessSecret).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -57,9 +61,11 @@ END OF TERMS AND CONDITIONS
              [formControlName]="controls.BucketName"
              type="text"
              autocomplete="off">
-      <mat-error *ngIf="form.get(controls.BucketName).hasError('required')">
+      @if (form.get(controls.BucketName).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -69,18 +75,21 @@ END OF TERMS AND CONDITIONS
              [formControlName]="controls.Endpoint"
              type="text"
              autocomplete="off">
-      <mat-error *ngIf="form.get(controls.Endpoint).hasError('required')">
+      @if (form.get(controls.Endpoint).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <mat-spinner *ngIf="saving"
-               [diameter]="25"
+  @if (saving) {
+  <mat-spinner [diameter]="25"
                @pushToSide
                color="accent"
                class="spinner" />
+  }
   <km-button icon="km-icon-save"
              label="Save Credentials"
              [disabled]="form.invalid || saving"

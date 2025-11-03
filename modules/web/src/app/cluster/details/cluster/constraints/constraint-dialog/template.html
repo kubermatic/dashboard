@@ -15,13 +15,14 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === Mode.Edit"
-     class="km-dialog-context-description">Edit <b>{{data.constraint.name}}</b> OPA constraint of <b>{{data.cluster.name}}</b> cluster</p>
+  @if (data.mode === Mode.Edit) {
+  <p class="km-dialog-context-description">Edit <b>{{data.constraint.name}}</b> OPA constraint of <b>{{data.cluster.name}}</b> cluster</p>
+  }
 
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex
-                    *ngIf="data.mode === Mode.Add">
+    @if (data.mode === Mode.Add) {
+    <mat-form-field fxFlex>
       <mat-label>Constraint Name</mat-label>
       <input required
              matInput
@@ -30,23 +31,29 @@ limitations under the License.
              autocomplete="off"
              kmAutofocus
              id="km-constraint-name-input">
-      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+      @if (form.get(Controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+      }
+      @if (form.get(Controls.Name).hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
+    }
 
     <mat-form-field fxFlex>
       <mat-label>Constraint Template</mat-label>
       <mat-select [formControlName]="Controls.ConstraintTemplate"
                   disableOptionCentering
                   id="km-constraint-template-select">
-        <mat-option *ngFor="let constraintTemplate of constraintTemplates"
-                    [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
+        @for (constraintTemplate of constraintTemplates; track constraintTemplate) {
+        <mat-option [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
           {{constraintTemplate.name}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </form>

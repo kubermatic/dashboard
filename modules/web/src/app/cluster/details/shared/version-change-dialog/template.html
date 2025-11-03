@@ -17,46 +17,52 @@ limitations under the License.
   <div fxLayout="row inline"
        fxLayoutAlign=" center">
     <span>Change Control Plane Version</span>
-    <div *ngIf="hasAvailableUpdates && hasVersionOptions"
-         class="km-update-available-badge">
+    @if (hasAvailableUpdates && hasVersionOptions) {
+    <div class="km-update-available-badge">
       <i class="km-icon-update-available-arrow"></i>
       <span>Update Available</span>
     </div>
+    }
     <km-cluster-type-eol [version]="cluster.spec?.version"
                          type="badge" />
   </div>
 </km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description">Change Control Plane Version of <b>{{cluster.name}}</b> cluster</p>
-  <ng-container [ngSwitch]="hasVersionOptions">
-    <mat-form-field *ngSwitchCase="true">
-      <mat-label>Control Plane Version</mat-label>
-      <mat-select [(ngModel)]="selectedVersion"
-                  panelClass="km-add-dialog-dropdown"
-                  disableOptionCentering>
-        <mat-option *ngFor="let version of versions"
-                    [value]="version">
-          {{version}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field *ngSwitchCase="false">
-      <mat-label>Control Plane Version</mat-label>
-      <input [(ngModel)]="selectedVersion"
-             matInput
-             type="text"
-             autocomplete="off"
-             required
-             cdkFocusInitial>
-    </mat-form-field>
-  </ng-container>
+  @switch (hasVersionOptions) {
+  @case (true) {
+  <mat-form-field>
+    <mat-label>Control Plane Version</mat-label>
+    <mat-select [(ngModel)]="selectedVersion"
+                panelClass="km-add-dialog-dropdown"
+                disableOptionCentering>
+      @for (version of versions; track version) {
+      <mat-option [value]="version">
+        {{version}}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  }
+  @case (false) {
+  <mat-form-field>
+    <mat-label>Control Plane Version</mat-label>
+    <input [(ngModel)]="selectedVersion"
+           matInput
+           type="text"
+           autocomplete="off"
+           required
+           cdkFocusInitial>
+  </mat-form-field>
+  }
+  }
 
   <div class="checkbox-wrapper">
-    <mat-checkbox *ngIf="!isClusterExternal"
-                  [(ngModel)]="isMachineDeploymentUpgradeEnabled">
+    @if (!isClusterExternal) {
+    <mat-checkbox [(ngModel)]="isMachineDeploymentUpgradeEnabled">
       Upgrade Machine Deployments
     </mat-checkbox>
+    }
   </div>
 
 </mat-dialog-content>

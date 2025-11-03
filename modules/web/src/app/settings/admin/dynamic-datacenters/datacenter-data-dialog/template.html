@@ -15,8 +15,9 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.isEditing"
-     class="km-dialog-context-description">Edit <b>{{data.datacenter.metadata.name}}</b> datacenter</p>
+  @if (data.isEditing) {
+  <p class="km-dialog-context-description">Edit <b>{{data.datacenter.metadata.name}}</b> datacenter</p>
+  }
 
   <form [formGroup]="form"
         fxLayout="column"
@@ -31,12 +32,16 @@ limitations under the License.
              autocomplete="off"
              cdkFocusInitial
              kmValueChangedIndicator>
-      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      @if (form.get(controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      }
+      @if (form.get(controls.Name).hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -49,14 +54,17 @@ limitations under the License.
                             fxLayout="row">
           <span class="km-provider-logo km-provider-logo-{{form.get(controls.Provider).value}} provider-logo-small"></span>
         </mat-select-trigger>
-        <mat-option *ngFor="let provider of providers"
-                    [value]="provider">
+        @for (provider of providers; track provider) {
+        <mat-option [value]="provider">
           <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-medium"></span>
         </mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="form.get(controls.Provider).hasError('required')">
+      @if (form.get(controls.Provider).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -65,15 +73,18 @@ limitations under the License.
                   disableOptionCentering
                   [formControlName]="controls.Seed"
                   id="km-add-dc-seed-input">
-        <mat-option *ngFor="let seed of seeds"
-                    [value]="seed">
+        @for (seed of seeds; track seed) {
+        <mat-option [value]="seed">
           {{seed}}
         </mat-option>
+        }
       </mat-select>
 
-      <mat-error *ngIf="form.get(controls.Seed).hasError('required')">
+      @if (form.get(controls.Seed).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -88,23 +99,26 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="start"
                fxLayoutGap="6px">
-            <ng-container *ngIf="form.get(controls.Country).value">
-              <span class="fi fi-{{form.get(controls.Country).value.toLowerCase()}}"></span>
-              <span>{{getCountryName(form.get(controls.Country).value)}}</span>
-            </ng-container>
+            @if (form.get(controls.Country).value) {
+            <span class="fi fi-{{form.get(controls.Country).value.toLowerCase()}}"></span>
+            <span>{{getCountryName(form.get(controls.Country).value)}}</span>
+            }
           </div>
         </mat-select-trigger>
-        <mat-option *ngFor="let countryCode of countryCodes"
-                    [value]="countryCode">
+        @for (countryCode of countryCodes; track countryCode) {
+        <mat-option [value]="countryCode">
           <div fxLayoutGap="6px">
             <span class="fi fi-{{countryCode.toLowerCase()}}"></span>
             <span>{{getCountryName(countryCode)}}</span>
           </div>
         </mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="form.get(controls.Country).hasError('required')">
+      @if (form.get(controls.Country).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -116,9 +130,11 @@ limitations under the License.
              type="text"
              autocomplete="off"
              kmValueChangedIndicator>
-      <mat-error *ngIf="form.get(controls.Location).hasError('required')">
+      @if (form.get(controls.Location).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
 
     <km-chip-list label="Required Emails"
@@ -144,62 +160,64 @@ limitations under the License.
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging"
                   kmValueChangedIndicator>Enforce Audit Logging</mat-checkbox>
 
-    <ng-container *ngIf="!!form.get(controls.EnforceAuditLogging).value">
-      <mat-checkbox [formControlName]="controls.EnforceAuditWebhookBackend">
-        Audit Webhook Backend
-        <i class="km-icon-info km-pointer"
-           matTooltip="Configure webhook backend for audit logging functionality. This enforces webhook backend for audit logs of all the clusters within the DC, ignoring cluster-specific settings."></i>
-      </mat-checkbox>
-
-      <ng-container *ngIf="!!form.get(controls.EnforceAuditWebhookBackend).value">
-        <mat-form-field>
-          <mat-label>Secret Name</mat-label>
-          <input matInput
-                 [formControlName]="controls.AuditWebhookBackendSecretName"
-                 type="text"
-                 autocomplete="off" />
-          <mat-error *ngIf="form.get(controls.AuditWebhookBackendSecretName)?.hasError('required')">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Secret Namespace</mat-label>
-          <input matInput
-                 [formControlName]="controls.AuditWebhookBackendSecretNamespace"
-                 type="text"
-                 autocomplete="off" />
-          <mat-error *ngIf="form.get(controls.AuditWebhookBackendSecretNamespace)?.hasError('required')">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Initial Backoff</mat-label>
-          <input matInput
-                 [formControlName]="controls.AuditWebhookBackendInitialBackoff"
-                 type="text"
-                 autocomplete="off" />
-          <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
-        </mat-form-field>
-      </ng-container>
-    </ng-container>
+    @if (!!form.get(controls.EnforceAuditLogging).value) {
+    <mat-checkbox [formControlName]="controls.EnforceAuditWebhookBackend">
+      Audit Webhook Backend
+      <i class="km-icon-info km-pointer"
+         matTooltip="Configure webhook backend for audit logging functionality. This enforces webhook backend for audit logs of all the clusters within the DC, ignoring cluster-specific settings."></i>
+    </mat-checkbox>
+    @if (!!form.get(controls.EnforceAuditWebhookBackend).value) {
+    <mat-form-field>
+      <mat-label>Secret Name</mat-label>
+      <input matInput
+             [formControlName]="controls.AuditWebhookBackendSecretName"
+             type="text"
+             autocomplete="off" />
+      @if (form.get(controls.AuditWebhookBackendSecretName)?.hasError('required')) {
+      <mat-error>
+        <strong>Required</strong>
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Secret Namespace</mat-label>
+      <input matInput
+             [formControlName]="controls.AuditWebhookBackendSecretNamespace"
+             type="text"
+             autocomplete="off" />
+      @if (form.get(controls.AuditWebhookBackendSecretNamespace)?.hasError('required')) {
+      <mat-error>
+        <strong>Required</strong>
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Initial Backoff</mat-label>
+      <input matInput
+             [formControlName]="controls.AuditWebhookBackendInitialBackoff"
+             type="text"
+             autocomplete="off" />
+      <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
+    </mat-form-field>
+    }
+    }
 
     <km-machine-flavor-filter class="km-machine-flavor-filter"
                               [formControl]="form.get(controls.MachineFlavorFilter)"
                               [machineFlavorFilter]="machineFlavorFilter" />
     <mat-card-title class="property-name">Provider Configuration</mat-card-title>
-    <ng-container *ngIf="form.get(controls.Provider).value === Provider.OpenStack">
-      <mat-checkbox [formControlName]="controls.EnableConfigDrive">
-
-        <div fxLayout="row"
-             fxLayoutAlign=" center"
-             fxLayoutGap="4px">
-          <span>Enable Config Drive</span>
-          <i class="km-icon-info km-pointer"
-             matTooltip="Enabling Config Drive will enforce it for all newly created machine deployments using this datacenter.">
-          </i>
-        </div>
-      </mat-checkbox>
-    </ng-container>
+    @if (form.get(controls.Provider).value === Provider.OpenStack) {
+    <mat-checkbox [formControlName]="controls.EnableConfigDrive">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="4px">
+        <span>Enable Config Drive</span>
+        <i class="km-icon-info km-pointer"
+           matTooltip="Enabling Config Drive will enforce it for all newly created machine deployments using this datacenter.">
+        </i>
+      </div>
+    </mat-checkbox>
+    }
   </form>
   <km-editor [(model)]="providerConfig"
              header="YAML" />

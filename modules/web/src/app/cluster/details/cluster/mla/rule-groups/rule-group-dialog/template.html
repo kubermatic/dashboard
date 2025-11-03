@@ -24,10 +24,11 @@ limitations under the License.
       <mat-select [formControlName]="Controls.Type"
                   disableOptionCentering
                   required>
-        <mat-option *ngFor="let type of ruleGroupTypes"
-                    [value]="type">
+        @for (type of ruleGroupTypes; track type) {
+        <mat-option [value]="type">
           {{type}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </form>

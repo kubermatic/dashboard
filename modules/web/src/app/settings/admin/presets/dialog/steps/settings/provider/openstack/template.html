@@ -32,9 +32,11 @@ limitations under the License.
            autocomplete="off"
            [required]="isDomainRequired()"
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
+    @if (form.get(Controls.Domain).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>

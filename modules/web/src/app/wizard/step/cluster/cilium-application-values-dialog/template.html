@@ -17,8 +17,9 @@ limitations under the License.
 <km-dialog-title>Initial CNI Values</km-dialog-title>
 <mat-dialog-content>
   <div fxLayoutAlign="center center">
-    <mat-spinner *ngIf="this.isLoadingDetails"
-                 [diameter]="25" />
+    @if (this.isLoadingDetails) {
+    <mat-spinner [diameter]="25" />
+    }
   </div>
   <div fxLayout="column">
     <p class="application-settings-desc">

@@ -14,130 +14,124 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container [ngSwitch]="urlPath">
-  <router-outlet *ngSwitchCase="view.Groups"
-                 name="groups" />
-
-  <ng-container *ngSwitchCase="view.Members">
-    <mat-card appearance="outlined"
-              class="km-card">
-      <mat-card-header>
-        <mat-card-title>Members</mat-card-title>
-        <button id="km-add-member-top-btn"
-                mat-flat-button
-                type="button"
-                (click)="addMember()"
-                [disabled]="!isAddEnabled()">
-          <i class="km-icon-mask km-icon-add"
-             matButtonIcon></i>
-          <span>Add Member</span>
-        </button>
-      </mat-card-header>
-      <mat-card-content>
-        <table class="km-table"
-               mat-table
-               matSort
-               [dataSource]="dataSource">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell
-                *matHeaderCellDef
-                class="km-header-cell p-35"
-                mat-sort-header>Name
-            </th>
-            <td mat-cell
-                *matCellDef="let element">{{element.name}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell
-                *matHeaderCellDef
-                class="km-header-cell p-40"
-                mat-sort-header>Email
-            </th>
-            <td mat-cell
-                *matCellDef="let element"
-                [attr.id]="'km-member-email-' + element?.email">{{element?.email}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="group">
-            <th mat-header-cell
-                *matHeaderCellDef
-                class="km-header-cell p-25">Role
-            </th>
-            <td mat-cell
-                *matCellDef="let element"
-                [attr.id]="'km-member-group-' + element?.email">{{getGroup(element)}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell
-                *matHeaderCellDef
-                class="km-header-cell"></th>
-            <td mat-cell
-                *matCellDef="let element">
-              <div fxLayoutAlign="end"
-                   class="km-table-actions">
-                <ng-container [ngSwitch]="!!element.deletionTimestamp">
-                  <ng-container *ngSwitchCase="true">
-                    <mat-spinner [diameter]="25"
-                                 class="km-spinner"
-                                 color="accent" />
-                  </ng-container>
-
-                  <ng-container *ngSwitchCase="false">
-                    <div [matTooltip]="getEditTooltip(element)">
-                      <button mat-icon-button
-                              [attr.id]="'km-edit-member-' + element?.email"
-                              (click)="editMember(element)"
-                              [disabled]="!isEditEnabled(element)">
-                        <i class="km-icon-mask km-icon-edit"></i>
-                      </button>
-                    </div>
-
-                    <div [matTooltip]="getDeleteTooltip(element)">
-                      <button mat-icon-button
-                              [attr.id]="'km-delete-member-' + element?.email"
-                              (click)="deleteMember(element)"
-                              [disabled]="!isDeleteEnabled(element)">
-                        <i class="km-icon-mask km-icon-delete"></i>
-                      </button>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row
-              class="km-header-row"
-              *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row
-              *matRowDef="let row; columns: displayedColumns"
-              class="km-mat-row"></tr>
-        </table>
-
-        <ng-container *ngIf="!members || members.length === 0">
-          <div class="km-row km-empty-list-msg"
-               *ngIf="!isInitializing">
-            No members available.
+@switch (urlPath) {
+@case (view.Groups) {
+<router-outlet name="groups" />
+}
+@case (view.Members) {
+<mat-card appearance="outlined"
+          class="km-card">
+  <mat-card-header>
+    <mat-card-title>Members</mat-card-title>
+    <button id="km-add-member-top-btn"
+            mat-flat-button
+            type="button"
+            (click)="addMember()"
+            [disabled]="!isAddEnabled()">
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
+      <span>Add Member</span>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-35"
+            mat-sort-header>Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-40"
+            mat-sort-header>Email
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.id]="'km-member-email-' + element?.email">{{element?.email}}</td>
+      </ng-container>
+      <ng-container matColumnDef="group">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Role
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.id]="'km-member-group-' + element?.email">{{getGroup(element)}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <div [matTooltip]="getEditTooltip(element)">
+              <button mat-icon-button
+                      [attr.id]="'km-edit-member-' + element?.email"
+                      (click)="editMember(element)"
+                      [disabled]="!isEditEnabled(element)">
+                <i class="km-icon-mask km-icon-edit"></i>
+              </button>
+            </div>
+            <div [matTooltip]="getDeleteTooltip(element)">
+              <button mat-icon-button
+                      [attr.id]="'km-delete-member-' + element?.email"
+                      (click)="deleteMember(element)"
+                      [disabled]="!isDeleteEnabled(element)">
+                <i class="km-icon-mask km-icon-delete"></i>
+              </button>
+            </div>
+            }
+            }
           </div>
-          <div class="km-row"
-               *ngIf="isInitializing">
-            <mat-spinner color="accent"
-                         class="km-spinner km-with-spacing"
-                         [diameter]="25" />
-          </div>
-        </ng-container>
-
-        <div [hidden]="!isPaginatorVisible()"
-             class="km-paginator-container">
-          <div fxLayout="row"
-               fxLayoutAlign="flex-end center">
-            <km-pagination-page-size />
-            <mat-paginator showFirstLastButtons />
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
-</ng-container>
+        </td>
+      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+    @if (!members || members.length === 0) {
+    @if (!isInitializing) {
+    <div class="km-row km-empty-list-msg">
+      No members available.
+    </div>
+    }
+    @if (isInitializing) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+    </div>
+    }
+    }
+    <div [hidden]="!isPaginatorVisible()"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+}
+}

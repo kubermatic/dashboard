@@ -74,9 +74,12 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!element.lastSeen">Never</ng-container>
-          <km-relative-time *ngIf="element.lastSeen"
-                            [date]="element.lastSeen" />
+          @if (!element.lastSeen) {
+          Never
+          }
+          @if (element.lastSeen) {
+          <km-relative-time [date]="element.lastSeen" />
+          }
         </td>
       </ng-container>
 
@@ -100,13 +103,13 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

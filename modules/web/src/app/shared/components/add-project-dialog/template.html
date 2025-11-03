@@ -28,9 +28,11 @@ limitations under the License.
                type="text"
                autocomplete="off"
                kmAutofocus>
-        <mat-error *ngIf="form.controls.name.hasError('required')">
+        @if (form.controls.name.hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <div>
@@ -48,32 +50,37 @@ limitations under the License.
                                  multiple
                                  fxLayout="row wrap"
                                  kmValueChangedIndicator>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.ubuntu"
-                             [value]="OperatingSystem.Ubuntu">
+          @if (adminAllowedOperatingSystems.ubuntu) {
+          <mat-button-toggle [value]="OperatingSystem.Ubuntu">
             <i class="km-os-image-ubuntu"></i>
             Ubuntu
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.flatcar"
-                             [value]="OperatingSystem.Flatcar">
+          }
+          @if (adminAllowedOperatingSystems.flatcar) {
+          <mat-button-toggle [value]="OperatingSystem.Flatcar">
             <i class="km-os-image-flatcar"></i>
             Flatcar
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.amzn2"
-                             [value]="OperatingSystem.AmazonLinux2">
+          }
+          @if (adminAllowedOperatingSystems.amzn2) {
+          <mat-button-toggle [value]="OperatingSystem.AmazonLinux2">
             <i class="km-os-image-amazon-linux-2"></i>
             Amazon Linux 2
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rhel"
-                             [value]="OperatingSystem.RHEL"
+          }
+          @if (adminAllowedOperatingSystems.rhel) {
+          <mat-button-toggle [value]="OperatingSystem.RHEL"
                              #rhelToggle>
             <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
             RHEL
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rockylinux"
-                             [value]="OperatingSystem.RockyLinux">
+          }
+          @if (adminAllowedOperatingSystems.rockylinux) {
+          <mat-button-toggle [value]="OperatingSystem.RockyLinux">
             <i class="km-os-image-rockylinux"></i>
             Rocky Linux
           </mat-button-toggle>
+          }
         </mat-button-toggle-group>
       </div>
 

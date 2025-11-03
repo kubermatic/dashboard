@@ -13,353 +13,356 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div *ngIf="!isEmpty(projects) else placeholder">
-
-  <ng-container *ngIf="!isInitializing else spinner">
-    <div fxLayout
-         fxLayoutAlign=" center">
-      <km-search-field (queryChange)="onSearch($event)" />
-      <div fxFlex></div>
-      <ng-container *ngTemplateOutlet="allProjectToggle" />
-      <mat-button-toggle-group class="project-view-switch"
-                               group="projectsView"
-                               (change)="changeView()">
-        <mat-button-toggle value="projectscard"
-                           [checked]="showCards">
-          <i class="km-icon-mask km-icon-projects-card"></i>
-        </mat-button-toggle>
-        <mat-button-toggle value="projectstable"
-                           [checked]="!showCards">
-          <i class="km-icon-mask km-icon-projects-table"></i>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-
-      <ng-container *ngTemplateOutlet="addProjectButton" />
-    </div>
-
-    <ng-container *ngIf="!isProjectsLoading; else spinner">
-      <!-- Table View -->
-      <div *ngIf="!showCards">
-        <mat-card appearance="outlined"
-                  class="km-project-view">
-          <mat-card-content>
-            <table class="km-table"
-                   mat-table
-                   matSort
-                   [dataSource]="dataSource"
-                   [trackBy]="projectTrackBy.bind(this)">
-              <ng-container matColumnDef="status">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell"></th>
-                <td mat-cell
-                    *matCellDef="let element">
-                  <i [matTooltip]="element.status"
-                     [ngClass]="getStatusIcon(element)"
-                     class="km-health-state"></i>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="name">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell p-20"
-                    mat-sort-header="name">Name
-                </th>
-                <td mat-cell
-                    *matCellDef="let element"
-                    [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="labels">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell p-20">Labels
-                </th>
-                <td mat-cell
-                    *matCellDef="let element">
-                  {{getNumberOfLabels(element.labels)}}
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="id">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell p-15"
-                    mat-sort-header="id">ID
-                </th>
-                <td mat-cell
-                    *matCellDef="let element">{{element.id}}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="role">
-                <th mat-header-cell
-                    mat-sort-header="role"
-                    *matHeaderCellDef
-                    class="km-header-cell p-15">Role
-                </th>
-                <td mat-cell
-                    *matCellDef="let element">
-                  <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
-                  <span *ngIf="!getRole(element.id)"
-                        class="km-label-primary"
-                        matTooltip="You're not a member of this project.">External Project</span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="clusters">
-                <th mat-header-cell
-                    mat-sort-header="clusters"
-                    *matHeaderCellDef
-                    class="km-header-cell p-10">Clusters
-                </th>
-                <td mat-cell
-                    *matCellDef="let element">{{element.clustersNumber ? element.clustersNumber : 0}}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="owners">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    [ngClass]="isEnterpriseEdition ? 'p-10' : 'p-20'"
-                    class="km-header-cell">Owners
-                </th>
-                <td mat-cell
-                    *matCellDef="let element"
-                    class="km-project-item-owner">
-                  <span>{{getOwners(element.owners)}}</span>
-                  <span *ngIf="isMoreOwners(element.owners)"
-                        [matTooltip]="getMoreOwners(element.owners)">...
-                    <span *ngIf="getMoreOwnersCount(element.owners) > 0"
-                          class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
-                  </span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="quota">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell p-20">
-                  Quota
-                </th>
-                <td mat-cell
-                    *matCellDef="let element"
-                    class="km-project-item-quota">
-                  <router-outlet *ngIf="element.status === ProjectStatus.Active"
-                                 name="quota-widget"
-                                 (activate)="onActivate($event, element.id, 'table')" />
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="actions">
-                <th mat-header-cell
-                    *matHeaderCellDef
-                    class="km-header-cell"></th>
-                <td mat-cell
-                    *matCellDef="let element">
-                  <div fxLayoutAlign="end"
-                       class="km-table-actions">
-                    <ng-container [ngSwitch]="!!element.deletionTimestamp">
-                      <ng-container *ngSwitchCase="true">
-                        <mat-spinner [diameter]="25"
-                                     class="km-spinner"
-                                     color="accent" />
-                      </ng-container>
-
-                      <ng-container *ngSwitchCase="false">
-                        <button mat-icon-button
-                                [attr.id]="'km-edit-project-' + element.name"
-                                matTooltip="Edit Project"
-                                (click)="editProject(element, $event)"
-                                [disabled]="!isEditEnabled(element)">
-                          <i class="km-icon-mask km-icon-edit"></i>
-                        </button>
-                        <button mat-icon-button
-                                [attr.id]="'km-delete-project-' + element.name"
-                                matTooltip="Delete Project"
-                                (click)="deleteProject(element, $event)"
-                                [disabled]="!isDeleteEnabled(element)">
-                          <i class="km-icon-mask km-icon-delete"></i>
-                        </button>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </td>
-              </ng-container>
-
-              <tr mat-header-row
-                  class="km-header-row"
-                  *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                  class="km-mat-row"
-                  [ngClass]="{'km-pointer': isProjectActive(row)}"
-                  (click)="selectProject(row)"></tr>
-            </table>
-
-            <div class="km-row km-empty-list-msg"
-                 *ngIf="isEmpty(projects)">
-              No projects available.
-            </div>
-
-            <div class="km-row km-empty-list-msg"
-                 *ngIf="!isEmpty(projects) && isEmpty(dataSource.filteredData)">
-              No projects found.
-            </div>
-
-            <div class="km-row"
-                 *ngIf="isInitializing">
-              <mat-spinner color="accent"
-                           class="projects-spinner"
-                           [diameter]="25" />
-            </div>
-
-            <div [hidden]="!isPaginatorVisible || showCards"
-                 class="km-paginator-container">
-              <div fxLayout="row"
-                   fxLayoutAlign="flex-end center">
-                <km-pagination-page-size />
-                <mat-paginator showFirstLastButtons />
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <!-- Cards View -->
-      <div *ngIf="showCards">
-        <div class="project-cards-view">
-
-          <mat-card appearance="outlined"
-                    *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
-                    (click)="selectProject(project)"
-                    [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-extended': isEnterpriseEdition && hasQuota}">
-            <mat-card-header>
-              <i mat-card-avatar
-                 [matTooltip]="project.status"
-                 [ngClass]="getStatusIcon(project)"
-                 class="km-health-state project-cards-status"
-                 fxFlexAlign=" center"></i>
-              <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
-                              [attr.id]="'km-project-name-' + project.name">
-                {{project.name}}
-              </mat-card-title>
-              <mat-card-subtitle>
-                <strong>ID</strong> {{project.id}}
-              </mat-card-subtitle>
-              <div fxFlex
-                   fxLayoutAlign="end">
+@if (!isEmpty(projects)) {
+<div>
+  @if (!isInitializing) {
+  <div fxLayout
+       fxLayoutAlign=" center">
+    <km-search-field (queryChange)="onSearch($event)" />
+    <div fxFlex></div>
+    <ng-container *ngTemplateOutlet="allProjectToggle" />
+    <mat-button-toggle-group class="project-view-switch"
+                             group="projectsView"
+                             (change)="changeView()">
+      <mat-button-toggle value="projectscard"
+                         [checked]="showCards">
+        <i class="km-icon-mask km-icon-projects-card"></i>
+      </mat-button-toggle>
+      <mat-button-toggle value="projectstable"
+                         [checked]="!showCards">
+        <i class="km-icon-mask km-icon-projects-table"></i>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <ng-container *ngTemplateOutlet="addProjectButton" />
+  </div>
+  @if (!isProjectsLoading) {
+  <!-- Table View -->
+  @if (!showCards) {
+  <div>
+    <mat-card appearance="outlined"
+              class="km-project-view">
+      <mat-card-content>
+        <table class="km-table"
+               mat-table
+               matSort
+               [dataSource]="dataSource"
+               [trackBy]="projectTrackBy.bind(this)">
+          <ng-container matColumnDef="status">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell"></th>
+            <td mat-cell
+                *matCellDef="let element">
+              <i [matTooltip]="element.status"
+                 [ngClass]="getStatusIcon(element)"
+                 class="km-health-state"></i>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-20"
+                mat-sort-header="name">Name
+            </th>
+            <td mat-cell
+                *matCellDef="let element"
+                [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="labels">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-20">Labels
+            </th>
+            <td mat-cell
+                *matCellDef="let element">
+              {{getNumberOfLabels(element.labels)}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-15"
+                mat-sort-header="id">ID
+            </th>
+            <td mat-cell
+                *matCellDef="let element">{{element.id}}</td>
+          </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell
+                mat-sort-header="role"
+                *matHeaderCellDef
+                class="km-header-cell p-15">Role
+            </th>
+            <td mat-cell
+                *matCellDef="let element">
+              @if (!!getRole(element.id)) {
+              <span>{{getRole(element.id)}}</span>
+              }
+              @if (!getRole(element.id)) {
+              <span class="km-label-primary"
+                    matTooltip="You're not a member of this project.">External Project</span>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="clusters">
+            <th mat-header-cell
+                mat-sort-header="clusters"
+                *matHeaderCellDef
+                class="km-header-cell p-10">Clusters
+            </th>
+            <td mat-cell
+                *matCellDef="let element">{{element.clustersNumber ? element.clustersNumber : 0}}</td>
+          </ng-container>
+          <ng-container matColumnDef="owners">
+            <th mat-header-cell
+                *matHeaderCellDef
+                [ngClass]="isEnterpriseEdition ? 'p-10' : 'p-20'"
+                class="km-header-cell">Owners
+            </th>
+            <td mat-cell
+                *matCellDef="let element"
+                class="km-project-item-owner">
+              <span>{{getOwners(element.owners)}}</span>
+              @if (isMoreOwners(element.owners)) {
+              <span [matTooltip]="getMoreOwners(element.owners)">...
+                @if (getMoreOwnersCount(element.owners) > 0) {
+                <span class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
+                }
+              </span>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="quota">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-20">
+              Quota
+            </th>
+            <td mat-cell
+                *matCellDef="let element"
+                class="km-project-item-quota">
+              @if (element.status === ProjectStatus.Active) {
+              <router-outlet name="quota-widget"
+                             (activate)="onActivate($event, element.id, 'table')" />
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell"></th>
+            <td mat-cell
+                *matCellDef="let element">
+              <div fxLayoutAlign="end"
+                   class="km-table-actions">
+                @switch (!!element.deletionTimestamp) {
+                @case (true) {
+                <mat-spinner [diameter]="25"
+                             class="km-spinner"
+                             color="accent" />
+                }
+                @case (false) {
                 <button mat-icon-button
-                        [attr.id]="'km-edit-project-' + project.name"
+                        [attr.id]="'km-edit-project-' + element.name"
                         matTooltip="Edit Project"
-                        (click)="editProject(project, $event)"
-                        [disabled]="!isEditEnabled(project)">
+                        (click)="editProject(element, $event)"
+                        [disabled]="!isEditEnabled(element)">
                   <i class="km-icon-mask km-icon-edit"></i>
                 </button>
                 <button mat-icon-button
-                        [attr.id]="'km-delete-project-' + project.name"
+                        [attr.id]="'km-delete-project-' + element.name"
                         matTooltip="Delete Project"
-                        (click)="deleteProject(project, $event)"
-                        [disabled]="!isDeleteEnabled(project)">
+                        (click)="deleteProject(element, $event)"
+                        [disabled]="!isDeleteEnabled(element)">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>
+                }
+                }
               </div>
-            </mat-card-header>
-            <mat-divider />
-            <mat-card-content fxLayout="column"
-                              fxLayoutGap="15px">
-              <div fxLayout="row"
-                   fxLayoutGap="30px"
-                   fxFlex>
-                <div fxLayout="row"
-                     fxLayoutAlign=" center"
-                     fxLayoutGap="8px">
-                  <i class="km-icon-mask km-icon-cluster"></i>
-                  <div>{{project.clustersNumber ? project.clustersNumber : 0}}</div>
-                </div>
-                <div fxLayout="row"
-                     fxLayoutAlign=" center"
-                     fxLayoutGap="8px"
-                     [matTooltip]="getLabelsTooltip(project)">
-                  <i class="km-icon-mask km-icon-labels"></i>
-                  <div>{{getLabelsLength(project)}}</div>
-                </div>
-              </div>
-
-              <div fxLayout="row"
-                   fxLayoutGap="20px"
-                   fxFlex
-                   class="owners-card-view">
-                <div fxLayout="row"
-                     fxLayoutAlign=" center"
-                     fxLayoutGap="8px">
-                  <i class="km-icon-mask km-icon-owner"></i>
-                  <span *ngIf="project.owners.length === 1"
-                        [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
-                  <km-initials-circle *ngIf="project.owners.length > 1"
-                                      [owners]="project.owners"
-                                      [limit]="2" />
-                </div>
-                <div fxLayout="row"
-                     fxLayoutAlign=" center"
-                     fxLayoutGap="8px"
-                     *ngIf="!!getRole(project.id)">
-                  <i class="km-icon-mask km-icon-role"></i>
-                  {{getRole(project.id)}}
-                </div>
-                <div fxFlex></div>
-                <span *ngIf="!getRole(project.id)"
-                      class="km-label-primary"
-                      matTooltip="You're not a member of this project.">External Project</span>
-              </div>
-
-              <div *ngIf="hasQuota"
-                   fxLayoutAlign="start start">
-                <router-outlet *ngIf="project.status === ProjectStatus.Active"
-                               name="quota-widget"
-                               (activate)="onActivate($event, project.id, 'cards')" />
-              </div>
-            </mat-card-content>
-          </mat-card>
+            </td>
+          </ng-container>
+          <tr mat-header-row
+              class="km-header-row"
+              *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              class="km-mat-row"
+              [ngClass]="{'km-pointer': isProjectActive(row)}"
+              (click)="selectProject(row)"></tr>
+        </table>
+        @if (isEmpty(projects)) {
+        <div class="km-row km-empty-list-msg">
+          No projects available.
         </div>
-      </div>
-    </ng-container>
-
-  </ng-container>
-
-  <ng-template #spinner>
-    <div class="km-row">
-      <mat-spinner color="accent"
-                   class="projects-spinner"
-                   [diameter]="25" />
-    </div>
-  </ng-template>
-</div>
-
-<ng-template #placeholder>
-  <ng-container *ngTemplateOutlet="allProjectToggle" />
-  <div fxLayout="column"
-       fxLayoutAlign="center center"
-       class="placeholder">
-    <div fxLayout="column"
-         fxLayoutAlign="center center">
-      <i class="km-icon-mask km-icon-projects-card i-40"></i>
-      <h2>Get Started</h2>
-      <div fxLayout="column"
-           fxLayoutAlign="center center"
-           class="placeholder-text">
-        <p>Dive right into your first project.</p>
-        <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/project-and-cluster-management/"
-           target="_blank"
-           rel="noreferrer noopener"
-           fxLayout="row inline"
-           fxLayoutAlign=" center">
-          Learn more in our documentation <i class="km-icon-external-link"></i>
-        </a>
-      </div>
-      <ng-container *ngTemplateOutlet="addProjectButton" />
+        }
+        @if (!isEmpty(projects) && isEmpty(dataSource.filteredData)) {
+        <div class="km-row km-empty-list-msg">
+          No projects found.
+        </div>
+        }
+        @if (isInitializing) {
+        <div class="km-row">
+          <mat-spinner color="accent"
+                       class="projects-spinner"
+                       [diameter]="25" />
+        </div>
+        }
+        <div [hidden]="!isPaginatorVisible || showCards"
+             class="km-paginator-container">
+          <div fxLayout="row"
+               fxLayoutAlign="flex-end center">
+            <km-pagination-page-size />
+            <mat-paginator showFirstLastButtons />
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  }
+  <!-- Cards View -->
+  @if (showCards) {
+  <div>
+    <div class="project-cards-view">
+      @for (project of dataSource.filteredData; track projectTrackBy($index, project)) {
+      <mat-card appearance="outlined"
+                (click)="selectProject(project)"
+                [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-extended': isEnterpriseEdition && hasQuota}">
+        <mat-card-header>
+          <i mat-card-avatar
+             [matTooltip]="project.status"
+             [ngClass]="getStatusIcon(project)"
+             class="km-health-state project-cards-status"
+             fxFlexAlign=" center"></i>
+          <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                          [attr.id]="'km-project-name-' + project.name">
+            {{project.name}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <strong>ID</strong> {{project.id}}
+          </mat-card-subtitle>
+          <div fxFlex
+               fxLayoutAlign="end">
+            <button mat-icon-button
+                    [attr.id]="'km-edit-project-' + project.name"
+                    matTooltip="Edit Project"
+                    (click)="editProject(project, $event)"
+                    [disabled]="!isEditEnabled(project)">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    [attr.id]="'km-delete-project-' + project.name"
+                    matTooltip="Delete Project"
+                    (click)="deleteProject(project, $event)"
+                    [disabled]="!isDeleteEnabled(project)">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </mat-card-header>
+        <mat-divider />
+        <mat-card-content fxLayout="column"
+                          fxLayoutGap="15px">
+          <div fxLayout="row"
+               fxLayoutGap="30px"
+               fxFlex>
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px">
+              <i class="km-icon-mask km-icon-cluster"></i>
+              <div>{{project.clustersNumber ? project.clustersNumber : 0}}</div>
+            </div>
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px"
+                 [matTooltip]="getLabelsTooltip(project)">
+              <i class="km-icon-mask km-icon-labels"></i>
+              <div>{{getLabelsLength(project)}}</div>
+            </div>
+          </div>
+          <div fxLayout="row"
+               fxLayoutGap="20px"
+               fxFlex
+               class="owners-card-view">
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px">
+              <i class="km-icon-mask km-icon-owner"></i>
+              @if (project.owners.length === 1) {
+              <span [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
+              }
+              @if (project.owners.length > 1) {
+              <km-initials-circle [owners]="project.owners"
+                                  [limit]="2" />
+              }
+            </div>
+            @if (!!getRole(project.id)) {
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px">
+              <i class="km-icon-mask km-icon-role"></i>
+              {{getRole(project.id)}}
+            </div>
+            }
+            <div fxFlex></div>
+            @if (!getRole(project.id)) {
+            <span class="km-label-primary"
+                  matTooltip="You're not a member of this project.">External Project</span>
+            }
+          </div>
+          @if (hasQuota) {
+          <div fxLayoutAlign="start start">
+            @if (project.status === ProjectStatus.Active) {
+            <router-outlet name="quota-widget"
+                           (activate)="onActivate($event, project.id, 'cards')" />
+            }
+          </div>
+          }
+        </mat-card-content>
+      </mat-card>
+      }
     </div>
   </div>
-</ng-template>
+  }
+  } @else {
+  <div class="km-row">
+    <mat-spinner color="accent"
+                 class="projects-spinner"
+                 [diameter]="25" />
+  </div>
+  }
+  } @else {
+  <div class="km-row">
+    <mat-spinner color="accent"
+                 class="projects-spinner"
+                 [diameter]="25" />
+  </div>
+  }
+</div>
+} @else {
+<ng-container *ngTemplateOutlet="allProjectToggle" />
+<div fxLayout="column"
+     fxLayoutAlign="center center"
+     class="placeholder">
+  <div fxLayout="column"
+       fxLayoutAlign="center center">
+    <i class="km-icon-mask km-icon-projects-card i-40"></i>
+    <h2>Get Started</h2>
+    <div fxLayout="column"
+         fxLayoutAlign="center center"
+         class="placeholder-text">
+      <p>Dive right into your first project.</p>
+      <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/project-and-cluster-management/"
+         target="_blank"
+         rel="noreferrer noopener"
+         fxLayout="row inline"
+         fxLayoutAlign=" center">
+        Learn more in our documentation <i class="km-icon-external-link"></i>
+      </a>
+    </div>
+    <ng-container *ngTemplateOutlet="addProjectButton" />
+  </div>
+</div>
+}
+
 
 <ng-template #addProjectButton>
   <button id="km-add-project-top-btn"
@@ -374,12 +377,13 @@ limitations under the License.
 </ng-template>
 
 <ng-template #allProjectToggle>
-  <mat-slide-toggle *ngIf="isAdmin || currentUser?.isGlobalViewer"
-                    class="all-projects-toggle"
+  @if (isAdmin || currentUser?.isGlobalViewer) {
+  <mat-slide-toggle class="all-projects-toggle"
                     [disabled]="isProjectsLoading"
                     labelPosition="before"
                     [matTooltip]="isProjectsLoading ? 'Please wait while projects are loading' : null"
                     [ngModel]="settings.displayAllProjectsForAdmin"
                     (toggleChange)="changeProjectVisibility()">Show All Projects
   </mat-slide-toggle>
+  }
 </ng-template>

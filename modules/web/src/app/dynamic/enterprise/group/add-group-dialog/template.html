@@ -34,12 +34,16 @@ END OF TERMS AND CONDITIONS
                required
                kmAutofocus
                [formControlName]="Controls.Group">
-        <mat-error *ngIf="form.controls.group.hasError('required')">
+        @if (form.controls.group.hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.Group).hasError('pattern')">
+        }
+        @if (form.get(Controls.Group).hasError('pattern')) {
+        <mat-error>
           Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
         </mat-error>
+        }
       </mat-form-field>
 
       <label class="km-radio-group-label">Select a Role</label>

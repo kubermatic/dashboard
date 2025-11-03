@@ -47,16 +47,19 @@ limitations under the License.
                fxLayoutAlign="end center"
                fxLayoutGap="8px"
                class="km-select-trigger-button-wrapper">
-            <i *ngIf="hasAvailableUpdates()"
-               matSuffix
+            @if (hasAvailableUpdates()) {
+            <i matSuffix
                matTooltip="Updates available"
                class="km-icon-update-available"></i>
-            <i *ngIf="isClusterBeforeEOL()"
-               matSuffix
+            }
+            @if (isClusterBeforeEOL()) {
+            <i matSuffix
                class="km-icon-warning"></i>
-            <i *ngIf="isClusterAfterEOL()"
-               matSuffix
+            }
+            @if (isClusterAfterEOL()) {
+            <i matSuffix
                class="km-icon-error"></i>
+            }
           </div>
         </mat-select-trigger>
       </mat-select>
@@ -64,7 +67,8 @@ limitations under the License.
 
   </div>
 
-  <i *ngIf="someUpgradesRestrictedByKubeletVersion"
-     matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+  @if (someUpgradesRestrictedByKubeletVersion) {
+  <i matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
      class="km-icon-warning"></i>
+  }
 </div>

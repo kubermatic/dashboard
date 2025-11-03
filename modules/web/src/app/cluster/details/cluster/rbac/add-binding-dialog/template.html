@@ -31,114 +31,136 @@ limitations under the License.
     <form [formGroup]="form"
           fxLayout="column"
           id="add-binding-form">
-      <ng-container *ngIf="bindingType === BindingType.Cluster">
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === Kind.User">
-          <mat-label>User Email</mat-label>
-          <input matInput
-                 required
-                 formControlName="email"
-                 type="email"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.Email).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-          <mat-error *ngIf="form.get(Controls.Email).hasError('pattern')">
-            User Email cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
-          </mat-error>
-        </mat-form-field>
+      @if (bindingType === BindingType.Cluster) {
+      @if (subjectType === Kind.User) {
+      <mat-form-field fxFlex>
+        <mat-label>User Email</mat-label>
+        <input matInput
+               required
+               formControlName="email"
+               type="email"
+               autocomplete="off">
+        @if (form.get(Controls.Email).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+        @if (form.get(Controls.Email).hasError('pattern')) {
+        <mat-error>
+          User Email cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+        </mat-error>
+        }
+      </mat-form-field>
+      }
+      @if (subjectType === Kind.Group) {
+      <mat-form-field fxFlex>
+        <mat-label>Group</mat-label>
+        <input matInput
+               required
+               formControlName="group"
+               autocomplete="off">
+        @if (form.get(Controls.Group).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+        @if (form.get(Controls.Group).hasError('pattern')) {
+        <mat-error>
+          Group cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+        </mat-error>
+        }
+      </mat-form-field>
+      }
+      <mat-form-field fxFlex>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    [placeholder]="roleLabel">
+          @for (role of clusterRoles; track role) {
+          <mat-option [value]="role.name">
+            {{role.name}}
+          </mat-option>
+          }
+        </mat-select>
+        @if (form.get(Controls.Role).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      }
 
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === Kind.Group">
-          <mat-label>Group</mat-label>
-          <input matInput
-                 required
-                 formControlName="group"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.Group).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-          <mat-error *ngIf="form.get(Controls.Group).hasError('pattern')">
-            Group cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex>
-          <mat-label>Role</mat-label>
-          <mat-select formControlName="role"
-                      panelClass="km-add-dialog-dropdown"
-                      disableOptionCentering
-                      [placeholder]="roleLabel">
-            <mat-option *ngFor="let role of clusterRoles"
-                        [value]="role.name">
-              {{role.name}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get(Controls.Role).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-      </ng-container>
-
-      <ng-container *ngIf="bindingType === BindingType.Namespace">
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === Kind.User">
-          <mat-label>User Email</mat-label>
-          <input matInput
-                 required
-                 formControlName="email"
-                 type="email"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.Email).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === Kind.Group">
-          <mat-label>Group</mat-label>
-          <input matInput
-                 required
-                 formControlName="group"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.Group).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex>
-          <mat-label>Role</mat-label>
-          <mat-select formControlName="role"
-                      panelClass="km-add-dialog-dropdown"
-                      disableOptionCentering
-                      [placeholder]="roleLabel">
-            <mat-option *ngFor="let role of roles"
-                        [value]="role.name">
-              {{role.name}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get(Controls.Role).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex>
-          <mat-label>Namespace</mat-label>
-          <mat-select formControlName="namespace"
-                      panelClass="km-add-dialog-dropdown"
-                      disableOptionCentering
-                      [placeholder]="namespaceLabel">
-            <mat-option *ngFor="let namespace of getNamespaces()"
-                        [value]="namespace">
-              {{namespace}}
-            </mat-option>
-          </mat-select>
-          <mat-hint *ngIf="!form.get(Controls.Role).value">Please select role first.</mat-hint>
-          <mat-error *ngIf="form.get(Controls.Namespace).hasError(ErrorType.Required)">
-            <strong>Required</strong>
-          </mat-error>
-        </mat-form-field>
-      </ng-container>
+      @if (bindingType === BindingType.Namespace) {
+      @if (subjectType === Kind.User) {
+      <mat-form-field fxFlex>
+        <mat-label>User Email</mat-label>
+        <input matInput
+               required
+               formControlName="email"
+               type="email"
+               autocomplete="off">
+        @if (form.get(Controls.Email).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      }
+      @if (subjectType === Kind.Group) {
+      <mat-form-field fxFlex>
+        <mat-label>Group</mat-label>
+        <input matInput
+               required
+               formControlName="group"
+               autocomplete="off">
+        @if (form.get(Controls.Group).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      }
+      <mat-form-field fxFlex>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    [placeholder]="roleLabel">
+          @for (role of roles; track role) {
+          <mat-option [value]="role.name">
+            {{role.name}}
+          </mat-option>
+          }
+        </mat-select>
+        @if (form.get(Controls.Role).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-label>Namespace</mat-label>
+        <mat-select formControlName="namespace"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    [placeholder]="namespaceLabel">
+          @for (namespace of getNamespaces(); track namespace) {
+          <mat-option [value]="namespace">
+            {{namespace}}
+          </mat-option>
+          }
+        </mat-select>
+        @if (!form.get(Controls.Role).value) {
+        <mat-hint>Please select role first.</mat-hint>
+        }
+        @if (form.get(Controls.Namespace).hasError(ErrorType.Required)) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      }
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

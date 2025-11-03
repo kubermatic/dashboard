@@ -20,18 +20,18 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<ng-container *ngIf="!isLoading()">
-  <km-metering-config [config]="config" />
-  <km-metering-schedule-config [schedules]="schedules" />
-</ng-container>
+@if (!isLoading()) {
+<km-metering-config [config]="config" />
+<km-metering-schedule-config [schedules]="schedules" />
+}
 
-<ng-container *ngIf="isLoading() || fetchingLegacyReportsInProgress">
-  <mat-spinner class="km-spinner"
-               [diameter]="50"
-               color="accent" />
-</ng-container>
+@if (isLoading() || fetchingLegacyReportsInProgress) {
+<mat-spinner class="km-spinner"
+             [diameter]="50"
+             color="accent" />
+}
 
-<ng-container *ngIf="showLegacyReportsCard">
-  <km-metering-legacy-reports-card [reports]="legacyReports"
-                                   [isLoadingReports]="false" />
-</ng-container>
+@if (showLegacyReportsCard) {
+<km-metering-legacy-reports-card [reports]="legacyReports"
+                                 [isLoadingReports]="false" />
+}

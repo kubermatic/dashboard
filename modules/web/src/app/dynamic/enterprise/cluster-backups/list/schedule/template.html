@@ -46,16 +46,17 @@ END OF TERMS AND CONDITIONS
       <km-search-field class="search-field"
                        (queryChange)="onSearch($event)" />
       <div fxFlex></div>
-      <div class="action-button"
-           *ngIf="clusters?.length">
-        <button *ngIf="selectedScheduleBackups.length"
-                mat-flat-button
+      @if (clusters?.length) {
+      <div class="action-button">
+        @if (selectedScheduleBackups.length) {
+        <button mat-flat-button
                 type="button"
                 matTooltip="Delete selected"
                 (click)="deleteScheduleBackups(selectedScheduleBackups)">
           <i class="km-icon-mask km-icon-delete"
              matButtonIcon></i>
         </button>
+        }
         <button mat-flat-button
                 type="button"
                 (click)="addScheduleBackup()"
@@ -65,6 +66,7 @@ END OF TERMS AND CONDITIONS
           <span>Create Cluster Schedule</span>
         </button>
       </div>
+      }
     </div>
   </div>
 
@@ -212,10 +214,11 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
-                      class="namespaces-label">
+            @for (namespace of element.spec.includedNamespaces; track namespace) {
+            <mat-chip class="namespaces-label">
               <div>{{namespace}}</div>
             </mat-chip>
+            }
           </div>
         </td>
       </ng-container>
@@ -234,17 +237,19 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!clusterScheduleBackups.length && !loadingBackups">
+    @if (!clusterScheduleBackups.length && !loadingBackups) {
+    <div class="km-row km-empty-list-msg">
       No schedules available.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="loadingBackups && !clusterScheduleBackups.length">
+    @if (loadingBackups && !clusterScheduleBackups.length) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!clusterScheduleBackups?.length"
          class="km-paginator-container">

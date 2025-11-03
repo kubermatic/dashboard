@@ -35,32 +35,30 @@ limitations under the License.
         <i class="km-icon-done"></i>
       </ng-template>
 
-      <mat-step *ngFor="let step of steps; index as i; last as isLast"
-                [stepControl]="form.get(step.name)"
+      @for (step of steps; track step; let i = $index; let isLast = $last) {
+      <mat-step [stepControl]="form.get(step.name)"
                 fxFlex="100%"
                 class="km-transition-none">
         <ng-template matStepLabel>{{step.name}}</ng-template>
-
-        <div [ngSwitch]="step.name"
-             id="{{step.id}}-step"
+        <div id="{{step.id}}-step"
              class="wizard-step">
-          <ng-container *ngSwitchCase="StepRegistry.Provider">
-            <km-kubeone-wizard-provider-step [formControl]="form.get(StepRegistry.Provider)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="StepRegistry.Cluster">
-            <km-kubeone-wizard-cluster-step [formControl]="form.get(StepRegistry.Cluster)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="StepRegistry.Credentials">
-            <km-kubeone-wizard-credentials-step [formControl]="form.get(StepRegistry.Credentials)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="StepRegistry.Summary">
-            <km-kubeone-wizard-summary-step *ngIf="last" />
-          </ng-container>
+          @switch (step.name) {
+          @case (StepRegistry.Provider) {
+          <km-kubeone-wizard-provider-step [formControl]="form.get(StepRegistry.Provider)" />
+          }
+          @case (StepRegistry.Cluster) {
+          <km-kubeone-wizard-cluster-step [formControl]="form.get(StepRegistry.Cluster)" />
+          }
+          @case (StepRegistry.Credentials) {
+          <km-kubeone-wizard-credentials-step [formControl]="form.get(StepRegistry.Credentials)" />
+          }
+          @case (StepRegistry.Summary) {
+          @if (last) {
+          <km-kubeone-wizard-summary-step />
+          }
+          }
+          }
         </div>
-
         <div class="button-navigation"
              id="{{step.id}}-nav">
           <a mat-flat-button
@@ -72,38 +70,43 @@ limitations under the License.
             <span>Cancel</span>
           </a>
           <div fxFlex></div>
+          @if (creating) {
           <mat-spinner fxFlexAlign="center"
                        [diameter]="30"
-                       color="primary"
-                       *ngIf="creating" />
+                       color="primary" />
+          }
+          @if (!first) {
           <button mat-flat-button
                   type="button"
                   color="tertiary"
-                  matStepperPrevious
-                  *ngIf="!first">
+                  matStepperPrevious>
             <i class="km-icon-mask km-icon-back"
                matButtonIcon></i>
             <span>Back</span>
           </button>
+          }
+          @if (!last) {
           <button id="km-kubeone-wizard-{{step.id}}-next-btn"
                   mat-flat-button
                   type="button"
                   matStepperNext
-                  [disabled]="invalid"
-                  *ngIf="!last">
+                  [disabled]="invalid">
             <i class="km-icon-mask km-icon-next"
                matButtonIcon></i>
             <span>Next</span>
           </button>
+          }
+          @if (last && isLast) {
           <km-button buttonId="km-kubeone-wizard-create-btn"
-                     *ngIf="last && isLast"
                      icon="km-icon-add"
                      label="Import KubeOne Cluster"
                      [disabled]="creating"
                      [observable]="getObservable()"
                      (next)="onNext($event)" />
+          }
         </div>
       </mat-step>
+      }
     </mat-horizontal-stepper>
   </mat-card>
 </form>

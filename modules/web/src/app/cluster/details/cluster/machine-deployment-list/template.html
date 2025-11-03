@@ -38,8 +38,8 @@ limitations under the License.
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div *ngIf="!!cluster.spec.cloud.edge"
-           class="kubeadm-manual">
+      @if (!!cluster.spec.cloud.edge) {
+      <div class="kubeadm-manual">
         To interact with cluster pods (reading logs, exec into containers, etc…), cluster CSRs must be approved manually per worker node:
         <div class="km-code-block km-copy"
              fxLayoutAlign=" center"
@@ -56,6 +56,7 @@ limitations under the License.
           <i class="km-icon-mask km-icon-terminal i-16"></i>&nbsp;kubectl certificate approve [csr-name]
         </div>
       </div>
+      }
       <table class="km-table"
              mat-table
              matSort
@@ -87,10 +88,11 @@ limitations under the License.
             <div fxLayoutAlign=" center"
                  fxLayoutGap="4px">
               <span>{{element.name}}</span>
-              <km-chip *ngIf="getOperatingSystem(element) === 'Container Linux'"
-                       text="EOL"
+              @if (getOperatingSystem(element) === 'Container Linux') {
+              <km-chip text="EOL"
                        type="error"
                        matTooltip="Container Linux has reached its end of life and is no longer maintained or updated." />
+              }
             </div>
           </td>
         </ng-container>
@@ -112,9 +114,10 @@ limitations under the License.
               fxLayoutGap="4px">
             <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}
               / {{!!element.spec?.replicas ? element.spec.replicas : 0}}</span>
-            <div *ngIf="element.status?.availableReplicas > element.spec.replicas"
-                 class="km-icon-info km-pointer"
+            @if (element.status?.availableReplicas > element.spec.replicas) {
+            <div class="km-icon-info km-pointer"
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
+            }
           </td>
         </ng-container>
 
@@ -127,16 +130,16 @@ limitations under the License.
               *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
         </ng-container>
 
-        <ng-container *ngIf="cluster?.spec?.cloud.aws">
-          <ng-container matColumnDef="availabilityZone">
-            <th mat-header-cell
-                *matHeaderCellDef
-                class="km-header-cell p-10">Availability Zone
-            </th>
-            <td mat-cell
-                *matCellDef="let element">{{element.spec.template.cloud?.aws?.availabilityZone}}</td>
-          </ng-container>
+        @if (cluster?.spec?.cloud.aws) {
+        <ng-container matColumnDef="availabilityZone">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-10">Availability Zone
+          </th>
+          <td mat-cell
+              *matCellDef="let element">{{element.spec.template.cloud?.aws?.availabilityZone}}</td>
         </ng-container>
+        }
 
         <ng-container [matColumnDef]="Column.OS">
           <th mat-header-cell
@@ -172,40 +175,37 @@ limitations under the License.
           <td mat-cell
               *matCellDef="let element">
             <div class="km-table-actions">
-              <ng-container [ngSwitch]="!!element.deletionTimestamp">
-                <ng-container *ngSwitchCase="true">
-                  <mat-spinner [diameter]="25"
-                               class="km-spinner"
-                               color="accent" />
-                </ng-container>
-
-                <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button
-                          class="machine-deployment-action"
-                          matTooltip="Restart Machine Deployment"
-                          (click)="showRestartDialog(element); $event.stopPropagation()"
-                          [disabled]="!isEditEnabled()">
-                    <i class="km-icon-mask km-icon-regenerate"></i>
-                  </button>
-
-                  <button mat-icon-button
-                          class="machine-deployment-action"
-                          matTooltip="Edit Machine Deployment"
-                          (click)="showEditDialog(element); $event.stopPropagation()"
-                          [disabled]="!isEditEnabled()">
-                    <i class="km-icon-mask km-icon-edit"></i>
-                  </button>
-
-                  <button mat-icon-button
-                          class="machine-deployment-action"
-                          matTooltip="Delete Machine Deployment"
-                          (click)="showDeleteDialog(element); $event.stopPropagation()"
-                          [disabled]="!isDeleteEnabled()">
-                    <i class="km-icon-mask km-icon-delete"
-                       aria-hidden="true"></i>
-                  </button>
-                </ng-container>
-              </ng-container>
+              @switch (!!element.deletionTimestamp) {
+              @case (true) {
+              <mat-spinner [diameter]="25"
+                           class="km-spinner"
+                           color="accent" />
+              }
+              @case (false) {
+              <button mat-icon-button
+                      class="machine-deployment-action"
+                      matTooltip="Restart Machine Deployment"
+                      (click)="showRestartDialog(element); $event.stopPropagation()"
+                      [disabled]="!isEditEnabled()">
+                <i class="km-icon-mask km-icon-regenerate"></i>
+              </button>
+              <button mat-icon-button
+                      class="machine-deployment-action"
+                      matTooltip="Edit Machine Deployment"
+                      (click)="showEditDialog(element); $event.stopPropagation()"
+                      [disabled]="!isEditEnabled()">
+                <i class="km-icon-mask km-icon-edit"></i>
+              </button>
+              <button mat-icon-button
+                      class="machine-deployment-action"
+                      matTooltip="Delete Machine Deployment"
+                      (click)="showDeleteDialog(element); $event.stopPropagation()"
+                      [disabled]="!isDeleteEnabled()">
+                <i class="km-icon-mask km-icon-delete"
+                   aria-hidden="true"></i>
+              </button>
+              }
+              }
             </div>
           </td>
         </ng-container>
@@ -220,12 +220,15 @@ limitations under the License.
             (click)="goToDetails(row)"></tr>
       </table>
 
-      <div class="km-row km-empty-list-msg"
-           *ngIf="hasNoData()">
+      @if (hasNoData()) {
+      <div class="km-row km-empty-list-msg">
         No machine deployments available.
       </div>
+      }
 
-      <km-loader *ngIf="isLoadingData()" />
+      @if (isLoadingData()) {
+      <km-loader />
+      }
 
       <div [hidden]="!isPaginatorVisible()"
            class="km-paginator-container">
@@ -236,8 +239,8 @@ limitations under the License.
         </div>
       </div>
 
-      <ol *ngIf="!!cluster.spec.cloud.bringyourown"
-          class="kubeadm-manual">
+      @if (!!cluster.spec.cloud.bringyourown) {
+      <ol class="kubeadm-manual">
         <li>
           Install kubeadm on you local system and the worker node,
           <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/"
@@ -259,6 +262,7 @@ limitations under the License.
           </div>
         </li>
       </ol>
+      }
 
     </mat-card-content>
   </mat-card>

@@ -28,14 +28,20 @@ limitations under the License.
            autocomplete="off"
            cdkFocusInitial
            required>
-    <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+    @if (form.get(controls.Name).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
-    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValuePattern')">
+    }
+    @if (form.get(controls.Name).hasError('validLabelValuePattern')) {
+    <mat-error>
       Only alphanumeric characters, "." and "-" can be used. "-" and "." cannot be first or last character.
     </mat-error>
-    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValueLength')">
+    }
+    @if (form.get(controls.Name).hasError('validLabelValueLength')) {
+    <mat-error>
       Name cannot be longer than 63 characters.
     </mat-error>
+    }
   </mat-form-field>
 </form>

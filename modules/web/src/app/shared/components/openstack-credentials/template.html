@@ -31,12 +31,12 @@ limitations under the License.
     </mat-button-toggle>
   </mat-button-toggle-group>
 
-  <ng-container *ngIf="credentialsType === CredentialsType.Default">
-    <km-openstack-default-credentials [formControl]="form.get(Controls.Credentials)"
-                                      [mode]="mode" />
-  </ng-container>
+  @if (credentialsType === CredentialsType.Default) {
+  <km-openstack-default-credentials [formControl]="form.get(Controls.Credentials)"
+                                    [mode]="mode" />
+  }
 
-  <ng-container *ngIf="credentialsType === CredentialsType.Application">
-    <km-openstack-application-credentials [formControl]="form.get(Controls.Credentials)" />
-  </ng-container>
+  @if (credentialsType === CredentialsType.Application) {
+  <km-openstack-application-credentials [formControl]="form.get(Controls.Credentials)" />
+  }
 </form>

@@ -16,47 +16,50 @@ limitations under the License.
 <form [formGroup]="form"
       fxFlex="100%"
       fxLayout="column">
-  <div *ngIf="providers.length === 0"
-       class="no-data-warning"
+  @if (providers.length === 0) {
+  <div class="no-data-warning"
        id="km-wizard-seed-warning"
        fxLayoutAlign="center center">
     <i class="km-icon-warning"></i>
     <span>You need to deploy a seed cluster before you can create user clusters.</span>
   </div>
+  }
 
-  <ng-container *ngIf="providers.length > 0">
-    <mat-card-header class="km-no-padding">
-      <mat-card-title class="km-color-primary">Provider</mat-card-title>
-    </mat-card-header>
-    <mat-button-toggle-group group="providerGroup"
-                             [formControlName]="controls.Provider"
+  @if (providers.length > 0) {
+  <mat-card-header class="km-no-padding">
+    <mat-card-title class="km-color-primary">Provider</mat-card-title>
+  </mat-card-header>
+  <mat-button-toggle-group group="providerGroup"
+                           [formControlName]="controls.Provider"
+                           fxLayout="row wrap">
+    @for (provider of providers; track provider) {
+    <mat-button-toggle value="{{provider}}">
+      <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+    </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+  }
+
+  @if (datacenters.length > 0) {
+  <mat-card-header class="km-no-padding">
+    <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-button-toggle-group group="datacenterGroup"
+                             [formControlName]="controls.Datacenter"
                              fxLayout="row wrap">
-      <mat-button-toggle *ngFor="let provider of providers;"
-                         value="{{provider}}">
-        <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+      @for (datacenter of datacenters; track trackByDatacenter($index, datacenter)) {
+      <mat-button-toggle value="{{datacenter.metadata.name}}"
+                         (click)="next()">
+        <span class="fi fi-{{ datacenter.spec.country.toLowerCase() }}">
+        </span>
+        <div class="location">
+          <span [ngClass]="{'country-prefix': !!getZone(datacenter)}">{{getLocation(datacenter)}}</span>
+          <span>{{getZone(datacenter)}}</span>
+        </div>
       </mat-button-toggle>
+      }
     </mat-button-toggle-group>
-  </ng-container>
-
-  <ng-container *ngIf="datacenters.length > 0">
-    <mat-card-header class="km-no-padding">
-      <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-button-toggle-group group="datacenterGroup"
-                               [formControlName]="controls.Datacenter"
-                               fxLayout="row wrap">
-        <mat-button-toggle *ngFor="let datacenter of datacenters; trackBy: trackByDatacenter"
-                           value="{{datacenter.metadata.name}}"
-                           (click)="next()">
-          <span class="fi fi-{{ datacenter.spec.country.toLowerCase() }}">
-          </span>
-          <div class="location">
-            <span [ngClass]="{'country-prefix': !!getZone(datacenter)}">{{getLocation(datacenter)}}</span>
-            <span>{{getZone(datacenter)}}</span>
-          </div>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </mat-card-content>
-  </ng-container>
+  </mat-card-content>
+  }
 </form>

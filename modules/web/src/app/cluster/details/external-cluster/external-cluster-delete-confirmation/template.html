@@ -34,8 +34,8 @@ limitations under the License.
            #clusterNameInput>
   </mat-form-field>
 
-  <div *ngIf="warningMessage"
-       class="warning-container"
+  @if (warningMessage) {
+  <div class="warning-container"
        fxFlex
        fxLayout="row"
        fxLayoutAlign="start center">
@@ -44,6 +44,7 @@ limitations under the License.
       <p [innerHTML]="warningMessage"></p>
     </div>
   </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions>

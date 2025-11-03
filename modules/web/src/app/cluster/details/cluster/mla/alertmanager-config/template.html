@@ -37,28 +37,31 @@ limitations under the License.
   <div fxFlex></div>
   <div fxLayout="row"
        fxLayoutAlign=" center">
+    @if (shouldDisplayLink(Type.Alertmanager)) {
     <a [href]="getLinkURL(Type.Alertmanager)"
        target="_blank"
        rel="noopener noreferrer"
        mat-flat-button
-       color="quaternary"
-       *ngIf="shouldDisplayLink(Type.Alertmanager)">
+       color="quaternary">
       <i class="km-icon-mask km-icon-external-link"
          matButtonIcon></i>
       <span>Open Alertmanager UI</span>
     </a>
+    }
+    @if (shouldDisplayLink(Type.Grafana)) {
     <a [href]="getLinkURL(Type.Grafana)"
        target="_blank"
        rel="noopener noreferrer"
        mat-flat-button
-       color="quaternary"
-       *ngIf="shouldDisplayLink(Type.Grafana)">
+       color="quaternary">
       <i class="km-icon-mask km-icon-external-link"
          matButtonIcon></i>
       <span>Open Grafana UI</span>
     </a>
-    <i *ngIf="displayGrafanaWarning()"
-       matTooltip="{{getAddonsEnabledWarningText()}} {{getAddonsAvailableWarningText()}}"
+    }
+    @if (displayGrafanaWarning()) {
+    <i matTooltip="{{getAddonsEnabledWarningText()}} {{getAddonsAvailableWarningText()}}"
        class="km-icon-warning addon-disabled-icon"></i>
+    }
   </div>
 </div>

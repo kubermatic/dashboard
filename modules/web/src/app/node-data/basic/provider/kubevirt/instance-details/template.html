@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>Instance Type <ng-container *ngIf="preference">and Preference</ng-container> Details</km-dialog-title>
+<km-dialog-title>Instance Type @if (preference) {
+  and Preference
+  } Details</km-dialog-title>
 <mat-dialog-content>
-  <h3 *ngIf="preference">Instance Type</h3>
+  @if (preference) {
+  <h3>Instance Type</h3>
+  }
   <km-property>
     <div key>Name</div>
     <div value>{{instance.name}}</div>
@@ -24,13 +28,13 @@ limitations under the License.
   <div class="block-title km-text-muted">Spec</div>
   <div class="km-code-block">{{instanceSpec | json}}</div>
 
-  <ng-container *ngIf="preference">
-    <h3>Preference</h3>
-    <km-property>
-      <div key>Name</div>
-      <div value>{{preference.name}}</div>
-    </km-property>
-    <div class="block-title km-text-muted">Spec</div>
-    <div class="km-code-block">{{preferenceSpec | json}}</div>
-  </ng-container>
+  @if (preference) {
+  <h3>Preference</h3>
+  <km-property>
+    <div key>Name</div>
+    <div value>{{preference.name}}</div>
+  </km-property>
+  <div class="block-title km-text-muted">Spec</div>
+  <div class="km-code-block">{{preferenceSpec | json}}</div>
+  }
 </mat-dialog-content>

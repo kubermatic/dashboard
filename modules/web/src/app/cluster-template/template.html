@@ -77,8 +77,9 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayout="row"
                fxLayoutAlign=" center">
-            <span *ngIf="!!element?.cluster?.spec?.cloud"
-                  class="km-provider-logo km-provider-logo-{{getProvider(element.cluster)}}"></span>
+            @if (!!element?.cluster?.spec?.cloud) {
+            <span class="km-provider-logo km-provider-logo-{{getProvider(element.cluster)}}"></span>
+            }
 
           </div>
         </td>
@@ -91,9 +92,9 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!!templateDatacenterMap[element.id]">
-            {{templateDatacenterMap[element.id].spec.country}} ({{templateDatacenterMap[element.id].spec.location}})
-          </ng-container>
+          @if (!!templateDatacenterMap[element.id]) {
+          {{templateDatacenterMap[element.id].spec.country}} ({{templateDatacenterMap[element.id].spec.location}})
+          }
         </td>
       </ng-container>
 
@@ -116,35 +117,34 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        matTooltip="Edit Cluster Template"
-                        (click)="editClusterTemplate(element)"
-                        [disabled]="!canEdit(element)">
-                  <i class="km-icon-mask km-icon-edit"></i>
-                </button>
-                <button mat-icon-button
-                        [attr.id]="'km-template-instance-' + element.name"
-                        matTooltip="Create Cluster from Template"
-                        (click)="createCluster(element)"
-                        [disabled]="!canCreateCluster()">
-                  <i class="km-icon-mask km-icon-cluster-from-template"></i>
-                </button>
-                <button mat-icon-button
-                        matTooltip="Delete Cluster Template"
-                        (click)="delete(element)"
-                        [disabled]="!canDelete(element)">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    matTooltip="Edit Cluster Template"
+                    (click)="editClusterTemplate(element)"
+                    [disabled]="!canEdit(element)">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    [attr.id]="'km-template-instance-' + element.name"
+                    matTooltip="Create Cluster from Template"
+                    (click)="createCluster(element)"
+                    [disabled]="!canCreateCluster()">
+              <i class="km-icon-mask km-icon-cluster-from-template"></i>
+            </button>
+            <button mat-icon-button
+                    matTooltip="Delete Cluster Template"
+                    (click)="delete(element)"
+                    [disabled]="!canDelete(element)">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -157,18 +157,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isEmpty()">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="!isInitializing">
-        No cluster templates available.
-      </div>
-      <div class="km-row"
-           *ngIf="isInitializing">
-        <mat-spinner color="accent"
-                     class="km-spinner km-with-spacing"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isEmpty()) {
+    @if (!isInitializing) {
+    <div class="km-row km-empty-list-msg">
+      No cluster templates available.
+    </div>
+    }
+    @if (isInitializing) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+    </div>
+    }
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

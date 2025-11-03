@@ -14,58 +14,54 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="!isInitialized">
-  <mat-spinner color="accent"
-               class="km-spinner km-with-spacing"
-               [diameter]="50" />
-</ng-container>
+@if (!isInitialized) {
+<mat-spinner color="accent"
+             class="km-spinner km-with-spacing"
+             [diameter]="50" />
+}
 
-<ng-container *ngIf="isInitialized">
-  <div fxLayout="row">
-    <button mat-flat-button
-            type="button"
-            color="tertiary"
-            [attr.id]="'km-delete-backup-' + backup.name"
-            (click)="delete(backup)"
-            [disabled]="!canDelete">
-      <i class="km-icon-mask km-icon-delete"
-         matButtonIcon></i>
-      <span>Delete Snapshot</span>
-    </button>
-  </div>
-
-  <mat-card appearance="outlined"
-            class="info">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign=" center"
-                      class="title">
-        <i [matTooltip]="getStatus(backup).message"
-           [ngClass]="getStatus(backup).icon"
-           class="km-vertical-center"></i>
-        <div>{{backup.name}}</div>
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content fxLayout="row">
-      <km-property>
-        <div key>Cluster ID</div>
-        <div value>{{backup.spec?.clusterId}}</div>
-      </km-property>
-    </mat-card-content>
-
-    <mat-card-content>
-      <km-property>
-        <div key>Destination</div>
-        <div value>{{backup.spec?.destination}}</div>
-      </km-property>
-    </mat-card-content>
-  </mat-card>
-
-  <km-backup-list [backups]="backup.status.lastBackups"
-                  [projectID]="selectedProject.id"
-                  [clusterID]="backup.spec.clusterId"
-                  [destination]="backup.spec.destination"
-                  [backupHealth]="getStatus(backup).message" />
-</ng-container>
+@if (isInitialized) {
+<div fxLayout="row">
+  <button mat-flat-button
+          type="button"
+          color="tertiary"
+          [attr.id]="'km-delete-backup-' + backup.name"
+          (click)="delete(backup)"
+          [disabled]="!canDelete">
+    <i class="km-icon-mask km-icon-delete"
+       matButtonIcon></i>
+    <span>Delete Snapshot</span>
+  </button>
+</div>
+<mat-card appearance="outlined"
+          class="info">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center"
+                    class="title">
+      <i [matTooltip]="getStatus(backup).message"
+         [ngClass]="getStatus(backup).icon"
+         class="km-vertical-center"></i>
+      <div>{{backup.name}}</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="row">
+    <km-property>
+      <div key>Cluster ID</div>
+      <div value>{{backup.spec?.clusterId}}</div>
+    </km-property>
+  </mat-card-content>
+  <mat-card-content>
+    <km-property>
+      <div key>Destination</div>
+      <div value>{{backup.spec?.destination}}</div>
+    </km-property>
+  </mat-card-content>
+</mat-card>
+<km-backup-list [backups]="backup.status.lastBackups"
+                [projectID]="selectedProject.id"
+                [clusterID]="backup.spec.clusterId"
+                [destination]="backup.spec.destination"
+                [backupHealth]="getStatus(backup).message" />
+}

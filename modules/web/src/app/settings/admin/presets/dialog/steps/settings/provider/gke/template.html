@@ -26,8 +26,10 @@ limitations under the License.
               [name]="Controls.ServiceAccount"
               autocomplete="off"
               kmValueChangedIndicator></textarea>
-    <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('required')">
+    @if (form.get(Controls.ServiceAccount).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

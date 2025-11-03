@@ -27,13 +27,16 @@ END OF TERMS AND CONDITIONS
         <mat-label>{{ backupStorageLocationLabel }}</mat-label>
         <mat-select [formControlName]="Controls.BSL"
                     disableOptionCentering>
-          <mat-option *ngFor="let bsl of backupStorageLocations"
-                      [value]="bsl.name">{{ bsl.displayName }}
+          @for (bsl of backupStorageLocations; track bsl) {
+          <mat-option [value]="bsl.name">{{ bsl.displayName }}
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.BSL).hasError('required')">
+        @if (form.get(Controls.BSL).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field subscriptSizing="dynamic">
@@ -45,9 +48,11 @@ END OF TERMS AND CONDITIONS
           This will create a sub-directory within a parent directory named after the current project ID.
           To create nested sub-directories, use the / separator (e.g. <code>directory-1/sub-directory-1</code>).
         </mat-hint>
-        <mat-error *ngIf="form.get(Controls.BackupName).hasError('required')">
+        @if (form.get(Controls.BackupName).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <div class="km-info-container">
@@ -91,11 +96,15 @@ END OF TERMS AND CONDITIONS
                     (click)="backupsDirectoryInput.click()">
               <span>Select Backups Directory</span>
             </button>
-            <span *ngIf="selectedBackupsDirectoryName">{{selectedBackupsDirectoryName}} ({{selectedBackupFiles.length}} files selected)</span>
+            @if (selectedBackupsDirectoryName) {
+            <span>{{selectedBackupsDirectoryName}} ({{selectedBackupFiles.length}} files selected)</span>
+            }
           </div>
-          <mat-error *ngIf="form.get(Controls.BackupsDirectory).hasError('fileSize')">
+          @if (form.get(Controls.BackupsDirectory).hasError('fileSize')) {
+          <mat-error>
             <strong>Selected directory contains files larger than the allowed size limit.</strong>
           </mat-error>
+          }
         </div>
 
         <div>
@@ -115,11 +124,15 @@ END OF TERMS AND CONDITIONS
                     (click)="kopiaDirectoryInput.click()">
               <span>Select Kopia Directory</span>
             </button>
-            <span *ngIf="selectedKopiaDirectoryName">{{selectedKopiaDirectoryName}} ({{selectedKopiaFiles.length}} files selected)</span>
+            @if (selectedKopiaDirectoryName) {
+            <span>{{selectedKopiaDirectoryName}} ({{selectedKopiaFiles.length}} files selected)</span>
+            }
           </div>
-          <mat-error *ngIf="form.get(Controls.KopiaDirectory).hasError('fileSize')">
+          @if (form.get(Controls.KopiaDirectory).hasError('fileSize')) {
+          <mat-error>
             <strong>Selected directory contains files larger than the allowed size limit.</strong>
           </mat-error>
+          }
         </div>
       </div>
     </form>
@@ -129,8 +142,8 @@ END OF TERMS AND CONDITIONS
     <div fxLayoutAlign="flex-end center"
          fxLayoutGap="20px"
          class="dialog-actions-container">
-      <div *ngIf="isUploading"
-           fxLayout="column"
+      @if (isUploading) {
+      <div fxLayout="column"
            fxLayoutGap="10px"
            class="upload-progress">
         <mat-progress-bar mode="determinate"
@@ -139,15 +152,17 @@ END OF TERMS AND CONDITIONS
                           matTooltip="{{totalProgress}}%" />
         <p>Uploading {{currentUploadFileName}}</p>
       </div>
-      <div *ngIf="errorMessage"
-           fxLayoutAlign=" center"
+      }
+      @if (errorMessage) {
+      <div fxLayoutAlign=" center"
            class="error-message">
         <i class="km-icon-warning"></i>
         <span>{{errorMessage}}</span>
       </div>
+      }
       <div fxLayout="row">
-        <button *ngIf="isUploading"
-                mat-flat-button
+        @if (isUploading) {
+        <button mat-flat-button
                 type="button"
                 color="quaternary"
                 [disabled]="isCancelTriggered"
@@ -157,6 +172,7 @@ END OF TERMS AND CONDITIONS
              matButtonIcon></i>
           <span>Cancel</span>
         </button>
+        }
         <button mat-flat-button
                 type="button"
                 (click)="onUpload()"

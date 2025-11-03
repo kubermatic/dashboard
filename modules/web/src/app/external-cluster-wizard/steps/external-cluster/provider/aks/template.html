@@ -20,83 +20,80 @@ limitations under the License.
       fxLayout.xs="column"
       fxLayoutGap="20px">
 
-  <ng-container *ngIf="!isDialogView()">
-    <div [fxFlex]="isDialogView() ? '100%' : '50%'"
-         fxLayout="column"
-         fxLayoutGap="10px">
-
-      <mat-card-header class="km-no-padding">
-        <mat-card-title>Cluster</mat-card-title>
-      </mat-card-header>
-
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput
-               type="text"
-               autocomplete="off"
-               [formControlName]="Controls.Name" />
-        <button mat-icon-button
-                type="button"
-                matSuffix
-                class="km-randomize-btn"
-                matTooltip="Generate name"
-                (click)="generateName()">
-          <i class="km-icon-randomize"></i>
-        </button>
-        <mat-hint>Enter a unique name for this cluster</mat-hint>
-        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Required)">
-          <strong>Required</strong>
-        </mat-error>
-        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Pattern)">
-          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
-        </mat-error>
-      </mat-form-field>
-
-      <km-autocomplete label="Kubernetes Version"
-                       required="true"
-                       [options]="kubernetesVersions"
-                       [formControlName]="Controls.KubernetesVersion">
-        <ng-container hint>
-          Enter or Select Kubernetes Version
-        </ng-container>
-      </km-autocomplete>
-
-      <km-combobox filterBy="name"
-                   inputLabel="Select Location..."
-                   hint="Enter a region name for your cluster."
-                   [required]="true"
-                   [label]="locationLabel"
-                   [options]="locations"
-                   [formControlName]="Controls.Location">
-        <div *option="let location">
-          {{location.name}}
-        </div>
-      </km-combobox>
-
-      <km-combobox filterBy="name"
-                   inputLabel="Select Resource Group..."
-                   [required]="true"
-                   [label]="resourceGroupLabel"
-                   [options]="resourceGroups"
-                   [formControlName]="Controls.NodeResourceGroup">
-        <div *option="let resourceGroup">
-          {{resourceGroup?.name}}
-        </div>
-
-        <ng-container hint>
-          Select the resource group name. To get or create a resource group check
-          <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
-             target="_blank"
-             rel="noreferrer noopener"
-             fxLayout="row inline"
-             fxLayoutAlign=" center">
-            AKS user guide <i class="km-icon-external-link"></i>.
-          </a>
-        </ng-container>
-      </km-combobox>
-
-    </div>
-  </ng-container>
+  @if (!isDialogView()) {
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Cluster</mat-card-title>
+    </mat-card-header>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Name" />
+      <button mat-icon-button
+              type="button"
+              matSuffix
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Enter a unique name for this cluster</mat-hint>
+      @if (form.get(Controls.Name).hasError(ErrorType.Required)) {
+      <mat-error>
+        <strong>Required</strong>
+      </mat-error>
+      }
+      @if (form.get(Controls.Name).hasError(ErrorType.Pattern)) {
+      <mat-error>
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
+      }
+    </mat-form-field>
+    <km-autocomplete label="Kubernetes Version"
+                     required="true"
+                     [options]="kubernetesVersions"
+                     [formControlName]="Controls.KubernetesVersion">
+      <ng-container hint>
+        Enter or Select Kubernetes Version
+      </ng-container>
+    </km-autocomplete>
+    <km-combobox filterBy="name"
+                 inputLabel="Select Location..."
+                 hint="Enter a region name for your cluster."
+                 [required]="true"
+                 [label]="locationLabel"
+                 [options]="locations"
+                 [formControlName]="Controls.Location">
+      <div *option="let location">
+        {{location.name}}
+      </div>
+    </km-combobox>
+    <km-combobox filterBy="name"
+                 inputLabel="Select Resource Group..."
+                 [required]="true"
+                 [label]="resourceGroupLabel"
+                 [options]="resourceGroups"
+                 [formControlName]="Controls.NodeResourceGroup">
+      <div *option="let resourceGroup">
+        {{resourceGroup?.name}}
+      </div>
+      <ng-container hint>
+        Select the resource group name. To get or create a resource group check
+        <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
+           target="_blank"
+           rel="noreferrer noopener"
+           fxLayout="row inline"
+           fxLayoutAlign=" center">
+          AKS user guide <i class="km-icon-external-link"></i>.
+        </a>
+      </ng-container>
+    </km-combobox>
+  </div>
+  }
 
   <div fxFlex="50%"
        fxLayout="column"
@@ -112,12 +109,16 @@ limitations under the License.
              autocomplete="off"
              [formControlName]="Controls.NodePoolName" />
       <mat-hint>Enter node pool name. It must contain only lowercase letters and numbers.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Required)">
+      @if (form.get(Controls.NodePoolName).hasError(ErrorType.Required)) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)">
+      }
+      @if (form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)) {
+      <mat-error>
         Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.
       </mat-error>
+      }
     </mat-form-field>
 
     <div>
@@ -138,8 +139,8 @@ limitations under the License.
       </div>
     </km-combobox>
 
-    <km-combobox *ngIf="isDialogView()"
-                 #nodePoolVersionsForMDCombobox
+    @if (isDialogView()) {
+    <km-combobox #nodePoolVersionsForMDCombobox
                  filterBy="version"
                  inputLabel="Select Kubernetes Version..."
                  hint="Select the kubernetes version."
@@ -151,6 +152,7 @@ limitations under the License.
         {{kubernetesVersion.version}}
       </div>
     </km-combobox>
+    }
 
     <km-number-stepper [formControlName]="Controls.Count"
                        label="Count"
@@ -191,22 +193,21 @@ limitations under the License.
       </mat-checkbox>
     </div>
 
-    <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
-      <km-number-stepper label="Max Count"
-                         mode="all"
-                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
-                         [required]="true"
-                         [min]="form.get(Controls.MinCount).value"
-                         [max]="AUTOSCALING_MAX_VALUE"
-                         [formControlName]="Controls.MaxCount" />
-
-      <km-number-stepper label="Min Count"
-                         mode="all"
-                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
-                         [required]="true"
-                         [min]="AUTOSCALING_MIN_VALUE"
-                         [max]="form.get(Controls.MaxCount).value"
-                         [formControlName]="Controls.MinCount" />
-    </ng-container>
+    @if (form.get(Controls.EnableAutoScaling).value) {
+    <km-number-stepper label="Max Count"
+                       mode="all"
+                       hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
+                       [required]="true"
+                       [min]="form.get(Controls.MinCount).value"
+                       [max]="AUTOSCALING_MAX_VALUE"
+                       [formControlName]="Controls.MaxCount" />
+    <km-number-stepper label="Min Count"
+                       mode="all"
+                       hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
+                       [required]="true"
+                       [min]="AUTOSCALING_MIN_VALUE"
+                       [max]="form.get(Controls.MaxCount).value"
+                       [formControlName]="Controls.MinCount" />
+    }
   </div>
 </form>

@@ -20,12 +20,13 @@ limitations under the License.
 
 <mat-dialog-content>
   <!-- Loading Spinner -->
-  <div class="km-row"
-       *ngIf="isLoading">
+  @if (isLoading) {
+  <div class="km-row">
     <mat-spinner color="accent"
                  class="km-spinner km-with-spacing"
                  [diameter]="25" />
   </div>
+  }
   <!-- Main Content -->
   <div [hidden]="isLoading">
     <p class="km-dialog-context-description">Displays usage details and associations of the <strong>{{presetName}}</strong> preset with clusters and cluster templates.</p>

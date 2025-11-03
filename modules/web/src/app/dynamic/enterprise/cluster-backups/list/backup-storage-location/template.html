@@ -153,8 +153,9 @@ END OF TERMS AND CONDITIONS
           *matRowDef="let element; columns: columns"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!backupStorageLocations.length">No storages available.</div>
+    @if (!backupStorageLocations.length) {
+    <div class="km-row km-empty-list-msg">No storages available.</div>
+    }
 
     <div [hidden]="!backupStorageLocations?.length"
          class="km-paginator-container">

@@ -69,10 +69,11 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData()">
+@if (hasNoData()) {
+<div class="km-row km-empty-list-msg">
   No constraint templates available.
 </div>
+}
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">

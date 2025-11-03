@@ -17,47 +17,49 @@ limitations under the License.
 <div class="header"
      fxLayoutGap="10px">
   <div fxFlex></div>
-  <ng-container *ngIf="hasNoData()">
-    <button id="km-gatekeeper-config-add-btn"
-            (click)="add()"
-            mat-flat-button
-            color="quaternary"
-            [disabled]="!isClusterRunning">
-      <i class="km-icon-mask km-icon-add"
-         matButtonIcon></i>
-      <span>Add Gatekeeper Config</span>
-    </button>
-  </ng-container>
-  <ng-container *ngIf="!isLoadingData() && !hasNoData()">
-    <button id="km-gatekeeper-config-edit-btn"
-            mat-icon-button
-            color="tertiary"
-            matTooltip="Edit Gatekeeper Config"
-            (click)="edit()">
-      <i class="km-icon-mask km-icon-edit"></i>
-    </button>
-    <button id="km-gatekeeper-config-delete-btn"
-            mat-icon-button
-            color="tertiary"
-            matTooltip="Delete Gatekeeper Config"
-            (click)="delete()">
-      <i class="km-icon-mask km-icon-delete"></i>
-    </button>
-  </ng-container>
+  @if (hasNoData()) {
+  <button id="km-gatekeeper-config-add-btn"
+          (click)="add()"
+          mat-flat-button
+          color="quaternary"
+          [disabled]="!isClusterRunning">
+    <i class="km-icon-mask km-icon-add"
+       matButtonIcon></i>
+    <span>Add Gatekeeper Config</span>
+  </button>
+  }
+  @if (!isLoadingData() && !hasNoData()) {
+  <button id="km-gatekeeper-config-edit-btn"
+          mat-icon-button
+          color="tertiary"
+          matTooltip="Edit Gatekeeper Config"
+          (click)="edit()">
+    <i class="km-icon-mask km-icon-edit"></i>
+  </button>
+  <button id="km-gatekeeper-config-delete-btn"
+          mat-icon-button
+          color="tertiary"
+          matTooltip="Delete Gatekeeper Config"
+          (click)="delete()">
+    <i class="km-icon-mask km-icon-delete"></i>
+  </button>
+  }
 </div>
 
-<div *ngIf="!isLoadingData() && !hasNoData()"
-     class="gatekeeper-config">
-  <h3 *ngIf="hasSection('readiness')"
-      flexLayout="row"
+@if (!isLoadingData() && !hasNoData()) {
+<div class="gatekeeper-config">
+  @if (hasSection('readiness')) {
+  <h3 flexLayout="row"
       class="section-inline">
     Readiness
     <km-property-boolean class="ready-check"
                          label="Stats Enabled"
                          [value]="gatekeeperConfig.spec.readiness.statsEnabled" />
   </h3>
-
-  <h3 *ngIf="hasSection('sync')">Sync</h3>
+  }
+  @if (hasSection('sync')) {
+  <h3>Sync</h3>
+  }
   <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="syncDataSource"
@@ -70,7 +72,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.group}}</td>
     </ng-container>
-
     <ng-container matColumnDef="version">
       <th mat-header-cell
           *matHeaderCellDef
@@ -79,7 +80,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.version}}</td>
     </ng-container>
-
     <ng-container matColumnDef="kind">
       <th mat-header-cell
           *matHeaderCellDef
@@ -88,7 +88,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.kind}}</td>
     </ng-container>
-
     <tr mat-header-row
         class="km-header-row"
         *matHeaderRowDef="syncDisplayedColumns"></tr>
@@ -96,8 +95,9 @@ limitations under the License.
         *matRowDef="let row; columns: syncDisplayedColumns"
         class="km-mat-row"></tr>
   </table>
-
-  <h3 *ngIf="hasSection('match')">Match</h3>
+  @if (hasSection('match')) {
+  <h3>Match</h3>
+  }
   <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="matchDataSource"
@@ -110,7 +110,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{toCommaSeparatedString(element.excludedNamespaces)}}</td>
     </ng-container>
-
     <ng-container matColumnDef="processes">
       <th mat-header-cell
           *matHeaderCellDef
@@ -119,7 +118,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{toCommaSeparatedString(element.processes)}}</td>
     </ng-container>
-
     <tr mat-header-row
         class="km-header-row"
         *matHeaderRowDef="matchDisplayedColumns"></tr>
@@ -127,8 +125,9 @@ limitations under the License.
         *matRowDef="let row; columns: matchDisplayedColumns"
         class="km-mat-row"></tr>
   </table>
-
-  <h3 *ngIf="hasSection('validation')">Validation</h3>
+  @if (hasSection('validation')) {
+  <h3>Validation</h3>
+  }
   <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="validationDataSource"
@@ -141,7 +140,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.user}}</td>
     </ng-container>
-
     <ng-container matColumnDef="group">
       <th mat-header-cell
           *matHeaderCellDef
@@ -150,7 +148,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.kind.group}}</td>
     </ng-container>
-
     <ng-container matColumnDef="version">
       <th mat-header-cell
           *matHeaderCellDef
@@ -159,7 +156,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.kind.version}}</td>
     </ng-container>
-
     <ng-container matColumnDef="kind">
       <th mat-header-cell
           *matHeaderCellDef
@@ -168,7 +164,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.kind.kind}}</td>
     </ng-container>
-
     <ng-container matColumnDef="dump">
       <th mat-header-cell
           *matHeaderCellDef
@@ -177,7 +172,6 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">{{element.dump}}</td>
     </ng-container>
-
     <tr mat-header-row
         class="km-header-row"
         *matHeaderRowDef="validationDisplayedColumns"></tr>
@@ -186,10 +180,14 @@ limitations under the License.
         class="km-mat-row"></tr>
   </table>
 </div>
+}
 
-<div class="km-empty-list-msg no-items"
-     *ngIf="hasNoData()">
+@if (hasNoData()) {
+<div class="km-empty-list-msg no-items">
   No config found.
 </div>
+}
 
-<km-loader *ngIf="isLoadingData()" />
+@if (isLoadingData()) {
+<km-loader />
+}

@@ -17,8 +17,8 @@ limitations under the License.
           class="km-card keep-margin">
   <mat-card-header fxFlexAlign=" center">
     <mat-card-title>Machine Deployments</mat-card-title>
-    <button *ngIf="!cluster.cloud.bringYourOwn && !cluster.cloud.kubeOne"
-            mat-flat-button
+    @if (!cluster.cloud.bringYourOwn && !cluster.cloud.kubeOne) {
+    <button mat-flat-button
             type="button"
             [disabled]="!isClusterRunning"
             (click)="addExternalMachineDeployment()">
@@ -26,6 +26,7 @@ limitations under the License.
          matButtonIcon></i>
       <span>Add Machine Deployment</span>
     </button>
+    }
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -63,49 +64,48 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container *ngIf="cluster.cloud.aks">
-        <ng-container [matColumnDef]="column.ProvisioningState">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell">
-            <div fxLayout="row"
-                 fxLayoutAlign=" center"
-                 fxLayoutGap="4px">
-              <span>Provisioning State</span>
-              <i class="km-icon-info km-pointer"
-                 matTooltip="This represents the state of the last operation attempted on this node pool,
+      @if (cluster.cloud.aks) {
+      <ng-container [matColumnDef]="column.ProvisioningState">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="4px">
+            <span>Provisioning State</span>
+            <i class="km-icon-info km-pointer"
+               matTooltip="This represents the state of the last operation attempted on this node pool,
                such as scaling the number of nodes or upgrading the Kubernetes version.
                 The nodes may still be running even if this state is showing as 'Failed'.
                Check previous operations on the node pool to resolve any failures."></i>
-            </div>
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            {{element?.phase?.aks?.provisioningState}}
-          </td>
-        </ng-container>
-
-        <ng-container [matColumnDef]="column.PowerState">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell">
-            <div fxLayout="row"
-                 fxLayoutAlign=" center"
-                 fxLayoutGap="4px">
-              <span>Power State</span>
-              <i class="km-icon-info km-pointer"
-                 matTooltip="This represents whether the node pool is powered on.
+          </div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          {{element?.phase?.aks?.provisioningState}}
+        </td>
+      </ng-container>
+      <ng-container [matColumnDef]="column.PowerState">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="4px">
+            <span>Power State</span>
+            <i class="km-icon-info km-pointer"
+               matTooltip="This represents whether the node pool is powered on.
                This field only changes as the result of a 'Start' or 'Stop' operation.
                To check if nodes are ready and accepting pods,
                view the status of the nodes within the node pool."></i>
-            </div>
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            {{element?.phase?.aks?.powerState}}
-          </td>
-        </ng-container>
+          </div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          {{element?.phase?.aks?.powerState}}
+        </td>
       </ng-container>
+      }
 
 
       <ng-container [matColumnDef]="column.Replicas">
@@ -166,30 +166,29 @@ limitations under the License.
           <div fxFlex="100"
                fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        class="machine-deployment-action"
-                        matTooltip="Update Machine Deployment"
-                        (click)="updateMachineDeployment(element, $event);"
-                        [disabled]="!isEditEnabled()">
-                  <i class="km-icon-mask km-icon-edit"></i>
-                </button>
-
-                <button mat-icon-button
-                        class="machine-deployment-action"
-                        matTooltip="Delete Machine Deployment"
-                        [disabled]="!isDeleteEnabled()"
-                        (click)="showDeleteDialog(element, $event);">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    class="machine-deployment-action"
+                    matTooltip="Update Machine Deployment"
+                    (click)="updateMachineDeployment(element, $event);"
+                    [disabled]="!isEditEnabled()">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    class="machine-deployment-action"
+                    matTooltip="Delete Machine Deployment"
+                    [disabled]="!isDeleteEnabled()"
+                    (click)="showDeleteDialog(element, $event);">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -204,12 +203,15 @@ limitations under the License.
           (click)="goToDetails(row)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="hasNoData()">
+    @if (hasNoData()) {
+    <div class="km-row km-empty-list-msg">
       No machine deployments available.
     </div>
+    }
 
-    <km-loader *ngIf="isLoadingData()" />
+    @if (isLoadingData()) {
+    <km-loader />
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

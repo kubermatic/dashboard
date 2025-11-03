@@ -68,11 +68,12 @@ END OF TERMS AND CONDITIONS
           <div fxLayoutAlign=" center"
                fxLayoutGap="10px">
             <span>{{element?.subjectHumanReadableName || element?.name}}</span>
-            <span *ngIf="element.isDefault"
-                  class="km-label-primary km-pointer"
+            @if (element.isDefault) {
+            <span class="km-label-primary km-pointer"
                   matTooltip="Project has been assigned the default project quota. This can be overridden by updating the quota values for this project.">
               Default
             </span>
+            }
           </div>
         </td>
       </ng-container>
@@ -84,8 +85,8 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Memory (GB)</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota && (element.quota.memory || element.quota.memory === 0)"
-               fxLayout="row"
+          @if (element.quota && (element.quota.memory || element.quota.memory === 0)) {
+          <div fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
             <mat-progress-bar value
@@ -95,6 +96,7 @@ END OF TERMS AND CONDITIONS
                               [value]="getProgressBarData(element.subjectName, resourceType.Memory).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.Memory).usageQuota}}</span>
           </div>
+          }
         </td>
       </ng-container>
 
@@ -105,8 +107,8 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>CPU</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota && (element.quota.cpu || element.quota.cpu === 0)"
-               fxLayout="row"
+          @if (element.quota && (element.quota.cpu || element.quota.cpu === 0)) {
+          <div fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
             <mat-progress-bar value
@@ -116,6 +118,7 @@ END OF TERMS AND CONDITIONS
                               [value]="getProgressBarData(element.subjectName, resourceType.CPU).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.CPU).usageQuota}}</span>
           </div>
+          }
         </td>
       </ng-container>
 
@@ -126,8 +129,8 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Disk (GB)</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota && (element.quota.storage || element.quota.storage === 0)"
-               fxLayout="row"
+          @if (element.quota && (element.quota.storage || element.quota.storage === 0)) {
+          <div fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
             <mat-progress-bar value
@@ -137,6 +140,7 @@ END OF TERMS AND CONDITIONS
                               [value]="getProgressBarData(element.subjectName, resourceType.Storage).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.Storage).usageQuota}}</span>
           </div>
+          }
         </td>
       </ng-container>
 
@@ -172,21 +176,21 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row"
-           fxLayoutAlign="center center">
-        <mat-spinner id="quotas-loading-spinner"
-                     color="accent"
-                     class="km-spinner"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row"
+         fxLayoutAlign="center center">
+      <mat-spinner id="quotas-loading-spinner"
+                   color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
-    <ng-container *ngIf="!isLoading && !this.quotas.length">
-      <div id="quotas-not-found"
-           class="km-row"
-           fxLayoutAlign="center center">No quotas found</div>
-    </ng-container>
+    @if (!isLoading && !this.quotas.length) {
+    <div id="quotas-not-found"
+         class="km-row"
+         fxLayoutAlign="center center">No quotas found</div>
+    }
 
     <div id="quotas-paginator"
          [hidden]="quotas?.length < paginator?.pageSize"

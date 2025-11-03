@@ -28,96 +28,94 @@ END OF TERMS AND CONDITIONS
         <mat-label>{{ backupStorageLocationLabel }}</mat-label>
         <mat-select [formControlName]="Controls.BSL"
                     disableOptionCentering>
-          <mat-option *ngFor="let bsl of backupStorageLocations"
-                      [value]="bsl.name">{{ bsl.displayName }}
+          @for (bsl of backupStorageLocations; track bsl) {
+          <mat-option [value]="bsl.name">{{ bsl.displayName }}
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.BSL).hasError('required')">
+        @if (form.get(Controls.BSL).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
-      <ng-container *ngIf="form.get(Controls.BSL).value">
-        <mat-form-field subscriptSizing="dynamic">
-          <mat-label>Backup Sync Period</mat-label>
-          <input [formControlName]="Controls.BackupSyncPeriod"
-                 matInput>
-          <mat-hint>Defines how frequently to sync backup API objects from object storage. Enter time in the format MMmSSs (e.g., 2m10s) and a value of 0 disables sync.</mat-hint>
-          <mat-error *ngIf="form.get(Controls.BackupSyncPeriod).hasError('pattern')">
-            Time must be in the format MMmSSs (e.g., 2m10s).
-          </mat-error>
-        </mat-form-field>
-
-        <div class="km-info-container">
-          <h4 class="info-title">Usage Guidelines</h4>
-          <p class="info-description">
-            The file explorer below shows the S3 bucket configured with the selected Backup Storage Location.
-            Choose the directory which contains backups that are to be imported into the target cluster.
-            By default, KKP uses the sub-directory convention of <code>&sol;&lt;project-id&gt;&sol;&lt;cluster-id&gt;</code> for each user cluster.
-            The backup folder created by Velero contains <strong>backups</strong> and <strong>kopia</strong> directories.
-            <br />
-            <br />
-            <strong>NOTE:</strong> If the path is incorrect, Velero won’t be able to sync the backups.
-          </p>
-        </div>
-
-        <ng-container *ngIf="!isLoadingBackups; else loadingBackups">
-          <p class="backup-selection-message">
-            <ng-container *ngIf="selectedNode; else noBackupSelected">
-              Selected Backup Path: <code>{{ selectedNode.path }}</code>
-            </ng-container>
-            <ng-template #noBackupSelected>
-              <ng-container *ngIf="s3DirectoriesDataSource.length; else noBackups">
-                Please select a backup path.
-              </ng-container>
-              <ng-template #noBackups>
-                No backups available. Please select a different backup storage location.
-              </ng-template>
-            </ng-template>
-          </p>
-
-          <ng-container *ngIf="s3DirectoriesDataSource.length">
-            <mat-tree #tree
-                      [dataSource]="s3DirectoriesDataSource"
-                      [childrenAccessor]="childrenAccessor"
-                      class="km-tree-in-dialog">
-              <mat-tree-node *matTreeNodeDef="let node"
-                             matTreeNodePadding>
-                <div fxLayoutAlign=" center"
-                     class="leaf-node"><i class="km-icon-mask km-icon-file i-12"></i>{{ node.name }}
-                </div>
-              </mat-tree-node>
-              <!-- This is the tree node template for expandable nodes -->
-              <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
-                             matTreeNodePadding
-                             matTreeNodeToggle
-                             class="km-pointer"
-                             [ngClass]="{'selected-node': selectedNode?.path === node.path}"
-                             [cdkTreeNodeTypeaheadLabel]="node.name"
-                             (click)="onSelectNode(node)">
-                <div fxLayoutAlign=" center"
-                     fxLayoutGap="10px">
-                  <i class="km-icon-mask km-icon-folder{{tree.isExpanded(node) ? '-open' : ''}}"
-                     matTreeNodeToggle></i>
-                  <span>{{ node.name }}</span>
-                  <i *ngIf="selectedNode?.path === node.path"
-                     class="km-icon-mask km-icon-check"></i>
-                </div>
-              </mat-tree-node>
-            </mat-tree>
-
-            <p class="disclaimer-message">
-              Disclaimer: Only AWS and Ceph S3 are supported so this feature is only tested for these providers.
-            </p>
-          </ng-container>
-
-        </ng-container>
-        <ng-template #loadingBackups>
-          <mat-spinner color="accent"
-                       class="km-spinner km-with-spacing"
-                       [diameter]="25" />
-        </ng-template>
-      </ng-container>
+      @if (form.get(Controls.BSL).value) {
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Backup Sync Period</mat-label>
+        <input [formControlName]="Controls.BackupSyncPeriod"
+               matInput>
+        <mat-hint>Defines how frequently to sync backup API objects from object storage. Enter time in the format MMmSSs (e.g., 2m10s) and a value of 0 disables sync.</mat-hint>
+        @if (form.get(Controls.BackupSyncPeriod).hasError('pattern')) {
+        <mat-error>
+          Time must be in the format MMmSSs (e.g., 2m10s).
+        </mat-error>
+        }
+      </mat-form-field>
+      <div class="km-info-container">
+        <h4 class="info-title">Usage Guidelines</h4>
+        <p class="info-description">
+          The file explorer below shows the S3 bucket configured with the selected Backup Storage Location.
+          Choose the directory which contains backups that are to be imported into the target cluster.
+          By default, KKP uses the sub-directory convention of <code>&sol;&lt;project-id&gt;&sol;&lt;cluster-id&gt;</code> for each user cluster.
+          The backup folder created by Velero contains <strong>backups</strong> and <strong>kopia</strong> directories.
+          <br />
+          <br />
+          <strong>NOTE:</strong> If the path is incorrect, Velero won’t be able to sync the backups.
+        </p>
+      </div>
+      @if (!isLoadingBackups) {
+      <p class="backup-selection-message">
+        @if (selectedNode) {
+        Selected Backup Path: <code>{{ selectedNode.path }}</code>
+        } @else {
+        @if (s3DirectoriesDataSource.length) {
+        Please select a backup path.
+        } @else {
+        No backups available. Please select a different backup storage location.
+        }
+        }
+      </p>
+      @if (s3DirectoriesDataSource.length) {
+      <mat-tree #tree
+                [dataSource]="s3DirectoriesDataSource"
+                [childrenAccessor]="childrenAccessor"
+                class="km-tree-in-dialog">
+        <mat-tree-node *matTreeNodeDef="let node"
+                       matTreeNodePadding>
+          <div fxLayoutAlign=" center"
+               class="leaf-node"><i class="km-icon-mask km-icon-file i-12"></i>{{ node.name }}
+          </div>
+        </mat-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
+                       matTreeNodePadding
+                       matTreeNodeToggle
+                       class="km-pointer"
+                       [ngClass]="{'selected-node': selectedNode?.path === node.path}"
+                       [cdkTreeNodeTypeaheadLabel]="node.name"
+                       (click)="onSelectNode(node)">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <i class="km-icon-mask km-icon-folder{{tree.isExpanded(node) ? '-open' : ''}}"
+               matTreeNodeToggle></i>
+            <span>{{ node.name }}</span>
+            @if (selectedNode?.path === node.path) {
+            <i class="km-icon-mask km-icon-check"></i>
+            }
+          </div>
+        </mat-tree-node>
+      </mat-tree>
+      <p class="disclaimer-message">
+        Disclaimer: Only AWS and Ceph S3 are supported so this feature is only tested for these providers.
+      </p>
+      }
+      } @else {
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+      }
+      }
     </form>
   </mat-dialog-content>
 

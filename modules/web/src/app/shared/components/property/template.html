@@ -18,7 +18,9 @@ limitations under the License.
   <div fxFlex
        fxLayout="column">
     <div class="label km-text-muted">
-      <div *ngIf="mode === Mode.Value"></div>
+      @if (mode === Mode.Value) {
+      <div></div>
+      }
       <ng-content select="[key]" />
     </div>
     <div fxFlex></div>

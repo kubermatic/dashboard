@@ -16,8 +16,8 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.CustomLinks">
-    <div *ngFor="let control of customLinksArray.controls; let i = index;"
-         [formGroupName]="i"
+    @for (control of customLinksArray.controls; track control; let i = $index) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="22">
@@ -26,9 +26,11 @@ limitations under the License.
                (keyup)="check()"
                [name]="Controls.Label"
                [formControlName]="Controls.Label">
-        <mat-error *ngIf="control.get(Controls.Label).errors?.required">
+        @if (control.get(Controls.Label).errors?.required) {
+        <mat-error>
           Label is required.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="40">
         <mat-label>URL</mat-label>
@@ -36,9 +38,11 @@ limitations under the License.
                (keyup)="check()"
                [name]="Controls.URL"
                [formControlName]="Controls.URL">
-        <mat-error *ngIf="control.get(Controls.URL).errors?.required">
+        @if (control.get(Controls.URL).errors?.required) {
+        <mat-error>
           URL is required.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="25">
         <mat-label>Icon</mat-label>
@@ -67,5 +71,6 @@ limitations under the License.
       </button>
       <km-spinner-with-confirmation [isSaved]="isSaved(i)" />
     </div>
+    }
   </div>
 </form>

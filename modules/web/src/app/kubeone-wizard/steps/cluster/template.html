@@ -57,9 +57,11 @@ limitations under the License.
                   [formControlName]="Controls.SSHKey"
                   [name]="Controls.SSHKey"></textarea>
         <mat-hint>Enter the Private SSH Key which was used while creating the KubeOne cluster.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.SSHKey).hasError('required')">
+        @if (form.get(Controls.SSHKey).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field fxFlex

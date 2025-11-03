@@ -28,61 +28,67 @@ limitations under the License.
     <i class="km-icon-done"></i>
   </ng-template>
 
-  <mat-step *ngIf="isEnabled(stepRegistry.Preset)"
-            [stepControl]="form.get(stepRegistry.Preset)"
+  @if (isEnabled(stepRegistry.Preset)) {
+  <mat-step [stepControl]="form.get(stepRegistry.Preset)"
             [label]="stepRegistry.Preset"
             fxFlex="100%">
     <km-preset-step [formControl]="form.get(stepRegistry.Preset)" />
   </mat-step>
+  }
 
-  <mat-step *ngIf="isEnabled(stepRegistry.Provider)"
-            [stepControl]="form.get(stepRegistry.Provider)"
+  @if (isEnabled(stepRegistry.Provider)) {
+  <mat-step [stepControl]="form.get(stepRegistry.Provider)"
             [label]="stepRegistry.Provider"
             fxFlex="100%">
     <km-preset-provider-step [existingProviders]="data.preset?.providers"
                              [mode]="data.mode"
                              [formControl]="form.get(stepRegistry.Provider)" />
   </mat-step>
+  }
 
-  <mat-step *ngIf="isEnabled(stepRegistry.Settings)"
-            [stepControl]="form.get(stepRegistry.Settings)"
+  @if (isEnabled(stepRegistry.Settings)) {
+  <mat-step [stepControl]="form.get(stepRegistry.Settings)"
             [label]="stepRegistry.Settings"
             fxFlex="100%">
     <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"
                              [mode]="data.mode" />
   </mat-step>
+  }
 </mat-horizontal-stepper>
 
 <mat-dialog-actions class="preset-dialog-action">
+  @if (creating) {
   <mat-spinner [diameter]="30"
-               color="accent"
-               *ngIf="creating" />
+               color="accent" />
+  }
+  @if (!first) {
   <button mat-flat-button
           type="button"
           color="tertiary"
-          (click)="stepper.previous()"
-          *ngIf="!first">
+          (click)="stepper.previous()">
     <i class="km-icon-mask km-icon-back"
        matButtonIcon></i>
     <span>Back</span>
   </button>
+  }
+  @if (!last) {
   <button mat-flat-button
           type="button"
           id="km-settings-preset-next-btn"
           (click)="stepper.next()"
-          [disabled]="invalid"
-          *ngIf="!last">
+          [disabled]="invalid">
     <i class="km-icon-mask km-icon-next"
        matButtonIcon></i>
     <span>Next</span>
   </button>
-  <km-button *ngIf="last"
-             class="create-button"
-             [ngSwitch]="data.mode"
+  }
+  @if (last) {
+  <km-button class="create-button"
              id="km-settings-preset-create-btn"
              [icon]="icon"
              [label]="label"
              [disabled]="creating || invalid"
              [observable]="getObservable()"
              (next)="onNext($event)" />
+  }
 </mat-dialog-actions>

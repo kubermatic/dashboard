@@ -58,12 +58,13 @@ limitations under the License.
            matButtonIcon></i>
         <span>Configure Load Balancer Classes</span>
       </button>
-      <span *ngIf="loadBalancerClassCount > 0"
-            class="km-text-muted km-pointer"
+      @if (loadBalancerClassCount > 0) {
+      <span class="km-text-muted km-pointer"
             (click)="openLoadBalancerClassDialog()"
             matTooltip="Click to view/edit configured LoadBalancer classes">
         ({{loadBalancerClassCount}} configured)
       </span>
+      }
     </div>
     <div class="km-muted-light">
       Set up Load Balancer Classes for this Cluster. This can be used to configure multiple classes with different

@@ -50,12 +50,13 @@ limitations under the License.
       </mat-checkbox>
     </div>
 
+    @if (showWarning()) {
     <div class="km-dialog-warning"
-         *ngIf="showWarning()"
          fxLayoutAlign=" center">
       <i class="km-icon-warning"></i>
       <div>Deactivating clean up may result in leftover resources at your provider</div>
     </div>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

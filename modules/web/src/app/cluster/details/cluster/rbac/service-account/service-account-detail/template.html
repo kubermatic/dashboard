@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<table *ngIf="dataSource.data?.length; else noBindings"
-       class="km-table km-table-with-frame content"
+@if (dataSource.data?.length) {
+<table class="km-table km-table-with-frame content"
        mat-table
        multiTemplateDataRows
        [dataSource]="dataSource">
-
   <ng-container [matColumnDef]="Column.Scope">
     <th *matHeaderCellDef
         mat-header-cell
@@ -29,7 +28,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.scope}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.ClusterRole">
     <th *matHeaderCellDef
         mat-header-cell
@@ -39,7 +37,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.clusterRole}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.PermissionNamespace">
     <th *matHeaderCellDef
         mat-header-cell
@@ -49,7 +46,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.namespace}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.Actions">
     <th mat-header-cell
         *matHeaderCellDef
@@ -66,20 +62,16 @@ limitations under the License.
       </div>
     </td>
   </ng-container>
-
   <tr mat-header-row
       class="km-header-row"
       *matHeaderRowDef="columns"></tr>
-
   <tr mat-row
       *matRowDef="let row; columns: columns"
       class="km-mat-row"></tr>
 </table>
-
-<ng-template #noBindings
-             class="km-row km-empty-list-msg">
-  <div fxLayout="row"
-       fxLayoutAlign="center center">
-    No bindings available.
-  </div>
-</ng-template>
+} @else {
+<div fxLayout="row"
+     fxLayoutAlign="center center">
+  No bindings available.
+</div>
+}

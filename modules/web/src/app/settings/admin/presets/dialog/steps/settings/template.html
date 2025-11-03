@@ -18,73 +18,96 @@ limitations under the License.
   <div fxLayout="row wrap"
        class="info-container">
     <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
-    <km-property *ngIf="mode === Mode.Create">
+    @if (mode === Mode.Create) {
+    <km-property>
       <div key>Preset Name</div>
       <div value>{{preset.metadata.name}}</div>
     </km-property>
-    <km-property *ngIf="preset?.spec?.requiredEmails">
+    }
+    @if (preset?.spec?.requiredEmails) {
+    <km-property>
       <div key>Restrict Preset Group to Domain(s)</div>
       <div value>{{preset.spec.requiredEmails}}</div>
     </km-property>
-    <km-property-boolean *ngIf="!preset?.spec?.enabled"
-                         [value]="!preset.spec.enabled"
+    }
+    @if (!preset?.spec?.enabled) {
+    <km-property-boolean [value]="!preset.spec.enabled"
                          label="Hide upon creation" />
+    }
   </div>
 
   <form [formGroup]="form"
         fxFlex="100%"
         fxLayout="column">
-    <div [ngSwitch]="provider">
-      <km-aks-settings *ngSwitchCase="Providers.AKS"
-                       [formControl]="form.get(Controls.Settings)" />
-      <km-alibaba-settings *ngSwitchCase="Providers.ALIBABA"
-                           [formControl]="form.get(Controls.Settings)" />
-      <km-anexia-settings *ngSwitchCase="Providers.ANEXIA"
-                          [formControl]="form.get(Controls.Settings)" />
-      <km-aws-settings *ngSwitchCase="Providers.AWS"
-                       [formControl]="form.get(Controls.Settings)" />
-      <km-azure-settings *ngSwitchCase="Providers.AZURE"
-                         [formControl]="form.get(Controls.Settings)" />
-      <km-digitalocean-settings *ngSwitchCase="Providers.DIGITALOCEAN"
-                                [formControl]="form.get(Controls.Settings)" />
-      <km-eks-settings *ngSwitchCase="Providers.EKS"
-                       [formControl]="form.get(Controls.Settings)" />
-      <km-gcp-settings *ngSwitchCase="Providers.GCP"
-                       [formControl]="form.get(Controls.Settings)" />
-      <km-gke-settings *ngSwitchCase="Providers.GKE"
-                       [formControl]="form.get(Controls.Settings)" />
-      <km-hetzner-settings *ngSwitchCase="Providers.HETZNER"
-                           [formControl]="form.get(Controls.Settings)" />
-      <km-kubevirt-settings *ngSwitchCase="Providers.KUBEVIRT"
-                            [formControl]="form.get(Controls.Settings)" />
-      <km-openstack-settings *ngSwitchCase="Providers.OPENSTACK"
-                             [formControl]="form.get(Controls.Settings)" />
-
-      <km-nutanix-settings *ngSwitchCase="Providers.NUTANIX"
-                           [formControl]="form.get(Controls.Settings)" />
-      <km-vsphere-settings *ngSwitchCase="Providers.VSPHERE"
-                           [formControl]="form.get(Controls.Settings)" />
-      <km-vmware-cloud-director-settings *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
-                                         [formControl]="form.get(Controls.Settings)" />
-      <km-baremetal-settings *ngSwitchCase="Providers.BAREMETAL"
-                             [formControl]="form.get(Controls.Settings)" />
+    <div>
+      @switch (provider) {
+      @case (Providers.AKS) {
+      <km-aks-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.ALIBABA) {
+      <km-alibaba-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.ANEXIA) {
+      <km-anexia-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.AWS) {
+      <km-aws-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.AZURE) {
+      <km-azure-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.DIGITALOCEAN) {
+      <km-digitalocean-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.EKS) {
+      <km-eks-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.GCP) {
+      <km-gcp-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.GKE) {
+      <km-gke-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.HETZNER) {
+      <km-hetzner-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.KUBEVIRT) {
+      <km-kubevirt-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.OPENSTACK) {
+      <km-openstack-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.NUTANIX) {
+      <km-nutanix-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.VSPHERE) {
+      <km-vsphere-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.VMWARECLOUDDIRECTOR) {
+      <km-vmware-cloud-director-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      @case (Providers.BAREMETAL) {
+      <km-baremetal-settings [formControl]="form.get(Controls.Settings)" />
+      }
+      }
     </div>
 
-    <ng-container *ngIf="!isExternal()">
-      <mat-checkbox *ngIf="isProvider(Providers.OPENSTACK)"
-                    [formControlName]="Controls.IsCustomizable">
-        Customizable Preset
-        <i class="km-icon-info km-pointer"
-           matTooltip="Allow customization of non-credential settings during cluster creation."></i>
-      </mat-checkbox>
-      <div class="optional-section">Optional Restrictions</div>
-      <div fxLayout="column"
-           fxLayoutGap="10px">
-        <km-autocomplete label="Restrict to Datacenter"
-                         [formControlName]="Controls.Datacenter"
-                         [isLoading]="isLoadingDatacenters"
-                         [options]="datacenters" />
-      </div>
-    </ng-container>
+    @if (!isExternal()) {
+    @if (isProvider(Providers.OPENSTACK)) {
+    <mat-checkbox [formControlName]="Controls.IsCustomizable">
+      Customizable Preset
+      <i class="km-icon-info km-pointer"
+         matTooltip="Allow customization of non-credential settings during cluster creation."></i>
+    </mat-checkbox>
+    }
+    <div class="optional-section">Optional Restrictions</div>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <km-autocomplete label="Restrict to Datacenter"
+                       [formControlName]="Controls.Datacenter"
+                       [isLoading]="isLoadingDatacenters"
+                       [options]="datacenters" />
+    </div>
+    }
   </form>
 </div>

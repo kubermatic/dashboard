@@ -51,8 +51,9 @@ limitations under the License.
     <mat-select [formControlName]="Controls.IPAllocationMode"
                 disableOptionCentering
                 kmValueChangedIndicator>
-      <mat-option *ngFor="let mode of ipAllocationModes"
-                  [value]="mode"> {{mode}} </mat-option>
+      @for (mode of ipAllocationModes; track mode) {
+      <mat-option [value]="mode"> {{mode}} </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -91,8 +92,9 @@ limitations under the License.
                 (selectionChange)="onNetworkChanged($event.value)"
                 disableOptionCentering
                 kmValueChangedIndicator>
-      <mat-option *ngFor="let network of networks"
-                  [value]="network"> {{network}} </mat-option>
+      @for (network of networks; track network) {
+      <mat-option [value]="network"> {{network}} </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 

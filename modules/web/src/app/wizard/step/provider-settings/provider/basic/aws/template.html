@@ -31,9 +31,11 @@ limitations under the License.
          fxLayoutAlign=" center"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here <i class="km-icon-external-link"></i></a>.
     </mat-hint>
-    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
+    @if (form.get(Controls.AccessKeyID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -52,9 +54,11 @@ limitations under the License.
          fxLayoutAlign=" center"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here <i class="km-icon-external-link"></i></a>.
     </mat-hint>
-    <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
+    @if (form.get(Controls.AccessKeySecret).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-combobox #vpcCombobox
@@ -76,49 +80,52 @@ limitations under the License.
 
   <mat-checkbox [formControlName]="Controls.UseAssumeRole">Enable Assume Role</mat-checkbox>
 
-  <ng-container *ngIf="isAssumeRoleEnabled">
-    <mat-form-field fxFlex>
-      <mat-label>AssumeRole ARN</mat-label>
-      <input matInput
-             [formControlName]="Controls.AssumeRoleARN"
-             [name]="Controls.AssumeRoleARN"
-             kmInputPassword
-             autocomplete="off"
-             required>
-      <mat-hint>
-        Specify to use an assumed role to run the user cluster.
-        More information can be found
-        <a target="_blank"
-           rel="noopener"
-           fxLayout="row inline"
-           fxLayoutAlign=" center"
-           href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here <i class="km-icon-external-link"></i></a>.
-      </mat-hint>
-      <mat-error *ngIf="form.get(Controls.AssumeRoleARN).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field fxFlex>
-      <mat-label>AssumeRole External ID</mat-label>
-      <input matInput
-             [formControlName]="Controls.AssumeRoleExternalID"
-             [name]="Controls.AssumeRoleExternalID"
-             kmInputPassword
-             autocomplete="off"
-             required>
-      <mat-hint>
-        Specify to use an external ID in combination with the assumed role.
-        More information can be found
-        <a target="_blank"
-           rel="noopener"
-           fxLayout="row inline"
-           fxLayoutAlign=" center"
-           href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here <i class="km-icon-external-link"></i></a>.
-      </mat-hint>
-      <mat-error *ngIf="form.get(Controls.AssumeRoleExternalID).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
+  @if (isAssumeRoleEnabled) {
+  <mat-form-field fxFlex>
+    <mat-label>AssumeRole ARN</mat-label>
+    <input matInput
+           [formControlName]="Controls.AssumeRoleARN"
+           [name]="Controls.AssumeRoleARN"
+           kmInputPassword
+           autocomplete="off"
+           required>
+    <mat-hint>
+      Specify to use an assumed role to run the user cluster.
+      More information can be found
+      <a target="_blank"
+         rel="noopener"
+         fxLayout="row inline"
+         fxLayoutAlign=" center"
+         href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here <i class="km-icon-external-link"></i></a>.
+    </mat-hint>
+    @if (form.get(Controls.AssumeRoleARN).hasError('required')) {
+    <mat-error>
+      <strong>Required</strong>
+    </mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>AssumeRole External ID</mat-label>
+    <input matInput
+           [formControlName]="Controls.AssumeRoleExternalID"
+           [name]="Controls.AssumeRoleExternalID"
+           kmInputPassword
+           autocomplete="off"
+           required>
+    <mat-hint>
+      Specify to use an external ID in combination with the assumed role.
+      More information can be found
+      <a target="_blank"
+         rel="noopener"
+         fxLayout="row inline"
+         fxLayoutAlign=" center"
+         href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here <i class="km-icon-external-link"></i></a>.
+    </mat-hint>
+    @if (form.get(Controls.AssumeRoleExternalID).hasError('required')) {
+    <mat-error>
+      <strong>Required</strong>
+    </mat-error>
+    }
+  </mat-form-field>
+  }
 </form>

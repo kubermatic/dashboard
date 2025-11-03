@@ -18,8 +18,8 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="cidrs">
-    <div *ngFor="let control of controls.controls; let i = index;"
-         [formGroupName]="i"
+    @for (control of controls.controls; track control; let i = $index) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex>
@@ -27,9 +27,11 @@ limitations under the License.
         <input matInput
                (keyup)="check()"
                [formControl]="control">
-        <mat-error *ngIf="control.hasError('pattern')">
+        @if (control.hasError('pattern')) {
+        <mat-error>
           Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
         </mat-error>
+        }
       </mat-form-field>
       <button mat-icon-button
               type="button"
@@ -41,5 +43,6 @@ limitations under the License.
            aria-hidden="true"></i>
       </button>
     </div>
+    }
   </div>
 </form>

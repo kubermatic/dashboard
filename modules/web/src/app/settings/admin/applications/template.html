@@ -100,8 +100,9 @@ limitations under the License.
                         [value]="targetDatacenters(element)"
                         (selectionChange)="onDatacentersChange($event.value, element)"
                         disableOptionCentering>
-              <mat-option *ngFor="let dc of datacenters"
-                          [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
+              @for (dc of datacenters; track dc) {
+              <mat-option [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </td>
@@ -115,13 +116,13 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

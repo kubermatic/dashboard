@@ -25,9 +25,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
+    @if (form.get(Controls.AccessKeyID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -39,9 +41,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.SecretAccessKey).hasError('required')">
+    @if (form.get(Controls.SecretAccessKey).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -52,8 +56,10 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Region).hasError('required')">
+    @if (form.get(Controls.Region).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

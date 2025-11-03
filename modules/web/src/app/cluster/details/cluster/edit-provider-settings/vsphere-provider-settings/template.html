@@ -23,9 +23,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Control.Username).hasError('required')">
+    @if (form.get(Control.Username).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -36,9 +38,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Control.Password).hasError('required')">
+    @if (form.get(Control.Password).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-checkbox [formControlName]="Control.UseCustomCloudCredentials"
@@ -51,28 +55,28 @@ limitations under the License.
     </div>
   </mat-checkbox>
 
-  <mat-card-header class="km-no-padding"
-                   *ngIf="useCustomCloudCredentials">
+  @if (useCustomCloudCredentials) {
+  <mat-card-header class="km-no-padding">
     <mat-card-title>Credentials for provisioning vSphere resources</mat-card-title>
   </mat-card-header>
+  }
 
-  <ng-container *ngIf="useCustomCloudCredentials">
-    <mat-form-field fxFlex>
-      <mat-label>Infrastructure Management Username</mat-label>
-      <input matInput
-             [formControlName]="Control.InfraManagementUsername"
-             type="text"
-             autocomplete="off"
-             kmValueChangedIndicator />
-    </mat-form-field>
-
-    <mat-form-field fxFlex>
-      <mat-label>Infrastructure Management Password</mat-label>
-      <input matInput
-             [formControlName]="Control.InfraManagementPassword"
-             kmInputPassword
-             autocomplete="off"
-             kmValueChangedIndicator />
-    </mat-form-field>
-  </ng-container>
+  @if (useCustomCloudCredentials) {
+  <mat-form-field fxFlex>
+    <mat-label>Infrastructure Management Username</mat-label>
+    <input matInput
+           [formControlName]="Control.InfraManagementUsername"
+           type="text"
+           autocomplete="off"
+           kmValueChangedIndicator />
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Infrastructure Management Password</mat-label>
+    <input matInput
+           [formControlName]="Control.InfraManagementPassword"
+           kmInputPassword
+           autocomplete="off"
+           kmValueChangedIndicator />
+  </mat-form-field>
+  }
 </form>

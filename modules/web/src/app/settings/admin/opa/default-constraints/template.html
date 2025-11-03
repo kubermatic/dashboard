@@ -32,19 +32,21 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="end"
                class="km-select-trigger-button-wrapper">
-            <button *ngIf="constraintTemplateFilter"
-                    (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
+            @if (constraintTemplateFilter) {
+            <button (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
                     matSuffix
                     mat-icon-button
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>
+            }
           </div>
         </mat-select-trigger>
-        <mat-option *ngFor="let constraintTemplate of constraintTemplates"
-                    [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
+        @for (constraintTemplate of constraintTemplates; track constraintTemplate) {
+        <mat-option [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
           {{constraintTemplate.spec?.crd?.spec?.names?.kind}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -104,20 +106,28 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">
       <span class="provider-wrapper">
-        <ng-container *ngFor="let provider of element.spec?.selector?.providers; let i = index">
-          <i *ngIf="i < displayedProvidersLimit || isShowProviders[element.name]"
-             class="km-provider-logo km-provider-logo-{{provider}} provider-logo {{provider}}"></i>
-        </ng-container>
+        @for (provider of element.spec?.selector?.providers; track provider; let i = $index) {
+        @if (i < displayedProvidersLimit
+          ||
+          isShowProviders[element.name])
+          {
+          <i
+          class="km-provider-logo km-provider-logo-{{provider}} provider-logo {{provider}}"></i>
+          }
+          }
       </span>
       <km-labels [labels]="element.spec?.selector?.labelSelector?.matchLabels"
                  class="labels-wrapper" />
-      <ng-container *ngIf="hasNoMatches(element.spec.selector)">All</ng-container>
-      <span *ngIf="numberOfProviders(element) >  displayedProvidersLimit"
-            class="num-of-extra-providers"
+      @if (hasNoMatches(element.spec.selector)) {
+      All
+      }
+      @if (numberOfProviders(element) > displayedProvidersLimit) {
+      <span class="num-of-extra-providers"
             (click)="toggleProvider(element)">
         {{isShowProviders[element.name] ? '-' : '+'}} {{numberOfProviders(element) - displayedProvidersLimit}}
         <i class="km-icon-mask km-icon-arrow-{{isShowProviders[element.name] ? 'up' : 'down'}}"></i>
       </span>
+      }
     </td>
   </ng-container>
 
@@ -172,10 +182,11 @@ limitations under the License.
       [attr.id]="row.name"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData()">
+@if (hasNoData()) {
+<div class="km-row km-empty-list-msg">
   No default constraints available.
 </div>
+}
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">

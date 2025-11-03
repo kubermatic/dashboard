@@ -13,29 +13,40 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div *ngIf="visible"
-     [formGroup]="form"
-     [ngSwitch]="provider"
+@if (visible) {
+<div [formGroup]="form"
      fxLayout="column"
      fxLayoutGap="8px">
   <mat-card-header class="km-no-padding">
     <mat-card-title>Advanced Settings</mat-card-title>
   </mat-card-header>
-
-  <km-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
-                                   [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-vsphere-provider-extended *ngSwitchCase="Providers.VSPHERE"
-                                       [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-azure-provider-extended *ngSwitchCase="Providers.AZURE"
-                                     [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-gcp-provider-extended *ngSwitchCase="Providers.GCP"
-                                   [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-openstack-provider-extended *ngSwitchCase="Providers.OPENSTACK"
-                                         [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-hetzner-provider-extended *ngSwitchCase="Providers.HETZNER"
-                                       [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-nutanix-provider-extended *ngSwitchCase="Providers.NUTANIX"
-                                       [formControl]="form.get(Controls.ProviderExtended)" />
-  <km-wizard-vmware-cloud-director-provider-extended *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
-                                                     [formControl]="form.get(Controls.ProviderExtended)" />
+  <div>
+    @switch (provider) {
+    @case (Providers.AWS) {
+    <km-wizard-aws-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.VSPHERE) {
+    <km-wizard-vsphere-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.AZURE) {
+    <km-wizard-azure-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.GCP) {
+    <km-wizard-gcp-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.OPENSTACK) {
+    <km-wizard-openstack-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.HETZNER) {
+    <km-wizard-hetzner-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.NUTANIX) {
+    <km-wizard-nutanix-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    @case (Providers.VMWARECLOUDDIRECTOR) {
+    <km-wizard-vmware-cloud-director-provider-extended [formControl]="form.get(Controls.ProviderExtended)" />
+    }
+    }
+  </div>
 </div>
+}

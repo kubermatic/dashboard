@@ -20,15 +20,17 @@ limitations under the License.
   <mat-card-header>
     <mat-card-title>Clusters</mat-card-title>
   </mat-card-header>
-  <div *ngIf="!!projectClusterListErrorMessage"
-       fxLayoutAlign=" center"
+  @if (!!projectClusterListErrorMessage) {
+  <div fxLayoutAlign=" center"
        class="error-message">
     <i class="km-icon-warning"></i>
     <div>{{projectClusterListErrorMessage}}
-      <a *ngIf="isAdmin"
-         href="settings/seeds">Check Seed Configuration</a>
+      @if (isAdmin) {
+      <a href="settings/seeds">Check Seed Configuration</a>
+      }
     </div>
   </div>
+  }
   <div fxLayoutAlign=" center"
        class="header">
     <km-search-field (queryChange)="onSearch($event)" />
@@ -88,10 +90,11 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <div *ngIf="isRestoring(element.id)"
-                 class="km-update-available-badge">
+            @if (isRestoring(element.id)) {
+            <div class="km-update-available-badge">
               Restoring
             </div>
+            }
           </div>
         </td>
       </ng-container>
@@ -105,8 +108,9 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayout="row"
                fxLayoutAlign=" center">
-            <span *ngIf="!!element.spec.cloud"
-                  class="km-provider-logo km-provider-logo-{{getProvider(element)}}"></span>
+            @if (!!element.spec.cloud) {
+            <span class="km-provider-logo km-provider-logo-{{getProvider(element)}}"></span>
+            }
 
           </div>
         </td>
@@ -132,9 +136,9 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!!nodeDC[element.id]">
-            {{nodeDC[element.id].spec.country}} ({{nodeDC[element.id].spec.location}})
-          </ng-container>
+          @if (!!nodeDC[element.id]) {
+          {{nodeDC[element.id].spec.country}} ({{nodeDC[element.id].spec.location}})
+          }
         </td>
       </ng-container>
 
@@ -152,17 +156,24 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!!machinesCount[element.id]; else mdSpinner">
-            <div *ngIf="machinesCount[element.id].replicas > 0; else noMD"
-                 fxLayout="row"
-                 fxLayoutAlign=" center">
-              <i [matTooltip]="getMDHealthStatus(element).message"
-                 [ngClass]="getMDHealthStatus(element).icon"
-                 class="machine-deployment-health"></i>
-              <span>{{machinesCount[element.id].availableReplicas}} / {{machinesCount[element.id].replicas}}</span>
-            </div>
-            <ng-template #noMD>0</ng-template>
-          </ng-container>
+          @if (!!machinesCount[element.id]) {
+          @if (machinesCount[element.id].replicas > 0) {
+          <div fxLayout="row"
+               fxLayoutAlign=" center">
+            <i [matTooltip]="getMDHealthStatus(element).message"
+               [ngClass]="getMDHealthStatus(element).icon"
+               class="machine-deployment-health"></i>
+            <span>{{machinesCount[element.id].availableReplicas}} / {{machinesCount[element.id].replicas}}</span>
+          </div>
+          } @else {
+          0
+          }
+          <ng-template #noMD>0</ng-template>
+          } @else {
+          <mat-spinner [diameter]="15"
+                       class="km-spinner"
+                       color="accent" />
+          }
           <ng-template #mdSpinner>
             <mat-spinner [diameter]="15"
                          class="km-spinner"
@@ -190,23 +201,22 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        [attr.id]="'km-delete-cluster-' + element.name"
-                        matTooltip="Delete Cluster"
-                        (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!can(Permission.Delete) || isRestoring(element.id)">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    [attr.id]="'km-delete-cluster-' + element.name"
+                    matTooltip="Delete Cluster"
+                    (click)="deleteClusterDialog(element, $event)"
+                    [disabled]="!can(Permission.Delete) || isRestoring(element.id)">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -221,22 +231,25 @@ limitations under the License.
           (click)="!isRestoring(row.id) ? navigateToCluster(row) : null"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && isEmpty(clusters)">
+    @if (isInitialized && isEmpty(clusters)) {
+    <div class="km-row km-empty-list-msg">
       No clusters available.
     </div>
+    }
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+    @if (isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)) {
+    <div class="km-row km-empty-list-msg">
       No clusters found.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="!isInitialized">
+    @if (!isInitialized) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

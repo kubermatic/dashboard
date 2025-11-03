@@ -76,18 +76,19 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!globalViewers?.length && !isLoading">
+    @if (!globalViewers?.length && !isLoading) {
+    <div class="km-row km-empty-list-msg">
       No global viewers available.
     </div>
+    }
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"

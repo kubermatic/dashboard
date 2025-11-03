@@ -44,8 +44,10 @@ limitations under the License.
     <div value>{{cluster?.id}}</div>
   </km-property>
 
-  <km-property *ngIf="!!region">
+  @if (!!region) {
+  <km-property>
     <div key>Region</div>
     <div value>{{region}}</div>
   </km-property>
+  }
 </div>

@@ -42,8 +42,9 @@ limitations under the License.
       <div fxLayoutAlign=" center"
            fxLayoutGap="8px">
         <span>{{element.destinationName}}</span>
-        <span *ngIf="isDefault(element.destinationName)"
-              class="km-label-primary">default</span>
+        @if (isDefault(element.destinationName)) {
+        <span class="km-label-primary">default</span>
+        }
       </div>
     </td>
   </ng-container>
@@ -76,8 +77,9 @@ limitations under the License.
     </th>
     <td mat-cell
         *matCellDef="let element">
-      <i *ngIf="hasCredentials(element)"
-         class="km-icon-mask km-icon-check green-icon"></i>
+      @if (hasCredentials(element)) {
+      <i class="km-icon-mask km-icon-check green-icon"></i>
+      }
     </td>
   </ng-container>
 
@@ -119,8 +121,8 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<ng-container *ngIf="!hasDestinations()">
-  <div class="km-row km-empty-list-msg empty-list">
-    No destinations available.
-  </div>
-</ng-container>
+@if (!hasDestinations()) {
+<div class="km-row km-empty-list-msg empty-list">
+  No destinations available.
+</div>
+}

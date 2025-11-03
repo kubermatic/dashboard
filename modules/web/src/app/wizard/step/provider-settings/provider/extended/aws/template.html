@@ -23,7 +23,9 @@ limitations under the License.
                    [validators]="securityGroupValidators">
     <ng-container hint>
       Specify to attach worker nodes to it, otherwise a new security group will be used.&nbsp;
-      <span *ngIf="!hasRequiredCredentials()">Enter your credentials to load autocompletions.</span>
+      @if (!hasRequiredCredentials()) {
+      <span>Enter your credentials to load autocompletions.</span>
+      }
     </ng-container>
     <ng-container patternError>
       The security group ID need to look similar to 'sg-a2c195ca'.
@@ -37,9 +39,11 @@ limitations under the License.
            type="text"
            autocomplete="off">
     <mat-hint>Specify to attach worker nodes to it, otherwise the default route table will be used.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.RouteTableID).hasError( 'pattern')">
+    @if (form.get(Controls.RouteTableID).hasError( 'pattern')) {
+    <mat-error>
       The route table ID needs to look similar to 'rtb-0bd18f60'.
     </mat-error>
+    }
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Instance Profile Name</mat-label>

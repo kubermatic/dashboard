@@ -28,12 +28,16 @@ limitations under the License.
                autocomplete="off"
                required
                kmAutofocus>
-        <mat-error *ngIf="form.controls.email.hasError('required')">
+        @if (form.controls.email.hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.controls.email.hasError('email')">
+        }
+        @if (form.controls.email.hasError('email')) {
+        <mat-error>
           <strong>Invalid email</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <label class="km-radio-group-label">Select a Role</label>

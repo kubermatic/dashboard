@@ -15,8 +15,9 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === Mode.Edit"
-     class="km-dialog-context-description">Edit <b>{{getCTName()}}</b> constraint template</p>
+  @if (data.mode === Mode.Edit) {
+  <p class="km-dialog-context-description">Edit <b>{{getCTName()}}</b> constraint template</p>
+  }
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML" />

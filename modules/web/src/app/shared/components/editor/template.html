@@ -15,9 +15,10 @@ limitations under the License.
 -->
 
 <div class="editor">
+  @if (header) {
   <div class="header"
-       *ngIf="header"
        [ngClass]="getHeaderClasses()">{{header}}</div>
+  }
   <ngx-monaco-editor [ngStyle]="{height: height}"
                      [options]="options"
                      [(ngModel)]="model"

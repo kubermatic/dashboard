@@ -19,7 +19,8 @@ limitations under the License.
   <mat-card-header class="km-no-padding">
     <mat-card-title>SSH Keys</mat-card-title>
   </mat-card-header>
-  <mat-form-field *ngIf="hasKeys()">
+  @if (hasKeys()) {
+  <mat-form-field>
     <mat-label>SSH Keys</mat-label>
     <mat-select [formControlName]="Controls.Keys"
                 [id]="Controls.Keys"
@@ -27,11 +28,15 @@ limitations under the License.
                 disableOptionCentering
                 panelClass="km-multiple-values-dropdown"
                 [compareWith]="compareValues">
-      <mat-option *ngFor="let key of keys"
-                  [value]="key">{{key.name}}</mat-option>
+      @for (key of keys; track key) {
+      <mat-option [value]="key">{{key.name}}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
-  <p *ngIf="!hasKeys()">You have no SSH keys</p>
+  }
+  @if (!hasKeys()) {
+  <p>You have no SSH keys</p>
+  }
   <div class="km-full-width">
     <div fxFlex></div>
     <button (click)="addSSHKeyDialog()"

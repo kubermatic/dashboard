@@ -77,39 +77,42 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="element.status.addresses && getAddresses(element) as addresses">
-            <div fxLayout="column"
-                 fxLayoutGap="5px"
-                 [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIPs.length && addresses.internalIPs.length) || addresses.internalIPs.length > 1 || addresses.externalIPs.length > 1}">
-              <div *ngIf="!!addresses.internalIPs.length"
-                   fxLayout="row"
-                   fxLayoutGap="5px">
-                <span>Int. IP:</span>
-                <div fxLayout="column">
-                  <span *ngFor="let internalIP of addresses.internalIPs"
-                        class="km-copy"
-                        [cbContent]="internalIP"
-                        (click)="$event.stopPropagation()"
-                        ngxClipboard
-                        matTooltip="click to copy">{{internalIP}}</span>
-                </div>
+          @if (element.status.addresses && getAddresses(element); as addresses) {
+          <div fxLayout="column"
+               fxLayoutGap="5px"
+               [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIPs.length && addresses.internalIPs.length) || addresses.internalIPs.length > 1 || addresses.externalIPs.length > 1}">
+            @if (!!addresses.internalIPs.length) {
+            <div fxLayout="row"
+                 fxLayoutGap="5px">
+              <span>Int. IP:</span>
+              <div fxLayout="column">
+                @for (internalIP of addresses.internalIPs; track internalIP) {
+                <span class="km-copy"
+                      [cbContent]="internalIP"
+                      (click)="$event.stopPropagation()"
+                      ngxClipboard
+                      matTooltip="click to copy">{{internalIP}}</span>
+                }
               </div>
-              <div *ngIf="!!addresses.externalIPs.length"
-                   fxLayout="row"
-                   fxLayoutGap="5px">
-                <span>Ext. IP:</span>
-                <div fxLayout="column">
-                  <span *ngFor="let externalIP of addresses.externalIPs"
-                        class="km-copy"
-                        [cbContent]="externalIP"
-                        (click)="$event.stopPropagation()"
-                        ngxClipboard
-                        matTooltip="click to copy">{{externalIP}}</span>
-                </div>
-              </div>
-
             </div>
-          </ng-container>
+            }
+            @if (!!addresses.externalIPs.length) {
+            <div fxLayout="row"
+                 fxLayoutGap="5px">
+              <span>Ext. IP:</span>
+              <div fxLayout="column">
+                @for (externalIP of addresses.externalIPs; track externalIP) {
+                <span class="km-copy"
+                      [cbContent]="externalIP"
+                      (click)="$event.stopPropagation()"
+                      ngxClipboard
+                      matTooltip="click to copy">{{externalIP}}</span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+          }
         </td>
       </ng-container>
 
@@ -132,51 +135,63 @@ limitations under the License.
             [attr.colspan]="displayedColumns.length">
           <mat-card-content fxLayout="row wrap"
                             class="km-row">
-            <km-property *ngIf="!!element.status.nodeInfo.kernelVersion">
+            @if (!!element.status.nodeInfo.kernelVersion) {
+            <km-property>
               <div key>Kernel Version</div>
               <div value>{{element.status.nodeInfo.kernelVersion}}</div>
             </km-property>
+            }
 
-            <km-property *ngIf="!!element.status.nodeInfo.containerRuntimeVersion">
+            @if (!!element.status.nodeInfo.containerRuntimeVersion) {
+            <km-property>
               <div key>Container Runtime Version</div>
               <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
             </km-property>
+            }
 
-            <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
+            @if (!!element.status.capacity.cpu && !!element.status.capacity.memory) {
+            <km-property>
               <div key>Node Capacity</div>
               <div value>{{element.status.capacity.cpu}}
                 CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
             </km-property>
+            }
 
-            <km-property *ngIf="!!element.status.nodeInfo.operatingSystem">
+            @if (!!element.status.nodeInfo.operatingSystem) {
+            <km-property>
               <div key>Operating System</div>
               <div value>{{element.status.nodeInfo.operatingSystem}}</div>
             </km-property>
+            }
 
-            <km-property *ngIf="!!element.status.nodeInfo.architecture">
+            @if (!!element.status.nodeInfo.architecture) {
+            <km-property>
               <div key>Architecture</div>
               <div value>{{element.status.nodeInfo.architecture}}</div>
             </km-property>
+            }
 
-            <div *ngIf="getMetrics(element.name)"
-                 fxLayout="row">
+            @if (getMetrics(element.name)) {
+            <div fxLayout="row">
               <km-property-usage name="Nodes CPU Usage"
                                  unit="millicores"
                                  [used]="getMetrics(element.name)?.cpuTotalMillicores"
                                  [total]="getMetrics(element.name)?.cpuAvailableMillicores" />
-
               <km-property-usage name="Nodes Memory Usage"
                                  unit="MiB"
                                  [used]="getMetrics(element.name)?.memoryTotalBytes"
                                  [total]="getMetrics(element.name).memoryAvailableBytes" />
             </div>
+            }
 
-            <km-property *ngIf="element.spec.labels">
+            @if (element.spec.labels) {
+            <km-property>
               <div key>Labels</div>
               <div value>
                 <km-labels [labels]="element.spec.labels" />
               </div>
             </km-property>
+            }
 
           </mat-card-content>
         </td>
@@ -195,12 +210,15 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="hasNoData()">
+    @if (hasNoData()) {
+    <div class="km-row km-empty-list-msg">
       No nodes available.
     </div>
+    }
 
-    <km-loader *ngIf="isLoadingData()" />
+    @if (isLoadingData()) {
+    <km-loader />
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

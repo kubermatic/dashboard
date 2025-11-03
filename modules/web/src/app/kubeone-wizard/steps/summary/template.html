@@ -35,110 +35,111 @@ limitations under the License.
       <div class="properties"
            fxLayout="row wrap">
 
-        <km-property *ngIf="preset; else credentials">
+        @if (preset) {
+        <km-property>
           <div key>Preset</div>
           <div value>{{preset}}</div>
         </km-property>
+        } @else {
+        <!-- AWS -->
+        @if (kubeOneClusterSpec?.cloudSpec?.aws) {
+        <km-property>
+          <div key>Access Key ID</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Secret Access Key</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        }
+        <!-- GCP -->
+        @if (kubeOneClusterSpec?.cloudSpec?.gcp) {
+        <km-property>
+          <div key>Service Account</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        }
+        <!-- Azure -->
+        @if (kubeOneClusterSpec?.cloudSpec?.azure) {
+        <km-property>
+          <div key>Client ID</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Client Secret</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Subscription ID</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Tenant ID</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        }
+        <!-- DigitalOcean -->
+        @if (kubeOneClusterSpec?.cloudSpec?.digitalocean) {
+        <km-property>
+          <div key>Token</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        }
+        <!-- Hetzner -->
+        @if (kubeOneClusterSpec?.cloudSpec?.hetzner) {
+        <km-property>
+          <div key>Token</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        }
+        <!-- OpenStack -->
+        @if (kubeOneClusterSpec?.cloudSpec?.openstack) {
+        <km-property>
+          <div key>AuthURL</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.authURL}}</div>
+        </km-property>
+        <km-property>
+          <div key>Username</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.username}}</div>
+        </km-property>
+        <km-property>
+          <div key>Password</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Domain</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.domain}}</div>
+        </km-property>
+        <km-property>
+          <div key>Project Name</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.project}}</div>
+        </km-property>
+        <km-property>
+          <div key>Project ID</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.projectID}}</div>
+        </km-property>
+        <km-property>
+          <div key>Region</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.region}}</div>
+        </km-property>
+        }
+        <!-- VSphere -->
+        @if (kubeOneClusterSpec?.cloudSpec?.vsphere) {
+        <km-property>
+          <div key>Username</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.username}}</div>
+        </km-property>
+        <km-property>
+          <div key>Password</div>
+          <div value>{{SECRET_MASK}}</div>
+        </km-property>
+        <km-property>
+          <div key>Server URL</div>
+          <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.server}}</div>
+        </km-property>
+        }
+        }
 
-        <ng-template #credentials>
-          <!-- AWS -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.aws">
-            <km-property>
-              <div key>Access Key ID</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Secret Access Key</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-          </ng-container>
-          <!-- GCP -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.gcp">
-            <km-property>
-              <div key>Service Account</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-          </ng-container>
-          <!-- Azure -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.azure">
-            <km-property>
-              <div key>Client ID</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Client Secret</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Subscription ID</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Tenant ID</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-          </ng-container>
-          <!-- DigitalOcean -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.digitalocean">
-            <km-property>
-              <div key>Token</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-          </ng-container>
-          <!-- Hetzner -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.hetzner">
-            <km-property>
-              <div key>Token</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-          </ng-container>
-          <!-- OpenStack -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.openstack">
-            <km-property>
-              <div key>AuthURL</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.authURL}}</div>
-            </km-property>
-            <km-property>
-              <div key>Username</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.username}}</div>
-            </km-property>
-            <km-property>
-              <div key>Password</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Domain</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.domain}}</div>
-            </km-property>
-            <km-property>
-              <div key>Project Name</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.project}}</div>
-            </km-property>
-            <km-property>
-              <div key>Project ID</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.projectID}}</div>
-            </km-property>
-            <km-property>
-              <div key>Region</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.region}}</div>
-            </km-property>
-          </ng-container>
-          <!-- VSphere -->
-          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.vsphere">
-            <km-property>
-              <div key>Username</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.username}}</div>
-            </km-property>
-            <km-property>
-              <div key>Password</div>
-              <div value>{{SECRET_MASK}}</div>
-            </km-property>
-            <km-property>
-              <div key>Server URL</div>
-              <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.server}}</div>
-            </km-property>
-          </ng-container>
-        </ng-template>
       </div>
     </div>
   </div>

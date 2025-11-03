@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-external-cluster-details *ngIf="spec && cloudSpec"
-                             [cluster]="cluster">
+@if (spec && cloudSpec) {
+<km-external-cluster-details [cluster]="cluster">
   <ng-container leftColumn>
     <km-property>
       <div key>Cluster Service Role</div>
@@ -23,25 +23,24 @@ limitations under the License.
       </div>
     </km-property>
   </ng-container>
-
-  <ng-container rightColumn
-                *ngIf="spec.vpcConfigRequest as vpcConfig">
+  @if (spec.vpcConfigRequest; as vpcConfig) {
+  <ng-container rightColumn>
     <div class="section-header">Networking</div>
     <km-property>
       <div key>VPC</div>
       <div value>{{ vpcConfig.vpcId }}</div>
     </km-property>
-
     <km-property class="subnet-ids">
       <div key>Subnet</div>
       <km-labels value
                  [labels]="vpcConfig.subnetIds" />
     </km-property>
-
     <km-property class="security-groups-ids">
       <div key>Security Groups</div>
       <km-labels value
                  [labels]="vpcConfig.securityGroupIds" />
     </km-property>
   </ng-container>
+  }
 </km-external-cluster-details>
+}

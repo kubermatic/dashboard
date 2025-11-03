@@ -36,9 +36,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Controls.Template).hasError('required')">
+    @if (form.get(Controls.Template).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-number-stepper [formControlName]="Controls.DiskSizeGB"

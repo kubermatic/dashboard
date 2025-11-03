@@ -29,32 +29,30 @@ limitations under the License.
                      required />
 
   <ng-container formArrayName="disks">
-    <ng-container *ngFor="let diskForm of disks.controls; let i = index">
-      <div [formGroup]="diskForm"
-           fxLayout="column"
-           fxLayout="row"
-           fxLayoutGap="10px">
-
-        <km-number-stepper [formControlName]="DiskControls.Size"
-                           mode="errors"
-                           label="Disk Size in GB"
-                           min="0"
-                           fxFlex="45" />
-
-        <km-autocomplete label="Disk Type"
-                         fxFlex="40"
-                         [formControlName]="DiskControls.PerformanceType"
-                         [isLoading]="isLoadingDiskTypes"
-                         [options]="diskTypes" />
-
-        <button mat-icon-button
-                class="delete-button"
-                *ngIf="isDiskRemovable(i)"
-                (click)="deleteDisk(i)">
-          <i class="km-icon-mask km-icon-delete"></i>
-        </button>
-      </div>
-    </ng-container>
+    @for (diskForm of disks.controls; track diskForm; let i = $index) {
+    <div [formGroup]="diskForm"
+         fxLayout="column"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <km-number-stepper [formControlName]="DiskControls.Size"
+                         mode="errors"
+                         label="Disk Size in GB"
+                         min="0"
+                         fxFlex="45" />
+      <km-autocomplete label="Disk Type"
+                       fxFlex="40"
+                       [formControlName]="DiskControls.PerformanceType"
+                       [isLoading]="isLoadingDiskTypes"
+                       [options]="diskTypes" />
+      @if (isDiskRemovable(i)) {
+      <button mat-icon-button
+              class="delete-button"
+              (click)="deleteDisk(i)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+      }
+    </div>
+    }
   </ng-container>
 
   <km-autocomplete label="Template Name or ID"

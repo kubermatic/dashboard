@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="loadingClusterTemplate">
-  <mat-spinner [diameter]="50"
-               class="km-spinner"
-               color="accent" />
-</ng-container>
+@if (loadingClusterTemplate) {
+<mat-spinner [diameter]="50"
+             class="km-spinner"
+             color="accent" />
+}
 
-<form [formGroup]="form"
-      *ngIf="!loadingClusterTemplate">
+@if (!loadingClusterTemplate) {
+<form [formGroup]="form">
   <mat-card appearance="outlined"
             fxFlex="100%">
     <div fxLayout="row">
@@ -41,44 +41,37 @@ limitations under the License.
       <ng-template matStepperIcon="edit">
         <i class="km-icon-done"></i>
       </ng-template>
-
-      <mat-step *ngFor="let step of steps; index as i;"
-                [stepControl]="form.get(step.name)"
+      @for (step of steps; track step; let i = $index) {
+      <mat-step [stepControl]="form.get(step.name)"
                 fxFlex="100%"
                 style="transition: none;">
         <ng-template matStepLabel>{{step.name}}</ng-template>
-        <div [ngSwitch]="step.name"
-             id="{{step.id}}-step"
+        <div id="{{step.id}}-step"
              class="wizard-step">
-          <ng-container *ngSwitchCase="stepRegistry.Provider">
-            <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.Cluster">
-            <km-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.ProviderSettings">
-            <km-wizard-provider-settings-step [formControl]="form.get(stepRegistry.ProviderSettings)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.NodeSettings">
-            <km-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.MachineNetwork">
-            <km-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.Applications">
-            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="stepRegistry.Summary">
-            <km-wizard-summary-step />
-          </ng-container>
+          @switch (step.name) {
+          @case (stepRegistry.Provider) {
+          <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)" />
+          }
+          @case (stepRegistry.Cluster) {
+          <km-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)" />
+          }
+          @case (stepRegistry.ProviderSettings) {
+          <km-wizard-provider-settings-step [formControl]="form.get(stepRegistry.ProviderSettings)" />
+          }
+          @case (stepRegistry.NodeSettings) {
+          <km-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)" />
+          }
+          @case (stepRegistry.MachineNetwork) {
+          <km-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)" />
+          }
+          @case (stepRegistry.Applications) {
+          <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)" />
+          }
+          @case (stepRegistry.Summary) {
+          <km-wizard-summary-step />
+          }
+          }
         </div>
-
         <div class="button-navigation"
              id="{{step.id}}-nav">
           <a mat-flat-button
@@ -90,67 +83,75 @@ limitations under the License.
             <span>Cancel</span>
           </a>
           <div fxFlex></div>
+          @if (creating) {
           <mat-spinner fxFlexAlign="center"
                        [diameter]="30"
-                       color="primary"
-                       *ngIf="creating" />
-
-          <div *ngIf="quotaExceededWarning && active?.name === stepRegistry.NodeSettings"
-               fxLayoutAlign="start center">
+                       color="primary" />
+          }
+          @if (quotaExceededWarning && active?.name === stepRegistry.NodeSettings) {
+          <div fxLayoutAlign="start center">
             <i class="km-icon-warning"></i>
             <div><strong>Quota exceeded.</strong> <br>In the last step cluster creation is disabled.</div>
           </div>
+          }
+          @if (!first) {
           <button mat-flat-button
                   type="button"
                   color="tertiary"
-                  matStepperPrevious
-                  *ngIf="!first">
+                  matStepperPrevious>
             <i class="km-icon-mask km-icon-back"
                matButtonIcon></i>
             <span>Back</span>
           </button>
+          }
+          @if (!last) {
           <button id="km-wizard-{{step.id}}-next-btn"
                   mat-flat-button
                   type="button"
                   matStepperNext
-                  [disabled]="invalid"
-                  *ngIf="!last">
+                  [disabled]="invalid">
             <i class="km-icon-mask km-icon-next"
                matButtonIcon></i>
             <span>Next</span>
           </button>
+          }
+          @if (last) {
           <button id="km-wizard-create-template-btn"
                   mat-flat-button
                   type="button"
                   color="alternative"
                   [disabled]="creating"
-                  *ngIf="last"
                   kmThrottleClick
                   (throttleClick)="onSaveClusterTemplate()">
             <i class="km-icon-mask km-icon-save"
                matButtonIcon></i>
             <span>{{ getSecondaryButtonLabel() }}</span>
           </button>
+          }
+          @if (last && !showCreateClusterButton) {
           <button id="km-wizard-update-template-btn"
                   mat-flat-button
                   type="button"
                   [disabled]="creating"
-                  *ngIf="last && !showCreateClusterButton"
                   kmThrottleClick
                   (throttleClick)="onSaveClusterTemplate(true)">
             <i class="km-icon-mask km-icon-save"
                matButtonIcon></i>
             <span>{{getPrimaryButtonLabel()}}</span>
           </button>
+          }
+          @if (showCreateClusterButton) {
           <km-button buttonId="km-wizard-create-btn"
-                     *ngIf="showCreateClusterButton"
                      icon="km-icon-add"
                      [label]="getPrimaryButtonLabel()"
                      [disabled]="creating || quotaExceededWarning"
                      [observable]="getObservable()"
                      (next)="onNext($event)" />
+          }
         </div>
       </mat-step>
+      }
     </mat-horizontal-stepper>
   </mat-card>
 </form>
+}

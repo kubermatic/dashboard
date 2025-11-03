@@ -35,12 +35,16 @@ END OF TERMS AND CONDITIONS
                type="text"
                autocomplete="off"
                cdkFocusInitial>
-        <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        @if (form.get(controls.Name).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+        }
+        @if (form.get(controls.Name).hasError('pattern')) {
+        <mat-error>
           Schedule name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-radio-group [formControlName]="controls.Group"
@@ -76,23 +80,20 @@ END OF TERMS AND CONDITIONS
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="form.get(controls.Group).value === ScheduleOption.Custom"
-           fxLayout="column"
+      @if (form.get(controls.Group).value === ScheduleOption.Custom) {
+      <div fxLayout="column"
            fxLayoutGap="20px">
-
         <km-number-stepper [formControlName]="controls.Retention"
                            mode="all"
                            label="Report Retention"
                            hint="Number of days each report is saved, leave the field empty to store reports forever."
                            min="1" />
-
         <km-number-stepper [formControlName]="controls.Interval"
                            mode="all"
                            label="Report Scope"
                            hint="Number of days captured in each report."
                            min="1"
                            required />
-
         <mat-form-field>
           <mat-label>Cron Expression</mat-label>
           <input [formControlName]="controls.Schedule"
@@ -108,7 +109,6 @@ END OF TERMS AND CONDITIONS
                rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
           </mat-hint>
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>Report Types</mat-label>
           <mat-select [formControlName]="controls.Types"
@@ -116,19 +116,23 @@ END OF TERMS AND CONDITIONS
                       panelClass="km-multiple-values-dropdown"
                       disableOptionCentering
                       required>
-            <mat-option *ngFor="let type of reportTypes"
-                        [value]="type">
+            @for (type of reportTypes; track type) {
+            <mat-option [value]="type">
               {{type}}
             </mat-option>
+            }
           </mat-select>
           <mat-hint>
             Types of reports to generate. By default, all types of reports are generated.
           </mat-hint>
-          <mat-error *ngIf="form.get(controls.Types).hasError('required')">
+          @if (form.get(controls.Types).hasError('required')) {
+          <mat-error>
             <strong>Required</strong>
           </mat-error>
+          }
         </mat-form-field>
       </div>
+      }
     </form>
   </mat-dialog-content>
 

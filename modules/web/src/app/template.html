@@ -18,24 +18,26 @@ limitations under the License.
   <km-navigation [showMenuSwitchAndProjectSelector]="showMenuSwitchAndProjectSelector"
                  [hasSecondarySidenav]="hasSecondarySidenav" />
   <mat-sidenav-container autosize>
+    @if (auth.authenticated()) {
     <mat-sidenav #sidenav
                  opened="false"
                  disableClose="true"
-                 mode="side"
-                 *ngIf="auth.authenticated()">
+                 mode="side">
       <km-sidenav />
     </mat-sidenav>
+    }
     <div class="km-main"
          fxFlex
          fxLayout="column">
       <km-announcement-banner [announcements]="adminAnnouncements" />
       <router-outlet />
-      <km-footer *ngIf="!!settings"
-                 [ngClass]="hasSecondarySidenav ? 'footer-sm' : ''"
+      @if (!!settings) {
+      <km-footer [ngClass]="hasSecondarySidenav ? 'footer-sm' : ''"
                  [version]="version"
                  [settings]="settings"
                  [customLinks]="customLinks"
                  [authenticated]="auth.authenticated()" />
+      }
     </div>
   </mat-sidenav-container>
 </main>

@@ -17,10 +17,11 @@ limitations under the License.
 <form [formGroup]="form">
   <km-dialog-title>{{mode}} Machine Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
-    <p *ngIf="mode === 'Edit'"
-       class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of
+    @if (mode === 'Edit') {
+    <p class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of
       <b>{{clusterName}}</b> cluster
     </p>
+    }
     <km-node-data [provider]="provider"
                   [formControl]="form.get(Control.NodeData)" />
   </mat-dialog-content>
@@ -29,12 +30,13 @@ limitations under the License.
          fxLayout="column"
          fxLayoutAlign="start"
          fxLayoutGap="10px">
-      <div *ngIf="isRecreationWarningVisible"
-           fxFlex
+      @if (isRecreationWarningVisible) {
+      <div fxFlex
            fxLayoutAlign="start center">
         <i class="km-icon-warning"></i>
         <div>Changed node settings, Nodes will be recreated.</div>
       </div>
+      }
     </div>
     <button mat-flat-button
             (click)="onConfirm()"

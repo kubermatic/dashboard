@@ -40,19 +40,21 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="end"
                      class="km-select-trigger-button-wrapper">
-                  <button *ngIf="seedFilter"
-                          (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
+                  @if (seedFilter) {
+                  <button (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
                           mat-icon-button
                           aria-label="Clear">
                     <i class="km-icon-mask km-icon-remove"></i>
                   </button>
+                  }
                 </div>
               </mat-select-trigger>
-              <mat-option *ngFor="let seed of seeds"
-                          [value]="seed">
+              @for (seed of seeds; track seed) {
+              <mat-option [value]="seed">
                 {{seed}}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
 
@@ -70,19 +72,21 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="end"
                      class="km-select-trigger-button-wrapper">
-                  <button *ngIf="typeFilter"
-                          (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
+                  @if (typeFilter) {
+                  <button (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
                           mat-icon-button
                           aria-label="Clear">
                     <i class="km-icon-mask km-icon-remove"></i>
                   </button>
+                  }
                 </div>
               </mat-select-trigger>
-              <mat-option *ngFor="let type of ruleGroupTypes"
-                          [value]="type">
+              @for (type of ruleGroupTypes; track type) {
+              <mat-option [value]="type">
                 {{type}}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </div>
@@ -164,10 +168,11 @@ limitations under the License.
           [attr.id]="row.name"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="hasNoData()">
+    @if (hasNoData()) {
+    <div class="km-row km-empty-list-msg">
       No rule groups available.
     </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

@@ -86,10 +86,11 @@ END OF TERMS AND CONDITIONS
         class="km-mat-row"></tr>
   </table>
 
-  <div class="km-row km-empty-list-msg"
-       *ngIf="hasNoData()">
+  @if (hasNoData()) {
+  <div class="km-row km-empty-list-msg">
     No allowed registries available.
   </div>
+  }
 
   <div [hidden]="!isPaginatorVisible()"
        class="km-paginator-container">

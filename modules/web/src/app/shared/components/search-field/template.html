@@ -23,13 +23,14 @@ limitations under the License.
            formControlName="query"
            type="text"
            autocomplete="off">
-    <button *ngIf="!isEmpty()"
-            (click)="clear()"
+    @if (!isEmpty()) {
+    <button (click)="clear()"
             matSuffix
             mat-icon-button
             matTooltip="Clear"
             aria-label="Clear">
       <i class="km-icon-mask km-icon-remove"></i>
     </button>
+    }
   </mat-form-field>
 </form>

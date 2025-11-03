@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<table *ngIf="!isLoading; else loading"
-       class="km-table"
+@if (!isLoading) {
+<table class="km-table"
        mat-table
        matSort
        matSortDirection="asc"
@@ -30,7 +30,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.scope}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.User">
     <th mat-header-cell
         *matHeaderCellDef
@@ -41,7 +40,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.name}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.ClusterRole">
     <th mat-header-cell
         *matHeaderCellDef
@@ -51,7 +49,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.clusterRole}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.Namespace">
     <th mat-header-cell
         *matHeaderCellDef
@@ -61,7 +58,6 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element">{{element.namespace}}</td>
   </ng-container>
-
   <ng-container [matColumnDef]="Column.Actions">
     <th mat-header-cell
         *matHeaderCellDef
@@ -70,38 +66,35 @@ limitations under the License.
         *matCellDef="let element">
       <div class="km-table-actions"
            fxLayoutAlign="end">
-        <mat-spinner *ngIf="!!element['deletionTimestamp']; else deleteButton"
-                     [diameter]="25"
+        @if (!!element['deletionTimestamp']) {
+        <mat-spinner [diameter]="25"
                      class="km-spinner"
                      color="accent" />
-
-        <ng-template #deleteButton>
-          <button mat-icon-button
-                  matTooltip="Delete Binding"
-                  (click)="delete(element)">
-            <i class="km-icon-mask km-icon-delete"
-               aria-hidden="true"></i>
-          </button>
-        </ng-template>
+        } @else {
+        <button mat-icon-button
+                matTooltip="Delete Binding"
+                (click)="delete(element)">
+          <i class="km-icon-mask km-icon-delete"
+             aria-hidden="true"></i>
+        </button>
+        }
       </div>
     </td>
   </ng-container>
-
   <tr mat-header-row
       class="km-header-row"
       *matHeaderRowDef="columns"></tr>
-
   <tr mat-row
       *matRowDef="let row; columns: columns"
       class="km-mat-row"
       [attr.id]="row.id"></tr>
 </table>
+} @else {
+<km-loader />
+}
 
-<div *ngIf="!isLoading && !dataSource.data?.length"
-     class="km-row km-empty-list-msg">
+@if (!isLoading && !dataSource.data?.length) {
+<div class="km-row km-empty-list-msg">
   No bindings available.
 </div>
-
-<ng-template #loading>
-  <km-loader />
-</ng-template>
+}

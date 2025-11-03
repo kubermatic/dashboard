@@ -41,7 +41,8 @@ END OF TERMS AND CONDITIONS
     <km-search-field class="search-field"
                      (queryChange)="onSearch($event)" />
     <div fxFlex></div>
-    <div *ngIf="selectedRestores.length">
+    @if (selectedRestores.length) {
+    <div>
       <button mat-flat-button
               type="button"
               matTooltip="Delete selected"
@@ -49,6 +50,7 @@ END OF TERMS AND CONDITIONS
         <i class="km-icon-mask km-icon-delete"></i>
       </button>
     </div>
+    }
   </div>
 
   <mat-card-content>
@@ -154,10 +156,11 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
-                      class="namespaces-label">
+            @for (namespace of element.spec.includedNamespaces; track namespace) {
+            <mat-chip class="namespaces-label">
               <div>{{namespace}}</div>
             </mat-chip>
+            }
           </div>
         </td>
       </ng-container>
@@ -176,17 +179,19 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!clusterRestores?.length && !loadingRestores">
+    @if (!clusterRestores?.length && !loadingRestores) {
+    <div class="km-row km-empty-list-msg">
       No restores available.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="loadingRestores && !clusterRestores?.length">
+    @if (loadingRestores && !clusterRestores?.length) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!clusterRestores?.length"
          class="km-paginator-container">

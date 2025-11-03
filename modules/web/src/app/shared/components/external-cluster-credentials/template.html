@@ -15,20 +15,31 @@ limitations under the License.
 -->
 
 <div fxLayout="column">
-  <ng-container *ngIf="provider !== Provider.Custom">
-    <mat-card-header *ngIf="title"
-                     class="km-no-padding">
-      <mat-card-title>{{title}}</mat-card-title>
-    </mat-card-header>
-    <div *ngIf="!hideLogo"
-         class="km-provider-logo km-provider-logo-{{provider}}"></div>
-
-    <km-credentials-presets />
-  </ng-container>
-  <div [ngSwitch]="provider">
-    <km-custom-credentials *ngSwitchCase="Provider.Custom" />
-    <km-aks-credentials *ngSwitchCase="Provider.AKS" />
-    <km-eks-credentials *ngSwitchCase="Provider.EKS" />
-    <km-gke-credentials *ngSwitchCase="Provider.GKE" />
+  @if (provider !== Provider.Custom) {
+  @if (title) {
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+  }
+  @if (!hideLogo) {
+  <div class="km-provider-logo km-provider-logo-{{provider}}"></div>
+  }
+  <km-credentials-presets />
+  }
+  <div>
+    @switch (provider) {
+    @case (Provider.Custom) {
+    <km-custom-credentials />
+    }
+    @case (Provider.AKS) {
+    <km-aks-credentials />
+    }
+    @case (Provider.EKS) {
+    <km-eks-credentials />
+    }
+    @case (Provider.GKE) {
+    <km-gke-credentials />
+    }
+    }
   </div>
 </div>

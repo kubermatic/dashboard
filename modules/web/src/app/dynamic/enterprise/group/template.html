@@ -69,31 +69,29 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <div>
-                  <button mat-icon-button
-                          (click)="editGroup(element)"
-                          [disabled]="!isEditEnabled()">
-                    <i class="km-icon-mask km-icon-edit"></i>
-                  </button>
-                </div>
-
-                <div>
-                  <button mat-icon-button
-                          (click)="deleteGroup(element)"
-                          [disabled]="!isDeleteEnabled()">
-                    <i class="km-icon-mask km-icon-delete"></i>
-                  </button>
-                </div>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <div>
+              <button mat-icon-button
+                      (click)="editGroup(element)"
+                      [disabled]="!isEditEnabled()">
+                <i class="km-icon-mask km-icon-edit"></i>
+              </button>
+            </div>
+            <div>
+              <button mat-icon-button
+                      (click)="deleteGroup(element)"
+                      [disabled]="!isDeleteEnabled()">
+                <i class="km-icon-mask km-icon-delete"></i>
+              </button>
+            </div>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -106,18 +104,20 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!groups || groups.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="!isInitializingGroups">
-        No groups available.
-      </div>
-      <div class="km-row"
-           *ngIf="isInitializingGroups">
-        <mat-spinner color="accent"
-                     class="km-spinner km-with-spacing"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (!groups || groups.length === 0) {
+    @if (!isInitializingGroups) {
+    <div class="km-row km-empty-list-msg">
+      No groups available.
+    </div>
+    }
+    @if (isInitializingGroups) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+    </div>
+    }
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

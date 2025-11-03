@@ -20,8 +20,8 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<div *ngIf="!isThemeEnforced"
-     fxLayout="row"
+@if (!isThemeEnforced) {
+<div fxLayout="row"
      id="km-theme-picker">
   <div class="entry-label"
        fxLayoutAlign=" center">Theme</div>
@@ -29,18 +29,21 @@ END OF TERMS AND CONDITIONS
                            (change)="onThemeChange($event.value)"
                            class="toggle-button"
                            fxLayout="row wrap">
-    <mat-button-toggle *ngIf="hasPreferredTheme"
-                       [value]="systemDefaultOption">
+    @if (hasPreferredTheme) {
+    <mat-button-toggle [value]="systemDefaultOption">
       <i class="km-icon-mask km-icon-defaults"></i>
       <span>System</span>
     </mat-button-toggle>
-    <mat-button-toggle *ngFor="let theme of themes"
-                       [value]="theme.name">
+    }
+    @for (theme of themes; track theme) {
+    <mat-button-toggle [value]="theme.name">
       <i class="km-icon-mask"
          [id]="theme.name"
          [ngClass]="theme.isDark ? 'km-icon-moon' : 'km-icon-sun'"></i>
       {{theme.displayName}}
     </mat-button-toggle>
+    }
   </mat-button-toggle-group>
   <km-spinner-with-confirmation [isSaved]="isEqual(settings?.selectedTheme, apiSettings?.selectedTheme)" />
 </div>
+}

@@ -114,18 +114,18 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <mat-spinner *ngIf="element.deletionTimestamp; else disconnectButton"
-                         [diameter]="25"
+            @if (element.deletionTimestamp) {
+            <mat-spinner [diameter]="25"
                          class="km-spinner"
                          color="accent" />
-            <ng-template #disconnectButton>
-              <button mat-icon-button
-                      matTooltip="Disconnect Cluster"
-                      (click)="disconnectClusterDialog(element, $event)"
-                      [disabled]="!can(Permission.Delete)">
-                <i class="km-icon-mask km-icon-disconnect"></i>
-              </button>
-            </ng-template>
+            } @else {
+            <button mat-icon-button
+                    matTooltip="Disconnect Cluster"
+                    (click)="disconnectClusterDialog(element, $event)"
+                    [disabled]="!can(Permission.Delete)">
+              <i class="km-icon-mask km-icon-disconnect"></i>
+            </button>
+            }
           </div>
         </td>
       </ng-container>
@@ -141,22 +141,25 @@ limitations under the License.
           (click)="navigateToCluster(row)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && isEmpty(clusters)">
+    @if (isInitialized && isEmpty(clusters)) {
+    <div class="km-row km-empty-list-msg">
       No clusters available.
     </div>
+    }
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+    @if (isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)) {
+    <div class="km-row km-empty-list-msg">
       No clusters found.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="!isInitialized">
+    @if (!isInitialized) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

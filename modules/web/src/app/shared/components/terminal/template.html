@@ -15,37 +15,33 @@ limitations under the License.
 -->
 
 
-<ng-container *ngIf="isLoadingTerminal; else terminalContainer">
-  <div class="km-terminal terminal-placeholder">
-    <div fxFlex
-         fxLayout="column"
-         fxLayoutAlign="center center"
-         fxLayoutGap="8px">
-      <i class="km-icon-terminal-placeholder i-60"></i>
-      <mat-spinner matSuffix
-                   class="cent"
-                   [diameter]="30" />
-      <p>{{message}}</p>
-    </div>
-
+@if (isLoadingTerminal) {
+<div class="km-terminal terminal-placeholder">
+  <div fxFlex
+       fxLayout="column"
+       fxLayoutAlign="center center"
+       fxLayoutGap="8px">
+    <i class="km-icon-terminal-placeholder i-60"></i>
+    <mat-spinner matSuffix
+                 class="cent"
+                 [diameter]="30" />
+    <p>{{message}}</p>
   </div>
-</ng-container>
-
-<ng-template #terminalContainer>
-  <div class="km-terminal">
-    <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
-                         [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
-                         (openInNewTab)="openInSeparateView()"
-                         (close)="onClose()" />
-
-    <km-terminal-status-bar *ngIf="isConnectionLost || isSessionExpiring || isTokenExpired"
-                            [isConnectionLost]="isConnectionLost"
-                            [isSessionExpiring]="isSessionExpiring"
-                            [isTokenExpired]="isTokenExpired"
-                            (reconnect)="onReconnect()"
-                            (extendSession)="onExtendSession()"
-                            (tokenExpired)="onTokenExpired()" />
-
-    <div #terminal></div>
-  </div>
-</ng-template>
+</div>
+} @else {
+<div class="km-terminal">
+  <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
+                       [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
+                       (openInNewTab)="openInSeparateView()"
+                       (close)="onClose()" />
+  @if (isConnectionLost || isSessionExpiring || isTokenExpired) {
+  <km-terminal-status-bar [isConnectionLost]="isConnectionLost"
+                          [isSessionExpiring]="isSessionExpiring"
+                          [isTokenExpired]="isTokenExpired"
+                          (reconnect)="onReconnect()"
+                          (extendSession)="onExtendSession()"
+                          (tokenExpired)="onTokenExpired()" />
+  }
+  <div #terminal></div>
+</div>
+}

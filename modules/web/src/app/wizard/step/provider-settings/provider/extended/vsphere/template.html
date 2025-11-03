@@ -65,8 +65,10 @@ limitations under the License.
                    [options]="datastores">
     <ng-container hint>Datastore to be used for storing virtual machines and as
       a default for dynamic volume provisioning. It is mutually exclusive with
-      Datastore Cluster field.<span *ngIf="!hasRequiredCredentials()">&nbsp;Enter
+      Datastore Cluster field.@if (!hasRequiredCredentials()) {
+      <span>&nbsp;Enter
         your credentials to load autocompletions.</span>
+      }
     </ng-container>
   </km-autocomplete>
 

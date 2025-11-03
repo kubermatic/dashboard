@@ -27,6 +27,7 @@ limitations under the License.
                        required />
     <ng-container *ngTemplateOutlet="quotaWidget" />
   </form>
+  @if (showDetails) {
   <km-cluster-summary class="cluster-summary"
                       [cluster]="template.cluster"
                       [machineDeployment]="template.nodeDeployment"
@@ -35,6 +36,6 @@ limitations under the License.
                       [seedSettings]="seedSettings"
                       [applications]="template.applications"
                       [flipLayout]="true"
-                      *ngIf="showDetails"
                       @shrinkGrow />
+  }
 </div>

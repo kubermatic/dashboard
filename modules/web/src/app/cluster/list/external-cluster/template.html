@@ -78,8 +78,9 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <span *ngIf="element?.labels['is-imported'] === 'true'"
-                  class="km-label-primary">Imported</span>
+            @if (element?.labels['is-imported'] === 'true') {
+            <span class="km-label-primary">Imported</span>
+            }
           </div>
         </td>
       </ng-container>
@@ -104,9 +105,9 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="element.cloud">
-            {{getRegion(element.cloud)}}
-          </ng-container>
+          @if (element.cloud) {
+          {{getRegion(element.cloud)}}
+          }
         </td>
       </ng-container>
 
@@ -129,30 +130,30 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        matTooltip="Disconnect Cluster"
-                        (click)="disconnectClusterDialog(element, $event)"
-                        [disabled]="!can(Permission.Delete)">
-                  <i class="km-icon-mask km-icon-disconnect"></i>
-                </button>
-                <button *ngIf="(!element?.labels || element?.labels['is-imported'] !== 'true') && !isClusterDeleted(element)"
-                        mat-icon-button
-                        [attr.id]="'km-delete-cluster-' + element.name"
-                        matTooltip="Delete Cluster"
-                        (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!can(Permission.Delete)">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    matTooltip="Disconnect Cluster"
+                    (click)="disconnectClusterDialog(element, $event)"
+                    [disabled]="!can(Permission.Delete)">
+              <i class="km-icon-mask km-icon-disconnect"></i>
+            </button>
+            @if ((!element?.labels || element?.labels['is-imported'] !== 'true') && !isClusterDeleted(element)) {
+            <button mat-icon-button
+                    [attr.id]="'km-delete-cluster-' + element.name"
+                    matTooltip="Delete Cluster"
+                    (click)="deleteClusterDialog(element, $event)"
+                    [disabled]="!can(Permission.Delete)">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -168,22 +169,25 @@ limitations under the License.
           (click)="navigateToCluster(row)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && isEmpty(clusters)">
+    @if (isInitialized && isEmpty(clusters)) {
+    <div class="km-row km-empty-list-msg">
       No external clusters available.
     </div>
+    }
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+    @if (isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)) {
+    <div class="km-row km-empty-list-msg">
       No external clusters found.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="!isInitialized">
+    @if (!isInitialized) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

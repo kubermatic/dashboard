@@ -22,18 +22,25 @@ limitations under the License.
           fxLayout="column"
           fxLayoutGap="10px">
       <mat-form-field>
-        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
-        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
+        @if (clusters.length > 0) {
+        <mat-label>Cluster</mat-label>
+        }
+        @if (clusters.length === 0) {
+        <mat-label>No Clusters Available</mat-label>
+        }
         <mat-select [formControlName]="Controls.Cluster"
                     disableOptionCentering
                     required>
-          <mat-option *ngFor="let cluster of clusters"
-                      [value]="cluster.id">{{cluster.name}}</mat-option>
+          @for (cluster of clusters; track cluster) {
+          <mat-option [value]="cluster.id">{{cluster.name}}</mat-option>
+          }
         </mat-select>
         <mat-hint>The list of existing clusters for the selected project.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.Cluster).hasError('required')">
+        @if (form.get(Controls.Cluster).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
@@ -42,47 +49,63 @@ limitations under the License.
                matInput
                required>
         <mat-hint>The name of the created automatic backup.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        @if (form.get(Controls.Name).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
-      <div *ngIf="!!this.form.get(Controls.Cluster).value && !this.isLoadingDestinations"
-           fxLayout="column"
+      @if (!!this.form.get(Controls.Cluster).value && !this.isLoadingDestinations) {
+      <div fxLayout="column"
            fxLayoutGap="10px">
         <km-property>
           <div key>Seed</div>
           <div value>{{seed}}</div>
         </km-property>
-
         <mat-form-field>
-          <mat-label *ngIf="hasDestinations()">Destination</mat-label>
-          <mat-label *ngIf="!hasDestinations()">No destinations available</mat-label>
+          @if (hasDestinations()) {
+          <mat-label>Destination</mat-label>
+          }
+          @if (!hasDestinations()) {
+          <mat-label>No destinations available</mat-label>
+          }
           <mat-select [formControlName]="Controls.Destination"
                       disableOptionCentering
                       required>
-            <mat-option *ngFor="let destination of destinations"
-                        [value]="destination">{{destination}}</mat-option>
+            @for (destination of destinations; track destination) {
+            <mat-option [value]="destination">{{destination}}</mat-option>
+            }
           </mat-select>
-          <mat-hint *ngIf="isAdmin && !hasDestinations()">
+          @if (isAdmin && !hasDestinations()) {
+          <mat-hint>
             <a class="km-pointer"
                fxLayoutAlign=" center"
                href="/settings/backupdestinations"
                target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.
             </a>
           </mat-hint>
-          <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
+          }
+          @if (!isAdmin && !hasDestinations()) {
+          <mat-hint>Contact your Administrator to configure a destination.
           </mat-hint>
-          <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
+          }
+          @if (hasDestinations()) {
+          <mat-hint>The list of existing destinations for the selected cluster seed.
           </mat-hint>
-          <mat-error *ngIf="form.get(Controls.Destination).hasError('required')">
+          }
+          @if (form.get(Controls.Destination).hasError('required')) {
+          <mat-error>
             <strong>Required</strong>
           </mat-error>
+          }
         </mat-form-field>
       </div>
+      }
 
-      <mat-spinner *ngIf="this.isLoadingDestinations"
-                   [diameter]="25" />
+      @if (this.isLoadingDestinations) {
+      <mat-spinner [diameter]="25" />
+      }
 
     </form>
   </mat-dialog-content>

@@ -61,27 +61,25 @@ END OF TERMS AND CONDITIONS
         *matCellDef="let element">
       <div class="km-table-actions"
            fxLayoutAlign="end">
-        <ng-container *ngIf="isProcessingReport(element); else actionButtons">
-          <mat-spinner color="accent"
-                       class="km-spinner"
-                       fxFlexAlign=" center"
-                       [diameter]="25" />
-        </ng-container>
+        @if (isProcessingReport(element)) {
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     fxFlexAlign=" center"
+                     [diameter]="25" />
+        } @else {
+        <button id="km-download-report-button"
+                mat-icon-button
+                kmThrottleClick
+                (throttleClick)="download(element.name)">
+          <i class="km-icon-mask km-icon-download"></i>
+        </button>
+        <button mat-icon-button
+                kmThrottleClick
+                (throttleClick)="remove(element.name)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+        }
 
-        <ng-template #actionButtons>
-          <button id="km-download-report-button"
-                  mat-icon-button
-                  kmThrottleClick
-                  (throttleClick)="download(element.name)">
-            <i class="km-icon-mask km-icon-download"></i>
-          </button>
-
-          <button mat-icon-button
-                  kmThrottleClick
-                  (throttleClick)="remove(element.name)">
-            <i class="km-icon-mask km-icon-delete"></i>
-          </button>
-        </ng-template>
       </div>
     </td>
   </ng-container>

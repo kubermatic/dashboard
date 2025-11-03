@@ -15,8 +15,9 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === Mode.Edit"
-     class="km-dialog-context-description">Edit OPA gatekeeper config of <b>{{data.cluster.name}}</b> cluster</p>
+  @if (data.mode === Mode.Edit) {
+  <p class="km-dialog-context-description">Edit OPA gatekeeper config of <b>{{data.cluster.name}}</b> cluster</p>
+  }
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML" />

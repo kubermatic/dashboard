@@ -13,138 +13,137 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="cluster">
-  <div class="cluster-detail-actions">
-    <button mat-icon-button
-            color="tertiary"
-            (click)="goBack()"
-            matTooltip="Go back to the cluster list">
-      <i class="km-icon-mask km-icon-arrow-left"></i>
+@if (cluster) {
+<div class="cluster-detail-actions">
+  <button mat-icon-button
+          color="tertiary"
+          (click)="goBack()"
+          matTooltip="Go back to the cluster list">
+    <i class="km-icon-mask km-icon-arrow-left"></i>
+  </button>
+  <div fxFlex></div>
+</div>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center"
+                    class="cluster-name"
+                    fxLayoutGap="20px">
+      <i [matTooltip]="getStatus()"
+         [ngClass]="getStatusColor()"
+         class="cluster-health km-pointer"></i>
+      <span ngxClipboard
+            [cbContent]="cluster.name"
+            matTooltip="Click to copy"
+            class="cluster-name km-copy">{{cluster.name}}</span>
+      <span class="km-label-primary">KubeOne</span>
+    </mat-card-title>
+    <button color="alternative"
+            mat-flat-button
+            type="button"
+            [disabled]="!enableDownloadKubeconfigButton()"
+            kmThrottleClick
+            (throttleClick)="downloadKubeconfig()">
+      <i class="km-icon-mask km-icon-download"
+         matButtonIcon></i>
+      <span>Get Kubeconfig</span>
     </button>
-    <div fxFlex></div>
-  </div>
-
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign=" center"
-                      class="cluster-name"
-                      fxLayoutGap="20px">
-        <i [matTooltip]="getStatus()"
-           [ngClass]="getStatusColor()"
-           class="cluster-health km-pointer"></i>
-        <span ngxClipboard
-              [cbContent]="cluster.name"
-              matTooltip="Click to copy"
-              class="cluster-name km-copy">{{cluster.name}}</span>
-        <span class="km-label-primary">KubeOne</span>
-      </mat-card-title>
-
-      <button color="alternative"
-              mat-flat-button
-              type="button"
-              [disabled]="!enableDownloadKubeconfigButton()"
-              kmThrottleClick
-              (throttleClick)="downloadKubeconfig()">
-        <i class="km-icon-mask km-icon-download"
-           matButtonIcon></i>
-        <span>Get Kubeconfig</span>
+    <div class="provider-menu">
+      <button mat-icon-button
+              color="tertiary"
+              class="provider-menu-btn"
+              [matMenuTriggerFor]="menu">
+        <i class="km-icon-mask km-icon-points-menu"></i>
       </button>
-      <div class="provider-menu">
-        <button mat-icon-button
-                color="tertiary"
-                class="provider-menu-btn"
-                [matMenuTriggerFor]="menu">
-          <i class="km-icon-mask km-icon-points-menu"></i>
+      <mat-menu #menu="matMenu"
+                class="km-provider-edit-settings">
+        <button id="km-disconnect-external-cluster-btn"
+                mat-menu-item
+                (click)="disconnectCluster()"
+                [disabled]="!canDisconnect()">
+          Disconnect Cluster
         </button>
-        <mat-menu #menu="matMenu"
-                  class="km-provider-edit-settings">
-          <button id="km-disconnect-external-cluster-btn"
-                  mat-menu-item
-                  (click)="disconnectCluster()"
-                  [disabled]="!canDisconnect()">
-            Disconnect Cluster
-          </button>
-        </mat-menu>
-      </div>
-    </mat-card-header>
-
-    <mat-card-content class="km-row">
-      <div class="km-content-wrap">
-        <km-version-picker [cluster]="cluster"
-                           [isClusterRunning]="isRunning()"
-                           [upgrades]="canEdit() ? upgrades : []"
-                           [hasUpgradeOptions]="hasUpgrades()"
-                           [isClusterExternal]="true"
-                           *ngIf="cluster?.spec?.version" />
-        <km-property>
-          <div key>Cluster ID</div>
-          <div value
-               ngxClipboard
-               [cbContent]="cluster?.id"
-               matTooltip="Click to copy"
-               class="km-copy">
-            {{cluster?.id}}
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="km-row">
+    <div class="km-content-wrap">
+      @if (cluster?.spec?.version) {
+      <km-version-picker [cluster]="cluster"
+                         [isClusterRunning]="isRunning()"
+                         [upgrades]="canEdit() ? upgrades : []"
+                         [hasUpgradeOptions]="hasUpgrades()"
+                         [isClusterExternal]="true" />
+      }
+      <km-property>
+        <div key>Cluster ID</div>
+        <div value
+             ngxClipboard
+             [cbContent]="cluster?.id"
+             matTooltip="Click to copy"
+             class="km-copy">
+          {{cluster?.id}}
+        </div>
+      </km-property>
+      <km-property>
+        <div key>Provider</div>
+        <div value>
+          <span class="km-provider-logo km-provider-logo-{{cluster.cloud.kubeOne?.providerName}}"></span>
+        </div>
+      </km-property>
+      @if (cluster.spec.containerRuntime) {
+      <km-property>
+        <div key>Container Runtime</div>
+        <div value>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <span>{{cluster.spec.containerRuntime}}</span>
+            @if (cluster.spec.containerRuntime === ContainerRuntime.Docker) {
+            <i [matTooltip]="'Support for docker will be removed with Kubernetes 1.24 release. It is recommended to switch to containerd as container runtime.'"
+               class="km-icon-warning"></i>
+            }
           </div>
-        </km-property>
-        <km-property>
-          <div key>Provider</div>
-          <div value>
-            <span class="km-provider-logo km-provider-logo-{{cluster.cloud.kubeOne?.providerName}}"></span>
-          </div>
-        </km-property>
-        <km-property *ngIf="cluster.spec.containerRuntime">
-          <div key>Container Runtime</div>
-          <div value>
-            <div fxLayout="row"
-                 fxLayoutAlign=" center"
-                 fxLayoutGap="10px">
-              <span>{{cluster.spec.containerRuntime}}</span>
-              <ng-container *ngIf="cluster.spec.containerRuntime === ContainerRuntime.Docker">
-                <i [matTooltip]="'Support for docker will be removed with Kubernetes 1.24 release. It is recommended to switch to containerd as container runtime.'"
-                   class="km-icon-warning"></i>
-              </ng-container>
-            </div>
-          </div>
-        </km-property>
-        <km-property *ngIf="cluster.labels">
-          <div key>Labels</div>
-          <div value>
-            <km-labels [labels]="cluster.labels" />
-          </div>
-        </km-property>
-        <km-property>
-          <div key>Imported</div>
-          <div value>
-            <km-relative-time [date]="cluster.creationTimestamp" />
-          </div>
-        </km-property>
-      </div>
+        </div>
+      </km-property>
+      }
+      @if (cluster.labels) {
+      <km-property>
+        <div key>Labels</div>
+        <div value>
+          <km-labels [labels]="cluster.labels" />
+        </div>
+      </km-property>
+      }
+      <km-property>
+        <div key>Imported</div>
+        <div value>
+          <km-relative-time [date]="cluster.creationTimestamp" />
+        </div>
+      </km-property>
+    </div>
+    <km-cluster-metrics [clusterMetrics]="clusterMetrics" />
+  </mat-card-content>
+</mat-card>
+@if (machineDeployments?.length) {
+<km-kubeone-machine-deployment-list [cluster]="cluster"
+                                    [machineDeployments]="machineDeployments"
+                                    [projectID]="projectID"
+                                    [isClusterRunning]="isRunning()"
+                                    [isInitialized]="areMachineDeploymentsInitialized" />
+} @else {
+<km-external-node-list [cluster]="cluster"
+                       [nodes]="nodes"
+                       [nodesMetrics]="nodesMetrics"
+                       [projectID]="projectID"
+                       [isInitialized]="areNodesInitialized" />
+}
+<km-event-card [events]="events" />
+}
 
-      <km-cluster-metrics [clusterMetrics]="clusterMetrics" />
-    </mat-card-content>
-  </mat-card>
-
-  <km-kubeone-machine-deployment-list *ngIf="machineDeployments?.length; else nodesList"
-                                      [cluster]="cluster"
-                                      [machineDeployments]="machineDeployments"
-                                      [projectID]="projectID"
-                                      [isClusterRunning]="isRunning()"
-                                      [isInitialized]="areMachineDeploymentsInitialized" />
-
-  <ng-template #nodesList>
-    <km-external-node-list [cluster]="cluster"
-                           [nodes]="nodes"
-                           [nodesMetrics]="nodesMetrics"
-                           [projectID]="projectID"
-                           [isInitialized]="areNodesInitialized" />
-  </ng-template>
-
-  <km-event-card [events]="events" />
-</ng-container>
-
+@if (!cluster) {
 <mat-spinner [diameter]="25"
-             *ngIf="!cluster"
              color="accent"
              class="km-spinner" />
+}

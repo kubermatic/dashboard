@@ -14,112 +14,107 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="isClusterRunning; else loading">
+@if (isClusterRunning) {
+<div fxLayout="row"
+     fxLayoutAlign="space-between center"
+     class="actions-container">
+  <div>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix">
+      <mat-select class="km-select-ellipsis"
+                  [formControl]="modeControl"
+                  panelClass="preset-dropdown"
+                  disableOptionCentering
+                  required>
+        <mat-select-trigger fxLayout="row"
+                            fxLayoutGap="10px"
+                            fxLayoutAlign=" center">
+          <ng-container *ngTemplateOutlet="icons; context: {$implicit: modeControl.value}" />
+          <span>{{modeControl.value}}</span>
+        </mat-select-trigger>
+        @for (mode of modes; track mode) {
+        <mat-option [value]="mode">
+          <div fxLayout="row"
+               fxLayoutGap="10px"
+               fxLayoutAlign=" center">
+            <ng-container *ngTemplateOutlet="icons; context: {$implicit: mode}" />
+            <span>{{mode}}</span>
+          </div>
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <ng-template #icons
+               let-mode>
+    @switch (mode) {
+    @case (RBACKind.ServiceAccount) {
+    <i class="km-icon-mask km-icon-serviceaccount"></i>
+    }
+    @case (RBACKind.Group) {
+    <i class="km-icon-mask km-icon-group"></i>
+    }
+    @case (RBACKind.User) {
+    <i class="km-icon-mask km-user"></i>
+    }
+    }
+  </ng-template>
   <div fxLayout="row"
        fxLayoutAlign="space-between center"
-       class="actions-container">
-    <div>
-      <mat-form-field fxFlex
-                      class="km-dropdown-with-suffix">
-        <mat-select class="km-select-ellipsis"
-                    [formControl]="modeControl"
-                    panelClass="preset-dropdown"
-                    disableOptionCentering
-                    required>
-          <mat-select-trigger fxLayout="row"
-                              fxLayoutGap="10px"
-                              fxLayoutAlign=" center">
-            <ng-container *ngTemplateOutlet="icons; context: {$implicit: modeControl.value}" />
-            <span>{{modeControl.value}}</span>
-          </mat-select-trigger>
-
-          <mat-option *ngFor="let mode of modes"
-                      [value]="mode">
-            <div fxLayout="row"
-                 fxLayoutGap="10px"
-                 fxLayoutAlign=" center">
-              <ng-container *ngTemplateOutlet="icons; context: {$implicit: mode}" />
-              <span>{{mode}}</span>
-            </div>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <ng-template #icons
-                 let-mode>
-      <ng-container [ngSwitch]="mode">
-        <i *ngSwitchCase="RBACKind.ServiceAccount"
-           class="km-icon-mask km-icon-serviceaccount"></i>
-        <i *ngSwitchCase="RBACKind.Group"
-           class="km-icon-mask km-icon-group"></i>
-        <i *ngSwitchCase="RBACKind.User"
-           class="km-icon-mask km-user"></i>
-      </ng-container>
-    </ng-template>
-
-    <div [ngSwitch]="modeControl.value"
-         fxLayout="row"
-         fxLayoutAlign="space-between center"
-         fxLayoutGap="10px">
-      <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
-        <button mat-flat-button
-                (click)="addServiceAccount($event)">
-          <i class="km-icon-mask km-icon-add"
-             matButtonIcon></i>
-          <span>Add Service Account</span>
-        </button>
-
-        <button mat-flat-button
-                (click)="addServiceAccountBinding()">
-          <i class="km-icon-mask km-icon-add"
-             matButtonIcon></i>
-          <span>Add Binding</span>
-        </button>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="RBACKind.User">
-        <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
-      </ng-container>
-
-      <ng-container *ngSwitchCase="RBACKind.Group">
-        <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
-      </ng-container>
-    </div>
-  </div>
-
-  <ng-template #userAndGroupBindingButton>
+       fxLayoutGap="10px">
+    @switch (modeControl.value) {
+    @case (RBACKind.ServiceAccount) {
     <button mat-flat-button
-            (click)="addBinding($event)">
+            (click)="addServiceAccount($event)">
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
+      <span>Add Service Account</span>
+    </button>
+    <button mat-flat-button
+            (click)="addServiceAccountBinding()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
       <span>Add Binding</span>
     </button>
-  </ng-template>
-
-  <ng-container [ngSwitch]="modeControl.value">
-    <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
-      <km-rbac-service-account [projectID]="projectID"
-                               [cluster]="cluster"
-                               (addBinding)="addServiceAccountBinding($event)"
-                               (deleteBinding)="deleteBinding($event)"
-                               (deleteClusterServiceAccount)="deleteServiceAccount($event)" />
-    </ng-container>
-
-    <km-rbac-users-or-groups *ngSwitchCase="RBACKind.Group"
-                             [projectID]="projectID"
-                             [cluster]="cluster"
-                             [rbacType]="modeControl.value"
-                             (deleteBinding)="deleteBinding($event)" />
-
-    <km-rbac-users-or-groups *ngSwitchCase="RBACKind.User"
-                             [projectID]="projectID"
-                             [cluster]="cluster"
-                             [rbacType]="modeControl.value"
-                             (deleteBinding)="deleteBinding($event)" />
-  </ng-container>
-</ng-container>
-
-<ng-template #loading>
-  <km-loader />
+    }
+    @case (RBACKind.User) {
+    <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
+    }
+    @case (RBACKind.Group) {
+    <ng-container *ngTemplateOutlet="userAndGroupBindingButton" />
+    }
+    }
+  </div>
+</div>
+<ng-template #userAndGroupBindingButton>
+  <button mat-flat-button
+          (click)="addBinding($event)">
+    <i class="km-icon-mask km-icon-add"
+       matButtonIcon></i>
+    <span>Add Binding</span>
+  </button>
 </ng-template>
+@switch (modeControl.value) {
+@case (RBACKind.ServiceAccount) {
+<km-rbac-service-account [projectID]="projectID"
+                         [cluster]="cluster"
+                         (addBinding)="addServiceAccountBinding($event)"
+                         (deleteBinding)="deleteBinding($event)"
+                         (deleteClusterServiceAccount)="deleteServiceAccount($event)" />
+}
+@case (RBACKind.Group) {
+<km-rbac-users-or-groups [projectID]="projectID"
+                         [cluster]="cluster"
+                         [rbacType]="modeControl.value"
+                         (deleteBinding)="deleteBinding($event)" />
+}
+@case (RBACKind.User) {
+<km-rbac-users-or-groups [projectID]="projectID"
+                         [cluster]="cluster"
+                         [rbacType]="modeControl.value"
+                         (deleteBinding)="deleteBinding($event)" />
+}
+}
+} @else {
+<km-loader />
+}

@@ -85,23 +85,22 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent" />
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        [attr.id]="'km-delete-sshkey-' + element.name"
-                        matTooltip="Delete SSH key"
-                        (click)="deleteSshKey(element, $event)"
-                        [disabled]="!canDelete()">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            @switch (!!element.deletionTimestamp) {
+            @case (true) {
+            <mat-spinner [diameter]="25"
+                         class="km-spinner"
+                         color="accent" />
+            }
+            @case (false) {
+            <button mat-icon-button
+                    [attr.id]="'km-delete-sshkey-' + element.name"
+                    matTooltip="Delete SSH key"
+                    (click)="deleteSshKey(element, $event)"
+                    [disabled]="!canDelete()">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            }
+            }
           </div>
         </td>
       </ng-container>
@@ -137,18 +136,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!sshKeys || sshKeys.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="!loading">
-        No SSH keys available.
-      </div>
-      <div class="km-row"
-           *ngIf="!!loading">
-        <mat-spinner color="accent"
-                     class="km-spinner km-with-spacing"
-                     [diameter]="25" />
-      </div>
-    </ng-container>
+    @if (!sshKeys || sshKeys.length === 0) {
+    @if (!loading) {
+    <div class="km-row km-empty-list-msg">
+      No SSH keys available.
+    </div>
+    }
+    @if (!!loading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25" />
+    </div>
+    }
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

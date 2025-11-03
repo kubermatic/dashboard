@@ -22,12 +22,16 @@ limitations under the License.
   </div>
 </div>
 
-<div [ngSwitch]="provider"
-     fxLayout="column">
-  <km-aks-cluster-select *ngSwitchCase="Provider.AKS"
-                         [projectID]="projectID" />
-  <km-eks-cluster-select *ngSwitchCase="Provider.EKS"
-                         [projectID]="projectID" />
-  <km-gke-cluster-select *ngSwitchCase="Provider.GKE"
-                         [projectID]="projectID" />
+<div fxLayout="column">
+  @switch (provider) {
+  @case (Provider.AKS) {
+  <km-aks-cluster-select [projectID]="projectID" />
+  }
+  @case (Provider.EKS) {
+  <km-eks-cluster-select [projectID]="projectID" />
+  }
+  @case (Provider.GKE) {
+  <km-gke-cluster-select [projectID]="projectID" />
+  }
+  }
 </div>
