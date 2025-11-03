@@ -29,6 +29,7 @@ export class ClusterSpecService {
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
   private isCusterTemplateEditMode = false;
+  private _encryptionAtRestKey: string;
 
   get cluster(): Cluster {
     return this._cluster;
@@ -142,10 +143,19 @@ export class ClusterSpecService {
     this.clusterChanges.emit(this._cluster);
   }
 
+  get encryptionAtRestKey(): string | null {
+    return this._encryptionAtRestKey;
+  }
+
+  set encryptionAtRestKey(key: string | null) {
+    this._encryptionAtRestKey = key;
+  }
+
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
     this._sshKeys = [];
     this.isCusterTemplateEditMode = false;
+    this._encryptionAtRestKey = null;
   }
 
   initializeClusterFromClusterTemplate(template: ClusterTemplate): void {

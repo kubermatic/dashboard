@@ -17,7 +17,7 @@ import {AnexiaNodeSpec} from '@shared/entity/node';
 import {AWSSize} from '@shared/entity/provider/aws';
 import {AzureSizes} from '@shared/entity/provider/azure';
 import {Optimized, Standard} from '@shared/entity/provider/digitalocean';
-import {EquinixSize} from '@shared/entity/provider/equinix';
+
 import {GCPMachineSize} from '@shared/entity/provider/gcp';
 import {Type} from '@shared/entity/provider/hetzner';
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
@@ -71,7 +71,7 @@ export class ResourceQuotaCalculationPayload {
   awsSize?: AWSSize;
   azureSize?: AzureSizes;
   doSize?: Standard | Optimized;
-  equinixSize?: EquinixSize;
+
   gcpSize?: GCPMachineSize;
   hetznerSize?: Type;
   kubevirtNodeSize?: KubeVirtNodeSize;

@@ -78,7 +78,6 @@ type DatacenterSpec struct {
 	Azure               *kubermaticv1.DatacenterSpecAzure               `json:"azure,omitempty"`
 	Edge                *kubermaticv1.DatacenterSpecEdge                `json:"edge,omitempty"`
 	Openstack           *kubermaticv1.DatacenterSpecOpenstack           `json:"openstack,omitempty"`
-	Packet              *kubermaticv1.DatacenterSpecPacket              `json:"packet,omitempty"`
 	GCP                 *kubermaticv1.DatacenterSpecGCP                 `json:"gcp,omitempty"`
 	Hetzner             *kubermaticv1.DatacenterSpecHetzner             `json:"hetzner,omitempty"`
 	VSphere             *kubermaticv1.DatacenterSpecVSphere             `json:"vsphere,omitempty"`
@@ -422,34 +421,6 @@ type HetznerSize struct {
 	Cores       int     `json:"cores"`
 	Memory      float32 `json:"memory"`
 	Disk        int     `json:"disk"`
-}
-
-// PacketSizeList represents an array of Packet VM sizes.
-// swagger:model PacketSizeList
-type PacketSizeList []PacketSize
-
-// PacketSize is the object representing Packet VM sizes.
-// swagger:model PacketSize
-type PacketSize struct {
-	Name   string        `json:"name,omitempty"`
-	CPUs   []PacketCPU   `json:"cpus,omitempty"`
-	Memory string        `json:"memory,omitempty"`
-	Drives []PacketDrive `json:"drives,omitempty"`
-}
-
-// PacketCPU represents an array of Packet CPUs. It is a part of PacketSize.
-// swagger:model PacketCPU
-type PacketCPU struct {
-	Count int    `json:"count,omitempty"`
-	Type  string `json:"type,omitempty"`
-}
-
-// PacketDrive represents an array of Packet drives. It is a part of PacketSize.
-// swagger:model PacketDrive
-type PacketDrive struct {
-	Count int    `json:"count,omitempty"`
-	Size  string `json:"size,omitempty"`
-	Type  string `json:"type,omitempty"`
 }
 
 // NutanixCluster represents a Nutanix cluster.
@@ -797,6 +768,8 @@ type OpenstackSubnet struct {
 	Name string `json:"name"`
 	// IPversion is the IP protocol version (4 or 6)
 	IPVersion int `json:"ipVersion"`
+	// Tags are Neutron subnet tags (if supported by the deployment)
+	Tags []string `json:"tags,omitempty"`
 }
 
 // OpenstackTenant is the object representing a openstack tenant.
@@ -954,9 +927,16 @@ type MasterVersion struct {
 // CreateClusterSpec is the structure that is used to create cluster with its initial node deployment
 // swagger:model CreateClusterSpec
 type CreateClusterSpec struct {
-	Cluster        Cluster         `json:"cluster"`
-	NodeDeployment *NodeDeployment `json:"nodeDeployment,omitempty"`
-	Applications   []Application   `json:"applications,omitempty"`
+	Cluster          Cluster               `json:"cluster"`
+	NodeDeployment   *NodeDeployment       `json:"nodeDeployment,omitempty"`
+	Applications     []Application         `json:"applications,omitempty"`
+	EncryptionAtRest *EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
+}
+
+// EncryptionAtRestSpec contains the encryption key for encryption at rest
+// swagger:model EncryptionAtRestSpec
+type EncryptionAtRestSpec struct {
+	Key string `json:"key"`
 }
 
 const (
@@ -1082,6 +1062,12 @@ type ClusterSpec struct {
 
 	// Kyverno holds the configuration for the Kyverno policy management component.
 	Kyverno *kubermaticv1.KyvernoSettings `json:"kyverno,omitempty"`
+
+	// EncryptionConfiguration defines the encryption configuration for the cluster.
+	EncryptionConfiguration *kubermaticv1.EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+
+	// Features is a map that controls specific features on cluster level.
+	Features map[string]bool `json:"features,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1114,6 +1100,8 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 		DisableCSIDriver                     bool                                   `json:"disableCsiDriver,omitempty"`
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
+		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration  `json:"encryptionConfiguration,omitempty"`
+		Features                             map[string]bool                        `json:"features,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1124,7 +1112,6 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 			AWS:                 newPublicAWSCloudSpec(cs.Cloud.AWS),
 			Azure:               newPublicAzureCloudSpec(cs.Cloud.Azure),
 			Openstack:           newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
-			Packet:              newPublicPacketCloudSpec(cs.Cloud.Packet),
 			Hetzner:             newPublicHetznerCloudSpec(cs.Cloud.Hetzner),
 			VSphere:             newPublicVSphereCloudSpec(cs.Cloud.VSphere),
 			Baremetal:           newPublicBaremetalCloudSpec(cs.Cloud.Baremetal),
@@ -1160,6 +1147,8 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		APIServerAllowedIPRanges:             cs.APIServerAllowedIPRanges,
 		DisableCSIDriver:                     cs.DisableCSIDriver,
 		Kyverno:                              cs.Kyverno,
+		EncryptionConfiguration:              cs.EncryptionConfiguration,
+		Features:                             cs.Features,
 	})
 
 	return ret, err
@@ -1168,15 +1157,15 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 // PublicCloudSpec is a public counterpart of apiv1.CloudSpec.
 // swagger:model PublicCloudSpec
 type PublicCloudSpec struct {
-	DatacenterName      string                              `json:"dc"`
-	Fake                *PublicFakeCloudSpec                `json:"fake,omitempty"`
-	Digitalocean        *PublicDigitaloceanCloudSpec        `json:"digitalocean,omitempty"`
-	BringYourOwn        *PublicBringYourOwnCloudSpec        `json:"bringyourown,omitempty"`
-	Edge                *PublicEdgeCloudSpec                `json:"edge,omitempty"`
-	AWS                 *PublicAWSCloudSpec                 `json:"aws,omitempty"`
-	Azure               *PublicAzureCloudSpec               `json:"azure,omitempty"`
-	Openstack           *PublicOpenstackCloudSpec           `json:"openstack,omitempty"`
-	Packet              *PublicPacketCloudSpec              `json:"packet,omitempty"`
+	DatacenterName string                       `json:"dc"`
+	Fake           *PublicFakeCloudSpec         `json:"fake,omitempty"`
+	Digitalocean   *PublicDigitaloceanCloudSpec `json:"digitalocean,omitempty"`
+	BringYourOwn   *PublicBringYourOwnCloudSpec `json:"bringyourown,omitempty"`
+	Edge           *PublicEdgeCloudSpec         `json:"edge,omitempty"`
+	AWS            *PublicAWSCloudSpec          `json:"aws,omitempty"`
+	Azure          *PublicAzureCloudSpec        `json:"azure,omitempty"`
+	Openstack      *PublicOpenstackCloudSpec    `json:"openstack,omitempty"`
+
 	Hetzner             *PublicHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *PublicVSphereCloudSpec             `json:"vsphere,omitempty"`
 	Baremetal           *PublicBaremetalCloudSpec           `json:"baremetal,omitempty"`
@@ -1329,17 +1318,6 @@ func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (pub
 	}
 }
 
-// PublicPacketCloudSpec is a public counterpart of apiv1.PacketCloudSpec.
-type PublicPacketCloudSpec struct{}
-
-func newPublicPacketCloudSpec(internal *kubermaticv1.PacketCloudSpec) (public *PublicPacketCloudSpec) {
-	if internal == nil {
-		return nil
-	}
-
-	return &PublicPacketCloudSpec{}
-}
-
 // PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.
 type PublicGCPCloudSpec struct {
 	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
@@ -1422,6 +1400,12 @@ func newPublicVMwareCloudDirectorCloudSpec(internal *kubermaticv1.VMwareCloudDir
 	}
 }
 
+// EncryptionStatus defines the encryption at rest status.
+type EncryptionStatus struct {
+	// Phase represents the current state of encryption at rest
+	Phase string `json:"phase"`
+}
+
 // ClusterStatus defines the cluster status.
 type ClusterStatus struct {
 	// Version actual version of the kubernetes master components
@@ -1430,6 +1414,8 @@ type ClusterStatus struct {
 	URL string `json:"url"`
 	// ExternalCCMMigration represents the migration status to the external CCM
 	ExternalCCMMigration ExternalCCMMigrationStatus `json:"externalCCMMigration"`
+	// Encryption represents the encryption at rest status
+	Encryption *EncryptionStatus `json:"encryption,omitempty"`
 }
 
 type ExternalCCMMigrationStatus string
@@ -1518,7 +1504,6 @@ type NodeCloudSpec struct {
 	AWS                 *AWSNodeSpec                 `json:"aws,omitempty"`
 	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
 	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
-	Packet              *PacketNodeSpec              `json:"packet,omitempty"`
 	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
@@ -2086,39 +2071,6 @@ func (spec *AWSNodeSpec) MarshalJSON() ([]byte, error) {
 		SpotInstancePersistentRequest:    spec.SpotInstancePersistentRequest,
 		SpotInstanceInterruptionBehavior: spec.SpotInstanceInterruptionBehavior,
 		EBSVolumeEncrypted:               spec.EBSVolumeEncrypted,
-	}
-
-	return json.Marshal(&res)
-}
-
-// PacketNodeSpec specifies packet specific node settings
-// swagger:model PacketNodeSpec
-type PacketNodeSpec struct {
-	// InstanceType denotes the plan to which the device will be provisioned.
-	// required: true
-	InstanceType string `json:"instanceType"`
-	// additional instance tags
-	// required: false
-	Tags []string `json:"tags"`
-}
-
-func (spec *PacketNodeSpec) MarshalJSON() ([]byte, error) {
-	missing := make([]string, 0)
-
-	if len(spec.InstanceType) == 0 {
-		missing = append(missing, "instanceType")
-	}
-
-	if len(missing) > 0 {
-		return []byte{}, fmt.Errorf("missing or invalid required parameter(s): %s", strings.Join(missing, ", "))
-	}
-
-	res := struct {
-		InstanceType string   `json:"instanceType"`
-		Tags         []string `json:"tags"`
-	}{
-		InstanceType: spec.InstanceType,
-		Tags:         spec.Tags,
 	}
 
 	return json.Marshal(&res)

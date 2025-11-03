@@ -12,7 +12,7 @@
   "info": {
     "description": "This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.",
     "title": "Kubermatic Kubernetes Platform API",
-    "version": "2.28"
+    "version": "2.29"
   },
   "paths": {
     "/api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}": {
@@ -1352,6 +1352,12 @@
             "type": "string",
             "x-go-name": "UserID",
             "name": "user_id",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "x-go-name": "OIDCKubeLoginEnabled",
+            "name": "oidc_kubelogin_enabled",
             "in": "query"
           }
         ],
@@ -12910,51 +12916,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "equinixmetal"
-        ],
-        "summary": "Lists sizes from Equinix Metal.",
-        "operationId": "listEquinixMetalSizesNoCredentialsV2",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
-              }
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/disktypes": {
       "get": {
         "description": "Lists disk types from GCP",
@@ -13881,51 +13842,6 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackTenant"
-              }
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "packet"
-        ],
-        "summary": "Lists sizes from packet (use Equinix Metal API endpoints instead).",
-        "operationId": "listPacketSizesNoCredentialsV2",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
               }
             }
           },
@@ -15534,6 +15450,9 @@
                 "cluster": {
                   "$ref": "#/definitions/Cluster"
                 },
+                "encryptionAtRest": {
+                  "$ref": "#/definitions/EncryptionAtRestSpec"
+                },
                 "name": {
                   "type": "string",
                   "x-go-name": "Name"
@@ -15778,6 +15697,9 @@
                 },
                 "cluster": {
                   "$ref": "#/definitions/Cluster"
+                },
+                "encryptionAtRest": {
+                  "$ref": "#/definitions/EncryptionAtRestSpec"
                 },
                 "name": {
                   "type": "string",
@@ -20156,64 +20078,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/providers/equinixmetal/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "equinixmetal"
-        ],
-        "summary": "Lists sizes from Equinix Metal.",
-        "operationId": "listProjectEquinixMetalSizes",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "APIKey",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "EquinixProjectID",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
-              }
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/providers/gcp/disktypes": {
       "get": {
         "description": "List disktypes for a given project",
@@ -21572,6 +21436,110 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackAvailabilityZone"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/membersubnets": {
+      "get": {
+        "description": "Lists load balancer member subnets from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackMemberSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "NetworkID",
+            "name": "network_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenStackLoadBalancerPoolMember",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenStackLoadBalancerPoolMember"
               }
             }
           },
@@ -23142,9 +23110,6 @@
                 },
                 "doSize": {
                   "$ref": "#/definitions/DigitaloceanSize"
-                },
-                "equinixSize": {
-                  "$ref": "#/definitions/PacketSize"
                 },
                 "gcpSize": {
                   "$ref": "#/definitions/GCPMachineSize"
@@ -30178,9 +30143,6 @@
         "openstack": {
           "$ref": "#/definitions/OpenstackCloudSpec"
         },
-        "packet": {
-          "$ref": "#/definitions/PacketCloudSpec"
-        },
         "providerName": {
           "description": "ProviderName is the name of the cloud provider used for this cluster.\nThis must match the given provider spec (e.g. if the providerName is\n\"aws\", then the `aws` field must be set).",
           "type": "string",
@@ -30660,11 +30622,22 @@
           "type": "boolean",
           "x-go-name": "EnableUserSSHKeyAgent"
         },
+        "encryptionConfiguration": {
+          "$ref": "#/definitions/EncryptionConfiguration"
+        },
         "eventRateLimitConfig": {
           "$ref": "#/definitions/EventRateLimitConfig"
         },
         "exposeStrategy": {
           "$ref": "#/definitions/ExposeStrategy"
+        },
+        "features": {
+          "description": "Features is a map that controls specific features on cluster level.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "x-go-name": "Features"
         },
         "kubelb": {
           "$ref": "#/definitions/KubeLB"
@@ -30731,6 +30704,9 @@
       "type": "object",
       "title": "ClusterStatus defines the cluster status.",
       "properties": {
+        "encryption": {
+          "$ref": "#/definitions/EncryptionStatus"
+        },
         "externalCCMMigration": {
           "$ref": "#/definitions/ExternalCCMMigrationStatus"
         },
@@ -31226,6 +31202,11 @@
         "containerdRegistryMirrors": {
           "$ref": "#/definitions/ContainerRuntimeContainerd"
         },
+        "enableNonRootDeviceOwnership": {
+          "description": "Optional: EnableNonRootDeviceOwnership enables the non-root device ownership feature in the container runtime.",
+          "type": "boolean",
+          "x-go-name": "EnableNonRootDeviceOwnership"
+        },
         "insecureRegistries": {
           "description": "Optional: These image registries will be configured as insecure\non the container runtime.",
           "type": "array",
@@ -31316,6 +31297,9 @@
         },
         "cluster": {
           "$ref": "#/definitions/Cluster"
+        },
+        "encryptionAtRest": {
+          "$ref": "#/definitions/EncryptionAtRestSpec"
         },
         "nodeDeployment": {
           "$ref": "#/definitions/NodeDeployment"
@@ -31586,9 +31570,6 @@
         },
         "operatingSystemProfiles": {
           "$ref": "#/definitions/OperatingSystemProfileList"
-        },
-        "packet": {
-          "$ref": "#/definitions/DatacenterSpecPacket"
         },
         "provider": {
           "description": "Name of the datacenter provider. Extracted based on which provider is defined in the spec.\nIt is used for informational purposes.",
@@ -31973,27 +31954,6 @@
           "description": "Optional: Gets mapped to the \"use-octavia\" setting in the cloud config.\nuse-octavia is enabled by default in CCM since v1.17.0, and disabled by\ndefault with the in-tree cloud provider.",
           "type": "boolean",
           "x-go-name": "UseOctavia"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-    },
-    "DatacenterSpecPacket": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nDatacenterSpecPacket describes a Packet datacenter.",
-      "type": "object",
-      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
-      "properties": {
-        "facilities": {
-          "description": "The list of enabled facilities, for example \"ams1\", for a full list of available\nfacilities see https://metal.equinix.com/developers/docs/locations/facilities/",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Facilities"
-        },
-        "metro": {
-          "description": "Metros are facilities that are grouped together geographically and share capacity\nand networking features, see https://metal.equinix.com/developers/docs/locations/metros/",
-          "type": "string",
-          "x-go-name": "Metro"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -32750,6 +32710,52 @@
     "EdgeNodeSpec": {
       "description": "EdgeNodeSpec specifies edge specific node settings",
       "type": "object",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "EncryptionAtRestSpec": {
+      "description": "EncryptionAtRestSpec contains the encryption key for encryption at rest",
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "x-go-name": "Key"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "EncryptionConfiguration": {
+      "type": "object",
+      "title": "EncryptionConfiguration configures encryption-at-rest for Kubernetes API data.",
+      "properties": {
+        "enabled": {
+          "description": "Enables encryption-at-rest on this cluster.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "resources": {
+          "description": "List of resources that will be stored encrypted in etcd.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Resources"
+        },
+        "secretbox": {
+          "$ref": "#/definitions/SecretboxEncryptionConfiguration"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "EncryptionStatus": {
+      "type": "object",
+      "title": "EncryptionStatus defines the encryption at rest status.",
+      "properties": {
+        "phase": {
+          "description": "Phase represents the current state of encryption at rest",
+          "type": "string",
+          "x-go-name": "Phase"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "EnvVar": {
@@ -35359,7 +35365,7 @@
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KKP installs the Gateway API CRDs for the user cluster.",
+          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KubeLB installs the Gateway API CRDs in the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -35393,7 +35399,7 @@
           "x-go-name": "DisableIngressClass"
         },
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.\nWhen this option is enabled for the user cluster, KKP installs the Gateway API CRDs for the user cluster.",
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB. Once enabled, Gateway API CRDs are installed for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -35519,9 +35525,6 @@
         "digitalocean": {
           "$ref": "#/definitions/KubeOneDigitalOceanCloudSpec"
         },
-        "equinix": {
-          "$ref": "#/definitions/KubeOneEquinixCloudSpec"
-        },
         "gcp": {
           "$ref": "#/definitions/KubeOneGCPCloudSpec"
         },
@@ -35551,21 +35554,6 @@
           "description": "Token is used to authenticate with the DigitalOcean API.",
           "type": "string",
           "x-go-name": "Token"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "KubeOneEquinixCloudSpec": {
-      "type": "object",
-      "title": "KubeOneEquinixCloudSpec specifies access data to a Equinix cloud.",
-      "properties": {
-        "apiKey": {
-          "type": "string",
-          "x-go-name": "APIKey"
-        },
-        "projectID": {
-          "type": "string",
-          "x-go-name": "ProjectID"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -35711,7 +35699,7 @@
           "x-go-name": "Manifest"
         },
         "providerName": {
-          "description": "ProviderName is the name of the cloud provider used, one of\n\"aws\", \"azure\", \"digitalocean\", \"gcp\",\n\"hetzner\", \"nutanix\", \"openstack\", \"packet\", \"vsphere\" KubeOne natively-supported providers.\n+ readOnly",
+          "description": "ProviderName is the name of the cloud provider used, one of\n\"aws\", \"azure\", \"digitalocean\", \"gcp\",\n\"hetzner\", \"nutanix\", \"openstack\", \"vsphere\" KubeOne natively-supported providers.\n+ readOnly",
           "type": "string",
           "x-go-name": "ProviderName"
         },
@@ -37259,9 +37247,6 @@
         "openstack": {
           "$ref": "#/definitions/OpenstackNodeSpec"
         },
-        "packet": {
-          "$ref": "#/definitions/PacketNodeSpec"
-        },
         "vmwareclouddirector": {
           "$ref": "#/definitions/VMwareCloudDirectorNodeSpec"
         },
@@ -37419,6 +37404,11 @@
       "properties": {
         "containerdRegistryMirrors": {
           "$ref": "#/definitions/ContainerRuntimeContainerd"
+        },
+        "enableNonRootDeviceOwnership": {
+          "description": "Optional: EnableNonRootDeviceOwnership enables the non-root device ownership feature in the container runtime.",
+          "type": "boolean",
+          "x-go-name": "EnableNonRootDeviceOwnership"
         },
         "httpProxy": {
           "$ref": "#/definitions/ProxyValue"
@@ -38291,6 +38281,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "OpenStackLoadBalancerPoolMember": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Openstack": {
       "type": "object",
       "properties": {
@@ -38425,6 +38429,11 @@
           "type": "string",
           "x-go-name": "IngressHostnameSuffix"
         },
+        "ipv6SubnetCidr": {
+          "description": "IPv6SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec\ndidn't specify a subnet id for the IPv6 networking.\n+optional",
+          "type": "string",
+          "x-go-name": "IPv6SubnetCIDR"
+        },
         "ipv6SubnetID": {
           "description": "IPv6SubnetID holds the ID of the subnet used for IPv6 networking.\nIf not provided, a new subnet will be created if IPv6 is enabled.\n+optional",
           "type": "string",
@@ -38434,6 +38443,14 @@
           "description": "IPv6SubnetPool holds the name of the subnet pool used for creating new IPv6 subnets.\nIf not provided, the default IPv6 subnet pool will be used.\n+optional",
           "type": "string",
           "x-go-name": "IPv6SubnetPool"
+        },
+        "loadBalancerClasses": {
+          "description": "List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadBalancerClass"
+          },
+          "x-go-name": "LoadBalancerClasses"
         },
         "network": {
           "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.\n\nNote that the network is internal if the \"External\" field is set to false",
@@ -38470,6 +38487,16 @@
           "description": "SecurityGroups is the name of the security group (only supports a singular security group) that will be used for Machines in the cluster.\nIf this field is left empty, a default security group will be created and used.",
           "type": "string",
           "x-go-name": "SecurityGroups"
+        },
+        "subnetAllocationPool": {
+          "description": "SubnetAllocationPool represents a pool of usable IPs that can be assigned to resources via the DHCP. The format is\nfirst usable ip and last usable ip separated by a dash(e.g: 10.10.0.1-10.10.0.254)\n+optional",
+          "type": "string",
+          "x-go-name": "SubnetAllocationPool"
+        },
+        "subnetCidr": {
+          "description": "SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec\ndidn't specify a subnet id.\n+optional",
+          "type": "string",
+          "x-go-name": "SubnetCIDR"
         },
         "subnetID": {
           "type": "string",
@@ -38700,6 +38727,14 @@
           "description": "Name is human-readable name for the subnet",
           "type": "string",
           "x-go-name": "Name"
+        },
+        "tags": {
+          "description": "Tags are Neutron subnet tags (if supported by the deployment)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Tags"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
@@ -38805,160 +38840,6 @@
         "ubuntu": {
           "$ref": "#/definitions/UbuntuSpec"
         }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "Packet": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.",
-      "type": "object",
-      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
-      "properties": {
-        "apiKey": {
-          "type": "string",
-          "x-go-name": "APIKey"
-        },
-        "billingCycle": {
-          "type": "string",
-          "x-go-name": "BillingCycle"
-        },
-        "datacenter": {
-          "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
-          "type": "string",
-          "x-go-name": "Datacenter"
-        },
-        "enabled": {
-          "description": "Only enabled presets will be available in the KKP dashboard.",
-          "type": "boolean",
-          "x-go-name": "Enabled"
-        },
-        "isCustomizable": {
-          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
-          "type": "boolean",
-          "x-go-name": "IsCustomizable"
-        },
-        "projectID": {
-          "type": "string",
-          "x-go-name": "ProjectID"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-    },
-    "PacketCPU": {
-      "type": "object",
-      "title": "PacketCPU represents an array of Packet CPUs. It is a part of PacketSize.",
-      "properties": {
-        "count": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Count"
-        },
-        "type": {
-          "type": "string",
-          "x-go-name": "Type"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "PacketCloudSpec": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nPacketCloudSpec specifies access data to a Packet cloud.",
-      "type": "object",
-      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
-      "properties": {
-        "apiKey": {
-          "type": "string",
-          "x-go-name": "APIKey"
-        },
-        "billingCycle": {
-          "type": "string",
-          "x-go-name": "BillingCycle"
-        },
-        "credentialsReference": {
-          "$ref": "#/definitions/GlobalSecretKeySelector"
-        },
-        "projectID": {
-          "type": "string",
-          "x-go-name": "ProjectID"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-    },
-    "PacketDrive": {
-      "type": "object",
-      "title": "PacketDrive represents an array of Packet drives. It is a part of PacketSize.",
-      "properties": {
-        "count": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Count"
-        },
-        "size": {
-          "type": "string",
-          "x-go-name": "Size"
-        },
-        "type": {
-          "type": "string",
-          "x-go-name": "Type"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "PacketNodeSpec": {
-      "description": "PacketNodeSpec specifies packet specific node settings",
-      "type": "object",
-      "required": [
-        "instanceType"
-      ],
-      "properties": {
-        "instanceType": {
-          "description": "InstanceType denotes the plan to which the device will be provisioned.",
-          "type": "string",
-          "x-go-name": "InstanceType"
-        },
-        "tags": {
-          "description": "additional instance tags",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Tags"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "PacketSize": {
-      "type": "object",
-      "title": "PacketSize is the object representing Packet VM sizes.",
-      "properties": {
-        "cpus": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PacketCPU"
-          },
-          "x-go-name": "CPUs"
-        },
-        "drives": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PacketDrive"
-          },
-          "x-go-name": "Drives"
-        },
-        "memory": {
-          "type": "string",
-          "x-go-name": "Memory"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "PacketSizeList": {
-      "type": "array",
-      "title": "PacketSizeList represents an array of Packet VM sizes.",
-      "items": {
-        "$ref": "#/definitions/PacketSize"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
@@ -39459,9 +39340,6 @@
         "openstack": {
           "$ref": "#/definitions/Openstack"
         },
-        "packet": {
-          "$ref": "#/definitions/Packet"
-        },
         "projects": {
           "description": "Projects is a list of project IDs that this preset is limited to.",
           "type": "array",
@@ -39688,7 +39566,7 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "ProviderType": {
-      "description": "+kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;packet;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector",
+      "description": "+kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector",
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
@@ -39802,9 +39680,6 @@
         "openstack": {
           "$ref": "#/definitions/PublicOpenstackCloudSpec"
         },
-        "packet": {
-          "$ref": "#/definitions/PublicPacketCloudSpec"
-        },
         "vmwareclouddirector": {
           "$ref": "#/definitions/PublicVMwareCloudDirectorCloudSpec"
         },
@@ -39907,11 +39782,6 @@
           "x-go-name": "SubnetID"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "PublicPacketCloudSpec": {
-      "type": "object",
-      "title": "PublicPacketCloudSpec is a public counterpart of apiv1.PacketCloudSpec.",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicServiceAccountToken": {
@@ -40080,9 +39950,6 @@
         },
         "doSize": {
           "$ref": "#/definitions/DigitaloceanSize"
-        },
-        "equinixSize": {
-          "$ref": "#/definitions/PacketSize"
         },
         "gcpSize": {
           "$ref": "#/definitions/GCPMachineSize"
@@ -40537,6 +40404,41 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "SecretboxEncryptionConfiguration": {
+      "type": "object",
+      "title": "SecretboxEncryptionConfiguration defines static key encryption based on the 'secretbox' solution for Kubernetes.",
+      "properties": {
+        "keys": {
+          "description": "List of 'secretbox' encryption keys. The first element of this list is considered\nthe \"primary\" key which will be used for encrypting data while writing it. Additional\nkeys will be used for decrypting data while reading it, if keys higher in the list\ndid not succeed in decrypting it.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SecretboxKey"
+          },
+          "x-go-name": "Keys"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "SecretboxKey": {
+      "type": "object",
+      "title": "SecretboxKey stores a key or key reference for encrypting Kubernetes API data at rest with a static key.",
+      "properties": {
+        "name": {
+          "description": "Identifier of a key, used in various places to refer to the key.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "secretRef": {
+          "$ref": "#/definitions/SecretKeySelector"
+        },
+        "value": {
+          "description": "Value contains a 32-byte random key that is base64 encoded. This is the key used\nfor encryption. Can be generated via `head -c 32 /dev/urandom | base64`, for example.",
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "Seed": {
       "description": "Seed represents a seed object",

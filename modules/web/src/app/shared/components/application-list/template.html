@@ -301,7 +301,7 @@ limitations under the License.
           <i [class]="getEditIcon(application)"></i>
         </button>
         <span [matTooltip]="!isEnforcedApplication(application) ? 'Delete Application' : 'Enforced applications cannot be deleted.'">
-          <button *ngIf="!isSystemApplication(application)"
+          <button *ngIf="!isSystemApplication(application.labels)"
                   mat-icon-button
                   [attr.id]="'km-delete-application-' + application.name"
                   (click)="onDeleteApplication(application)"

@@ -21,7 +21,6 @@ import {
   ProviderDetail,
   SeedOverviewDatasource,
 } from '@app/settings/admin/seed-configurations/types/seed-configurations';
-import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {DatacenterService} from '@core/services/datacenter';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
@@ -53,7 +52,6 @@ export class SeedConfigurationDetailsComponent implements OnInit {
   toggledColumns: string[] = [Column.ClustersByDatacenter];
   seedName: string;
   seedOverviewDatasource: SeedOverviewDatasource;
-  equinixDeprecatedWarning = false;
 
   private readonly _unsubscribe = new Subject<void>();
 
@@ -115,8 +113,7 @@ export class SeedConfigurationDetailsComponent implements OnInit {
   }
 
   private _mapProviderDetailToArray(seedOverview: SeedOverview): ProviderDetail[] {
-    this.equinixDeprecatedWarning = !!seedOverview.providers[NodeProvider.EQUINIX];
-    const providers = Object.keys(seedOverview.providers);
+    const providers: string[] = Object.keys(seedOverview.providers);
 
     return providers.map(provider => {
       const providerObj = seedOverview.providers[provider];

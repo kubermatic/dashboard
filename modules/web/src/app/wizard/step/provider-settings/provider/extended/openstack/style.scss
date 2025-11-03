@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class EquinixSize {
-  name: string;
-  cpus: EquinixCPU[];
-  memory: string;
-  drives: EquinixDrive[];
+.button-navigation {
+    margin: 20px 15px;
 }
 
-export class EquinixDrive {
-  count: number;
-  size: string;
-  type: string;
-}
-
-export class EquinixCPU {
-  count: number;
-  type: string;
+.km-muted-light {
+    font-size: 12px;
+    margin: 10px 0;
 }

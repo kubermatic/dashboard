@@ -43,7 +43,6 @@ export class DatacenterSpec {
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;
-  packet?: EquinixDatacenterSpec;
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
@@ -134,10 +133,7 @@ export class OpenStackDatacenterSpec {
   region: string;
   images: DatacenterOperatingSystemOptions;
   enforceFloatingIP: boolean;
-}
-
-export class EquinixDatacenterSpec {
-  facilities: string[];
+  enableConfigDrive?: boolean;
 }
 
 export class VSphereDatacenterSpec {

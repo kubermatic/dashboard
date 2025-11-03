@@ -108,9 +108,6 @@ type DatacenterSpec struct {
 	// operating system profiles
 	OperatingSystemProfiles OperatingSystemProfileList `json:"operatingSystemProfiles,omitempty"`
 
-	// packet
-	Packet *DatacenterSpecPacket `json:"packet,omitempty"`
-
 	// vmwareclouddirector
 	Vmwareclouddirector *DatacenterSpecVMwareCloudDirector `json:"vmwareclouddirector,omitempty"`
 
@@ -187,10 +184,6 @@ func (m *DatacenterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOperatingSystemProfiles(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePacket(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -531,25 +524,6 @@ func (m *DatacenterSpec) validateOperatingSystemProfiles(formats strfmt.Registry
 	return nil
 }
 
-func (m *DatacenterSpec) validatePacket(formats strfmt.Registry) error {
-	if swag.IsZero(m.Packet) { // not required
-		return nil
-	}
-
-	if m.Packet != nil {
-		if err := m.Packet.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("packet")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("packet")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *DatacenterSpec) validateVmwareclouddirector(formats strfmt.Registry) error {
 	if swag.IsZero(m.Vmwareclouddirector) { // not required
 		return nil
@@ -657,10 +631,6 @@ func (m *DatacenterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 	}
 
 	if err := m.contextValidateOperatingSystemProfiles(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidatePacket(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -943,22 +913,6 @@ func (m *DatacenterSpec) contextValidateOperatingSystemProfiles(ctx context.Cont
 			return ce.ValidateName("operatingSystemProfiles")
 		}
 		return err
-	}
-
-	return nil
-}
-
-func (m *DatacenterSpec) contextValidatePacket(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Packet != nil {
-		if err := m.Packet.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("packet")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("packet")
-			}
-			return err
-		}
 	}
 
 	return nil

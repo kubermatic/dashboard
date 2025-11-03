@@ -86,6 +86,11 @@ enum Controls {
   StaticNetworkCIDR = 'CIDR',
 }
 
+enum ClusterAutoscalingWarning {
+  NotInCatalog = 'To configure autoscaling, the Cluster Autoscaler application must be present in the applications catalog.',
+  NotInstalled = 'To configure autoscaling, the Cluster Autoscaler application needs to be installed on the cluster',
+}
+
 @Component({
   selector: 'km-node-data',
   templateUrl: './template.html',
@@ -111,8 +116,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-  readonly MinReplicasCount = 0;
-  readonly MaxReplicasCount = 1000;
+  readonly minReplicasCount = 0;
+  readonly maxReplicasCount = 1000;
+  readonly autoscalerMinReplicasCount = 1;
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
   @Input() provider: NodeProvider;
@@ -133,10 +139,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
-  autoscalingTooltipText =
-    'Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application.';
   clusterAutoscalerAppDefinition: ApplicationDefinition;
   autoscalerApplication: Application;
+  clusterAutoscalerWarningMessage: string;
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -231,11 +236,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.EnableClusterAutoscalingApp]: this._builder.control(!!this.autoscalerApplication),
       [Controls.MaxReplicas]: this._builder.control(
         this._nodeDataService.nodeData.maxReplicas,
-        Validators.max(this.MaxReplicasCount)
+        Validators.max(this.maxReplicasCount)
       ),
       [Controls.MinReplicas]: this._builder.control(
         this._nodeDataService.nodeData.minReplicas,
-        Validators.min(this.MinReplicasCount)
+        Validators.min(this.autoscalerMinReplicasCount)
       ),
     });
 
@@ -243,27 +248,37 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.addControl(Controls.Kubelet, this._builder.control(''));
       this.dialogEditMode = !!this._nodeDataService.nodeData.name;
 
+      this._applicationService.list(this.projectId, this._clusterSpecService.cluster.id).subscribe(apps => {
+        this.autoscalerApplication = apps.find(
+          app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+        );
+        if (!this.autoscalerApplication?.name) {
+          this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.NotInstalled;
+          this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+          this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+        }
+      });
+
       if (this.dialogEditMode) {
         this.form.get(Controls.Name).disable();
       } else {
         this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
       }
+    } else {
+      this._applicationService
+        .getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME)
+        .pipe(take(1))
+        .subscribe(appdef => {
+          if (appdef.name) {
+            this.clusterAutoscalerAppDefinition = appdef;
+            this.autoscalerApplication = this.autoscalerApplication ?? createApplicationInstallation(appdef);
+          } else {
+            this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+            this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+            this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.NotInCatalog;
+          }
+        });
     }
-
-    this._applicationService
-      .getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME)
-      .pipe(take(1))
-      .subscribe(appdef => {
-        if (appdef.name) {
-          this.clusterAutoscalerAppDefinition = appdef;
-          this.autoscalerApplication = this.autoscalerApplication ?? createApplicationInstallation(appdef);
-        } else {
-          this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
-          this.form.get(Controls.EnableClusterAutoscalingApp).disable();
-          this.autoscalingTooltipText =
-            'To enable autoscaling, the Cluster Autoscaler application must be added to the applications catalog.';
-        }
-      });
 
     this.currentNodeOS = (this.dialogEditMode || this.wizardMode) && this._nodeDataService.operatingSystem;
 
@@ -371,13 +386,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .get(Controls.EnableClusterAutoscalingApp)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(enable => {
-        this._filterOutAutoscalerApp();
-        if (enable) {
-          this._applicationService.applications = [
-            ...this._applicationService.applications,
-            this.autoscalerApplication,
-          ];
-        }
+        this._updateAutoscalerApplication(enable);
       });
   }
 
@@ -407,7 +416,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.ANEXIA,
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.EQUINIX,
           NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
@@ -421,7 +429,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.AWS,
           NodeProvider.AZURE,
           NodeProvider.DIGITALOCEAN,
-          NodeProvider.EQUINIX,
           NodeProvider.HETZNER,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
@@ -492,6 +499,17 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           this.autoscalerApplication = app;
         }
       });
+  }
+
+  isClusterAutoscalingEnabled(): boolean {
+    return !!this.clusterAutoscalerAppDefinition || (this.isDialogView() && !!this.autoscalerApplication);
+  }
+
+  isMinMaxReplicasDisabled(): boolean {
+    return (
+      (this.isDialogView() && !this.autoscalerApplication) ||
+      (!this.isDialogView() && !this.form.get(Controls.EnableClusterAutoscalingApp).value)
+    );
   }
 
   private _init(): void {
@@ -684,10 +702,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private getSupportedOperatingSystemProfiles(): string[] {
     let cloudProvider = this.provider.toString();
-    if (this.provider === NodeProvider.EQUINIX) {
-      // Packet was renamed to EquinixMetal for the machines.
-      cloudProvider = 'equinixmetal';
-    } else if (this.provider === NodeProvider.GCP) {
+    if (this.provider === NodeProvider.GCP) {
       // For machines, GCP needs to be replaced with gce.
       cloudProvider = 'gce';
     } else if (this.provider === NodeProvider.VMWARECLOUDDIRECTOR) {
@@ -729,6 +744,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     };
   }
 
+  private _updateAutoscalerApplication(enable: boolean): void {
+    const hasAutoscalerApp = this._applicationService.applications.some(
+      app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+    );
+
+    if (enable && !hasAutoscalerApp && this.autoscalerApplication) {
+      this._applicationService.applications = [...this._applicationService.applications, this.autoscalerApplication];
+    } else if (!enable && hasAutoscalerApp) {
+      this._filterOutAutoscalerApp();
+      this.form.get(Controls.MaxReplicas).setValue(null);
+      this.form.get(Controls.MinReplicas).setValue(null);
+    }
+  }
   private _filterOutAutoscalerApp(): void {
     this._applicationService.applications = this._applicationService.applications.filter(
       app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME

@@ -69,6 +69,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   isLoadingSubnets = false;
   loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
 
+  get selectedLoadBalancerSKU(): string {
+    return this.form.get(Controls.LoadBalancerSKU).value;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _cdr: ChangeDetectorRef,
@@ -253,6 +257,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   getValueFromInternalForm(control: Controls): string {
     const internalFormValue = this.form.get(control).value;
     return internalFormValue ? internalFormValue[AutocompleteControls.Main] : '';
+  }
+
+  clearLoadBalancerSKU(): void {
+    this.form.get(Controls.LoadBalancerSKU).reset();
   }
 
   private _getResourceGroup(): string {

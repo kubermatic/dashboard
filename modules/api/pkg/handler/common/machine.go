@@ -740,11 +740,14 @@ func outputMachine(machine *clusterv1alpha1.Machine, node *corev1.Node, hideInit
 		return nil, fmt.Errorf("failed to get node cloud spec from machine: %w", err)
 	}
 
+	var labels map[string]string
 	if node != nil {
 		if node.Name != machine.Spec.Name {
 			displayName = node.Name
 		}
 		nodeStatus = apiNodeStatus(nodeStatus, node, hideInitialNodeConditions)
+
+		labels = gpuLabels(node.Labels)
 	}
 
 	nodeStatus.ErrorReason = strings.TrimSuffix(nodeStatus.ErrorReason, errGlue)
@@ -767,12 +770,29 @@ func outputMachine(machine *clusterv1alpha1.Machine, node *corev1.Node, hideInit
 			Versions: apiv1.NodeVersionInfo{
 				Kubelet: machine.Spec.Versions.Kubelet,
 			},
+			Labels:          labels,
 			OperatingSystem: *operatingSystemSpec,
 			Cloud:           *cloudSpec,
 			SSHUserName:     sshUserName,
 		},
 		Status: nodeStatus,
 	}, nil
+}
+
+const (
+	labelGPUNvidia = "nvidia.com"
+)
+
+func gpuLabels(labels map[string]string) map[string]string {
+	nvidiaLabels := make(map[string]string)
+
+	for k, v := range labels {
+		if strings.Contains(k, labelGPUNvidia) {
+			nvidiaLabels[k] = v
+		}
+	}
+
+	return nvidiaLabels
 }
 
 func parseNodeConditions(node *corev1.Node) (reason string, message string) {

@@ -80,7 +80,27 @@ limitations under the License.
                   [value]="loadBalancerSKU">
         {{loadBalancerSKU}}
       </mat-option>
+      <mat-select-trigger fxFlex
+                          fxLayout="row">
+        <div fxFlex
+             fxLayoutAlign="start">
+          {{selectedLoadBalancerSKU}}
+        </div>
+
+        <div fxFlex
+             fxLayoutAlign="end"
+             class="km-select-trigger-button-wrapper">
+          <button *ngIf="selectedLoadBalancerSKU"
+                  (click)="clearLoadBalancerSKU(); $event.stopPropagation()"
+                  matSuffix
+                  mat-icon-button
+                  aria-label="Clear">
+            <i class="km-icon-mask km-icon-remove"></i>
+          </button>
+        </div>
+      </mat-select-trigger>
     </mat-select>
+    <mat-hint>If not specified default SKU "standard" will be used.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>

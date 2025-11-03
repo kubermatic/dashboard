@@ -41,7 +41,7 @@ import {GCPProviderBasicComponent} from './step/provider-settings/provider/basic
 import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
 import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/basic/kubevirt/component';
 import {OpenstackProviderBasicComponent} from './step/provider-settings/provider/basic/openstack/component';
-import {EquinixProviderBasicComponent} from './step/provider-settings/provider/basic/equinix/component';
+
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {AzureProviderExtendedComponent} from './step/provider-settings/provider/extended/azure/component';
@@ -55,6 +55,7 @@ import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
 import {VMwareCloudDirectorProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/vmware-cloud-director/component';
 import {VMwareCloudDirectorProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/vmware-cloud-director/component';
+import {OpenstackLoadBalancerClassDialogComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/loadbalancer-class-dialog/component';
 
 const components = [
   WizardComponent,
@@ -75,7 +76,7 @@ const components = [
   OpenstackProviderBasicComponent,
   OpenstackProviderExtendedComponent,
   OpenstackProviderExtendedCredentialsComponent,
-  EquinixProviderBasicComponent,
+  OpenstackLoadBalancerClassDialogComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,

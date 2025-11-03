@@ -68,6 +68,7 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+  generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
@@ -77,6 +78,7 @@ import _ from 'lodash';
 import {combineLatest, merge, Subscription} from 'rxjs';
 import {filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
+import {WizardMode} from '../../types/wizard-mode';
 import {StepBase} from '../base';
 import {
   CiliumApplicationValuesDialogComponent,
@@ -135,6 +137,8 @@ enum Controls {
   KubeLBEnableGatewayAPI = 'kubelbEnableGatewayAPI',
   DisableCSIDriver = 'disableCSIDriver',
   CiliumIngress = 'ciliumIngress',
+  EncryptionAtRest = 'encryptionAtRest',
+  EncryptionAtRestKey = 'encryptionAtRestKey',
 }
 
 @Component({
@@ -186,6 +190,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   provider: NodeProvider;
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   isUserSshKeyEnabled = false;
+  wizardMode: WizardMode;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -233,6 +238,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   ngOnInit(): void {
     this.provider = this._clusterSpecService.provider;
+    this.wizardMode = window.history.state?.mode;
     this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
       this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
     });
@@ -324,7 +330,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           }
 
           if (this.provider === NodeProvider.OPENSTACK) {
-            this.form.addControl(Controls.RouterReconciliation, this._builder.control(false));
+            this.form.addControl(
+              Controls.RouterReconciliation,
+              this._builder.control(
+                this._clusterSpecService?.cluster?.annotations?.[
+                  InternalClusterSpecAnnotations.SkipRouterReconciliation
+                ] === 'true'
+              )
+            );
             this.form
               .get(Controls.RouterReconciliation)
               .valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -497,7 +510,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.KubeLB).valueChanges,
       this.form.get(Controls.KubeLBUseLoadBalancerClass).valueChanges,
       this.form.get(Controls.KubeLBEnableGatewayAPI).valueChanges,
-      this.form.get(Controls.DisableCSIDriver).valueChanges
+      this.form.get(Controls.DisableCSIDriver).valueChanges,
+      this.form.get(Controls.EncryptionAtRest).valueChanges,
+      this.form.get(Controls.EncryptionAtRestKey).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -518,6 +533,23 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._clusterSpecService.cluster = this._getClusterEntity();
       });
 
+    // Handle encryption at rest validation
+    this.form
+      .get(Controls.EncryptionAtRest)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this.form
+            .get(Controls.EncryptionAtRestKey)
+            .setValidators([Validators.required, KmValidators.encryptionKey()]);
+          this.form.get(Controls.EncryptionAtRestKey).updateValueAndValidity();
+        } else {
+          this.form.get(Controls.EncryptionAtRestKey).clearValidators();
+          this.form.get(Controls.EncryptionAtRestKey).setValue('');
+          this.form.get(Controls.EncryptionAtRestKey).updateValueAndValidity();
+        }
+      });
+
     this._handleClusterSpecChanges();
     this._handleCNIPluginChanges();
     this._updateAvailableProxyModes();
@@ -525,6 +557,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  generateEncryptionKey(): void {
+    const key = generateEncryptionKey();
+    this.control(Controls.EncryptionAtRestKey).setValue(key);
   }
 
   onLabelsChange(labels: Record<string, string>): void {
@@ -595,6 +632,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS.includes(this._clusterSpecService.provider);
   }
 
+  isEncryptionAtRestVisible(): boolean {
+    return (
+      !this.clusterTemplateEditMode &&
+      this.wizardMode !== WizardMode.CreateClusterTemplate &&
+      this.wizardMode !== WizardMode.EditClusterTemplate &&
+      this.wizardMode !== WizardMode.CustomizeClusterTemplate
+    );
+  }
+
   isExposeStrategyLoadBalancer(): boolean {
     return this.form.get(Controls.ExposeStrategy).value === ExposeStrategy.loadbalancer;
   }
@@ -649,6 +695,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubeLBUseLoadBalancerClass]: this._builder.control(clusterSpec?.kubelb?.useLoadBalancerClass ?? false),
       [Controls.KubeLBEnableGatewayAPI]: this._builder.control(clusterSpec?.kubelb?.enableGatewayAPI ?? false),
       [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
+      [Controls.EncryptionAtRest]: this._builder.control(clusterSpec?.encryptionConfiguration?.enabled ?? false),
+      [Controls.EncryptionAtRestKey]: this._builder.control('', [KmValidators.encryptionKey()]),
       [Controls.CiliumIngress]: this._builder.control(false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
@@ -793,6 +841,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.KubeLBEnableGatewayAPI]:
             clusterSpec?.kubelb?.enableGatewayAPI ?? this.controlValue(Controls.KubeLBEnableGatewayAPI),
           [Controls.DisableCSIDriver]: clusterSpec?.disableCsiDriver ?? this.controlValue(Controls.DisableCSIDriver),
+          [Controls.EncryptionAtRest]:
+            clusterSpec?.encryptionConfiguration?.enabled ?? this.controlValue(Controls.EncryptionAtRest),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
@@ -1101,13 +1151,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       konnectivityEnabled: konnectivity,
     } as ClusterNetwork;
 
+    // Handle annotations
     let annotations = this._clusterSpecService.cluster.annotations;
-    if (this.cniApplicationValues) {
-      annotations = {
-        ...(annotations || {}),
-        [ClusterAnnotation.InitialCNIValuesRequest]: this.canEditCNIValues ? this.cniApplicationValues : null,
-      };
-    }
+    annotations = this._handleCNIAnnotations(annotations);
+
+    // Handle encryption at rest key storage
+    this._handleEncryptionAtRestKey();
 
     if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
@@ -1158,6 +1207,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterNetwork,
         cniPlugin: cniPlugin,
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
+        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest) ? {enabled: true} : null,
       } as ClusterSpec,
     } as Cluster;
 
@@ -1171,6 +1221,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       clusterObject.spec.backupConfig = null;
     }
     return clusterObject;
+  }
+
+  private _handleCNIAnnotations(annotations: any): any {
+    if (this.cniApplicationValues) {
+      return {
+        ...(annotations || {}),
+        [ClusterAnnotation.InitialCNIValuesRequest]: this.canEditCNIValues ? this.cniApplicationValues : null,
+      };
+    }
+    return annotations;
+  }
+  private _handleEncryptionAtRestKey(): void {
+    if (this.controlValue(Controls.EncryptionAtRest)) {
+      // Store encryption key in ClusterSpecService for CreateClusterModel
+      this._clusterSpecService.encryptionAtRestKey = this.controlValue(Controls.EncryptionAtRestKey);
+    } else {
+      // Clear encryption key from ClusterSpecService
+      this._clusterSpecService.encryptionAtRestKey = null;
+    }
   }
 
   private _getAuditWebhookBackendConfig(): AuditLoggingWebhookBackend {

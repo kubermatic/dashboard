@@ -19,7 +19,7 @@ limitations under the License.
 // This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.
 //
 //	Schemes: https
-//	Version: 2.28
+//	Version: 2.29
 //
 //	Consumes:
 //	- application/json
@@ -430,7 +430,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	policyTemplateProvider := policyTemplateProviderFactory(client)
 
-	policyBindingProvider := policyBindingProviderFactory(client)
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,
@@ -475,7 +474,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		etcdRestoreProjectProviderGetter:               etcdRestoreProjectProviderGetter,
 		backupStorageProvider:                          backupStorageProvider,
 		policyTemplateProvider:                         policyTemplateProvider,
-		policyBindingProvider:                          policyBindingProvider,
 		backupCredentialsProviderGetter:                backupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        privilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   seedProvider,
@@ -602,7 +600,6 @@ func createAPIHandler(
 		EtcdRestoreProjectProviderGetter:               prov.etcdRestoreProjectProviderGetter,
 		BackupStorageProvider:                          prov.backupStorageProvider,
 		PolicyTemplateProvider:                         prov.policyTemplateProvider,
-		PolicyBindingProvider:                          prov.policyBindingProvider,
 		BackupCredentialsProviderGetter:                prov.backupCredentialsProviderGetter,
 		PrivilegedMLAAdminSettingProviderGetter:        prov.privilegedMLAAdminSettingProviderGetter,
 		SeedProvider:                                   prov.seedProvider,
@@ -640,7 +637,7 @@ func createAPIHandler(
 	r.RegisterV1(v1Router, metrics)
 	r.RegisterV1Optional(v1Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 	r.RegisterV1Admin(v1Router)
-	r.RegisterV1Websocket(v1Router)
+	r.RegisterV1Websocket(v1Router, options.overwriteRegistry)
 	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 
 	mainRouter.Methods(http.MethodGet).

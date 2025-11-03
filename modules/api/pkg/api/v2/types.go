@@ -597,7 +597,7 @@ type BringYourOwnSpec struct{}
 type KubeOneSpec struct {
 	// ProviderName is the name of the cloud provider used, one of
 	// "aws", "azure", "digitalocean", "gcp",
-	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers.
+	// "hetzner", "nutanix", "openstack", "vsphere" KubeOne natively-supported providers.
 	// + readOnly
 	ProviderName string `json:"providerName"`
 	// Region is the kubernetes control plane region.
@@ -624,7 +624,6 @@ type KubeOneCloudSpec struct {
 	Azure               *KubeOneAzureCloudSpec               `json:"azure,omitempty"`
 	DigitalOcean        *KubeOneDigitalOceanCloudSpec        `json:"digitalocean,omitempty"`
 	OpenStack           *KubeOneOpenStackCloudSpec           `json:"openstack,omitempty"`
-	Equinix             *KubeOneEquinixCloudSpec             `json:"equinix,omitempty"`
 	Hetzner             *KubeOneHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *KubeOneVSphereCloudSpec             `json:"vsphere,omitempty"`
 	VMwareCloudDirector *KubeOneVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
@@ -685,12 +684,6 @@ type KubeOneVMwareCloudDirectorCloudSpec struct {
 	Password     string `json:"password"`
 	Organization string `json:"organization"`
 	VDC          string `json:"vdc"`
-}
-
-// KubeOneEquinixCloudSpec specifies access data to a Equinix cloud.
-type KubeOneEquinixCloudSpec struct {
-	APIKey    string `json:"apiKey"`
-	ProjectID string `json:"projectID"`
 }
 
 // KubeOneHetznerCloudSpec specifies access data to hetzner cloud.
@@ -1857,6 +1850,24 @@ type OpenstackSubnetPool struct {
 	IsDefault bool `json:"isDefault"`
 	// Prefixes is the list of subnet prefixes
 	Prefixes []string `json:"prefixes"`
+}
+
+type OpenStackLoadBalancer struct {
+	ID    string                      `json:"id"`
+	Name  string                      `json:"name"`
+	Pools []OpenStackLoadBalancerPool `json:"pools"`
+}
+
+type OpenStackLoadBalancerPool struct {
+	Name    string                            `json:"name"`
+	ID      string                            `json:"id"`
+	Members []OpenStackLoadBalancerPoolMember `json:"members"`
+}
+
+// swagger:model OpenStackLoadBalancerPoolMember
+type OpenStackLoadBalancerPoolMember struct {
+	Name string `json:"name"`
+	ID   string `json:"id"`
 }
 
 // OpenstackServerGroup is the object representing a openstack server group.

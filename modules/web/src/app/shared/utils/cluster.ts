@@ -38,3 +38,17 @@ export function getClusterMachinesCount(machineDeployments: MachineDeployment[])
 
   return mdStatus;
 }
+
+export function generateEncryptionKey(): string {
+  const byteLength = 32;
+  const bytes = new Uint8Array(byteLength);
+  crypto.getRandomValues(bytes);
+
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+
+  // Encode to Base64
+  return btoa(binary);
+}

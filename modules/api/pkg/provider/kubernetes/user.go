@@ -85,10 +85,10 @@ func (p *UserProvider) UserByEmail(ctx context.Context, email string) (*kubermat
 // CreateUser creates a new user. If no user is found at all the created user is elected as the first admin.
 //
 // Note that:
-// The name of the newly created resource will be unique and it is derived from the user's email address (sha256(email)
+// The name of the newly created resource will be unique and it is derived from the user's email address (sha256(email))
 // This prevents creating multiple resources for the same user with the same email address.
 //
-// In the beginning I was considering to hex-encode the email address as it will produce a unique output because the email address in unique.
+// In the beginning I was considering to hex-encode the email address as it will produce a unique output because the email address is unique.
 // The only issue I have found with this approach is that the length can get quite long quite fast.
 // Thus decided to use sha256 as it produces fixed output and the hash collisions are very, very, very, very rare.
 
@@ -96,7 +96,7 @@ func (p *UserProvider) CreateUser(ctx context.Context, name, email string, group
 	if len(name) == 0 || len(email) == 0 {
 		return nil, apierrors.NewBadRequest("Email, ID and Name cannot be empty when creating a new user resource")
 	}
-
+	email = strings.ToLower(email)
 	if kubermaticv1helper.IsProjectServiceAccount(email) {
 		return nil, apierrors.NewBadRequest(fmt.Sprintf("cannot add a user with the given email %s as the name is reserved, please try a different email address", email))
 	}
@@ -132,7 +132,6 @@ func (p *UserProvider) CreateUser(ctx context.Context, name, email string, group
 func (p *UserProvider) UpdateUser(ctx context.Context, user *kubermaticv1.User) (*kubermaticv1.User, error) {
 	// make sure the first patch doesn't override the status
 	status := user.Status.DeepCopy()
-
 	if err := p.runtimeClient.Update(ctx, user); err != nil {
 		return nil, err
 	}

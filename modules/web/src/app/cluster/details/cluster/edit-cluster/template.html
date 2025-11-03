@@ -301,6 +301,41 @@ limitations under the License.
            [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
       </mat-checkbox>
 
+      <mat-checkbox [formControlName]="Controls.EncryptionAtRest"
+                    kmValueChangedIndicator>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="8px">
+          <span>Encryption at Rest</span>
+          <i class="km-icon-info km-pointer"
+             [matTooltip]="isEncryptionActive() ? 'Enable or disable encryption at rest for cluster secrets.' : 'Enable encryption at rest for cluster secrets for this user cluster.'"></i>
+        </div>
+      </mat-checkbox>
+
+      <mat-form-field *ngIf="!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()"
+                      subscriptSizing="dynamic">
+        <mat-label>Encryption Key</mat-label>
+        <input matInput
+               [formControlName]="Controls.EncryptionAtRestKey"
+               kmInputPassword
+               placeholder="Base64-encoded 32-byte encryption key"
+               autocomplete="off" />
+        <button mat-icon-button
+                type="button"
+                matSuffix
+                class="km-randomize-btn"
+                matTooltip="Generate encryption key"
+                (click)="generateEncryptionKey()">
+          <i class="km-icon-randomize"></i>
+        </button>
+        <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('invalidBase64')">
+          <strong>Invalid base64 format</strong>
+        </mat-error>
+      </mat-form-field>
+
       <mat-checkbox [formControlName]="Controls.ClusterBackup"
                     *ngIf="isclusterBackupEnabled"
                     kmValueChangedIndicator>

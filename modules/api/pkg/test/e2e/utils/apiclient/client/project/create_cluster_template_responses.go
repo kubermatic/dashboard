@@ -315,6 +315,9 @@ type CreateClusterTemplateBody struct {
 	// cluster
 	Cluster *models.Cluster `json:"cluster,omitempty"`
 
+	// encryption at rest
+	EncryptionAtRest *models.EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
+
 	// node deployment
 	NodeDeployment *models.NodeDeployment `json:"nodeDeployment,omitempty"`
 }
@@ -332,6 +335,10 @@ func (o *CreateClusterTemplateBody) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := o.validateCluster(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.validateEncryptionAtRest(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -416,6 +423,25 @@ func (o *CreateClusterTemplateBody) validateCluster(formats strfmt.Registry) err
 	return nil
 }
 
+func (o *CreateClusterTemplateBody) validateEncryptionAtRest(formats strfmt.Registry) error {
+	if swag.IsZero(o.EncryptionAtRest) { // not required
+		return nil
+	}
+
+	if o.EncryptionAtRest != nil {
+		if err := o.EncryptionAtRest.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "encryptionAtRest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "encryptionAtRest")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (o *CreateClusterTemplateBody) validateNodeDeployment(formats strfmt.Registry) error {
 	if swag.IsZero(o.NodeDeployment) { // not required
 		return nil
@@ -448,6 +474,10 @@ func (o *CreateClusterTemplateBody) ContextValidate(ctx context.Context, formats
 	}
 
 	if err := o.contextValidateCluster(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.contextValidateEncryptionAtRest(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -509,6 +539,22 @@ func (o *CreateClusterTemplateBody) contextValidateCluster(ctx context.Context, 
 				return ve.ValidateName("Body" + "." + "cluster")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("Body" + "." + "cluster")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (o *CreateClusterTemplateBody) contextValidateEncryptionAtRest(ctx context.Context, formats strfmt.Registry) error {
+
+	if o.EncryptionAtRest != nil {
+		if err := o.EncryptionAtRest.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "encryptionAtRest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "encryptionAtRest")
 			}
 			return err
 		}

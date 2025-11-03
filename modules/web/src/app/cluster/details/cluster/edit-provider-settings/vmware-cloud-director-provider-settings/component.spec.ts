@@ -26,7 +26,6 @@ import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
 import {EditProviderSettingsComponent} from '../component';
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
-import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
@@ -50,7 +49,6 @@ describe('VMwareCloudDirectorProviderSettingsComponent', () => {
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
         AzureProviderSettingsComponent,
-        EquinixProviderSettingsComponent,
         KubevirtProviderSettingsComponent,
         AlibabaProviderSettingsComponent,
         NutanixProviderSettingsComponent,

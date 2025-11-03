@@ -37,7 +37,6 @@ import (
 	"k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins"
 	tink "k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins/tinkerbell"
 	digitalocean "k8c.io/machine-controller/sdk/cloudprovider/digitalocean"
-	equinixmetal "k8c.io/machine-controller/sdk/cloudprovider/equinixmetal"
 	gce "k8c.io/machine-controller/sdk/cloudprovider/gce"
 	hetzner "k8c.io/machine-controller/sdk/cloudprovider/hetzner"
 	kubevirt "k8c.io/machine-controller/sdk/cloudprovider/kubevirt"
@@ -516,49 +515,6 @@ func GetDigitaloceanProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeS
 
 func getDigitaloceanProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*runtime.RawExtension, error) {
 	config, err := GetDigitaloceanProviderConfig(c, nodeSpec, dc)
-	if err != nil {
-		return nil, err
-	}
-
-	return EncodeAsRawExtension(config)
-}
-
-func GetPacketProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*equinixmetal.RawConfig, error) {
-	config := &equinixmetal.RawConfig{
-		InstanceType: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Packet.InstanceType},
-	}
-
-	tags := sets.New(nodeSpec.Cloud.Packet.Tags...)
-	tags.Insert("kubernetes", fmt.Sprintf("kubernetes-cluster-%s", c.Name), fmt.Sprintf("system/cluster:%s", c.Name))
-	projectID, ok := c.Labels[kubermaticv1.ProjectIDLabelKey]
-	if ok {
-		tags.Insert(fmt.Sprintf("system/project:%s", projectID))
-	}
-	config.Tags = make([]providerconfig.ConfigVarString, len(sets.List(tags)))
-	for i, tag := range sets.List(tags) {
-		config.Tags[i].Value = tag
-	}
-
-	var facilities = sets.Set[string]{}
-	if dc.Spec.Packet.Facilities != nil {
-		facilities = sets.New(dc.Spec.Packet.Facilities...)
-		config.Facilities = make([]providerconfig.ConfigVarString, len(sets.List(facilities)))
-		for i, facility := range sets.List(facilities) {
-			config.Facilities[i].Value = facility
-		}
-	}
-
-	if len(facilities) < 1 && dc.Spec.Packet.Metro == "" {
-		return nil, errors.New("equinixmetal metro or facilities must be specified")
-	}
-
-	config.Metro.Value = dc.Spec.Packet.Metro
-
-	return config, nil
-}
-
-func getPacketProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*runtime.RawExtension, error) {
-	config, err := GetPacketProviderConfig(c, nodeSpec, dc)
 	if err != nil {
 		return nil, err
 	}

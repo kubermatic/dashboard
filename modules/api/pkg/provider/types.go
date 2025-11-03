@@ -1400,26 +1400,3 @@ type PolicyTemplateProvider interface {
 	// is unsafe in a sense that it uses privileged account to get the resources
 	DeleteUnsecured(ctx context.Context, name string, projectID string, userInfo *UserInfo) error
 }
-
-type PolicyBindingProvider interface {
-	// CreateUnsecured creates a new PolicyBinding.
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resources
-	CreateUnsecured(ctx context.Context, policyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error)
-	// GetUnsecured gets the policyBinding with the given name.
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resources
-	GetUnsecured(ctx context.Context, name string, clusterID string) (*kubermaticv1.PolicyBinding, error)
-	// ListUnsecured gets a list of policyBindings.
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resources
-	ListUnsecured(ctx context.Context, clusterID string) (*kubermaticv1.PolicyBindingList, error)
-	// PatchUnsecured updates the policyBinding with the given name.
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resources
-	PatchUnsecured(ctx context.Context, updatedpolicyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error)
-	// DeleteUnsecured deletes the policyBinding with the given name.
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resources
-	DeleteUnsecured(ctx context.Context, name string, clusterID string) error
-}

@@ -25,6 +25,9 @@ type CreateClusterSpec struct {
 	// cluster
 	Cluster *Cluster `json:"cluster,omitempty"`
 
+	// encryption at rest
+	EncryptionAtRest *EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
+
 	// node deployment
 	NodeDeployment *NodeDeployment `json:"nodeDeployment,omitempty"`
 }
@@ -38,6 +41,10 @@ func (m *CreateClusterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCluster(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEncryptionAtRest(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -96,6 +103,25 @@ func (m *CreateClusterSpec) validateCluster(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *CreateClusterSpec) validateEncryptionAtRest(formats strfmt.Registry) error {
+	if swag.IsZero(m.EncryptionAtRest) { // not required
+		return nil
+	}
+
+	if m.EncryptionAtRest != nil {
+		if err := m.EncryptionAtRest.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryptionAtRest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryptionAtRest")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *CreateClusterSpec) validateNodeDeployment(formats strfmt.Registry) error {
 	if swag.IsZero(m.NodeDeployment) { // not required
 		return nil
@@ -124,6 +150,10 @@ func (m *CreateClusterSpec) ContextValidate(ctx context.Context, formats strfmt.
 	}
 
 	if err := m.contextValidateCluster(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEncryptionAtRest(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -165,6 +195,22 @@ func (m *CreateClusterSpec) contextValidateCluster(ctx context.Context, formats 
 				return ve.ValidateName("cluster")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cluster")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CreateClusterSpec) contextValidateEncryptionAtRest(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EncryptionAtRest != nil {
+		if err := m.EncryptionAtRest.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryptionAtRest")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryptionAtRest")
 			}
 			return err
 		}

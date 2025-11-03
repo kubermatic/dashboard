@@ -115,7 +115,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   ngAfterViewInit(): void {
     if (this._paginator && this._sort) {
-      this._paginator.pageSize = this.currentUser.userSettings?.itemsPerPage;
+      this._paginator.pageSize = this.currentUser?.userSettings?.itemsPerPage;
       this.dataSource.paginator = this._paginator;
       this._sort.active = 'name';
       this._sort.direction = 'asc';

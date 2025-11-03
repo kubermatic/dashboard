@@ -298,6 +298,16 @@ export class WizardComponent implements OnInit, OnDestroy {
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }
+
+    const encryptionEnabled = cluster.spec?.encryptionConfiguration?.enabled;
+    const encryptionKey = this._clusterSpecService.encryptionAtRestKey;
+
+    if (encryptionEnabled && encryptionKey) {
+      clusterModel.encryptionAtRest = {
+        key: encryptionKey,
+      };
+    }
+
     return clusterModel;
   }
 
@@ -355,12 +365,12 @@ export class WizardComponent implements OnInit, OnDestroy {
         template.nodeDeployment.name = namePrefix;
         this._clusterSpecService.initializeClusterFromClusterTemplate(template);
         this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
-        template.applications.forEach(app => {
+        template.applications?.forEach(app => {
           if (app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME) {
             (app.labels ??= {})[ApplicationLabel.ManagedBy] = ApplicationLabelValue.KKP;
           }
         });
-        this._applicationService.applications = template.applications;
+        this._applicationService.applications = template.applications || [];
         this.clusterTemplate = template;
 
         // Re-initialize the form.

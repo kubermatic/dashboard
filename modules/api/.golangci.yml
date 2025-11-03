@@ -121,6 +121,10 @@ linters:
       - path: (.+)\.go$
         text: cyclomatic complexity [0-9]+ of func `GetAPIV2NodeCloudSpec` is high
       - path: (.+)\.go$
+        text: cyclomatic complexity [0-9]+ of func `CredentialEndpoint` is high
+      - path: (.+)\.go$
+        text: cyclomatic complexity [0-9]+ of func `GenerateCluster` is high
+      - path: (.+)\.go$
         text: loop variable tc captured by func literal
       - path: (.+)\.go$
         text: The Packet / Equinix Metal provider is deprecated

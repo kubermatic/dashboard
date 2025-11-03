@@ -13,29 +13,103 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Share</km-dialog-title>
+<km-dialog-title>{{dialogTitle}} Kubeconfig</km-dialog-title>
 <mat-dialog-content>
-  <p>
-    Share <b>{{cluster.name}}</b> cluster with other users by giving them the following link that can be used to authenticate with an OIDC provider and then generate a kubeconfig file.
-  </p>
-  <p>
-    Please <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
-       target="_blank"
-       fxLayout="row inline"
-       fxLayoutAlign=" center"
-       rel="noopener">visit our documentation <i class="km-icon-external-link i-18"></i></a>
-    for more details.
-  </p>
-  <div class="km-code-block km-copy"
+  <ng-container *ngIf="dialogTitle === shareKubeConfigDialogMode.Share">
+    <p>
+      Share <b>{{cluster.name}}</b> cluster with other users by giving them the following link that can be used to authenticate with an OIDC provider and then generate a kubeconfig file.
+    </p>
+    <p>
+      <strong>
+        Please <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+           target="_blank"
+           fxLayout="row inline"
+           fxLayoutAlign=" center"
+           rel="noopener">visit our documentation <i class="km-icon-external-link i-18"></i></a>
+        for more details.
+      </strong>
+    </p>
+  </ng-container>
+  <label class="km-radio-group-label">
+    Select Kubeconfig Authentication Method
+  </label>
+
+  <mat-radio-group [(ngModel)]="isOIDCKubeLoginEnabled"
+                   (change)="getDownloadLink()">
+    <mat-radio-button [value]="false"
+                      class="km-radio-button">
+      <div class="km-radio-button-title">
+        OIDC via KKP API
+      </div>
+      <div class="km-radio-button-description">
+        Stores the token directly in the kubeconfig file.
+      </div>
+    </mat-radio-button>
+    <mat-radio-button [value]="true"
+                      class="km-radio-button">
+      <div class="km-radio-button-title">
+        OIDC via oidc-login plugin
+      </div>
+      <div class="km-radio-button-description">
+        Uses the kubectl oidc-login plugin to fetch tokens dynamically.
+      </div>
+    </mat-radio-button>
+  </mat-radio-group>
+  <ng-container *ngIf="isOIDCKubeLoginEnabled">
+    <div class="km-plugin-instructions">
+      <label>
+        <i class="km-icon-info"></i>
+        <b>To use this option, install the kubelogin plugin:</b>
+      </label>
+      <ul>
+        <li>
+          On Linux / macOS
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.brewInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.brewInstallCommand}}
+          </div>
+        </li>
+        <li>
+          On Windows (Chocolatey)
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.chocoInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.chocoInstallCommand}}
+          </div>
+        </li>
+        <li>
+          Krew (kubectl plugin manager)
+          <P>
+            Krew needs to be installed first. Check
+            <a href="https://krew.sigs.k8s.io/docs/user-guide/setup/install/"
+               target="_blank"
+               rel="noopener">installation docs <i class="km-icon-external-link i-18"></i></a>.
+          </P>
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.krewInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.krewInstallCommand}}
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+  <div *ngIf="dialogTitle === shareKubeConfigDialogMode.Share"
+       class="km-code-block km-copy"
        matTooltip="Click to copy"
        ngxClipboard
        [cbContent]="kubeconfigLink">{{kubeconfigLink}}</div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-dialog-close
-          mat-flat-button>
-    <i class="km-icon-mask km-icon-check i-24"
+  <button mat-flat-button
+          (click)="onClick()">
+    <i class="km-icon-mask"
+       [ngClass]="buttonIcon"
        matButtonIcon></i>
-    <span>Got It</span>
+    <span>{{buttonLabel}}</span>
   </button>
 </mat-dialog-actions>

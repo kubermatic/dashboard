@@ -260,6 +260,11 @@ limitations under the License.
                                  label="Cluster Backup"
                                  [value]="!!cluster.spec.backupConfig">
             </km-property-boolean>
+
+            <km-property-boolean *ngIf="cluster.spec.encryptionConfiguration?.enabled"
+                                 label="Encryption at Rest"
+                                 [value]="cluster.spec.encryptionConfiguration?.enabled">
+            </km-property-boolean>
           </div>
           <div fxLayout="row wrap">
             <ng-container *ngIf="cluster.spec.auditLogging?.webhookBackend as webhookBackend">
@@ -324,7 +329,7 @@ limitations under the License.
           <div value>{{cluster.credential}}</div>
         </km-property>
 
-        <ng-container *ngIf="!cluster.credential">
+        <ng-container *ngIf="displaySettings()">
           <!-- AWS -->
           <ng-container *ngIf="cluster.spec.cloud?.aws">
             <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
@@ -380,7 +385,7 @@ limitations under the License.
               <div value>{{cluster.spec.cloud?.azure.vnet}}</div>
             </km-property>
 
-            <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet"
+            <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet !== undefined"
                                  label="Assign Availability Set"
                                  [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
             </km-property-boolean>
@@ -408,7 +413,7 @@ limitations under the License.
 
           <!-- Openstack -->
           <ng-container *ngIf="cluster.spec.cloud?.openstack">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud?.openstack.domain">
               <div key>Domain</div>
               <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
             </km-property>
@@ -452,30 +457,29 @@ limitations under the License.
               <div key>IPv6 Subnet Pool</div>
               <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
             </km-property>
-            <km-property-boolean label="Enable Ingress Hostname"
+            <km-property-boolean *ngIf="cluster.spec.cloud?.openstack.enableIngressHostname !== undefined"
+                                 label="Enable Ingress Hostname"
                                  [value]="cluster.spec.cloud?.openstack.enableIngressHostname">
             </km-property-boolean>
             <km-property *ngIf="cluster.spec.cloud?.openstack.ingressHostnameSuffix">
               <div key>Ingress Hostname Suffix</div>
               <div value>{{cluster.spec.cloud?.openstack.ingressHostnameSuffix}}</div>
             </km-property>
-          </ng-container>
-
-          <!-- Equinix -->
-          <ng-container *ngIf="cluster.spec.cloud?.packet">
-            <km-property>
-              <div key>Project ID</div>
-              <div value>{{cluster.spec.cloud?.packet.projectID}}</div>
-            </km-property>
-            <km-property>
-              <div key>Billing Cycle</div>
-              <div value>{{cluster.spec.cloud?.packet.billingCycle}}</div>
+            <km-property *ngIf="cluster.spec.cloud?.openstack.loadBalancerClasses?.length > 0">
+              <div key>LoadBalancer Classes</div>
+              <div value>
+                <mat-chip-set selectable="false">
+                  <mat-chip *ngFor="let lbClass of cluster.spec.cloud.openstack.loadBalancerClasses">
+                    {{lbClass.name}}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
             </km-property>
           </ng-container>
 
           <!-- Nutanix -->
           <ng-container *ngIf="cluster.spec.cloud?.nutanix">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.username">
               <div key>Username</div>
               <div value>{{cluster.spec.cloud.nutanix.username}}</div>
             </km-property>
@@ -483,7 +487,7 @@ limitations under the License.
               <div key>Proxy URL</div>
               <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.clusterName">
               <div key>Cluster Name</div>
               <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
             </km-property>
@@ -492,11 +496,11 @@ limitations under the License.
               <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
             </km-property>
             <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
-              <km-property>
+              <km-property *ngIf="cluster.spec.cloud.nutanix.csi.username">
                 <div key>Prism Element Username</div>
                 <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
               </km-property>
-              <km-property>
+              <km-property *ngIf="cluster.spec.cloud.nutanix.csi.endpoint">
                 <div key>Prism Element Endpoint</div>
                 <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
               </km-property>
@@ -517,7 +521,7 @@ limitations under the License.
 
           <!-- vSphere -->
           <ng-container *ngIf="cluster.spec.cloud?.vsphere">
-            <km-property>
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.username">
               <div key>Username</div>
               <div value>{{cluster.spec.cloud?.vsphere.username}}</div>
             </km-property>
@@ -553,19 +557,19 @@ limitations under the License.
 
           <!-- VMware Cloud Director -->
           <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector as vmwareclouddirector">
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.username">
               <div key>Username</div>
               <div value>{{vmwareclouddirector.username}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.organization">
               <div key>Organization</div>
               <div value>{{vmwareclouddirector.organization}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.vdc">
               <div key>VDC</div>
               <div value>{{vmwareclouddirector.vdc}}</div>
             </km-property>
-            <km-property>
+            <km-property *ngIf="vmwareclouddirector.ovdcNetworks">
               <div key>Organization VDC Networks</div>
               <div value>{{vmwareclouddirector.ovdcNetworks}}</div>
             </km-property>
@@ -993,13 +997,7 @@ limitations under the License.
               </km-property>
             </ng-container>
 
-            <!-- Equinix Nodes -->
-            <ng-container *ngIf="machineDeployment.spec.template.cloud?.packet">
-              <km-property>
-                <div key>Instance Type</div>
-                <div value>{{machineDeployment.spec.template.cloud?.packet?.instanceType}}</div>
-              </km-property>
-            </ng-container>
+
 
             <!-- VSphere Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.vsphere">
@@ -1186,6 +1184,9 @@ limitations under the License.
               <km-property-boolean label="Allocate Floating IP"
                                    [value]="machineDeployment.spec.template.cloud?.openstack?.useFloatingIP">
               </km-property-boolean>
+              <km-property-boolean label="Enable Config Drive"
+                                   [value]="machineDeployment.spec.template.cloud?.openstack?.configDrive">
+              </km-property-boolean>
             </ng-container>
 
             <!-- AWS Tags -->
@@ -1228,13 +1229,7 @@ limitations under the License.
               </div>
             </km-property>
 
-            <!-- Packet Tags -->
-            <km-property *ngIf="machineDeployment.spec.template.cloud?.packet?.tags?.length > 0">
-              <div key>Provider Tags</div>
-              <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.packet.tags"></km-labels>
-              </div>
-            </km-property>
+
 
             <!-- Alibaba Labels -->
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.alibaba?.labels)">

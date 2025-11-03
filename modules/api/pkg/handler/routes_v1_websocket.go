@@ -81,7 +81,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -89,12 +89,12 @@ const (
 	waitForKubeconfigSecretTimeout              = 5 * time.Minute
 )
 
-func (r Routing) RegisterV1Websocket(mux *mux.Router) {
+func (r Routing) RegisterV1Websocket(mux *mux.Router, overwriteRegistry string) {
 	providers := getProviders(r)
 
 	mux.HandleFunc("/ws/admin/settings", getSettingsWatchHandler(wsh.WriteSettings, providers, r))
 	mux.HandleFunc("/ws/me", getUserWatchHandler(wsh.WriteUser, providers, r))
-	mux.HandleFunc("/ws/projects/{project_id}/clusters/{cluster_id}/terminal", getTerminalWatchHandler(wsh.Terminal, providers, r, maxNumberOfTerminalActiveConnectionsPerUser, terminalActiveConnectionsMemoryDuration))
+	mux.HandleFunc("/ws/projects/{project_id}/clusters/{cluster_id}/terminal", getTerminalWatchHandler(wsh.Terminal, providers, r, maxNumberOfTerminalActiveConnectionsPerUser, terminalActiveConnectionsMemoryDuration, overwriteRegistry))
 }
 
 func getProviders(r Routing) watcher.Providers {
@@ -110,6 +110,7 @@ func getProviders(r Routing) watcher.Providers {
 		SeedsGetter:               r.seedsGetter,
 		SeedClientGetter:          r.seedsClientGetter,
 		ClusterProviderGetter:     r.clusterProviderGetter,
+		OIDCIssuerVerifierGetter:  r.oidcIssuerVerifierGetter,
 	}
 }
 
@@ -200,7 +201,7 @@ func (l *connections) releaseMemory() {
 	l.mutex.Unlock()
 }
 
-func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.Providers, routing Routing, maxNumberOfConnections int, memoryDuration time.Duration) func(w http.ResponseWriter, req *http.Request) {
+func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.Providers, routing Routing, maxNumberOfConnections int, memoryDuration time.Duration, overwriteRegistry string) func(w http.ResponseWriter, req *http.Request) {
 	connectionsPerUser := newConnections()
 
 	// Cleaning the map from time to time to release the memory
@@ -251,6 +252,12 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		if err != nil {
 			return
 		}
+
+		oidcIssuerVerifier, err := middleware.GetOIDCIssuerVerifier(ctx, providers.ClusterProviderGetter, providers.OIDCIssuerVerifierGetter, providers.SeedsGetter, clusterID)
+		if err != nil {
+			return
+		}
+
 		privilegedClusterProvider := clusterProvider.(provider.PrivilegedClusterProvider)
 
 		user, err := providers.UserProvider.UserByEmail(ctx, authenticatedUser.Email)
@@ -298,8 +305,8 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		connectionsPerUser.increaseActiveConnections(userProjectClusterUniqueKey)
 		defer connectionsPerUser.decreaseActiveConnections(userProjectClusterUniqueKey)
 
+		kubeconfigSecret := &corev1.Secret{}
 		if !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
-			kubeconfigSecret := &corev1.Secret{}
 			if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 				Namespace: metav1.NamespaceSystem,
 				Name:      handlercommon.KubeconfigSecretName(userEmailID),
@@ -314,7 +321,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions)
+		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, overwriteRegistry)
 	}
 }
 

@@ -19,6 +19,8 @@ import {UniqueValidator} from '@shared/validators/unique.validator';
 import {YamlValidator} from '@shared/validators/yaml.validator';
 import {CronExpressionValidator} from './cron.validator';
 import {AtLeastOneValidator} from './at-least-one.validator';
+import {duplicateValidator} from './duplicate.validator';
+import {EncryptionKeyValidator} from './encryption-key.validator';
 
 export class KmValidators {
   static get atLeastOneValidator(): ValidatorFn {
@@ -60,6 +62,15 @@ export class KmValidators {
 
   static yaml(): ValidatorFn {
     const validator = new YamlValidator();
+    return validator.validate.bind(validator);
+  }
+
+  static duplicate(existingValues: string[], ignoreCase = true): ValidatorFn {
+    return duplicateValidator(existingValues, ignoreCase);
+  }
+
+  static encryptionKey(): ValidatorFn {
+    const validator = new EncryptionKeyValidator();
     return validator.validate.bind(validator);
   }
 }

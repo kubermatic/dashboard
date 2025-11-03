@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card *ngIf="cluster?.spec?.opaIntegration?.enabled || nodeDc?.spec?.provider === nodeProvider.EQUINIX"
+<mat-card *ngIf="cluster?.spec?.opaIntegration?.enabled"
           class="warning-card">
   <mat-card-content>
     <div *ngIf="cluster?.spec?.opaIntegration?.enabled"
@@ -23,18 +23,7 @@ limitations under the License.
       <i class="km-icon-warning"></i>
       <div>OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be <strong>removed in the future</strong>, Kyverno has replaced it as an Enterprise Edition feature for policy management.</div>
     </div>
-    <div *ngIf="nodeDc?.spec?.provider === nodeProvider.EQUINIX"
-         fxLayout="row"
-         fxLayoutAlign=" center">
-      <i class="km-icon-warning"></i>
-      <div>
-        Equinix Metal has been deprecated in KKP 2.28 and will be <strong>removed in KKP 2.29</strong>. Please plan your migration to a supported provider as soon as possible to ensure continued service. This change is due to Equinix's
-        announcement to discontinue Equinix Metal service by June 2026. For more information, please refer to the
-        <a href="https://docs.equinix.com/metal/#sunsetting-equinix-metal"
-           target="_blank"
-           rel="noopener noreferrer">official Equinix Metal Sunset Announcement</a>.
-      </div>
-    </div>
+
   </mat-card-content>
 </mat-card>
 
@@ -68,14 +57,16 @@ limitations under the License.
 
       <div fxFlex></div>
 
-      <km-button color="alternative"
-                 icon="km-icon-download"
-                 label="Get Kubeconfig"
-                 [disabled]="isDeletingState"
-                 [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
-                 [observable]="getObservable()"
-                 (next)="onNext($event)">
-      </km-button>
+      <button mat-flat-button
+              type="button"
+              color="alternative"
+              [disabled]="isDeletingState"
+              [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
+              (click)="onGetKubeconfig()">
+        <i class="km-icon-mask km-icon-download"
+           matButtonIcon></i>
+        <span>Get Kubeconfig</span>
+      </button>
 
       <a class="km-open-kubernetes-dashboard-btn"
          id="km-open-kubernetes-dashboard-btn"
@@ -149,7 +140,7 @@ limitations under the License.
           <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableShareCluster"
                   mat-menu-item
                   id="km-share-kubeconfig-btn"
-                  (click)="shareConfigDialog()">
+                  (click)="shareConfigDialog(shareKubeconfigDialogMode.Share)">
             <span>Share Cluster</span>
           </button>
           <mat-divider></mat-divider>
@@ -218,6 +209,18 @@ limitations under the License.
                  [ngClass]="presetStatus?.icon"
                  class="km-vertical-center"></i>
               {{cluster.annotations?.presetName ?? "-"}}
+            </div>
+          </div>
+        </km-property>
+        <km-property *ngIf="cluster?.status?.encryption?.phase">
+          <div key>Encryption at Rest</div>
+          <div value>
+            <div fxLayoutAlign=" center">
+              <i *ngIf="encryptionStatus"
+                 [matTooltip]="encryptionStatus?.message"
+                 [ngClass]="encryptionStatus?.icon"
+                 class="km-vertical-center"></i>
+              {{cluster.status.encryption.phase}}
             </div>
           </div>
         </km-property>

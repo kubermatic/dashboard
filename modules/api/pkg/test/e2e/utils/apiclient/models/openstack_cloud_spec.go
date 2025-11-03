@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -47,6 +48,11 @@ type OpenstackCloudSpec struct {
 	// Note that the network is external if the "External" field is set to true
 	FloatingIPPool string `json:"floatingIPPool,omitempty"`
 
+	// IPv6SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec
+	// didn't specify a subnet id for the IPv6 networking.
+	// +optional
+	IPV6SubnetCIDR string `json:"ipv6SubnetCidr,omitempty"`
+
 	// IPv6SubnetID holds the ID of the subnet used for IPv6 networking.
 	// If not provided, a new subnet will be created if IPv6 is enabled.
 	// +optional
@@ -61,6 +67,10 @@ type OpenstackCloudSpec struct {
 	// The suffix is set to `nip.io` by default. Can only be used with the external CCM and might be deprecated and removed in
 	// future versions as it is considered a workaround only.
 	IngressHostnameSuffix string `json:"ingressHostnameSuffix,omitempty"`
+
+	// List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.
+	// +optional
+	LoadBalancerClasses []*LoadBalancerClass `json:"loadBalancerClasses"`
 
 	// Network holds the name of the internal network
 	// When specified, all worker nodes will be attached to this network. If not specified, a network, subnet & router will be created.
@@ -88,6 +98,16 @@ type OpenstackCloudSpec struct {
 	// SecurityGroups is the name of the security group (only supports a singular security group) that will be used for Machines in the cluster.
 	// If this field is left empty, a default security group will be created and used.
 	SecurityGroups string `json:"securityGroups,omitempty"`
+
+	// SubnetAllocationPool represents a pool of usable IPs that can be assigned to resources via the DHCP. The format is
+	// first usable ip and last usable ip separated by a dash(e.g: 10.10.0.1-10.10.0.254)
+	// +optional
+	SubnetAllocationPool string `json:"subnetAllocationPool,omitempty"`
+
+	// SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec
+	// didn't specify a subnet id.
+	// +optional
+	SubnetCIDR string `json:"subnetCidr,omitempty"`
 
 	// subnet ID
 	SubnetID string `json:"subnetID,omitempty"`
@@ -122,6 +142,10 @@ type OpenstackCloudSpec struct {
 func (m *OpenstackCloudSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateLoadBalancerClasses(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCredentialsReference(formats); err != nil {
 		res = append(res, err)
 	}
@@ -133,6 +157,32 @@ func (m *OpenstackCloudSpec) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *OpenstackCloudSpec) validateLoadBalancerClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.LoadBalancerClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.LoadBalancerClasses); i++ {
+		if swag.IsZero(m.LoadBalancerClasses[i]) { // not required
+			continue
+		}
+
+		if m.LoadBalancerClasses[i] != nil {
+			if err := m.LoadBalancerClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -178,6 +228,10 @@ func (m *OpenstackCloudSpec) validateNodePortsAllowedIPRanges(formats strfmt.Reg
 func (m *OpenstackCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateLoadBalancerClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCredentialsReference(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -189,6 +243,26 @@ func (m *OpenstackCloudSpec) ContextValidate(ctx context.Context, formats strfmt
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *OpenstackCloudSpec) contextValidateLoadBalancerClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.LoadBalancerClasses); i++ {
+
+		if m.LoadBalancerClasses[i] != nil {
+			if err := m.LoadBalancerClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

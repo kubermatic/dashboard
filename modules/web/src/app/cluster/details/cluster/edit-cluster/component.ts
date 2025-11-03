@@ -46,10 +46,12 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+  generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
+import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -83,6 +85,8 @@ enum Controls {
   RouterReconciliation = 'routerReconciliation',
   BackupStorageLocation = 'backupStorageLocation',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
+  EncryptionAtRest = 'encryptionAtRest',
+  EncryptionAtRestKey = 'encryptionAtRestKey',
 }
 
 @Component({
@@ -128,6 +132,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
   readonly NodeProvider = NodeProvider;
   private readonly _nameMinLen = 3;
+  private readonly ENCRYPTION_KEY_ANNOTATION = 'kubermatic.io/encryption-key';
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
@@ -200,6 +205,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
+      [Controls.EncryptionAtRest]: new FormControl(!!this.cluster.spec.encryptionConfiguration?.enabled),
+      [Controls.EncryptionAtRestKey]: new FormControl('', [KmValidators.encryptionKey()]),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -328,7 +335,36 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (initialClusterDefaultNodeSelectorKey && this.labels?.[initialClusterDefaultNodeSelectorKey]) {
       this._handleClusterDefaultNodeSelector(this.podNodeSelectorAdmissionPluginConfig);
     }
+
+    // Handle Encryption at Rest validator changes
+    this.form
+      .get(Controls.EncryptionAtRest)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(enabled => {
+        const EncryptionAtRestControl = this.form.get(Controls.EncryptionAtRestKey);
+        const wasEnabled = this.cluster.spec.encryptionConfiguration?.enabled;
+
+        if (enabled && !wasEnabled) {
+          EncryptionAtRestControl.setValidators([Validators.required, KmValidators.encryptionKey()]);
+        } else {
+          EncryptionAtRestControl.clearValidators();
+          if (!enabled) {
+            EncryptionAtRestControl.setValue('');
+          }
+        }
+        EncryptionAtRestControl.updateValueAndValidity();
+      });
+
     this._cdr.detectChanges();
+  }
+
+  generateEncryptionKey(): void {
+    const key = generateEncryptionKey();
+    this.form.get(Controls.EncryptionAtRestKey).setValue(key);
+  }
+
+  isEncryptionActive(): boolean {
+    return this.cluster.spec.encryptionConfiguration?.enabled || this.cluster.status?.encryption?.phase === 'Active';
   }
 
   private _getAuditPolicyPresetInitialState(): AuditPolicyPreset | '' {
@@ -540,6 +576,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       patch.spec.backupConfig = null;
     }
 
+    this._handleEncryptionConfigurationChanges(patch);
+
     if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {
       patch.spec.cloud[this._provider] = {
         nodePortsAllowedIPRanges: {
@@ -564,6 +602,27 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._matDialogRef.close(cluster);
     this._clusterService.onClusterUpdate.next();
     this._notificationService.success(`Updated the ${this.cluster.name} cluster`);
+  }
+
+  private _handleEncryptionConfigurationChanges(patch: ClusterPatch): void {
+    const encryptionEnabled = !!this.form.get(Controls.EncryptionAtRest).value;
+    const encryptionKey = this.form.get(Controls.EncryptionAtRestKey).value;
+    const wasEnabled = !!this.cluster.spec.encryptionConfiguration?.enabled;
+
+    if (encryptionEnabled !== wasEnabled || (encryptionEnabled && encryptionKey)) {
+      patch.spec.encryptionConfiguration = {
+        enabled: encryptionEnabled,
+      };
+
+      if (encryptionEnabled && encryptionKey) {
+        if (!patch.annotations) {
+          patch.annotations = {};
+        }
+        patch.annotations[this.ENCRYPTION_KEY_ANNOTATION] = encryptionKey;
+      }
+    } else if (wasEnabled) {
+      patch.spec.encryptionConfiguration = this.cluster.spec.encryptionConfiguration;
+    }
   }
 
   private _handleClusterDefaultNodeSelector(config: Record<string, string>): void {

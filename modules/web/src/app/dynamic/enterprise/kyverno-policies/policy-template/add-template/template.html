@@ -95,11 +95,13 @@ END OF TERMS AND CONDITIONS
         <i class="km-icon-info km-pointer"
            matTooltip="Enforced policies will be applied to all targeted clusters. Users can't delete them."></i>
       </mat-checkbox>
-      <mat-checkbox [formControlName]="controls.NamespacedPolicy">
-        Namespaced Policy
+      <span>
+        <mat-checkbox [formControlName]="controls.NamespacedPolicy">
+          Namespaced Policy
+        </mat-checkbox>
         <i class="km-icon-info km-pointer"
            matTooltip="Enable to scope the policy down to Namespace instead of the default i.e. Cluster scope."></i>
-      </mat-checkbox>
+      </span>
     </div>
     <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
                    title="Projects Labels Selector"

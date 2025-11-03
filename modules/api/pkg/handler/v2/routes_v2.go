@@ -914,10 +914,9 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/openstack/servergroups").
 		Handler(r.listProjectOpenstackServerGroups())
 
-	// Equinix Metal (Packet) endpoints
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/providers/equinixmetal/sizes").
-		Handler(r.listProjectEquinixMetalSizes())
+		Path("/projects/{project_id}/providers/openstack/membersubnets").
+		Handler(r.listProjectOpenstackMemberSubnets())
 
 	// Hetzner endpoints
 	mux.Methods(http.MethodGet).
@@ -1060,14 +1059,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches").
 		Handler(r.listAlibabaVSwitchesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes").
-		Handler(r.listPacketSizesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes").
-		Handler(r.listEquinixMetalSizesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/anexia/vlans").
@@ -4802,54 +4793,6 @@ func (r Routing) listAlibabaVSwitchesNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes packet listPacketSizesNoCredentialsV2
-//
-// Lists sizes from packet (use Equinix Metal API endpoints instead).
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listPacketSizesNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.EquinixMetalSizesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalSizesNoCredentialsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes equinixmetal listEquinixMetalSizesNoCredentialsV2
-//
-// Lists sizes from Equinix Metal.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listEquinixMetalSizesNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.EquinixMetalSizesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalSizesNoCredentialsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/anexia/vlans anexia listAnexiaVlansNoCredentialsV2
 //
 // Lists vlans from Anexia
@@ -7133,28 +7076,6 @@ func (r Routing) listProjectVMwareCloudDirectorTemplates() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes equinixmetal listProjectEquinixMetalSizes
-//
-// Lists sizes from Equinix Metal.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listProjectEquinixMetalSizes() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-		)(provider.EquinixMetalProjectSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalProjectSizesReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/providers/hetzner/sizes hetzner listProjectHetznerSizes
 //
 // Lists sizes from Hetzner.
@@ -7502,6 +7423,28 @@ func (r Routing) listProjectOpenstackServerGroups() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
 		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/membersubnets openstack listProjectOpenstackMemberSubnets
+//
+// Lists load balancer member subnets from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenStackLoadBalancerPoolMember
+func (r Routing) listProjectOpenstackMemberSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackMemberSubnetsEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectMemberSubnetReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -11430,7 +11373,8 @@ func (r Routing) listKyvernoPolicyBindings() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.ListEndpoint(r.userInfoGetter)),
 		policybinding.DecodeListPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11455,7 +11399,8 @@ func (r Routing) getKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.GetEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.GetEndpoint(r.userInfoGetter)),
 		policybinding.DecodeGetPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11482,7 +11427,8 @@ func (r Routing) createKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.CreateEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.CreateEndpoint(r.userInfoGetter)),
 		policybinding.DecodeCreatePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11509,7 +11455,8 @@ func (r Routing) patchKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.PatchEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.PatchEndpoint(r.userInfoGetter)),
 		policybinding.DecodePatchPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11531,7 +11478,8 @@ func (r Routing) deleteKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.DeleteEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.DeleteEndpoint(r.userInfoGetter)),
 		policybinding.DecodeDeletePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

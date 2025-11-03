@@ -27,6 +27,8 @@ import (
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
 	ostokens "github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	osusers "github.com/gophercloud/gophercloud/openstack/identity/v3/users"
+	osloadbalancer "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/loadbalancers"
+	oslbpools "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/pools"
 	osextnetwork "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/external"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/subnetpools"
@@ -160,18 +162,39 @@ func getTenants(authClient *gophercloud.ProviderClient, region string) ([]osproj
 }
 
 func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName string) ([]ossubnets.Subnet, error) {
-	var allSubnets []ossubnets.Subnet
-
-	networks, err := getAllNetworks(netClient, osnetworks.ListOpts{Name: networkIDOrName})
-	if err != nil {
-		return nil, fmt.Errorf("failed to list networks: %w", err)
+	findNetwork := func(opts osnetworks.ListOpts, searchBy string) (string, error) {
+		networks, err := getAllNetworks(netClient, opts)
+		if err != nil {
+			return "", fmt.Errorf("failed to list networks by %s: %w", searchBy, err)
+		}
+		if len(networks) == 1 {
+			return networks[0].ID, nil
+		}
+		if len(networks) > 1 {
+			return "", fmt.Errorf("got %d networks for %s '%s', expected one at most", len(networks), searchBy, networkIDOrName)
+		}
+		return "", nil
 	}
 
-	networkID := networkIDOrName
-	if len(networks) == 1 {
-		networkID = networks[0].ID
-	} else if len(networks) > 1 {
-		return nil, fmt.Errorf("got %d networks for idOrName '%s', expected one at most", len(networks), networkIDOrName)
+	const (
+		searchByName = "name"
+		searchByID   = "id"
+	)
+
+	// Try by name first
+	networkID, err := findNetwork(osnetworks.ListOpts{Name: networkIDOrName}, searchByName)
+	if err != nil {
+		return nil, err
+	}
+	if networkID == "" {
+		// Fallback to ID
+		networkID, err = findNetwork(osnetworks.ListOpts{ID: networkIDOrName}, searchByID)
+		if err != nil {
+			return nil, err
+		}
+		if networkID == "" {
+			return nil, fmt.Errorf("network with id or name '%s' not found", networkIDOrName)
+		}
 	}
 
 	allPages, err := ossubnets.List(netClient, ossubnets.ListOpts{NetworkID: networkID}).AllPages()
@@ -179,7 +202,8 @@ func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName s
 		return nil, err
 	}
 
-	if allSubnets, err = ossubnets.ExtractSubnets(allPages); err != nil {
+	allSubnets, err := ossubnets.ExtractSubnets(allPages)
+	if err != nil {
 		return nil, err
 	}
 
@@ -205,4 +229,40 @@ func getAvailabilityZones(computeClient *gophercloud.ServiceClient) ([]osavailab
 	}
 
 	return availabilityZones, nil
+}
+
+func getLoadBalancers(lbClient *gophercloud.ServiceClient, vipNetworkID string) ([]osloadbalancer.LoadBalancer, error) {
+	allPages, err := osloadbalancer.List(lbClient, osloadbalancer.ListOpts{VipNetworkID: vipNetworkID}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancers: %w", err)
+	}
+	loadBalancers, err := osloadbalancer.ExtractLoadBalancers(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancers: %w", err)
+	}
+	return loadBalancers, nil
+}
+
+func getAllLoadBalancerPools(lbClient *gophercloud.ServiceClient) ([]oslbpools.Pool, error) {
+	allPages, err := oslbpools.List(lbClient, oslbpools.ListOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancer pools: %w", err)
+	}
+	pools, err := oslbpools.ExtractPools(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancer pools: %w", err)
+	}
+	return pools, nil
+}
+
+func getLoadBalancerPoolMembers(lbClient *gophercloud.ServiceClient, poolID string) ([]oslbpools.Member, error) {
+	allPages, err := oslbpools.ListMembers(lbClient, poolID, oslbpools.ListMembersOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancer pool members: %w", err)
+	}
+	members, err := oslbpools.ExtractMembers(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancer pool members: %w", err)
+	}
+	return members, nil
 }

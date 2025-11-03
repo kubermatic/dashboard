@@ -15,6 +15,7 @@
 import {Application} from '@shared/entity/application';
 import {BackupStorageLocationSpec} from '@shared/entity/backup';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {OpenstackLoadBalancerClass} from '@shared/entity/provider/openstack';
 import {isObjectEmpty} from '@shared/utils/common';
 import _ from 'lodash';
 
@@ -32,7 +33,6 @@ export enum Provider {
   KubeVirt = 'kubevirt',
   Nutanix = 'nutanix',
   OpenStack = 'openstack',
-  Equinix = 'packet',
   VSphere = 'vsphere',
   VMwareCloudDirector = 'vmwareclouddirector',
 }
@@ -51,7 +51,6 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.KubeVirt, 'KubeVirt'],
   [Provider.Nutanix, 'Nutanix'],
   [Provider.OpenStack, 'Openstack'],
-  [Provider.Equinix, 'Equinix Metal'],
   [Provider.VSphere, 'VSphere'],
   [Provider.VMwareCloudDirector, 'VMware Cloud Director'],
 ]);
@@ -118,7 +117,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
-  packet?: EquinixCloudSpec;
+
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
@@ -271,6 +270,7 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   ipv6SubnetPool: string;
   enableIngressHostname?: boolean;
   ingressHostnameSuffix?: string;
+  loadBalancerClasses?: OpenstackLoadBalancerClass[];
 
   static isEmpty(spec: OpenstackCloudSpec): boolean {
     return _.difference(
@@ -280,14 +280,10 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   }
 
   private static getKeysToCompare(spec: ExtraCloudSpecOptions): string[] {
-    return Object.keys(spec).filter(key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix');
+    return Object.keys(spec).filter(
+      key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix' && key !== 'loadBalancerClasses'
+    );
   }
-}
-
-export class EquinixCloudSpec {
-  apiKey: string;
-  projectID: string;
-  billingCycle: string;
 }
 
 export class VSphereCloudSpec {
@@ -373,6 +369,7 @@ export class ClusterSpec {
   exposeStrategy?: ExposeStrategy;
   kubelb?: KubeLB;
   disableCsiDriver?: boolean;
+  encryptionConfiguration?: EncryptionConfiguration;
 }
 
 export class KubeLB {
@@ -480,6 +477,11 @@ export class KubernetesDashboard {
   enabled?: boolean;
 }
 
+export class EncryptionConfiguration {
+  enabled?: boolean;
+  resources?: string[];
+}
+
 export class OPAIntegration {
   enabled: boolean;
 }
@@ -504,10 +506,15 @@ export class BackupConfig {
   };
 }
 
+export interface EncryptionStatus {
+  phase: string;
+}
+
 export class Status {
   url: string;
   version: string;
   externalCCMMigration: ExternalCCMMigrationStatus;
+  encryption?: EncryptionStatus;
 }
 
 export enum ExternalCCMMigrationStatus {
@@ -571,6 +578,7 @@ export class ClusterSpecPatch {
   containerRuntime?: ContainerRuntime;
   cniPlugin?: CNIPluginConfigPatch;
   apiServerAllowedIPRanges?: NetworkRanges;
+  encryptionConfiguration?: EncryptionConfiguration;
 }
 
 export class CNIPluginConfigPatch {
@@ -583,7 +591,7 @@ export class CloudSpecPatch {
   nutanix?: NutanixCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
-  packet?: EquinixCloudSpecPatch;
+
   vsphere?: VSphereCloudSpecPatch;
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
@@ -614,12 +622,6 @@ export class OpenstackCloudSpecPatch {
   applicationCredentialID?: string;
   applicationCredentialSecret?: string;
   domain?: string;
-}
-
-export class EquinixCloudSpecPatch {
-  apiKey?: string;
-  projectID?: string;
-  billingCycle?: string;
 }
 
 export class NutanixCloudSpecPatch {
@@ -689,14 +691,17 @@ export class ProviderSettingsPatch {
   isValid: boolean;
 }
 
-export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];
+export const AZURE_LOADBALANCER_SKUS = ['standard'];
 
-export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
+export interface EncryptionAtRestConfig {
+  key: string;
+}
 
 export class CreateClusterModel {
   cluster: ClusterModel;
   nodeDeployment?: MachineDeployment;
   applications?: Application[];
+  encryptionAtRest?: EncryptionAtRestConfig;
 }
 
 class ClusterModel {
