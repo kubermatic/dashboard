@@ -77,9 +77,9 @@ require (
 	k8c.io/machine-controller/sdk v1.64.0
 	k8c.io/operating-system-manager v1.8.0
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.34.0
+	k8s.io/api v0.34.1
 	k8s.io/apiextensions-apiserver v0.34.0
-	k8s.io/apimachinery v0.34.0
+	k8s.io/apimachinery v0.34.1
 	k8s.io/apiserver v0.34.0
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/code-generator v0.34.0
@@ -102,7 +102,7 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
-replace k8s.io/client-go => k8s.io/client-go v0.33.4
+replace k8s.io/client-go => k8s.io/client-go v0.34.1
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
@@ -369,6 +369,7 @@ require (
 	go.step.sm/crypto v0.63.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
+	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
 	golang.org/x/mod v0.27.0 // indirect
@@ -403,4 +404,5 @@ require (
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/release-utils v0.11.1 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.7.0 // indirect
+	sigs.k8s.io/structured-merge-diff/v6 v6.3.0 // indirect
 )
