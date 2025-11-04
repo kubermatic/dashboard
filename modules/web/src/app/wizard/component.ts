@@ -133,7 +133,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.project.id = this._route.snapshot.paramMap.get(PathParam.ProjectID);
 
     if (this.clusterTemplateID) {
-      this.loadClusterTemplate();
+      this._loadClusterTemplate();
     } else {
       this.loadingClusterTemplate = false;
     }
@@ -333,7 +333,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         // Template is already loaded at this point and we don't need to reload it unless the project ID has changed.
         if (this.clusterTemplateID && project.id !== this.project.id) {
           this.project = project;
-          this.loadClusterTemplate();
+          this._loadClusterTemplate();
         }
         this.project = project;
       });
@@ -352,7 +352,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.form = this._formBuilder.group(controls);
   }
 
-  private loadClusterTemplate(): void {
+  private _loadClusterTemplate(): void {
     this._clusterTemplateService
       .get(this.project.id, this.clusterTemplateID)
       // We just need to load the cluster template once. Usage of `takeUntil` will cause an endless chain of update that
