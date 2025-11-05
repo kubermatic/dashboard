@@ -24,6 +24,9 @@ type EnvVarSource struct {
 	// field ref
 	FieldRef *ObjectFieldSelector `json:"fieldRef,omitempty"`
 
+	// file key ref
+	FileKeyRef *FileKeySelector `json:"fileKeyRef,omitempty"`
+
 	// resource field ref
 	ResourceFieldRef *ResourceFieldSelector `json:"resourceFieldRef,omitempty"`
 
@@ -40,6 +43,10 @@ func (m *EnvVarSource) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateFieldRef(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFileKeyRef(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -87,6 +94,25 @@ func (m *EnvVarSource) validateFieldRef(formats strfmt.Registry) error {
 				return ve.ValidateName("fieldRef")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("fieldRef")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EnvVarSource) validateFileKeyRef(formats strfmt.Registry) error {
+	if swag.IsZero(m.FileKeyRef) { // not required
+		return nil
+	}
+
+	if m.FileKeyRef != nil {
+		if err := m.FileKeyRef.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fileKeyRef")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("fileKeyRef")
 			}
 			return err
 		}
@@ -145,6 +171,10 @@ func (m *EnvVarSource) ContextValidate(ctx context.Context, formats strfmt.Regis
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateFileKeyRef(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateResourceFieldRef(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -183,6 +213,22 @@ func (m *EnvVarSource) contextValidateFieldRef(ctx context.Context, formats strf
 				return ve.ValidateName("fieldRef")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("fieldRef")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *EnvVarSource) contextValidateFileKeyRef(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FileKeyRef != nil {
+		if err := m.FileKeyRef.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fileKeyRef")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("fileKeyRef")
 			}
 			return err
 		}

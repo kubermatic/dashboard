@@ -178,7 +178,7 @@ func GetClients() (ctrlruntimeclient.Client, rest.Interface, *rest.Config, error
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to get pod GVK: %w", err)
 	}
-	podRestClient, err := apiutil.RESTClientForGVK(gvk, false, config, serializer.NewCodecFactory(sc), httpClient)
+	podRestClient, err := apiutil.RESTClientForGVK(gvk, false, false, config, serializer.NewCodecFactory(sc), httpClient)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to create pod rest client: %w", err)
 	}
