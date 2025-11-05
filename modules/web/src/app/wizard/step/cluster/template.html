@@ -556,7 +556,7 @@ limitations under the License.
                  matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
             </mat-checkbox>
 
-            <ng-container *ngIf="isMLAEnabled">
+            <ng-container *ngIf="isMLAEnabled()">
               <mat-checkbox [formControlName]="Controls.MLALogging">
                 User Cluster Logging
                 <i *ngIf="isEnforced(Controls.MLALogging)"
