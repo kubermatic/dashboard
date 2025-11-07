@@ -132,7 +132,6 @@ func (p *UserProvider) CreateUser(ctx context.Context, name, email string, group
 func (p *UserProvider) UpdateUser(ctx context.Context, user *kubermaticv1.User) (*kubermaticv1.User, error) {
 	// make sure the first patch doesn't override the status
 	status := user.Status.DeepCopy()
-	user.Spec.Email = strings.ToLower(user.Spec.Email)
 	if err := p.runtimeClient.Update(ctx, user); err != nil {
 		return nil, err
 	}
