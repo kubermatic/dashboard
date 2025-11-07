@@ -18,7 +18,8 @@ import (
 // swagger:model EnvVar
 type EnvVar struct {
 
-	// Name of the environment variable. Must be a C_IDENTIFIER.
+	// Name of the environment variable.
+	// May consist of any printable ASCII characters except '='.
 	Name string `json:"name,omitempty"`
 
 	// Variable references $(VAR_NAME) are expanded

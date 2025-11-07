@@ -1145,9 +1145,6 @@ func GenTestMachine(name, rawProviderSpec string, labels map[string]string, owne
 			Labels:          labels,
 			OwnerReferences: ownerRef,
 		},
-		TypeMeta: metav1.TypeMeta{
-			Kind: "Machine",
-		},
 		Spec: clusterv1alpha1.MachineSpec{
 			ProviderSpec: clusterv1alpha1.ProviderSpec{
 				Value: &runtime.RawExtension{
@@ -1178,9 +1175,6 @@ func GenTestMachineDeployment(name, rawProviderSpec string, selector map[string]
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: metav1.NamespaceSystem,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind: "MachineDeployment",
 		},
 		Spec: clusterv1alpha1.MachineDeploymentSpec{
 			Selector: metav1.LabelSelector{
@@ -1857,8 +1851,6 @@ func CreateRawVariables(t *testing.T, in map[string]interface{}) *runtime.RawExt
 
 func GenConstraint(name, namespace, kind string) *kubermaticv1.Constraint {
 	ct := &kubermaticv1.Constraint{}
-	ct.Kind = kubermaticv1.ConstraintKind
-	ct.APIVersion = kubermaticv1.SchemeGroupVersion.String()
 	ct.Name = name
 	ct.Namespace = namespace
 	ct.Spec = kubermaticv1.ConstraintSpec{
@@ -2009,10 +2001,6 @@ func GenRuleGroup(name, clusterName string, ruleGroupType kubermaticv1.RuleGroup
 			Name:      name,
 			Namespace: kubernetes.NamespaceName(clusterName),
 		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       kubermaticv1.RuleGroupKindName,
-			APIVersion: kubermaticv1.SchemeGroupVersion.String(),
-		},
 		Spec: kubermaticv1.RuleGroupSpec{
 			RuleGroupType: ruleGroupType,
 			IsDefault:     isDefault,
@@ -2029,10 +2017,6 @@ func GenAdminRuleGroup(name, namespace string, ruleGroupType kubermaticv1.RuleGr
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       kubermaticv1.RuleGroupKindName,
-			APIVersion: kubermaticv1.SchemeGroupVersion.String(),
 		},
 		Spec: kubermaticv1.RuleGroupSpec{
 			RuleGroupType: ruleGroupType,
@@ -2173,10 +2157,6 @@ func GenMLAAdminSetting(name, clusterName string, value int32) *kubermaticv1.MLA
 			Name:      name,
 			Namespace: kubernetes.NamespaceName(clusterName),
 		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       kubermaticv1.MLAAdminSettingKindName,
-			APIVersion: kubermaticv1.SchemeGroupVersion.String(),
-		},
 		Spec: kubermaticv1.MLAAdminSettingSpec{
 			ClusterName: clusterName,
 			MonitoringRateLimits: &kubermaticv1.MonitoringRateLimitSettings{
@@ -2225,10 +2205,6 @@ func GenApplicationInstallation(namespace string, name string, targetnamespace s
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       appskubermaticv1.ApplicationInstallationKindName,
-			APIVersion: appskubermaticv1.SchemeGroupVersion.String(),
 		},
 		Spec: appskubermaticv1.ApplicationInstallationSpec{
 			Namespace: &appskubermaticv1.AppNamespaceSpec{
@@ -2280,10 +2256,6 @@ func GenApplicationDefinition(name string) *appskubermaticv1.ApplicationDefiniti
 	return &appskubermaticv1.ApplicationDefinition{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       appskubermaticv1.ApplicationDefinitionKindName,
-			APIVersion: appskubermaticv1.SchemeGroupVersion.String(),
 		},
 		Spec: appskubermaticv1.ApplicationDefinitionSpec{
 			Method: appskubermaticv1.HelmTemplateMethod,

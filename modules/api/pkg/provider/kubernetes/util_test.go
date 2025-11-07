@@ -68,7 +68,6 @@ func createAuthenitactedUser() *kubermaticv1.User {
 
 func createBinding(name, projectID, email, group string) *kubermaticv1.UserProjectBinding {
 	binding := genBinding(projectID, email, group)
-	binding.Kind = kubermaticv1.UserProjectBindingKind
 	binding.Name = name
 	return binding
 }
@@ -123,10 +122,6 @@ func genUser(id, name, email string) *kubermaticv1.User {
 // genProject generates new empty project.
 func genProject(name string, phase kubermaticv1.ProjectPhase, creationTime time.Time) *kubermaticv1.Project {
 	return &kubermaticv1.Project{
-		TypeMeta: metav1.TypeMeta{
-			Kind:       "Project",
-			APIVersion: "kubermatic.k8c.io/v1",
-		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:              fmt.Sprintf("%s-%s", name, "ID"),
 			CreationTimestamp: metav1.NewTime(creationTime),
@@ -234,8 +229,6 @@ func genCluster(name, clusterType, projectID, workerName, userEmail string) *kub
 
 func genConstraintTemplate(name string) *kubermaticv1.ConstraintTemplate {
 	ct := &kubermaticv1.ConstraintTemplate{}
-	ct.Kind = "ConstraintTemplate"
-	ct.APIVersion = kubermaticv1.SchemeGroupVersion.String()
 	ct.Name = name
 	ct.Spec = kubermaticv1.ConstraintTemplateSpec{
 		CRD: constrainttemplatev1.CRD{
