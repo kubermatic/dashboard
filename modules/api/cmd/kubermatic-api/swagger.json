@@ -32763,7 +32763,7 @@
       "title": "EnvVar represents an environment variable present in a Container.",
       "properties": {
         "name": {
-          "description": "Name of the environment variable. Must be a C_IDENTIFIER.",
+          "description": "Name of the environment variable.\nMay consist of any printable ASCII characters except '='.",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -32787,6 +32787,9 @@
         },
         "fieldRef": {
           "$ref": "#/definitions/ObjectFieldSelector"
+        },
+        "fileKeyRef": {
+          "$ref": "#/definitions/FileKeySelector"
         },
         "resourceFieldRef": {
           "$ref": "#/definitions/ResourceFieldSelector"
@@ -33526,6 +33529,34 @@
       "type": "string",
       "title": "FieldValueErrorReason is a machine-readable value providing more detail about why a field failed the validation.",
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+    },
+    "FileKeySelector": {
+      "description": "+structType=atomic",
+      "type": "object",
+      "title": "FileKeySelector selects a key of the env file.",
+      "properties": {
+        "key": {
+          "description": "The key within the env file. An invalid key will prevent the pod from starting.\nThe keys defined within a source may consist of any printable ASCII characters except '='.\nDuring Alpha stage of the EnvFiles feature gate, the key size is limited to 128 characters.\n+required",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "optional": {
+          "description": "Specify whether the file or its key must be defined. If the file or key\ndoes not exist, then the env var is not published.\nIf optional is set to true and the specified key does not exist,\nthe environment variable will not be set in the Pod's containers.\n\nIf optional is set to false and the specified key does not exist,\nan error will be returned during Pod creation.\n+optional\n+default=false",
+          "type": "boolean",
+          "x-go-name": "Optional"
+        },
+        "path": {
+          "description": "The path within the volume from which to select the file.\nMust be relative and may not contain the '..' path or start with '..'.\n+required",
+          "type": "string",
+          "x-go-name": "Path"
+        },
+        "volumeName": {
+          "description": "The name of the volume mount containing the env file.\n+required",
+          "type": "string",
+          "x-go-name": "VolumeName"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
     },
     "FlatcarSpec": {
       "description": "FlatcarSpec contains Flatcar Linux specific settings",
@@ -40100,7 +40131,7 @@
       "title": "ResourceRequirements describes the compute resource requirements.",
       "properties": {
         "claims": {
-          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.\n\n+listType=map\n+listMapKey=name\n+featureGate=DynamicResourceAllocation\n+optional",
+          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis field depends on the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.\n\n+listType=map\n+listMapKey=name\n+featureGate=DynamicResourceAllocation\n+optional",
           "type": "array",
           "items": {
             "$ref": "#/definitions/ResourceClaim"
