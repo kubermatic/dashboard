@@ -673,7 +673,6 @@ func TestCreatePreset(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "multi-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{
 						Token: "test",
@@ -1234,7 +1233,6 @@ func TestDeleteProviderPreset(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "do-os-preset", ResourceVersion: "1000"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Openstack: &kubermaticv1.Openstack{
 						Username: "username",
@@ -1314,7 +1312,6 @@ func TestDeletePresetProvider(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "do-preset"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec:       kubermaticv1.PresetSpec{},
 			},
 			HTTPStatus:      http.StatusOK,
