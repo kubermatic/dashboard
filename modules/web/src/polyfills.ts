@@ -30,8 +30,8 @@ import 'core-js/es/string';
 import 'core-js/es/symbol';
 
 import 'zone.js';
+import {Buffer} from 'buffer';
 
 (window as any).global = window;
 (window as any).process = {browser: true, env: {}};
-/* eslint-disable @typescript-eslint/no-require-imports */
-(window as any).Buffer = (window as any).Buffer || require('buffer').Buffer;
+(window as any).Buffer = (window as any).Buffer || Buffer;
