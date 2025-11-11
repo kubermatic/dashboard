@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-external-cluster-details *ngIf="spec && cloudSpec"
-                             [cluster]="cluster">
+@if (spec && cloudSpec) {
+<km-external-cluster-details [cluster]="cluster">
   <ng-container leftColumn>
     <km-property>
       <div key>Zone</div>
@@ -22,16 +22,13 @@ limitations under the License.
         <span>{{ cloudSpec.zone }}</span>
       </div>
     </km-property>
-
     <div class="section-header">Kubernetes Version</div>
-
     <km-property>
       <div key>Release Channel</div>
       <div value>
         <span>{{ spec.releaseChannel ?? 'STATIC' }}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Version</div>
       <div value>
@@ -39,39 +36,33 @@ limitations under the License.
       </div>
     </km-property>
   </ng-container>
-
-  <ng-container rightColumn
-                *ngIf="spec.nodeConfig as nodeConfig">
+  @if (spec.nodeConfig; as nodeConfig) {
+  <ng-container rightColumn>
     <div class="section-header">Initial Node Pool</div>
-
     <km-property>
       <div key>Node Pool Name</div>
       <div value>
         <span>{{ nodeConfig.name}}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Machine Types</div>
       <div value>
         <span>{{ nodeConfig.machineType }}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Disk Types</div>
       <div value>
         <span>{{ nodeConfig.diskType }}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Disk Size</div>
       <div value>
         <span>{{ nodeConfig.diskSizeGb }}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Initial Node Count</div>
       <div value>
@@ -79,4 +70,6 @@ limitations under the License.
       </div>
     </km-property>
   </ng-container>
+  }
 </km-external-cluster-details>
+}

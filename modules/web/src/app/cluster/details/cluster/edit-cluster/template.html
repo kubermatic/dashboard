@@ -31,12 +31,16 @@ limitations under the License.
                autocomplete="off"
                cdkFocusInitial
                kmValueChangedIndicator />
-        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        @if (form.get(Controls.Name).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
+        }
+        @if (form.get(Controls.Name).hasError('minlength')) {
+        <mat-error>
           Name must be at least {{form.get(Controls.Name).getError('minlength').requiredLength}} characters.
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="km-dropdown-with-suffix"
@@ -62,18 +66,20 @@ limitations under the License.
                       panelClass="km-multiple-values-dropdown"
                       kmValueChangedIndicator
                       disableOptionCentering>
-            <mat-option *ngFor="let admissionPlugin of admissionPlugins"
-                        [value]="admissionPlugin"
+            @for (admissionPlugin of admissionPlugins; track admissionPlugin) {
+            <mat-option [value]="admissionPlugin"
                         [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
               {{getPluginName(admissionPlugin)}}
-              <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
-                 class="km-icon-info km-pointer"
+              @if (admissionPlugin === admissionPlugin.PodSecurityPolicy) {
+              <i class="km-icon-info km-pointer"
                  matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+              }
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
-        <div *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
-             class="km-admission-plugin-warning"
+        @if (isPluginEnabled(admissionPlugin.PodSecurityPolicy)) {
+        <div class="km-admission-plugin-warning"
              fxLayout="row"
              fxLayoutAlign=" center"
              fxLayoutGap="16px">
@@ -89,14 +95,16 @@ limitations under the License.
                rel="noreferrer noopener">Learn more<i class="km-icon-external-link i-18"></i></a>
           </p>
         </div>
-        <div *ngIf="isPodSecurityPolicyEnforced()"
-             class="km-admission-plugin-warning"
+        }
+        @if (isPodSecurityPolicyEnforced()) {
+        <div class="km-admission-plugin-warning"
              fxLayout="row">
           <i class="km-icon-info km-pointer"></i>
           <p fxFlex="95">Pod Security Policy is enforced by your admin in the chosen datacenter.</p>
         </div>
-        <km-label-form *ngIf="isPluginEnabled(admissionPlugin.PodNodeSelector)"
-                       class="pod-node-selector-config"
+        }
+        @if (isPluginEnabled(admissionPlugin.PodNodeSelector)) {
+        <km-label-form class="pod-node-selector-config"
                        title="Pod Node Selector Configuration"
                        keyName="Namespace"
                        valueName="Label Selector"
@@ -106,23 +114,26 @@ limitations under the License.
                        [labelHint]="CLUSTER_DEFAULT_NODE_SELECTOR_HINT"
                        [labelHintKey]="CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE"
                        (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
-                       fxFlex="100"></km-label-form>
-        <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
+                       fxFlex="100" />
+        }
+        @if (isPluginEnabled(admissionPlugin.EventRateLimit)) {
+        <div>
           <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"
-                                              [eventRateLimitConfig]="eventRateLimitConfig"></km-wizard-cluster-event-rate-limit>
+                                              [eventRateLimitConfig]="eventRateLimitConfig" />
         </div>
+        }
       </div>
 
-      <km-chip-list *ngIf="isAllowedIPRangeSupported"
-                    label="Allowed IP Ranges for NodePorts"
+      @if (isAllowedIPRangeSupported) {
+      <km-chip-list label="Allowed IP Ranges for NodePorts"
                     placeholder="IP CIDRs..."
                     [formControlName]="Controls.NodePortsAllowedIPRanges"
                     [kmPattern]="ipv4AndIPv6CidrRegex"
-                    kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
-      </km-chip-list>
+                    kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR" />
+      }
 
-      <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
-                    class="tag-list"
+      @if (isExposeStrategyLoadBalancer()) {
+      <km-chip-list class="tag-list"
                     label="Allowed IP Ranges for API server"
                     placeholder="IP CIDRs..."
                     description=""
@@ -141,6 +152,7 @@ limitations under the License.
              href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/apiserver-policies/#api-server-allowed-source-ip-ranges">here <i class="km-icon-external-link"></i></a>.
         </ng-container>
       </km-chip-list>
+      }
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.Konnectivity"
@@ -148,16 +160,17 @@ limitations under the License.
                       kmValueChangedIndicator>
           Konnectivity
         </mat-checkbox>
-        <i *ngIf="!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled"
-           class="km-icon-info km-pointer"
+        @if (!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled) {
+        <i class="km-icon-info km-pointer"
            matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
+        }
       </div>
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
                       kmValueChangedIndicator>Audit Logging</mat-checkbox>
-        <mat-button-toggle-group *ngIf="!!form.get(Controls.AuditLogging).value"
-                                 [formControlName]="Controls.AuditPolicyPreset"
+        @if (!!form.get(Controls.AuditLogging).value) {
+        <mat-button-toggle-group [formControlName]="Controls.AuditPolicyPreset"
                                  group="auditLogging"
                                  kmValueChangedIndicator>
           <mat-button-toggle [value]="AuditPolicyPreset.Custom"
@@ -177,121 +190,133 @@ limitations under the License.
             recommended
           </mat-button-toggle>
         </mat-button-toggle-group>
-        <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-           class="km-icon-info km-pointer"
+        }
+        @if (!!datacenter.spec.enforceAuditLogging) {
+        <i class="km-icon-info km-pointer"
            matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
+        }
       </div>
 
-      <ng-container *ngIf="!!form.get(Controls.AuditLogging).value">
-        <div fxLayoutAlign=" center">
-          <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
-          <i class="km-icon-info km-pointer"
-             matTooltip="Configure webhook backend for audit logging functionality."></i>
-        </div>
-
-        <ng-container *ngIf="!!form.get(Controls.AuditWebhookBackend).value">
-          <mat-form-field>
-            <mat-label>Secret Name</mat-label>
-            <input matInput
-                   [formControlName]="Controls.AuditWebhookBackendSecretName"
-                   type="text"
-                   autocomplete="off" />
-            <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretName)?.hasError('required')">
-              <strong>Required</strong>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Secret Namespace</mat-label>
-            <input matInput
-                   [formControlName]="Controls.AuditWebhookBackendSecretNamespace"
-                   type="text"
-                   autocomplete="off" />
-            <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretNamespace)?.hasError('required')">
-              <strong>Required</strong>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Initial Backoff</mat-label>
-            <input matInput
-                   [formControlName]="Controls.AuditWebhookBackendInitialBackoff"
-                   type="text"
-                   autocomplete="off" />
-            <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
-          </mat-form-field>
-        </ng-container>
-      </ng-container>
+      @if (!!form.get(Controls.AuditLogging).value) {
+      <div fxLayoutAlign=" center">
+        <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
+        <i class="km-icon-info km-pointer"
+           matTooltip="Configure webhook backend for audit logging functionality."></i>
+      </div>
+      @if (!!form.get(Controls.AuditWebhookBackend).value) {
+      <mat-form-field>
+        <mat-label>Secret Name</mat-label>
+        <input matInput
+               [formControlName]="Controls.AuditWebhookBackendSecretName"
+               type="text"
+               autocomplete="off" />
+        @if (form.get(Controls.AuditWebhookBackendSecretName)?.hasError('required')) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Secret Namespace</mat-label>
+        <input matInput
+               [formControlName]="Controls.AuditWebhookBackendSecretNamespace"
+               type="text"
+               autocomplete="off" />
+        @if (form.get(Controls.AuditWebhookBackendSecretNamespace)?.hasError('required')) {
+        <mat-error>
+          <strong>Required</strong>
+        </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Initial Backoff</mat-label>
+        <input matInput
+               [formControlName]="Controls.AuditWebhookBackendInitialBackoff"
+               type="text"
+               autocomplete="off" />
+        <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
+      </mat-form-field>
+      }
+      }
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration"
                     kmValueChangedIndicator>
         OPA Integration
-        <i *ngIf="isEnforced(Controls.OPAIntegration)"
-           class="km-icon-info km-pointer"
+        @if (isEnforced(Controls.OPAIntegration)) {
+        <i class="km-icon-info km-pointer"
            matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+        }
       </mat-checkbox>
 
-      <mat-checkbox *ngIf="isEnterpriseEdition"
-                    [formControlName]="Controls.KyvernoIntegration"
+      @if (isEnterpriseEdition) {
+      <mat-checkbox [formControlName]="Controls.KyvernoIntegration"
                     kmValueChangedIndicator>
         Kyverno Policy Management
         <i class="km-icon-info km-pointer"
            matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
       </mat-checkbox>
+      }
 
+      @if (isMLAEnabled()) {
       <mat-checkbox [formControlName]="Controls.MLALogging"
-                    *ngIf="isMLAEnabled()"
                     kmValueChangedIndicator>
         User Cluster Logging
-        <i *ngIf="isEnforced(Controls.MLALogging)"
-           class="km-icon-info km-pointer"
+        @if (isEnforced(Controls.MLALogging)) {
+        <i class="km-icon-info km-pointer"
            matTooltip="User Cluster Logging is enforced by your admin."></i>
+        }
       </mat-checkbox>
+      }
 
+      @if (isMLAEnabled()) {
       <mat-checkbox [formControlName]="Controls.MLAMonitoring"
-                    *ngIf="isMLAEnabled()"
                     kmValueChangedIndicator>
         User Cluster Monitoring
-        <i *ngIf="isEnforced(Controls.MLAMonitoring)"
-           class="km-icon-info km-pointer"
+        @if (isEnforced(Controls.MLAMonitoring)) {
+        <i class="km-icon-info km-pointer"
            matTooltip="User Cluster Monitoring is enforced by your admin."></i>
+        }
       </mat-checkbox>
+      }
 
-      <mat-checkbox *ngIf="isKubernetesDashboardEnable"
-                    [formControlName]="Controls.KubernetesDashboardEnabled"
+      @if (isKubernetesDashboardEnable) {
+      <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
                     kmValueChangedIndicator>
         Kubernetes Dashboard
       </mat-checkbox>
+      }
 
-      <ng-container *ngIf="isEnterpriseEdition">
-        <div fxLayout="row"
-             fxLayoutAlign=" center"
-             *ngIf="isKubeLBEnabled || isKubeLBEnabledForCluster()"
-             [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''">
-          <mat-checkbox [formControlName]="Controls.KubeLB"
-                        [disabled]="isKubeLBEnforced"
-                        kmValueChangedIndicator>
-            Kubermatic KubeLB
-          </mat-checkbox>
+      @if (isEnterpriseEdition) {
+      @if (isKubeLBEnabled || isKubeLBEnabledForCluster()) {
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''">
+        <mat-checkbox [formControlName]="Controls.KubeLB"
+                      [disabled]="isKubeLBEnforced"
+                      kmValueChangedIndicator>
+          Kubermatic KubeLB
+        </mat-checkbox>
+        <i class="km-icon-info km-pointer"
+           [matTooltip]="'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
+      </div>
+      }
+      @if (form.get(Controls.KubeLB).value) {
+      <div class="km-suboption">
+        <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
+          Use LoadBalancer Class
           <i class="km-icon-info km-pointer"
-             [matTooltip]="'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
-        </div>
-
-        <ng-container *ngIf="form.get(Controls.KubeLB).value">
-          <div class="km-suboption">
-            <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
-              Use LoadBalancer Class
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to limit KubeLB to only process services with Kubernetes LoadBalancer Class named `kubelb`. When disabled, KubeLB will manage all services of type `LoadBalancer`"></i>
-            </mat-checkbox>
-          </div>
-          <div class="km-suboption">
-            <mat-checkbox [formControlName]="Controls.KubeLBEnableGatewayAPI">
-              Enable Gateway API
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to use Gateway APIs. KKP will install the Gateway API CRDs in this cluster."></i>
-            </mat-checkbox>
-          </div>
-        </ng-container>
-      </ng-container>
+             matTooltip="Enable to limit KubeLB to only process services with Kubernetes LoadBalancer Class named `kubelb`. When disabled, KubeLB will manage all services of type `LoadBalancer`"></i>
+        </mat-checkbox>
+      </div>
+      <div class="km-suboption">
+        <mat-checkbox [formControlName]="Controls.KubeLBEnableGatewayAPI">
+          Enable Gateway API
+          <i class="km-icon-info km-pointer"
+             matTooltip="Enable to use Gateway APIs. KKP will install the Gateway API CRDs in this cluster."></i>
+        </mat-checkbox>
+      </div>
+      }
+      }
 
       <mat-checkbox [formControlName]="Controls.DisableCSIDriver"
                     [disabled]="isCSIDriverDisabled"
@@ -312,8 +337,8 @@ limitations under the License.
         </div>
       </mat-checkbox>
 
-      <mat-form-field *ngIf="!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()"
-                      subscriptSizing="dynamic">
+      @if (!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()) {
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Encryption Key</mat-label>
         <input matInput
                [formControlName]="Controls.EncryptionAtRestKey"
@@ -328,41 +353,52 @@ limitations under the License.
                 (click)="generateEncryptionKey()">
           <i class="km-icon-randomize"></i>
         </button>
-        <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('required')">
+        @if (form.get(Controls.EncryptionAtRestKey)?.hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('invalidBase64')">
+        }
+        @if (form.get(Controls.EncryptionAtRestKey)?.hasError('invalidBase64')) {
+        <mat-error>
           <strong>Invalid base64 format</strong>
         </mat-error>
+        }
       </mat-form-field>
+      }
 
+      @if (isclusterBackupEnabled) {
       <mat-checkbox [formControlName]="Controls.ClusterBackup"
-                    *ngIf="isclusterBackupEnabled"
                     kmValueChangedIndicator>
         Cluster Backup
         <i class="km-icon-info km-pointer"
            matTooltip="Enable create backups from this cluster"></i>
       </mat-checkbox>
+      }
 
-      <mat-checkbox *ngIf="datacenter?.spec?.provider === NodeProvider.OPENSTACK"
-                    [formControlName]="Controls.RouterReconciliation">
+      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
+      <mat-checkbox [formControlName]="Controls.RouterReconciliation">
         Skip Router Reconciliation
       </mat-checkbox>
+      }
 
-      <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled"
-                      class="bsl-field">
+      @if (!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled) {
+      <mat-form-field class="bsl-field">
         <mat-label>{{backupStorageLocationLabel}}</mat-label>
         <mat-select [formControlName]="Controls.BackupStorageLocation"
                     disableOptionCentering
                     kmValueChangedIndicator>
-          <mat-option *ngFor="let bsl of backupStorageLocationsList"
-                      [value]="bsl.name">{{bsl.displayName}}
+          @for (bsl of backupStorageLocationsList; track bsl) {
+          <mat-option [value]="bsl.name">{{bsl.displayName}}
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.BackupStorageLocation).hasError('required')">
+        @if (form.get(Controls.BackupStorageLocation).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
+      }
 
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"
@@ -373,12 +409,11 @@ limitations under the License.
                      [canDeleteDisabledLabel]="true"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]="asyncLabelValidators"
-                     [formControlName]="Controls.Labels"></km-label-form>
+                     [formControlName]="Controls.Labels" />
 
       <km-annotation-form [annotations]="annotations"
                           [formControlName]="Controls.Annotations"
-                          (annotationsChange)="onAnnotationsChange($event)">
-      </km-annotation-form>
+                          (annotationsChange)="onAnnotationsChange($event)" />
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -387,7 +422,6 @@ limitations under the License.
                label="Save Changes"
                [disabled]="!form.valid || !providerSettingsPatch.isValid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

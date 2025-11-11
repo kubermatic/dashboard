@@ -48,7 +48,7 @@ limitations under the License.
                           id="km-cleanup-enforce-setting"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)" />
           </div>
         </div>
 
@@ -75,7 +75,7 @@ limitations under the License.
                           id="km-opa-enforce-setting"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.opaOptions, apiSettings.opaOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.opaOptions, apiSettings.opaOptions)" />
           </div>
         </div>
 
@@ -97,7 +97,7 @@ limitations under the License.
                           (change)="onSettingsChange()"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()" />
           </div>
         </div>
 
@@ -119,7 +119,7 @@ limitations under the License.
                           (change)="onSettingsChange()"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()" />
           </div>
         </div>
 
@@ -141,7 +141,7 @@ limitations under the License.
                           (change)="onSettingsChange()"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentOptions, apiSettings.machineDeploymentOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentOptions, apiSettings.machineDeploymentOptions)" />
           </div>
         </div>
 
@@ -155,8 +155,8 @@ limitations under the License.
           </div>
           <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
                         (change)="onSettingsChange()"
-                        id="km-enable-external-clusters-setting"></mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
+                        id="km-enable-external-clusters-setting" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)" />
         </div>
 
         <div fxLayout="row">
@@ -171,21 +171,21 @@ limitations under the License.
                         (change)="onSettingsChange()"
                         [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
                         id="km-enable-kubernetes-dashboard-setting">
-            <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
-              <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled. Visit the
-                <a [href]="getDocumentationLink()"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="km-clickable-link"
-                   fxLayout="row inline"
-                   fxLayoutAlign=" center">
-                  documentation <i class="km-icon-external-link i-18"></i>
-                </a>
-                to learn more.
-              </mat-hint>
-            </ng-container>
+            @if (!isKubernetesDashboardFeatureGatesEnabled()) {
+            <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled. Visit the
+              <a [href]="getDocumentationLink()"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="km-clickable-link"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center">
+                documentation <i class="km-icon-external-link i-18"></i>
+              </a>
+              to learn more.
+            </mat-hint>
+            }
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)" />
         </div>
 
         <div fxLayout="row">
@@ -200,7 +200,8 @@ limitations under the License.
                         [disabled]="!isOIDCKubeCfgEndpointEnabled"
                         (change)="onOIDCKubeconfigSettingsChange()"
                         id="km-enable-oidc-setting">
-            <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
+            @if (!isOIDCKubeCfgEndpointEnabled) {
+            <mat-hint>This feature is disabled. Visit the
               <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -211,8 +212,9 @@ limitations under the License.
               </a>
               to learn more.
             </mat-hint>
+            }
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)" />
         </div>
 
         <div fxLayout="row">
@@ -225,9 +227,8 @@ limitations under the License.
           </div>
           <mat-checkbox class="experimental-label"
                         [(ngModel)]="settings.enableEtcdBackup"
-                        (change)="onSettingsChange()">
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableEtcdBackup, apiSettings.enableEtcdBackup)"></km-spinner-with-confirmation>
+                        (change)="onSettingsChange()" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableEtcdBackup, apiSettings.enableEtcdBackup)" />
         </div>
 
         <div fxLayout="row">
@@ -242,7 +243,8 @@ limitations under the License.
                         [disabled]="!settings.enableOIDCKubeconfig"
                         (change)="onSettingsChange()"
                         id="km-disabled-admin-kubeconfig-setting">
-            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+            @if (!settings.enableOIDCKubeconfig) {
+            <mat-hint>This feature requires the OIDC kubeconfig feature to be enabled. Visit the
               <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -253,8 +255,9 @@ limitations under the License.
               </a>
               to learn more.
             </mat-hint>
+            }
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)" />
         </div>
 
         <div fxLayout="row">
@@ -267,9 +270,8 @@ limitations under the License.
           </div>
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enabled"
                         [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()">
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enabled, apiSettings.webTerminalOptions.enabled)"></km-spinner-with-confirmation>
+                        (change)="onSettingsChange()" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enabled, apiSettings.webTerminalOptions.enabled)" />
         </div>
 
         <div fxLayout="row">
@@ -282,9 +284,8 @@ limitations under the License.
           </div>
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enableInternetAccess"
                         [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()">
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enableInternetAccess, apiSettings.webTerminalOptions.enableInternetAccess)"></km-spinner-with-confirmation>
+                        (change)="onSettingsChange()" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enableInternetAccess, apiSettings.webTerminalOptions.enableInternetAccess)" />
         </div>
 
         <div fxLayout="row">
@@ -297,9 +298,8 @@ limitations under the License.
           </div>
           <mat-checkbox [(ngModel)]="settings.enableShareCluster"
                         [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()">
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableShareCluster, apiSettings.enableShareCluster)"></km-spinner-with-confirmation>
+                        (change)="onSettingsChange()" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableShareCluster, apiSettings.enableShareCluster)" />
         </div>
 
         <div fxLayout="row">
@@ -312,13 +312,12 @@ limitations under the License.
           </div>
           <mat-checkbox class="experimental-label"
                         [(ngModel)]="settings.enableClusterBackups"
-                        (change)="onSettingsChange()">
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
+                        (change)="onSettingsChange()" />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)" />
         </div>
 
-        <div *ngIf="settings.enableClusterBackups"
-             fxLayout="row">
+        @if (settings.enableClusterBackups) {
+        <div fxLayout="row">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
@@ -333,8 +332,9 @@ limitations under the License.
                         [value]="settings.clusterBackupOptions?.defaultChecksumAlgorithm"
                         (selectionChange)="onVeleroChecksumAlgorithmChange($event.value)"
                         disableOptionCentering>
-              <mat-option *ngFor="let algorithm of veleroChecksumAlgorithms"
-                          [value]="algorithm"> {{algorithm}} </mat-option>
+              @for (algorithm of veleroChecksumAlgorithms; track algorithm) {
+              <mat-option [value]="algorithm"> {{algorithm}} </mat-option>
+              }
               <mat-select-trigger fxFlex
                                   fxLayout="row"
                                   fxLayoutAlign=" center">
@@ -342,23 +342,24 @@ limitations under the License.
                      fxLayoutAlign="start">
                   {{settings.clusterBackupOptions?.defaultChecksumAlgorithm}}
                 </div>
-
                 <div fxFlex
                      fxLayoutAlign="end"
                      class="km-select-trigger-button-wrapper">
-                  <button *ngIf="settings.clusterBackupOptions?.defaultChecksumAlgorithm"
-                          (click)="onVeleroChecksumAlgorithmChange(''); $event.stopPropagation()"
+                  @if (settings.clusterBackupOptions?.defaultChecksumAlgorithm) {
+                  <button (click)="onVeleroChecksumAlgorithmChange(''); $event.stopPropagation()"
                           matSuffix
                           mat-icon-button
                           aria-label="Clear">
                     <i class="km-icon-mask km-icon-remove"></i>
                   </button>
+                  }
                 </div>
               </mat-select-trigger>
             </mat-select>
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.clusterBackupOptions?.defaultChecksumAlgorithm, apiSettings.clusterBackupOptions?.defaultChecksumAlgorithm)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.clusterBackupOptions?.defaultChecksumAlgorithm, apiSettings.clusterBackupOptions?.defaultChecksumAlgorithm)" />
         </div>
+        }
 
         <div fxLayout="row">
           <div fxFlex="16%"
@@ -376,7 +377,7 @@ limitations under the License.
                    [(ngModel)]="settings.mlaAlertmanagerPrefix"
                    type="text" />
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)" />
         </div>
 
         <div fxLayout="row">
@@ -395,7 +396,7 @@ limitations under the License.
                    [(ngModel)]="settings.mlaGrafanaPrefix"
                    type="text" />
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaGrafanaPrefix, apiSettings.mlaGrafanaPrefix)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaGrafanaPrefix, apiSettings.mlaGrafanaPrefix)" />
         </div>
 
         <div fxLayout="row">
@@ -408,9 +409,8 @@ limitations under the License.
                              label="Initial Replicas"
                              min="0"
                              max="50"
-                             required>
-          </km-number-stepper>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
+                             required />
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)" />
         </div>
 
         <div fxLayout="row">
@@ -467,7 +467,7 @@ limitations under the License.
           </div>
           <km-static-labels-form class="static-labels"
                                  [staticLabels]="settings.staticLabels"
-                                 (staticLabelsChange)="onStaticLabelsChange($event)"></km-static-labels-form>
+                                 (staticLabelsChange)="onStaticLabelsChange($event)" />
         </div>
         <div fxLayout="row">
           <div fxFlex="16%"
@@ -483,15 +483,13 @@ limitations under the License.
             <km-chip-list label="Hidden Annotations"
                           [tags]="hiddenAnnotations"
                           (onChange)="onHiddenAnnotationsChange($event)"
-                          fxFlex>
-            </km-chip-list>
+                          fxFlex />
 
             <km-chip-list label="Protected Annotations"
                           [tags]="protectedAnnotations"
                           (onChange)="onProtectedAnnotationsChange($event)"
                           description="Use comma, space or enter key as the separator. presetName is an internal KKP protected annotation and cannot be deleted."
-                          fxFlex>
-            </km-chip-list>
+                          fxFlex />
           </div>
         </div>
       </div>
@@ -530,7 +528,7 @@ limitations under the License.
                           id="km-openstack-enforce-custom-disk"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, apiSettings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, apiSettings.providerConfiguration.openStack.enforceCustomDisk)" />
           </div>
         </div>
       </div>
@@ -548,11 +546,12 @@ limitations under the License.
                       multiple
                       disableOptionCentering
                       kmValueChangedIndicator>
-            <mat-option *ngFor="let mode of ipAllocationModes"
-                        [value]="mode"> {{mode}} </mat-option>
+            @for (mode of ipAllocationModes; track mode) {
+            <mat-option [value]="mode"> {{mode}} </mat-option>
+            }
           </mat-select>
         </mat-form-field>
-        <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes, apiSettings.providerConfiguration.vmwareCloudDirector.ipAllocationModes)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes, apiSettings.providerConfiguration.vmwareCloudDirector.ipAllocationModes)" />
       </div>
     </div>
   </mat-card-content>

@@ -16,9 +16,9 @@ limitations under the License.
 
 <km-dialog-title>Announcements</km-dialog-title>
 <mat-dialog-content class="announcements-dialog-content">
+  @if (hasAnnouncements()) {
   <table mat-table
          matSort
-         *ngIf="hasAnnouncements()"
          class="km-table"
          [dataSource]="dataSource">
     <ng-container [matColumnDef]="Column.Message">
@@ -35,7 +35,7 @@ limitations under the License.
           class="km-header-cell p-20">Created</th>
       <td mat-cell
           *matCellDef="let element">
-        <km-relative-time [date]="getCreatedAt(element)"></km-relative-time>
+        <km-relative-time [date]="getCreatedAt(element)" />
       </td>
     </ng-container>
     <ng-container [matColumnDef]="Column.Actions">
@@ -44,14 +44,15 @@ limitations under the License.
           class="km-header-cell"></th>
       <td mat-cell
           *matCellDef="let element">
-        <button *ngIf="!isMessageRead(element) && !markingAnnouncementsAsRead[element]"
-                mat-icon-button
+        @if (!isMessageRead(element) && !markingAnnouncementsAsRead[element]) {
+        <button mat-icon-button
                 (click)="markAsRead(element)"
                 matTooltip="Mark as read"
                 fxLayoutAlign="center center">
           <i class="km-icon-mask km-icon-check"></i>
         </button>
-        <km-spinner-with-confirmation [isSaved]="!markingAnnouncementsAsRead[element]"></km-spinner-with-confirmation>
+        }
+        <km-spinner-with-confirmation [isSaved]="!markingAnnouncementsAsRead[element]" />
       </td>
     </ng-container>
     <tr mat-header-row
@@ -62,8 +63,9 @@ limitations under the License.
         class="km-mat-row"
         [ngClass]="{'unread-announcement': !isMessageRead(row)}"></tr>
   </table>
-  <div class="km-row km-empty-list-msg"
-       *ngIf="!hasAnnouncements()">No announcements available.</div>
+  }
+  @if (!hasAnnouncements()) {
+  <div class="km-row km-empty-list-msg">No announcements available.</div>
+  }
 </mat-dialog-content>
-<mat-dialog-actions>
-</mat-dialog-actions>
+<mat-dialog-actions />

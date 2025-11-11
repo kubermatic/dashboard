@@ -30,8 +30,8 @@ limitations under the License.
     </mat-button-toggle>
   </mat-button-toggle-group>
 
-  <form *ngIf="credentialsType === CredentialsType.Default"
-        [formGroup]="defaultCredentialsForm"
+  @if (credentialsType === CredentialsType.Default) {
+  <form [formGroup]="defaultCredentialsForm"
         fxLayout="column"
         fxLayoutGap="8px">
     <mat-form-field fxFlex>
@@ -43,9 +43,11 @@ limitations under the License.
              autocomplete="off"
              required
              kmValueChangedIndicator>
-      <mat-error *ngIf="defaultCredentialsForm.get(Control.Username).hasError('required')">
+      @if (defaultCredentialsForm.get(Control.Username).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field fxFlex>
       <mat-label>Password</mat-label>
@@ -55,11 +57,12 @@ limitations under the License.
              autocomplete="off"
              required
              kmValueChangedIndicator>
-      <mat-error *ngIf="defaultCredentialsForm.get(Control.Password).hasError('required')">
+      @if (defaultCredentialsForm.get(Control.Password).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
-
     <mat-form-field fxFlex>
       <mat-label>Project</mat-label>
       <input [formControlName]="Control.Project"
@@ -68,11 +71,12 @@ limitations under the License.
              matInput
              autocomplete="off"
              kmValueChangedIndicator>
-      <mat-error *ngIf="defaultCredentialsForm.get(Control.Project).hasError('required')">
+      @if (defaultCredentialsForm.get(Control.Project).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
-
     <mat-form-field fxFlex>
       <mat-label>Project ID</mat-label>
       <input [formControlName]="Control.ProjectID"
@@ -81,22 +85,25 @@ limitations under the License.
              matInput
              autocomplete="off"
              kmValueChangedIndicator>
-      <mat-error *ngIf="defaultCredentialsForm.get(Control.ProjectID).hasError('required')">
+      @if (defaultCredentialsForm.get(Control.ProjectID).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
-
-    <div *ngIf="defaultCredentialsForm.get(Control.Project).value || defaultCredentialsForm.get(Control.ProjectID).value"
-         fxFlex
+    @if (defaultCredentialsForm.get(Control.Project).value || defaultCredentialsForm.get(Control.ProjectID).value) {
+    <div fxFlex
          fxLayout="row"
          fxLayoutAlign="start center"
          class="warning-container">
       <i class="km-icon-warning"></i>
       <p class="km-text km-no-margin">When switching from application to user credentials, ensure that you are configuring the project already in use.</p>
     </div>
+    }
   </form>
-  <form *ngIf="credentialsType === CredentialsType.Application"
-        [formGroup]="applicationCredentialsForm"
+  }
+  @if (credentialsType === CredentialsType.Application) {
+  <form [formGroup]="applicationCredentialsForm"
         fxLayout="column"
         fxLayoutGap="8px">
     <mat-form-field fxFlex>
@@ -107,11 +114,12 @@ limitations under the License.
              autocomplete="off"
              required
              kmValueChangedIndicator>
-      <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialID).hasError('required')">
+      @if (applicationCredentialsForm.get(Control.ApplicationCredentialID).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
-
     <mat-form-field fxFlex>
       <mat-label>Application Credential Secret</mat-label>
       <input [formControlName]="Control.ApplicationCredentialSecret"
@@ -121,11 +129,14 @@ limitations under the License.
              autocomplete="off"
              required
              kmValueChangedIndicator>
-      <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialSecret).hasError('required')">
+      @if (applicationCredentialsForm.get(Control.ApplicationCredentialSecret).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
   </form>
+  }
 
   <mat-form-field fxFlex>
     <mat-label>Domain</mat-label>
@@ -135,8 +146,10 @@ limitations under the License.
            autocomplete="off"
            [required]="credentialsType === CredentialsType.Default"
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Control.Domain).hasError('required')">
+    @if (form.get(Control.Domain).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

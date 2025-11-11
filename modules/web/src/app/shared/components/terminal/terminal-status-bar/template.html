@@ -21,28 +21,34 @@ limitations under the License.
     <div>
       <i class="km-icon-warning"></i>
     </div>
-    <div [ngSwitch]="sessionState">
-      <p *ngSwitchCase="terminalState.Expired">
+    <div>
+      @switch (sessionState) {
+      @case (terminalState.Expired) {
+      <p>
         Session expired. Authenticate again and wait a few seconds for the new kubeconfig to mount.
       </p>
-
-      <p *ngSwitchCase="terminalState.ConnectionLost">
+      }
+      @case (terminalState.ConnectionLost) {
+      <p>
         The connection to your Web Terminal was lost.
       </p>
-
-      <p *ngSwitchCase="terminalState.Expiring">
+      }
+      @case (terminalState.Expiring) {
+      <p>
         The web session will expire soon.
       </p>
+      }
+      }
     </div>
   </div>
 
-  <div [ngSwitch]="sessionState"
-       fxFlex
+  <div fxFlex
        fxLayout="row"
        fxLayoutAlign="end center"
        fxLayoutGap="10px">
-    <button *ngSwitchCase="'expired'"
-            mat-flat-button
+    @switch (sessionState) {
+    @case ('expired') {
+    <button mat-flat-button
             class="button-border-box"
             matTooltip="Authenticate again to regain access"
             (click)="onTokenExpired()">
@@ -50,9 +56,9 @@ limitations under the License.
          matButtonIcon></i>
       <span>Authenticate</span>
     </button>
-
-    <button *ngSwitchCase="'connectionLost'"
-            mat-flat-button
+    }
+    @case ('connectionLost') {
+    <button mat-flat-button
             class="button-border-box"
             matTooltip="Gain lost connection to terminal"
             (click)="onReconnect()">
@@ -60,9 +66,9 @@ limitations under the License.
          matButtonIcon></i>
       <span>Reconnect</span>
     </button>
-
-    <button *ngSwitchCase="'expiring'"
-            mat-flat-button
+    }
+    @case ('expiring') {
+    <button mat-flat-button
             class="button-border-box"
             matTooltip="Retain current session to terminal"
             (click)="onExtendSession()">
@@ -70,6 +76,7 @@ limitations under the License.
          matButtonIcon></i>
       <span>Extend Session</span>
     </button>
-
+    }
+    }
   </div>
 </div>

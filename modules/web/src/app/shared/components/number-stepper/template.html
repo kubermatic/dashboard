@@ -15,7 +15,9 @@ limitations under the License.
 -->
 <mat-form-field class="km-number-stepper-input"
                 [ngClass]="{'message': mode === 'hint' || mode === 'errors' || mode === 'all', 'force-min-width': forceFormFieldMinWidth}">
-  <mat-label *ngIf="!!label">{{label}}</mat-label>
+  @if (!!label) {
+  <mat-label>{{label}}</mat-label>
+  }
   <input #input="ngModel"
          matInput
          type="number"
@@ -32,8 +34,12 @@ limitations under the License.
          [attr.cdkFocusInitial]="focus ? focus : null"
          kmValueChangedIndicator
          [ValueChangedIndicator]="enableKmValueChangedIndicator">
-  <mat-error *ngFor="let message of errors">{{message}}</mat-error>
-  <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
+  @for (message of errors; track message) {
+  <mat-error>{{message}}</mat-error>
+  }
+  @if ((mode === 'hint' || mode === 'all') && !!hint) {
+  <mat-hint>{{hint}}</mat-hint>
+  }
 </mat-form-field>
 <button mat-icon-button
         class="stepper-button left"

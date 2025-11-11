@@ -31,19 +31,21 @@ limitations under the License.
        fxLayout="row"
        fxLayoutGap="10px"
        fxLayoutAlign="end center">
-    <button *ngIf="showOpenInSeparateViewButton"
-            mat-icon-button
+    @if (showOpenInSeparateViewButton) {
+    <button mat-icon-button
             class="button-border-box"
             matTooltip="Maximize terminal"
             (click)="onOpenInNewTab()">
       <i class="km-icon-mask-white km-icon-external-link"></i>
     </button>
-    <button *ngIf="showCloseButton"
-            mat-icon-button
+    }
+    @if (showCloseButton) {
+    <button mat-icon-button
             class="button-border-box"
             matTooltip="Close terminal"
             (click)="onClose()">
       <i class="km-icon-mask-white km-icon-close km-pointer"></i>
     </button>
+    }
   </div>
 </div>

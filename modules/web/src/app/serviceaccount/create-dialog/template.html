@@ -27,12 +27,16 @@ limitations under the License.
              autocomplete="off"
              required
              kmAutofocus>
-      <mat-error *ngIf="form.controls.name.hasError('required')">
+      @if (form.controls.name.hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.controls.name.hasError('pattern')">
+      }
+      @if (form.controls.name.hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
     <label class="km-radio-group-label">Select a Group</label>
     <mat-radio-group formControlName="group"
@@ -69,6 +73,5 @@ limitations under the License.
              label="Create Service Account"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

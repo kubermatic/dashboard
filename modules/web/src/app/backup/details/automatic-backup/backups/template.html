@@ -68,7 +68,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.backupFinishedTime"></km-relative-time>
+          <km-relative-time [date]="element.backupFinishedTime" />
         </td>
       </ng-container>
 
@@ -79,7 +79,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.scheduledTime"></km-relative-time>
+          <km-relative-time [date]="element.scheduledTime" />
         </td>
       </ng-container>
 
@@ -108,17 +108,18 @@ limitations under the License.
           *matRowDef="let row; columns: columns;"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isEmpty">
+    @if (isEmpty) {
+    <div class="km-row km-empty-list-msg">
       No backups available.
     </div>
+    }
 
     <div [hidden]="!hasPaginator"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

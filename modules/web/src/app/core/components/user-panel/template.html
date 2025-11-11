@@ -21,9 +21,9 @@ limitations under the License.
           (click)="toggle()">
     <i class="km-icon-mask km-user"></i>
   </button>
+  @if (isOpen() && !!user) {
   <div class="panel"
-       fxLayout="column"
-       *ngIf="isOpen() && !!user">
+       fxLayout="column">
     <div class="header"
          fxLayout="row">
       <span fxFlex>{{user.name}}</span>
@@ -42,21 +42,24 @@ limitations under the License.
            (click)="goToAccount()">
         User Settings
       </div>
+      @if (isAdminPanelVisible()) {
       <div class="km-option-hover-bg"
            id="km-navbar-admin-settings-btn"
            matRipple
-           *ngIf="isAdminPanelVisible()"
            (click)="goToAdminPanel()">
         Admin Panel
       </div>
-      <mat-divider></mat-divider>
+      }
+      <mat-divider />
+      @if (isAuthenticated()) {
       <div class="km-option-hover-bg"
            id="km-navbar-logout-btn"
            matRipple
-           *ngIf="isAuthenticated()"
            (click)="logout()">
         Sign out
       </div>
+      }
     </div>
   </div>
+  }
 </div>

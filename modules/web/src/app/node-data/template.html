@@ -25,11 +25,13 @@ limitations under the License.
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="8px">
-    <mat-card-header *ngIf="!isDialogView()"
-                     class="km-no-padding">
+    @if (!isDialogView()) {
+    <mat-card-header class="km-no-padding">
       <mat-card-title>Basic Settings</mat-card-title>
     </mat-card-header>
-    <mat-form-field *ngIf="!dialogEditMode">
+    }
+    @if (!dialogEditMode) {
+    <mat-form-field>
       <mat-label>Name</mat-label>
       <input [formControlName]="Controls.Name"
              id="km-node-name-input"
@@ -44,79 +46,93 @@ limitations under the License.
               (click)="generateName()">
         <i class="km-icon-randomize"></i>
       </button>
-      <mat-hint *ngIf="!dialogEditMode">Leave this field blank to use automatic name generation.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+      @if (!dialogEditMode) {
+      <mat-hint>Leave this field blank to use automatic name generation.</mat-hint>
+      }
+      @if (form.get(Controls.Name).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
+      }
     </mat-form-field>
+    }
 
-    <div class="quota-widget"
-         *ngIf="isEnterpriseEdition && isDialogView()">
-      <ng-template #quotaWidgetContainer></ng-template>
+    @if (isEnterpriseEdition && isDialogView()) {
+    <div class="quota-widget">
+      <ng-template #quotaWidgetContainer />
     </div>
+    }
 
-    <div *ngIf="!isProvider(NodeProvider.EDGE)"
-         fxLayout="row"
+    @if (!isProvider(NodeProvider.EDGE)) {
+    <div fxLayout="row"
          fxLayoutGap="10px">
-      <km-number-stepper *ngIf="!isProvider(NodeProvider.BAREMETAL)"
-                         [fxFlex]="isDialogView() ? '50' : '100'"
+      @if (!isProvider(NodeProvider.BAREMETAL)) {
+      <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
                          id="km-node-count-input"
                          mode="errors"
                          label="Replicas"
                          required
                          [min]="form.get(Controls.MinReplicas).value ?? minReplicasCount"
                          [max]="form.get(Controls.MaxReplicas).value ?? maxReplicasCount"
-                         [formControlName]="Controls.Count">
-      </km-number-stepper>
-
+                         [formControlName]="Controls.Count" />
+      }
+      @if (isDialogView()) {
       <km-node-data-kubelet-version fxFlex="50"
-                                    *ngIf="isDialogView()"
-                                    [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+                                    [formControl]="form.get(Controls.Kubelet)" />
+      }
     </div>
+    }
 
-    <ng-container *ngIf="isDialogView()">
-      <km-basic-node-data [provider]="provider"
-                          [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
-    </ng-container>
+    @if (isDialogView()) {
+    <km-basic-node-data [provider]="provider"
+                        [formControlName]="Controls.ProviderBasic" />
+    }
 
     <div fxLayout="column">
       <mat-button-toggle-group group="operatingSystemGroup"
                                [formControlName]="Controls.OperatingSystem"
                                kmValueChangedIndicator>
-        <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.Ubuntu)">
+        @if (isOperatingSystemAllowed(OperatingSystem.Ubuntu)) {
+        <mat-button-toggle [value]="OperatingSystem.Ubuntu">
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.Flatcar"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.Flatcar)">
+        }
+        @if (isOperatingSystemAllowed(OperatingSystem.Flatcar)) {
+        <mat-button-toggle [value]="OperatingSystem.Flatcar">
           <i class="km-os-image-flatcar"></i>
           Flatcar
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.AmazonLinux2"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.AmazonLinux2)">
+        }
+        @if (isOperatingSystemAllowed(OperatingSystem.AmazonLinux2)) {
+        <mat-button-toggle [value]="OperatingSystem.AmazonLinux2">
           <i class="km-os-image-amazon-linux-2"></i>
           Amazon Linux 2
         </mat-button-toggle>
+        }
+        @if (isOperatingSystemAllowed(OperatingSystem.RHEL)) {
         <mat-button-toggle [value]="OperatingSystem.RHEL"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.RHEL)"
                            #rhelToggle>
           <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
           RHEL
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.RockyLinux"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.RockyLinux)">
+        }
+        @if (isOperatingSystemAllowed(OperatingSystem.RockyLinux)) {
+        <mat-button-toggle [value]="OperatingSystem.RockyLinux">
           <i class="km-os-image-rockylinux"></i>
           Rocky Linux
         </mat-button-toggle>
+        }
       </mat-button-toggle-group>
-      <mat-error *ngIf="form.get(Controls.OperatingSystem).hasError('required')">
+      @if (form.get(Controls.OperatingSystem).hasError('required')) {
+      <mat-error>
         No operating system supported. Please contact your administrator.
       </mat-error>
+      }
 
       <!-- Options for RHEL -->
-      <div *ngIf="isOperatingSystemSelected(OperatingSystem.RHEL)"
-           class="os-options">
+      @if (isOperatingSystemSelected(OperatingSystem.RHEL)) {
+      <div class="os-options">
         <mat-form-field>
           <mat-label>RHEL Subscription Manager User</mat-label>
           <input [formControlName]="Controls.RhelSubscriptionManagerUser"
@@ -126,7 +142,6 @@ limitations under the License.
                  kmValueChangedIndicator />
           <mat-hint>RHEL Subscription Manager User is required to register a machine.</mat-hint>
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>RHEL Subscription Manager Password</mat-label>
           <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
@@ -136,7 +151,6 @@ limitations under the License.
                  kmValueChangedIndicator />
           <mat-hint>RHEL Subscription Manager Password is required to register a machine.</mat-hint>
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>RHEL Subscription Manager Offline Token</mat-label>
           <input [formControlName]="Controls.RhelOfflineToken"
@@ -147,15 +161,15 @@ limitations under the License.
           <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
         </mat-form-field>
       </div>
+      }
 
       <!-- Options for Flatcar -->
-      <div *ngIf="isOperatingSystemSelected(OperatingSystem.Flatcar)"
-           class="os-options">
+      @if (isOperatingSystemSelected(OperatingSystem.Flatcar)) {
+      <div class="os-options">
         <mat-checkbox [id]="Controls.DisableAutoUpdate"
                       [formControlName]="Controls.DisableAutoUpdate"
                       kmValueChangedIndicator>Disable auto-update
         </mat-checkbox>
-
         <mat-card-header class="km-no-padding">
           <mat-card-title>Static Network Configuration</mat-card-title>
         </mat-card-header>
@@ -166,11 +180,12 @@ limitations under the License.
                  autocomplete="off"
                  kmValueChangedIndicator />
           <mat-hint>Address for the machine.</mat-hint>
-          <mat-error *ngIf="form.get(Controls.StaticNetworkCIDR).hasError('pattern')">
+          @if (form.get(Controls.StaticNetworkCIDR).hasError('pattern')) {
+          <mat-error>
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
+          }
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>Gateway</mat-label>
           <input [formControlName]="Controls.StaticNetworkGateway"
@@ -178,11 +193,12 @@ limitations under the License.
                  autocomplete="off"
                  kmValueChangedIndicator />
           <mat-hint>Routing gateway address.</mat-hint>
-          <mat-error *ngIf="form.get(Controls.StaticNetworkGateway).hasError('pattern')">
+          @if (form.get(Controls.StaticNetworkGateway).hasError('pattern')) {
+          <mat-error>
             Invalid pattern. Should be a valid IPv4 or IPv6 address.
           </mat-error>
+          }
         </mat-form-field>
-
         <km-chip-list class="tag-list"
                       label="DNS Servers"
                       placeholder="DNS Servers..."
@@ -190,159 +206,163 @@ limitations under the License.
                       (onChange)="onDNSServerChange($event)"
                       [formControlName]="Controls.StaticNetworkDNSServers"
                       [kmPattern]="ipv4AndIPv6Regex"
-                      kmPatternError="Input has to be a valid IPv4 or IPv6 address"></km-chip-list>
+                      kmPatternError="Input has to be a valid IPv4 or IPv6 address" />
       </div>
+      }
 
       <div fxLayout="row"
            fxLayoutGap="36px">
         <!-- Options for Ubuntu, CenOS, RHEL, Rocky Linux, and Amazon Linux 2 -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
-             class="os-options">
+        @if (isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)) {
+        <div class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot"
                         kmValueChangedIndicator>Upgrade system on first boot
           </mat-checkbox>
         </div>
+        }
       </div>
     </div>
 
-    <km-autocomplete *ngIf="form.get(Controls.OperatingSystem).value"
-                     label="Operating System Profile"
+    @if (form.get(Controls.OperatingSystem).value) {
+    <km-autocomplete label="Operating System Profile"
                      [formControlName]="Controls.OperatingSystemProfile"
                      [isLoading]="isLoadingOSProfiles"
                      [options]="supportedOperatingSystemProfiles"
                      [validators]="operatingSystemProfileValidators">
-      <ng-container hint
-                    *ngIf="!dialogEditMode">Leave this field blank to use default operating system profile.</ng-container>
+      @if (!dialogEditMode) {
+      <ng-container hint>Leave this field blank to use default operating system profile.</ng-container>
+      }
       <span patternError>
         OSP can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </span>
     </km-autocomplete>
+    }
 
-    <div *ngIf="isDialogView() && nodeHasAdvanceSettings">
+    @if (isDialogView() && nodeHasAdvanceSettings) {
+    <div>
       <km-expansion-panel expandLabel="Advanced Settings"
                           collapseLabel="Advanced Settings">
         <ng-container>
           <mat-card-title class="provider-options">{{ providerDisplayName }} Settings</mat-card-title>
           <km-extended-node-data [provider]="provider"
                                  [visible]="nodeHasAdvanceSettings"
-                                 [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+                                 [formControlName]="Controls.ProviderExtended" />
         </ng-container>
       </km-expansion-panel>
     </div>
+    }
 
-    <div *ngIf="displayQuotaInWizard && isEnterpriseEdition && !isDialogView()"
-         class="additional-margin">
-      <ng-template #quotaWidgetContainer></ng-template>
+    @if (displayQuotaInWizard && isEnterpriseEdition && !isDialogView()) {
+    <div class="additional-margin">
+      <ng-template #quotaWidgetContainerWizard />
     </div>
+    }
 
-    <ng-container *ngIf="!isProvider(NodeProvider.EDGE, NodeProvider.BAREMETAL)">
-      <mat-card-header class="km-no-padding">
-        <mat-card-title fxFlex
-                        fxLayout="row"
-                        fxLayoutAlign="start center"
-                        fxLayoutGap="5px">
-          <div>Cluster Autoscaling</div>
-          <i *ngIf="isClusterAutoscalingEnabled()"
-             class="km-icon-info km-pointer"
-             matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. NOTE: The addon for cluster-autoscaler has been deprecated in favor of the Application, please make sure to remove the addon from the cluster before enabling this option."></i>
-        </mat-card-title>
-      </mat-card-header>
-
-      <div fxLayoutAlign="space-between center">
-        <div>
-
-          <div *ngIf="!isClusterAutoscalingEnabled()"
-               class="km-selector-warning"
-               fxLayout="row"
-               fxLayoutAlign="start center">
-            <i class="km-icon-warning km-warning km-pointer"></i>
-            <p fxFlex="95">
-              {{clusterAutoscalerWarningMessage}}
-            </p>
-          </div>
-          <ng-container *ngIf="!isDialogView()">
-            <mat-checkbox id="km-enable-cluster-autoscaling-app"
-                          kmValueChangedIndicator
-                          [name]="Controls.EnableClusterAutoscalingApp"
-                          [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
-            </mat-checkbox>
-            <i *ngIf="isClusterAutoscalingEnabled()"
-               class="km-icon-info km-pointer"
-               matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
-          </ng-container>
+    @if (!isProvider(NodeProvider.EDGE, NodeProvider.BAREMETAL)) {
+    <mat-card-header class="km-no-padding">
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      fxLayoutAlign="start center"
+                      fxLayoutGap="5px">
+        <div>Cluster Autoscaling</div>
+        @if (isClusterAutoscalingEnabled()) {
+        <i class="km-icon-info km-pointer"
+           matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. NOTE: The addon for cluster-autoscaler has been deprecated in favor of the Application, please make sure to remove the addon from the cluster before enabling this option."></i>
+        }
+      </mat-card-title>
+    </mat-card-header>
+    <div fxLayoutAlign="space-between center">
+      <div>
+        @if (!isClusterAutoscalingEnabled()) {
+        <div class="km-selector-warning"
+             fxLayout="row"
+             fxLayoutAlign="start center">
+          <i class="km-icon-warning km-warning km-pointer"></i>
+          <p fxFlex="95">
+            {{clusterAutoscalerWarningMessage}}
+          </p>
         </div>
-        <button *ngIf="form.get(Controls.EnableClusterAutoscalingApp).value"
-                mat-flat-button
-                color="quaternary"
-                (click)="onEditAutoScalerApp()">
-          <i class="km-icon-mask km-icon-edit"
-             matButtonIcon></i>
-          <span>Edit Application Values</span>
-        </button>
+        }
+        @if (!isDialogView()) {
+        <mat-checkbox id="km-enable-cluster-autoscaling-app"
+                      kmValueChangedIndicator
+                      [name]="Controls.EnableClusterAutoscalingApp"
+                      [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+        </mat-checkbox>
+        @if (isClusterAutoscalingEnabled()) {
+        <i class="km-icon-info km-pointer"
+           matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
+        }
+        }
       </div>
-
-
-      <km-number-stepper label="Min Replicas"
-                         mode="all"
-                         hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
-                         [min]="autoscalerMinReplicasCount"
-                         [max]="form.get(Controls.MaxReplicas).value  || maxReplicasCount"
-                         [required]="form.get(Controls.MaxReplicas).value"
-                         [disabled]="isMinMaxReplicasDisabled()"
-                         [formControlName]="Controls.MinReplicas">
-      </km-number-stepper>
-
-      <km-number-stepper label="Max Replicas"
-                         mode="all"
-                         hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
-                         [min]="form.get(Controls.MinReplicas).value || autoscalerMinReplicasCount"
-                         [max]="maxReplicasCount"
-                         [required]="form.get(Controls.MinReplicas).value"
-                         [disabled]="isMinMaxReplicasDisabled()"
-                         [formControlName]="Controls.MaxReplicas">
-      </km-number-stepper>
-    </ng-container>
+      @if (form.get(Controls.EnableClusterAutoscalingApp).value) {
+      <button mat-flat-button
+              color="quaternary"
+              (click)="onEditAutoScalerApp()">
+        <i class="km-icon-mask km-icon-edit"
+           matButtonIcon></i>
+        <span>Edit Application Values</span>
+      </button>
+      }
+    </div>
+    <km-number-stepper label="Min Replicas"
+                       mode="all"
+                       hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
+                       [min]="autoscalerMinReplicasCount"
+                       [max]="form.get(Controls.MaxReplicas).value  || maxReplicasCount"
+                       [required]="form.get(Controls.MaxReplicas).value"
+                       [disabled]="isMinMaxReplicasDisabled()"
+                       [formControlName]="Controls.MinReplicas" />
+    <km-number-stepper label="Max Replicas"
+                       mode="all"
+                       hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
+                       [min]="form.get(Controls.MinReplicas).value || autoscalerMinReplicasCount"
+                       [max]="maxReplicasCount"
+                       [required]="form.get(Controls.MinReplicas).value"
+                       [disabled]="isMinMaxReplicasDisabled()"
+                       [formControlName]="Controls.MaxReplicas" />
+    }
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
                    [asyncKeyValidators]="asyncLabelValidators"
                    [labels]="labels"
-                   (labelsChange)="onLabelsChange($event)"></km-label-form>
+                   (labelsChange)="onLabelsChange($event)" />
 
     <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                         title="Node Annotations"
                         [infoTooltip]="'Annotations for the nodes created against this machine deployment'"
                         [annotations]="annotations"
-                        (annotationsChange)="onAnnotationsChange($event)"></km-annotation-form>
+                        (annotationsChange)="onAnnotationsChange($event)" />
 
-    <km-taint-form *ngIf="!isProvider(NodeProvider.EDGE)"
-                   title="Node Taints"
+    @if (!isProvider(NodeProvider.EDGE)) {
+    <km-taint-form title="Node Taints"
                    [taints]="taints"
-                   (taintsChange)="onTaintsChange($event)"></km-taint-form>
+                   (taintsChange)="onTaintsChange($event)" />
+    }
 
     <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                         [annotations]="machineDeploymentAnnotations"
                         [infoTooltip]="'Annotations for the machine deployment object'"
                         title="Machine Deployment Annotations"
-                        (annotationsChange)="onMachineDeploymentAnnotationsChange($event)">
-    </km-annotation-form>
+                        (annotationsChange)="onMachineDeploymentAnnotationsChange($event)" />
   </div>
 
-  <div *ngIf="!isDialogView()"
-       fxFlex="50%"
+  @if (!isDialogView()) {
+  <div fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="8px">
-    <mat-card-header *ngIf="!isProvider(NodeProvider.EDGE)"
-                     class="km-no-padding">
+    @if (!isProvider(NodeProvider.EDGE)) {
+    <mat-card-header class="km-no-padding">
       <mat-card-title>{{ providerDisplayName }} Settings</mat-card-title>
     </mat-card-header>
-
+    }
     <km-basic-node-data [provider]="provider"
-                        [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
-
+                        [formControlName]="Controls.ProviderBasic" />
     <km-extended-node-data [provider]="provider"
                            [visible]="true"
-                           [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+                           [formControlName]="Controls.ProviderExtended" />
   </div>
+  }
 </form>

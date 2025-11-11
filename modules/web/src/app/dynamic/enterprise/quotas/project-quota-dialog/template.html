@@ -25,10 +25,11 @@ END OF TERMS AND CONDITIONS
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutAlign="space-between stretch">
-    <p *ngIf="editQuota"
-       class="km-dialog-context-description">
+    @if (editQuota) {
+    <p class="km-dialog-context-description">
       Edit quotas of <b>{{editQuota.subjectHumanReadableName}}</b> project
     </p>
+    }
 
     <form [formGroup]="quotaGroup"
           class="quota-form"
@@ -43,24 +44,21 @@ END OF TERMS AND CONDITIONS
                            label="CPU"
                            min="0"
                            [formControl]="quotaGroup.controls.cpu"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
 
         <km-number-stepper id="km-memory-input"
                            label="Memory (GB)"
                            min="0"
                            type="decimal"
                            [formControl]="quotaGroup.controls.memory"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
 
         <km-number-stepper id="km-storage-input"
                            label="Disk (GB)"
                            min="0"
                            type="decimal"
                            [formControl]="quotaGroup.controls.storage"
-                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
-        </km-number-stepper>
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)" />
       </div>
 
       <mat-error class="quotas-error"
@@ -69,8 +67,8 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </form>
 
-    <div *ngIf="!editQuota"
-         fxLayout="column"
+    @if (!editQuota) {
+    <div fxLayout="column"
          fxLayoutAlign=" stretch">
       <km-combobox label="Project"
                    inputLabel="Project"
@@ -86,14 +84,15 @@ END OF TERMS AND CONDITIONS
              fxLayoutGap="10px"
              fxLayoutAlign=" center">
           <span>{{project.name}}</span>
-
-          <mat-card-subtitle class="km-no-margin km-no-padding"
-                             *ngIf="projectNameCountMap[project.name] > 1">
+          @if (projectNameCountMap[project.name] > 1) {
+          <mat-card-subtitle class="km-no-margin km-no-padding">
             <strong>ID</strong> {{project.id}}
           </mat-card-subtitle>
+          }
         </div>
       </km-combobox>
     </div>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -101,6 +100,5 @@ END OF TERMS AND CONDITIONS
              [icon]="selectedQuota ? 'km-icon-save' : 'km-icon-add'"
              label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
              [disabled]="!isQuotaUpdated || form.invalid"
-             [observable]="getObservable()">
-  </km-button>
+             [observable]="getObservable()" />
 </mat-dialog-actions>

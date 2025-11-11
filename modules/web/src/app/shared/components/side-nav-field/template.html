@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="!isSidenavCollapsed"
-     fxLayout="column"
+@if (!isSidenavCollapsed) {
+<div fxLayout="column"
      class="side-nav-bar">
   <div (click)="onClick()"
        id="km-side-nav-field-{{id}}"
@@ -30,16 +30,19 @@ limitations under the License.
       <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
     </a>
   </div>
-  <div *ngIf="expanded"
-       @shrinkGrow>
-    <ng-container *ngTemplateOutlet="content"></ng-container>
+  @if (expanded) {
+  <div @shrinkGrow>
+    <ng-container *ngTemplateOutlet="content" />
   </div>
-  <div *ngIf="lastItem"
-       class="side-nav-end"></div>
+  }
+  @if (lastItem) {
+  <div class="side-nav-end"></div>
+  }
 </div>
+}
 
-<div *ngIf="isSidenavCollapsed"
-     class="collapsed-side-nav-bar"
+@if (isSidenavCollapsed) {
+<div class="collapsed-side-nav-bar"
      [ngClass]="isExpandedActive() ? 'expanded-menu' : ''">
   <button [matTooltip]="label"
           [class]="icon"
@@ -52,8 +55,9 @@ limitations under the License.
             [class]="'side-nav-sub-menu-item'">
     <mat-label class="menu-label">{{label}}</mat-label>
     <hr />
-    <ng-container *ngTemplateOutlet="content"></ng-container>
+    <ng-container *ngTemplateOutlet="content" />
   </mat-menu>
 </div>
+}
 
-<ng-template #content><ng-content></ng-content></ng-template>
+<ng-template #content><ng-content /></ng-template>

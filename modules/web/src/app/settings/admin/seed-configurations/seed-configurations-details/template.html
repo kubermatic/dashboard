@@ -15,169 +15,156 @@ limitations under the License.
 -->
 
 
-<ng-container *ngIf="isLoadingDetails">
-  <mat-spinner color="accent"
-               class="km-spinner km-with-spacing"
-               [diameter]="50"></mat-spinner>
-</ng-container>
+@if (isLoadingDetails) {
+<mat-spinner color="accent"
+             class="km-spinner km-with-spacing"
+             [diameter]="50" />
+}
 
 
-<ng-container *ngIf="!isLoadingDetails">
-
-  <div fxLayout="row"
-       class="content">
-    <button mat-flat-button
-            color="tertiary"
-            (click)="goBack()"
-            matTooltip="Go back to seeds configurations">
-      <i class="km-icon-mask km-icon-arrow-left"
-         matButtonIcon></i>
-    </button>
-  </div>
-
-  <mat-card appearance="outlined"
-            class="info">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign="center">
-        <i [matTooltip]="seedOverviewDatasource.phase"
-           [ngClass]="getStatusIcon(seedOverviewDatasource)"></i>
-        <div fxFlex>{{seedName}}</div>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="info-details">
-      <ng-container>
-        <div fxLayout="row">
-          <km-property>
-            <div key>Providers</div>
-            <div value>{{seedOverviewDatasource?.providerCount}}</div>
-          </km-property>
-          <km-property>
-            <div key>Datacenters</div>
-            <div value>{{seedOverviewDatasource?.datacentersCount}}</div>
-          </km-property>
-          <km-property>
-            <div key>Clusters</div>
-            <div value>{{seedOverviewDatasource?.clustersCount}}</div>
-          </km-property>
-          <km-property>
-            <div key>Location</div>
-            <div value>{{seedOverviewDatasource?.location}}</div>
-          </km-property>
-          <km-property>
-            <div key>Created</div>
-            <div value>
-              <km-relative-time [date]="seedOverviewDatasource?.created"></km-relative-time>
-            </div>
-          </km-property>
-        </div>
+@if (!isLoadingDetails) {
+<div fxLayout="row"
+     class="content">
+  <button mat-flat-button
+          color="tertiary"
+          (click)="goBack()"
+          matTooltip="Go back to seeds configurations">
+    <i class="km-icon-mask km-icon-arrow-left"
+       matButtonIcon></i>
+  </button>
+</div>
+<mat-card appearance="outlined"
+          class="info">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign="center">
+      <i [matTooltip]="seedOverviewDatasource.phase"
+         [ngClass]="getStatusIcon(seedOverviewDatasource)"></i>
+      <div fxFlex>{{seedName}}</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="info-details">
+    <ng-container>
+      <div fxLayout="row">
+        <km-property>
+          <div key>Providers</div>
+          <div value>{{seedOverviewDatasource?.providerCount}}</div>
+        </km-property>
+        <km-property>
+          <div key>Datacenters</div>
+          <div value>{{seedOverviewDatasource?.datacentersCount}}</div>
+        </km-property>
+        <km-property>
+          <div key>Clusters</div>
+          <div value>{{seedOverviewDatasource?.clustersCount}}</div>
+        </km-property>
+        <km-property>
+          <div key>Location</div>
+          <div value>{{seedOverviewDatasource?.location}}</div>
+        </km-property>
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="seedOverviewDatasource?.created" />
+          </div>
+        </km-property>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+<mat-card appearance="outlined"
+          class="info">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Providers</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           matSort
+           mat-table
+           multiTemplateDataRows
+           [dataSource]="dataSource">
+      <ng-container [matColumnDef]="Column.StateArrow">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i class="km-icon-mask "
+             [ngClass]="isShowProviders[element[Column.Provider]] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+        </td>
       </ng-container>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card appearance="outlined"
-            class="info">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign=" center">
-        <div fxFlex>Providers</div>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <table class="km-table"
-             matSort
-             mat-table
-             multiTemplateDataRows
-             [dataSource]="dataSource">
-
-        <ng-container [matColumnDef]="Column.StateArrow">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"></th>
-          <td mat-cell
-              *matCellDef="let element">
-            <i class="km-icon-mask "
-               [ngClass]="isShowProviders[element[Column.Provider]] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-          </td>
-        </ng-container>
-
-        <ng-container [matColumnDef]="Column.Provider">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"
-              mat-sort-header>Provider
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            <div fxLayout="row"
-                 fxLayoutGap="10px"
-                 fxLayoutAlign=" center">
-              <span class="km-provider-logo km-provider-logo-{{element[Column.Provider]}}"></span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container [matColumnDef]="Column.Datacenters">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell p-30"
-              mat-sort-header>Datacenters
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            <div fxLayout="row"
-                 fxLayoutGap="10px"
-                 fxLayoutAlign=" center">
-              <span>{{element[Column.Datacenters]}}</span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container [matColumnDef]="Column.Clusters">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"
-              mat-sort-header>Clusters
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            <div fxLayout="row"
-                 fxLayoutGap="10px"
-                 fxLayoutAlign=" center">
-              <span>{{element[Column.Clusters]}}</span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container [matColumnDef]="Column.ClustersByDatacenter">
-          <td mat-cell
-              class="km-provider-datacenter-details"
-              *matCellDef="let element"
-              [attr.colspan]="displayedColumns.length">
-            <div class="km-provider-datacenter-details-wrapper">
-              <km-provider-datacenter-details [datacentersDetail]="datacenterDetailPerProvider[element[Column.Provider]]">
-              </km-provider-datacenter-details>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row
-            class="km-header-row"
-            *matHeaderRowDef="displayedColumns"></tr>
-
-        <tr mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            class="km-mat-row km-pointer"
-            (click)="toggleProvider(row)"></tr>
-
-        <tr mat-row
-            *matRowDef="let row; let i=index; columns: toggledColumns;"
-            [ngClass]="isShowProviders[row[Column.Provider]] ? '' : 'km-hidden'"
-            class="km-mat-row"></tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
-
-</ng-container>
+      <ng-container [matColumnDef]="Column.Provider">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Provider
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayout="row"
+               fxLayoutGap="10px"
+               fxLayoutAlign=" center">
+            <span class="km-provider-logo km-provider-logo-{{element[Column.Provider]}}"></span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container [matColumnDef]="Column.Datacenters">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-30"
+            mat-sort-header>Datacenters
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayout="row"
+               fxLayoutGap="10px"
+               fxLayoutAlign=" center">
+            <span>{{element[Column.Datacenters]}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container [matColumnDef]="Column.Clusters">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Clusters
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayout="row"
+               fxLayoutGap="10px"
+               fxLayoutAlign=" center">
+            <span>{{element[Column.Clusters]}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container [matColumnDef]="Column.ClustersByDatacenter">
+        <td mat-cell
+            class="km-provider-datacenter-details"
+            *matCellDef="let element"
+            [attr.colspan]="displayedColumns.length">
+          <div class="km-provider-datacenter-details-wrapper">
+            <km-provider-datacenter-details [datacentersDetail]="datacenterDetailPerProvider[element[Column.Provider]]" />
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row km-pointer"
+          (click)="toggleProvider(row)"></tr>
+      <tr mat-row
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowProviders[row[Column.Provider]] ? '' : 'km-hidden'"
+          class="km-mat-row"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+}

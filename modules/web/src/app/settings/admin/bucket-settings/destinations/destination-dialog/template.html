@@ -15,22 +15,26 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === Mode.Edit"
-     class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination</p>
+  @if (data.mode === Mode.Edit) {
+  <p class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination</p>
+  }
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex
-                    *ngIf="data.mode === Mode.Add">
+    @if (data.mode === Mode.Add) {
+    <mat-form-field fxFlex>
       <mat-label>Destination Name</mat-label>
       <input matInput
              [formControlName]="Controls.DestinationName"
              type="text"
              autocomplete="off"
              required>
-      <mat-error *ngIf="form.get(Controls.DestinationName).hasError('pattern')">
+      @if (form.get(Controls.DestinationName).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
+      }
     </mat-form-field>
+    }
 
     <mat-form-field fxFlex>
       <mat-label>Bucket</mat-label>
@@ -58,15 +62,18 @@ limitations under the License.
       <span>Use as default for admin enforced backups for each cluster in the seed</span>
     </mat-checkbox>
 
+    @if (shouldDisplayWarning()) {
     <div class="km-dialog-warning"
-         *ngIf="shouldDisplayWarning()"
          fxLayoutAlign=" start">
       <i class="km-icon-warning"></i>
       <div>
-        Upon saving this setting, every new default backup will be created with this destination<ng-container *ngIf="currentDefault"> instead of "{{currentDefault}}"</ng-container>,
+        Upon saving this setting, every new default backup will be created with this destination@if (currentDefault) {
+        instead of "{{currentDefault}}"
+        },
         over time existing backups will be replaced by backups that use the new destination.
       </div>
     </div>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -75,6 +82,5 @@ limitations under the License.
              [label]="label()"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

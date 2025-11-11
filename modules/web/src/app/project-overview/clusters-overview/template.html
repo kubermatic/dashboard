@@ -16,8 +16,8 @@ limitations under the License.
 
 <km-tab-card [verticalMargin]="false">
   <km-tab label="Clusters">
-    <table *ngIf="!isLoadingClusters; else spinner"
-           class="km-table"
+    @if (!isLoadingClusters) {
+    <table class="km-table"
            mat-table
            [dataSource]="clusterDataSource"
            [trackBy]="clusterTrackBy">
@@ -59,22 +59,23 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let cluster">
-          <ng-container *ngIf="!!clusterMachinesCount?.[cluster.id]; else mdSpinner">
-            <div *ngIf="clusterMachinesCount[cluster.id].replicas > 0; else noMD"
-                 fxLayout="row"
-                 fxLayoutAlign=" center">
-              <i [matTooltip]="getClusterMDHealthStatus(cluster).message"
-                 [ngClass]="getClusterMDHealthStatus(cluster).icon"
-                 class="machine-deployment-health"></i>
-              <span>{{clusterMachinesCount[cluster.id].availableReplicas}} / {{clusterMachinesCount[cluster.id].replicas}}</span>
-            </div>
-            <ng-template #noMD>0</ng-template>
-          </ng-container>
-          <ng-template #mdSpinner>
-            <mat-spinner [diameter]="15"
-                         class="km-spinner"
-                         color="accent"></mat-spinner>
-          </ng-template>
+          @if (!!clusterMachinesCount?.[cluster.id]) {
+          @if (clusterMachinesCount[cluster.id].replicas > 0) {
+          <div fxLayout="row"
+               fxLayoutAlign=" center">
+            <i [matTooltip]="getClusterMDHealthStatus(cluster).message"
+               [ngClass]="getClusterMDHealthStatus(cluster).icon"
+               class="machine-deployment-health"></i>
+            <span>{{clusterMachinesCount[cluster.id].availableReplicas}} / {{clusterMachinesCount[cluster.id].replicas}}</span>
+          </div>
+          } @else {
+          0
+          }
+          } @else {
+          <mat-spinner [diameter]="15"
+                       class="km-spinner"
+                       color="accent" />
+          }
         </td>
       </ng-container>
       <tr mat-header-row
@@ -85,25 +86,33 @@ limitations under the License.
           class="km-mat-row km-pointer"
           (click)="clusterNavigate(cluster)"></tr>
     </table>
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!isLoadingClusters && clusters.length < 1">
+    } @else {
+    <mat-spinner [diameter]="25"
+                 class="km-spinner"
+                 color="accent" />
+    }
+    @if (!isLoadingClusters && clusters.length < 1)
+      {
+      <div
+      class="km-row km-empty-list-msg">
       No clusters available.
-    </div>
-    <div class="action-container"
-         fxFlex
-         fxLayoutAlign="end">
-      <button mat-flat-button
-              (click)="clustersNavigate()">
-        <i class="km-icon-mask km-icon-next"
-           matButtonIcon></i>
-        <span>Show All Clusters</span>
-      </button>
-    </div>
+      </div>
+      }
+      <div class="action-container"
+           fxFlex
+           fxLayoutAlign="end">
+        <button mat-flat-button
+                (click)="clustersNavigate()">
+          <i class="km-icon-mask km-icon-next"
+             matButtonIcon></i>
+          <span>Show All Clusters</span>
+        </button>
+      </div>
   </km-tab>
-  <km-tab label="External Clusters"
-          *ngIf="externalClustersEnabled">
-    <table *ngIf="!isLoadingExternalClusters; else spinner"
-           class="km-table"
+  @if (externalClustersEnabled) {
+  <km-tab label="External Clusters">
+    @if (!isLoadingExternalClusters) {
+    <table class="km-table"
            mat-table
            [dataSource]="externalClusterDataSource"
            [trackBy]="externalClusterTrackBy">
@@ -141,26 +150,35 @@ limitations under the License.
           [matTooltip]="canAccessExternalCluster(cluster) ? '' : 'Cluster cannot be accessed'"
           (click)="externalClusterNavigate(cluster)"></tr>
     </table>
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!isLoadingExternalClusters && externalClusters.length < 1">
+    } @else {
+    <mat-spinner [diameter]="25"
+                 class="km-spinner"
+                 color="accent" />
+    }
+    @if (!isLoadingExternalClusters && externalClusters.length < 1)
+      {
+      <div
+      class="km-row km-empty-list-msg">
       No clusters available.
-    </div>
-    <div class="action-container"
-         fxFlex
-         fxLayoutAlign="end">
-      <button mat-flat-button
-              (click)="externalClustersNavigate()">
-        <i class="km-icon-mask km-icon-next"
-           matButtonIcon></i>
-        <span>Show All External Clusters</span>
-      </button>
-    </div>
+      </div>
+      }
+      <div class="action-container"
+           fxFlex
+           fxLayoutAlign="end">
+        <button mat-flat-button
+                (click)="externalClustersNavigate()">
+          <i class="km-icon-mask km-icon-next"
+             matButtonIcon></i>
+          <span>Show All External Clusters</span>
+        </button>
+      </div>
   </km-tab>
+  }
 
-  <km-tab label="KubeOne Clusters"
-          *ngIf="externalClustersEnabled">
-    <table *ngIf="!isLoadingExternalClusters; else spinner"
-           class="km-table"
+  @if (externalClustersEnabled) {
+  <km-tab label="KubeOne Clusters">
+    @if (!isLoadingExternalClusters) {
+    <table class="km-table"
            mat-table
            [dataSource]="kubeOneClusterDataSource"
            [trackBy]="externalClusterTrackBy">
@@ -211,25 +229,29 @@ limitations under the License.
           [matTooltip]="canAccessExternalCluster(cluster) ? '' : 'Cluster cannot be accessed'"
           (click)="kubeOneClusterNavigate(cluster)"></tr>
     </table>
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!isLoadingExternalClusters && kubeOneClusterDataSource.data.length < 1">
-      No clusters available.
-    </div>
-    <div class="action-container"
-         fxFlex
-         fxLayoutAlign="end">
-      <button mat-flat-button
-              (click)="kubeOneClustersNavigate()">
-        <i class="km-icon-mask km-icon-next"
-           matButtonIcon></i>
-        <span>Show All KubeOne Clusters</span>
-      </button>
-    </div>
-  </km-tab>
-
-  <ng-template #spinner>
+    } @else {
     <mat-spinner [diameter]="25"
                  class="km-spinner"
-                 color="accent"></mat-spinner>
-  </ng-template>
+                 color="accent" />
+    }
+    @if (!isLoadingExternalClusters && kubeOneClusterDataSource.data.length < 1)
+      {
+      <div
+      class="km-row km-empty-list-msg">
+      No clusters available.
+      </div>
+      }
+      <div class="action-container"
+           fxFlex
+           fxLayoutAlign="end">
+        <button mat-flat-button
+                (click)="kubeOneClustersNavigate()">
+          <i class="km-icon-mask km-icon-next"
+             matButtonIcon></i>
+          <span>Show All KubeOne Clusters</span>
+        </button>
+      </div>
+  </km-tab>
+  }
+
 </km-tab-card>

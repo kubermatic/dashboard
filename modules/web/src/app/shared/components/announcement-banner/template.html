@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="showAnnouncementBanner && !!currentAnnouncementID"
-     class="announcement">
+@if (showAnnouncementBanner && !!currentAnnouncementID) {
+<div class="announcement">
   <i class="km-icon-announcement i-24"></i>
   <p>{{ announcements.get(currentAnnouncementID)?.message }}</p>
   <div>
@@ -32,3 +32,4 @@ limitations under the License.
     </button>
   </div>
 </div>
+}

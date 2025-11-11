@@ -17,20 +17,28 @@ limitations under the License.
 <div fxLayout="column">
   <div class="bar"
        [ngClass]="expanded ? 'expanded' : ''"
-       (click)="onClick()"
-       [ngSwitch]="expanded">
+       (click)="onClick()">
     <div fxLayoutAlign="center center"
          fxLayoutGap="4px"
          class="label km-text-muted">
       <hr fxFlex>
-      <div *ngSwitchCase="true">{{collapseLabel}}</div>
-      <div *ngSwitchCase="false">{{expandLabel}}</div>
+      <div>
+        @switch (expanded) {
+        @case (true) {
+        <div>{{collapseLabel}}</div>
+        }
+        @case (false) {
+        <div>{{expandLabel}}</div>
+        }
+        }
+      </div>
       <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
       <hr fxFlex>
     </div>
   </div>
-  <div *ngIf="expanded"
-       @shrinkGrow>
-    <ng-content></ng-content>
+  @if (expanded) {
+  <div @shrinkGrow>
+    <ng-content />
   </div>
+  }
 </div>

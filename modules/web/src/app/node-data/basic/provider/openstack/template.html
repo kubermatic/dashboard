@@ -45,15 +45,15 @@ limitations under the License.
     </mat-checkbox>
   </div>
 
-  <km-number-stepper *ngIf="form.get(Controls.UseCustomDisk).value"
-                     [formControlName]="Controls.CustomDiskSize"
+  @if (form.get(Controls.UseCustomDisk).value) {
+  <km-number-stepper [formControlName]="Controls.CustomDiskSize"
                      mode="errors"
                      label="Disk Size in GB"
                      [required]="isDiskSizeRequired()"
                      hint="An additional network storage volume will be created and used as the disk for the VM."
                      min="10"
-                     max="16000">
-  </km-number-stepper>
+                     max="16000" />
+  }
 
   <km-combobox #availabilityZoneCombobox
                [required]="false"
@@ -101,30 +101,30 @@ limitations under the License.
                   kmValueChangedIndicator>
       Allocate Floating IP
     </mat-checkbox>
-    <i *ngIf="isFloatingIPEnforced()"
-       class="km-icon-info icon-info km-pointer"
+    @if (isFloatingIPEnforced()) {
+    <i class="km-icon-info icon-info km-pointer"
        matTooltip="Floating IP usage is enforced by selected datacenter"></i>
+    }
   </div>
   <div>
     <mat-checkbox [formControlName]="Controls.EnableConfigDrive">
       Enable Config Drive
     </mat-checkbox>
-    <i *ngIf="isConfigDriveEnforced()"
-       class="km-icon-info icon-info km-pointer"
+    @if (isConfigDriveEnforced()) {
+    <i class="km-icon-info icon-info km-pointer"
        matTooltip="Config Drive usage is enforced by selected datacenter"></i>
+    }
   </div>
 
   <km-number-stepper [formControlName]="Controls.InstanceReadyCheckPeriod"
                      mode="errors"
                      label="Instance Ready Check Period"
                      hint="Time in seconds between running a check for instance ready status."
-                     min="1">
-  </km-number-stepper>
+                     min="1" />
 
   <km-number-stepper [formControlName]="Controls.InstanceReadyCheckTimeout"
                      mode="errors"
                      label="Instance Ready Check Timeout"
                      hint="Time in seconds to wait for instance to be in ready status before timing out. Set to 0 to disable timeout."
-                     min="0">
-  </km-number-stepper>
+                     min="0" />
 </form>

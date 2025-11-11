@@ -20,15 +20,13 @@ limitations under the License.
                      mode="errors"
                      label="Number of CPUs"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.Memory"
                      mode="errors"
                      label="Memory in MB"
                      min="512"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <mat-form-field fxFlex>
     <mat-label>VM Template</mat-label>
@@ -38,17 +36,18 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Controls.Template).hasError('required')">
+    @if (form.get(Controls.Template).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-number-stepper [formControlName]="Controls.DiskSizeGB"
                      mode="errors"
                      label="Disk Size in GB"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-combobox #vmGroupsCombobox
                [selected]="selectedVMGroup"

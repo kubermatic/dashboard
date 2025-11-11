@@ -14,80 +14,74 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="!isInitialized">
-  <mat-spinner color="accent"
-               class="km-spinner km-with-spacing"
-               [diameter]="50"></mat-spinner>
-</ng-container>
+@if (!isInitialized) {
+<mat-spinner color="accent"
+             class="km-spinner km-with-spacing"
+             [diameter]="50" />
+}
 
-<ng-container *ngIf="isInitialized">
-  <div fxLayout="row">
-    <button mat-icon-button
-            color="tertiary"
-            (click)="goBack()"
-            matTooltip="Go back to the backup list">
-      <i class="km-icon-mask km-icon-arrow-left"></i>
-    </button>
-  </div>
-
-  <mat-card appearance="outlined"
-            class="info">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign=" center"
-                      class="title">
-        <i [matTooltip]="getStatus(backup).message"
-           [ngClass]="getStatus(backup).icon"
-           class="km-vertical-center"></i>
-        <div>{{backup.name}}</div>
-      </mat-card-title>
-      <div fxFlex></div>
-      <div fxLayout="row">
-        <button mat-icon-button
-                color="tertiary"
-                [attr.id]="'km-delete-backup-' + backup.name"
-                (click)="delete(backup)"
-                [disabled]="!canDelete"
-                matTooltip="Delete Automatic Backup">
-          <i class="km-icon-mask km-icon-delete"></i>
-        </button>
+@if (isInitialized) {
+<div fxLayout="row">
+  <button mat-icon-button
+          color="tertiary"
+          (click)="goBack()"
+          matTooltip="Go back to the backup list">
+    <i class="km-icon-mask km-icon-arrow-left"></i>
+  </button>
+</div>
+<mat-card appearance="outlined"
+          class="info">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center"
+                    class="title">
+      <i [matTooltip]="getStatus(backup).message"
+         [ngClass]="getStatus(backup).icon"
+         class="km-vertical-center"></i>
+      <div>{{backup.name}}</div>
+    </mat-card-title>
+    <div fxFlex></div>
+    <div fxLayout="row">
+      <button mat-icon-button
+              color="tertiary"
+              [attr.id]="'km-delete-backup-' + backup.name"
+              (click)="delete(backup)"
+              [disabled]="!canDelete"
+              matTooltip="Delete Automatic Backup">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content fxLayout="row">
+    <km-property>
+      <div key>Cluster ID</div>
+      <div value>{{backup.spec?.clusterId}}</div>
+    </km-property>
+    <km-property>
+      <div key>Destination</div>
+      <div value>{{backup.spec?.destination}}</div>
+    </km-property>
+    <km-property>
+      <div key>Schedule</div>
+      <div value>{{backup.spec?.schedule}}</div>
+    </km-property>
+    <km-property>
+      <div key
+           fxLayout="row"
+           fxLayoutGap="4px"
+           fxLayoutAlign=" center">
+        <div>Keep</div>
+        <div class="km-icon-info km-pointer"
+             matTooltip="Keep is the number of backups to keep around before deleting the oldest one. If not set, it will be controlled by the Kubermatic. Only used if Schedule is set."></div>
       </div>
-    </mat-card-header>
-
-    <mat-card-content fxLayout="row">
-      <km-property>
-        <div key>Cluster ID</div>
-        <div value>{{backup.spec?.clusterId}}</div>
-      </km-property>
-
-      <km-property>
-        <div key>Destination</div>
-        <div value>{{backup.spec?.destination}}</div>
-      </km-property>
-
-      <km-property>
-        <div key>Schedule</div>
-        <div value>{{backup.spec?.schedule}}</div>
-      </km-property>
-
-      <km-property>
-        <div key
-             fxLayout="row"
-             fxLayoutGap="4px"
-             fxLayoutAlign=" center">
-          <div>Keep</div>
-          <div class="km-icon-info km-pointer"
-               matTooltip="Keep is the number of backups to keep around before deleting the oldest one. If not set, it will be controlled by the Kubermatic. Only used if Schedule is set."></div>
-        </div>
-        <div value>{{keep(backup)}}</div>
-      </km-property>
-    </mat-card-content>
-  </mat-card>
-
-  <km-backup-list [backups]="backup.status.lastBackups"
-                  [projectID]="selectedProject.id"
-                  [clusterID]="backup.spec.clusterId"
-                  [destination]="backup.spec.destination"
-                  [backupHealth]="getStatus(backup).message"></km-backup-list>
-</ng-container>
+      <div value>{{keep(backup)}}</div>
+    </km-property>
+  </mat-card-content>
+</mat-card>
+<km-backup-list [backups]="backup.status.lastBackups"
+                [projectID]="selectedProject.id"
+                [clusterID]="backup.spec.clusterId"
+                [destination]="backup.spec.destination"
+                [backupHealth]="getStatus(backup).message" />
+}

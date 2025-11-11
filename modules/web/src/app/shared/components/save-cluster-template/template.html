@@ -30,12 +30,16 @@ limitations under the License.
              autocomplete="off"
              required
              cdkFocusInitial>
-      <mat-error *ngIf="form.get(control.Name).hasError('required')">
+      @if (form.get(control.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(control.Name).hasError('pattern')">
+      }
+      @if (form.get(control.Name).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
+      }
     </mat-form-field>
 
     <label class="km-radio-group-label">Select a Scope</label>
@@ -53,26 +57,29 @@ limitations under the License.
         <div class="km-radio-button-title">Project</div>
         <div class="km-radio-button-description">Appears only in this project, useable by everyone</div>
       </mat-radio-button>
+      @if (user?.isAdmin) {
       <mat-radio-button [value]="scope.Global"
-                        *ngIf="user?.isAdmin"
                         class="km-radio-button">
         <div class="km-radio-button-title">Global</div>
         <div class="km-radio-button-description">Appears in every project, useable by everyone</div>
       </mat-radio-button>
+      }
     </mat-radio-group>
   </form>
-  <div *ngIf="showSSHKeyWarning"
-       class="km-dialog-warning"
+  @if (showSSHKeyWarning) {
+  <div class="km-dialog-warning"
        fxLayoutAlign=" center">
     <i class="km-icon-warning"></i>
     <div>SSH keys will not be saved in cluster templates that are not in the project scope.</div>
   </div>
-  <div *ngIf="showEncryptionWarning"
-       class="km-dialog-warning"
+  }
+  @if (showEncryptionWarning) {
+  <div class="km-dialog-warning"
        fxLayoutAlign=" center">
     <i class="km-icon-warning"></i>
     <div>Encryption at Rest is enabled on this cluster, but it will be disabled when saving it as a template, since templates don’t support encryption.</div>
   </div>
+  }
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-save-template-confirm-btn"
@@ -80,6 +87,5 @@ limitations under the License.
              label="Save Cluster Template"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

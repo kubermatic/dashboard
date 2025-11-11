@@ -22,7 +22,8 @@ END OF TERMS AND CONDITIONS
 <div (keydown.enter)="onEnterKeyDown()">
   <km-dialog-title>Delete {{type}}</km-dialog-title>
   <mat-dialog-content>
-    <p *ngIf="(backups?.length === 1) || !!bslName">
+    @if ((backups?.length === 1) || !!bslName) {
+    <p>
       Delete
       <b ngxClipboard
          [cbContent]="getcbContent()"
@@ -30,7 +31,9 @@ END OF TERMS AND CONDITIONS
          class="km-copy">{{getcbContent()}}</b>
       {{type}} permanently?
     </p>
-    <p *ngIf="(backups?.length > 1)">
+    }
+    @if ((backups?.length > 1)) {
+    <p>
       Type
       <b ngxClipboard
          [cbContent]="getcbContent()"
@@ -38,6 +41,7 @@ END OF TERMS AND CONDITIONS
          class="km-copy">yes</b>
       to delete all selected {{type}}s permanently?
     </p>
+    }
     <mat-form-field>
       <mat-label>{{inputLabel()}}</mat-label>
       <input matInput

@@ -22,19 +22,45 @@ limitations under the License.
       Edit {{providerDisplayName(cluster)}} provider settings of <b>{{cluster.name}}</b> cluster
     </p>
 
-    <km-anexia-provider-settings *ngIf="!!cluster.spec.cloud.anexia"></km-anexia-provider-settings>
-    <km-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></km-alibaba-provider-settings>
-    <km-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></km-aws-provider-settings>
-    <km-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></km-digitalocean-provider-settings>
-    <km-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></km-hetzner-provider-settings>
-    <km-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></km-openstack-provider-settings>
-    <km-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></km-vsphere-provider-settings>
-    <km-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></km-azure-provider-settings>
-    <km-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></km-gcp-provider-settings>
-    <km-nutanix-provider-settings *ngIf="!!cluster.spec.cloud.nutanix"></km-nutanix-provider-settings>
-    <km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>
-    <km-vmware-cloud-director-provider-settings *ngIf="!!cluster.spec.cloud.vmwareclouddirector"></km-vmware-cloud-director-provider-settings>
-    <km-baremetal-provider-settings *ngIf="!!cluster.spec.cloud.baremetal"></km-baremetal-provider-settings>
+    @if (!!cluster.spec.cloud.anexia) {
+    <km-anexia-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.alibaba) {
+    <km-alibaba-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.aws) {
+    <km-aws-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.digitalocean) {
+    <km-digitalocean-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.hetzner) {
+    <km-hetzner-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.openstack) {
+    <km-openstack-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.vsphere) {
+    <km-vsphere-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.azure) {
+    <km-azure-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.gcp) {
+    <km-gcp-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.nutanix) {
+    <km-nutanix-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.kubevirt) {
+    <km-kubevirt-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.vmwareclouddirector) {
+    <km-vmware-cloud-director-provider-settings />
+    }
+    @if (!!cluster.spec.cloud.baremetal) {
+    <km-baremetal-provider-settings />
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions>

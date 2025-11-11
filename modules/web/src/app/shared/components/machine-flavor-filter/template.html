@@ -34,27 +34,23 @@ limitations under the License.
                          id="km-cpu-resource-quota-setting"
                          label="Min CPU"
                          min="0"
-                         required>
-      </km-number-stepper>
+                         required />
 
       <km-number-stepper [formControlName]="Controls.MaxCPU"
                          label="Max CPU"
                          min="0"
-                         required>
-      </km-number-stepper>
+                         required />
 
       <km-number-stepper [formControlName]="Controls.MinRAM"
                          id="km-ram-resource-quota-setting"
                          label="Min RAM (GB)"
                          min="0"
-                         required>
-      </km-number-stepper>
+                         required />
 
       <km-number-stepper [formControlName]="Controls.MaxRAM"
                          label="Max RAM (GB)"
                          min="0"
-                         required>
-      </km-number-stepper>
+                         required />
 
       <mat-checkbox fxLayoutAlign=" center"
                     [formControlName]="Controls.EnableGPU"

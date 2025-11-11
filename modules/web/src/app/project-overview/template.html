@@ -26,13 +26,14 @@ limitations under the License.
               [disabled]="!isEditEnabled()">
         <i class="km-icon-mask km-icon-edit"></i>
       </button>
-      <km-create-resource-panel *ngIf="project"
-                                [project]="project"
+      @if (project) {
+      <km-create-resource-panel [project]="project"
                                 [clusterTemplates]="clusterTemplates"
                                 (refreshClusters)="clustersChange.next()"
                                 (refreshExternalClusters)="externalClustersChange.next()"
                                 (refreshClusterTemplates)="clusterTemplatesChange.next()"
-                                (refreshBackups)="backupsChange.next()"></km-create-resource-panel>
+                                (refreshBackups)="backupsChange.next()" />
+      }
     </mat-card-header>
 
     <mat-card-content fxLayout="row wrap"
@@ -76,8 +77,8 @@ limitations under the License.
             <div value>{{clusterTemplates.length}}</div>
           </km-property>
         </div>
-        <div *ngIf="etcdBackupEnabled"
-             fxLayoutAlign=" center"
+        @if (etcdBackupEnabled) {
+        <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
              fxFlex>
           <i class="km-icon-mask km-icon-backup"></i>
@@ -86,8 +87,9 @@ limitations under the License.
             <div value>{{backups.length}}</div>
           </km-property>
         </div>
-        <div *ngIf="isUserSshKeyEnabled"
-             fxLayoutAlign=" center"
+        }
+        @if (isUserSshKeyEnabled) {
+        <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
              fxFlex>
           <i class="km-icon-mask km-icon-key"></i>
@@ -96,6 +98,7 @@ limitations under the License.
             <div value>{{sshKeys.length}}</div>
           </km-property>
         </div>
+        }
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
              fxFlex>
@@ -106,18 +109,19 @@ limitations under the License.
           </km-property>
         </div>
       </div>
-      <div *ngIf="project?.labels"
-           fxLayoutAlign=" start"
+      @if (project?.labels) {
+      <div fxLayoutAlign=" start"
            fxLayoutGap="15px">
         <i class="km-icon-mask km-icon-labels labels-icon"></i>
         <km-property>
           <div key>Labels</div>
           <div value>
             <km-labels [oneLineLimit]="true"
-                       [labels]="project?.labels"></km-labels>
+                       [labels]="project?.labels" />
           </div>
         </km-property>
       </div>
+      }
     </mat-card-content>
   </mat-card>
 
@@ -133,27 +137,28 @@ limitations under the License.
                             [isLoadingClusters]="isLoadingClusters"
                             [externalClusters]="externalClusters"
                             [externalClustersEnabled]="externalClustersEnabled"
-                            [isLoadingExternalClusters]="isLoadingExternalClusters"></km-clusters-overview>
+                            [isLoadingExternalClusters]="isLoadingExternalClusters" />
     </div>
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
-      <mat-card appearance="outlined"
-                *ngIf="isEnterpriseEdition && projectQuota">
+      @if (isEnterpriseEdition && projectQuota) {
+      <mat-card appearance="outlined">
         <mat-card-header>
           <mat-card-title>Project Quota</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <router-outlet name="quota-widget"
-                         (activate)="onActivate($event)"></router-outlet>
+                         (activate)="onActivate($event)" />
         </mat-card-content>
       </mat-card>
+      }
       <km-providers-overview [clusters]="clusters"
-                             [externalClusters]="externalClusters"></km-providers-overview>
+                             [externalClusters]="externalClusters" />
       <km-members-overview [project]="project"
                            [members]="members"
                            [groups]="groups"
-                           [showMembersAndGroups]="hasPermission(View.Members)"></km-members-overview>
+                           [showMembersAndGroups]="hasPermission(View.Members)" />
     </div>
   </div>
 </div>

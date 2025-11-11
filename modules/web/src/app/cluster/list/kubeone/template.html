@@ -22,12 +22,12 @@ limitations under the License.
   <div fxLayout
        fxLayoutAlign=" center"
        class="header">
-    <km-search-field (queryChange)="onSearch($event)"></km-search-field>
+    <km-search-field (queryChange)="onSearch($event)" />
     <div fxFlex></div>
 
     <div fxLayoutAlign="center center">
       <router-outlet name="quota-widget"
-                     (activate)="onQuotaWidgetActivate($event)"></router-outlet>
+                     (activate)="onQuotaWidgetActivate($event)" />
     </div>
     <button id="km-import-kubeone-cluster-btn"
             mat-flat-button
@@ -102,7 +102,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
+          <km-relative-time [date]="element.creationTimestamp" />
         </td>
       </ng-container>
 
@@ -114,18 +114,18 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <mat-spinner *ngIf="element.deletionTimestamp; else disconnectButton"
-                         [diameter]="25"
+            @if (element.deletionTimestamp) {
+            <mat-spinner [diameter]="25"
                          class="km-spinner"
-                         color="accent"></mat-spinner>
-            <ng-template #disconnectButton>
-              <button mat-icon-button
-                      matTooltip="Disconnect Cluster"
-                      (click)="disconnectClusterDialog(element, $event)"
-                      [disabled]="!can(Permission.Delete)">
-                <i class="km-icon-mask km-icon-disconnect"></i>
-              </button>
-            </ng-template>
+                         color="accent" />
+            } @else {
+            <button mat-icon-button
+                    matTooltip="Disconnect Cluster"
+                    (click)="disconnectClusterDialog(element, $event)"
+                    [disabled]="!can(Permission.Delete)">
+              <i class="km-icon-mask km-icon-disconnect"></i>
+            </button>
+            }
           </div>
         </td>
       </ng-container>
@@ -141,29 +141,32 @@ limitations under the License.
           (click)="navigateToCluster(row)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && isEmpty(clusters)">
+    @if (isInitialized && isEmpty(clusters)) {
+    <div class="km-row km-empty-list-msg">
       No clusters available.
     </div>
+    }
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+    @if (isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)) {
+    <div class="km-row km-empty-list-msg">
       No clusters found.
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="!isInitialized">
+    @if (!isInitialized) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

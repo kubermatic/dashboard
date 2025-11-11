@@ -14,127 +14,111 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="!isLoading; else loading">
-  <table *ngIf="dataSource.data?.length; else noServiceAccounts"
-         class="km-table"
-         matSort
-         mat-table
-         multiTemplateDataRows
-         [dataSource]="dataSource">
-
-    <!--  Expansion Arrow -->
-    <ng-container [matColumnDef]="Column.StateArrow">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <i class="km-icon-mask"
-           [ngClass]="clusterServiceAccountExpansion[element.id] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      </td>
-    </ng-container>
-
-    <!-- Name of the service account  -->
-    <ng-container [matColumnDef]="Column.Name">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>Name
-      </th>
-      <td mat-cell
-          *matCellDef="let element">
-        {{ element.name }}
-      </td>
-    </ng-container>
-
-    <!-- Namespace -->
-    <ng-container [matColumnDef]="Column.Namespace">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell p-30"
-          mat-sort-header>Service Account Namespace
-      </th>
-      <td mat-cell
-          *matCellDef="let element">
-        {{ element.namespace }}
-      </td>
-    </ng-container>
-
-    <!-- Action buttons -->
-    <ng-container [matColumnDef]="Column.Actions">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <div class="km-table-actions"
-             fxLayoutAlign="end">
-          <mat-spinner *ngIf="!!element['deletionTimestamp']; else actionButtons"
-                       [diameter]="25"
-                       class="km-spinner"
-                       color="accent"></mat-spinner>
-
-          <ng-template #actionButtons>
-            <button mat-icon-button
-                    kmThrottleClick
-                    (throttleClick)="addServiceAccountBinding(element)">
-              <i class="km-icon-mask km-icon-add"></i>
-            </button>
-
-            <button mat-icon-button
-                    kmThrottleClick
-                    matTooltip="Download Kubeconfig"
-                    (throttleClick)="download(element)">
-              <i class="km-icon-mask km-icon-download"></i>
-            </button>
-
-            <button mat-icon-button
-                    kmThrottleClick
-                    (throttleClick)="deleteServiceAccount(element)">
-              <i class="km-icon-mask km-icon-delete"></i>
-            </button>
-          </ng-template>
-        </div>
-      </td>
-    </ng-container>
-
-    <!-- Details  -->
-    <ng-container [matColumnDef]="Column.Details">
-      <td mat-cell
-          *matCellDef="let element"
-          [attr.colspan]="columns.length">
-        <div>
-          <km-rbac-service-account-details [details]="bindingDetails?.[element.name]"
-                                           (deleteBinding)="deleteServiceAccountBinding($event)">
-          </km-rbac-service-account-details>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row
-        class="km-header-row"
-        *matHeaderRowDef="columns"></tr>
-
-    <tr mat-row
-        *matRowDef="let row; columns: columns"
-        class="km-mat-row km-pointer"
-        (click)="expandRow(row)"></tr>
-
-    <tr mat-row
-        *matRowDef="let row; let i=index; columns: [ Column.Details ];"
-        [ngClass]="clusterServiceAccountExpansion[row.id] ? '' : 'km-hidden'"
-        class="km-mat-row"></tr>
-  </table>
-
-  <ng-template #noServiceAccounts
-               class="km-row km-empty-list-msg">
-    <div fxLayout="row"
-         fxLayoutAlign="center center">
-      No service accounts available.
-    </div>
-  </ng-template>
-</ng-container>
-
-<ng-template #loading>
-  <km-loader></km-loader>
-</ng-template>
+@if (!isLoading) {
+@if (dataSource.data?.length) {
+<table class="km-table"
+       matSort
+       mat-table
+       multiTemplateDataRows
+       [dataSource]="dataSource">
+  <!--  Expansion Arrow -->
+  <ng-container [matColumnDef]="Column.StateArrow">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <i class="km-icon-mask"
+         [ngClass]="clusterServiceAccountExpansion[element.id] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+    </td>
+  </ng-container>
+  <!-- Name of the service account  -->
+  <ng-container [matColumnDef]="Column.Name">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Name
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      {{ element.name }}
+    </td>
+  </ng-container>
+  <!-- Namespace -->
+  <ng-container [matColumnDef]="Column.Namespace">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell p-30"
+        mat-sort-header>Service Account Namespace
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      {{ element.namespace }}
+    </td>
+  </ng-container>
+  <!-- Action buttons -->
+  <ng-container [matColumnDef]="Column.Actions">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <div class="km-table-actions"
+           fxLayoutAlign="end">
+        @if (!!element['deletionTimestamp']) {
+        <mat-spinner [diameter]="25"
+                     class="km-spinner"
+                     color="accent" />
+        } @else {
+        <button mat-icon-button
+                kmThrottleClick
+                (throttleClick)="addServiceAccountBinding(element)">
+          <i class="km-icon-mask km-icon-add"></i>
+        </button>
+        <button mat-icon-button
+                kmThrottleClick
+                matTooltip="Download Kubeconfig"
+                (throttleClick)="download(element)">
+          <i class="km-icon-mask km-icon-download"></i>
+        </button>
+        <button mat-icon-button
+                kmThrottleClick
+                (throttleClick)="deleteServiceAccount(element)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+        }
+      </div>
+    </td>
+  </ng-container>
+  <!-- Details  -->
+  <ng-container [matColumnDef]="Column.Details">
+    <td mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="columns.length">
+      <div>
+        <km-rbac-service-account-details [details]="bindingDetails?.[element.name]"
+                                         (deleteBinding)="deleteServiceAccountBinding($event)" />
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row
+      class="km-header-row"
+      *matHeaderRowDef="columns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: columns"
+      class="km-mat-row km-pointer"
+      (click)="expandRow(row)"></tr>
+  <tr mat-row
+      *matRowDef="let row; let i=index; columns: [ Column.Details ];"
+      [ngClass]="clusterServiceAccountExpansion[row.id] ? '' : 'km-hidden'"
+      class="km-mat-row"></tr>
+</table>
+} @else {
+<div fxLayout="row"
+     fxLayoutAlign="center center">
+  No service accounts available.
+</div>
+}
+} @else {
+<km-loader />
+}

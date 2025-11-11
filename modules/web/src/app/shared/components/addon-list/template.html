@@ -17,7 +17,8 @@ limitations under the License.
 <div fxLayout="row"
      fxLayoutAlign=" center">
   <div fxFlex>
-    <p *ngIf="!addons?.length">
+    @if (!addons?.length) {
+    <p>
       Addons are extensions provided by Kubermatic to expand cluster capabilities,
       <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/concept/kkp-concepts/addons/"
          target="_blank"
@@ -27,6 +28,7 @@ limitations under the License.
         learn more about Addons <i class="km-icon-external-link i-18"></i>.
       </a>
     </p>
+    }
   </div>
   <button mat-flat-button
           color="quaternary"
@@ -39,21 +41,23 @@ limitations under the License.
   </button>
 </div>
 
-<div *ngIf="isClusterReady"
-     fxLayout="row wrap"
+@if (isClusterReady) {
+<div fxLayout="row wrap"
      fxLayoutGap="10px">
-  <div *ngFor="let addon of addons"
-       fxLayoutAlign="center center"
+  @for (addon of addons; track addon) {
+  <div fxLayoutAlign="center center"
        class="addon-container km-border">
     <div fxFlex
          fxLayoutAlign="center center">
-      <span *ngIf="!hasLogo(addon.name)"
-            [ngClass]="{'km-text-muted' : !!addon.deletionTimestamp}">{{addon.name}}</span>
+      @if (!hasLogo(addon.name)) {
+      <span [ngClass]="{'km-text-muted' : !!addon.deletionTimestamp}">{{addon.name}}</span>
+      }
+      @if (hasLogo(addon.name)) {
       <img class="km-addon-logo"
            [ngClass]="{'km-addon-logo-disabled' : !!addon.deletionTimestamp}"
            [matTooltip]="getTooltip(addon)"
-           *ngIf="hasLogo(addon.name)"
            [src]="getAddonLogo(addon.name)">
+      }
     </div>
     <div [matMenuTriggerFor]="menu"
          fxLayoutAlign="center center"
@@ -73,11 +77,16 @@ limitations under the License.
       </button>
     </mat-menu>
   </div>
-  <div *ngIf="addons.length === 0"
-       class="no-data-warning"
+  }
+  @if (addons.length === 0) {
+  <div class="no-data-warning"
        fxFlex>
     No addons installed.
   </div>
+  }
 </div>
+}
 
-<km-loader *ngIf="!isClusterReady"></km-loader>
+@if (!isClusterReady) {
+<km-loader />
+}

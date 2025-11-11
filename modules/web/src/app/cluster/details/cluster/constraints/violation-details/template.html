@@ -66,18 +66,18 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<ng-container *ngIf="!violations || violations.length === 0">
-  <div class="km-row km-empty-list-msg">
-    No violations available.
-  </div>
-</ng-container>
+@if (!violations || violations.length === 0) {
+<div class="km-row km-empty-list-msg">
+  No violations available.
+</div>
+}
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
+    <km-pagination-page-size />
     <mat-paginator showFirstLastButtons
-                   (page)="onPaginateChange($event)"></mat-paginator>
+                   (page)="onPaginateChange($event)" />
   </div>
 </div>

@@ -86,17 +86,18 @@ END OF TERMS AND CONDITIONS
         class="km-mat-row"></tr>
   </table>
 
-  <div class="km-row km-empty-list-msg"
-       *ngIf="hasNoData()">
+  @if (hasNoData()) {
+  <div class="km-row km-empty-list-msg">
     No allowed registries available.
   </div>
+  }
 
   <div [hidden]="!isPaginatorVisible()"
        class="km-paginator-container">
     <div fxLayout="row"
          fxLayoutAlign="flex-end center">
-      <km-pagination-page-size></km-pagination-page-size>
-      <mat-paginator showFirstLastButtons></mat-paginator>
+      <km-pagination-page-size />
+      <mat-paginator showFirstLastButtons />
     </div>
   </div>
 </km-dynamic-tab>

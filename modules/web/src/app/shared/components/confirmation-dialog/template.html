@@ -18,13 +18,15 @@ limitations under the License.
   <km-dialog-title>{{data.title}}</km-dialog-title>
   <mat-dialog-content>
     <p [innerHTML]="data.message"></p>
-    <div *ngIf="!!data.warning"
-         class="km-dialog-warning"
+    @if (!!data.warning) {
+    <div class="km-dialog-warning"
          fxLayoutAlign=" center">
       <i class="km-icon-warning"></i>
       <span [innerHTML]="data.warning"></span>
     </div>
-    <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
+    }
+    @if (!!data.compareName && data.compareName.length > 0) {
+    <mat-form-field>
       <mat-label>{{data.inputPlaceholder}}</mat-label>
       <input id="km-confirmation-dialog-input"
              matInput
@@ -34,10 +36,11 @@ limitations under the License.
              (keyup)="onChange($event)"
              kmAutofocus>
     </mat-form-field>
+    }
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button *ngIf="!data.throttleButton"
-            mat-flat-button
+    @if (!data.throttleButton) {
+    <button mat-flat-button
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">
@@ -45,14 +48,15 @@ limitations under the License.
          matButtonIcon></i>
       <span>{{data.confirmLabel}}</span>
     </button>
-    <km-button *ngIf="data.throttleButton"
-               [mat-dialog-close]="true"
+    }
+    @if (data.throttleButton) {
+    <km-button [mat-dialog-close]="true"
                id="km-confirmation-dialog-confirm-btn"
                [icon]="getIconClass()"
                [label]="data.confirmLabel"
                [disabled]="!inputNameMatches()"
                [observable]="data.observable"
-               (next)="data.next">
-    </km-button>
+               (next)="data.next" />
+    }
   </mat-dialog-actions>
 </div>

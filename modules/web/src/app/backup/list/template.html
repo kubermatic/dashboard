@@ -14,12 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="enableEtcdBackup">
-  <ng-container [ngSwitch]="etcdBackupType">
-    <km-automatic-backup-list *ngSwitchCase="view.Backups"></km-automatic-backup-list>
-
-    <km-snapshot-list *ngSwitchCase="view.Snapshots"></km-snapshot-list>
-
-    <km-restore-list *ngSwitchCase="view.Restores"></km-restore-list>
-  </ng-container>
-</ng-container>
+@if (enableEtcdBackup) {
+@switch (etcdBackupType) {
+@case (view.Backups) {
+<km-automatic-backup-list />
+}
+@case (view.Snapshots) {
+<km-snapshot-list />
+}
+@case (view.Restores) {
+<km-restore-list />
+}
+}
+}

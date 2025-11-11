@@ -22,8 +22,8 @@ limitations under the License.
     <form [formGroup]="form"
           fxLayout
           class="km-machine-networks-form">
+      @for (network of networks; track network; let i = $index) {
       <div fxFlex="100%"
-           *ngFor="let network of networks; let i=index"
            formArrayName="machineNetworks"
            class="km-machine-networks-form-inner">
         <div class="km-form-group-tags-inner"
@@ -34,7 +34,6 @@ limitations under the License.
                aria-hidden="true"
                (click)="delete(i)"></i>
           </span>
-
           <mat-form-field class="km-machine-networks-form-field">
             <mat-label>CIDR Range</mat-label>
             <input matInput
@@ -42,12 +41,16 @@ limitations under the License.
                    formControlName="cidr"
                    autocomplete="off">
             <mat-hint>Example: 196.44.198.32/29</mat-hint>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
+            @if (form.controls.machineNetworks.controls[i].controls.cidr.hasError('required')) {
+            <mat-error>
               <strong>Required</strong>
             </mat-error>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')">
+            }
+            @if (form.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')) {
+            <mat-error>
               Pattern is not valid.
             </mat-error>
+            }
           </mat-form-field>
           <mat-form-field class="km-machine-networks-form-field">
             <mat-label>DNS Servers</mat-label>
@@ -56,12 +59,16 @@ limitations under the License.
                    formControlName="dnsServers"
                    autocomplete="off">
             <mat-hint>DNS Servers separated with commas, example: 8.8.8.8, 8.8.8.4</mat-hint>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
+            @if (form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')) {
+            <mat-error>
               <strong>Required</strong>
             </mat-error>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')">
+            }
+            @if (form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')) {
+            <mat-error>
               Pattern is not valid.
             </mat-error>
+            }
           </mat-form-field>
           <mat-form-field class="km-machine-networks-form-field">
             <mat-label>Gateway</mat-label>
@@ -70,15 +77,20 @@ limitations under the License.
                    formControlName="gateway"
                    autocomplete="off">
             <mat-hint>Example: 10.0.0.1</mat-hint>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">
+            @if (form.controls.machineNetworks.controls[i].controls.gateway.hasError('required')) {
+            <mat-error>
               <strong>Required</strong>
             </mat-error>
-            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')">
+            }
+            @if (form.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')) {
+            <mat-error>
               Pattern is not valid.
             </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
+      }
 
       <div fxFlex="100%"
            class="km-machine-networks-form-inner">

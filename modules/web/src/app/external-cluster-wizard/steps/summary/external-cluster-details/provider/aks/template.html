@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-external-cluster-details *ngIf="spec && cloudSpec"
-                             [cluster]="cluster">
+@if (spec && cloudSpec) {
+<km-external-cluster-details [cluster]="cluster">
   <ng-container leftColumn>
     <km-property>
       <div key>Location</div>
@@ -22,7 +22,6 @@ limitations under the License.
         <span>{{ cloudSpec.location }}</span>
       </div>
     </km-property>
-
     <km-property>
       <div key>Resource Group</div>
       <div value>
@@ -30,7 +29,6 @@ limitations under the License.
       </div>
     </km-property>
   </ng-container>
-
   <ng-container rightColumn>
     <div class="section-header">Node Pool Setting</div>
     <km-property>
@@ -39,47 +37,42 @@ limitations under the License.
         <span>{{ spec.machineDeploymentSpec.name }}</span>
       </div>
     </km-property>
-
-    <ng-container *ngIf="spec.machineDeploymentSpec.basicSettings as setting">
-      <km-property>
-        <div key>VM Size</div>
-        <div value>
-          <span>{{ setting.vmSize }}</span>
-        </div>
-      </km-property>
-
-      <km-property>
-        <div key>Count</div>
-        <div value>
-          <span>{{ setting.count }}</span>
-        </div>
-      </km-property>
-
-      <km-property>
-        <div key>Mode</div>
-        <div value>
-          <span>{{ setting.mode }}</span>
-        </div>
-      </km-property>
-
-      <km-property-boolean label="AutoScaling"
-                           [value]="setting.enableAutoScaling"> </km-property-boolean>
-
-      <ng-container *ngIf="setting.enableAutoScaling && setting.scalingConfig as scalingConfig">
-        <km-property>
-          <div key>Max Count</div>
-          <div value>
-            <span>{{ scalingConfig.maxCount }}</span>
-          </div>
-        </km-property>
-
-        <km-property>
-          <div key>Min Count</div>
-          <div value>
-            <span>{{ scalingConfig.minCount }}</span>
-          </div>
-        </km-property>
-      </ng-container>
-    </ng-container>
+    @if (spec.machineDeploymentSpec.basicSettings; as setting) {
+    <km-property>
+      <div key>VM Size</div>
+      <div value>
+        <span>{{ setting.vmSize }}</span>
+      </div>
+    </km-property>
+    <km-property>
+      <div key>Count</div>
+      <div value>
+        <span>{{ setting.count }}</span>
+      </div>
+    </km-property>
+    <km-property>
+      <div key>Mode</div>
+      <div value>
+        <span>{{ setting.mode }}</span>
+      </div>
+    </km-property>
+    <km-property-boolean label="AutoScaling"
+                         [value]="setting.enableAutoScaling" />
+    @if (setting.enableAutoScaling && setting.scalingConfig; as scalingConfig) {
+    <km-property>
+      <div key>Max Count</div>
+      <div value>
+        <span>{{ scalingConfig.maxCount }}</span>
+      </div>
+    </km-property>
+    <km-property>
+      <div key>Min Count</div>
+      <div value>
+        <span>{{ scalingConfig.minCount }}</span>
+      </div>
+    </km-property>
+    }
+    }
   </ng-container>
 </km-external-cluster-details>
+}

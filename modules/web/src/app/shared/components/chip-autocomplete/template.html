@@ -13,23 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card-header *ngIf="title"
-                 class="km-no-padding">
+@if (title) {
+<mat-card-header class="km-no-padding">
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
+}
 
 <form [formGroup]="form">
   <mat-form-field>
-    <mat-label *ngIf="label">{{label}}</mat-label>
+    @if (label) {
+    <mat-label>{{label}}</mat-label>
+    }
     <mat-chip-grid class="km-chip-list-with-input"
                    #tagList
                    [formControlName]="Controls.Tags">
-      <mat-chip-row *ngFor="let tag of selectedTags"
-                    (removed)="removeTag(tag)">
+      @for (tag of selectedTags; track tag) {
+      <mat-chip-row (removed)="removeTag(tag)">
         {{tag}}
         <i matChipRemove
            class="km-icon-mask km-icon-remove"></i>
       </mat-chip-row>
+      }
       <input #tagInput
              [required]="required"
              [formControlName]="Controls.Filter"
@@ -41,17 +45,22 @@ limitations under the License.
     </mat-chip-grid>
     <mat-autocomplete #auto="matAutocomplete"
                       (optionSelected)="selected($event)">
-      <mat-option *ngFor="let tag of filteredTags"
-                  [value]="tag"> {{tag}} </mat-option>
+      @for (tag of filteredTags; track tag) {
+      <mat-option [value]="tag"> {{tag}} </mat-option>
+      }
     </mat-autocomplete>
     <mat-hint>{{description}}</mat-hint>
 
-    <mat-error *ngIf="form.get(Controls.Tags).hasError('required')">
+    @if (form.get(Controls.Tags).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
 
-    <mat-error *ngIf="form.get(Controls.Tags).hasError('unique')">
+    @if (form.get(Controls.Tags).hasError('unique')) {
+    <mat-error>
       <span>Values must be <strong>unique</strong>.</span>
     </mat-error>
+    }
   </mat-form-field>
 </form>

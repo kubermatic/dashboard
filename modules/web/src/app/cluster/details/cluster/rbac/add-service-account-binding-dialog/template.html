@@ -30,14 +30,17 @@ limitations under the License.
                     disableOptionCentering
                     [formControl]="form.get(Controls.ServiceAccountID)"
                     [placeholder]="serviceAccountsLabel">
-          <mat-option *ngFor="let serviceAccount of serviceAccounts"
-                      [value]="serviceAccount.id">
+          @for (serviceAccount of serviceAccounts; track serviceAccount) {
+          <mat-option [value]="serviceAccount.id">
             {{ serviceAccount.name }} <span class="km-text-muted">(Namespace: {{ serviceAccount.namespace }})</span>
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.ServiceAccountID).hasError(ErrorType.Required)">
+        @if (form.get(Controls.ServiceAccountID).hasError(ErrorType.Required)) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
@@ -46,28 +49,38 @@ limitations under the License.
                     disableOptionCentering
                     [formControl]="form.get(Controls.RoleID)"
                     [placeholder]="roleLabel">
-          <mat-option *ngFor="let role of roles"
-                      [value]="role"> {{ role }} </mat-option>
+          @for (role of roles; track role) {
+          <mat-option [value]="role"> {{ role }} </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.RoleID).hasError(ErrorType.Required)">
+        @if (form.get(Controls.RoleID).hasError(ErrorType.Required)) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field *ngIf="bindingModeControl.value === BindingMode.Namespace">
+      @if (bindingModeControl.value === BindingMode.Namespace) {
+      <mat-form-field>
         <mat-label>Namespace</mat-label>
         <mat-select panelClass="km-add-dialog-dropdown"
                     [disabled]="!form.get(Controls.RoleID).value"
                     [formControl]="form.get(Controls.RoleNamespace)"
                     [placeholder]="namespaceLabel">
-          <mat-option *ngFor="let roleNamespace of roleNamespacesMap?.[form.get(Controls.RoleID).value]"
-                      [value]="roleNamespace">{{ roleNamespace }}</mat-option>
+          @for (roleNamespace of roleNamespacesMap?.[form.get(Controls.RoleID).value]; track roleNamespace) {
+          <mat-option [value]="roleNamespace">{{ roleNamespace }}</mat-option>
+          }
         </mat-select>
-        <mat-hint *ngIf="!form.get(Controls.RoleID).value">Please select role first.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.RoleNamespace).hasError(ErrorType.Required)">
+        @if (!form.get(Controls.RoleID).value) {
+        <mat-hint>Please select role first.</mat-hint>
+        }
+        @if (form.get(Controls.RoleNamespace).hasError(ErrorType.Required)) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
+      }
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -75,7 +88,6 @@ limitations under the License.
                label="Add Binding"
                [disabled]="!form.valid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

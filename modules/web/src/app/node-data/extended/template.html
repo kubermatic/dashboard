@@ -13,30 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form *ngIf="visible"
-      [formGroup]="form"
-      [ngSwitch]="provider">
-  <km-alibaba-extended-node-data *ngSwitchCase="Provider.ALIBABA"
-                                 [formControl]="form.get(Control.ProviderExtended)">
-  </km-alibaba-extended-node-data>
-  <km-aws-extended-node-data *ngSwitchCase="Provider.AWS"
-                             [formControl]="form.get(Control.ProviderExtended)">
-  </km-aws-extended-node-data>
-  <km-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                      [formControl]="form.get(Control.ProviderExtended)">
-  </km-digitalocean-extended-node-data>
-
-  <km-azure-extended-node-data *ngSwitchCase="Provider.AZURE"
-                               [formControl]="form.get(Control.ProviderExtended)">
-  </km-azure-extended-node-data>
-  <km-gcp-extended-node-data *ngSwitchCase="Provider.GCP"
-                             [formControl]="form.get(Control.ProviderExtended)">
-  </km-gcp-extended-node-data>
-  <km-openstack-extended-node-data *ngSwitchCase="Provider.OPENSTACK"
-                                   [formControl]="form.get(Control.ProviderExtended)">
-  </km-openstack-extended-node-data>
-
-  <km-vsphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
-                                 [formControl]="form.get(Control.ProviderExtended)">
-  </km-vsphere-extended-node-data>
+@if (visible) {
+<form [formGroup]="form">
+  @switch (provider) {
+  @case (Provider.ALIBABA) {
+  <km-alibaba-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.AWS) {
+  <km-aws-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.DIGITALOCEAN) {
+  <km-digitalocean-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.AZURE) {
+  <km-azure-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.GCP) {
+  <km-gcp-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.OPENSTACK) {
+  <km-openstack-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  @case (Provider.VSPHERE) {
+  <km-vsphere-extended-node-data [formControl]="form.get(Control.ProviderExtended)" />
+  }
+  }
 </form>
+}

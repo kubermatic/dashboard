@@ -14,27 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-content-wrap"
-     *ngIf="clusterMetrics">
+@if (clusterMetrics) {
+<div class="km-content-wrap">
+  @if (clusterMetrics?.nodes?.cpuTotalMillicores) {
   <km-property-usage name="Nodes CPU Usage"
                      unit="millicores"
                      [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
-                     [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"
-                     *ngIf="clusterMetrics?.nodes?.cpuTotalMillicores"></km-property-usage>
-
+                     [total]="clusterMetrics?.nodes?.cpuAvailableMillicores" />
+  }
+  @if (clusterMetrics?.nodes?.memoryTotalBytes) {
   <km-property-usage name="Nodes Memory Usage"
                      unit="MiB"
                      [used]="clusterMetrics?.nodes?.memoryTotalBytes"
-                     [total]="clusterMetrics?.nodes?.memoryAvailableBytes"
-                     *ngIf="clusterMetrics?.nodes?.memoryTotalBytes"></km-property-usage>
-
+                     [total]="clusterMetrics?.nodes?.memoryAvailableBytes" />
+  }
+  @if (clusterMetrics?.controlPlane?.cpuTotalMillicores) {
   <km-property-usage name="Control Plane CPU Usage"
                      unit="millicores"
-                     [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"
-                     *ngIf="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
-
+                     [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores" />
+  }
+  @if (clusterMetrics?.controlPlane?.memoryTotalBytes) {
   <km-property-usage name="Control Plane Memory Usage"
                      unit="MiB"
-                     [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"
-                     *ngIf="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+                     [used]="clusterMetrics?.controlPlane?.memoryTotalBytes" />
+  }
 </div>
+}

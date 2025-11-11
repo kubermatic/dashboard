@@ -28,20 +28,18 @@ limitations under the License.
         fxLayoutGap="16px">
     <km-number-stepper [formControlName]="Controls.CPU"
                        label="CPU"
-                       min="0"> </km-number-stepper>
+                       min="0" />
 
     <km-number-stepper [formControlName]="Controls.Memory"
                        label="Memory (GB)"
                        min="0"
-                       type="decimal">
-    </km-number-stepper>
+                       type="decimal" />
 
     <km-number-stepper [formControlName]="Controls.Storage"
                        label="Disk (GB)"
                        min="0"
-                       type="decimal">
-    </km-number-stepper>
+                       type="decimal" />
     <km-spinner-with-confirmation class="spinner-icon"
-                                  [isSaved]="isEqual(settings.defaultQuota.quota, apiSettings.defaultQuota?.quota)"></km-spinner-with-confirmation>
+                                  [isSaved]="isEqual(settings.defaultQuota.quota, apiSettings.defaultQuota?.quota)" />
   </form>
 </div>

@@ -29,12 +29,16 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The name of the created backup storage location.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+      @if (form.get(Controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+      }
+      @if (form.get(Controls.Name).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Bucket</mat-label>
@@ -42,9 +46,11 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The bucket in which to store backups.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+      @if (form.get(Controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Prefix</mat-label>
@@ -75,66 +81,67 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.BackupSyncPeriod"
              matInput>
       <mat-hint>Enter time in the format MMmSSs (e.g., 2m10s),BackupSyncPeriod defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.BackupSyncPeriod).hasError('pattern')">
+      @if (form.get(Controls.BackupSyncPeriod).hasError('pattern')) {
+      <mat-error>
         Time must be in the format MMmSSs (e.g., 2m10s).
       </mat-error>
+      }
     </mat-form-field>
     <mat-checkbox [formControlName]="Controls.AddCustomConfig">Add custom config
     </mat-checkbox>
-    <ng-container *ngIf="form.get(Controls.AddCustomConfig).value">
-      <km-editor [(model)]="valuesConfig"
-                 height="370px"
-                 header="values.yaml">
-      </km-editor>
-      <km-validate-json-or-yaml [data]="valuesConfig"
-                                [isOnlyYAML]="true"
-                                (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
-    </ng-container>
-    <ng-container *ngIf="!form.get(Controls.AddCustomConfig).value">
-
-      <mat-form-field class="region-field">
-        <mat-label>Region</mat-label>
-        <input [formControlName]="Controls.Region"
-               matInput>
-        <mat-hint>The AWS region where the bucket is located.</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Endpoints</mat-label>
-        <input [formControlName]="Controls.Endpoints"
-               matInput>
-        <mat-hint>Specify the AWS S3 URL here.</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Default Checksum Algorithm</mat-label>
-        <mat-select class="km-select-ellipsis"
-                    [formControlName]="Controls.ChecksumAlgorithm"
-                    disableOptionCentering>
-          <mat-option *ngFor="let algorithm of veleroChecksumAlgorithms"
-                      [value]="algorithm"> {{algorithm}} </mat-option>
-          <mat-select-trigger fxFlex
-                              fxLayout="row"
-                              fxLayoutAlign=" center">
-            <div fxFlex
-                 fxLayoutAlign="start">
-              {{form.get(Controls.ChecksumAlgorithm).value}}
-            </div>
-
-            <div fxFlex
-                 fxLayoutAlign="end"
-                 class="km-select-trigger-button-wrapper">
-              <button *ngIf="form.get(Controls.ChecksumAlgorithm).value"
-                      (click)="form.get(Controls.ChecksumAlgorithm).setValue(''); $event.stopPropagation()"
-                      matSuffix
-                      mat-icon-button
-                      aria-label="Clear">
-                <i class="km-icon-mask km-icon-remove"></i>
-              </button>
-            </div>
-          </mat-select-trigger>
-        </mat-select>
-        <mat-hint>Leave empty to disable the checksum.</mat-hint>
-      </mat-form-field>
-    </ng-container>
+    @if (form.get(Controls.AddCustomConfig).value) {
+    <km-editor [(model)]="valuesConfig"
+               height="370px"
+               header="values.yaml" />
+    <km-validate-json-or-yaml [data]="valuesConfig"
+                              [isOnlyYAML]="true"
+                              (dataValid)="isValidYaml($event)" />
+    }
+    @if (!form.get(Controls.AddCustomConfig).value) {
+    <mat-form-field class="region-field">
+      <mat-label>Region</mat-label>
+      <input [formControlName]="Controls.Region"
+             matInput>
+      <mat-hint>The AWS region where the bucket is located.</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Endpoints</mat-label>
+      <input [formControlName]="Controls.Endpoints"
+             matInput>
+      <mat-hint>Specify the AWS S3 URL here.</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Default Checksum Algorithm</mat-label>
+      <mat-select class="km-select-ellipsis"
+                  [formControlName]="Controls.ChecksumAlgorithm"
+                  disableOptionCentering>
+        @for (algorithm of veleroChecksumAlgorithms; track algorithm) {
+        <mat-option [value]="algorithm"> {{algorithm}} </mat-option>
+        }
+        <mat-select-trigger fxFlex
+                            fxLayout="row"
+                            fxLayoutAlign=" center">
+          <div fxFlex
+               fxLayoutAlign="start">
+            {{form.get(Controls.ChecksumAlgorithm).value}}
+          </div>
+          <div fxFlex
+               fxLayoutAlign="end"
+               class="km-select-trigger-button-wrapper">
+            @if (form.get(Controls.ChecksumAlgorithm).value) {
+            <button (click)="form.get(Controls.ChecksumAlgorithm).setValue(''); $event.stopPropagation()"
+                    matSuffix
+                    mat-icon-button
+                    aria-label="Clear">
+              <i class="km-icon-mask km-icon-remove"></i>
+            </button>
+            }
+          </div>
+        </mat-select-trigger>
+      </mat-select>
+      <mat-hint>Leave empty to disable the checksum.</mat-hint>
+    </mat-form-field>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -142,6 +149,5 @@ END OF TERMS AND CONDITIONS
              [label]="label"
              [disabled]="form.invalid || !isYamlEditorValid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

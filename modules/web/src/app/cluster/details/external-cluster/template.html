@@ -13,245 +13,261 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="cluster">
-  <div class="cluster-detail-actions">
-    <button mat-icon-button
-            color="tertiary"
-            (click)="goBack()"
-            matTooltip="Go back to the cluster list">
-      <i class="km-icon-mask km-icon-arrow-left"></i>
+@if (cluster) {
+<div class="cluster-detail-actions">
+  <button mat-icon-button
+          color="tertiary"
+          (click)="goBack()"
+          matTooltip="Go back to the cluster list">
+    <i class="km-icon-mask km-icon-arrow-left"></i>
+  </button>
+  <div fxFlex></div>
+</div>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center"
+                    class="cluster-name"
+                    fxLayoutGap="20px">
+      <i [matTooltip]="getStatus()"
+         [ngClass]="getStatusColor()"
+         class="cluster-health km-pointer"></i>
+      <span ngxClipboard
+            [cbContent]="cluster.name"
+            matTooltip="Click to copy"
+            class="cluster-name km-copy">{{cluster.name}}</span>
+      <span class="km-label-primary">External</span>
+      @if (isImportedCluster) {
+      <span class="km-label-primary">Imported</span>
+      }
+    </mat-card-title>
+    <button color="alternative"
+            mat-flat-button
+            type="button"
+            kmThrottleClick
+            (throttleClick)="downloadKubeconfig()"
+            [disabled]="isKubeConfigButtonDisabled()">
+      <i class="km-icon-mask km-icon-download"
+         matButtonIcon></i>
+      <span>Get Kubeconfig</span>
     </button>
-    <div fxFlex></div>
-  </div>
-
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title fxFlex
-                      fxLayout="row"
-                      fxLayoutAlign=" center"
-                      class="cluster-name"
-                      fxLayoutGap="20px">
-        <i [matTooltip]="getStatus()"
-           [ngClass]="getStatusColor()"
-           class="cluster-health km-pointer"></i>
-        <span ngxClipboard
-              [cbContent]="cluster.name"
-              matTooltip="Click to copy"
-              class="cluster-name km-copy">{{cluster.name}}</span>
-        <span class="km-label-primary">External</span>
-        <span *ngIf="isImportedCluster"
-              class="km-label-primary">Imported</span>
-      </mat-card-title>
-
-      <button color="alternative"
-              mat-flat-button
-              type="button"
-              kmThrottleClick
-              (throttleClick)="downloadKubeconfig()"
-              [disabled]="isKubeConfigButtonDisabled()">
-        <i class="km-icon-mask km-icon-download"
-           matButtonIcon></i>
-        <span>Get Kubeconfig</span>
+    <div class="provider-menu">
+      <button mat-icon-button
+              color="tertiary"
+              class="provider-menu-btn"
+              [matMenuTriggerFor]="menu">
+        <i class="km-icon-mask km-icon-points-menu"></i>
       </button>
-      <div class="provider-menu">
-        <button mat-icon-button
-                color="tertiary"
-                class="provider-menu-btn"
-                [matMenuTriggerFor]="menu">
-          <i class="km-icon-mask km-icon-points-menu"></i>
+      <mat-menu #menu="matMenu"
+                class="km-provider-edit-settings">
+        <button id="km-disconnect-external-cluster-btn"
+                mat-menu-item
+                (click)="disconnectCluster()"
+                [disabled]="!canDisconnect()">
+          Disconnect Cluster
         </button>
-        <mat-menu #menu="matMenu"
-                  class="km-provider-edit-settings">
-          <button id="km-disconnect-external-cluster-btn"
-                  mat-menu-item
-                  (click)="disconnectCluster()"
-                  [disabled]="!canDisconnect()">
-            Disconnect Cluster
-          </button>
-          <button *ngIf="(!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)"
-                  mat-menu-item
-                  id="km-delete-external-cluster-btn"
-                  [disabled]="!canDisconnect()"
-                  (click)="deleteClusterDialog()">
-            Delete Cluster
-          </button>
-        </mat-menu>
-      </div>
-    </mat-card-header>
-
-    <mat-card-content class="km-row">
-      <div class="km-content-wrap">
-        <km-version-picker [cluster]="cluster"
-                           [isClusterRunning]="isRunning()"
-                           [upgrades]="canEdit() ? upgrades : []"
-                           [hasUpgradeOptions]="isRunning()"
-                           [isClusterExternal]="true"
-                           *ngIf="cluster?.spec?.version"></km-version-picker>
-        <km-property>
-          <div key>Cluster ID</div>
-          <div value
-               ngxClipboard
-               [cbContent]="cluster?.id"
-               matTooltip="Click to copy"
-               class="km-copy">
-            {{cluster?.id}}
-          </div>
-        </km-property>
-        <km-property>
-          <div key>Provider</div>
-          <div value>
-            <span [ngClass]="provider === Provider.Custom ?
+        @if ((!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)) {
+        <button mat-menu-item
+                id="km-delete-external-cluster-btn"
+                [disabled]="!canDisconnect()"
+                (click)="deleteClusterDialog()">
+          Delete Cluster
+        </button>
+        }
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="km-row">
+    <div class="km-content-wrap">
+      @if (cluster?.spec?.version) {
+      <km-version-picker [cluster]="cluster"
+                         [isClusterRunning]="isRunning()"
+                         [upgrades]="canEdit() ? upgrades : []"
+                         [hasUpgradeOptions]="isRunning()"
+                         [isClusterExternal]="true" />
+      }
+      <km-property>
+        <div key>Cluster ID</div>
+        <div value
+             ngxClipboard
+             [cbContent]="cluster?.id"
+             matTooltip="Click to copy"
+             class="km-copy">
+          {{cluster?.id}}
+        </div>
+      </km-property>
+      <km-property>
+        <div key>Provider</div>
+        <div value>
+          <span [ngClass]="provider === Provider.Custom ?
                   'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+provider"></span>
-          </div>
-        </km-property>
-
-        <!-- specification for AKS -->
-        <ng-container *ngIf="provider === Provider.AKS">
-          <km-property>
-            <div key>Location</div>
-            <div value>{{cluster?.cloud?.aks?.location}}</div>
-          </km-property>
-          <km-property>
-            <div key>Resource Group</div>
-            <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
-          </km-property>
-          <km-property>
-            <div key>Provisioning State</div>
-            <div value>{{cluster?.status?.aks?.provisioningState}}</div>
-          </km-property>
-          <km-property>
-            <div key>Power State</div>
-            <div value>{{cluster?.status?.aks?.powerState}}</div>
-          </km-property>
-          <km-property>
-            <div key>DNS Prefix</div>
-            <div value>{{cluster?.spec?.aksclusterSpec?.dnsPrefix}}</div>
-          </km-property>
-          <km-property>
-            <div key>Enable RBAC</div>
-            <div value>{{cluster?.spec?.aksclusterSpec?.enableRBAC}}</div>
-          </km-property>
-          <km-property>
-            <div key>FQDN</div>
-            <div value>{{cluster?.spec?.aksclusterSpec?.fqdn}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec?.aksclusterSpec?.networkProfile">
-            <div key>Network Profile</div>
-            <div value>
-              <km-labels [labels]="cluster.spec?.aksclusterSpec?.networkProfile"></km-labels>
+        </div>
+      </km-property>
+      <!-- specification for AKS -->
+      @if (provider === Provider.AKS) {
+      <km-property>
+        <div key>Location</div>
+        <div value>{{cluster?.cloud?.aks?.location}}</div>
+      </km-property>
+      <km-property>
+        <div key>Resource Group</div>
+        <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
+      </km-property>
+      <km-property>
+        <div key>Provisioning State</div>
+        <div value>{{cluster?.status?.aks?.provisioningState}}</div>
+      </km-property>
+      <km-property>
+        <div key>Power State</div>
+        <div value>{{cluster?.status?.aks?.powerState}}</div>
+      </km-property>
+      <km-property>
+        <div key>DNS Prefix</div>
+        <div value>{{cluster?.spec?.aksclusterSpec?.dnsPrefix}}</div>
+      </km-property>
+      <km-property>
+        <div key>Enable RBAC</div>
+        <div value>{{cluster?.spec?.aksclusterSpec?.enableRBAC}}</div>
+      </km-property>
+      <km-property>
+        <div key>FQDN</div>
+        <div value>{{cluster?.spec?.aksclusterSpec?.fqdn}}</div>
+      </km-property>
+      @if (cluster.spec?.aksclusterSpec?.networkProfile) {
+      <km-property>
+        <div key>Network Profile</div>
+        <div value>
+          <km-labels [labels]="cluster.spec?.aksclusterSpec?.networkProfile" />
+        </div>
+      </km-property>
+      }
+      }
+      <!-- specification for EKS -->
+      @if (provider === Provider.EKS) {
+      <km-property>
+        <div key>Region</div>
+        <div value>{{cluster?.cloud?.eks?.region}}</div>
+      </km-property>
+      <km-property>
+        <div key>VpcId</div>
+        <div value>{{cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.vpcId}}</div>
+      </km-property>
+      <km-property>
+        <div key>Subnet Ids</div>
+        <div value>
+          @if (subnetIds?.length) {
+          <mat-chip-set>
+            @for (subnetId of subnetIds; track subnetId) {
+            <div>
+              <mat-chip>
+                <div>{{subnetId}}</div>
+              </mat-chip>
             </div>
-          </km-property>
-        </ng-container>
-
-        <!-- specification for EKS -->
-        <ng-container *ngIf="provider === Provider.EKS">
-          <km-property>
-            <div key>Region</div>
-            <div value>{{cluster?.cloud?.eks?.region}}</div>
-          </km-property>
-          <km-property>
-            <div key>VpcId</div>
-            <div value>{{cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.vpcId}}</div>
-          </km-property>
-          <km-property>
-            <div key>Subnet Ids</div>
-            <div value>
-              <mat-chip-set *ngIf="subnetIds?.length">
-                <div *ngFor="let subnetId of subnetIds">
-                  <mat-chip>
-                    <div>{{subnetId}}</div>
-                  </mat-chip>
-                </div>
-              </mat-chip-set>
+            }
+          </mat-chip-set>
+          }
+        </div>
+      </km-property>
+      <km-property>
+        <div key>Security Group Ids</div>
+        <div value>
+          @if (securityGroupIds?.length) {
+          <mat-chip-set>
+            @for (securityGroupId of securityGroupIds; track securityGroupId) {
+            <div>
+              <mat-chip>
+                <div>{{securityGroupId}}</div>
+              </mat-chip>
             </div>
-          </km-property>
-          <km-property>
-            <div key>Security Group Ids</div>
-            <div value>
-              <mat-chip-set *ngIf="securityGroupIds?.length">
-                <div *ngFor="let securityGroupId of securityGroupIds">
-                  <mat-chip>
-                    <div>{{securityGroupId}}</div>
-                  </mat-chip>
-                </div>
-              </mat-chip-set>
-            </div>
-          </km-property>
-          <km-property *ngIf="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig">
-            <div key>Kubernetes Network Config</div>
-            <div value>
-              <km-labels [labels]="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig"></km-labels>
-            </div>
-          </km-property>
-        </ng-container>
+            }
+          </mat-chip-set>
+          }
+        </div>
+      </km-property>
+      @if (cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig) {
+      <km-property>
+        <div key>Kubernetes Network Config</div>
+        <div value>
+          <km-labels [labels]="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig" />
+        </div>
+      </km-property>
+      }
+      }
+      <!-- specification for GKE -->
+      @if (provider === Provider.GKE) {
+      <km-property>
+        <div key>Zone</div>
+        <div value>{{cluster?.cloud?.gke?.zone}}</div>
+      </km-property>
+      <km-property>
+        <div key>Cluster Ipv4 CIDR</div>
+        <div value>{{cluster?.spec?.gkeclusterSpec?.clusterIpv4Cidr}}</div>
+      </km-property>
+      <km-property>
+        <div key>Default Max Pods Constraint</div>
+        <div value>{{cluster?.spec?.gkeclusterSpec?.defaultMaxPodsConstraint}}</div>
+      </km-property>
+      <km-property>
+        <div key>Sub Network</div>
+        <div value>{{cluster?.spec?.gkeclusterSpec?.subnetwork}}</div>
+      </km-property>
+      }
+      <!--  -->
+      @if (cluster.labels) {
+      <km-property>
+        <div key>Labels</div>
+        <div value>
+          <km-labels [labels]="cluster.labels" />
+        </div>
+      </km-property>
+      }
+      @if (provider !== Provider.AKS) {
+      <km-property>
+        <div key>Created</div>
+        @if (provider === Provider.GKE) {
+        <div value>
+          <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime" />
+        </div>
+        }
+        @if (provider === Provider.EKS) {
+        <div value>
+          <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt" />
+        </div>
+        }
+      </km-property>
+      }
+      @if (isImportedCluster) {
+      <km-property>
+        <div key>Imported</div>
+        <div value>
+          <km-relative-time [date]="cluster.creationTimestamp" />
+        </div>
+      </km-property>
+      }
+    </div>
+    <km-cluster-metrics [clusterMetrics]="clusterMetrics" />
+  </mat-card-content>
+</mat-card>
+@if (provider !== Provider.Custom && provider !== Provider.KubeOne) {
+<km-external-machine-deployment-list [cluster]="cluster"
+                                     [machineDeployments]="machineDeployments"
+                                     [projectID]="projectID"
+                                     [isClusterRunning]="isRunning()"
+                                     [isInitialized]="areMachineDeploymentsInitialized" />
+}
+@if (provider === Provider.Custom || provider === Provider.KubeOne) {
+<km-external-node-list [cluster]="cluster"
+                       [nodes]="nodes"
+                       [nodesMetrics]="nodesMetrics"
+                       [projectID]="projectID"
+                       [isInitialized]="areNodesInitialized" />
+}
+<km-event-card [events]="events" />
+}
 
-        <!-- specification for GKE -->
-        <ng-container *ngIf="provider === Provider.GKE">
-          <km-property>
-            <div key>Zone</div>
-            <div value>{{cluster?.cloud?.gke?.zone}}</div>
-          </km-property>
-          <km-property>
-            <div key>Cluster Ipv4 CIDR</div>
-            <div value>{{cluster?.spec?.gkeclusterSpec?.clusterIpv4Cidr}}</div>
-          </km-property>
-          <km-property>
-            <div key>Default Max Pods Constraint</div>
-            <div value>{{cluster?.spec?.gkeclusterSpec?.defaultMaxPodsConstraint}}</div>
-          </km-property>
-          <km-property>
-            <div key>Sub Network</div>
-            <div value>{{cluster?.spec?.gkeclusterSpec?.subnetwork}}</div>
-          </km-property>
-        </ng-container>
-        <!--  -->
-        <km-property *ngIf="cluster.labels">
-          <div key>Labels</div>
-          <div value>
-            <km-labels [labels]="cluster.labels"></km-labels>
-          </div>
-        </km-property>
-        <km-property *ngIf="provider !== Provider.AKS">
-          <div key>Created</div>
-          <div *ngIf="provider === Provider.GKE"
-               value>
-            <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime"></km-relative-time>
-          </div>
-          <div *ngIf="provider === Provider.EKS"
-               value>
-            <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt"></km-relative-time>
-          </div>
-        </km-property>
-        <km-property *ngIf="isImportedCluster">
-          <div key>Imported</div>
-          <div value>
-            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
-          </div>
-        </km-property>
-      </div>
-
-      <km-cluster-metrics [clusterMetrics]="clusterMetrics"></km-cluster-metrics>
-    </mat-card-content>
-  </mat-card>
-
-  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom && provider !== Provider.KubeOne"
-                                       [cluster]="cluster"
-                                       [machineDeployments]="machineDeployments"
-                                       [projectID]="projectID"
-                                       [isClusterRunning]="isRunning()"
-                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
-
-  <km-external-node-list *ngIf="provider === Provider.Custom || provider === Provider.KubeOne"
-                         [cluster]="cluster"
-                         [nodes]="nodes"
-                         [nodesMetrics]="nodesMetrics"
-                         [projectID]="projectID"
-                         [isInitialized]="areNodesInitialized"></km-external-node-list>
-
-  <km-event-card [events]="events"></km-event-card>
-</ng-container>
-
+@if (!cluster) {
 <mat-spinner [diameter]="25"
-             *ngIf="!cluster"
              color="accent"
-             class="km-spinner"></mat-spinner>
+             class="km-spinner" />
+}

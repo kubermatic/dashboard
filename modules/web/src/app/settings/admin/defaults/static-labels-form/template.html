@@ -16,8 +16,8 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.StaticLabels">
-    <div *ngFor="let control of staticLabelArray?.controls; let i = index;"
-         class="label-row"
+    @for (control of staticLabelArray?.controls; track control; let i = $index) {
+    <div class="label-row"
          fxLayout="row"
          fxLayoutGap="10px"
          [formGroupName]="i">
@@ -26,21 +26,34 @@ limitations under the License.
         <input matInput
                [name]="Controls.Key"
                [formControlName]="Controls.Key">
-        <mat-error *ngIf="control.get(Controls.Key).errors?.required">
+        @if (control.get(Controls.Key).errors?.required) {
+        <mat-error>
           Key is required.
         </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.validLabelKeyUniqueness"> Key is not unique. </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.validLabelKeyPrefixPattern"> Prefix not allowed. </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.validLabelKeyNamePattern"> Name not allowed. </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.validLabelKeyPrefixLength"> Prefix is too long. </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.validLabelKeyNameLength"> Name is too long. </mat-error>
-        <mat-error *ngIf="control.get(Controls.Key).errors?.labelKeyNameRestricted"> Restricted label name. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.validLabelKeyUniqueness) {
+        <mat-error> Key is not unique. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.validLabelKeyPrefixPattern) {
+        <mat-error> Prefix not allowed. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.validLabelKeyNamePattern) {
+        <mat-error> Name not allowed. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.validLabelKeyPrefixLength) {
+        <mat-error> Prefix is too long. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.validLabelKeyNameLength) {
+        <mat-error> Name is too long. </mat-error>
+        }
+        @if (control.get(Controls.Key).errors?.labelKeyNameRestricted) {
+        <mat-error> Restricted label name. </mat-error>
+        }
       </mat-form-field>
       <km-chip-list class="static-labels-values"
                     label="Values"
                     isStaticLabel="true"
-                    [formControlName]="Controls.Values">
-      </km-chip-list>
+                    [formControlName]="Controls.Values" />
       <mat-checkbox fxFlex="13"
                     [formControlName]="Controls.Default">Default
       </mat-checkbox>
@@ -56,5 +69,6 @@ limitations under the License.
            aria-hidden="true"></i>
       </button>
     </div>
+    }
   </div>
 </form>

@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="isInitialized()">
-  <km-cluster-panel [cluster]="cluster"
-                    [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
-  <br />
-
-  <div class="km-web-terminal">
-    <km-terminal [layout]="layoutType.page"
-                 (close)="goBack()"></km-terminal>
-  </div>
-</ng-container>
+@if (isInitialized()) {
+<km-cluster-panel [cluster]="cluster"
+                  [datacenter]="datacenter"
+                  [projectID]="projectID" />
+<br />
+<div class="km-web-terminal">
+  <km-terminal [layout]="layoutType.page"
+               (close)="goBack()" />
+</div>
+}

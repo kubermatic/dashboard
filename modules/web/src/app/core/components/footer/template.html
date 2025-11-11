@@ -30,15 +30,19 @@ limitations under the License.
 
     <div id="km-edition">{{version?.edition}}</div>
 
-    <div *ngIf="settings.displayTermsOfService">
+    @if (settings.displayTermsOfService) {
+    <div>
       <a routerLink="terms-of-service">Terms of Service</a>
     </div>
+    }
 
-    <div *ngIf="settings?.displayDemoInfo">Demo system</div>
+    @if (settings?.displayDemoInfo) {
+    <div>Demo system</div>
+    }
   </div>
 
-  <div *ngFor="let link of getCustomLinks() | kmLinkLocation: 'Footer'"
-       fxFlexAlign="center"
+  @for (link of getCustomLinks() | kmLinkLocation: 'Footer'; track link) {
+  <div fxFlexAlign="center"
        fxLayoutAlign="end center">
     <a [href]="link.url"
        [matTooltip]="link.label"
@@ -49,4 +53,5 @@ limitations under the License.
          [style.filter]="getFilter()"></i>
     </a>
   </div>
+  }
 </footer>

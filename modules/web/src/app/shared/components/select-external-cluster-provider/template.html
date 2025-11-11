@@ -19,9 +19,10 @@ limitations under the License.
   <mat-button-toggle-group group="providerGroup"
                            fxLayout="row wrap"
                            [formControlName]="Controls.Provider">
-    <mat-button-toggle *ngFor="let externalProvider of providers"
-                       [value]="externalProvider">
+    @for (externalProvider of providers; track externalProvider) {
+    <mat-button-toggle [value]="externalProvider">
       <span class="km-provider-logo km-provider-logo-{{externalProvider}}"></span>
     </mat-button-toggle>
+    }
   </mat-button-toggle-group>
 </form>

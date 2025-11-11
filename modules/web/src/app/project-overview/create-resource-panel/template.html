@@ -20,9 +20,9 @@ limitations under the License.
        matButtonIcon></i>
     <span>Create Resource</span>
   </button>
+  @if (isOpen) {
   <div class="panel"
-       fxLayout="column"
-       *ngIf="isOpen">
+       fxLayout="column">
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
@@ -49,8 +49,8 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster || !clusterTemplates?.length}"></i>
       <span>Cluster from Template</span>
     </div>
-    <div *ngIf="areExternalClustersEnabled"
-         class="entry"
+    @if (areExternalClustersEnabled) {
+    <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="10px"
@@ -63,7 +63,8 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>External Cluster</span>
     </div>
-    <mat-divider></mat-divider>
+    }
+    <mat-divider />
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
@@ -77,7 +78,7 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster Template</span>
     </div>
-    <mat-divider></mat-divider>
+    <mat-divider />
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateBackups, 'km-option-hover-bg km-pointer': canCreateBackups}"
          fxLayoutAlign=" center"
@@ -105,9 +106,10 @@ limitations under the License.
       <span>Snapshot</span>
     </div>
   </div>
+  }
 </div>
 
 <ng-template #quotaWidget>
   <router-outlet name="quota-widget"
-                 (activate)="onActivate($event)"></router-outlet>
+                 (activate)="onActivate($event)" />
 </ng-template>

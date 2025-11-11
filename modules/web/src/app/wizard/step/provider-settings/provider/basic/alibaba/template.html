@@ -24,9 +24,11 @@ limitations under the License.
            kmInputPassword
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
+    @if (form.get(Controls.AccessKeyID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -37,8 +39,10 @@ limitations under the License.
            kmInputPassword
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
+    @if (form.get(Controls.AccessKeySecret).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

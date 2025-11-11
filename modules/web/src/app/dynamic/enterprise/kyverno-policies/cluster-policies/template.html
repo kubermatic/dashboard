@@ -97,22 +97,24 @@ END OF TERMS AND CONDITIONS
     <tr mat-row
         *matRowDef="let row; columns: columns;"></tr>
   </table>
-  <div class="km-row km-empty-list-msg"
-       *ngIf="!policyBindings.length && !loadingTemplates">No policy templates are available</div>
+  @if (!policyBindings.length && !loadingTemplates) {
+  <div class="km-row km-empty-list-msg">No policy templates are available</div>
+  }
 
-  <div class="km-row"
-       *ngIf="loadingTemplates && policyBindings.length">
+  @if (loadingTemplates && policyBindings.length) {
+  <div class="km-row">
     <mat-spinner color="accent"
                  class="km-spinner km-with-spacing"
-                 [diameter]="25"></mat-spinner>
+                 [diameter]="25" />
   </div>
+  }
 
   <div [hidden]="!dataSource.data.length"
        class="km-paginator-container">
     <div fxLayout="row"
          fxLayoutAlign="flex-end center">
-      <km-pagination-page-size></km-pagination-page-size>
-      <mat-paginator showFirstLastButtons></mat-paginator>
+      <km-pagination-page-size />
+      <mat-paginator showFirstLastButtons />
     </div>
   </div>
 </div>

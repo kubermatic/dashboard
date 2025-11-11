@@ -30,12 +30,16 @@ END OF TERMS AND CONDITIONS
                matInput
                required>
         <mat-hint>The name of the created cluster {{type.toLowerCase()}}.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        @if (form.get(Controls.Name).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+        }
+        @if (form.get(Controls.Name).hasError('pattern')) {
+        <mat-error>
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
         <mat-label>Backup Storage Location</mat-label>
@@ -49,25 +53,30 @@ END OF TERMS AND CONDITIONS
         <i class="km-icon-info km-pointer"
            matTooltip="Select all namespaces to backup."></i>
       </mat-checkbox>
-      <mat-form-field *ngIf="!form?.get(Controls.AllNamespaces).value">
+      @if (!form?.get(Controls.AllNamespaces).value) {
+      <mat-form-field>
         <mat-label>{{namespacesLabel}}</mat-label>
         <mat-select [formControlName]="Controls.Namespaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of nameSpaces"
-                      [value]="nameSpace">
+          @for (nameSpace of nameSpaces; track nameSpace) {
+          <mat-option [value]="nameSpace">
             {{nameSpace}}
           </mat-option>
+          }
         </mat-select>
         <mat-hint>Namespaces to include in the backup.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.Namespaces).hasError('required')">
+        @if (form.get(Controls.Namespaces).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
+      }
 
-      <mat-form-field *ngIf="isScheduleBackup()"
-                      class="schedule-field"
+      @if (isScheduleBackup()) {
+      <mat-form-field class="schedule-field"
                       subscriptSizing="dynamic">
         <mat-label>Schedule</mat-label>
         <input [formControlName]="Controls.CronJob"
@@ -76,26 +85,33 @@ END OF TERMS AND CONDITIONS
         <mat-hint>
           Cron expression that describes how often a backup should be created.
         </mat-hint>
-        <mat-error *ngIf="form.get(Controls.CronJob).hasError('required')">
+        @if (form.get(Controls.CronJob).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.CronJob).hasError('cronExpression')">Schedule must be in cron expression. Must match the criteria specified
+        }
+        @if (form.get(Controls.CronJob).hasError('cronExpression')) {
+        <mat-error>Schedule must be in cron expression. Must match the criteria specified
           <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
              target="_blank"
              fxLayout="row inline"
              fxLayoutAlign=" center"
              rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
         </mat-error>
+        }
       </mat-form-field>
+      }
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>Expires In</mat-label>
         <input [formControlName]="Controls.ExpiresIn"
                matInput>
         <mat-hint>Enter the time in the format HHhMMmSSs (e.g., 24h10m10s). The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
-        <mat-error *ngIf="form.get(Controls.ExpiresIn).hasError('pattern')">
+        @if (form.get(Controls.ExpiresIn).hasError('pattern')) {
+        <mat-error>
           Time must be in the format HHhMMmSSs (e.g., 24h10m10s).
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-checkbox class="default-volumes"
@@ -110,7 +126,7 @@ END OF TERMS AND CONDITIONS
                        [labels]="labels"
                        noValidators="true"
                        (labelsChange)="onLabelsChange($event)"
-                       [formControlName]="Controls.Labels"></km-label-form>
+                       [formControlName]="Controls.Labels" />
       </div>
     </form>
   </mat-dialog-content>
@@ -119,7 +135,6 @@ END OF TERMS AND CONDITIONS
                [label]="btnLabel"
                [disabled]="form.invalid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

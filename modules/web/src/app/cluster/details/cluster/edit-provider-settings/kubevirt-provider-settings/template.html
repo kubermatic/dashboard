@@ -24,8 +24,10 @@ limitations under the License.
               [name]="Control.Kubeconfig"
               autocomplete="off"
               kmValueChangedIndicator></textarea>
-    <mat-error *ngIf="form.get(Control.Kubeconfig).hasError('required')">
+    @if (form.get(Control.Kubeconfig).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

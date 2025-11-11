@@ -60,15 +60,16 @@ limitations under the License.
           fxLayout="row"
           fxLayoutAlign=" center"
           class="providers-column">
-        <ng-container *ngFor="let provider of getDisplayedProviders(element)">
-          <span class="km-provider-logo km-provider-logo-{{provider}}">
-          </span>
-        </ng-container>
-        <span *ngIf="element['providerNames']?.length > displayedProviders"
-              class="km-text km-pointer"
+        @for (provider of getDisplayedProviders(element); track provider) {
+        <span class="km-provider-logo km-provider-logo-{{provider}}">
+        </span>
+        }
+        @if (element['providerNames']?.length > displayedProviders) {
+        <span class="km-text km-pointer"
               [matTooltip]="getHiddenProviders(element['providerNames'])">
           +{{element['providerNames']?.length - displayedProviders}}
         </span>
+        }
       </td>
     </ng-container>
 
@@ -113,16 +114,18 @@ limitations under the License.
   </table>
 
 
-  <div class="km-row km-empty-list-msg"
-       *ngIf="!isInitializing && isEmpty(dataSource.data)">
+  @if (!isInitializing && isEmpty(dataSource.data)) {
+  <div class="km-row km-empty-list-msg">
     No seeds available.
   </div>
+  }
 
-  <div class="km-row"
-       *ngIf="isInitializing">
+  @if (isInitializing) {
+  <div class="km-row">
     <mat-spinner color="accent"
                  class="km-spinner km-with-spacing"
-                 [diameter]="25"></mat-spinner>
+                 [diameter]="25" />
   </div>
+  }
 
 </mat-card>

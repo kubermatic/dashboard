@@ -30,9 +30,11 @@ limitations under the License.
                autocomplete="off"
                cdkFocusInitial
                kmValueChangedIndicator>
-        <mat-error *ngIf="form.controls.name.hasError('required')">
+        @if (form.controls.name.hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
       <div>
         <div fxLayoutAlign=" center"
@@ -49,40 +51,46 @@ limitations under the License.
                                  multiple
                                  fxLayout="row wrap"
                                  kmValueChangedIndicator>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.ubuntu"
-                             [value]="OperatingSystem.Ubuntu">
+          @if (adminAllowedOperatingSystems.ubuntu) {
+          <mat-button-toggle [value]="OperatingSystem.Ubuntu">
             <i class="km-os-image-ubuntu"></i>
             Ubuntu
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.flatcar"
-                             [value]="OperatingSystem.Flatcar">
+          }
+          @if (adminAllowedOperatingSystems.flatcar) {
+          <mat-button-toggle [value]="OperatingSystem.Flatcar">
             <i class="km-os-image-flatcar"></i>
             Flatcar
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.amzn2"
-                             [value]="OperatingSystem.AmazonLinux2">
+          }
+          @if (adminAllowedOperatingSystems.amzn2) {
+          <mat-button-toggle [value]="OperatingSystem.AmazonLinux2">
             <i class="km-os-image-amazon-linux-2"></i>
             Amazon Linux 2
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rhel"
-                             [value]="OperatingSystem.RHEL"
+          }
+          @if (adminAllowedOperatingSystems.rhel) {
+          <mat-button-toggle [value]="OperatingSystem.RHEL"
                              #rhelToggle>
             <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
             RHEL
           </mat-button-toggle>
-          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rockylinux"
-                             [value]="OperatingSystem.RockyLinux">
+          }
+          @if (adminAllowedOperatingSystems.rockylinux) {
+          <mat-button-toggle [value]="OperatingSystem.RockyLinux">
             <i class="km-os-image-rockylinux"></i>
             Rocky Linux
           </mat-button-toggle>
+          }
         </mat-button-toggle-group>
       </div>
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
-                     [formControlName]="Controls.Labels"></km-label-form>
+                     [formControlName]="Controls.Labels" />
 
-      <div *ngIf="isEnterpriseEdition && projectQouta && user.isAdmin">
+      @if (isEnterpriseEdition && projectQouta && user.isAdmin) {
+      <div>
         <mat-card-header>
           <mat-card-title>Quota</mat-card-title>
         </mat-card-header>
@@ -93,24 +101,20 @@ limitations under the License.
           <km-number-stepper id="km-cpu-input"
                              label="CPU"
                              min="0"
-                             [formControlName]="Controls.CPUQuota">
-          </km-number-stepper>
-
+                             [formControlName]="Controls.CPUQuota" />
           <km-number-stepper id="km-memory-input"
                              label="Memory (GB)"
                              min="0"
                              type="decimal"
-                             [formControlName]="Controls.MemoryQuota">
-          </km-number-stepper>
-
+                             [formControlName]="Controls.MemoryQuota" />
           <km-number-stepper id="km-storage-input"
                              label="Disk (GB)"
                              min="0"
                              type="decimal"
-                             [formControlName]="Controls.StorageQuota">
-          </km-number-stepper>
+                             [formControlName]="Controls.StorageQuota" />
         </div>
       </div>
+      }
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -119,7 +123,6 @@ limitations under the License.
                label="Save Changes"
                [disabled]="!form.valid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

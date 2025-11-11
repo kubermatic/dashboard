@@ -40,7 +40,7 @@ limitations under the License.
              fxLayout="column">
           <km-custom-links-form [(customLinks)]="settings.customLinks"
                                 [apiCustomLinks]="apiSettings.customLinks"
-                                (customLinksChange)="onSettingsChange()"></km-custom-links-form>
+                                (customLinksChange)="onSettingsChange()" />
           <div fxLayout="row">
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
                           id="km-api-docs-setting"
@@ -58,7 +58,7 @@ limitations under the License.
                           id="km-changelog-setting"
                           (change)="onChangelogSettingsChange($event)">Display What's New
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isDisplayLinksEqual()"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isDisplayLinksEqual()" />
           </div>
         </div>
       </div>

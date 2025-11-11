@@ -34,23 +34,24 @@ limitations under the License.
     </button>
   </div>
 
-  <ng-container *ngIf="showMessageSection()">
-    <div class="notification-message km-pointer"
-         (click)="copyMessageToClipboard()"
-         matTooltip="Click to copy">
-      <ng-container *ngIf="!hasLongMessage() || !isMessageCollapsed; else truncated">{{message}}</ng-container>
-      <ng-template #truncated>
-        {{message | slice:0:messageMaxLength}}...
-      </ng-template>
-    </div>
-
-    <div *ngIf="hasLongMessage()"
-         class="notification-message-expansion"
-         fxLayoutAlign="center">
-      <button mat-icon-button
-              (click)="isMessageCollapsed = !isMessageCollapsed">
-        <i class="km-icon-arrow-{{isMessageCollapsed ? 'down' : 'up'}}"></i>
-      </button>
-    </div>
-  </ng-container>
+  @if (showMessageSection()) {
+  <div class="notification-message km-pointer"
+       (click)="copyMessageToClipboard()"
+       matTooltip="Click to copy">
+    @if (!hasLongMessage() || !isMessageCollapsed) {
+    {{message}}
+    } @else {
+    {{message | slice:0:messageMaxLength}}...
+    }
+  </div>
+  @if (hasLongMessage()) {
+  <div class="notification-message-expansion"
+       fxLayoutAlign="center">
+    <button mat-icon-button
+            (click)="isMessageCollapsed = !isMessageCollapsed">
+      <i class="km-icon-arrow-{{isMessageCollapsed ? 'down' : 'up'}}"></i>
+    </button>
+  </div>
+  }
+  }
 </div>

@@ -20,15 +20,14 @@ limitations under the License.
   <div class="application-logo-wrapper"
        fxLayout="row"
        fxLayoutAlign="center center">
-    <ng-container *ngIf="applicationDefinition.spec.logoData; else logoPlaceholder">
-      <img class="km-application-logo"
-           [src]="applicationDefinition.spec.logoData"
-           [alt]="applicationDefinition.name"
-           [matTooltip]="applicationDefinition.name">
-    </ng-container>
-    <ng-template #logoPlaceholder>
-      <i class="km-icon-application i-40"></i>
-    </ng-template>
+    @if (applicationDefinition.spec.logoData) {
+    <img class="km-application-logo"
+         [src]="applicationDefinition.spec.logoData"
+         [alt]="applicationDefinition.name"
+         [matTooltip]="applicationDefinition.name">
+    } @else {
+    <i class="km-icon-application i-40"></i>
+    }
   </div>
   <div fxLayout="column"
        fxLayoutGap="10px"
@@ -40,15 +39,16 @@ limitations under the License.
          fxLayout="column"
          fxLayoutAlign="space-between"
          fxLayoutGap="10px">
-      <div *ngIf="applicationDefinition.spec?.description"
-           class="application-description">
+      @if (applicationDefinition.spec?.description) {
+      <div class="application-description">
         {{applicationDefinition.spec?.description}}
       </div>
-      <div *ngIf="displayLinks"
-           fxLayout="row"
+      }
+      @if (displayLinks) {
+      <div fxLayout="row"
            fxLayoutGap="10px">
-        <a *ngIf="applicationDefinition.spec.documentationURL"
-           class="km-pointer"
+        @if (applicationDefinition.spec.documentationURL) {
+        <a class="km-pointer"
            [href]="applicationDefinition.spec.documentationURL"
            target="_blank"
            rel="noreferrer noopener"
@@ -57,9 +57,12 @@ limitations under the License.
            fxLayoutGap="5px">
           <i class="km-icon-docs"></i><span>Documentation</span>
         </a>
-        <span *ngIf="applicationDefinition.spec.documentationURL && applicationDefinition.spec.sourceURL">-</span>
-        <a *ngIf="applicationDefinition.spec.sourceURL"
-           class="km-pointer"
+        }
+        @if (applicationDefinition.spec.documentationURL && applicationDefinition.spec.sourceURL) {
+        <span>-</span>
+        }
+        @if (applicationDefinition.spec.sourceURL) {
+        <a class="km-pointer"
            [href]="applicationDefinition.spec.sourceURL"
            target="_blank"
            rel="noreferrer noopener"
@@ -68,7 +71,9 @@ limitations under the License.
            fxLayoutGap="5px">
           <i class="km-icon-code"></i><span>Source</span>
         </a>
+        }
       </div>
+      }
     </div>
   </div>
 </div>

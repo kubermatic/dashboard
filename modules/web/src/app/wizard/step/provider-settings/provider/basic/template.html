@@ -13,42 +13,46 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div [formGroup]="form"
-     [ngSwitch]="provider">
-  <km-wizard-alibaba-provider-basic *ngSwitchCase="Providers.ALIBABA"
-                                    [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-alibaba-provider-basic>
-  <km-wizard-aws-provider-basic *ngSwitchCase="Providers.AWS"
-                                [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-aws-provider-basic>
-  <km-wizard-digitalocean-provider-basic *ngSwitchCase="Providers.DIGITALOCEAN"
-                                         [formControl]="form.get(Controls.ProviderBasic)"></km-wizard-digitalocean-provider-basic>
-  <km-wizard-hetzner-provider-basic *ngSwitchCase="Providers.HETZNER"
-                                    [formControl]="form.get(Controls.ProviderBasic)"></km-wizard-hetzner-provider-basic>
-  <km-wizard-kubevirt-provider-basic *ngSwitchCase="Providers.KUBEVIRT"
-                                     [formControl]="form.get(Controls.ProviderBasic)"></km-wizard-kubevirt-provider-basic>
-  <km-wizard-nutanix-provider-basic *ngSwitchCase="Providers.NUTANIX"
-                                    [formControl]="form.get(Controls.ProviderBasic)"></km-wizard-nutanix-provider-basic>
-
-  <km-wizard-vsphere-provider-basic *ngSwitchCase="Providers.VSPHERE"
-                                    [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-vsphere-provider-basic>
-  <km-wizard-azure-provider-basic *ngSwitchCase="Providers.AZURE"
-                                  [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-azure-provider-basic>
-  <km-wizard-gcp-provider-basic *ngSwitchCase="Providers.GCP"
-                                [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-gcp-provider-basic>
-  <km-wizard-openstack-provider-basic *ngSwitchCase="Providers.OPENSTACK"
-                                      [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-openstack-provider-basic>
-  <km-wizard-anexia-provider-basic *ngSwitchCase="Providers.ANEXIA"
-                                   [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-anexia-provider-basic>
-  <km-wizard-vmware-cloud-director-provider-basic *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
-                                                  [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-vmware-cloud-director-provider-basic>
-  <km-wizard-baremetal-provider-basic *ngSwitchCase="Providers.BAREMETAL"
-                                      [formControl]="form.get(Controls.ProviderBasic)">
-  </km-wizard-baremetal-provider-basic>
+<div [formGroup]="form">
+  @switch (provider) {
+  @case (Providers.ALIBABA) {
+  <km-wizard-alibaba-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.AWS) {
+  <km-wizard-aws-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.DIGITALOCEAN) {
+  <km-wizard-digitalocean-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.HETZNER) {
+  <km-wizard-hetzner-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.KUBEVIRT) {
+  <km-wizard-kubevirt-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.NUTANIX) {
+  <km-wizard-nutanix-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.VSPHERE) {
+  <km-wizard-vsphere-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.AZURE) {
+  <km-wizard-azure-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.GCP) {
+  <km-wizard-gcp-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.OPENSTACK) {
+  <km-wizard-openstack-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.ANEXIA) {
+  <km-wizard-anexia-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.VMWARECLOUDDIRECTOR) {
+  <km-wizard-vmware-cloud-director-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  @case (Providers.BAREMETAL) {
+  <km-wizard-baremetal-provider-basic [formControl]="form.get(Controls.ProviderBasic)" />
+  }
+  }
 </div>

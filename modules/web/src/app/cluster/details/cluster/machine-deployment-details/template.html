@@ -13,12 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="km-machine-deployment-details"
-     *ngIf="isInitialized()">
+@if (isInitialized()) {
+<div class="km-machine-deployment-details">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
-
+                    [projectID]="projectID" />
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title class="machine-deployment-name">
@@ -32,10 +31,11 @@ limitations under the License.
       </mat-card-title>
       <div fxFlex></div>
       <div fxLayout="row">
-        <km-copy-joining-script-button *ngIf="machineDeployment.spec?.template.cloud?.edge"
-                                       [machineDeploymentID]="machineDeploymentID"
+        @if (machineDeployment.spec?.template.cloud?.edge) {
+        <km-copy-joining-script-button [machineDeploymentID]="machineDeploymentID"
                                        [clusterName]="clusterName"
-                                       [projectID]="projectID"></km-copy-joining-script-button>
+                                       [projectID]="projectID" />
+        }
         <button mat-icon-button
                 color="tertiary"
                 (click)="showRestartDialog()"
@@ -58,7 +58,6 @@ limitations under the License.
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
       </div>
-
     </mat-card-header>
     <mat-card-content class="km-row">
       <div class="km-content-wrap">
@@ -74,26 +73,28 @@ limitations under the License.
                fxLayoutGap="4px">
             <span>{{!!machineDeployment.status?.availableReplicas ? machineDeployment.status.availableReplicas : 0}}
               /{{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
-            <div *ngIf="machineDeployment.status?.availableReplicas > machineDeployment.spec.replicas"
-                 class="km-icon-info km-pointer"
+            @if (machineDeployment.status?.availableReplicas > machineDeployment.spec.replicas) {
+            <div class="km-icon-info km-pointer"
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
+            }
           </div>
         </km-property>
-
-        <km-property *ngIf="machineDeployment.spec.minReplicas">
+        @if (machineDeployment.spec.minReplicas) {
+        <km-property>
           <div key>Min Replicas</div>
           <div value>
             <span>{{machineDeployment.spec.minReplicas}}</span>
           </div>
         </km-property>
-
-        <km-property *ngIf="machineDeployment.spec.maxReplicas">
+        }
+        @if (machineDeployment.spec.maxReplicas) {
+        <km-property>
           <div key>Max Replicas</div>
           <div value>
             <span>{{machineDeployment.spec.maxReplicas}}</span>
           </div>
         </km-property>
-
+        }
         <km-property>
           <div key>Paused</div>
           <div value>{{machineDeployment.spec.paused}}</div>
@@ -110,156 +111,158 @@ limitations under the License.
                fxLayoutGap="10px">
             <div class="km-os-image-{{systemLogoClass}}"></div>
             <span>{{system}}</span>
-            <km-chip *ngIf="system === 'Container Linux'"
-                     text="EOL"
+            @if (system === 'Container Linux') {
+            <km-chip text="EOL"
                      type="error"
-                     matTooltip="Container Linux has reached its end of life and is no longer maintained or updated.">
-            </km-chip>
+                     matTooltip="Container Linux has reached its end of life and is no longer maintained or updated." />
+            }
           </div>
         </km-property>
-
-        <ng-container *ngIf="machineDeployment.spec.template.cloud.aws">
-          <km-property>
-            <div key>Subnet ID</div>
-            <div value>{{machineDeployment.spec.template.cloud.aws.subnetID}}</div>
-          </km-property>
-          <km-property>
-            <div key>Availability Zone</div>
-            <div value>{{machineDeployment.spec.template.cloud.aws.availabilityZone}}</div>
-          </km-property>
-        </ng-container>
-
-        <ng-container *ngIf="machineDeployment.spec.template.cloud.nutanix">
-          <km-property>
-            <div key>Image Name</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.imageName}}</div>
-          </km-property>
-          <km-property>
-            <div key>Subnet Name</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.subnetName}}</div>
-          </km-property>
-          <km-property>
-            <div key>CPUs</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.cpus}}</div>
-          </km-property>
-          <km-property>
-            <div key>Cores per CPU</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
-          </km-property>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
-                               label="CPU Passthrough"
-                               [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
-          </km-property-boolean>
-          <km-property>
-            <div key>Memory</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
-          </km-property>
-          <km-property>
-            <div key>Disk Size</div>
-            <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
-          </km-property>
-          <km-property *ngIf="machineDeployment.spec.template.cloud.nutanix.categories as categories">
-            <div key>Categories</div>
-            <div value>
-              <km-labels [labels]="categories"></km-labels>
-            </div>
-          </km-property>
-        </ng-container>
-
-        <ng-container *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector as vmwareclouddirector">
-          <km-property *ngIf="vmwareclouddirector.vapp">
-            <div key>VApp</div>
-            <div value>{{vmwareclouddirector.vapp}}</div>
-          </km-property>
-        </ng-container>
-
+        @if (machineDeployment.spec.template.cloud.aws) {
+        <km-property>
+          <div key>Subnet ID</div>
+          <div value>{{machineDeployment.spec.template.cloud.aws.subnetID}}</div>
+        </km-property>
+        <km-property>
+          <div key>Availability Zone</div>
+          <div value>{{machineDeployment.spec.template.cloud.aws.availabilityZone}}</div>
+        </km-property>
+        }
+        @if (machineDeployment.spec.template.cloud.nutanix) {
+        <km-property>
+          <div key>Image Name</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.imageName}}</div>
+        </km-property>
+        <km-property>
+          <div key>Subnet Name</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.subnetName}}</div>
+        </km-property>
+        <km-property>
+          <div key>CPUs</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.cpus}}</div>
+        </km-property>
+        <km-property>
+          <div key>Cores per CPU</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
+        </km-property>
+        @if (machineDeployment.spec.template.cloud.nutanix.cpuPassthrough) {
+        <km-property-boolean label="CPU Passthrough"
+                             [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough" />
+        }
+        <km-property>
+          <div key>Memory</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
+        </km-property>
+        <km-property>
+          <div key>Disk Size</div>
+          <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
+        </km-property>
+        @if (machineDeployment.spec.template.cloud.nutanix.categories; as categories) {
+        <km-property>
+          <div key>Categories</div>
+          <div value>
+            <km-labels [labels]="categories" />
+          </div>
+        </km-property>
+        }
+        }
+        @if (machineDeployment.spec.template.cloud.vmwareclouddirector; as vmwareclouddirector) {
+        @if (vmwareclouddirector.vapp) {
+        <km-property>
+          <div key>VApp</div>
+          <div value>{{vmwareclouddirector.vapp}}</div>
+        </km-property>
+        }
+        }
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="machineDeployment.creationTimestamp" />
           </div>
         </km-property>
-
         <div class="quota-widget">
           <router-outlet name="quota-widget"
-                         (activate)="onActivate($event)"></router-outlet>
+                         (activate)="onActivate($event)" />
         </div>
-
         <div fxFlex="100%">
-          <km-property fxFlex="50%"
-                       *ngIf="machineDeployment.spec.template.labels">
+          @if (machineDeployment.spec.template.labels) {
+          <km-property fxFlex="50%">
             <div key>Node Labels</div>
             <div value>
               <km-labels [labels]="machineDeployment.spec.template.labels"
-                         emptyMessage="No assigned labels"></km-labels>
+                         emptyMessage="No assigned labels" />
             </div>
           </km-property>
-          <km-property fxFlex="50%"
-                       *ngIf="machineDeployment.spec.template.annotations">
+          }
+          @if (machineDeployment.spec.template.annotations) {
+          <km-property fxFlex="50%">
             <div key>Node Annotations</div>
             <div value>
               <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)"
-                         emptyMessage="No assigned annotations"></km-labels>
+                         emptyMessage="No assigned annotations" />
             </div>
           </km-property>
-          <km-property fxFlex="50%"
-                       *ngIf="machineDeployment.spec.template.taints">
+          }
+          @if (machineDeployment.spec.template.taints) {
+          <km-property fxFlex="50%">
             <div key>Node Taints</div>
             <div value>
-              <km-taints [taints]="machineDeployment.spec.template.taints"></km-taints>
+              <km-taints [taints]="machineDeployment.spec.template.taints" />
             </div>
           </km-property>
-
-          <km-property fxFlex="50%"
-                       *ngIf="machineDeployment.annotations">
+          }
+          @if (machineDeployment.annotations) {
+          <km-property fxFlex="50%">
             <div key>Machine Deployment Annotations</div>
             <div value>
-              <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)"></km-labels>
+              <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)" />
             </div>
           </km-property>
+          }
         </div>
       </div>
-
       <div class="additional-details">
-        <mat-divider></mat-divider>
+        <mat-divider />
         <div class="km-content-wrap"
              fxFlex
              fxLayout="row wrap"
              fxLayoutAlign=" center">
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu"
-                               [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rhel"
-                               [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rockylinux"
-                               [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar"
-                               [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate"
-                               label="Disable auto-update"></km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.amzn2"
-                               [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
+          @if (machineDeployment.spec.template.operatingSystem.ubuntu) {
+          <km-property-boolean [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot" />
+          }
+          @if (machineDeployment.spec.template.operatingSystem.rhel) {
+          <km-property-boolean [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot" />
+          }
+          @if (machineDeployment.spec.template.operatingSystem.rockylinux) {
+          <km-property-boolean [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot" />
+          }
+          @if (machineDeployment.spec.template.operatingSystem.flatcar) {
+          <km-property-boolean [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate"
+                               label="Disable auto-update" />
+          }
+          @if (machineDeployment.spec.template.operatingSystem.amzn2) {
+          <km-property-boolean [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot" />
+          }
         </div>
       </div>
-
     </mat-card-content>
   </mat-card>
-
   <km-node-list [cluster]="cluster"
                 [mdName]="machineDeployment.name"
                 [nodes]="nodes"
                 [nodesMetrics]="metrics"
                 (deleteNode)="loadNodes()"
-                [projectID]="getProjectID()"></km-node-list>
-
-  <km-event-card [events]="events"></km-event-card>
-
+                [projectID]="getProjectID()" />
+  <km-event-card [events]="events" />
 </div>
+}
 
-<ng-container *ngIf="!isInitialized()">
-  <mat-spinner [diameter]="25"
-               color="accent"
-               class="km-spinner"></mat-spinner>
-</ng-container>
+@if (!isInitialized()) {
+<mat-spinner [diameter]="25"
+             color="accent"
+             class="km-spinner" />
+}
