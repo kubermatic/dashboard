@@ -18,7 +18,7 @@
   .cni-version-container {
     .cni-version {
       .mdc-notched-outline {
-        --mdc-outlined-text-field-disabled-outline-color: #{map.get($colors, divider)};
+        --mat-outlined-text-field-disabled-outline-color: #{map.get($colors, divider)};
       }
 
       .cni-version-type {
