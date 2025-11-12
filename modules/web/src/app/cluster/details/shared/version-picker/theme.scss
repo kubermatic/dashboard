@@ -18,7 +18,7 @@
   .version-picker-container {
     .km-version-picker {
       .mat-form-field-outline {
-        --mat-outlined-text-field-disabled-outline-color: #{map.get($colors, divider)};
+        --mat-form-field-outlined-disabled-outline-color: #{map.get($colors, divider)};
       }
 
       .version-picker-type {
