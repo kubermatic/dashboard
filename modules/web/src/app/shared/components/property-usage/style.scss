@@ -22,7 +22,7 @@
 .property-usage-bar {
   @include mixins.size(280px, 6px, true);
 
-  --mat-linear-progress-track-height: 6px;
+  --mat-progress-bar-track-height: 6px;
 
   border-radius: variables.$border-radius;
   margin: 6px 0;

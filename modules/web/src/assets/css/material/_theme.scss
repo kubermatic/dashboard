@@ -131,9 +131,9 @@
     &.mat-mdc-form-field {
       color: map.get($colors, hint-color);
 
-      --mat-outlined-text-field-outline-color: #{map.get($colors, divider)};
-      --mat-outlined-text-field-disabled-outline-color: #{map.get($colors, divider-disabled)};
-      --mat-outlined-text-field-hover-outline-color: #{map.get($colors, secondary-dark)};
+      --mat-form-field-outlined-outline-color: #{map.get($colors, divider)};
+      --mat-form-field-outlined-disabled-outline-color: #{map.get($colors, divider-disabled)};
+      --mat-form-field-outlined-hover-outline-color: #{map.get($colors, secondary-dark)};
     }
 
   }
@@ -155,8 +155,8 @@
   .mat-mdc-button,
   .mat-mdc-unelevated-button,
   .mat-mdc-raised-button {
-    --mat-filled-button-container-color: #{map.get($colors, primary)};
-    --mat-filled-button-label-text-color: #fff;
+    --mat-button-filled-container-color: #{map.get($colors, primary)};
+    --mat-button-filled-label-text-color: #fff;
 
     &:hover:not([disabled]) {
       background-color: map.get($colors, primary-hover);
@@ -277,30 +277,30 @@
     &.mat-accent,
     button {
       // track color
-      --mat-switch-selected-track-color: #{map.get($colors, primary)};
-      --mat-switch-selected-focus-track-color: var(--mat-switch-selected-track-color);
-      --mat-switch-selected-hover-track-color: var(--mat-switch-selected-track-color);
-      --mat-switch-selected-pressed-track-color: var(--mat-switch-selected-track-color);
-      --mat-switch-unselected-track-color: #{map.get($colors, divider)};
-      --mat-switch-unselected-focus-track-color: var(--mat-switch-unselected-track-color);
-      --mat-switch-unselected-hover-track-color: var(--mat-switch-unselected-track-color);
-      --mat-switch-unselected-pressed-track-color: var(--mat-switch-unselected-track-color);
+      --mat-slide-toggle-selected-track-color: #{map.get($colors, primary)};
+      --mat-slide-toggle-selected-focus-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-hover-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-pressed-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-unselected-track-color: #{map.get($colors, divider)};
+      --mat-slide-toggle-unselected-focus-track-color: var(--mat-slide-toggle-unselected-track-color);
+      --mat-slide-toggle-unselected-hover-track-color: var(--mat-slide-toggle-unselected-track-color);
+      --mat-slide-toggle-unselected-pressed-track-color: var(--mat-slide-toggle-unselected-track-color);
 
       // handle color
-      --mat-switch-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
-      --mat-switch-selected-handle-color: #fafafa;
-      --mat-switch-selected-focus-handle-color: var(--mat-switch-selected-handle-color);
-      --mat-switch-selected-hover-handle-color: var(--mat-switch-selected-handle-color);
-      --mat-switch-selected-pressed-handle-color: var(--mat-switch-selected-handle-color);
-      --mat-switch-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
-      --mat-switch-unselected-focus-handle-color: var(--mat-switch-unselected-handle-color);
-      --mat-switch-unselected-hover-handle-color: var(--mat-switch-unselected-handle-color);
-      --mat-switch-unselected-pressed-handle-color: var(--mat-switch-unselected-handle-color);
+      --mat-slide-toggle-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-selected-handle-color: #fafafa;
+      --mat-slide-toggle-selected-focus-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-selected-hover-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-selected-pressed-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-unselected-focus-handle-color: var(--mat-slide-toggle-unselected-handle-color);
+      --mat-slide-toggle-unselected-hover-handle-color: var(--mat-slide-toggle-unselected-handle-color);
+      --mat-slide-toggle-unselected-pressed-handle-color: var(--mat-slide-toggle-unselected-handle-color);
 
       // ripple color
-      --mat-switch-selected-focus-state-layer-color: var(--mat-switch-selected-track-color);
-      --mat-switch-selected-hover-state-layer-color: var(--mat-switch-selected-track-color);
-      --mat-switch-selected-pressed-state-layer-color: var(--mat-switch-selected-track-color);
+      --mat-slide-toggle-selected-focus-state-layer-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-hover-state-layer-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-pressed-state-layer-color: var(--mat-slide-toggle-selected-track-color);
     }
   }
 
@@ -406,6 +406,6 @@
   }
 
   .mat-mdc-progress-bar.mat-accent {
-    --mat-linear-progress-active-indicator-color: #{map.get($colors, indicator-orange)};
+    --mat-progress-bar-active-indicator-color: #{map.get($colors, indicator-orange)};
   }
 }
