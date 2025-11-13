@@ -89,7 +89,7 @@ limitations under the License.
             [attr.id]="'km-clusters-' + element.name">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            <span>{{element.name}}</span>
+            <span matTooltip="Cluster ID: {{element.id}}">{{element.name}}</span>
             @if (isRestoring(element.id)) {
             <div class="km-update-available-badge">
               Restoring
