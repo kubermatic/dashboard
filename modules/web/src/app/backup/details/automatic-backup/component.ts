@@ -16,6 +16,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {getBackupHealthStatus, HealthStatus} from '@app/shared/utils/health-status';
+import {ClusterService} from '@core/services/cluster';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -29,6 +30,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import { Cluster } from '@app/shared/entity/cluster';
 
 @Component({
   selector: 'km-automatic-backup-details',
@@ -43,7 +45,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   selectedProject = {} as Project;
   isInitialized = false;
   backup: EtcdBackupConfig = {} as EtcdBackupConfig;
-
+  cluster: Cluster;
   get canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
   }
@@ -57,6 +59,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
@@ -90,6 +93,13 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
         this.backup = backup;
         this.isInitialized = true;
       });
+
+    this._projectService.selectedProject
+      .pipe(switchMap(project => this._clusterService.clusters(project.id, false)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => {
+        this.cluster = clusters.find(cluster => cluster.id === this.backup.spec.clusterId);
+      });
   }
 
   ngOnDestroy(): void {
@@ -99,6 +109,10 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this._router.navigate(['/projects/' + this.selectedProject.id + '/backups']);
+  }
+
+  getClusterName(): string {
+    return this.cluster?.name;
   }
 
   delete(backup: EtcdBackupConfig): void {
