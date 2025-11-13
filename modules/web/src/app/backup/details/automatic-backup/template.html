@@ -55,6 +55,10 @@ limitations under the License.
   </mat-card-header>
   <mat-card-content fxLayout="row">
     <km-property>
+      <div key>Cluster Name</div>
+      <div value>{{getClusterName()}}</div>
+    </km-property>
+    <km-property>
       <div key>Cluster ID</div>
       <div value>{{backup.spec?.clusterId}}</div>
     </km-property>
