@@ -36,6 +36,7 @@ import {distinctUntilChanged, map, startWith, switchMap, take, takeUntil, tap} f
 
 enum Column {
   Status = 'status',
+  ID = 'id',
   Name = 'name',
   Provider = 'provider',
   Version = 'version',

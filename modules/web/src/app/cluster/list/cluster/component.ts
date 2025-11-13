@@ -52,6 +52,7 @@ import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 
 enum Column {
   Status = 'status',
+  ID = 'id',
   Name = 'name',
   Provider = 'provider',
   Version = 'version',

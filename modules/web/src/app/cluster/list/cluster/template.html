@@ -99,6 +99,22 @@ limitations under the License.
         </td>
       </ng-container>
 
+      <ng-container [matColumnDef]="Column.ID">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-30"
+            mat-sort-header>ID
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.id]="'km-clusters-' + element.id">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.id}}</span>
+          </div>
+        </td>
+      </ng-container>
+
       <ng-container [matColumnDef]="Column.Provider">
         <th mat-header-cell
             *matHeaderCellDef
