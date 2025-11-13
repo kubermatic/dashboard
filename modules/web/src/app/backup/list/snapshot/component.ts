@@ -23,6 +23,7 @@ import {
   DeleteSnapshotDialogConfig,
 } from '@app/backup/list/snapshot/delete-dialog/component';
 import {BackupService} from '@core/services/backup';
+import {ClusterService} from '@core/services/cluster';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {EtcdBackupConfig, EtcdBackupConfigCondition} from '@shared/entity/backup';
@@ -32,7 +33,7 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {HealthStatus, getBackupHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -47,6 +48,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
   private _backups = [];
+  private _clusters = [];
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
 
@@ -55,7 +57,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'destination', 'created', 'actions'];
+    return ['status', 'name', 'cluster-name', 'cluster', 'destination', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -79,6 +81,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
@@ -113,6 +116,12 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
         this._backups = backups;
         this.dataSource.data = this._backups;
       });
+
+    this._clusterService.clusters(this._selectedProject.id, false)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => {
+        this._clusters = clusters;
+      });
   }
 
   ngOnDestroy(): void {
@@ -127,6 +136,21 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     }
 
     return getBackupHealthStatus(backup, condition);
+  }
+
+  getClusterName(backup: EtcdBackupConfig): Observable<string> {
+    for (const cluster of this._clusters) {
+      if (cluster.id === backup.spec.clusterId) {
+        return new Observable<string>(observer => {
+          observer.next(cluster.name);
+          observer.complete();
+        });
+      }
+    }
+    return new Observable<string>(observer => {
+      observer.next('N/A');
+      observer.complete();
+    });
   }
 
   delete(backup: EtcdBackupConfig): void {
