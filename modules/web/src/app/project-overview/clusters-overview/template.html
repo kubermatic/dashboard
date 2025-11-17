@@ -41,7 +41,7 @@ limitations under the License.
             *matCellDef="let cluster">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            {{cluster.name}}
+            <span matTooltip="Cluster ID: {{cluster.id}}">{{cluster.name}}</span>
           </div>
         </td>
       </ng-container>
