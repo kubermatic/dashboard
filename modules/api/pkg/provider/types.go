@@ -269,6 +269,11 @@ type PrivilegedClusterProvider interface {
 	// Note that the client you will get has admin privileges in the seed cluster
 	GetSeedClusterAdminClient() kubernetes.Interface
 
+	// GetMasterClient returns a runtime client to interact with all resources in the master cluster
+	//
+	// Note that the client you will get has admin privileges in the master cluster
+	GetMasterClient() ctrlruntimeclient.Client
+
 	// GetUnsecured returns a cluster for the project and given name.
 	//
 	// Note that the admin privileges are used to get cluster

@@ -536,6 +536,7 @@ func TestListProjectMethod(t *testing.T) {
 				"",
 				rbac.ExtractGroupPrefix,
 				fakeClient,
+				fakeClient,
 				kubernetesClient,
 				false,
 				versions,
