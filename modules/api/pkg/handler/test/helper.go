@@ -362,6 +362,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		"",
 		rbac.ExtractGroupPrefix,
 		fakeClient,
+		fakeClient,
 		kubernetesClient,
 		false,
 		kubermaticVersions,

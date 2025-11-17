@@ -108,6 +108,7 @@ func TestCreateCluster(t *testing.T) {
 				tc.workerName,
 				nil,
 				fakeClient,
+				fakeClient,
 				nil,
 				tc.shareKubeconfig,
 				versions,

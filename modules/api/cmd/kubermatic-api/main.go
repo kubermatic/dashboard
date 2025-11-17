@@ -268,7 +268,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	}
 
 	seedClientGetter := kubernetesprovider.SeedClientGetterFactory(seedKubeconfigGetter)
-	clusterProviderGetter := clusterProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter, seedClientGetter, options)
+	clusterProviderGetter := clusterProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter, seedClientGetter, mgr.GetClient(), options)
 
 	presetProvider, err := kubernetesprovider.NewPresetProvider(client)
 	if err != nil {
@@ -699,7 +699,7 @@ func setSecureHeaders(next http.Handler) http.Handler {
 	})
 }
 
-func clusterProviderFactory(mapper meta.RESTMapper, seedKubeconfigGetter provider.SeedKubeconfigGetter, seedClientGetter provider.SeedClientGetter, options serverRunOptions) provider.ClusterProviderGetter {
+func clusterProviderFactory(mapper meta.RESTMapper, seedKubeconfigGetter provider.SeedKubeconfigGetter, seedClientGetter provider.SeedClientGetter, masterClient ctrlruntimeclient.Client, options serverRunOptions) provider.ClusterProviderGetter {
 	return func(seed *kubermaticv1.Seed) (provider.ClusterProvider, error) {
 		cfg, err := seedKubeconfigGetter(seed)
 		if err != nil {
@@ -728,6 +728,7 @@ func clusterProviderFactory(mapper meta.RESTMapper, seedKubeconfigGetter provide
 			options.workerName,
 			rbac.ExtractGroupPrefix,
 			seedCtrlruntimeClient,
+			masterClient,
 			kubeClient,
 			options.featureGates.Enabled(features.OIDCKubeCfgEndpoint),
 			options.versions,
