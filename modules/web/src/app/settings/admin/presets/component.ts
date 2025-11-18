@@ -256,7 +256,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
         take(1)
       )
       .subscribe(created => {
-        created === true ? this._presetsChanged.next() : null;
+        created === true && this._presetsChanged.next();
       });
   }
 

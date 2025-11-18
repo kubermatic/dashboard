@@ -14,6 +14,8 @@
 
 import {Injectable} from '@angular/core';
 
+/* eslint-disable */
+
 @Injectable()
 export class GoogleAnalyticsService {
   private active = false;
@@ -36,7 +38,6 @@ export class GoogleAnalyticsService {
       (i[r] =
         i[r] ||
         function () {
-          // eslint-disable-next-line
           (i[r].q = i[r].q || []).push(arguments);
         }),
         (i[r].l = new Date().getTime());

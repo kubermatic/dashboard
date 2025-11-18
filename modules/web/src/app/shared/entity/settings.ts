@@ -60,7 +60,7 @@ export interface AdminSettings {
   staticLabels?: StaticLabel[];
   annotations?: AdminSettingsAnnotations;
   // the Object type is used when we send the announcements to the API
-  announcements?: Map<string, AdminAnnouncement> | Object;
+  announcements?: Map<string, AdminAnnouncement> | object;
   clusterBackupOptions?: ClusterBackupOptions;
 }
 

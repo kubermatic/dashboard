@@ -79,7 +79,11 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(value => {
         const projectIDControl = this.defaultCredentialsForm.get(Control.ProjectID);
-        value ? projectIDControl.disable() : projectIDControl.enable();
+        if (value) {
+          projectIDControl.disable();
+        } else {
+          projectIDControl.enable();
+        }
       });
 
     this.form.controls[Control.Default]
@@ -88,7 +92,11 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(value => {
         const projectControl = this.defaultCredentialsForm.get(Control.Project);
-        value ? projectControl.disable() : projectControl.enable();
+        if (value) {
+          projectControl.disable();
+        } else {
+          projectControl.enable();
+        }
       });
 
     this.onCredentialsTypeChanged(this.credentialsType);

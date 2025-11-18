@@ -33,4 +33,5 @@ import 'zone.js';
 
 (window as any).global = window;
 (window as any).process = {browser: true, env: {}};
+/* eslint-disable @typescript-eslint/no-require-imports */
 (window as any).Buffer = (window as any).Buffer || require('buffer').Buffer;

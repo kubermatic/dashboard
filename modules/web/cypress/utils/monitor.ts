@@ -134,10 +134,10 @@ export class TrafficMonitor {
 
     switch (response.objMatchRule) {
       case MatchRule.EVERY:
-        expect(objArr.every(obj => response.properties.check(obj))).to.be.true;
+        expect(objArr.every(obj => response.properties.check(obj))).to.equal(true);
         break;
       case MatchRule.SOME:
-        expect(objArr.some(obj => response.properties.check(obj))).to.be.true;
+        expect(objArr.some(obj => response.properties.check(obj))).to.equal(true);
         break;
     }
 

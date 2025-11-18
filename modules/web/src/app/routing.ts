@@ -22,7 +22,7 @@ import {View} from './shared/entity/common';
 import {SSHKeyGuard} from './core/services/ssh-key/guard';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
-  preload(route: Route, load: Function): Observable<any> {
+  preload(route: Route, load: () => Observable<any>): Observable<any> {
     return route.data && route.data['preload'] ? load() : of(null);
   }
 }
