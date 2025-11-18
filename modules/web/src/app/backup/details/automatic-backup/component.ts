@@ -91,14 +91,12 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(backup => {
         this.backup = backup;
+        this._clusterService.clusters(this.selectedProject.id, false)
+          .pipe(takeUntil(this._unsubscribe))
+          .subscribe(clusters => {
+            this.cluster = clusters.find(cluster => cluster.id === this.backup.spec.clusterId);
+          });
         this.isInitialized = true;
-      });
-
-    this._projectService.selectedProject
-      .pipe(switchMap(project => this._clusterService.clusters(project.id, false)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => {
-        this.cluster = clusters.find(cluster => cluster.id === this.backup.spec.clusterId);
       });
   }
 
@@ -109,10 +107,6 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this._router.navigate(['/projects/' + this.selectedProject.id + '/backups']);
-  }
-
-  getClusterName(): string {
-    return this.cluster?.name;
   }
 
   delete(backup: EtcdBackupConfig): void {
