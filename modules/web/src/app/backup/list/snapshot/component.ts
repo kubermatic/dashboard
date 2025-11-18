@@ -117,7 +117,8 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
         this.dataSource.data = this._backups;
       });
 
-    this._clusterService.clusters(this._selectedProject.id, false)
+    this._projectService.selectedProject
+      .pipe(switchMap(project => this._clusterService.clusters(project.id, false)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this._clusters = clusters;
@@ -138,19 +139,13 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     return getBackupHealthStatus(backup, condition);
   }
 
-  getClusterName(backup: EtcdBackupConfig): Observable<string> {
+  getClusterName(backup: EtcdBackupConfig): string {
     for (const cluster of this._clusters) {
       if (cluster.id === backup.spec.clusterId) {
-        return new Observable<string>(observer => {
-          observer.next(cluster.name);
-          observer.complete();
-        });
+        return cluster.name;
       }
     }
-    return new Observable<string>(observer => {
-      observer.next('N/A');
-      observer.complete();
-    });
+    return 'N/A';
   }
 
   delete(backup: EtcdBackupConfig): void {
