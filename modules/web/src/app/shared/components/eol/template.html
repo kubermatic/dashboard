@@ -14,33 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="isBefore() || isAfter()">
-  <div *ngIf="type === displayType.Chip"
-       fxLayoutAlign=" center">
-    <km-chip *ngIf="isAfter()"
-             text="EOL"
-             type="error"
-             matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}"></km-chip>
-
-    <km-chip *ngIf="isBefore()"
-             text="EOL"
-             type="warning"
-             matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}."></km-chip>
-  </div>
-
-  <div *ngIf="type === displayType.Badge"
-       class="km-update-available-badge"
-       [ngClass]="isBefore() ? 'warning-border' : 'error-border'">
-    <i class="km-badge-icon"
-       [ngClass]="isBefore() ? 'km-icon-failed km-warning-bg' : 'km-icon-failed'"></i>
-    <span *ngIf="isAfter()"
-          matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}">
-      End of Life
-    </span>
-
-    <span *ngIf="isBefore()"
-          matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}.">
-      End of Life
-    </span>
-  </div>
-</ng-container>
+@if (isBefore() || isAfter()) {
+@if (type === displayType.Chip) {
+<div fxLayoutAlign=" center">
+  @if (isAfter()) {
+  <km-chip text="EOL"
+           type="error"
+           matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}" />
+  }
+  @if (isBefore()) {
+  <km-chip text="EOL"
+           type="warning"
+           matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}." />
+  }
+</div>
+}
+@if (type === displayType.Badge) {
+<div class="km-update-available-badge"
+     [ngClass]="isBefore() ? 'warning-border' : 'error-border'">
+  <i class="km-badge-icon"
+     [ngClass]="isBefore() ? 'km-icon-failed km-warning-bg' : 'km-icon-failed'"></i>
+  @if (isAfter()) {
+  <span matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}">
+    End of Life
+  </span>
+  }
+  @if (isBefore()) {
+  <span matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}.">
+    End of Life
+  </span>
+  }
+</div>
+}
+}

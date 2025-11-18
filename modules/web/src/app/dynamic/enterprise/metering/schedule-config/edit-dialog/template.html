@@ -35,16 +35,14 @@ END OF TERMS AND CONDITIONS
                          mode="all"
                          label="Report is deleted after (days)"
                          hint="Defines how long reports should be kept. Leave empty to keep reports forever."
-                         min="1">
-      </km-number-stepper>
+                         min="1" />
 
       <km-number-stepper [formControlName]="controls.Interval"
                          mode="all"
                          label="Report Scope"
                          hint="Range of days captured in each report."
                          min="1"
-                         required>
-      </km-number-stepper>
+                         required />
 
       <mat-form-field>
         <mat-label>Cron Expression</mat-label>
@@ -71,17 +69,20 @@ END OF TERMS AND CONDITIONS
                     disableOptionCentering
                     required
                     kmValueChangedIndicator>
-          <mat-option *ngFor="let type of reportTypes"
-                      [value]="type">
+          @for (type of reportTypes; track type) {
+          <mat-option [value]="type">
             {{type}}
           </mat-option>
+          }
         </mat-select>
         <mat-hint>
           Types of reports to generate. By default, all types of reports are generated.
         </mat-hint>
-        <mat-error *ngIf="form.get(controls.Types).hasError('required')">
+        @if (form.get(controls.Types).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
     </div>
   </form>
@@ -92,6 +93,5 @@ END OF TERMS AND CONDITIONS
              label="Save Changes"
              [observable]="getObservable()"
              (next)="onNext()"
-             [disabled]="form.invalid">
-  </km-button>
+             [disabled]="form.invalid" />
 </mat-dialog-actions>

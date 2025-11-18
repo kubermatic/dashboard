@@ -14,40 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="view !== ApplicationListView.Summary"
-     fxLayoutAlign=" center">
-  <km-search-field *ngIf="applicationsDataSource.data?.length"
-                   (queryChange)="onSearchQueryChanged($event)"></km-search-field>
+@if (view !== ApplicationListView.Summary) {
+<div fxLayoutAlign=" center">
+  @if (applicationsDataSource.data?.length) {
+  <km-search-field (queryChange)="onSearchQueryChanged($event)" />
+  }
   <div fxFlex>
-    <p *ngIf="!applicationsDataSource.data?.length">
-      <ng-container *ngIf="view === ApplicationListView.Wizard; else defaultViewText">
-        No application selected to install on cluster creation,
-      </ng-container>
-      <ng-template #defaultViewText> Install third party Applications into a cluster, </ng-template>
-      <ng-container *ngTemplateOutlet="applicationDocsLink"></ng-container>
+    @if (!applicationsDataSource.data?.length) {
+    <p>
+      @if (view === ApplicationListView.Wizard) {
+      No application selected to install on cluster creation,
+      } @else {
+      Install third party Applications into a cluster,
+      }
+      <ng-container *ngTemplateOutlet="applicationDocsLink" />
     </p>
+    }
   </div>
-  <ng-container *ngIf="view === ApplicationListView.Default && applications?.length">
-    <mat-slide-toggle class="system-applications-toggle"
-                      labelPosition="before"
-                      [matTooltip]="'System applications are managed by KKP.'"
-                      [ngModel]="showSystemApplications"
-                      (toggleChange)="toggleSystemApplications()">Show System Applications
-    </mat-slide-toggle>
-    <mat-button-toggle-group *ngIf="applicationsDataSource.data?.length"
-                             class="applications-view-switch"
-                             group="applicationsView"
-                             (change)="changeView()">
-      <mat-button-toggle value="applicationscard"
-                         [checked]="showCards">
-        <i class="km-icon-mask km-icon-projects-card"></i>
-      </mat-button-toggle>
-      <mat-button-toggle value="applicationstable"
-                         [checked]="!showCards">
-        <i class="km-icon-mask km-icon-projects-table"></i>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </ng-container>
+  @if (view === ApplicationListView.Default && applications?.length) {
+  <mat-slide-toggle class="system-applications-toggle"
+                    labelPosition="before"
+                    [matTooltip]="'System applications are managed by KKP.'"
+                    [ngModel]="showSystemApplications"
+                    (toggleChange)="toggleSystemApplications()">Show System Applications
+  </mat-slide-toggle>
+  @if (applicationsDataSource.data?.length) {
+  <mat-button-toggle-group class="applications-view-switch"
+                           group="applicationsView"
+                           (change)="changeView()">
+    <mat-button-toggle value="applicationscard"
+                       [checked]="showCards">
+      <i class="km-icon-mask km-icon-projects-card"></i>
+    </mat-button-toggle>
+    <mat-button-toggle value="applicationstable"
+                       [checked]="!showCards">
+      <i class="km-icon-mask km-icon-projects-table"></i>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  }
+  }
   <div [matTooltip]="getAddBtnTooltip()">
     <button mat-flat-button
             color="quaternary"
@@ -59,24 +64,27 @@ limitations under the License.
     </button>
   </div>
 </div>
+}
 
-<div *ngIf="isClusterReady"
-     class="applications-container"
+@if (isClusterReady) {
+<div class="applications-container"
      [ngClass]="{'table-view': !showCards}">
-  <div *ngIf="showCards || !applicationsDataSource.data?.length; else applicationsTable">
+  @if (showCards || !applicationsDataSource.data?.length) {
+  <div>
     <div class="application-cards-view"
          fxFlex
          fxLayout="row wrap"
          fxLayoutGap="20px">
-      <div *ngFor="let application of applicationsDataSource.filteredData"
-           class="application-card">
+      @for (application of applicationsDataSource.filteredData; track application) {
+      <div class="application-card">
         <mat-card-header>
-          <i *ngIf="applicationsStatusMap[application.spec.namespace?.name]?.[application.name] as status"
-             mat-card-avatar
+          @if (applicationsStatusMap[application.spec.namespace?.name]?.[application.name]; as status) {
+          <i mat-card-avatar
              [matTooltip]="status.message"
              [ngClass]="status.icon"
              class="km-health-state application-cards-status"
              fxFlexAlign=" center"></i>
+          }
           <mat-card-title [matTooltip]="application.name"
                           [attr.id]="'km-application-name-' + application.name"
                           fxLayout="row"
@@ -84,11 +92,12 @@ limitations under the License.
                           fxLayoutGap="5px">
             <span>{{getApplicationName(application.name)}}</span>
           </mat-card-title>
-          <div *ngIf="view !== ApplicationListView.Summary"
-               fxFlex
+          @if (view !== ApplicationListView.Summary) {
+          <div fxFlex
                fxLayoutAlign="end">
-            <ng-container *ngTemplateOutlet="actionButtons; context: {application: application}"></ng-container>
+            <ng-container *ngTemplateOutlet="actionButtons; context: {application: application}" />
           </div>
+          }
         </mat-card-header>
         <mat-card-content>
           <div fxFlex
@@ -99,41 +108,44 @@ limitations under the License.
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-application"
                  matTooltip="Application"></i>
-              <img *ngIf="getApplicationLogo(application.spec.applicationRef.name) as logo; else applicationDefName"
-                   class="km-application-logo"
+              @if (getApplicationLogo(application.spec.applicationRef.name); as logo) {
+              <img class="km-application-logo"
                    [src]="logo"
                    [alt]="getApplicationName(application.spec.applicationRef.name)"
                    [matTooltip]="application.spec.applicationRef.name" />
-              <ng-template #applicationDefName>
-                <span>{{getApplicationName(application.spec.applicationRef.name)}}</span>
-              </ng-template>
+              } @else {
+              <span>{{getApplicationName(application.spec.applicationRef.name)}}</span>
+              }
             </div>
             <div fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
-              <div *ngIf="application.spec.namespace?.name as namespace"
-                   fxLayout="row"
+              @if (application.spec.namespace?.name; as namespace) {
+              <div fxLayout="row"
                    fxLayoutAlign=" center"
                    fxLayoutGap="10px"
                    matTooltip="Method: {{applicationsMethodMap[namespace]?.[application.name]}}, Source: {{applicationsSourceMap[namespace]?.[application.name]}}">
                 <km-application-method-icon [method]="applicationsMethodMap[namespace]?.[application.name]"
-                                            [displayTooltip]="false"></km-application-method-icon>
-                <km-application-method-icon *ngIf="applicationsMethodMap[namespace]?.[application.name] !== applicationsSourceMap[namespace]?.[application.name]"
-                                            [method]="applicationsSourceMap[namespace]?.[application.name]"
-                                            [displayTooltip]="false"></km-application-method-icon>
+                                            [displayTooltip]="false" />
+                @if (applicationsMethodMap[namespace]?.[application.name] !== applicationsSourceMap[namespace]?.[application.name]) {
+                <km-application-method-icon [method]="applicationsSourceMap[namespace]?.[application.name]"
+                                            [displayTooltip]="false" />
+                }
               </div>
+              }
               <span>{{application.spec?.applicationRef?.version}}</span>
             </div>
-            <div *ngIf="application.spec?.namespace?.name"
-                 fxLayout="row"
+            @if (application.spec?.namespace?.name) {
+            <div fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-namespace"
                  matTooltip="Application Resources Namespace"></i>
               <span>{{application.spec.namespace.name}}</span>
             </div>
-            <div *ngIf="getApplicationType(application) as applicationType"
-                 fxLayout="row"
+            }
+            @if (getApplicationType(application); as applicationType) {
+            <div fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-default km-icon-warning-event"
@@ -143,176 +155,174 @@ limitations under the License.
                 {{ applicationType }}
               </span>
             </div>
+            }
           </div>
         </mat-card-content>
       </div>
-      <div *ngIf="!applicationsDataSource.data?.length && view === ApplicationListView.Default"
-           class="km-no-data-message"
+      }
+      @if (!applicationsDataSource.data?.length && view === ApplicationListView.Default) {
+      <div class="km-no-data-message"
            fxFlex>
         No applications added.
       </div>
-      <div *ngIf="applicationsDataSource.filter && !applicationsDataSource.filteredData?.length"
-           class="km-no-data-message"
+      }
+      @if (applicationsDataSource.filter && !applicationsDataSource.filteredData?.length) {
+      <div class="km-no-data-message"
            fxFlex>
         No results for "{{applicationsDataSource.filter}}" found.
       </div>
+      }
     </div>
   </div>
-
-  <ng-template #applicationsTable>
-    <table class="km-table"
-           mat-table
-           matSort
-           [dataSource]="applicationsDataSource">
-      <ng-container [matColumnDef]="Column.Status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-5"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <i *ngIf="applicationsStatusMap[element.spec.namespace?.name]?.[element.name] as status"
-             [matTooltip]="status.message"
-             [ngClass]="status.icon"
-             class="km-vertical-center"
-             fxFlexAlign=" center"></i>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-20"
-            mat-sort-header="name">Name</th>
-        <td mat-cell
-            *matCellDef="let element"
-            [attr.id]="'km-application-name-' + element.name">
-          {{element.name}}
-          <span *ngIf="getApplicationType(element) as applicationType"
-                class="km-label-primary"
-                [matTooltip]="getApplicationTypeDescription(element)">{{applicationType}}</span>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Application">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15"
-            mat-sort-header="application">Application</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <img *ngIf="getApplicationLogo(element.spec.applicationRef.name) as logo; else applicationDefName"
-               class="km-application-logo"
-               [src]="logo"
-               [alt]="getApplicationName(element.spec.applicationRef.name)"
-               [matTooltip]="element.spec.applicationRef.name" />
-          <ng-template #applicationDefName> {{getApplicationName(element.spec.applicationRef.name)}} </ng-template>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Version">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-10">Version</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.spec.applicationRef?.version}}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Method">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-5">Method</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <km-application-method-icon [method]="applicationsMethodMap[element.spec.namespace.name]?.[element.name]"></km-application-method-icon>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Source">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-5">Source</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <km-application-method-icon [method]="applicationsSourceMap[element.spec.namespace.name]?.[element.name]"></km-application-method-icon>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Namespace">
-        <th mat-header-cell
-            mat-sort-header="namespace"
-            *matHeaderCellDef
-            class="km-header-cell p-20">Namespace</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.spec.namespace.name}}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Added">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">Added</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
-        </td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-5"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <div fxLayoutAlign="end"
-               class="km-table-actions">
-            <ng-container *ngTemplateOutlet="actionButtons; context: {application: element}"></ng-container>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row
-          class="km-header-row"
-          *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
-    </table>
-
-    <div class="km-row km-empty-list-msg"
-         *ngIf="applicationsDataSource.filter && !applicationsDataSource.filteredData?.length">
-      No results for "{{applicationsDataSource.filter}}" found.
-    </div>
-  </ng-template>
-
+  } @else {
+  <table class="km-table"
+         mat-table
+         matSort
+         [dataSource]="applicationsDataSource">
+    <ng-container [matColumnDef]="Column.Status">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-5"></th>
+      <td mat-cell
+          *matCellDef="let element">
+        @if (applicationsStatusMap[element.spec.namespace?.name]?.[element.name]; as status) {
+        <i [matTooltip]="status.message"
+           [ngClass]="status.icon"
+           class="km-vertical-center"
+           fxFlexAlign=" center"></i>
+        }
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Name">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-20"
+          mat-sort-header="name">Name</th>
+      <td mat-cell
+          *matCellDef="let element"
+          [attr.id]="'km-application-name-' + element.name">
+        {{element.name}}
+        @if (getApplicationType(element); as applicationType) {
+        <span class="km-label-primary"
+              [matTooltip]="getApplicationTypeDescription(element)">{{applicationType}}</span>
+        }
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Application">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-15"
+          mat-sort-header="application">Application</th>
+      <td mat-cell
+          *matCellDef="let element">
+        @if (getApplicationLogo(element.spec.applicationRef.name); as logo) {
+        <img class="km-application-logo"
+             [src]="logo"
+             [alt]="getApplicationName(element.spec.applicationRef.name)"
+             [matTooltip]="element.spec.applicationRef.name" />
+        } @else {
+        {{getApplicationName(element.spec.applicationRef.name)}}
+        }
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Version">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-10">Version</th>
+      <td mat-cell
+          *matCellDef="let element">{{element.spec.applicationRef?.version}}</td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Method">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-5">Method</th>
+      <td mat-cell
+          *matCellDef="let element">
+        <km-application-method-icon [method]="applicationsMethodMap[element.spec.namespace.name]?.[element.name]" />
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Source">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-5">Source</th>
+      <td mat-cell
+          *matCellDef="let element">
+        <km-application-method-icon [method]="applicationsSourceMap[element.spec.namespace.name]?.[element.name]" />
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Namespace">
+      <th mat-header-cell
+          mat-sort-header="namespace"
+          *matHeaderCellDef
+          class="km-header-cell p-20">Namespace</th>
+      <td mat-cell
+          *matCellDef="let element">{{element.spec.namespace.name}}</td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Added">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-15">Added</th>
+      <td mat-cell
+          *matCellDef="let element">
+        <km-relative-time [date]="element.creationTimestamp" />
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Actions">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-5"></th>
+      <td mat-cell
+          *matCellDef="let element">
+        <div fxLayoutAlign="end"
+             class="km-table-actions">
+          <ng-container *ngTemplateOutlet="actionButtons; context: {application: element}" />
+        </div>
+      </td>
+    </ng-container>
+    <tr mat-header-row
+        class="km-header-row"
+        *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="km-mat-row"></tr>
+  </table>
+  @if (applicationsDataSource.filter && !applicationsDataSource.filteredData?.length) {
+  <div class="km-row km-empty-list-msg">
+    No results for "{{applicationsDataSource.filter}}" found.
+  </div>
+  }
+  }
   <ng-template #actionButtons
                let-application="application">
-    <ng-container [ngSwitch]="!!application.deletionTimestamp">
-      <ng-container *ngSwitchCase="true">
-        <mat-spinner [diameter]="25"
-                     class="km-spinner"
-                     color="accent"></mat-spinner>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="false">
-        <button mat-icon-button
-                [attr.id]="'km-edit-application-' + application.name"
-                [matTooltip]="!isEnforcedApplication(application) ? 'Edit Application' : 'Enforced applications cannot be edited and only viewed.'"
-                (click)="onEditApplication(application)"
-                [disabled]="!canEdit">
-          <i [class]="getEditIcon(application)"></i>
-        </button>
-        <span [matTooltip]="!isEnforcedApplication(application) ? 'Delete Application' : 'Enforced applications cannot be deleted.'">
-          <button *ngIf="!isSystemApplication(application.labels)"
-                  mat-icon-button
-                  [attr.id]="'km-delete-application-' + application.name"
-                  (click)="onDeleteApplication(application)"
-                  [disabled]="!canEdit || isEnforcedApplication(application)">
-            <i class="km-icon-mask km-icon-delete"></i>
-          </button>
-        </span>
-      </ng-container>
-    </ng-container>
+    @switch (!!application.deletionTimestamp) {
+    @case (true) {
+    <mat-spinner [diameter]="25"
+                 class="km-spinner"
+                 color="accent" />
+    }
+    @case (false) {
+    <button mat-icon-button
+            [attr.id]="'km-edit-application-' + application.name"
+            [matTooltip]="!isEnforcedApplication(application) ? 'Edit Application' : 'Enforced applications cannot be edited and only viewed.'"
+            (click)="onEditApplication(application)"
+            [disabled]="!canEdit">
+      <i [class]="getEditIcon(application)"></i>
+    </button>
+    <span [matTooltip]="!isEnforcedApplication(application) ? 'Delete Application' : 'Enforced applications cannot be deleted.'">
+      @if (!isSystemApplication(application.labels)) {
+      <button mat-icon-button
+              [attr.id]="'km-delete-application-' + application.name"
+              (click)="onDeleteApplication(application)"
+              [disabled]="!canEdit || isEnforcedApplication(application)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+      }
+    </span>
+    }
+    }
   </ng-template>
 </div>
+}
 
 <ng-template #applicationDocsLink>
   <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/applications/"
@@ -324,4 +334,6 @@ limitations under the License.
   </a>
 </ng-template>
 
-<km-loader *ngIf="!isClusterReady"></km-loader>
+@if (!isClusterReady) {
+<km-loader />
+}

@@ -33,32 +33,35 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="end"
                class="km-select-trigger-button-wrapper">
-            <button *ngIf="typeFilter"
-                    (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
+            @if (typeFilter) {
+            <button (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
                     matSuffix
                     mat-icon-button
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>
+            }
           </div>
         </mat-select-trigger>
-        <mat-option *ngFor="let types of ruleGroupTypes"
-                    [value]="types">
+        @for (types of ruleGroupTypes; track types) {
+        <mat-option [value]="types">
           {{types}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
   <div fxFlex></div>
+  @if (isClusterRunning) {
   <button mat-flat-button
           color="quaternary"
           matTooltip=""
-          *ngIf="isClusterRunning"
           (click)="add()">
     <i class="km-icon-mask km-icon-add"
        matButtonIcon></i>
     <span>Add Rule Group</span>
   </button>
+  }
 </div>
 
 <table class="km-table"
@@ -78,8 +81,9 @@ limitations under the License.
       <div fxLayoutAlign=" center"
            fxLayoutGap="8px">
         <span>{{element.name}}</span>
-        <span *ngIf="element.isDefault"
-              class="km-label-primary admin-label">Admin Rule Group</span>
+        @if (element.isDefault) {
+        <span class="km-label-primary admin-label">Admin Rule Group</span>
+        }
       </div>
     </td>
   </ng-container>
@@ -125,16 +129,17 @@ limitations under the License.
       [attr.id]="row.name"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData()">
+@if (hasNoData()) {
+<div class="km-row km-empty-list-msg">
   No rule groups available.
 </div>
+}
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
-    <mat-paginator showFirstLastButtons></mat-paginator>
+    <km-pagination-page-size />
+    <mat-paginator showFirstLastButtons />
   </div>
 </div>

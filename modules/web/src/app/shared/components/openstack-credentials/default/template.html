@@ -24,9 +24,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+    @if (form.get(Controls.Username).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -38,9 +40,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+    @if (form.get(Controls.Password).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -52,15 +56,20 @@ limitations under the License.
            [required]="isRequired(Controls.Project)"
            kmValueChangedIndicator>
     <mat-autocomplete #autoProject="matAutocomplete">
-      <mat-option *ngFor="let project of projects"
-                  [value]="project.name">
+      @for (project of projects; track project) {
+      <mat-option [value]="project.name">
         {{project.name}}
       </mat-option>
+      }
     </mat-autocomplete>
-    <mat-hint *ngIf="mode === Modes.Wizard">{{getHint(Controls.Project)}}</mat-hint>
-    <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
+    @if (mode === Modes.Wizard) {
+    <mat-hint>{{getHint(Controls.Project)}}</mat-hint>
+    }
+    @if (form.get(Controls.Project).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -71,8 +80,10 @@ limitations under the License.
            matInput
            autocomplete="off"
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
+    @if (form.get(Controls.ProjectID).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 </form>

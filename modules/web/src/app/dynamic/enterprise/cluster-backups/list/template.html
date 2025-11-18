@@ -19,11 +19,19 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<ng-container *ngIf="adminSettings.enableClusterBackups">
-  <ng-container [ngSwitch]="clustersBackupView">
-    <km-cluster-backups-list *ngSwitchCase="view.ClusterBackup"></km-cluster-backups-list>
-    <km-cluster-schedule-backups-list *ngSwitchCase="view.ClusterSchedule"></km-cluster-schedule-backups-list>
-    <km-cluster-restore-list *ngSwitchCase="view.ClusterRestore"></km-cluster-restore-list>
-    <km-backup-storage-locations-list *ngSwitchCase="view.BackupStorageLocation"></km-backup-storage-locations-list>
-  </ng-container>
-</ng-container>
+@if (adminSettings.enableClusterBackups) {
+@switch (clustersBackupView) {
+@case (view.ClusterBackup) {
+<km-cluster-backups-list />
+}
+@case (view.ClusterSchedule) {
+<km-cluster-schedule-backups-list />
+}
+@case (view.ClusterRestore) {
+<km-cluster-restore-list />
+}
+@case (view.BackupStorageLocation) {
+<km-backup-storage-locations-list />
+}
+}
+}

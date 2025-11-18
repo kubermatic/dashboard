@@ -20,10 +20,11 @@ limitations under the License.
     <mat-label>LoadBalancer SKU</mat-label>
     <mat-select [formControlName]="Controls.LoadBalancerSKU"
                 disableOptionCentering>
-      <mat-option *ngFor="let loadBalancerSKU of loadBalancerSKUs"
-                  [value]="loadBalancerSKU">
+      @for (loadBalancerSKU of loadBalancerSKUs; track loadBalancerSKU) {
+      <mat-option [value]="loadBalancerSKU">
         {{loadBalancerSKU}}
       </mat-option>
+      }
       <mat-select-trigger fxFlex
                           fxLayout="row">
         <div fxFlex
@@ -34,13 +35,14 @@ limitations under the License.
         <div fxFlex
              fxLayoutAlign="end"
              class="km-select-trigger-button-wrapper">
-          <button *ngIf="selectedLoadBalancerSKU"
-                  (click)="clearLoadBalancerSKU(); $event.stopPropagation()"
+          @if (selectedLoadBalancerSKU) {
+          <button (click)="clearLoadBalancerSKU(); $event.stopPropagation()"
                   matSuffix
                   mat-icon-button
                   aria-label="Clear">
             <i class="km-icon-mask km-icon-remove"></i>
           </button>
+          }
         </div>
       </mat-select-trigger>
     </mat-select>
@@ -50,55 +52,61 @@ limitations under the License.
                    [formControlName]="Controls.ResourceGroup"
                    [isLoading]="isLoadingResourceGroups"
                    [options]="resourceGroups">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials()">
+    @if (!hasRequiredCredentials()) {
+    <ng-container hint>
       Enter your credentials to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <km-autocomplete label="VNet Resource Group"
                    [formControlName]="Controls.VNetResourceGroup"
                    [isLoading]="isLoadingResourceGroups"
                    [options]="resourceGroups">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials()">
+    @if (!hasRequiredCredentials()) {
+    <ng-container hint>
       Enter your credentials to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <km-autocomplete label="Route Table"
                    [formControlName]="Controls.RouteTable"
                    [isLoading]="isLoadingRouteTables"
                    [options]="routeTables">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
+    @if (!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)) {
+    <ng-container hint>
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <km-autocomplete label="Security Group"
                    [formControlName]="Controls.SecurityGroup"
                    [isLoading]="isLoadingSecurityGroups"
                    [options]="securityGroups">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
+    @if (!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)) {
+    <ng-container hint>
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <km-autocomplete label="VNet"
                    [formControlName]="Controls.VNet"
                    [isLoading]="isLoadingVnets"
                    [options]="vnets">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
+    @if (!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)) {
+    <ng-container hint>
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <km-autocomplete label="Subnet"
                    [formControlName]="Controls.Subnet"
                    [isLoading]="isLoadingSubnets"
                    [options]="subnets">
-    <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup) || !getValueFromInternalForm(Controls.VNet)">
+    @if (!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup) || !getValueFromInternalForm(Controls.VNet)) {
+    <ng-container hint>
       Enter your credentials, resource group and VNet to load autocompletions.
     </ng-container>
+    }
   </km-autocomplete>
   <mat-checkbox [formControlName]="Controls.AssignAvailabilitySet"
                 [name]="Controls.AssignAvailabilitySet">

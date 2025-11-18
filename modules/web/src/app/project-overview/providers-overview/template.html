@@ -23,20 +23,23 @@ limitations under the License.
   <mat-card-content>
 
     <div #chartContainer
-         [ngSwitch]="clusters.length + externalClusters.length > 0"
          [ngClass]="{'empty': clusters.length + externalClusters.length < 1}"
          class="chart-container"
          fxLayoutAlign="center center">
-      <ngx-charts-pie-chart *ngSwitchCase="true"
-                            [results]="clusterDistribution"
+      @switch (clusters.length + externalClusters.length > 0) {
+      @case (true) {
+      <ngx-charts-pie-chart [results]="clusterDistribution"
                             [animations]="false"
                             [customColors]="colors"
                             [labels]="true"
                             [trimLabels]="false"
                             [doughnut]="true"
-                            [view]="[chartContainer.offsetWidth, chartContainer.offsetHeight]">
-      </ngx-charts-pie-chart>
-      <div *ngSwitchCase="false">No clusters available.</div>
+                            [view]="[chartContainer.offsetWidth, chartContainer.offsetHeight]" />
+      }
+      @case (false) {
+      <div>No clusters available.</div>
+      }
+      }
     </div>
   </mat-card-content>
 

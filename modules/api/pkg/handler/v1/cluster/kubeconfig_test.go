@@ -60,7 +60,6 @@ contexts:
   name: AbcClusterID
 current-context: AbcClusterID
 kind: Config
-preferences: {}
 users:
 - name: bob@acme.com
   user:
@@ -85,7 +84,6 @@ contexts:
   name: AbcClusterID
 current-context: AbcClusterID
 kind: Config
-preferences: {}
 users:
 - name: john@acme.com
   user:
@@ -505,7 +503,6 @@ contexts:
   name: %s
 current-context: %s
 kind: Config
-preferences: {}
 users:
 - name: default
   user:

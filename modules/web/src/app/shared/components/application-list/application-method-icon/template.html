@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<i *ngIf="icon; else displayText"
-   class="km-provider-logo"
+@if (icon) {
+<i class="km-provider-logo"
    [ngClass]="icon"
    [matTooltip]="displayTooltip ? method : null"></i>
-<ng-template #displayText>
-  {{method}}
-</ng-template>
+} @else {
+{{method}}
+}

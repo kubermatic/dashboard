@@ -66,13 +66,14 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <button *ngIf="!isDestinationVisible(element.name)"
-                    mat-icon-button
+            @if (!isDestinationVisible(element.name)) {
+            <button mat-icon-button
                     fxLayoutAlign="center center"
                     matTooltip="Add Destination"
                     (click)="addDestination($event, element)">
               <i class="km-icon-mask km-icon-add"></i>
             </button>
+            }
           </div>
         </td>
       </ng-container>
@@ -83,7 +84,7 @@ limitations under the License.
             class="bucket-destinations"
             [attr.colspan]="displayedColumns.length">
           <div class="bucket-destinations-wrapper">
-            <km-destinations [seed]="element"></km-destinations>
+            <km-destinations [seed]="element" />
           </div>
         </td>
       </ng-container>
@@ -101,20 +102,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

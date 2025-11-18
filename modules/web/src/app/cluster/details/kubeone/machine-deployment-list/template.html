@@ -84,10 +84,10 @@ limitations under the License.
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
             <span>v{{element.spec.template.versions?.kubelet}}</span>
-            <ng-container *ngIf="showVersionWarning(element)">
-              <i [matTooltip]="'Please update machine deployment version to match cluster version.'"
-                 class="km-icon-warning"></i>
-            </ng-container>
+            @if (showVersionWarning(element)) {
+            <i [matTooltip]="'Please update machine deployment version to match cluster version.'"
+               class="km-icon-warning"></i>
+            }
           </div>
         </td>
       </ng-container>
@@ -108,7 +108,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
+          <km-relative-time [date]="element.creationTimestamp" />
         </td>
       </ng-container>
 
@@ -142,19 +142,22 @@ limitations under the License.
           (click)="goToDetails(row)"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="hasNoData()">
+    @if (hasNoData()) {
+    <div class="km-row km-empty-list-msg">
       No machine deployments available.
     </div>
+    }
 
-    <km-loader *ngIf="isLoadingData()"></km-loader>
+    @if (isLoadingData()) {
+    <km-loader />
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
 

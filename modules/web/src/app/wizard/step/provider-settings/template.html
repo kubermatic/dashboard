@@ -27,17 +27,16 @@ limitations under the License.
       <mat-card-header class="km-no-padding">
         <mat-card-title>Basic Settings</mat-card-title>
       </mat-card-header>
-      <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
+      <km-wizard-presets [formControl]="form.get(Control.Preset)" />
       <km-wizard-provider-basic [provider]="provider"
-                                [formControl]="form.get(Control.ProviderBasic)"></km-wizard-provider-basic>
+                                [formControl]="form.get(Control.ProviderBasic)" />
     </div>
 
     <div fxFlex="50"
          fxLayout="column">
       <km-wizard-provider-extended [provider]="provider"
                                    [visible]="hasExtendedSection(provider)"
-                                   [formControl]="form.get(Control.ProviderExtended)">
-      </km-wizard-provider-extended>
+                                   [formControl]="form.get(Control.ProviderExtended)" />
     </div>
   </div>
 </div>

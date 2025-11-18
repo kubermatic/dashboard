@@ -24,10 +24,11 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="20px">
 
-    <mat-card-header *ngIf="!isDialogView()"
-                     class="km-no-padding">
+    @if (!isDialogView()) {
+    <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
+    }
 
     <mat-form-field>
       <mat-label>Name</mat-label>
@@ -44,16 +45,20 @@ limitations under the License.
         <i class="km-icon-randomize"></i>
       </button>
       <mat-hint>Enter a unique name for this {{isDialogView() ? 'machine deployment' : 'cluster'}}</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+      @if (form.get(Controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+      }
+      @if (form.get(Controls.Name).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
+      }
     </mat-form-field>
 
-    <km-autocomplete *ngIf="!isDialogView(); else dialogViewKubernetesVersion"
-                     label="Kubernetes Version"
+    @if (!isDialogView()) {
+    <km-autocomplete label="Kubernetes Version"
                      required="true"
                      [options]="kubernetesVersions"
                      [formControlName]="Controls.Version">
@@ -61,77 +66,75 @@ limitations under the License.
         Enter or Select Kubernetes Version
       </ng-container>
     </km-autocomplete>
+    } @else {
+    <mat-form-field>
+      <mat-label>Kubernetes Version</mat-label>
+      <input [formControlName]="Controls.Version"
+             matInput
+             type="text"
+             autocomplete="off" />
+      <mat-hint>Selected kubernetes version for the node group.</mat-hint>
+    </mat-form-field>
+    }
 
-    <ng-template #dialogViewKubernetesVersion>
-      <mat-form-field>
-        <mat-label>Kubernetes Version</mat-label>
-        <input [formControlName]="Controls.Version"
-               matInput
-               type="text"
-               autocomplete="off" />
-        <mat-hint>Selected kubernetes version for the node group.</mat-hint>
-      </mat-form-field>
-    </ng-template>
 
-    <ng-container *ngIf="isDialogView()">
-      <km-combobox filterBy="roleName"
-                   inputLabel="Select Node IAM Role... "
-                   [label]="nodeRoleLabel"
-                   [required]="true"
-                   [options]="nodeRoles"
-                   (changed)="onNodeRoleChange($event)"
-                   [formControlName]="Controls.RoleArn">
-        <div *option="let roleArn">
-          {{roleArn.roleName}} ({{roleArn.arn}})
-        </div>
-        <ng-container hint>
-          Select the IAM role arn that will be used by the nodes.
-          <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
-             target="_blank"
-             rel="noreferrer noopener"
-             fxLayout="row inline"
-             fxLayoutAlign=" center">
-            EKS user guide <i class="km-icon-external-link"></i>
-          </a>
-        </ng-container>
-      </km-combobox>
-
-      <mat-radio-group fxLayoutGap="15px"
-                       [formControlName]="Controls.Architecture">
-        <mat-radio-button [value]="Architecture.X86_64">
-          <div>x86_64 architecture</div>
-        </mat-radio-button>
-        <mat-radio-button [value]="Architecture.ARM64">
-          <div>arm64 architecture</div>
-        </mat-radio-button>
-      </mat-radio-group>
-
-      <km-combobox #instanceTypeCombobox
-                   filterBy="name"
-                   hint="Select the instance types for a node group."
-                   inputLabel="Select instance type by name"
-                   [multiple]="true"
-                   [options]="instanceTypes"
-                   [formControlName]="Controls.InstanceType"
-                   [valueFormatter]="instanceDisplayName.bind(this)"
-                   [label]="instanceTypeLabel">
-        <div *option="let instanceType">
-          {{instanceType.pretty_name +' ('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
-        </div>
-      </km-combobox>
-
-      <div class="km-dialog-warning"
-           *ngIf="selectedInstanceTypes?.length > 1"
-           fxLayoutAlign=" center">
-        <i class="km-icon-warning"></i>
-        <div>Using instances with different resource sizes may affect the scaling of nodes,
-          because Kubernetes Cluster Autoscaler assumes all the nodes within a node group have the same resources
-          such as vCPU and memory.</div>
+    @if (isDialogView()) {
+    <km-combobox filterBy="roleName"
+                 inputLabel="Select Node IAM Role... "
+                 [label]="nodeRoleLabel"
+                 [required]="true"
+                 [options]="nodeRoles"
+                 (changed)="onNodeRoleChange($event)"
+                 [formControlName]="Controls.RoleArn">
+      <div *option="let roleArn">
+        {{roleArn.roleName}} ({{roleArn.arn}})
       </div>
-    </ng-container>
+      <ng-container hint>
+        Select the IAM role arn that will be used by the nodes.
+        <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
+           target="_blank"
+           rel="noreferrer noopener"
+           fxLayout="row inline"
+           fxLayoutAlign=" center">
+          EKS user guide <i class="km-icon-external-link"></i>
+        </a>
+      </ng-container>
+    </km-combobox>
+    <mat-radio-group fxLayoutGap="15px"
+                     [formControlName]="Controls.Architecture">
+      <mat-radio-button [value]="Architecture.X86_64">
+        <div>x86_64 architecture</div>
+      </mat-radio-button>
+      <mat-radio-button [value]="Architecture.ARM64">
+        <div>arm64 architecture</div>
+      </mat-radio-button>
+    </mat-radio-group>
+    <km-combobox #instanceTypeCombobox
+                 filterBy="name"
+                 hint="Select the instance types for a node group."
+                 inputLabel="Select instance type by name"
+                 [multiple]="true"
+                 [options]="instanceTypes"
+                 [formControlName]="Controls.InstanceType"
+                 [valueFormatter]="instanceDisplayName.bind(this)"
+                 [label]="instanceTypeLabel">
+      <div *option="let instanceType">
+        {{instanceType.pretty_name +' ('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
+      </div>
+    </km-combobox>
+    @if (selectedInstanceTypes?.length > 1) {
+    <div class="km-dialog-warning"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>Using instances with different resource sizes may affect the scaling of nodes,
+        because Kubernetes Cluster Autoscaler assumes all the nodes within a node group have the same resources
+        such as vCPU and memory.</div>
+    </div>
+    }
+    }
 
-    <km-combobox *ngIf="!isDialogView()"
-                 filterBy="roleName"
+    @if (!isDialogView()) {
+    <km-combobox filterBy="roleName"
                  inputLabel="Select Cluster Service Role... "
                  [label]="clusterRoleLabel"
                  [required]="true"
@@ -152,15 +155,16 @@ limitations under the License.
         </a>
       </ng-container>
     </km-combobox>
+    }
 
-    <km-number-stepper *ngIf="isDialogView()"
-                       [formControlName]="Controls.DiskSize"
+    @if (isDialogView()) {
+    <km-number-stepper [formControlName]="Controls.DiskSize"
                        mode="all"
                        label="Disk Size in GB"
                        min="1"
                        hint="Enter the size of the attached EBS volume for each node."
-                       required>
-    </km-number-stepper>
+                       required />
+    }
   </div>
 
   <div fxFlex="50%"
@@ -171,8 +175,8 @@ limitations under the License.
       <mat-card-title>Networking</mat-card-title>
     </mat-card-header>
 
-    <km-combobox *ngIf="!isDialogView()"
-                 #vpcCombobox
+    @if (!isDialogView()) {
+    <km-combobox #vpcCombobox
                  filterBy="id"
                  inputLabel="Select Vpc..."
                  hint="Select a VPC to use for your EKS cluster resources."
@@ -184,9 +188,11 @@ limitations under the License.
         {{vpc.id}}
       </div>
     </km-combobox>
+    }
 
 
-    <div *ngIf="isDialogView()">
+    @if (isDialogView()) {
+    <div>
       <mat-form-field>
         <mat-label>VPC</mat-label>
         <input matInput
@@ -196,6 +202,7 @@ limitations under the License.
         <mat-hint>Selected VPC for your nodes.</mat-hint>
       </mat-form-field>
     </div>
+    }
 
     <km-combobox #subnetCombobox
                  filterBy="subnetId"
@@ -212,8 +219,8 @@ limitations under the License.
       </div>
     </km-combobox>
 
-    <km-combobox *ngIf="!isDialogView()"
-                 #securityGroupCombobox
+    @if (!isDialogView()) {
+    <km-combobox #securityGroupCombobox
                  filterBy="groupId"
                  hint="Choose the security groups to apply to the EKS-managed Elastic Network Interfaces that are created in your worker node subnets"
                  inputLabel="Select Security Groups..."
@@ -227,38 +234,36 @@ limitations under the License.
         {{securityGroup?.groupId}}
       </div>
     </km-combobox>
+    }
 
     <div>
-      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidget" />
     </div>
 
-    <ng-container *ngIf="isDialogView()">
-      <mat-card-header class="km-no-padding">
-        <mat-card-title>AutoScaling</mat-card-title>
-      </mat-card-header>
-      <km-number-stepper [formControlName]="Controls.DesiredSize"
-                         mode="all"
-                         label="Desired Size"
-                         hint="Set the desired number of nodes that the group should launch with initially."
-                         [required]="true"
-                         [min]="minNodeCount"
-                         [max]="maxNodeCount">
-      </km-number-stepper>
-      <km-number-stepper [formControlName]="Controls.MaxSize"
-                         mode="all"
-                         label="Max Count"
-                         hint="Set the maximum number of nodes that the group can scale out to."
-                         [required]="true"
-                         [min]="minNodeCount">
-      </km-number-stepper>
-      <km-number-stepper [formControlName]="Controls.MinSize"
-                         mode="all"
-                         label="Min Count"
-                         min="1"
-                         hint="Set the minimum number of nodes that the group can scale in to"
-                         [required]="true"
-                         [max]="maxNodeCount">
-      </km-number-stepper>
-    </ng-container>
+    @if (isDialogView()) {
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>AutoScaling</mat-card-title>
+    </mat-card-header>
+    <km-number-stepper [formControlName]="Controls.DesiredSize"
+                       mode="all"
+                       label="Desired Size"
+                       hint="Set the desired number of nodes that the group should launch with initially."
+                       [required]="true"
+                       [min]="minNodeCount"
+                       [max]="maxNodeCount" />
+    <km-number-stepper [formControlName]="Controls.MaxSize"
+                       mode="all"
+                       label="Max Count"
+                       hint="Set the maximum number of nodes that the group can scale out to."
+                       [required]="true"
+                       [min]="minNodeCount" />
+    <km-number-stepper [formControlName]="Controls.MinSize"
+                       mode="all"
+                       label="Min Count"
+                       min="1"
+                       hint="Set the minimum number of nodes that the group can scale in to"
+                       [required]="true"
+                       [max]="maxNodeCount" />
+    }
   </div>
 </form>

@@ -23,9 +23,11 @@ limitations under the License.
            [name]="Controls.Username"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+    @if (form.get(Controls.Username).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Password</mat-label>
@@ -35,9 +37,11 @@ limitations under the License.
            kmInputPassword
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+    @if (form.get(Controls.Password).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Proxy URL</mat-label>
@@ -69,9 +73,11 @@ limitations under the License.
            [name]="Controls.PrismElementUsername"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.PrismElementUsername).hasError('required')">
+    @if (form.get(Controls.PrismElementUsername).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Password</mat-label>
@@ -81,9 +87,11 @@ limitations under the License.
            kmInputPassword
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.PrismElementPassword).hasError('required')">
+    @if (form.get(Controls.PrismElementPassword).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Endpoint</mat-label>
@@ -98,6 +106,5 @@ limitations under the License.
                      hint="Leave empty to use the default value. Check the documentation for more information."
                      label="Port"
                      min="0"
-                     max="65535">
-  </km-number-stepper>
+                     max="65535" />
 </form>

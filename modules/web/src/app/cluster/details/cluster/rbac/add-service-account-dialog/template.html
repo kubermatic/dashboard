@@ -24,12 +24,16 @@ limitations under the License.
         <input matInput
                required
                [formControl]="form.controls.name" />
-        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Required)">
+        @if (form.get(Controls.Name).hasError(ErrorType.Required)) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Pattern)">
+        }
+        @if (form.get(Controls.Name).hasError(ErrorType.Pattern)) {
+        <mat-error>
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
@@ -37,14 +41,18 @@ limitations under the License.
         <mat-select panelClass="km-add-dialog-dropdown"
                     disableOptionCentering
                     [formControl]="form.controls.namespace">
-          <mat-option *ngIf="!namespaces.length"
-                      disabled>Loading...</mat-option>
-          <mat-option *ngFor="let namespace of namespaces"
-                      [value]="namespace"> {{ namespace }} </mat-option>
+          @if (!namespaces.length) {
+          <mat-option disabled>Loading...</mat-option>
+          }
+          @for (namespace of namespaces; track namespace) {
+          <mat-option [value]="namespace"> {{ namespace }} </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.Namespace).hasError(ErrorType.Required)">
+        @if (form.get(Controls.Namespace).hasError(ErrorType.Required)) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
     </form>
   </mat-dialog-content>
@@ -53,7 +61,6 @@ limitations under the License.
                label="Add Service Account"
                [disabled]="!form.valid"
                [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
+               (next)="onNext($event)" />
   </mat-dialog-actions>
 </div>

@@ -34,7 +34,7 @@ limitations under the License.
       </div>
       <div fxLayoutAlign="space-between">
         <km-search-field class="search"
-                         (queryChange)="onSearch($event)"></km-search-field>
+                         (queryChange)="onSearch($event)" />
       </div>
     </mat-card-title>
   </mat-card-header>
@@ -64,8 +64,7 @@ limitations under the License.
             *matCellDef="let element">
           <mat-slide-toggle [checked]="isDefaultApplication(element)"
                             [disabled]="isEnforcedApplication(element)"
-                            (change)="onDefaultChange($event, element)">
-          </mat-slide-toggle>
+                            (change)="onDefaultChange($event, element)" />
         </td>
       </ng-container>
 
@@ -80,8 +79,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           <mat-slide-toggle [checked]="isEnforcedApplication(element)"
-                            (change)="onEnforceChange($event, element)">
-          </mat-slide-toggle>
+                            (change)="onEnforceChange($event, element)" />
         </td>
       </ng-container>
 
@@ -102,8 +100,9 @@ limitations under the License.
                         [value]="targetDatacenters(element)"
                         (selectionChange)="onDatacentersChange($event.value, element)"
                         disableOptionCentering>
-              <mat-option *ngFor="let dc of datacenters"
-                          [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
+              @for (dc of datacenters; track dc) {
+              <mat-option [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </td>
@@ -117,20 +116,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

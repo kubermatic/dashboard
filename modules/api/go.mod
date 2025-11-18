@@ -72,20 +72,20 @@ require (
 	google.golang.org/api v0.232.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.10.0
-	k8c.io/kubermatic/sdk/v2 v2.29.0-rc.1.0.20251023140643-ae9026233002
-	k8c.io/kubermatic/v2 v2.29.0-rc.1.0.20251023140643-ae9026233002
+	k8c.io/kubermatic/sdk/v2 v2.29.1-0.20251117160856-8a32fa83bb27
+	k8c.io/kubermatic/v2 v2.29.1-0.20251117160856-8a32fa83bb27
 	k8c.io/machine-controller/sdk v1.64.0
 	k8c.io/operating-system-manager v1.8.0
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.34.1
+	k8s.io/api v0.34.0
 	k8s.io/apiextensions-apiserver v0.34.0
-	k8s.io/apimachinery v0.34.1
+	k8s.io/apimachinery v0.34.0
 	k8s.io/apiserver v0.34.0
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/code-generator v0.34.0
 	k8s.io/klog/v2 v2.130.1
-	k8s.io/kubectl v0.33.4
-	k8s.io/metrics v0.33.4
+	k8s.io/kubectl v0.34.0
+	k8s.io/metrics v0.34.0
 	k8s.io/utils v0.0.0-20250820121507-0af2bda4dd1d
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
@@ -100,9 +100,9 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 // Pin prism-go-client to v0.4.0 as we have no way to test v0.5.1; we don't have a working environment for Nutanix.
 replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cloud-native/prism-go-client v0.4.0
 
-replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250910181357-589584f1c912
+replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250710124328-f3f2b991d03b
 
-replace k8s.io/client-go => k8s.io/client-go v0.34.1
+replace k8s.io/client-go => k8s.io/client-go v0.34.0
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
@@ -394,7 +394,7 @@ require (
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.34.0 // indirect
 	k8s.io/gengo/v2 v2.0.0-20250604051438-85fd79dbfd9f // indirect
-	k8s.io/kube-aggregator v0.33.4 // indirect
+	k8s.io/kube-aggregator v0.34.0 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
 	k8s.io/pod-security-admission v0.33.0 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect

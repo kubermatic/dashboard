@@ -21,8 +21,8 @@ limitations under the License.
 </mat-card-header>
 
 <div fxLayout="column">
-  <div *ngFor="let tag of disabledTags; let i = index"
-       fxLayout="row"
+  @for (tag of disabledTags; track tag; let i = $index) {
+  <div fxLayout="row"
        fxLayoutGap="10px"
        matTooltip="Tags specified at the cluster level will be created and managed by KKP. These tags will be attached to the machine deployments.">
     <mat-form-field fxFlex="45">
@@ -43,49 +43,60 @@ limitations under the License.
       <i class="km-icon-mask km-icon-delete"></i>
     </button>
   </div>
+  }
 </div>
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.Tags">
-    <div *ngFor="let tagControl of tagsFormArray.controls; let i = index"
-         [formGroupName]="i"
+    @for (tagControl of tagsFormArray.controls; track tagControl; let i = $index) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="44">
         <mat-label>{{categoryLabel}}</mat-label>
         <mat-select [formControlName]="Controls.Category"
                     disableOptionCentering>
-          <mat-option *ngFor="let category of categories"
-                      [value]="category.id">
+          @for (category of categories; track category) {
+          <mat-option [value]="category.id">
             {{category.name}}
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="tagControl.get(Controls.Category).errors?.required">
+        @if (tagControl.get(Controls.Category).errors?.required) {
+        <mat-error>
           Required
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="44">
         <mat-label>{{categoryTagsLabel[getSelectedCategory(tagControl)] || TagState.Empty}}</mat-label>
         <mat-select [formControlName]="Controls.Tag"
                     disableOptionCentering>
-          <mat-option *ngFor="let tag of categoryTags[getSelectedCategory(tagControl)]"
-                      [value]="tag.name">
+          @for (tag of categoryTags[getSelectedCategory(tagControl)]; track tag) {
+          <mat-option [value]="tag.name">
             {{tag.name}}
           </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="tagControl.get(Controls.Tag).errors?.required">
+        @if (tagControl.get(Controls.Tag).errors?.required) {
+        <mat-error>
           Required
         </mat-error>
-        <mat-error *ngIf="tagControl.get(Controls.Tag).errors?.unique">
+        }
+        @if (tagControl.get(Controls.Tag).errors?.unique) {
+        <mat-error>
           Tag is not unique.
         </mat-error>
+        }
       </mat-form-field>
+      @if (isRemovable(i)) {
       <button mat-icon-button
               class="delete-button"
-              *ngIf="isRemovable(i)"
               (click)="deleteTag(i)">
         <i class="km-icon-mask km-icon-delete"></i>
       </button>
+      }
     </div>
+    }
   </div>
 </form>

@@ -35,6 +35,5 @@ limitations under the License.
              label="Revoke Token"
              [disabled]="!revokeAdminToken && !revokeViewerToken"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

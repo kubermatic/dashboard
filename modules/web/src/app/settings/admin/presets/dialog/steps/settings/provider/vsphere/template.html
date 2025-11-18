@@ -25,9 +25,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+    @if (form.get(Controls.Username).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -39,9 +41,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator />
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+    @if (form.get(Controls.Password).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-chip-list label="Networks"
@@ -49,8 +53,7 @@ limitations under the License.
                 [tags]="networks"
                 (onChange)="onNetworksChange($event)"
                 [formControlName]="Controls.Networks"
-                fxFlex>
-  </km-chip-list>
+                fxFlex />
 
   <mat-form-field fxFlex>
     <mat-label>Datastore</mat-label>

@@ -33,11 +33,14 @@ END OF TERMS AND CONDITIONS
     </mat-card-title>
     <div fxFlex></div>
     <span class="card-title">
-      {{reports.length}} report<ng-container *ngIf="reports.length !== 1">s</ng-container>
+      {{reports.length}} report@if (reports.length !== 1) {
+      s
+      }
     </span>
   </mat-card-header>
-  <mat-card-content *ngIf="showReports"
-                    fxLayout="column">
-    <km-metering-legacy-reports-list [reports]="reports"></km-metering-legacy-reports-list>
+  @if (showReports) {
+  <mat-card-content fxLayout="column">
+    <km-metering-legacy-reports-list [reports]="reports" />
   </mat-card-content>
+  }
 </mat-card>

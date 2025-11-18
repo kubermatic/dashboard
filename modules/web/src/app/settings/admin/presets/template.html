@@ -42,19 +42,21 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="end"
                      class="km-select-trigger-button-wrapper">
-                  <button *ngIf="providerFilter"
-                          (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
+                  @if (providerFilter) {
+                  <button (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
                           mat-icon-button
                           aria-label="Clear">
                     <i class="km-icon-mask km-icon-remove"></i>
                   </button>
+                  }
                 </div>
               </mat-select-trigger>
-              <mat-option *ngFor="let provider of providers"
-                          [value]="provider">
+              @for (provider of providers; track provider) {
+              <mat-option [value]="provider">
                 <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-small"></span>
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
 
@@ -73,19 +75,21 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="end"
                      class="km-select-trigger-button-wrapper">
-                  <button *ngIf="datacenterFilter"
-                          (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
+                  @if (datacenterFilter) {
+                  <button (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
                           mat-icon-button
                           aria-label="Clear">
                     <i class="km-icon-mask km-icon-remove"></i>
                   </button>
+                  }
                 </div>
               </mat-select-trigger>
-              <mat-option *ngFor="let datacenter of datacenters"
-                          [value]="datacenter.metadata.name">
+              @for (datacenter of datacenters; track datacenter) {
+              <mat-option [value]="datacenter.metadata.name">
                 {{datacenter.metadata.name}}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
 
@@ -149,17 +153,18 @@ limitations under the License.
             fxLayout="row"
             fxLayoutAlign=" center"
             class="providers-column">
-          <ng-container *ngFor="let provider of getDisplayedProviders(element.providers)">
-            <span class="km-provider-logo km-provider-logo-{{provider.name}}"
-                  [ngClass]="provider.enabled && element?.enabled ? '' : 'km-disabled disabled'">
-            </span>
-          </ng-container>
-          <span *ngIf="element.providers.length > displayedProviders"
-                class="km-text km-pointer"
+          @for (provider of getDisplayedProviders(element.providers); track provider) {
+          <span class="km-provider-logo km-provider-logo-{{provider.name}}"
+                [ngClass]="provider.enabled && element?.enabled ? '' : 'km-disabled disabled'">
+          </span>
+          }
+          @if (element.providers.length > displayedProviders) {
+          <span class="km-text km-pointer"
                 [ngClass]="{'km-disabled': !element?.enabled}"
                 (click)="editPreset(element)">
             +{{element.providers.length - displayedProviders}}
           </span>
+          }
         </td>
       </ng-container>
 
@@ -239,20 +244,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isBusyCounter > 0">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    @if (isBusyCounter > 0) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

@@ -30,25 +30,32 @@ limitations under the License.
              autocomplete="off"
              required />
       <mat-hint>Unique name for this load balancer class</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).errors?.required"> Name is required. </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).errors?.[ControlErrors.Duplicate]"> Name must be unique. </mat-error>
+      @if (form.get(Controls.Name).errors?.required) {
+      <mat-error> Name is required. </mat-error>
+      }
+      @if (form.get(Controls.Name).errors?.[ControlErrors.Duplicate]) {
+      <mat-error> Name must be unique. </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Floating Network ID</mat-label>
       <mat-select [formControlName]="Controls.FloatingNetworkID">
-        <mat-option *ngIf="isFloatingNetworksLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isFloatingNetworksLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isFloatingNetworksLoading && !floatingNetworks?.length"
-                    disabled>
+        }
+        @if (!isFloatingNetworksLoading && !floatingNetworks?.length) {
+        <mat-option disabled>
           No floating networks available
         </mat-option>
-        <mat-option *ngFor="let network of floatingNetworks"
-                    [value]="network.id">
+        }
+        @for (network of floatingNetworks; track network) {
+        <mat-option [value]="network.id">
           {{ getNetworkDisplayName(network) }}
         </mat-option>
+        }
       </mat-select>
       <mat-hint>Select the floating network for external access</mat-hint>
     </mat-form-field>
@@ -57,22 +64,26 @@ limitations under the License.
       <mat-label>Floating Subnet Name</mat-label>
       <mat-select [formControlName]="Controls.FloatingSubnetName"
                   [disabled]="!form.get(Controls.FloatingNetworkID).value">
-        <mat-option *ngIf="isFloatingSubnetsLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isFloatingSubnetsLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
-                    disabled>
+        }
+        @if (!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value) {
+        <mat-option disabled>
           Select a floating network first
         </mat-option>
-        <mat-option *ngIf="!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
-                    disabled>
+        }
+        @if (!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length) {
+        <mat-option disabled>
           No subnets available
         </mat-option>
-        <mat-option *ngFor="let subnet of floatingSubnets"
-                    [value]="subnet.name">
+        }
+        @for (subnet of floatingSubnets; track subnet) {
+        <mat-option [value]="subnet.name">
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
+        }
       </mat-select>
       <mat-hint>Select floating subnet by name</mat-hint>
     </mat-form-field>
@@ -93,22 +104,26 @@ limitations under the License.
                   [disabled]="!form.get(Controls.FloatingNetworkID).value"
                   multiple
                   panelClass="km-multiple-values-dropdown">
-        <mat-option *ngIf="isFloatingSubnetsLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isFloatingSubnetsLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
-                    disabled>
+        }
+        @if (!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value) {
+        <mat-option disabled>
           Select a floating network first
         </mat-option>
-        <mat-option *ngIf="!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
-                    disabled>
+        }
+        @if (!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length) {
+        <mat-option disabled>
           No subnets available
         </mat-option>
-        <mat-option *ngFor="let subnet of floatingSubnets"
-                    [value]="subnet.name">
+        }
+        @for (subnet of floatingSubnets; track subnet) {
+        <mat-option [value]="subnet.name">
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
+        }
       </mat-select>
       <mat-hint>Select multiple tags to filter subnets (comma-separated in output)</mat-hint>
     </mat-form-field>
@@ -116,16 +131,19 @@ limitations under the License.
     <mat-form-field>
       <mat-label>Network ID</mat-label>
       <mat-select [formControlName]="Controls.NetworkID">
-        <mat-option *ngIf="isNetworksLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isNetworksLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isNetworksLoading && !networks?.length"
-                    disabled> No networks available </mat-option>
-        <mat-option *ngFor="let network of networks"
-                    [value]="network.id">
+        }
+        @if (!isNetworksLoading && !networks?.length) {
+        <mat-option disabled> No networks available </mat-option>
+        }
+        @for (network of networks; track network) {
+        <mat-option [value]="network.id">
           {{ getNetworkDisplayName(network) }}
         </mat-option>
+        }
       </mat-select>
       <mat-hint>Internal network for load balancer</mat-hint>
     </mat-form-field>
@@ -134,20 +152,24 @@ limitations under the License.
       <mat-label>Subnet ID</mat-label>
       <mat-select [formControlName]="Controls.SubnetID"
                   [disabled]="!form.get(Controls.NetworkID).value">
-        <mat-option *ngIf="isSubnetsLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isSubnetsLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isSubnetsLoading && !form.get(Controls.NetworkID).value"
-                    disabled>
+        }
+        @if (!isSubnetsLoading && !form.get(Controls.NetworkID).value) {
+        <mat-option disabled>
           Select a network first
         </mat-option>
-        <mat-option *ngIf="!isSubnetsLoading && form.get(Controls.NetworkID).value && !subnets?.length"
-                    disabled>
+        }
+        @if (!isSubnetsLoading && form.get(Controls.NetworkID).value && !subnets?.length) {
+        <mat-option disabled>
           No subnets available
         </mat-option>
-        <mat-option *ngFor="let subnet of subnets"
-                    [value]="subnet.id"> {{ getSubnetDisplayName(subnet) }} </mat-option>
+        }
+        @for (subnet of subnets; track subnet) {
+        <mat-option [value]="subnet.id"> {{ getSubnetDisplayName(subnet) }} </mat-option>
+        }
       </mat-select>
       <mat-hint>Subnet for the load balancer</mat-hint>
     </mat-form-field>
@@ -156,22 +178,26 @@ limitations under the License.
       <mat-label>Member Subnet ID</mat-label>
       <mat-select [formControlName]="Controls.MemberSubnetID"
                   [disabled]="!form.get(Controls.NetworkID).value">
-        <mat-option *ngIf="isMemberSubnetsLoading"
-                    disabled>
-          <mat-spinner [diameter]="16"></mat-spinner> Loading...
+        @if (isMemberSubnetsLoading) {
+        <mat-option disabled>
+          <mat-spinner [diameter]="16" /> Loading...
         </mat-option>
-        <mat-option *ngIf="!isMemberSubnetsLoading && !form.get(Controls.NetworkID).value"
-                    disabled>
+        }
+        @if (!isMemberSubnetsLoading && !form.get(Controls.NetworkID).value) {
+        <mat-option disabled>
           Select a network first
         </mat-option>
-        <mat-option *ngIf="!isMemberSubnetsLoading && form.get(Controls.NetworkID).value && !memberSubnets?.length"
-                    disabled>
+        }
+        @if (!isMemberSubnetsLoading && form.get(Controls.NetworkID).value && !memberSubnets?.length) {
+        <mat-option disabled>
           No member subnets available
         </mat-option>
-        <mat-option *ngFor="let subnet of memberSubnets"
-                    [value]="subnet.id">
+        }
+        @for (subnet of memberSubnets; track subnet) {
+        <mat-option [value]="subnet.id">
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
+        }
       </mat-select>
       <mat-hint>Subnet where load balancer members are located</mat-hint>
     </mat-form-field>
@@ -201,7 +227,7 @@ limitations under the License.
   <!-- Load balancer Configured Classes -->
   <div class="loadbalancer-classes-section">
     <p class="km-text-muted">Load Balancer Classes ({{openstackConfiguredClasses.length}})</p>
-    <mat-divider></mat-divider>
+    <mat-divider />
     <table class="km-table"
            mat-table
            multiTemplateDataRows
@@ -253,31 +279,49 @@ limitations under the License.
           <div class="element-detail"
                [@detailExpand]="expandedStates[i] ? 'expanded' : 'collapsed'">
             <div class="detail-content">
-              <div *ngIf="element.config?.floatingNetworkID">
+              @if (element.config?.floatingNetworkID) {
+              <div>
                 <strong>Floating Network ID:</strong> {{element.config.floatingNetworkID}}
-                <span *ngIf="getDisplayNameForNetworkID(element.config.floatingNetworkID) !== element.config.floatingNetworkID">
+                @if (getDisplayNameForNetworkID(element.config.floatingNetworkID) !== element.config.floatingNetworkID) {
+                <span>
                   ({{getDisplayNameForNetworkID(element.config.floatingNetworkID)}})
                 </span>
+                }
               </div>
-              <div *ngIf="element.config?.floatingSubnetID">
+              }
+              @if (element.config?.floatingSubnetID) {
+              <div>
                 <strong>Floating Subnet ID:</strong> {{element.config.floatingSubnetID}}
               </div>
-              <div *ngIf="element.config?.floatingSubnetName">
+              }
+              @if (element.config?.floatingSubnetName) {
+              <div>
                 <strong>Floating Subnet Name:</strong> {{element.config.floatingSubnetName}}
               </div>
-              <div *ngIf="element.config?.floatingSubnetTags">
+              }
+              @if (element.config?.floatingSubnetTags) {
+              <div>
                 <strong>Floating Subnet Tags:</strong> {{element.config.floatingSubnetTags}}
               </div>
-              <div *ngIf="element.config?.networkID">
+              }
+              @if (element.config?.networkID) {
+              <div>
                 <strong>Network ID:</strong> {{element.config.networkID}}
-                <span *ngIf="getDisplayNameForNetworkID(element.config.networkID) !== element.config.networkID">
+                @if (getDisplayNameForNetworkID(element.config.networkID) !== element.config.networkID) {
+                <span>
                   ({{getDisplayNameForNetworkID(element.config.networkID)}})
                 </span>
+                }
               </div>
-              <div *ngIf="element.config?.subnetID"><strong>Subnet ID:</strong> {{element.config.subnetID}}</div>
-              <div *ngIf="element.config?.memberSubnetID">
+              }
+              @if (element.config?.subnetID) {
+              <div><strong>Subnet ID:</strong> {{element.config.subnetID}}</div>
+              }
+              @if (element.config?.memberSubnetID) {
+              <div>
                 <strong>Member Subnet ID:</strong> {{element.config.memberSubnetID}}
               </div>
+              }
             </div>
           </div>
         </td>
@@ -296,10 +340,11 @@ limitations under the License.
           [class.expanded]="expandedStates[i]"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!openstackConfiguredClasses.length">
+    @if (!openstackConfiguredClasses.length) {
+    <div class="km-row km-empty-list-msg">
       No load balancer classes available.
     </div>
+    }
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

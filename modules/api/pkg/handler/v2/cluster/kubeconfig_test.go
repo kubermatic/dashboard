@@ -385,7 +385,6 @@ contexts:
   name: %s
 current-context: %s
 kind: Config
-preferences: {}
 users:
 - name: %s
   user:

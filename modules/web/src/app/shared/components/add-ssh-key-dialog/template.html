@@ -26,12 +26,16 @@ limitations under the License.
              type="text"
              autocomplete="off"
              kmAutofocus>
-      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      @if (form.get(controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      }
+      @if (form.get(controls.Name).hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class="km-ssh-key-textarea">
@@ -43,12 +47,16 @@ limitations under the License.
                 type="text"
                 class="form-control"
                 (change)="onNewKeyTextChanged()"></textarea>
-      <mat-error *ngIf="form.get(controls.Key).hasError('required')">
+      @if (form.get(controls.Key).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(controls.Key).hasError('validSSHKey')">
+      }
+      @if (form.get(controls.Key).hasError('validSSHKey')) {
+      <mat-error>
         SSH Key has invalid form. Use OpenSSH format.
       </mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
@@ -58,6 +66,5 @@ limitations under the License.
              label="Add SSH Key"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

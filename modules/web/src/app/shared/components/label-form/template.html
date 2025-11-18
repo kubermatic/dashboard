@@ -19,36 +19,36 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="labels">
-    <ng-container *ngIf="disabledLabelFormGroup?.value.key && disabledLabelFormGroup?.value.value">
-      <div [matTooltip]="disabledLabelTooltip"
-           matTooltipPosition="above"
-           fxLayout="row"
-           fxLayoutGap="10px">
-        <mat-form-field fxFlex="45">
-          <mat-label>Key</mat-label>
-          <input matInput
-                 [formControl]="disabledLabelFormGroup.controls.key" />
-        </mat-form-field>
-        <mat-form-field fxFlex="45">
-          <mat-label>Value</mat-label>
-          <input matInput
-                 [formControl]="disabledLabelFormGroup.controls.value" />
-        </mat-form-field>
-        <button mat-icon-button
-                type="button"
-                class="delete-button"
-                [disabled]="!canDeleteDisabledLabel"
-                (click)="deleteDisabledLabel()">
-          <i class="km-icon-mask km-icon-delete"
-             aria-hidden="true"></i>
-        </button>
-      </div>
-    </ng-container>
+    @if (disabledLabelFormGroup?.value.key && disabledLabelFormGroup?.value.value) {
+    <div [matTooltip]="disabledLabelTooltip"
+         matTooltipPosition="above"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="45">
+        <mat-label>Key</mat-label>
+        <input matInput
+               [formControl]="disabledLabelFormGroup.controls.key" />
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <mat-label>Value</mat-label>
+        <input matInput
+               [formControl]="disabledLabelFormGroup.controls.value" />
+      </mat-form-field>
+      <button mat-icon-button
+              type="button"
+              class="delete-button"
+              [disabled]="!canDeleteDisabledLabel"
+              (click)="deleteDisabledLabel()">
+        <i class="km-icon-mask km-icon-delete"
+           aria-hidden="true"></i>
+      </button>
+    </div>
+    }
 
-    <div *ngFor="let label of labelArray.controls; let i = index;"
-         fxLayout="column">
-      <div *ngIf="!(hideRestrictedLabels && label.get('key').errors?.labelKeyNameRestricted)"
-           [formGroupName]="i"
+    @for (label of labelArray.controls; track label; let i = $index) {
+    <div fxLayout="column">
+      @if (!(hideRestrictedLabels && label.get('key').errors?.labelKeyNameRestricted)) {
+      <div [formGroupName]="i"
            fxLayout="row"
            fxLayoutGap="10px">
         <mat-form-field fxFlex="45">
@@ -60,23 +60,37 @@ limitations under the License.
                  name="key"
                  formControlName="key"
                  [matAutocomplete]="staticKeys" />
-          <i *ngIf="getStaticLabelsKeys()?.length"
-             class="km-icon-mask autocomplete-arrow"
+          @if (getStaticLabelsKeys()?.length) {
+          <i class="km-icon-mask autocomplete-arrow"
              [ngClass]="keysListOpen ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+          }
           <mat-autocomplete #staticKeys="matAutocomplete"
                             (closed)="check(i); keysListOpen = false"
                             (opened)="keysListOpen = true">
-            <mat-option *ngFor="let key of getStaticLabelsKeys()"
-                        [value]="key">
+            @for (key of getStaticLabelsKeys(); track key) {
+            <mat-option [value]="key">
               {{key}}
             </mat-option>
+            }
           </mat-autocomplete>
-          <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"> {{keyName}} is not unique. </mat-error>
-          <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixPattern"> Prefix not allowed. </mat-error>
-          <mat-error *ngIf="label.get('key').errors?.validLabelKeyNamePattern"> Name not allowed. </mat-error>
-          <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixLength"> Prefix is too long. </mat-error>
-          <mat-error *ngIf="label.get('key').errors?.validLabelKeyNameLength"> Name is too long. </mat-error>
-          <mat-error *ngIf="label.get('key').errors?.labelKeyNameRestricted"> Restricted label name. </mat-error>
+          @if (label.get('key').errors?.validLabelKeyUniqueness) {
+          <mat-error> {{keyName}} is not unique. </mat-error>
+          }
+          @if (label.get('key').errors?.validLabelKeyPrefixPattern) {
+          <mat-error> Prefix not allowed. </mat-error>
+          }
+          @if (label.get('key').errors?.validLabelKeyNamePattern) {
+          <mat-error> Name not allowed. </mat-error>
+          }
+          @if (label.get('key').errors?.validLabelKeyPrefixLength) {
+          <mat-error> Prefix is too long. </mat-error>
+          }
+          @if (label.get('key').errors?.validLabelKeyNameLength) {
+          <mat-error> Name is too long. </mat-error>
+          }
+          @if (label.get('key').errors?.labelKeyNameRestricted) {
+          <mat-error> Restricted label name. </mat-error>
+          }
         </mat-form-field>
         <mat-form-field fxFlex="45">
           <mat-label>{{valueName}}</mat-label>
@@ -85,19 +99,25 @@ limitations under the License.
                  name="value"
                  [matAutocomplete]="staticValues"
                  formControlName="value" />
-          <i *ngIf="getKeyValues(label.get('key').value)?.length"
-             class="km-icon-mask autocomplete-arrow"
+          @if (getKeyValues(label.get('key').value)?.length) {
+          <i class="km-icon-mask autocomplete-arrow"
              [ngClass]="valuesListOpen ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+          }
           <mat-autocomplete #staticValues="matAutocomplete"
                             (closed)="check(i); valuesListOpen = false"
                             (opened)="valuesListOpen = true">
-            <mat-option *ngFor="let value of getKeyValues(label.get('key').value)"
-                        [value]="value">
+            @for (value of getKeyValues(label.get('key').value); track value) {
+            <mat-option [value]="value">
               {{value}}
             </mat-option>
+            }
           </mat-autocomplete>
-          <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"> {{valueName}} not allowed. </mat-error>
-          <mat-error *ngIf="label.get('value').errors?.validLabelValueLength"> {{valueName}} is too long. </mat-error>
+          @if (label.get('value').errors?.validLabelValuePattern) {
+          <mat-error> {{valueName}} not allowed. </mat-error>
+          }
+          @if (label.get('value').errors?.validLabelValueLength) {
+          <mat-error> {{valueName}} is too long. </mat-error>
+          }
         </mat-form-field>
         <button mat-icon-button
                 type="button"
@@ -108,19 +128,24 @@ limitations under the License.
              aria-hidden="true"></i>
         </button>
       </div>
-
-      <ng-container *ngIf="label.get('key') as control">
-        <mat-hint *ngIf="labelHintKey && control.valid && control.value === labelHintKey"
-                  class="label-hint"
-                  [innerHTML]="labelHint"></mat-hint>
-      </ng-container>
+      }
+      @if (label.get('key'); as control) {
+      @if (labelHintKey && control.valid && control.value === labelHintKey) {
+      <mat-hint class="label-hint"
+                [innerHTML]="labelHint" />
+      }
+      }
     </div>
+    }
   </div>
 </form>
-<div *ngIf="removedLabels.length"
-     class="removed-label-form">
+@if (removedLabels.length) {
+<div class="removed-label-form">
   <p>Removed Labels</p>
-  <div *ngFor="let removedLabel of removedLabels">
+  @for (removedLabel of removedLabels; track removedLabel) {
+  <div>
     <p>Key: {{removedLabel.key}}, Value: {{removedLabel.value}}</p>
   </div>
+  }
 </div>
+}

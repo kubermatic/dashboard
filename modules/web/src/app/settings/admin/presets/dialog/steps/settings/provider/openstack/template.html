@@ -20,7 +20,7 @@ limitations under the License.
   <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
                             (onChange)="onCredentialsChange($event)"
                             (onCredentialsTypeChange)="onCredentialsTypeChange($event)"
-                            [mode]="Modes.PresetCreation"></km-openstack-credentials>
+                            [mode]="Modes.PresetCreation" />
 
   <div>OpenStack Configuration</div>
   <mat-form-field fxFlex>
@@ -32,9 +32,11 @@ limitations under the License.
            autocomplete="off"
            [required]="isDomainRequired()"
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
+    @if (form.get(Controls.Domain).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>

@@ -23,8 +23,9 @@ limitations under the License.
                 panelClass="preset-dropdown"
                 disableOptionCentering
                 required>
-      <mat-option *ngFor="let presetName of presetList.names"
-                  [value]="presetName">{{presetName}}</mat-option>
+      @for (presetName of presetList.names; track presetName) {
+      <mat-option [value]="presetName">{{presetName}}</mat-option>
+      }
       <mat-select-trigger fxFlex
                           fxLayout="row">
         <div fxFlex
@@ -35,19 +36,22 @@ limitations under the License.
         <div fxFlex
              fxLayoutAlign="end"
              class="km-select-trigger-button-wrapper">
-          <button *ngIf="selectedPreset"
-                  (click)="reset(); $event.stopPropagation()"
+          @if (selectedPreset) {
+          <button (click)="reset(); $event.stopPropagation()"
                   matSuffix
                   mat-icon-button
                   aria-label="Clear">
             <i class="km-icon-mask km-icon-remove"></i>
           </button>
+          }
         </div>
       </mat-select-trigger>
     </mat-select>
-    <mat-error *ngIf="form.get(Controls.Preset).hasError('required')">
+    @if (form.get(Controls.Preset).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
     <mat-hint>Using provider presets will disable most of the other provider-related fields.</mat-hint>
   </mat-form-field>
 </form>

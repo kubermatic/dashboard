@@ -17,18 +17,24 @@ limitations under the License.
 <mat-dialog-content>
   <p class="km-dialog-context-description">Edit <b>{{addon.name}}</b> addon of <b>{{cluster.name}}</b> cluster</p>
 
+  @if (hasLogo()) {
   <img class="km-addon-logo"
-       *ngIf="hasLogo()"
        [src]="getAddonLogo()"
        [alt]="addon.name">
-  <div *ngIf="!hasLogo()">{{addon.name}}</div>
-  <div *ngIf="!!addonConfig?.spec?.description"
-       class="install-addon-dialog-option-desc">
+  }
+  @if (!hasLogo()) {
+  <div>{{addon.name}}</div>
+  }
+  @if (!!addonConfig?.spec?.description) {
+  <div class="install-addon-dialog-option-desc">
     {{addonConfig.spec.description}}
   </div>
+  }
   <form [formGroup]="form">
-    <div *ngFor="let control of addonConfig?.spec?.formSpec">
-      <mat-form-field *ngIf="['text', 'number'].includes(control.type)">
+    @for (control of addonConfig?.spec?.formSpec; track control) {
+    <div>
+      @if (['text', 'number'].includes(control.type)) {
+      <mat-form-field>
         <mat-label>{{control.displayName}}</mat-label>
         <input matInput
                [formControlName]="control.internalName"
@@ -37,8 +43,9 @@ limitations under the License.
                [required]="!!control.required">
         <mat-hint>{{control.helpText}}</mat-hint>
       </mat-form-field>
-
-      <mat-form-field *ngIf="control.type === 'text-area'">
+      }
+      @if (control.type === 'text-area') {
+      <mat-form-field>
         <mat-label>{{control.displayName}}</mat-label>
         <textarea matInput
                   [formControlName]="control.internalName"
@@ -47,15 +54,17 @@ limitations under the License.
                   [required]="!!control.required"></textarea>
         <mat-hint>{{control.helpText}}</mat-hint>
       </mat-form-field>
-
-      <div *ngIf="control.type === 'boolean'"
-           class="boolean-field">
+      }
+      @if (control.type === 'boolean') {
+      <div class="boolean-field">
         <mat-checkbox [formControlName]="control.internalName">
           {{control.displayName}}
         </mat-checkbox>
         <div class="mat-hint">{{control.helpText}}</div>
       </div>
+      }
     </div>
+    }
   </form>
   <form [formGroup]="formBasic">
     <mat-checkbox [formControlName]="Controls.ContinuouslyReconcile"

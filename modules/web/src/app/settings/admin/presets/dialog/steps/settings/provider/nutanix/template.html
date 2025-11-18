@@ -25,9 +25,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+    @if (form.get(Controls.Username).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -39,9 +41,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+    @if (form.get(Controls.Password).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -63,9 +67,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.ProxyURL).hasError('required')">
+    @if (form.get(Controls.ProxyURL).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -87,9 +93,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.CSIUsername).hasError('required')">
+    @if (form.get(Controls.CSIUsername).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -101,9 +109,11 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.CSIPassword).hasError('required')">
+    @if (form.get(Controls.CSIPassword).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -115,14 +125,15 @@ limitations under the License.
            autocomplete="off"
            required
            kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.CSIEndpoint).hasError('required')">
+    @if (form.get(Controls.CSIEndpoint).hasError('required')) {
+    <mat-error>
       <strong>Required</strong>
     </mat-error>
+    }
   </mat-form-field>
 
   <km-number-stepper [formControlName]="Controls.CSIPort"
                      label="CSI Port"
                      min="0"
-                     max="65535">
-  </km-number-stepper>
+                     max="65535" />
 </form>

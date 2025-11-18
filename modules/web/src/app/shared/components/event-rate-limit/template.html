@@ -44,8 +44,7 @@ limitations under the License.
                          label="QPS"
                          min="1"
                          step="10"
-                         required>
-      </km-number-stepper>
+                         required />
     </div>
 
     <div fxFlex
@@ -56,16 +55,14 @@ limitations under the License.
                          label="Burst"
                          min="1"
                          step="10"
-                         required>
-      </km-number-stepper>
+                         required />
       <km-number-stepper [formControlName]="Controls.CacheSize"
                          id="km-event-rate-limit-cache-size-input"
                          mode="errors"
                          label="Cache Size"
                          step="10"
                          min="1"
-                         required>
-      </km-number-stepper>
+                         required />
     </div>
 
   </form>

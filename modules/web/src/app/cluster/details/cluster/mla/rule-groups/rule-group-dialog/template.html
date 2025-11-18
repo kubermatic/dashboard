@@ -24,17 +24,18 @@ limitations under the License.
       <mat-select [formControlName]="Controls.Type"
                   disableOptionCentering
                   required>
-        <mat-option *ngFor="let type of ruleGroupTypes"
-                    [value]="type">
+        @for (type of ruleGroupTypes; track type) {
+        <mat-option [value]="type">
           {{type}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </form>
 
   <div class="spec">Data</div>
   <km-editor [(model)]="ruleGroupData"
-             header="YAML"></km-editor>
+             header="YAML" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-rule-group-dialog-btn"
@@ -42,6 +43,5 @@ limitations under the License.
              [label]="data.confirmLabel+' Rule Group'"
              [disabled]="!isValid()"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

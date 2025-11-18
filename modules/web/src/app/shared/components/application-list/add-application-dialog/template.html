@@ -38,172 +38,191 @@ limitations under the License.
           </a>
         </p>
         <div class="applications-search">
-          <km-search-field (queryChange)="onSearchQueryChanged($event)"></km-search-field>
+          <km-search-field (queryChange)="onSearchQueryChanged($event)" />
         </div>
         <div fxFlex
              fxLayout="column"
              fxLayoutAlign="space-between">
-          <ng-container *ngFor="let installableApplication of applicationDefsDataSource.filteredData">
-            <km-application-definition-card [applicationDefinition]="installableApplication"
-                                            [isSelectable]="true"
-                                            [selected]="selectedApplication?.name === installableApplication.name"
-                                            (click)="select(installableApplication)"></km-application-definition-card>
-          </ng-container>
+          @for (installableApplication of applicationDefsDataSource.filteredData; track installableApplication) {
+          <km-application-definition-card [applicationDefinition]="installableApplication"
+                                          [isSelectable]="true"
+                                          [selected]="selectedApplication?.name === installableApplication.name"
+                                          (click)="select(installableApplication)" />
+          }
         </div>
-        <div *ngIf="!applicationDefsDataSource.filteredData?.length"
-             class="km-no-data-message"
+        @if (!applicationDefsDataSource.filteredData?.length) {
+        <div class="km-no-data-message"
              fxFlex>
-          <ng-container *ngIf="applicationDefsDataSource.filter; else noApplicationDefs">
-            No results for "{{applicationDefsDataSource.filter}}" found.
-          </ng-container>
-          <ng-template #noApplicationDefs>
-            No applications found.
-          </ng-template>
+          @if (applicationDefsDataSource.filter) {
+          No results for "{{applicationDefsDataSource.filter}}" found.
+          } @else {
+          No applications found.
+          }
         </div>
+        }
       </div>
     </mat-step>
     <mat-step [label]="StepRegistry.Settings">
-      <ng-container *ngIf="selectedApplication">
-        <km-application-definition-card [applicationDefinition]="selectedApplication"
-                                        [displayLinks]="true"></km-application-definition-card>
-        <form *ngIf="form && !isLoadingDetails"
-              [formGroup]="form">
+      @if (selectedApplication) {
+      <km-application-definition-card [applicationDefinition]="selectedApplication"
+                                      [displayLinks]="true" />
+      @if (form && !isLoadingDetails) {
+      <form [formGroup]="form">
+        <div fxFlex
+             fxLayout="column"
+             fxLayoutGap="10px">
           <div fxFlex
-               fxLayout="column"
-               fxLayoutGap="10px">
-            <div fxFlex
-                 fxLayout="row"
-                 fxLayoutGap="30px">
-              <div fxFlex="100%"
-                   class="version-dropdown">
-                <mat-form-field>
-                  <mat-label>Version</mat-label>
-                  <mat-select [formControlName]="Controls.Version"
-                              disableOptionCentering
-                              required
-                              panelClass="km-add-dialog-dropdown"
-                              (selectionChange)="onVersionChanged($event.value)">
-                    <mat-option *ngFor="let version of selectedApplication.spec?.versions"
-                                [value]="version.version">
-                      {{ version.version }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
-                    <strong>Required</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <div class="version-icon">
-                <km-property>
-                  <div key>Method</div>
-                  <div value
-                       class="version-icon-value"
-                       fxLayoutAlign="center">
-                    <km-application-method-icon [method]="applicationMethod"></km-application-method-icon>
-                  </div>
-                </km-property>
-              </div>
-              <div *ngIf="form.get(Controls.Version).value"
-                   class="version-icon">
-                <km-property>
-                  <div key>Source</div>
-                  <div value
-                       class="version-icon-value"
-                       fxLayoutAlign="center">
-                    <km-application-method-icon [method]="selectedVersionSource"></km-application-method-icon>
-                  </div>
-                </km-property>
-              </div>
+               fxLayout="row"
+               fxLayoutGap="30px">
+            <div fxFlex="100%"
+                 class="version-dropdown">
+              <mat-form-field>
+                <mat-label>Version</mat-label>
+                <mat-select [formControlName]="Controls.Version"
+                            disableOptionCentering
+                            required
+                            panelClass="km-add-dialog-dropdown"
+                            (selectionChange)="onVersionChanged($event.value)">
+                  @for (version of selectedApplication.spec?.versions; track version) {
+                  <mat-option [value]="version.version">
+                    {{ version.version }}
+                  </mat-option>
+                  }
+                </mat-select>
+                @if (form.get(Controls.Version).hasError('required')) {
+                <mat-error>
+                  <strong>Required</strong>
+                </mat-error>
+                }
+              </mat-form-field>
             </div>
-            <mat-form-field>
-              <mat-label>Application Installation Namespace</mat-label>
-              <input matInput
-                     required
-                     [formControlName]="Controls.AppInstallationNamespace"
-                     type="text"
-                     autocomplete="off">
-              <mat-hint>Namespace where application installation will be created.</mat-hint>
-              <mat-error *ngIf="form.get(Controls.AppInstallationNamespace).hasError('required')">
-                <strong>Required</strong>
-              </mat-error>
-              <mat-error *ngIf="form.get(Controls.AppInstallationNamespace).hasError('pattern')">
-                Namespace can only contain alphanumeric characters and dashes (only between characters).
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex>
-              <mat-label>Name</mat-label>
-              <input matInput
-                     required
-                     [formControlName]="Controls.Name"
-                     type="text"
-                     autocomplete="off">
-              <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
-                <strong>Required</strong>
-              </mat-error>
-              <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
-                Name can only contain alphanumeric characters and dashes (only between characters).
-              </mat-error>
-              <mat-error *ngIf="form.get(Controls.Name).hasError('duplicate')">
-                An application with this name already exists in the selected application resources namespace.
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Application Resources Namespace</mat-label>
-              <input matInput
-                     required
-                     [formControlName]="Controls.AppResourcesNamespace"
-                     type="text"
-                     autocomplete="off">
-              <mat-hint>Namespace where application resources will be deployed.</mat-hint>
-              <mat-error *ngIf="form.get(Controls.AppResourcesNamespace).hasError('required')">
-                <strong>Required</strong>
-              </mat-error>
-              <mat-error *ngIf="form.get(Controls.AppResourcesNamespace).hasError('pattern')">
-                Namespace can only contain alphanumeric characters and dashes (only between characters).
-              </mat-error>
-            </mat-form-field>
+            <div class="version-icon">
+              <km-property>
+                <div key>Method</div>
+                <div value
+                     class="version-icon-value"
+                     fxLayoutAlign="center">
+                  <km-application-method-icon [method]="applicationMethod" />
+                </div>
+              </km-property>
+            </div>
+            @if (form.get(Controls.Version).value) {
+            <div class="version-icon">
+              <km-property>
+                <div key>Source</div>
+                <div value
+                     class="version-icon-value"
+                     fxLayoutAlign="center">
+                  <km-application-method-icon [method]="selectedVersionSource" />
+                </div>
+              </km-property>
+            </div>
+            }
           </div>
-        </form>
-        <mat-spinner *ngIf="isLoadingDetails"
-                     [diameter]="25"
-                     class="km-spinner"
-                     color="primary"></mat-spinner>
-      </ng-container>
+          <mat-form-field>
+            <mat-label>Application Installation Namespace</mat-label>
+            <input matInput
+                   required
+                   [formControlName]="Controls.AppInstallationNamespace"
+                   type="text"
+                   autocomplete="off">
+            <mat-hint>Namespace where application installation will be created.</mat-hint>
+            @if (form.get(Controls.AppInstallationNamespace).hasError('required')) {
+            <mat-error>
+              <strong>Required</strong>
+            </mat-error>
+            }
+            @if (form.get(Controls.AppInstallationNamespace).hasError('pattern')) {
+            <mat-error>
+              Namespace can only contain alphanumeric characters and dashes (only between characters).
+            </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-label>Name</mat-label>
+            <input matInput
+                   required
+                   [formControlName]="Controls.Name"
+                   type="text"
+                   autocomplete="off">
+            @if (form.get(Controls.Name).hasError('required')) {
+            <mat-error>
+              <strong>Required</strong>
+            </mat-error>
+            }
+            @if (form.get(Controls.Name).hasError('pattern')) {
+            <mat-error>
+              Name can only contain alphanumeric characters and dashes (only between characters).
+            </mat-error>
+            }
+            @if (form.get(Controls.Name).hasError('duplicate')) {
+            <mat-error>
+              An application with this name already exists in the selected application resources namespace.
+            </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Application Resources Namespace</mat-label>
+            <input matInput
+                   required
+                   [formControlName]="Controls.AppResourcesNamespace"
+                   type="text"
+                   autocomplete="off">
+            <mat-hint>Namespace where application resources will be deployed.</mat-hint>
+            @if (form.get(Controls.AppResourcesNamespace).hasError('required')) {
+            <mat-error>
+              <strong>Required</strong>
+            </mat-error>
+            }
+            @if (form.get(Controls.AppResourcesNamespace).hasError('pattern')) {
+            <mat-error>
+              Namespace can only contain alphanumeric characters and dashes (only between characters).
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </form>
+      }
+      @if (isLoadingDetails) {
+      <mat-spinner [diameter]="25"
+                   class="km-spinner"
+                   color="primary" />
+      }
+      }
     </mat-step>
     <mat-step [label]="StepRegistry.ApplicationValues">
-      <ng-container *ngIf="stepper.selected?.label === StepRegistry.ApplicationValues">
-        <div fxLayout="column">
-          <p class="application-settings-desc">
-            Optional: Use custom values to override the default configuration for this application.
-          </p>
-          <div class="application-values">
-            <km-editor [(model)]="valuesConfig"
-                       (modelChange)="onValuesConfigChanged($event)"
-                       height="370px"
-                       header="values.yaml">
-            </km-editor>
-            <km-validate-json-or-yaml [data]="valuesConfig"
-                                      [isOnlyYAML]="true"
-                                      (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
-          </div>
+      @if (stepper.selected?.label === StepRegistry.ApplicationValues) {
+      <div fxLayout="column">
+        <p class="application-settings-desc">
+          Optional: Use custom values to override the default configuration for this application.
+        </p>
+        <div class="application-values">
+          <km-editor [(model)]="valuesConfig"
+                     (modelChange)="onValuesConfigChanged($event)"
+                     height="370px"
+                     header="values.yaml" />
+          <km-validate-json-or-yaml [data]="valuesConfig"
+                                    [isOnlyYAML]="true"
+                                    (dataValid)="onValuesConfigValidityChanged($event)" />
         </div>
-      </ng-container>
+      </div>
+      }
     </mat-step>
   </mat-horizontal-stepper>
   <ng-template #applicationLogo
                let-application="application">
-    <ng-container *ngIf="application.spec.logoData; else logoPlaceholder">
-      <img class="km-application-logo"
-           [src]="application.spec.logoData"
-           [alt]="application.name"
-           [matTooltip]="application.name">
-    </ng-container>
-    <ng-template #logoPlaceholder>
-      <i class="km-icon-application i-40"></i>
-    </ng-template>
+    @if (application.spec.logoData) {
+    <img class="km-application-logo"
+         [src]="application.spec.logoData"
+         [alt]="application.name"
+         [matTooltip]="application.name">
+    } @else {
+    <i class="km-icon-application i-40"></i>
+    }
   </ng-template>
 </div>
-<mat-dialog-actions *ngIf="stepper.selectedIndex > 0">
+@if (stepper.selectedIndex > 0) {
+<mat-dialog-actions>
   <button mat-flat-button
           type="button"
           color="tertiary"
@@ -213,16 +232,20 @@ limitations under the License.
     <span>Back</span>
   </button>
   <div fxFlex></div>
-  <button *ngIf="stepper.selectedIndex < stepper.steps.length - 1; else lastStep"
-          mat-flat-button
-          type="button"
-          [disabled]="!form?.valid || isLoadingDetails"
-          (click)="next()">
+  @if (stepper.selectedIndex < stepper.steps.length
+    -
+    1)
+    {
+    <button
+    mat-flat-button
+    type="button"
+    [disabled]="!form?.valid || isLoadingDetails"
+    (click)="next()">
     <i class="km-icon-mask km-icon-next"
        matButtonIcon></i>
     <span>Next</span>
-  </button>
-  <ng-template #lastStep>
+    </button>
+    } @else {
     <button mat-flat-button
             [disabled]="!form.valid || !!(valuesConfig && !isValuesConfigValid)"
             kmThrottleClick
@@ -231,5 +254,6 @@ limitations under the License.
          matButtonIcon></i>
       <span>Add Application</span>
     </button>
-  </ng-template>
+    }
 </mat-dialog-actions>
+}

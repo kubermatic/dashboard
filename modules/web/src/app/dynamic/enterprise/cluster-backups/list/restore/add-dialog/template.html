@@ -29,42 +29,50 @@ END OF TERMS AND CONDITIONS
                matInput
                required>
         <mat-hint>Choose a unique name for restore. Name can't be changed.</mat-hint>
-        <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        @if (form.get(controls.Name).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
-        <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+        }
+        @if (form.get(controls.Name).hasError('pattern')) {
+        <mat-error>
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
         </mat-error>
+        }
       </mat-form-field>
       <mat-checkbox [formControlName]="controls.AllNamespaces">
         Restore All Namespaces
         <i class="km-icon-info km-pointer"
            matTooltip="Select all namespaces to restore."></i>
       </mat-checkbox>
-      <mat-form-field *ngIf="!form?.get(controls.AllNamespaces).value">
+      @if (!form?.get(controls.AllNamespaces).value) {
+      <mat-form-field>
         <mat-label>Choose Namespaces</mat-label>
         <mat-select [formControlName]="controls.NameSpaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of nameSpaces"
-                      [value]="nameSpace">
+          @for (nameSpace of nameSpaces; track nameSpace) {
+          <mat-option [value]="nameSpace">
             {{nameSpace}}
           </mat-option>
+          }
         </mat-select>
         <mat-hint>Namespaces to include in the restore.</mat-hint>
-        <mat-error *ngIf="form.get(controls.NameSpaces).hasError('required')">
+        @if (form.get(controls.NameSpaces).hasError('required')) {
+        <mat-error>
           <strong>Required</strong>
         </mat-error>
+        }
       </mat-form-field>
+      }
     </mat-dialog-content>
     <mat-dialog-actions>
       <km-button icon="km-icon-restore"
                  label="Restore Cluster"
                  [disabled]="form.invalid"
                  [observable]="getObservable()"
-                 (next)="onNext($event)">
-      </km-button>
+                 (next)="onNext($event)" />
     </mat-dialog-actions>
   </form>
 </div>

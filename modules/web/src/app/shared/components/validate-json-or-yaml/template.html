@@ -13,9 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-hint *ngIf="!data || isDataValid">
-  Input should be valid <ng-container *ngIf="!isOnlyYAML"><strong>JSON</strong> or </ng-container><strong>YAML</strong>
+@if (!data || isDataValid) {
+<mat-hint>
+  Input should be valid @if (!isOnlyYAML) {
+  <strong>JSON</strong> or
+  }<strong>YAML</strong>
 </mat-hint>
-<mat-error *ngIf="data && !isDataValid">
-  Please enter valid <ng-container *ngIf="!isOnlyYAML"><strong>JSON</strong> or </ng-container><strong>YAML</strong>
+}
+@if (data && !isDataValid) {
+<mat-error>
+  Please enter valid @if (!isOnlyYAML) {
+  <strong>JSON</strong> or
+  }<strong>YAML</strong>
 </mat-error>
+}

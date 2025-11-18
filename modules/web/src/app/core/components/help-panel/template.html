@@ -13,21 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div *ngIf="shouldShowPanel()"
-     class="km-panel">
+@if (shouldShowPanel()) {
+<div class="km-panel">
   <button mat-icon-button
           class="root-button"
           id="km-navbar-help-menu"
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-help"></i>
-    <i *ngIf="!adminSettings?.disableChangelogPopup && hasNewChangelog()"
-       class="km-icon-circle km-new-bg"></i>
+    @if (!adminSettings?.disableChangelogPopup && hasNewChangelog()) {
+    <i class="km-icon-circle km-new-bg"></i>
+    }
   </button>
-
+  @if (isOpen()) {
   <div class="panel"
-       fxLayout="column"
-       *ngIf="isOpen()">
+       fxLayout="column">
     <div class="header"
          fxLayout="row">
       <span fxFlex>Help & Support</span>
@@ -38,11 +38,10 @@ limitations under the License.
         <i class="km-icon-mask km-icon-arrow-up"></i>
       </button>
     </div>
-
     <div class="menu"
          fxLayout="column">
-      <div *ngIf="!adminSettings?.disableChangelogPopup"
-           class="km-option-hover-bg"
+      @if (!adminSettings?.disableChangelogPopup) {
+      <div class="km-option-hover-bg"
            matRipple
            (click)="openChangelog()"
            fxLayoutGap="8px"
@@ -52,31 +51,34 @@ limitations under the License.
               fxLayoutAlign=" center">
           <i class="km-icon-mask km-icon-external-link"></i>
         </span>
-        <i *ngIf="hasNewChangelog()"
-           class="km-icon-sparkles"></i>
+        @if (hasNewChangelog()) {
+        <i class="km-icon-sparkles"></i>
+        }
       </div>
-
-      <div *ngIf="adminSettings?.displayAPIDocs"
-           class="km-option-hover-bg"
+      }
+      @if (adminSettings?.displayAPIDocs) {
+      <div class="km-option-hover-bg"
            id="km-navbar-api-docs-btn"
            matRipple
            (click)="goToAPIDocs()">
         API Documentation
       </div>
-
+      }
       <div class="km-option-hover-bg"
            matRipple
            (click)="openAnnouncementsDialog()">
         Announcements
       </div>
-
-      <div *ngFor="let link of adminSettings?.customLinks | kmLinkLocation: 'HelpPanel'"
-           class="km-option-hover-bg">
+      @for (link of adminSettings?.customLinks | kmLinkLocation: 'HelpPanel'; track link) {
+      <div class="km-option-hover-bg">
         <a [href]="link.url"
            class="custom-link"
            target="_blank"
            rel="noopener">{{link.label}}</a>
       </div>
+      }
     </div>
   </div>
+  }
 </div>
+}

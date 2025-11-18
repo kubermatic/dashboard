@@ -20,43 +20,40 @@ limitations under the License.
                      mode="errors"
                      label="CPUs"
                      min="1"
-                     required> </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.CPUCores"
                      mode="errors"
                      label="Cores per CPU"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.MemoryMB"
                      mode="errors"
                      label="Memory (MB)"
                      min="4"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.DiskSizeGB"
                      mode="errors"
                      label="Disk Size (GB)"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.DiskIOPs"
                      hint="Leave empty or 0 to use default value for the selected template."
                      mode="all"
                      label="Disk IOPS"
-                     min="0">
-  </km-number-stepper>
+                     min="0" />
 
   <mat-form-field fxFlex>
     <mat-label>IP Allocation Mode</mat-label>
     <mat-select [formControlName]="Controls.IPAllocationMode"
                 disableOptionCentering
                 kmValueChangedIndicator>
-      <mat-option *ngFor="let mode of ipAllocationModes"
-                  [value]="mode"> {{mode}} </mat-option>
+      @for (mode of ipAllocationModes; track mode) {
+      <mat-option [value]="mode"> {{mode}} </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -95,8 +92,9 @@ limitations under the License.
                 (selectionChange)="onNetworkChanged($event.value)"
                 disableOptionCentering
                 kmValueChangedIndicator>
-      <mat-option *ngFor="let network of networks"
-                  [value]="network"> {{network}} </mat-option>
+      @for (network of networks; track network) {
+      <mat-option [value]="network"> {{network}} </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 

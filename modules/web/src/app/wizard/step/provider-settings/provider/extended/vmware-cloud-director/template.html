@@ -29,43 +29,48 @@ limitations under the License.
                required>
     <div *option="let network">{{network.name}}</div>
     <ng-container hint>
-      <span *ngIf="!isPresetSelected">
+      @if (!isPresetSelected) {
+      <span>
         Select one or more organization VDC networks to be used for the cluster.
       </span>
-      <span *ngIf="isPresetSelected">
+      }
+      @if (isPresetSelected) {
+      <span>
         The selected preset already contains a network.
       </span>
+      }
     </ng-container>
   </km-combobox>
 
-  <ng-container *ngIf="!isCSIDriverDisabled">
-    <mat-card-header class="km-no-padding">
-      <mat-card-title>CSI Driver Settings</mat-card-title>
-    </mat-card-header>
-
-    <km-combobox [options]="storageProfiles"
-                 [selected]="selectedStorageProfile"
-                 [hint]="getHint(Controls.StorageProfile)"
-                 [formControlName]="Controls.StorageProfile"
-                 [required]="true"
-                 [label]="storageProfileLabel"
-                 (changed)="onStorageProfileChange($event)"
-                 inputLabel="Select storage profile..."
-                 filterBy="name">
-      <div *option="let storageProfile">{{storageProfile.name}}</div>
-    </km-combobox>
-
-    <mat-form-field fxFlex>
-      <mat-label>Filesystem</mat-label>
-      <mat-select [formControlName]="Controls.Filesystem"
-                  disableOptionCentering
-                  required>
-        <mat-option *ngFor="let fstype of fstypes"
-                    [value]="fstype"> {{fstype}} </mat-option>
-      </mat-select>
-      <mat-error *ngIf="form.get(Controls.Filesystem).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
+  @if (!isCSIDriverDisabled) {
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>CSI Driver Settings</mat-card-title>
+  </mat-card-header>
+  <km-combobox [options]="storageProfiles"
+               [selected]="selectedStorageProfile"
+               [hint]="getHint(Controls.StorageProfile)"
+               [formControlName]="Controls.StorageProfile"
+               [required]="true"
+               [label]="storageProfileLabel"
+               (changed)="onStorageProfileChange($event)"
+               inputLabel="Select storage profile..."
+               filterBy="name">
+    <div *option="let storageProfile">{{storageProfile.name}}</div>
+  </km-combobox>
+  <mat-form-field fxFlex>
+    <mat-label>Filesystem</mat-label>
+    <mat-select [formControlName]="Controls.Filesystem"
+                disableOptionCentering
+                required>
+      @for (fstype of fstypes; track fstype) {
+      <mat-option [value]="fstype"> {{fstype}} </mat-option>
+      }
+    </mat-select>
+    @if (form.get(Controls.Filesystem).hasError('required')) {
+    <mat-error>
+      <strong>Required</strong>
+    </mat-error>
+    }
+  </mat-form-field>
+  }
 </form>

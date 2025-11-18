@@ -16,18 +16,18 @@ limitations under the License.
 <form>
   <km-dialog-title>Add {{ cluster?.cloud.eks ? 'Node Group' : 'Node Pool'}}</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
-    <km-eks-cluster-settings *ngIf="cluster.cloud.eks"
-                             [projectID]="projectID"
-                             [cluster]="cluster">
-    </km-eks-cluster-settings>
-    <km-aks-cluster-settings *ngIf="cluster.cloud.aks"
-                             [cluster]="cluster"
-                             [projectID]="projectID">
-    </km-aks-cluster-settings>
-    <km-gke-cluster-settings *ngIf="cluster.cloud?.gke"
-                             [cluster]="cluster"
-                             [projectID]="projectID">
-    </km-gke-cluster-settings>
+    @if (cluster.cloud.eks) {
+    <km-eks-cluster-settings [projectID]="projectID"
+                             [cluster]="cluster" />
+    }
+    @if (cluster.cloud.aks) {
+    <km-aks-cluster-settings [cluster]="cluster"
+                             [projectID]="projectID" />
+    }
+    @if (cluster.cloud?.gke) {
+    <km-gke-cluster-settings [cluster]="cluster"
+                             [projectID]="projectID" />
+    }
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button

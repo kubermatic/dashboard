@@ -20,7 +20,7 @@ limitations under the License.
                  [labels]="tags"
                  noValidators="true"
                  (labelsChange)="onTagsChange($event)"
-                 [formControlName]="Controls.Tags"></km-label-form>
+                 [formControlName]="Controls.Tags" />
 
   <mat-checkbox [id]="Controls.IsSpotInstance"
                 [formControlName]="Controls.IsSpotInstance"
@@ -31,8 +31,8 @@ limitations under the License.
        matTooltip="Indicates whether the created machine is an AWS EC2 Spot Instance or on-demand EC2 instance."></i>
   </mat-checkbox>
 
-  <div *ngIf="isSpotInstance"
-       @pushDown
+  @if (isSpotInstance) {
+  <div @pushDown
        fxLayout="column"
        fxLayoutGap="16px">
     <km-number-stepper [formControlName]="Controls.SpotInstanceMaxPrice"
@@ -42,9 +42,7 @@ limitations under the License.
                        type="decimal"
                        min="0.0001"
                        [required]="isSpotInstance"
-                       step="0.01">
-    </km-number-stepper>
-
+                       step="0.01" />
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"
                   [formControlName]="Controls.SpotInstancePersistentRequest"
                   kmValueChangedIndicator>
@@ -53,6 +51,7 @@ limitations under the License.
          matTooltip="Ensures that your request will be submitted every time your Spot Instance is terminated."></i>
     </mat-checkbox>
   </div>
+  }
 
   <mat-checkbox [id]="Controls.AssignPublicIP"
                 [formControlName]="Controls.AssignPublicIP"

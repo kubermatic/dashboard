@@ -24,10 +24,11 @@ limitations under the License.
                   required
                   disableOptionCentering
                   panelClass="km-add-dialog-dropdown">
-        <mat-option *ngFor="let version of versions"
-                    [value]="version">
+        @for (version of versions; track version) {
+        <mat-option [value]="version">
           {{ version }}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </form>
@@ -38,6 +39,5 @@ limitations under the License.
              label="Save Changes"
              [disabled]="form.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

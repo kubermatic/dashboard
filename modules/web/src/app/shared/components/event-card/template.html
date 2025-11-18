@@ -29,13 +29,16 @@ limitations under the License.
              fxLayoutAlign=" center"
              fxLayoutGap="10px">
           <i [ngClass]="getTypeIcon()"></i>
-          <span>{{events.length}} event<ng-container *ngIf="events.length !== 1">s</ng-container></span>
+          <span>{{events.length}} event@if (events.length !== 1) {
+            s
+            }</span>
         </div>
       </div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <km-event-list [events]="events"
-                   *ngIf="isShowEvents"></km-event-list>
+    @if (isShowEvents) {
+    <km-event-list [events]="events" />
+    }
   </mat-card-content>
 </mat-card>

@@ -18,12 +18,12 @@ limitations under the License.
   <km-label-form title="Provider Labels"
                  [labels]="labels"
                  (labelsChange)="onLabelsChange($event)"
-                 [formControlName]="Controls.Labels"></km-label-form>
+                 [formControlName]="Controls.Labels" />
 
   <km-chip-list class="tag-list"
                 title="Provider Tags"
                 [tags]="tags"
                 placeholder="Add tag..."
                 (onChange)="onTagsChange($event)"
-                [formControlName]="Controls.Tags"></km-chip-list>
+                [formControlName]="Controls.Tags" />
 </form>

@@ -31,12 +31,16 @@ limitations under the License.
              required
              cdkFocusInitial
              kmValueChangedIndicator>
-      <mat-error *ngIf="form.controls.name.hasError('required')">
+      @if (form.controls.name.hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.controls.name.hasError('pattern')">
+      }
+      @if (form.controls.name.hasError('pattern')) {
+      <mat-error>
         Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
       </mat-error>
+      }
     </mat-form-field>
 
     <label class="km-radio-group-label">Select a Group</label>
@@ -74,6 +78,5 @@ limitations under the License.
              label="Save Changes"
              [disabled]="!form.valid"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

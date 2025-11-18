@@ -27,71 +27,69 @@ limitations under the License.
          [routerLink]="getRouterLink(view.Overview)"
          [ngClass]="getLinkClass(view.Overview)">
         <i class="km-icon-projects-card"></i>
-        <span *ngIf="!isSidenavCollapsed">Project Overview</span>
+        @if (!isSidenavCollapsed) {
+        <span>Project Overview</span>
+        }
       </a>
     </div>
     <km-side-nav-field [label]="projectSidenavSections.Resources"
                        icon="km-icon-cluster"
                        [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
-
-        <div class="sub-menu-item"
-             [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
-          <a id="km-nav-item-clusters"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Clusters)">
-            <span>Clusters</span>
-          </a>
-        </div>
-
-        <div *ngIf="adminSettings.enableExternalClusterImport"
-             class="sub-menu-item"
-             [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
-          <a id="km-nav-item-external-clusters"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.ExternalClusters)">
-            <span>External Clusters</span>
-          </a>
-        </div>
-
-        <div *ngIf="adminSettings.enableExternalClusterImport"
-             class="sub-menu-item"
-             [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
-          <a id="km-nav-item-kubeone-clusters"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.KubeOneClusters)">
-            <span>KubeOne Clusters</span>
-          </a>
-        </div>
-
-      </ng-container>
-
-      <ng-container *ngIf="isSidenavCollapsed">
-
-
-        <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Clusters)"
-           class="collapsed-sub-menu-item"
+      @if (!isSidenavCollapsed) {
+      <div class="sub-menu-item"
            [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
+        <a id="km-nav-item-clusters"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Clusters)">
           <span>Clusters</span>
         </a>
-
-        <a *ngIf="adminSettings.enableExternalClusterImport"
-           fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.ExternalClusters)"
-           class="collapsed-sub-menu-item"
+      </div>
+      @if (adminSettings.enableExternalClusterImport) {
+      <div class="sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
+        <a id="km-nav-item-external-clusters"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.ExternalClusters)">
           <span>External Clusters</span>
         </a>
-
-        <a *ngIf="adminSettings.enableExternalClusterImport"
-           fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.KubeOneClusters)"
-           class="collapsed-sub-menu-item"
+      </div>
+      }
+      @if (adminSettings.enableExternalClusterImport) {
+      <div class="sub-menu-item"
            [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
+        <a id="km-nav-item-kubeone-clusters"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.KubeOneClusters)">
           <span>KubeOne Clusters</span>
         </a>
-      </ng-container>
+      </div>
+      }
+      }
+
+      @if (isSidenavCollapsed) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Clusters)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
+        <span>Clusters</span>
+      </a>
+      @if (adminSettings.enableExternalClusterImport) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ExternalClusters)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
+        <span>External Clusters</span>
+      </a>
+      }
+      @if (adminSettings.enableExternalClusterImport) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.KubeOneClusters)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
+        <span>KubeOne Clusters</span>
+      </a>
+      }
+      }
     </km-side-nav-field>
 
 
@@ -104,131 +102,128 @@ limitations under the License.
          [routerLink]="getRouterLink(view.ClusterTemplates)"
          [ngClass]="getLinkClass(view.ClusterTemplates)">
         <i class="km-icon-cluster-template"></i>
-        <span *ngIf="!isSidenavCollapsed">Cluster Templates</span>
+        @if (!isSidenavCollapsed) {
+        <span>Cluster Templates</span>
+        }
       </a>
     </div>
-    <km-side-nav-field *ngIf="adminSettings.enableEtcdBackup"
-                       [label]="projectSidenavSections.Backups"
+    @if (adminSettings.enableEtcdBackup) {
+    <km-side-nav-field [label]="projectSidenavSections.Backups"
                        icon="km-icon-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
-        <div [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}"
-             class="sub-menu-item">
-          <a id="km-nav-item-backups"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Backups)">
-            <span>Automatic Backups</span>
-          </a>
-        </div>
-
-        <div [matTooltip]="getTooltip(view.Backups)"
-             [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Snapshots)">
-            <span>Snapshots</span>
-          </a>
-        </div>
-
-        <div [matTooltip]="getTooltip(view.Backups)"
-             [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Restores)">
-            <span>Restores</span>
-          </a>
-        </div>
-      </ng-container>
-
-
-      <ng-container *ngIf="isSidenavCollapsed">
-
-        <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Backups)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}">
+      @if (!isSidenavCollapsed) {
+      <div [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-backups"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Backups)">
           <span>Automatic Backups</span>
         </a>
-
+      </div>
+      <div [matTooltip]="getTooltip(view.Backups)"
+           [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Snapshots)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}">
+           [routerLink]="getRouterLink(view.Snapshots)">
           <span>Snapshots</span>
         </a>
-
+      </div>
+      <div [matTooltip]="getTooltip(view.Backups)"
+           [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Restores)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}">
+           [routerLink]="getRouterLink(view.Restores)">
           <span>Restores</span>
         </a>
-      </ng-container>
+      </div>
+      }
+      @if (isSidenavCollapsed) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Backups)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}">
+        <span>Automatic Backups</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Snapshots)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}">
+        <span>Snapshots</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Restores)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}">
+        <span>Restores</span>
+      </a>
+      }
     </km-side-nav-field>
+    }
 
-    <km-side-nav-field *ngIf="isEnterpriseEdition && adminSettings.enableClusterBackups"
-                       [label]="projectSidenavSections.ClusterBackups"
+    @if (isEnterpriseEdition && adminSettings.enableClusterBackups) {
+    <km-side-nav-field [label]="projectSidenavSections.ClusterBackups"
                        icon="km-icon-cluster-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
-        <div [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.ClusterBackup)">
-            <span>Backups</span>
-          </a>
-        </div>
-        <div [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.ClusterSchedule)">
-            <span>Schedules</span>
-          </a>
-        </div>
-        <div [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.ClusterRestore)">
-            <span>Restores</span>
-          </a>
-        </div>
-        <div [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.BackupStorageLocation)">
-            <span>Storage Locations</span>
-          </a>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="isSidenavCollapsed">
+      @if (!isSidenavCollapsed) {
+      <div [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.ClusterBackup)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}">
+           [routerLink]="getRouterLink(view.ClusterBackup)">
           <span>Backups</span>
         </a>
+      </div>
+      <div [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.ClusterSchedule)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}">
+           [routerLink]="getRouterLink(view.ClusterSchedule)">
           <span>Schedules</span>
         </a>
+      </div>
+      <div [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.ClusterRestore)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
+           [routerLink]="getRouterLink(view.ClusterRestore)">
           <span>Restores</span>
         </a>
+      </div>
+      <div [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}"
+           class="sub-menu-item">
         <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.BackupStorageLocation)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}">
+           [routerLink]="getRouterLink(view.BackupStorageLocation)">
           <span>Storage Locations</span>
         </a>
-      </ng-container>
+      </div>
+      }
+      @if (isSidenavCollapsed) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ClusterBackup)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}">
+        <span>Backups</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ClusterSchedule)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}">
+        <span>Schedules</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ClusterRestore)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
+        <span>Restores</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.BackupStorageLocation)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}">
+        <span>Storage Locations</span>
+      </a>
+      }
     </km-side-nav-field>
-    <div *ngIf="isEnterpriseEdition"
-         [matTooltip]="getTooltip(view.KyvernoPolicies)"
+    }
+    @if (isEnterpriseEdition) {
+    <div [matTooltip]="getTooltip(view.KyvernoPolicies)"
          [ngClass]="{'km-disabled': !isDisabledField(view.KyvernoPolicies)}"
          class="menu-item">
       <a id="km-nav-item-kyverno-policies"
@@ -237,102 +232,107 @@ limitations under the License.
          [routerLink]="getRouterLink(view.KyvernoPolicies)"
          [ngClass]="getLinkClass(view.KyvernoPolicies)">
         <i class="km-icon-kyverno"></i>
-        <span *ngIf="!isSidenavCollapsed">{{ViewDisplayName.KyvernoPolicies}}</span>
+        @if (!isSidenavCollapsed) {
+        <span>{{ViewDisplayName.KyvernoPolicies}}</span>
+        }
       </a>
     </div>
+    }
 
     <km-side-nav-field [label]="projectSidenavSections.Access"
                        icon="km-icon-key"
                        [isSidenavCollapsed]="isSidenavCollapsed"
                        [lastItem]=true>
-      <ng-container *ngIf="!isSidenavCollapsed">
-        <div *ngIf="isUserSshKeyEnabled"
-             [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
-             class="sub-menu-item">
-          <a id="km-nav-item-sshkeys"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.SSHKeys)">
-            <span>SSH Keys</span>
-          </a>
-        </div>
-
-        <div [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}"
-             class="sub-menu-item">
-          <a id="km-nav-item-members"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Members)">
-            <span>Members</span>
-          </a>
-        </div>
-
-        <div *ngIf="isEnterpriseEdition"
-             [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}"
-             class="sub-menu-item">
-          <a fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.Groups)">
-            <span>Groups</span>
-          </a>
-        </div>
-
-        <div [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}"
-             class="sub-menu-item">
-          <a id="km-nav-item-service-accounts"
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink(view.ServiceAccounts)">
-            <span>Service Accounts</span></a>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="isSidenavCollapsed">
-        <a *ngIf="isUserSshKeyEnabled"
+      @if (!isSidenavCollapsed) {
+      @if (isUserSshKeyEnabled) {
+      <div [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-sshkeys"
            fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.SSHKeys)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}">
+           [routerLink]="getRouterLink(view.SSHKeys)">
           <span>SSH Keys</span>
         </a>
-
-        <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Members)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}">
+      </div>
+      }
+      <div [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-members"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Members)">
           <span>Members</span>
         </a>
-
-        <a *ngIf="isEnterpriseEdition"
-           fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.Groups)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}">
+      </div>
+      @if (isEnterpriseEdition) {
+      <div [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}"
+           class="sub-menu-item">
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Groups)">
           <span>Groups</span>
         </a>
-
-        <a fxLayoutAlign=" center"
-           [routerLink]="getRouterLink(view.ServiceAccounts)"
-           class="collapsed-sub-menu-item"
-           [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}">
+      </div>
+      }
+      <div [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-service-accounts"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.ServiceAccounts)">
           <span>Service Accounts</span></a>
-      </ng-container>
+      </div>
+      }
+
+      @if (isSidenavCollapsed) {
+      @if (isUserSshKeyEnabled) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.SSHKeys)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}">
+        <span>SSH Keys</span>
+      </a>
+      }
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Members)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}">
+        <span>Members</span>
+      </a>
+      @if (isEnterpriseEdition) {
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Groups)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}">
+        <span>Groups</span>
+      </a>
+      }
+      <a fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ServiceAccounts)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}">
+        <span>Service Accounts</span></a>
+      }
 
     </km-side-nav-field>
 
-    <ng-container *ngIf="(adminSettings.customLinks| kmLinkLocation: 'Default') as filtered">
-      <mat-divider *ngIf="filtered.length > 0"></mat-divider>
-
-      <div *ngFor="let link of filtered"
-           class="menu-item">
-        <a [href]="link.url"
-           fxLayoutAlign=" center"
-           fxLayoutGap="20px"
-           target="_blank"
-           [matTooltip]="link.label"
-           [matTooltipDisabled]="!isSidenavCollapsed"
-           rel="noopener">
-          <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
-          <span *ngIf="!isSidenavCollapsed">{{link.label}}</span>
-        </a>
-      </div>
-    </ng-container>
+    @if ((adminSettings.customLinks| kmLinkLocation: 'Default'); as filtered) {
+    @if (filtered.length > 0) {
+    <mat-divider />
+    }
+    @for (link of filtered; track link) {
+    <div class="menu-item">
+      <a [href]="link.url"
+         fxLayoutAlign=" center"
+         fxLayoutGap="20px"
+         target="_blank"
+         [matTooltip]="link.label"
+         [matTooltipDisabled]="!isSidenavCollapsed"
+         rel="noopener">
+        <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
+        @if (!isSidenavCollapsed) {
+        <span>{{link.label}}</span>
+        }
+      </a>
+    </div>
+    }
+    }
 
     <div fxFlex></div>
 
@@ -343,7 +343,9 @@ limitations under the License.
          fxLayoutAlign="center center"
          routerLink="/projects">
         <i class="km-icon-mask km-icon-back"></i>
-        <span *ngIf="!isSidenavCollapsed">back to projects</span>
+        @if (!isSidenavCollapsed) {
+        <span>back to projects</span>
+        }
       </a>
     </div>
   </div>

@@ -20,12 +20,13 @@ limitations under the License.
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-bell"></i>
-    <span *ngIf="unseenNotificationsCount > 0"
-          class="notification-badge km-info-bg">{{unseenNotificationsCount > 99 ? '99+' : unseenNotificationsCount}}</span>
+    @if (unseenNotificationsCount > 0) {
+    <span class="notification-badge km-info-bg">{{unseenNotificationsCount > 99 ? '99+' : unseenNotificationsCount}}</span>
+    }
   </button>
+  @if (isOpen()) {
   <div class="panel"
-       fxLayout="column"
-       *ngIf="isOpen()">
+       fxLayout="column">
     <div class="header"
          fxLayout="row">
       <span fxFlex>{{getNotificationCount()}} Notification{{getNotificationCount() !== 1 ? 's' : ''}}</span>
@@ -54,14 +55,14 @@ limitations under the License.
     <div class="notification-list"
          fxLayout="column"
          fxFlex>
-      <div *ngFor="let notification of notifications"
-           @slideOut
+      @for (notification of notifications; track notification) {
+      <div @slideOut
            (@slideOut.start)="startAnimation()"
            (@slideOut.done)="finishAnimation()"
            fxLayout="column">
+        @if (isVisible(notification)) {
         <div class="notification"
-             fxLayout="row"
-             *ngIf="isVisible(notification)">
+             fxLayout="row">
           <div fxLayoutAlign="center"
                [ngClass]="notification.type === NotificationType.success ? 'notification-success-bg' : ''">
             <i class="notification-icon"
@@ -84,13 +85,17 @@ limitations under the License.
             </div>
           </div>
         </div>
+        }
       </div>
-      <div *ngIf="isEmpty()"
-           class="zero-state km-text-muted"
+      }
+      @if (isEmpty()) {
+      <div class="zero-state km-text-muted"
            fxLayoutAlign="center center"
            fxFlex>
         There are no notifications
       </div>
+      }
     </div>
   </div>
+  }
 </div>

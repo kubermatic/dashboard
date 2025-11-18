@@ -18,13 +18,12 @@ limitations under the License.
 <mat-dialog-content>
   <km-machine-networks [cluster]="cluster"
                        (machineNetworks)="machineNetworks = $event"
-                       (valid)="valid = $event"></km-machine-networks>
+                       (valid)="valid = $event" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button icon="km-icon-add"
              label="Add Machine Network"
              [disabled]="!valid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

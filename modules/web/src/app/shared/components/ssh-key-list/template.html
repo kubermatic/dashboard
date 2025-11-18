@@ -21,11 +21,14 @@ limitations under the License.
   <i class="km-icon-mask km-icon-key"></i>
   <div>
     <span>&nbsp;{{getDisplayed()}}</span>
-    <ng-container *ngIf="sshKeys.length > maxDisplayed">
-      <span>...&nbsp;</span>
-      <span [matTooltip]="getTruncatedSSHKeys()">+{{sshKeys.length - maxDisplayed}}
-      </span>
-    </ng-container>
-    <span *ngIf="sshKeys.length < 1">No assigned keys</span>
+    @if (sshKeys.length > maxDisplayed) {
+    <span>...&nbsp;</span>
+    <span [matTooltip]="getTruncatedSSHKeys()">+{{sshKeys.length - maxDisplayed}}
+    </span>
+    }
+    @if (sshKeys.length < 1)
+      {
+      <span>No assigned keys</span>
+      }
   </div>
 </div>

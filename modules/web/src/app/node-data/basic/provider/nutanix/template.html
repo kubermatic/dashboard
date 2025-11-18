@@ -42,15 +42,13 @@ limitations under the License.
                      mode="errors"
                      label="CPUs"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.CPUCores"
                      mode="errors"
                      label="Cores per CPU"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <mat-checkbox [formControlName]="Controls.CPUPassthrough"
                 fxFlex
@@ -62,15 +60,13 @@ limitations under the License.
                      mode="errors"
                      label="Memory (MB)"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <km-number-stepper [formControlName]="Controls.DiskSize"
                      mode="errors"
                      label="Disk Size (GB)"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required />
 
   <mat-card-header class="km-no-padding"
                    fxLayoutAlign=" center">
@@ -87,8 +83,8 @@ limitations under the License.
   </mat-card-header>
 
   <div [formArrayName]="Controls.Categories">
-    <div *ngFor="let control of categoriesFormArray.controls; let i = index"
-         [formGroupName]="i">
+    @for (control of categoriesFormArray.controls; track control; let i = $index) {
+    <div [formGroupName]="i">
       <div fxFlex
            fxLayoutGap="10px">
         <km-combobox [options]="filteredCategories[getSelectedCategory(control) || '']"
@@ -122,19 +118,24 @@ limitations under the License.
         </button>
       </div>
     </div>
+    }
   </div>
 
-  <div *ngIf="removedCategories?.length"
-       class="removed-categories-form">
+  @if (removedCategories?.length) {
+  <div class="removed-categories-form">
     <p>Removed Categories</p>
-    <div *ngFor="let category of removedCategories; let i = index;">
+    @for (category of removedCategories; track category; let i = $index) {
+    <div>
       <p>Category: {{category?.category}}, Value: {{category?.categoryValue}}</p>
     </div>
+    }
   </div>
+  }
 
-  <div *ngIf="categoriesFormArray.length === 0"
-       class="categories-msg km-text-muted">
+  @if (categoriesFormArray.length === 0) {
+  <div class="categories-msg km-text-muted">
     Select categories for Nutanix.
   </div>
+  }
 
 </form>

@@ -81,20 +81,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!admins">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    @if (!admins) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

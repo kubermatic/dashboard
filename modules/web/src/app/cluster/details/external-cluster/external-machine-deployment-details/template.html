@@ -13,176 +13,176 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="isInitialized()">
-  <km-cluster-panel [cluster]="cluster"
-                    [datacenter]="datacenter"
-                    [projectID]="projectID"></km-cluster-panel>
+@if (isInitialized()) {
+<km-cluster-panel [cluster]="cluster"
+                  [datacenter]="datacenter"
+                  [projectID]="projectID" />
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title class="machine-deployment-name">
+      <i class="machine-deployment-health km-pointer"
+         [matTooltip]="machineDeploymentHealthStatus?.message"
+         [ngClass]="machineDeploymentHealthStatus?.icon"></i>
+      <span ngxClipboard
+            [cbContent]="machineDeployment.name"
+            matTooltip="Click to copy"
+            class="km-copy">{{machineDeployment.name}}</span>
+    </mat-card-title>
+    <div fxFlex></div>
+    <div fxLayout="row">
+      <button mat-icon-button
+              color="tertiary"
+              matTooltip="Update Machine Deployment"
+              (click)="updateMachineDeployment()"
+              [disabled]="!isEditEnabled()">
+        <i class="km-icon-mask km-icon-edit"></i>
+      </button>
+      <button mat-icon-button
+              color="tertiary"
+              matTooltip="Delete Machine Deployment"
+              (click)="showDeleteDialog();"
+              [disabled]="!isDeleteEnabled()">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="km-row">
+    <div class="km-content-wrap">
+      <km-property>
+        <div key>kubelet Version</div>
+        <div value>{{machineDeployment.spec.template.versions.kubelet}}</div>
+      </km-property>
+      <km-property>
+        <div key>Replicas</div>
+        <div value
+             fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="4px">
+          <span>{{!!machineDeployment.status?.readyReplicas ? machineDeployment.status.readyReplicas : 0}}
+            / {{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
+          @if (machineDeployment.status?.readyReplicas > machineDeployment.spec.replicas) {
+          <div class="km-icon-info km-pointer"
+               matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
+          }
+        </div>
+      </km-property>
+      @if (!!machineDeployment?.cloud?.gke) {
+      @if (!!machineDeployment.cloud.gke?.autoscaling) {
+      @if (machineDeployment.cloud.gke.autoscaling.enabled !== undefined) {
+      <km-property>
+        <div key>Enabled</div>
+        <div value>{{machineDeployment.cloud.gke.autoscaling.enabled}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.autoscaling.autoprovisioned !== undefined) {
+      <km-property>
+        <div key>Autoprovisioned</div>
+        <div value>{{machineDeployment.cloud.gke.autoscaling.autoprovisioned}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.autoscaling.maxNodeCount !== undefined) {
+      <km-property>
+        <div key>Max Node Count</div>
+        <div value>{{machineDeployment.cloud.gke.autoscaling.maxNodeCount}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.autoscaling.minNodeCount !== undefined) {
+      <km-property>
+        <div key>Min Node Count</div>
+        <div value>{{machineDeployment.cloud.gke.autoscaling.minNodeCount}}</div>
+      </km-property>
+      }
+      }
+      }
+      <km-property>
+        <div value>
+          <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
+        </div>
+      </km-property>
+      @if (machineDeployment?.cloud?.aks) {
+      <km-property>
+        <div key>Provisioning State</div>
+        <div value>{{machineDeployment?.phase?.aks?.provisioningState}}</div>
+      </km-property>
+      <km-property>
+        <div key>Power State</div>
+        <div value>{{machineDeployment?.phase?.aks?.powerState}}</div>
+      </km-property>
+      }
+      <km-property>
+        <div key>Created</div>
+        <div value>
+          <km-relative-time [date]="machineDeployment.creationTimestamp" />
+        </div>
+      </km-property>
+    </div>
+    <div class="km-content-wrap">
+      @if (!!machineDeployment?.cloud?.gke) {
+      @if (!!machineDeployment.cloud.gke?.config) {
+      @if (machineDeployment.cloud.gke.config.machineType !== undefined) {
+      <km-property>
+        <div key>Machine Type</div>
+        <div value>{{machineDeployment.cloud.gke.config.machineType}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.config.imageType !== undefined) {
+      <km-property>
+        <div key>Image Type</div>
+        <div value>{{machineDeployment.cloud.gke.config.imageType}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.config.diskType !== undefined) {
+      <km-property>
+        <div key>Disk Type</div>
+        <div value>{{machineDeployment.cloud.gke.config.diskType}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.config.diskSizeGb !== undefined) {
+      <km-property>
+        <div key>Disk Size (GB)</div>
+        <div value>{{machineDeployment.cloud.gke.config.diskSizeGb}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.config.localSsdCount !== undefined) {
+      <km-property>
+        <div key>Local SSD Count</div>
+        <div value>{{machineDeployment.cloud.gke.config.localSsdCount}}</div>
+      </km-property>
+      }
+      @if (machineDeployment.cloud.gke.config.labels !== undefined) {
+      <km-labels [labels]="machineDeployment.cloud.gke.config.labels"
+                 [limit]="2" />
+      }
+      }
+      }
+    </div>
+    @if (machineDeployment?.cloud?.gke?.management) {
+    <mat-divider />
+    }
+    <div class="km-content-wrap">
+      @if (!!machineDeployment.cloud.gke?.management) {
+      @if (machineDeployment.cloud.gke.management.autoUpgrade !== undefined) {
+      <km-property-boolean label="Auto-Upgrade"
+                           [value]="machineDeployment.cloud.gke.management.autoUpgrade" />
+      }
+      @if (machineDeployment.cloud.gke.management.autoRepair !== undefined) {
+      <km-property-boolean label="Auto-Repair"
+                           [value]="machineDeployment.cloud.gke.management.autoRepair" />
+      }
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
+<km-external-node-list [cluster]="cluster"
+                       [nodes]="nodes"
+                       [nodesMetrics]="metrics"
+                       [projectID]="projectID"
+                       [isInitialized]="areNodesInitialized" />
+<km-event-card [events]="events" />
+}
 
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title class="machine-deployment-name">
-        <i class="machine-deployment-health km-pointer"
-           [matTooltip]="machineDeploymentHealthStatus?.message"
-           [ngClass]="machineDeploymentHealthStatus?.icon"></i>
-        <span ngxClipboard
-              [cbContent]="machineDeployment.name"
-              matTooltip="Click to copy"
-              class="km-copy">{{machineDeployment.name}}</span>
-      </mat-card-title>
-      <div fxFlex></div>
-      <div fxLayout="row">
-        <button mat-icon-button
-                color="tertiary"
-                matTooltip="Update Machine Deployment"
-                (click)="updateMachineDeployment()"
-                [disabled]="!isEditEnabled()">
-          <i class="km-icon-mask km-icon-edit"></i>
-        </button>
-
-        <button mat-icon-button
-                color="tertiary"
-                matTooltip="Delete Machine Deployment"
-                (click)="showDeleteDialog();"
-                [disabled]="!isDeleteEnabled()">
-          <i class="km-icon-mask km-icon-delete"></i>
-        </button>
-      </div>
-
-    </mat-card-header>
-    <mat-card-content class="km-row">
-
-      <div class="km-content-wrap">
-        <km-property>
-          <div key>kubelet Version</div>
-          <div value>{{machineDeployment.spec.template.versions.kubelet}}</div>
-        </km-property>
-        <km-property>
-          <div key>Replicas</div>
-          <div value
-               fxLayout="row"
-               fxLayoutAlign=" center"
-               fxLayoutGap="4px">
-            <span>{{!!machineDeployment.status?.readyReplicas ? machineDeployment.status.readyReplicas : 0}}
-              / {{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
-            <div *ngIf="machineDeployment.status?.readyReplicas > machineDeployment.spec.replicas"
-                 class="km-icon-info km-pointer"
-                 matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
-          </div>
-        </km-property>
-
-        <ng-container *ngIf="!!machineDeployment?.cloud?.gke">
-          <ng-container *ngIf="!!machineDeployment.cloud.gke?.autoscaling">
-            <km-property *ngIf="machineDeployment.cloud.gke.autoscaling.enabled !== undefined">
-              <div key>Enabled</div>
-              <div value>{{machineDeployment.cloud.gke.autoscaling.enabled}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.autoscaling.autoprovisioned !== undefined">
-              <div key>Autoprovisioned</div>
-              <div value>{{machineDeployment.cloud.gke.autoscaling.autoprovisioned}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.autoscaling.maxNodeCount !== undefined">
-              <div key>Max Node Count</div>
-              <div value>{{machineDeployment.cloud.gke.autoscaling.maxNodeCount}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.autoscaling.minNodeCount !== undefined">
-              <div key>Min Node Count</div>
-              <div value>{{machineDeployment.cloud.gke.autoscaling.minNodeCount}}</div>
-            </km-property>
-          </ng-container>
-        </ng-container>
-
-        <km-property>
-          <div value>
-            <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
-          </div>
-        </km-property>
-
-        <ng-container *ngIf="machineDeployment?.cloud?.aks">
-          <km-property>
-            <div key>Provisioning State</div>
-            <div value>{{machineDeployment?.phase?.aks?.provisioningState}}</div>
-          </km-property>
-          <km-property>
-            <div key>Power State</div>
-            <div value>{{machineDeployment?.phase?.aks?.powerState}}</div>
-          </km-property>
-        </ng-container>
-
-        <km-property>
-          <div key>Created</div>
-          <div value>
-            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
-          </div>
-        </km-property>
-      </div>
-
-      <div class="km-content-wrap">
-        <ng-container *ngIf="!!machineDeployment?.cloud?.gke">
-          <ng-container *ngIf="!!machineDeployment.cloud.gke?.config">
-            <km-property *ngIf="machineDeployment.cloud.gke.config.machineType !== undefined">
-              <div key>Machine Type</div>
-              <div value>{{machineDeployment.cloud.gke.config.machineType}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.config.imageType !== undefined">
-              <div key>Image Type</div>
-              <div value>{{machineDeployment.cloud.gke.config.imageType}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.config.diskType !== undefined">
-              <div key>Disk Type</div>
-              <div value>{{machineDeployment.cloud.gke.config.diskType}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.config.diskSizeGb !== undefined">
-              <div key>Disk Size (GB)</div>
-              <div value>{{machineDeployment.cloud.gke.config.diskSizeGb}}</div>
-            </km-property>
-
-            <km-property *ngIf="machineDeployment.cloud.gke.config.localSsdCount !== undefined">
-              <div key>Local SSD Count</div>
-              <div value>{{machineDeployment.cloud.gke.config.localSsdCount}}</div>
-            </km-property>
-
-            <km-labels *ngIf="machineDeployment.cloud.gke.config.labels !== undefined"
-                       [labels]="machineDeployment.cloud.gke.config.labels"
-                       [limit]="2"></km-labels>
-          </ng-container>
-        </ng-container>
-      </div>
-
-      <mat-divider *ngIf="machineDeployment?.cloud?.gke?.management"></mat-divider>
-
-      <div class="km-content-wrap">
-        <ng-container *ngIf="!!machineDeployment.cloud.gke?.management">
-          <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoUpgrade !== undefined"
-                               label="Auto-Upgrade"
-                               [value]="machineDeployment.cloud.gke.management.autoUpgrade">
-          </km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoRepair !== undefined"
-                               label="Auto-Repair"
-                               [value]="machineDeployment.cloud.gke.management.autoRepair">
-          </km-property-boolean>
-        </ng-container>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
-  <km-external-node-list [cluster]="cluster"
-                         [nodes]="nodes"
-                         [nodesMetrics]="metrics"
-                         [projectID]="projectID"
-                         [isInitialized]="areNodesInitialized"></km-external-node-list>
-
-  <km-event-card [events]="events"></km-event-card>
-
-</ng-container>
-
-<ng-container *ngIf="!isInitialized()">
-  <mat-spinner [diameter]="25"
-               color="accent"
-               class="km-spinner"></mat-spinner>
-</ng-container>
+@if (!isInitialized()) {
+<mat-spinner [diameter]="25"
+             color="accent"
+             class="km-spinner" />
+}

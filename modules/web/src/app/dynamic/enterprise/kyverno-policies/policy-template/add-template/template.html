@@ -28,21 +28,27 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="controls.Name"
              matInput
              required />
-      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      @if (form.get(controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      }
+      @if (form.get(controls.Name).hasError('pattern')) {
+      <mat-error>
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Title</mat-label>
       <input [formControlName]="controls.Title"
              matInput
              required />
-      <mat-error *ngIf="form.get(controls.Title).hasError('required')">
+      @if (form.get(controls.Title).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Description</mat-label>
@@ -50,15 +56,18 @@ END OF TERMS AND CONDITIONS
                 rows="3"
                 required
                 [formControlName]="controls.Description"> </textarea>
-      <mat-error *ngIf="form.get(controls.Description).hasError('required')">
+      @if (form.get(controls.Description).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Severity</mat-label>
       <mat-select [formControlName]="controls.Severity">
-        <mat-option *ngFor="let severity of severityOptions"
-                    [value]="severity">{{severity}}</mat-option>
+        @for (severity of severityOptions; track severity) {
+        <mat-option [value]="severity">{{severity}}</mat-option>
+        }
       </mat-select>
       <mat-hint>Specify the severity level of the policy</mat-hint>
     </mat-form-field>
@@ -77,12 +86,14 @@ END OF TERMS AND CONDITIONS
         admins and project owners.
       </mat-hint>
     </mat-form-field>
-    <mat-form-field *ngIf="form.get(controls.Scope).value === scopes.Project">
+    @if (form.get(controls.Scope).value === scopes.Project) {
+    <mat-form-field>
       <mat-label>Project</mat-label>
       <input [formControlName]="controls.Project"
              matInput />
       <mat-hint>The project for which the policy template is created.</mat-hint>
     </mat-form-field>
+    }
 
     <div fxLayout="column">
       <mat-checkbox [formControlName]="controls.Default">
@@ -103,22 +114,23 @@ END OF TERMS AND CONDITIONS
            matTooltip="Enable to scope the policy down to Namespace instead of the default i.e. Cluster scope."></i>
       </span>
     </div>
-    <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
-                   title="Projects Labels Selector"
+    @if (form.get(controls.Scope).value === scopes.Global) {
+    <km-label-form title="Projects Labels Selector"
                    [(labels)]="projectsLabels"
                    noValidators="true"
-                   [formControlName]="controls.ProjectSelector"></km-label-form>
+                   [formControlName]="controls.ProjectSelector" />
+    }
     <km-label-form title="Clusters Labels Selector"
                    [(labels)]="clustersLabels"
                    noValidators="true"
-                   [formControlName]="controls.ClusterSelector"></km-label-form>
+                   [formControlName]="controls.ClusterSelector" />
     <km-editor [(model)]="policySpec"
                height="370px"
                header="policySpec*" />
     <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint>
     <km-validate-json-or-yaml [data]="policySpec"
                               [isOnlyYAML]="true"
-                              (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
+                              (dataValid)="isValidYaml($event)" />
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -126,6 +138,5 @@ END OF TERMS AND CONDITIONS
              [label]="label"
              [disabled]="form.invalid || !isYamlEditorValid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

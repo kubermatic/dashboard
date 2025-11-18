@@ -32,33 +32,36 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="end"
                class="km-select-trigger-button-wrapper">
-            <button *ngIf="constraintTemplateFilter"
-                    (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
+            @if (constraintTemplateFilter) {
+            <button (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
                     matSuffix
                     mat-icon-button
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>
+            }
           </div>
         </mat-select-trigger>
-        <mat-option *ngFor="let constraintTemplate of constraintTemplates"
-                    [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
+        @for (constraintTemplate of constraintTemplates; track constraintTemplate) {
+        <mat-option [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
           {{constraintTemplate.spec?.crd?.spec?.names?.kind}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
   <div fxFlex></div>
+  @if (isClusterRunning) {
   <button mat-flat-button
           color="quaternary"
           matTooltip=""
           id="km-add-constraint-btn"
-          *ngIf="isClusterRunning"
           (click)="add()">
     <i class="km-icon-mask km-icon-add"
        matButtonIcon></i>
     <span>Add Constraint</span>
   </button>
+  }
 </div>
 
 <table class="km-table"
@@ -89,8 +92,9 @@ limitations under the License.
       <div fxLayoutAlign=" center"
            fxLayoutGap="8px">
         <span>{{element.name}}</span>
-        <span *ngIf="isDefaultConstraint(element)"
-              class="km-label-primary">Admin Constraint</span>
+        @if (isDefaultConstraint(element)) {
+        <span class="km-label-primary">Admin Constraint</span>
+        }
       </div>
     </td>
   </ng-container>
@@ -156,7 +160,7 @@ limitations under the License.
                                    [settings]="settings"
                                    [constraintName]="element.name"
                                    [projectId]="projectID"
-                                   [clusterId]="cluster.id"></km-violation-details-list>
+                                   [clusterId]="cluster.id" />
       </div>
     </td>
   </ng-container>
@@ -177,18 +181,21 @@ limitations under the License.
       class="km-mat-row"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData(dataSource.data)">
+@if (hasNoData(dataSource.data)) {
+<div class="km-row km-empty-list-msg">
   No constraints available.
 </div>
+}
 
-<km-loader *ngIf="isLoadingData(dataSource.data)"></km-loader>
+@if (isLoadingData(dataSource.data)) {
+<km-loader />
+}
 
 <div [hidden]="!isPaginatorVisible()"
      class="km-paginator-container">
   <div fxLayout="row"
        fxLayoutAlign="flex-end center">
-    <km-pagination-page-size></km-pagination-page-size>
-    <mat-paginator showFirstLastButtons></mat-paginator>
+    <km-pagination-page-size />
+    <mat-paginator showFirstLastButtons />
   </div>
 </div>

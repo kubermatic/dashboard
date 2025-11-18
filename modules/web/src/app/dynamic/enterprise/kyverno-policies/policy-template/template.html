@@ -24,15 +24,16 @@ END OF TERMS AND CONDITIONS
           class="km-card">
   <mat-card-header>
     <mat-card-title>Policy Templates
+      @if (!projectID) {
       <span class="km-label-primary"
-            *ngIf="!projectID"
             matTooltip="Early access feature - still under development.">Beta</span>
+      }
     </mat-card-title>
   </mat-card-header>
   <div fxLayoutAlign="space-between center"
        class="header">
     <km-search-field class="search"
-                     (queryChange)="onSearch($event)"></km-search-field>
+                     (queryChange)="onSearch($event)" />
     <button mat-flat-button
             [color]="projectID ?  'primary' : 'quaternary'"
             (click)="addTemplate(mode.Add)"
@@ -47,8 +48,8 @@ END OF TERMS AND CONDITIONS
            mat-table
            matSort
            [dataSource]="dataSource">
-      <ng-container *ngIf="projectID"
-                    matColumnDef="status">
+      @if (projectID) {
+      <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -59,6 +60,7 @@ END OF TERMS AND CONDITIONS
              class="km-vertical-center"></i>
         </td>
       </ng-container>
+      }
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -82,8 +84,7 @@ END OF TERMS AND CONDITIONS
           <mat-slide-toggle [checked]="element.spec.default"
                             [disabled]="isToggleDisabled(element) || !!element.spec.enforced"
                             [matTooltip]="isToggleDisabled(element) ? 'You do not have permission to edit this policy' : element.spec.enforced ? 'Enforced policies cannot be set as default' : ''"
-                            (change)="onDefaultChange($event, element)">
-          </mat-slide-toggle>
+                            (change)="onDefaultChange($event, element)" />
         </td>
       </ng-container>
       <ng-container matColumnDef="enforce">
@@ -98,8 +99,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <mat-slide-toggle [checked]="element.spec.enforced"
                             [disabled]="isToggleDisabled(element)"
-                            (change)="onEnforcedChange($event, element)">
-          </mat-slide-toggle>
+                            (change)="onEnforcedChange($event, element)" />
         </td>
       </ng-container>
       <ng-container matColumnDef="category">
@@ -130,13 +130,14 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <button *ngIf="element.spec.visibility === scopes.Global && !!projectID"
-                    mat-icon-button
+            @if (element.spec.visibility === scopes.Global && !!projectID) {
+            <button mat-icon-button
                     (click)="addTemplate(mode.Copy, element)"
                     [disabled]="!hasOwnerRole"
                     matTooltip="Create a copy of this template in the current project">
               <i class="km-icon-mask km-icon-copy"></i>
             </button>
+            }
             <button mat-icon-button
                     (click)="addTemplate(mode.Edit, element)"
                     [disabled]="isToggleDisabled(element)">
@@ -155,24 +156,26 @@ END OF TERMS AND CONDITIONS
       <tr mat-row
           *matRowDef="let row; columns: columns;"></tr>
     </table>
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!policyTemplates.length && !loadingTemplates">
+    @if (!policyTemplates.length && !loadingTemplates) {
+    <div class="km-row km-empty-list-msg">
       No policy templates are available
     </div>
+    }
 
-    <div class="km-row"
-         *ngIf="loadingTemplates && !policyTemplates.length">
+    @if (loadingTemplates && !policyTemplates.length) {
+    <div class="km-row">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
-                   [diameter]="25"></mat-spinner>
+                   [diameter]="25" />
     </div>
+    }
 
     <div [hidden]="!policyTemplates.length"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

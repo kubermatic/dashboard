@@ -25,14 +25,16 @@ limitations under the License.
              autocomplete="off"
              id="external-cluster-name-input"
              cdkFocusInitial>
-      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      @if (form.get(controls.Name).hasError('required')) {
+      <mat-error>
         <strong>Required</strong>
       </mat-error>
+      }
     </mat-form-field>
   </form>
   <km-editor [(model)]="kubeconfig"
              height="400px"
-             header="Kubeconfig *"></km-editor>
+             header="Kubeconfig *" />
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="external-cluster-confirm-btn"
@@ -40,6 +42,5 @@ limitations under the License.
              label="Edit Cluster Connection"
              [disabled]="form.invalid || !kubeconfig"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

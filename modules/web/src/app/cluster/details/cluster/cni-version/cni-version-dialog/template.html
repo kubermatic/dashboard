@@ -17,11 +17,12 @@ limitations under the License.
   <div fxLayout="row inline"
        fxLayoutAlign=" center">
     <span>Change CNI Plugin Version</span>
-    <div *ngIf="upgradeAvailable()"
-         class="km-update-available-badge">
+    @if (upgradeAvailable()) {
+    <div class="km-update-available-badge">
       <i class="km-icon-update-available-arrow"></i>
       <span>Update Available</span>
     </div>
+    }
   </div>
 </km-dialog-title>
 <mat-dialog-content>
@@ -35,10 +36,11 @@ limitations under the License.
       <mat-select [(ngModel)]="selectedCNIVersion"
                   panelClass="km-add-dialog-dropdown"
                   disableOptionCentering>
-        <mat-option *ngFor="let version of data.cniVersions"
-                    [value]="version">
+        @for (version of data.cniVersions; track version) {
+        <mat-option [value]="version">
           {{version}}
         </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -48,6 +50,5 @@ limitations under the License.
   <km-button icon="km-icon-check"
              label="Change CNI Version"
              [observable]="getObservable()"
-             (next)="onNext()">
-  </km-button>
+             (next)="onNext()" />
 </mat-dialog-actions>

@@ -29,8 +29,7 @@ limitations under the License.
                        focus
                        required
                        [hint]="disableReplicaControl ? 'To update Replicas you must save or cancel your current changes.' : ''"
-                       [disabled]="disableReplicaControl">
-    </km-number-stepper>
+                       [disabled]="disableReplicaControl" />
 
     <mat-form-field class="kubelet-version">
       <mat-label>{{versionsLabel}}</mat-label>
@@ -38,15 +37,18 @@ limitations under the License.
                   required
                   disableOptionCentering
                   panelClass="km-add-dialog-dropdown">
-        <mat-option *ngFor="let version of versions"
-                    [value]="version">
+        @for (version of versions; track version) {
+        <mat-option [value]="version">
           {{ version }}
         </mat-option>
+        }
       </mat-select>
 
-      <mat-hint *ngIf="form.get(Controls.KubeletVersion).disabled">
+      @if (form.get(Controls.KubeletVersion).disabled) {
+      <mat-hint>
         To update Kubelet Version you must save or cancel your current changes.
       </mat-hint>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
@@ -56,6 +58,5 @@ limitations under the License.
              label="Save Changes"
              [disabled]="form.invalid"
              [observable]="getObservable()"
-             (next)="onNext($event)">
-  </km-button>
+             (next)="onNext($event)" />
 </mat-dialog-actions>

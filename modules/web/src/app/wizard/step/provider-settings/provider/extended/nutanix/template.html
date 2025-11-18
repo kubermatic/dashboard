@@ -44,10 +44,11 @@ limitations under the License.
     <mat-label>Fstype</mat-label>
     <mat-select [formControlName]="Controls.Fstype"
                 disableOptionCentering>
-      <mat-option *ngFor="let fstype of fstypes"
-                  [value]="fstype">
+      @for (fstype of fstypes; track fstype) {
+      <mat-option [value]="fstype">
         {{fstype}}
       </mat-option>
+      }
     </mat-select>
     <mat-hint>Leave empty to use xfs.</mat-hint>
   </mat-form-field>

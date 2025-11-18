@@ -23,7 +23,7 @@ limitations under the License.
                     fxLayoutGap="32px">
       <div fxFlex>Accounts</div>
       <km-search-field class="search"
-                       (queryChange)="onSearch($event)"></km-search-field>
+                       (queryChange)="onSearch($event)" />
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -74,9 +74,12 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!element.lastSeen">Never</ng-container>
-          <km-relative-time *ngIf="element.lastSeen"
-                            [date]="element.lastSeen"></km-relative-time>
+          @if (!element.lastSeen) {
+          Never
+          }
+          @if (element.lastSeen) {
+          <km-relative-time [date]="element.lastSeen" />
+          }
         </td>
       </ng-container>
 
@@ -88,7 +91,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
+          <km-relative-time [date]="element.creationTimestamp" />
         </td>
       </ng-container>
 
@@ -100,20 +103,20 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    @if (isLoading) {
+    <div class="km-row">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    }
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">
       <div fxLayout="row"
            fxLayoutAlign="flex-end center">
-        <km-pagination-page-size></km-pagination-page-size>
-        <mat-paginator showFirstLastButtons></mat-paginator>
+        <km-pagination-page-size />
+        <mat-paginator showFirstLastButtons />
       </div>
     </div>
   </mat-card-content>

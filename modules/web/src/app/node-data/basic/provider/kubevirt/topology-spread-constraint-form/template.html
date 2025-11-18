@@ -19,8 +19,8 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.Constraints">
-    <div *ngFor="let constraint of constraintArray.controls; let i = index; let isLast = last"
-         [formGroupName]="i"
+    @for (constraint of constraintArray.controls; track constraint; let i = $index; let isLast = $last) {
+    <div [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
       <div fxFlex="29">
@@ -31,8 +31,7 @@ limitations under the License.
                            [required]="!isLast"
                            [enableKmValueChangedIndicator]="false"
                            mode="raw"
-                           label="Max Skew">
-        </km-number-stepper>
+                           label="Max Skew" />
       </div>
       <mat-form-field fxFlex="29">
         <mat-label>Topology Key</mat-label>
@@ -40,34 +39,42 @@ limitations under the License.
                [name]="Controls.TopologyKey"
                [formControlName]="Controls.TopologyKey"
                (keyup)="onControlValueChange(constraint)">
-        <mat-error *ngIf="constraint.get(Controls.TopologyKey).errors?.validLabelKeyUniqueness">
+        @if (constraint.get(Controls.TopologyKey).errors?.validLabelKeyUniqueness) {
+        <mat-error>
           Key is not unique.
         </mat-error>
+        }
       </mat-form-field>
       <mat-form-field fxFlex="29">
         <mat-label>When Unsatisfiable</mat-label>
         <mat-select [formControlName]="Controls.WhenUnsatisfiable"
                     disableOptionCentering
                     (selectionChange)="onControlValueChange(constraint)">
-          <mat-option *ngFor="let option of whenUnsatisfiableOptions"
-                      [value]="option">
+          @for (option of whenUnsatisfiableOptions; track option) {
+          <mat-option [value]="option">
             {{option}}
           </mat-option>
+          }
         </mat-select>
       </mat-form-field>
+      @if (isRemovable(i)) {
       <button mat-icon-button
               class="delete-button"
-              *ngIf="isRemovable(i)"
               (click)="deleteConstraint(i)">
         <i class="km-icon-mask km-icon-delete"></i>
       </button>
+      }
     </div>
+    }
   </div>
 </form>
-<div *ngIf="removedConstraints?.length"
-     class="removed-constraint-form">
+@if (removedConstraints?.length) {
+<div class="removed-constraint-form">
   <p>Removed Constraint</p>
-  <div *ngFor="let constraint of removedConstraints">
+  @for (constraint of removedConstraints; track constraint) {
+  <div>
     <p>Max Skew: {{constraint?.maxSkew}}, Topology Key: {{constraint?.topologyKey}}, When Unsatisfiable: {{constraint?.whenUnsatisfiable}}</p>
   </div>
+  }
 </div>
+}

@@ -33,37 +33,36 @@ limitations under the License.
       <i class="km-icon-done"></i>
     </ng-template>
 
-    <mat-step *ngFor="let step of steps; index as i;"
-              fxFlex="100%"
+    @for (step of steps; track step; let i = $index) {
+    <mat-step fxFlex="100%"
               class="km-transition-none">
       <ng-template matStepLabel>{{step.name}}</ng-template>
-
-      <div [ngSwitch]="step.name"
-           id="{{step.id}}-step"
+      <div id="{{step.id}}-step"
            class="wizard-step">
-        <ng-container *ngSwitchCase="stepRegistry.Provider">
-          <km-select-external-cluster-provider [providers]="externalProviders"
-                                               (providerChange)="onProviderChanged($event)"></km-select-external-cluster-provider>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="stepRegistry.Settings">
-          <km-external-cluster-credentials-step fxFlex="50%"
-                                                fxFlex.sm="100%"
-                                                title="Credentials"
-                                                [hideLogo]="true"></km-external-cluster-credentials-step>
-        </ng-container>
-        <ng-container *ngSwitchCase="stepRegistry.ExternalClusterDetails">
-          <ng-container *ngIf="isPresetSelected || isCredentialStepValid">
-            <km-external-cluster-step [formControl]="form.get(stepRegistry.ExternalClusterDetails)"
-                                      [projectID]="project.id"></km-external-cluster-step>
-          </ng-container>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="stepRegistry.Summary">
-          <km-external-cluster-summary-step *ngIf="stepperLastIndex"></km-external-cluster-summary-step>
-        </ng-container>
+        @switch (step.name) {
+        @case (stepRegistry.Provider) {
+        <km-select-external-cluster-provider [providers]="externalProviders"
+                                             (providerChange)="onProviderChanged($event)" />
+        }
+        @case (stepRegistry.Settings) {
+        <km-external-cluster-credentials-step fxFlex="50%"
+                                              fxFlex.sm="100%"
+                                              title="Credentials"
+                                              [hideLogo]="true" />
+        }
+        @case (stepRegistry.ExternalClusterDetails) {
+        @if (isPresetSelected || isCredentialStepValid) {
+        <km-external-cluster-step [formControl]="form.get(stepRegistry.ExternalClusterDetails)"
+                                  [projectID]="project.id" />
+        }
+        }
+        @case (stepRegistry.Summary) {
+        @if (stepperLastIndex) {
+        <km-external-cluster-summary-step />
+        }
+        }
+        }
       </div>
-
       <div class="button-navigation"
            id="{{step.id}}-nav">
         <a mat-flat-button
@@ -74,11 +73,9 @@ limitations under the License.
              matButtonIcon></i>
           <span>Cancel</span>
         </a>
-
         <div fxFlex></div>
-
-        <button *ngIf="!stepperFirstIndex"
-                type="button"
+        @if (!stepperFirstIndex) {
+        <button type="button"
                 color="tertiary"
                 mat-flat-button
                 matStepperPrevious>
@@ -86,8 +83,9 @@ limitations under the License.
              matButtonIcon></i>
           <span>Back</span>
         </button>
-
-        <div *ngIf="!stepperLastIndex; else showCreateButton">
+        }
+        @if (!stepperLastIndex) {
+        <div>
           <button type="button"
                   id="km-external-cluster-wizard-{{step.id}}-next-btn"
                   mat-flat-button
@@ -98,16 +96,16 @@ limitations under the License.
             <span>Next</span>
           </button>
         </div>
-        <ng-template #showCreateButton>
-          <km-button buttonId="km-external-cluster-wizard-create-btn"
-                     icon="km-icon-add"
-                     label="Create External Cluster"
-                     [disabled]="isInvalidStep()"
-                     [observable]="getObservable()"
-                     (next)="onCreateSuccess($event)">
-          </km-button>
-        </ng-template>
+        } @else {
+        <km-button buttonId="km-external-cluster-wizard-create-btn"
+                   icon="km-icon-add"
+                   label="Create External Cluster"
+                   [disabled]="isInvalidStep()"
+                   [observable]="getObservable()"
+                   (next)="onCreateSuccess($event)" />
+        }
       </div>
     </mat-step>
+    }
   </mat-horizontal-stepper>
 </mat-card>
