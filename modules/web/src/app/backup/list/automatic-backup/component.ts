@@ -22,6 +22,7 @@ import {
   AddAutomaticBackupDialogConfig,
 } from '@app/backup/list/automatic-backup/add-dialog/component';
 import {BackupService} from '@core/services/backup';
+import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -49,6 +50,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
   private _backups = [];
+  private _clusters = [];
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
 
@@ -57,7 +59,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'clusterName', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -82,6 +84,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _backupService: BackupService,
+    private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
@@ -116,6 +119,13 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
         this._backups = backups;
         this.dataSource.data = this._backups;
       });
+
+    this._projectService.selectedProject
+      .pipe(switchMap(project => this._clusterService.clusters(project.id, false)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => {
+        this._clusters = clusters;
+      });
   }
 
   ngOnDestroy(): void {
@@ -134,6 +144,15 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       ) || ({} as EtcdBackupConfigCondition);
 
     return getBackupHealthStatus(backup, condition);
+  }
+
+  getClusterName(backup: EtcdBackupConfig): string {
+    for (const cluster of this._clusters) {
+      if (cluster.id === backup.spec.clusterId) {
+        return cluster.name;
+      }
+    }
+    return 'N/A';
   }
 
   delete(backup: EtcdBackupConfig): void {
