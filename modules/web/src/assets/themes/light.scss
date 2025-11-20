@@ -75,11 +75,13 @@ $colors-light-palette: map.merge(
     500: #00517d,
   )
 );
-$theme-light: mat.m2-define-light-theme(
-  mat.m2-define-palette($colors-light-palette),
-  mat.m2-define-palette(mat.$m2-light-blue-palette),
-  mat.m2-define-palette(mat.$m2-pink-palette)
-);
+$theme-light: mat.m2-define-light-theme((
+  color: (
+    primary: mat.m2-define-palette($colors-light-palette),
+    accent: mat.m2-define-palette(mat.$m2-light-blue-palette),
+    warn: mat.m2-define-palette(mat.$m2-pink-palette)
+  )
+));
 $background: map.get($theme-light, background);
 $background: map.merge(
   $background,
