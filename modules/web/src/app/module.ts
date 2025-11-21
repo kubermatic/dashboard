@@ -40,7 +40,7 @@ const appInitializerFn = (
   historyService: HistoryService,
   userService: UserService,
   datacenterService: DatacenterService
-): Function => {
+): (() => Promise<{}>) => {
   return () => {
     historyService.init();
     userService.init();

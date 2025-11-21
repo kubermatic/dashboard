@@ -27,6 +27,7 @@ extends:
 plugins:
   - rxjs
 rules:
+  "@typescript-eslint/no-empty-object-type": off
   "@typescript-eslint/ban-ts-comment": off
   "@typescript-eslint/no-namespace": off
   "@typescript-eslint/no-unused-vars": off
@@ -40,6 +41,10 @@ rules:
       ignoreArrayIndexes: true
       ignoreReadonlyClassProperties: true
       ignoreEnums: true
+  "@typescript-eslint/no-unused-expressions":
+    - error
+    - allowShortCircuit: true
+      allowTernary: true
   node/no-unpublished-import: off
   node/no-extraneous-require: error
   node/no-unpublished-require: error
