@@ -41488,6 +41488,13 @@
       "description": "VMwareCloudDirectorNodeSpec VMware Cloud Director node settings",
       "type": "object",
       "properties": {
+        "additionalNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "AdditionalNetworks"
+        },
         "catalog": {
           "type": "string",
           "x-go-name": "Catalog"
