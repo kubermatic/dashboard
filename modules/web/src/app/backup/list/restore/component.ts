@@ -17,6 +17,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {BackupService} from '@core/services/backup';
+import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -44,6 +45,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
   private _restores = [];
+  private _clusters = [];
   dataSource = new MatTableDataSource<EtcdRestore>();
   isInitialized = true;
 
@@ -52,7 +54,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['name', 'phase', 'clusterID', 'backupName', 'destination', 'actions'];
+    return ['name', 'phase', 'clusterName', 'clusterID', 'backupName', 'destination', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -69,6 +71,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _backupService: BackupService,
+    private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
@@ -102,11 +105,27 @@ export class RestoreListComponent implements OnInit, OnDestroy {
         this._restores = restores;
         this.dataSource.data = this._restores;
       });
+
+    this._onChange
+      .pipe(switchMap(_ => this._clusterService.clusters(this._selectedProject.id, false)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => {
+        this._clusters = clusters;
+      });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getClusterName(restore: EtcdRestore): string {
+    for (const cluster of this._clusters) {
+      if (cluster.id === restore.spec.clusterId) {
+        return cluster.name;
+      }
+    }
+    return 'N/A';
   }
 
   delete(restore: EtcdRestore): void {
