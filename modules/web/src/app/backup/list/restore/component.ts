@@ -16,6 +16,7 @@ import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import {Cluster} from '@app/shared/entity/cluster';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -29,7 +30,7 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {forkJoin, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
@@ -45,7 +46,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
   private _restores = [];
-  private _clusters = [];
+  private _clusters = new Map<string, Cluster>();
   dataSource = new MatTableDataSource<EtcdRestore>();
   isInitialized = true;
 
@@ -94,23 +95,21 @@ export class RestoreListComponent implements OnInit, OnDestroy {
       .subscribe(_ => this._onChange.next());
 
     this._onChange
-      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id).pipe(take(1))))
+      .pipe(
+        switchMap(_ =>
+          forkJoin({
+            userGroup: this._userService.getCurrentUserGroup(this._selectedProject.id).pipe(take(1)),
+            restores: this._backupService.restoreList(this._selectedProject.id).pipe(take(1)),
+            clusters: this._clusterService.clusters(this._selectedProject.id, false).pipe(take(1)),
+          })
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
-
-    this._onChange
-      .pipe(switchMap(_ => this._backupService.restoreList(this._selectedProject.id)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(restores => {
+      .subscribe(({userGroup, restores, clusters}) => {
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
         this._restores = restores;
         this.dataSource.data = this._restores;
-      });
-
-    this._onChange
-      .pipe(switchMap(_ => this._clusterService.clusters(this._selectedProject.id, false)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => {
-        this._clusters = clusters;
+        clusters.forEach(cluster => this._clusters.set(cluster.id, cluster));
       });
   }
 
@@ -120,12 +119,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   }
 
   getClusterName(restore: EtcdRestore): string {
-    for (const cluster of this._clusters) {
-      if (cluster.id === restore.spec.clusterId) {
-        return cluster.name;
-      }
-    }
-    return 'N/A';
+    return this._clusters.get(restore.spec.clusterId)?.name ?? 'N/A';
   }
 
   delete(restore: EtcdRestore): void {

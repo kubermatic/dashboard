@@ -28,9 +28,9 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
-import { Cluster } from '@app/shared/entity/cluster';
+import {forkJoin, of, Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {Cluster} from '@app/shared/entity/cluster';
 
 @Component({
   selector: 'km-automatic-backup-details',
@@ -77,25 +77,23 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
     this._projectService.selectedProject
       .pipe(
-        switchMap(project => {
-          this.selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
-        })
+        switchMap(project =>
+          forkJoin({
+            userGroup: this._userService.getCurrentUserGroup(project.id).pipe(take(1)),
+            backups: this._backupService.list(project.id, false).pipe(take(1)),
+            clusters: this._clusterService.clusters(project.id, false).pipe(take(1)),
+            project: of(project),
+          })
+        )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+      .subscribe(({userGroup, backups, clusters, project}) => {
+        this.selectedProject = project;
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
 
-    this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.list(project.id)))
-      .pipe(map(backups => backups.find(backup => backup.id === this._route.snapshot.params.backupID)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backup => {
-        this.backup = backup;
-        this._clusterService.clusters(this.selectedProject.id, false)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe(clusters => {
-            this.cluster = clusters.find(cluster => cluster.id === this.backup.spec.clusterId);
-          });
+        this.backup = backups.find(backup => backup.id === this._route.snapshot.params.backupID);
+        this.cluster = clusters.find(cluster => cluster.id === this.backup.spec?.clusterId);
+
         this.isInitialized = true;
       });
   }
