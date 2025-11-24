@@ -257,17 +257,32 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
 			return nil, fmt.Errorf("failed to parse VMWare Cloud Director config: %w", err)
 		}
+
+		var networks []string
+
+		for _, network := range config.Networks {
+			networks = append(networks, network.Value)
+		}
+
+		network := config.Network.Value
+
+		if len(networks) > 0 {
+			network = networks[0]
+			networks = networks[1:]
+		}
+
 		cloudSpec.VMwareCloudDirector = &apiv1.VMwareCloudDirectorNodeSpec{
-			CPUs:             int(config.CPUs),
-			CPUCores:         int(config.CPUCores),
-			MemoryMB:         int(config.MemoryMB),
-			DiskSizeGB:       config.DiskSizeGB,
-			Template:         config.Template.Value,
-			Catalog:          config.Catalog.Value,
-			DiskIOPS:         config.DiskIOPS,
-			VApp:             config.VApp.Value,
-			Network:          config.Network.Value,
-			IPAllocationMode: config.IPAllocationMode,
+			CPUs:               int(config.CPUs),
+			CPUCores:           int(config.CPUCores),
+			MemoryMB:           int(config.MemoryMB),
+			DiskSizeGB:         config.DiskSizeGB,
+			Template:           config.Template.Value,
+			Catalog:            config.Catalog.Value,
+			DiskIOPS:           config.DiskIOPS,
+			VApp:               config.VApp.Value,
+			Network:            network,
+			AdditionalNetworks: networks,
+			IPAllocationMode:   config.IPAllocationMode,
 		}
 
 		if config.StorageProfile != nil {

@@ -18,6 +18,9 @@ import (
 // swagger:model VMwareCloudDirectorNodeSpec
 type VMwareCloudDirectorNodeSpec struct {
 
+	// additional networks
+	AdditionalNetworks []string `json:"additionalNetworks"`
+
 	// CPU cores
 	CPUCores int64 `json:"cpuCores,omitempty"`
 
