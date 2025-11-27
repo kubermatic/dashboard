@@ -1286,7 +1286,7 @@ func TestDeleteNodeDeployment(t *testing.T) {
 			}
 
 			machineDeployments := &clusterv1alpha1.MachineDeploymentList{}
-			if err := clientsSets.FakeClient.List(context.Background(), machineDeployments); err != nil {
+			if err := clientsSets.FakeSeedClient.List(context.Background(), machineDeployments); err != nil {
 				t.Fatalf("failed to list MachineDeployments: %v", err)
 			}
 

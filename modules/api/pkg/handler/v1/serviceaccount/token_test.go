@@ -781,7 +781,7 @@ func TestDeleteToken(t *testing.T) {
 			test.CompareWithResult(t, res, tc.expectedResponse)
 
 			expectedToken := &corev1.Secret{}
-			err = clientset.FakeClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: tc.tokenToDelete, Namespace: "kubermatic"}, expectedToken)
+			err = clientset.FakeSeedClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: tc.tokenToDelete, Namespace: "kubermatic"}, expectedToken)
 			if err == nil {
 				t.Fatalf("failed to delete token %s", tc.tokenToDelete)
 			}

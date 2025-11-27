@@ -2103,7 +2103,7 @@ func TestRevokeClusterAdminTokenEndpoint(t *testing.T) {
 			test.CompareWithResult(t, res, tc.expectedResponse)
 			if tc.httpStatus == http.StatusOK {
 				updatedCluster := &kubermaticv1.Cluster{}
-				if err := clientsSets.FakeClient.Get(context.Background(), types.NamespacedName{Name: test.DefaultClusterID}, updatedCluster); err != nil {
+				if err := clientsSets.FakeSeedClient.Get(context.Background(), types.NamespacedName{Name: test.DefaultClusterID}, updatedCluster); err != nil {
 					t.Fatalf("failed to get cluster from fake client: %v", err)
 				}
 				updatedToken := updatedCluster.Status.Address.AdminToken
