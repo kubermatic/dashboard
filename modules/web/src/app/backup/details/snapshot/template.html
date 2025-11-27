@@ -49,7 +49,7 @@ limitations under the License.
   <mat-card-content fxLayout="row">
     <km-property>
       <div key>Cluster Name</div>
-      <div value>{{cluster?.name}}</div>
+      <div value>{{cluster?.name || '-'}}</div>
     </km-property>
     <km-property>
       <div key>Cluster ID</div>

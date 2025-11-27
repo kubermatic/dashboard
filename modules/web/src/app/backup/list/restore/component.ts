@@ -119,7 +119,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   }
 
   getClusterName(restore: EtcdRestore): string {
-    return this._clusters.get(restore.spec.clusterId)?.name ?? 'N/A';
+    return this._clusters.get(restore.spec.clusterId)?.name ?? '-';
   }
 
   delete(restore: EtcdRestore): void {

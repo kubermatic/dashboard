@@ -138,7 +138,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   }
 
   getClusterName(backup: EtcdBackupConfig): string {
-    return this._clusters.get(backup.spec.clusterId)?.name ?? 'N/A';
+    return this._clusters.get(backup.spec.clusterId)?.name ?? '-';
   }
 
   delete(backup: EtcdBackupConfig): void {
