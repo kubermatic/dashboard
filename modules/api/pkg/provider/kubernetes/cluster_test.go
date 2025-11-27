@@ -91,13 +91,17 @@ func TestCreateCluster(t *testing.T) {
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			fakeClient := fake.
+			fakeSeedClient := fake.
+				NewClientBuilder().
+				WithObjects(tc.existingKubermaticObjects...).
+				Build()
+			fakeMasterClient := fake.
 				NewClientBuilder().
 				WithObjects(tc.existingKubermaticObjects...).
 				Build()
 
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
-				return fakeClient, nil
+				return fakeSeedClient, nil
 			}
 
 			// act
@@ -107,8 +111,8 @@ func TestCreateCluster(t *testing.T) {
 				nil,
 				tc.workerName,
 				nil,
-				fakeClient,
-				fakeClient,
+				fakeSeedClient,
+				fakeMasterClient,
 				nil,
 				tc.shareKubeconfig,
 				versions,
