@@ -19,6 +19,7 @@ import {
   DeleteSnapshotDialogComponent,
   DeleteSnapshotDialogConfig,
 } from '@app/backup/list/snapshot/delete-dialog/component';
+import {ClusterService} from '@core/services/cluster';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -28,9 +29,10 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
-import {Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {forkJoin, of, Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {Cluster} from '@app/shared/entity/cluster';
 
 @Component({
   selector: 'km-snapshot-details',
@@ -45,7 +47,7 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
   selectedProject = {} as Project;
   isInitialized = false;
   backup: EtcdBackupConfig = {} as EtcdBackupConfig;
-
+  cluster: Cluster;
   get canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
   }
@@ -59,6 +61,7 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
@@ -76,20 +79,23 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
 
     this._projectService.selectedProject
       .pipe(
-        switchMap(project => {
-          this.selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
-        })
+        switchMap(project =>
+          forkJoin({
+            userGroup: this._userService.getCurrentUserGroup(project.id).pipe(take(1)),
+            backups: this._backupService.list(project.id, true).pipe(take(1)),
+            clusters: this._clusterService.clusters(project.id, false).pipe(take(1)),
+            project: of(project),
+          })
+        )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+      .subscribe(({userGroup, backups, clusters, project}) => {
+        this.selectedProject = project;
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
 
-    this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.list(project.id, true)))
-      .pipe(map(backups => backups.find(backup => backup.id === this._route.snapshot.params.backupID)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backup => {
-        this.backup = backup;
+        this.backup = backups.find(backup => backup.id === this._route.snapshot.params.backupID);
+        this.cluster = clusters.find(cluster => cluster.id === this.backup.spec?.clusterId);
+
         this.isInitialized = true;
       });
   }

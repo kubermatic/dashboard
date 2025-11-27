@@ -21,7 +21,9 @@ import {
   AddAutomaticBackupDialogComponent,
   AddAutomaticBackupDialogConfig,
 } from '@app/backup/list/automatic-backup/add-dialog/component';
+import {Cluster} from '@app/shared/entity/cluster';
 import {BackupService} from '@core/services/backup';
+import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -34,7 +36,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {HealthStatus, getBackupHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {forkJoin, of, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -49,6 +51,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
   private _backups = [];
+  private _clusters = new Map<string, Cluster>();
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
 
@@ -57,7 +60,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'clusterName', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -82,6 +85,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _backupService: BackupService,
+    private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
@@ -101,20 +105,24 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
 
     this._projectService.selectedProject
       .pipe(
-        switchMap(project => {
-          this._selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
-        })
+        switchMap(project =>
+          forkJoin({
+            userGroup: this._userService.getCurrentUserGroup(project.id).pipe(take(1)),
+            backups: this._backupService.list(project.id).pipe(take(1)),
+            clusters: this._clusterService.clusters(project.id, false).pipe(take(1)),
+            project: of(project),
+          })
+        )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+      .subscribe(({userGroup, backups, clusters, project}) => {
+        this._selectedProject = project;
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
 
-    this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.list(project.id)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backups => {
         this._backups = backups;
         this.dataSource.data = this._backups;
+
+        clusters.forEach(cluster => this._clusters.set(cluster.id, cluster));
       });
   }
 
@@ -134,6 +142,10 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       ) || ({} as EtcdBackupConfigCondition);
 
     return getBackupHealthStatus(backup, condition);
+  }
+
+  getClusterName(backup: EtcdBackupConfig): string {
+    return this._clusters.get(backup.spec.clusterId)?.name ?? '-';
   }
 
   delete(backup: EtcdBackupConfig): void {
