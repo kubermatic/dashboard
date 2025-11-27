@@ -655,7 +655,6 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	)
 
 	return mainRouter, &ClientsSets{
-		FakeClient:               fakeSeedClient,
 		FakeMasterClient:         fakeMasterClient,
 		FakeSeedClient:           fakeSeedClient,
 		FakeKubernetesCoreClient: kubernetesClient,
@@ -822,7 +821,6 @@ func (f *fakeUserClusterConnection) GetClient(_ context.Context, _ *kubermaticv1
 
 // ClientsSets a simple wrapper that holds fake client sets.
 type ClientsSets struct {
-	FakeClient ctrlruntimeclient.Client
 	// FakeMasterClient is the client for master cluster operations
 	FakeMasterClient ctrlruntimeclient.Client
 	// FakeSeedClient is the client for seed cluster operations
