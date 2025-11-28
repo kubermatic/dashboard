@@ -292,38 +292,33 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		WithIndex(&corev1.Event{}, handlerv1common.EventFieldIndexerKey, handlerv1common.EventIndexer()).
 		Build()
 	kubernetesClient := fakerestclient.NewSimpleClientset(getRuntimeObjects(kubeObjects...)...)
-	// fakeImpersonationClient is used for seed cluster operations
 	fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 		return fakeSeedClient, nil
 	}
-	// fakeMasterImpersonationClient is used for master cluster operations (e.g., service accounts)
-	fakeMasterImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
-		return fakeMasterClient, nil
-	}
 
-	sshKeyProvider := kubernetes.NewSSHKeyProvider(fakeMasterImpersonationClient, fakeMasterClient)
-	privilegedSSHKeyProvider, err := kubernetes.NewPrivilegedSSHKeyProvider(fakeMasterClient)
+	sshKeyProvider := kubernetes.NewSSHKeyProvider(fakeImpersonationClient, fakeSeedClient)
+	privilegedSSHKeyProvider, err := kubernetes.NewPrivilegedSSHKeyProvider(fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
-	userProvider := kubernetes.NewUserProvider(fakeMasterClient)
-	adminProvider := kubernetes.NewAdminProvider(fakeMasterClient)
-	settingsProvider := kubernetes.NewSettingsProvider(fakeMasterClient)
-	addonConfigProvider := kubernetes.NewAddonConfigProvider(fakeMasterClient)
+	userProvider := kubernetes.NewUserProvider(fakeSeedClient)
+	adminProvider := kubernetes.NewAdminProvider(fakeSeedClient)
+	settingsProvider := kubernetes.NewSettingsProvider(fakeSeedClient)
+	addonConfigProvider := kubernetes.NewAddonConfigProvider(fakeSeedClient)
 	tokenGenerator, err := serviceaccount.JWTTokenGenerator([]byte(TestServiceAccountHashKey))
 	if err != nil {
 		return nil, nil, err
 	}
 	tokenAuth := serviceaccount.JWTTokenAuthenticator([]byte(TestServiceAccountHashKey))
-	serviceAccountTokenProvider, err := kubernetes.NewServiceAccountTokenProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	serviceAccountTokenProvider, err := kubernetes.NewServiceAccountTokenProvider(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
-	serviceAccountProvider := kubernetes.NewServiceAccountProvider(fakeMasterImpersonationClient, fakeMasterClient, "localhost")
-	projectMemberProvider := kubernetes.NewProjectMemberProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	serviceAccountProvider := kubernetes.NewServiceAccountProvider(fakeImpersonationClient, fakeSeedClient, "localhost")
+	projectMemberProvider := kubernetes.NewProjectMemberProvider(fakeImpersonationClient, fakeSeedClient)
 	userInfoGetter, err := provider.UserInfoGetterFactory(projectMemberProvider)
-	resourceQuotaProvider := resourceQuotaProviderFactory(fakeMasterImpersonationClient, fakeMasterClient)
-	groupProjectBindingProvider := groupProjectBindingProviderFactory(fakeMasterImpersonationClient, fakeMasterClient)
+	resourceQuotaProvider := resourceQuotaProviderFactory(fakeImpersonationClient, fakeSeedClient)
+	groupProjectBindingProvider := groupProjectBindingProviderFactory(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -357,11 +352,11 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return fakeOIDCClient, nil
 	}
 
-	projectProvider, err := kubernetes.NewProjectProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	projectProvider, err := kubernetes.NewProjectProvider(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
-	privilegedProjectProvider, err := kubernetes.NewPrivilegedProjectProvider(fakeMasterClient)
+	privilegedProjectProvider, err := kubernetes.NewPrivilegedProjectProvider(fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -389,11 +384,11 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return nil, fmt.Errorf("can not find clusterprovider for cluster %q", seed.Name)
 	}
 
-	credentialsManager, err := kubernetes.NewPresetProvider(fakeMasterClient)
+	credentialsManager, err := kubernetes.NewPresetProvider(fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
-	admissionPluginProvider := kubernetes.NewAdmissionPluginsProvider(fakeMasterClient)
+	admissionPluginProvider := kubernetes.NewAdmissionPluginsProvider(fakeSeedClient)
 
 	if seedsGetter == nil {
 		seedsGetter = CreateTestSeedsGetter(ctx, fakeSeedClient)
@@ -423,40 +418,40 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return nil, fmt.Errorf("can not find addonprovider for cluster %q", seed.Name)
 	}
 
-	externalClusterProvider, err := kubernetes.NewExternalClusterProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	externalClusterProvider, err := kubernetes.NewExternalClusterProvider(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
 	fakeExternalClusterProvider := &FakeExternalClusterProvider{
 		Provider:   externalClusterProvider,
-		FakeClient: fakeMasterClient,
+		FakeClient: fakeSeedClient,
 	}
 
-	constraintTemplateProvider, err := kubernetes.NewConstraintTemplateProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	constraintTemplateProvider, err := kubernetes.NewConstraintTemplateProvider(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
 	fakeConstraintTemplateProvider := &FakeConstraintTemplateProvider{
 		Provider:   constraintTemplateProvider,
-		FakeClient: fakeMasterClient,
+		FakeClient: fakeSeedClient,
 	}
 
-	privilegedAllowedRegistryProvider, err := kubernetes.NewAllowedRegistryPrivilegedProvider(fakeMasterClient)
+	privilegedAllowedRegistryProvider, err := kubernetes.NewAllowedRegistryPrivilegedProvider(fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
 	fakePrivilegedAllowedRegistryProvider := &FakePrivilegedAllowedRegistryProvider{
 		Provider:   privilegedAllowedRegistryProvider,
-		FakeClient: fakeMasterClient,
+		FakeClient: fakeSeedClient,
 	}
 
-	defaultConstraintProvider, err := kubernetes.NewDefaultConstraintProvider(fakeMasterImpersonationClient, fakeMasterClient, resources.KubermaticNamespace)
+	defaultConstraintProvider, err := kubernetes.NewDefaultConstraintProvider(fakeImpersonationClient, fakeSeedClient, resources.KubermaticNamespace)
 	if err != nil {
 		return nil, nil, err
 	}
 	fakeDefaultConstraintProvider := &FakeDefaultConstraintProvider{
 		Provider:   defaultConstraintProvider,
-		FakeClient: fakeMasterClient,
+		FakeClient: fakeSeedClient,
 	}
 
 	constraintProvider, err := kubernetes.NewConstraintProvider(fakeImpersonationClient, fakeSeedClient)
@@ -480,7 +475,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return nil, fmt.Errorf("can not find alertmanagerprovider for cluster %q", seed.Name)
 	}
 
-	clusterTemplateProvider, err := kubernetes.NewClusterTemplateProvider(fakeMasterImpersonationClient, fakeMasterClient)
+	clusterTemplateProvider, err := kubernetes.NewClusterTemplateProvider(fakeImpersonationClient, fakeSeedClient)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -553,9 +548,9 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return nil, fmt.Errorf("can not find privilegedMLAAdminSettingProvider for cluster %q", seed.Name)
 	}
 
-	seedProvider := kubernetes.NewSeedProvider(fakeMasterClient)
+	seedProvider := kubernetes.NewSeedProvider(fakeSeedClient)
 
-	applicationDefinitionProvider := kubernetes.NewApplicationDefinitionProvider(fakeMasterClient)
+	applicationDefinitionProvider := kubernetes.NewApplicationDefinitionProvider(fakeSeedClient)
 
 	eventRecorderProvider := kubernetes.NewEventRecorder()
 
