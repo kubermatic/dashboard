@@ -415,7 +415,7 @@ func TestDeleteApplicationDefinitions(t *testing.T) {
 			}
 
 			appDefs := &appskubermaticv1.ApplicationDefinitionList{}
-			if err := clients.FakeSeedClient.List(context.Background(), appDefs); err != nil {
+			if err := clients.FakeMasterClient.List(context.Background(), appDefs); err != nil {
 				t.Fatalf("failed to list ApplicationDefinitions: %v", err)
 			}
 
