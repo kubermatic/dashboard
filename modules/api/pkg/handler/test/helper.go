@@ -296,7 +296,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 		return fakeSeedClient, nil
 	}
-	// fakeMasterImpersonationClient is used for master cluster operations (e.g., service accounts)
+	// fakeMasterImpersonationClient is used for master cluster operations
 	fakeMasterImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 		return fakeMasterClient, nil
 	}
