@@ -611,17 +611,17 @@ func TestCreateClusterEndpoint(t *testing.T) {
 
 	t.Parallel()
 	testcases := []struct {
-		Name                     string
-		Body                     string
-		ExpectedResponse         string
-		HTTPStatus               int
-		ProjectToSync            string
-		ExistingProject          *kubermaticv1.Project
-		ExistingAPIUser          *apiv1.User
-		ExistingKubermaticObjs   []ctrlruntimeclient.Object
-		RewriteClusterID         bool
-		VerifyEncryptionSecret   bool
-		ExpectedEncryptionKey    string
+		Name                   string
+		Body                   string
+		ExpectedResponse       string
+		HTTPStatus             int
+		ProjectToSync          string
+		ExistingProject        *kubermaticv1.Project
+		ExistingAPIUser        *apiv1.User
+		ExistingKubermaticObjs []ctrlruntimeclient.Object
+		RewriteClusterID       bool
+		VerifyEncryptionSecret bool
+		ExpectedEncryptionKey  string
 	}{
 		// scenario 1
 		{
