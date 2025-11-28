@@ -117,7 +117,7 @@ func TestGetConfigEndpoint(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjs {
-				err = clientsSets.FakeClient.Create(context.Background(), gkObject)
+				err = clientsSets.FakeSeedClient.Create(context.Background(), gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object %v: %v", gkObject, err)
 				}
@@ -212,7 +212,7 @@ func TestDeleteConfigEndpoint(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjs {
-				err = clientsSets.FakeClient.Create(context.Background(), gkObject)
+				err = clientsSets.FakeSeedClient.Create(context.Background(), gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object %v: %v", gkObject, err)
 				}
@@ -314,7 +314,7 @@ func TestCreateConfigEndpoint(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjs {
-				err = clientsSets.FakeClient.Create(context.Background(), gkObject)
+				err = clientsSets.FakeSeedClient.Create(context.Background(), gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object %v: %v", gkObject, err)
 				}
@@ -414,7 +414,7 @@ func TestPatchConfigEndpoint(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjs {
-				err = clientsSets.FakeClient.Create(context.Background(), gkObject)
+				err = clientsSets.FakeSeedClient.Create(context.Background(), gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object %v: %v", gkObject, err)
 				}

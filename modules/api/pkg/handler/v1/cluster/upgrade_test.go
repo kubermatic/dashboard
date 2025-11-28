@@ -403,7 +403,7 @@ func TestUpgradeClusterNodeDeployments(t *testing.T) {
 			}
 
 			mds := &clusterv1alpha1.MachineDeploymentList{}
-			if err := cs.FakeClient.List(context.Background(), mds); err != nil {
+			if err := cs.FakeSeedClient.List(context.Background(), mds); err != nil {
 				t.Fatalf("failed to list machine deployments: %v", err)
 			}
 

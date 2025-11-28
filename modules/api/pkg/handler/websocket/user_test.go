@@ -121,12 +121,12 @@ func TestUserWatchEndpoint(t *testing.T) {
 			time.Sleep(time.Second)
 
 			var internalUser *kubermaticv1.User
-			if err := cli.FakeClient.Get(ctx, types.NamespacedName{Name: tc.userToUpdate}, internalUser); err != nil {
+			if err := cli.FakeSeedClient.Get(ctx, types.NamespacedName{Name: tc.userToUpdate}, internalUser); err != nil {
 				t.Fatalf("error getting user to update: %v", err)
 			}
 			internalUser.Spec.Settings = tc.userSettingsUpdate
 
-			if err := cli.FakeClient.Update(ctx, internalUser); err != nil {
+			if err := cli.FakeSeedClient.Update(ctx, internalUser); err != nil {
 				t.Fatalf("error updating user: %v", err)
 			}
 

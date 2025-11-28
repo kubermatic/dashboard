@@ -143,7 +143,7 @@ func TestListConstraints(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjects {
-				err = clientsSets.FakeClient.Create(ctx, gkObject)
+				err = clientsSets.FakeSeedClient.Create(ctx, gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object %v: %v", gkObject, err)
 				}
@@ -265,7 +265,7 @@ func TestGetConstraints(t *testing.T) {
 			}
 
 			for _, gkObject := range tc.ExistingGatekeeperObjects {
-				err = clientsSets.FakeClient.Create(ctx, gkObject)
+				err = clientsSets.FakeSeedClient.Create(ctx, gkObject)
 				if err != nil {
 					t.Fatalf("failed to create gk object: %v", err)
 				}
