@@ -36,7 +36,18 @@ import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@app/shared/validators/others';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import _ from 'lodash';
 import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import {NodeDataService} from '@app/core/services/node-data/service';
 
 enum Controls {
   Networks = 'networks',
@@ -107,6 +118,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
   tagCategories: VSphereTagCategory[] = [];
+  predefinedTagList: string[] = [];
   tagCategoryLabel = TagCategoryState.Empty;
   selectedTagCategory = '';
   tags: string[] = [];
@@ -123,7 +135,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _nodeDataService: NodeDataService
   ) {
     super('VSphere Provider Extended');
   }
@@ -243,11 +256,21 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._clusterSpecService.cluster.spec.cloud.vsphere.folder = folder;
   }
 
+  onLoadingTags(): void {}
+
   onTagCategoryChange(tagCategory: string): void {
     this.selectedTagCategory = tagCategory;
+    this.predefinedTagList = [];
     if (tagCategory) {
       this.form.get(Controls.Tags).enable();
       this.onTagValuesChange(this.tags);
+      this._nodeDataService.vsphere
+        .categoryTags(tagCategory)
+        .pipe(take(1))
+        .subscribe(tags => {
+          this.predefinedTagList = tags.map(t => t.name);
+          this._cdr.detectChanges();
+        });
     } else {
       this.form.get(Controls.Tags).reset();
       this.form.get(Controls.Tags).disable();

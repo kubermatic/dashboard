@@ -82,7 +82,7 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder = 'Select single or multiple values';
   @Input() required = false;
-  @Output() change = new EventEmitter<string[]>();
+  @Output() onChange = new EventEmitter<string[]>();
   @ViewChild('tagInput') tagInput: ElementRef;
   private readonly _debounceTime = 250;
   private _unsubscribe = new Subject<void>();
@@ -96,8 +96,13 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
     if (changes?.disabled && this.form) {
       if (this.disabled) {
         this.form.get(Controls.Tags).disable();
+        this.form.get(Controls.Tags).clearValidators();
       } else if (this.form.get(Controls.Tags).disabled) {
         this.form.get(Controls.Tags).enable();
+        this.required
+          ? this.form.get(Controls.Tags).addValidators(Validators.required)
+          : this.form.get(Controls.Tags).clearValidators();
+        this.form.get(Controls.Tags).updateValueAndValidity();
       }
     }
   }
@@ -180,7 +185,7 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   private _valueUpdated() {
     this._patchValue();
     this.filteredTags = this._removeSelectedTagsFromList();
-    this.change.emit(this.selectedTags);
+    this.onChange.emit(this.selectedTags);
   }
 
   private _patchValue() {
@@ -196,10 +201,10 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   }
 
   private _removeSelectedTagsFromFilterList(tags: string[]): string[] {
-    return tags?.filter(tag => !this.selectedTags.includes(tag)) || [];
+    return tags?.filter(tag => !this.selectedTags?.includes(tag)) || [];
   }
 
   private _removeSelectedTagsFromList(): string[] {
-    return this.tags?.filter(tag => !this.selectedTags.includes(tag)) || [];
+    return this.tags?.filter(tag => !this.selectedTags?.includes(tag)) || [];
   }
 }

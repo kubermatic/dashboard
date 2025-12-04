@@ -99,7 +99,8 @@ limitations under the License.
   </mat-form-field>
 
 
-  <mat-form-field fxFlex *ngIf="networks.length > 1">
+  <mat-form-field fxFlex
+                  *ngIf="networks.length > 1">
     <mat-label>Additional Networks</mat-label>
     <mat-select [formControlName]="Controls.AdditionalNetworks"
                 (selectionChange)="onAdditionalNetworkChanged($event.value)"

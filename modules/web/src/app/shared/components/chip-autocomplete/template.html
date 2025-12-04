@@ -40,6 +40,7 @@ limitations under the License.
              [placeholder]="placeholder"
              [matAutocomplete]="auto"
              [matChipInputFor]="tagList"
+             [matChipInputAddOnBlur]="true"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              (matChipInputTokenEnd)="addTag($event)" />
     </mat-chip-grid>
