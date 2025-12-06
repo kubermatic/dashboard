@@ -114,6 +114,8 @@ limitations under the License.
                         placeholder="Add tags..."
                         [disabled]="form.get(Controls.Tags).disabled"
                         [required]="!!form.get(Controls.TagCategory).value"
+                        [patternError]="tagValuesPatternError"
+                        [pattern]="tagValuesPattern"
                         [tags]="predefinedTagList"
                         (onChange)="onTagValuesChange($event)" />
 </form>

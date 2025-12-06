@@ -35,6 +35,7 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -82,6 +83,8 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder = 'Select single or multiple values';
   @Input() required = false;
+  @Input() patternError = 'Invalid pattern';
+  @Input() pattern: string;
   @Output() onChange = new EventEmitter<string[]>();
   @ViewChild('tagInput') tagInput: ElementRef;
   private readonly _debounceTime = 250;
@@ -99,9 +102,7 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
         this.form.get(Controls.Tags).clearValidators();
       } else if (this.form.get(Controls.Tags).disabled) {
         this.form.get(Controls.Tags).enable();
-        this.required
-          ? this.form.get(Controls.Tags).addValidators(Validators.required)
-          : this.form.get(Controls.Tags).clearValidators();
+        this.form.get(Controls.Tags).setValidators(this._validators());
         this.form.get(Controls.Tags).updateValueAndValidity();
       }
     }
@@ -127,7 +128,11 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   }
 
   removeTag(tag: string): void {
-    this.selectedTags = this.selectedTags.filter(selectedTag => selectedTag !== tag);
+    const index = this.selectedTags.indexOf(tag);
+
+    if (index >= 0) {
+      this.selectedTags.splice(index, 1);
+    }
     this._valueUpdated();
   }
 
@@ -156,10 +161,7 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   private _initForm() {
     this.form = this._builder.group({
       [Controls.Filter]: this._builder.control(''),
-      [Controls.Tags]: this._builder.control(
-        [],
-        this.required ? [Validators.required, KmValidators.unique()] : [KmValidators.unique()]
-      ),
+      [Controls.Tags]: this._builder.control([], this._validators()),
     });
 
     if (this.disabled) {
@@ -206,5 +208,18 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
 
   private _removeSelectedTagsFromList(): string[] {
     return this.tags?.filter(tag => !this.selectedTags?.includes(tag)) || [];
+  }
+
+  private _validators(): ValidatorFn[] {
+    const validators = [KmValidators.unique()];
+
+    if (this.required) {
+      validators.push(Validators.required);
+    }
+
+    if (this.pattern) {
+      validators.push(KmValidators.chipPattern(this.pattern));
+    }
+    return validators;
   }
 }

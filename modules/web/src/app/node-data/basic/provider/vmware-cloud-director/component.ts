@@ -367,7 +367,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     const networkControl = this.form.get(Controls.Network);
     const additionalNetworksControl = this.form.get(Controls.AdditionalNetworks);
 
-    additionalNetworksControl.setValue(additionalNetworksControl.value.filter(n => this.networks.includes(n)));
+    additionalNetworksControl.setValue(additionalNetworksControl.value?.filter(n => this.networks.includes(n)));
 
     if (networkControl.value && this.networks.includes(networkControl.value)) {
       return;

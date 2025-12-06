@@ -256,8 +256,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._clusterSpecService.cluster.spec.cloud.vsphere.folder = folder;
   }
 
-  onLoadingTags(): void {}
-
   onTagCategoryChange(tagCategory: string): void {
     this.selectedTagCategory = tagCategory;
     this.predefinedTagList = [];
