@@ -40,6 +40,7 @@ limitations under the License.
              [placeholder]="placeholder"
              [matAutocomplete]="auto"
              [matChipInputFor]="tagList"
+             [matChipInputAddOnBlur]="true"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              (matChipInputTokenEnd)="addTag($event)" />
     </mat-chip-grid>
@@ -62,5 +63,13 @@ limitations under the License.
       <span>Values must be <strong>unique</strong>.</span>
     </mat-error>
     }
+
+    @if (form.get(Controls.Tags).hasError('pattern')) {
+    <mat-error>
+      <span [innerHTML]="patternError"></span>
+    </mat-error>
+    }
+
+
   </mat-form-field>
 </form>

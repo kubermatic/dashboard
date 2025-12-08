@@ -109,15 +109,13 @@ limitations under the License.
                filterBy="name">
     <div *option="let category">{{category.name}}</div>
   </km-combobox>
-
-  <km-chip-list label="Tags"
-                [tags]="tags"
-                (onChange)="onTagValuesChange($event)"
-                [formControlName]="Controls.Tags"
-                [disabled]="form.get(Controls.Tags).disabled"
-                placeholder="Add tags..."
-                [kmPattern]="tagValuesPattern"
-                [kmPatternError]="tagValuesPatternError"
-                [kmRequired]="!!form.get(Controls.TagCategory).value"
-                fxFlex />
+  <km-chip-autocomplete [formControlName]="Controls.Tags"
+                        label="Tags"
+                        placeholder="Add tags..."
+                        [disabled]="form.get(Controls.Tags).disabled"
+                        [required]="!!form.get(Controls.TagCategory).value"
+                        [patternError]="tagValuesPatternError"
+                        [pattern]="tagValuesPattern"
+                        [tags]="predefinedTagList"
+                        (onChange)="onTagValuesChange($event)" />
 </form>
