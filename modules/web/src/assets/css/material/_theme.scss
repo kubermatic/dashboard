@@ -33,7 +33,7 @@
 
   // Dialogs.
   .mat-mdc-dialog-container {
-    --mdc-dialog-supporting-text-color: #{map.get($colors, text)};
+    --mat-dialog-supporting-text-color: #{map.get($colors, text)};
 
     color: map.get($colors, text);
   }
@@ -119,7 +119,7 @@
 
   // Menus.
   .mat-drawer-container {
-    background-color: map.get($colors, background);
+    --mat-sidenav-content-background-color: #{map.get($colors, background)};
 
     .mat-drawer-side {
       border: none;
@@ -131,9 +131,9 @@
     &.mat-mdc-form-field {
       color: map.get($colors, hint-color);
 
-      --mdc-outlined-text-field-outline-color: #{map.get($colors, divider)};
-      --mdc-outlined-text-field-disabled-outline-color: #{map.get($colors, divider-disabled)};
-      --mdc-outlined-text-field-hover-outline-color: #{map.get($colors, secondary-dark)};
+      --mat-form-field-outlined-outline-color: #{map.get($colors, divider)};
+      --mat-form-field-outlined-disabled-outline-color: #{map.get($colors, divider-disabled)};
+      --mat-form-field-outlined-hover-outline-color: #{map.get($colors, secondary-dark)};
     }
 
   }
@@ -155,8 +155,8 @@
   .mat-mdc-button,
   .mat-mdc-unelevated-button,
   .mat-mdc-raised-button {
-    --mdc-filled-button-container-color: #{map.get($colors, primary)};
-    --mdc-filled-button-label-text-color: #fff;
+    --mat-button-filled-container-color: #{map.get($colors, primary)};
+    --mat-button-filled-label-text-color: #fff;
 
     &:hover:not([disabled]) {
       background-color: map.get($colors, primary-hover);
@@ -265,12 +265,11 @@
 
   .mat-mdc-radio-button {
     &.mat-accent {
-      --mdc-radio-selected-icon-color: #{map.get($colors, primary)};
-      --mat-radio-checked-ripple-color: none;
-      --mdc-radio-selected-pressed-icon-color: var(--mdc-radio-selected-icon-color);
-      --mdc-radio-selected-hover-icon-color: var(--mdc-radio-selected-icon-color);
-      --mdc-radio-selected-focus-icon-color: var(--mdc-radio-selected-icon-color);
-      --mdc-radio-unselected-icon-color: #{map.get($colors, text-secondary)};
+      --mat-radio-selected-icon-color: #{map.get($colors, primary)};
+      --mat-radio-selected-pressed-icon-color: var(--mat-radio-selected-icon-color);
+      --mat-radio-selected-hover-icon-color: var(--mat-radio-selected-icon-color);
+      --mat-radio-selected-focus-icon-color: var(--mat-radio-selected-icon-color);
+      --mat-radio-unselected-icon-color: #{map.get($colors, text-secondary)};
     }
   }
 
@@ -278,30 +277,30 @@
     &.mat-accent,
     button {
       // track color
-      --mdc-switch-selected-track-color: #{map.get($colors, primary)};
-      --mdc-switch-selected-focus-track-color: var(--mdc-switch-selected-track-color);
-      --mdc-switch-selected-hover-track-color: var(--mdc-switch-selected-track-color);
-      --mdc-switch-selected-pressed-track-color: var(--mdc-switch-selected-track-color);
-      --mdc-switch-unselected-track-color: #{map.get($colors, divider)};
-      --mdc-switch-unselected-focus-track-color: var(--mdc-switch-unselected-track-color);
-      --mdc-switch-unselected-hover-track-color: var(--mdc-switch-unselected-track-color);
-      --mdc-switch-unselected-pressed-track-color: var(--mdc-switch-unselected-track-color);
+      --mat-slide-toggle-selected-track-color: #{map.get($colors, primary)};
+      --mat-slide-toggle-selected-focus-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-hover-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-pressed-track-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-unselected-track-color: #{map.get($colors, divider)};
+      --mat-slide-toggle-unselected-focus-track-color: var(--mat-slide-toggle-unselected-track-color);
+      --mat-slide-toggle-unselected-hover-track-color: var(--mat-slide-toggle-unselected-track-color);
+      --mat-slide-toggle-unselected-pressed-track-color: var(--mat-slide-toggle-unselected-track-color);
 
       // handle color
-      --mdc-switch-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
-      --mdc-switch-selected-handle-color: #fafafa;
-      --mdc-switch-selected-focus-handle-color: var(--mdc-switch-selected-handle-color);
-      --mdc-switch-selected-hover-handle-color: var(--mdc-switch-selected-handle-color);
-      --mdc-switch-selected-pressed-handle-color: var(--mdc-switch-selected-handle-color);
-      --mdc-switch-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
-      --mdc-switch-unselected-focus-handle-color: var(--mdc-switch-unselected-handle-color);
-      --mdc-switch-unselected-hover-handle-color: var(--mdc-switch-unselected-handle-color);
-      --mdc-switch-unselected-pressed-handle-color: var(--mdc-switch-unselected-handle-color);
+      --mat-slide-toggle-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-selected-handle-color: #fafafa;
+      --mat-slide-toggle-selected-focus-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-selected-hover-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-selected-pressed-handle-color: var(--mat-slide-toggle-selected-handle-color);
+      --mat-slide-toggle-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-unselected-focus-handle-color: var(--mat-slide-toggle-unselected-handle-color);
+      --mat-slide-toggle-unselected-hover-handle-color: var(--mat-slide-toggle-unselected-handle-color);
+      --mat-slide-toggle-unselected-pressed-handle-color: var(--mat-slide-toggle-unselected-handle-color);
 
       // ripple color
-      --mdc-switch-selected-focus-state-layer-color: var(--mdc-switch-selected-track-color);
-      --mdc-switch-selected-hover-state-layer-color: var(--mdc-switch-selected-track-color);
-      --mdc-switch-selected-pressed-state-layer-color: var(--mdc-switch-selected-track-color);
+      --mat-slide-toggle-selected-focus-state-layer-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-hover-state-layer-color: var(--mat-slide-toggle-selected-track-color);
+      --mat-slide-toggle-selected-pressed-state-layer-color: var(--mat-slide-toggle-selected-track-color);
     }
   }
 
@@ -321,22 +320,22 @@
   }
 
   .mdc-checkbox {
-    --mdc-checkbox-selected-icon-color: #{map.get($colors, primary)};
-    --mdc-checkbox-selected-hover-icon-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-focus-icon-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-pressed-icon-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-focus-state-layer-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-pressed-state-layer-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-focus-state-layer-opacity: 0;
-    --mdc-checkbox-unselected-focus-state-layer-opacity: 0;
+    --mat-checkbox-selected-icon-color: #{map.get($colors, primary)};
+    --mat-checkbox-selected-hover-icon-color: var(--mat-checkbox-selected-icon-color);
+    --mat-checkbox-selected-focus-icon-color: var(--mat-checkbox-selected-icon-color);
+    --mat-checkbox-selected-pressed-icon-color: var(--mat-checkbox-selected-icon-color);
+    --mat-checkbox-selected-focus-state-layer-color: var(--mat-checkbox-selected-icon-color);
+    --mat-checkbox-selected-pressed-state-layer-color: var(--mat-checkbox-selected-icon-color);
+    --mat-checkbox-selected-focus-state-layer-opacity: 0;
+    --mat-checkbox-unselected-focus-state-layer-opacity: 0;
   }
 
   // Chips.
   .mat-mdc-chip {
-    --mdc-chip-elevated-container-color: transparent;
-    --mdc-chip-label-text-color: #{map.get($colors, text)};
-    --mdc-chip-focus-state-layer-color: none;
-    --mdc-chip-hover-state-layer-color: none;
+    --mat-chip-elevated-container-color: transparent;
+    --mat-chip-label-text-color: #{map.get($colors, text)};
+    --mat-chip-focus-state-layer-color: none;
+    --mat-chip-hover-state-layer-color: none;
 
     .mat-mdc-chip-remove {
       background-color: map.get($colors, text);
@@ -365,7 +364,7 @@
 
   // Tooltips.
   .mat-mdc-tooltip {
-    --mdc-plain-tooltip-container-color: #{map.get($colors, tooltip-background)};
+    --mat-plain-tooltip-container-color: #{map.get($colors, tooltip-background)};
   }
 
   // Spinners.
@@ -383,7 +382,7 @@
 
   // Snackbar
   .mat-mdc-snack-bar-container {
-    --mdc-snackbar-container-color: #{map.get($colors, option-background)};
+    --mat-snack-bar-container-color: #{map.get($colors, option-background)};
   }
 
   // Progress bar
@@ -407,6 +406,6 @@
   }
 
   .mat-mdc-progress-bar.mat-accent {
-    --mdc-linear-progress-active-indicator-color: #{map.get($colors, indicator-orange)};
+    --mat-progress-bar-active-indicator-color: #{map.get($colors, indicator-orange)};
   }
 }

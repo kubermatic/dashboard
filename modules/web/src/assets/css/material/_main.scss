@@ -535,7 +535,7 @@ button {
   &.mat-mdc-raised-button,
   &.mat-mdc-icon-button {
     --mat-icon-button-state-layer-color: none;
-    --mdc-icon-button-state-layer-size: none;
+    --mat-icon-button-state-layer-size: none;
 
     font-size: variables.$font-size-subhead;
     height: 45px;
@@ -564,7 +564,7 @@ button {
 
   &.mat-mdc-icon-button {
     --mat-icon-button-state-layer-color: none;
-    --mdc-icon-button-state-layer-size: 45px !important;
+    --mat-icon-button-state-layer-size: 45px !important;
 
     bottom: 2px;
   }
@@ -645,9 +645,9 @@ button {
 
 /* stylelint-disable selector-class-pattern */
 .mat-mdc-slide-toggle {
-  --mdc-switch-track-width: 50px;
-  --mdc-switch-track-height: 24px;
-  --mdc-switch-track-shape: 50px;
+  --mat-slide-toggle-track-width: 50px;
+  --mat-slide-toggle-track-height: 24px;
+  --mat-slide-toggle-track-shape: 50px;
 
   .mdc-switch {
     .mdc-switch__handle-track {
@@ -671,8 +671,8 @@ button {
 .mat-mdc-chip {
   border-radius: variables.$border-radius;
 
-  --mdc-chip-container-height: 24px !important;
-  --mdc-chip-container-shape-radius: 3px !important;
+  --mat-chip-container-height: 24px !important;
+  --mat-chip-container-shape-radius: 3px !important;
 
   .mdc-evolution-chip__action {
     box-shadow: none !important;
