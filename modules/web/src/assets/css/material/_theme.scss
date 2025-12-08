@@ -119,7 +119,7 @@
 
   // Menus.
   .mat-drawer-container {
-    background-color: map.get($colors, background);
+    --mat-sidenav-content-background-color: #{map.get($colors, background)};
 
     .mat-drawer-side {
       border: none;
@@ -382,7 +382,7 @@
 
   // Snackbar
   .mat-mdc-snack-bar-container {
-    --mat-snackbar-container-color: #{map.get($colors, option-background)};
+    --mat-snack-bar-container-color: #{map.get($colors, option-background)};
   }
 
   // Progress bar
