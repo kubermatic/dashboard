@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, SecurityContext, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
@@ -84,7 +84,7 @@ export class InstallAddonDialogComponent {
 
   getAddonDescription(name: string): SafeHtml {
     const description = this.addonConfigs.get(name)?.spec?.description || '';
-    return this._sanitizer.sanitize(1, _.escape(description)) || '';
+    return this._sanitizer.sanitize(SecurityContext.HTML, description) || '';
   }
 
   select(name: string): void {

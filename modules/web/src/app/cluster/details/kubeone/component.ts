@@ -151,7 +151,11 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   downloadKubeconfig(): void {
-    window.open(this._clusterService.getExternalKubeconfigURL(this.projectID, this.cluster.id), '_blank', 'noopener,noreferrer');
+    window.open(
+      this._clusterService.getExternalKubeconfigURL(this.projectID, this.cluster.id),
+      '_blank',
+      'noopener,noreferrer'
+    );
   }
 
   hasUpgrades(): boolean {
