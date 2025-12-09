@@ -86,7 +86,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
       /{version-anchor-link}/g,
       this._config.getGitVersion().semver.raw.replace(/\./g, '')
     );
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
 
     if (this.hasNewChangelog()) {
       this._userService

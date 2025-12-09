@@ -130,7 +130,7 @@ export class ServiceAccountTokenComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Token',
-        message: `Delete <b>${_.escape(token.name)}</b> token of <b>${_.escape(this.serviceaccount.name)}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
+        message: `Delete <b>${_.escape(token.name)}</b> token of <b>${_.escape(this.serviceaccount.name)}</b> service account of <b>${_.escape(this._selectedProject.name)}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };
