@@ -14,7 +14,7 @@
 
 import {Component, Input, SecurityContext, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 import {
   Addon,
@@ -82,7 +82,7 @@ export class InstallAddonDialogComponent {
     return _.escape(getAddonShortDescription(this.addonConfigs.get(name)));
   }
 
-  getAddonDescription(name: string): SafeHtml {
+  getAddonDescription(name: string): string {
     const description = this.addonConfigs.get(name)?.spec?.description || '';
     return this._sanitizer.sanitize(SecurityContext.HTML, description) || '';
   }
