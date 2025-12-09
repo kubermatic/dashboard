@@ -27,6 +27,7 @@ import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-d
 import {SharedModule} from '@app/shared/module';
 import {fakeScheduleConfiguration} from '@test/data/metering';
 import {MeteringMockService} from '@test/services/metering-mock';
+import _ from 'lodash';
 import {of} from 'rxjs';
 import {MeteringScheduleAddDialog} from './add-dialog/component';
 import {MeteringScheduleConfigComponent} from './component';
@@ -109,7 +110,7 @@ describe('MeteringScheduleConfigComponent', () => {
     expect(spyCreateDialog).toHaveBeenCalledWith(ConfirmationDialogComponent, {
       data: {
         title: 'Delete Schedule Configuration',
-        message: `Delete <b>${fakeSchedule.name}</b> schedule permanently?`,
+        message: `Delete <b>${_.escape(fakeSchedule.name)}</b> schedule permanently?`,
         confirmLabel: 'Delete',
         warning: 'Deleting this will NOT remove reports related to it.',
       },

@@ -80,7 +80,7 @@ export class ShareKubeconfigComponent implements OnInit {
 
   onClick(): void {
     if (this.dialogTitle === ShareKubeconfigDialogMode.Download) {
-      window.open(this.kubeconfigLink, '_blank');
+      window.open(this.kubeconfigLink, '_blank', 'noopener,noreferrer');
     }
     this._matDialogRef.close();
   }

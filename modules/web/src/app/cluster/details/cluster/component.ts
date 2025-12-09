@@ -414,7 +414,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.shareConfigDialog(ShareKubeconfigDialogMode.Download);
     } else {
       const kubeconfigLink = this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id);
-      window.open(kubeconfigLink, '_blank');
+      window.open(kubeconfigLink, '_blank', 'noopener,noreferrer');
     }
   }
 

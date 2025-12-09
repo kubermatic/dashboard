@@ -122,12 +122,12 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
       const url = this._router.serializeUrl(
         this._router.createUrlTree([`/projects/${resource.projectId}/clusters/${resource.id}`])
       );
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer');
     } else {
       const url = this._router.serializeUrl(
         this._router.createUrlTree([`/projects/${resource.projectId}/clustertemplates`])
       );
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
   }
 

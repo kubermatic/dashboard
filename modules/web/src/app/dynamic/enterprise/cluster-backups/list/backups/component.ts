@@ -326,7 +326,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   onNext(url: BackupDownloadUrl) {
-    window.open(url.downloadURL, '_blank');
+    window.open(url.downloadURL, '_blank', 'noopener,noreferrer');
   }
 
   private _getCbslName(): void {

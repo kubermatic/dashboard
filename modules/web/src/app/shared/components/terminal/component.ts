@@ -252,7 +252,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
   onTokenExpired(): void {
     const url = this._getWebTerminalProxyURL();
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   private _getWebTerminalProxyURL(): string {
@@ -297,7 +297,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     if (data === ErrorOperations.KubeConfigSecretMissing) {
       if (!this.isDexAuthenticationPageOpened) {
         const url = this._getWebTerminalProxyURL();
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
         this.isDexAuthenticationPageOpened = true;
       }
       this.message = 'Please wait, authenticate in order to access web terminal...';

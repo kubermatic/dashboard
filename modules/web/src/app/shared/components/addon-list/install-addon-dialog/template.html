@@ -71,7 +71,7 @@ limitations under the License.
     <div>{{selectedAddon}}</div>
     }
     @if (!!addonConfigs.get(selectedAddon)?.spec?.description) {
-    <div [innerHTML]="addonConfigs.get(selectedAddon).spec.description"
+    <div [innerHTML]="getAddonDescription(selectedAddon)"
          class="desc">
     </div>
     }

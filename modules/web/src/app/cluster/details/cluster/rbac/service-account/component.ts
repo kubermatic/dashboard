@@ -81,7 +81,8 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
         serviceAccount.namespace,
         serviceAccount.id
       ),
-      '_blank'
+      '_blank',
+      'noopener,noreferrer'
     );
   }
 

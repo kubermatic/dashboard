@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, SecurityContext, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {DomSanitizer} from '@angular/platform-browser';
 
 import {
   Addon,
@@ -61,7 +62,8 @@ export class InstallAddonDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<Component>,
-    private readonly _builder: FormBuilder
+    private readonly _builder: FormBuilder,
+    private readonly _sanitizer: DomSanitizer
   ) {}
 
   hasLogo(name: string): boolean {
@@ -78,6 +80,11 @@ export class InstallAddonDialogComponent {
 
   getAddonShortDescription(name: string): string {
     return _.escape(getAddonShortDescription(this.addonConfigs.get(name)));
+  }
+
+  getAddonDescription(name: string): string {
+    const description = this.addonConfigs.get(name)?.spec?.description || '';
+    return this._sanitizer.sanitize(SecurityContext.HTML, description) || '';
   }
 
   select(name: string): void {
