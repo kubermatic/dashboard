@@ -173,7 +173,7 @@ func TestCreateOrUpdateEndpoint(t *testing.T) {
 			}
 
 			secret := &corev1.Secret{}
-			err = clients.FakeClient.Get(context.Background(), types.NamespacedName{
+			err = clients.FakeSeedClient.Get(context.Background(), types.NamespacedName{
 				Namespace: metav1.NamespaceSystem,
 				Name:      backupcredentials.GenBackupCredentialsSecretName(tc.BackupCredentials.Destination, tc.Seed.GetEtcdBackupDestination(testDestination)),
 			}, secret)

@@ -201,7 +201,7 @@ func TestCreateServiceAccountProject(t *testing.T) {
 
 				saName := kubermaticv1helper.EnsureProjectServiceAccountPrefix(sa.ID)
 				expectedSA := &kubermaticv1.User{}
-				err = client.FakeClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: saName}, expectedSA)
+				err = client.FakeMasterClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: saName}, expectedSA)
 				if err != nil {
 					t.Fatalf("expected SA object got error %v", err)
 				}
@@ -489,7 +489,7 @@ func TestEdit(t *testing.T) {
 
 				saName := kubermaticv1helper.EnsureProjectServiceAccountPrefix(sa.ID)
 				expectedSA := &kubermaticv1.User{}
-				err = client.FakeClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: saName}, expectedSA)
+				err = client.FakeMasterClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: saName}, expectedSA)
 				if err != nil {
 					t.Fatalf("expected SA object got error %v", err)
 				}

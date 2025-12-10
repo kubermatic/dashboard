@@ -161,7 +161,7 @@ func TestCreateClusterSAEndpoint(t *testing.T) {
 
 			// test k8s sa and secret has been created
 			if tc.httpStatus == http.StatusOK {
-				client := cs.FakeClient
+				client := cs.FakeSeedClient
 				ctx := context.Background()
 				sa := &corev1.ServiceAccount{}
 				if err := client.Get(ctx, types.NamespacedName{Namespace: tc.saNamespace, Name: tc.saName}, sa); err != nil {
@@ -693,7 +693,7 @@ func TestDeleteClusterSAEndpoint(t *testing.T) {
 			}
 
 			test.CompareWithResult(t, res, tc.expectedResponse)
-			client := cs.FakeClient
+			client := cs.FakeSeedClient
 			ctx := context.Background()
 
 			// test k8s sa has been unbinded and delete.(secret is automatically deleted by k8s controller but cannot be tested with fake client)
