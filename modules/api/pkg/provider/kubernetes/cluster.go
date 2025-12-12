@@ -72,6 +72,7 @@ func NewClusterProvider(
 	workerName string,
 	extractGroupPrefix extractGroupPrefixFunc,
 	client ctrlruntimeclient.Client,
+	masterClient ctrlruntimeclient.Client,
 	k8sClient kubernetes.Interface,
 	oidcKubeConfEndpoint bool,
 	versions kubermatic.Versions,
@@ -82,6 +83,7 @@ func NewClusterProvider(
 		workerName:                   workerName,
 		extractGroupPrefix:           extractGroupPrefix,
 		client:                       client,
+		masterClient:                 masterClient,
 		k8sClient:                    k8sClient,
 		oidcKubeConfEndpoint:         oidcKubeConfEndpoint,
 		seedKubeconfig:               cfg,
@@ -104,6 +106,7 @@ type ClusterProvider struct {
 	workerName           string
 	extractGroupPrefix   extractGroupPrefixFunc
 	client               ctrlruntimeclient.Client
+	masterClient         ctrlruntimeclient.Client
 	k8sClient            kubernetes.Interface
 	seedKubeconfig       *restclient.Config
 	versions             kubermatic.Versions
@@ -476,6 +479,13 @@ func (p *ClusterProvider) GetSeedClusterAdminRuntimeClient() ctrlruntimeclient.C
 // Note that this client has admin privileges in the seed cluster.
 func (p *ClusterProvider) GetSeedClusterAdminClient() kubernetes.Interface {
 	return p.k8sClient
+}
+
+// GetMasterClient returns a runtime client to interact with the master cluster resources.
+//
+// Note that this client has admin privileges in the master cluster.
+func (p *ClusterProvider) GetMasterClient() ctrlruntimeclient.Client {
+	return p.masterClient
 }
 
 func (p *ClusterProvider) withImpersonation(userInfo *provider.UserInfo) k8cuserclusterclient.ConfigOption {

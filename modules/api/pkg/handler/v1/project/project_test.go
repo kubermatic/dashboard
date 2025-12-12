@@ -511,23 +511,27 @@ func TestListProjectMethod(t *testing.T) {
 			testSeed := test.GenTestSeed()
 			tc.ExistingKubermaticObjects = append(tc.ExistingKubermaticObjects, testSeed)
 
-			fakeClient := fake.
+			fakeSeedClient := fake.
+				NewClientBuilder().
+				WithObjects(tc.ExistingKubermaticObjects...).
+				Build()
+			fakeMasterClient := fake.
 				NewClientBuilder().
 				WithObjects(tc.ExistingKubermaticObjects...).
 				Build()
 
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
-				return fakeClient, nil
+				return fakeSeedClient, nil
 			}
-			projectMemberProvider := kubernetes.NewProjectMemberProvider(fakeImpersonationClient, fakeClient)
-			userProvider := kubernetes.NewUserProvider(fakeClient)
+			projectMemberProvider := kubernetes.NewProjectMemberProvider(fakeImpersonationClient, fakeSeedClient)
+			userProvider := kubernetes.NewUserProvider(fakeSeedClient)
 
 			userInfoGetter, err := provider.UserInfoGetterFactory(projectMemberProvider)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			fUserClusterConnection := &fakeUserClusterConnection{fakeClient}
+			fUserClusterConnection := &fakeUserClusterConnection{fakeSeedClient}
 			kubernetesClient := fakerestclient.NewSimpleClientset()
 			clusterProvider := kubernetes.NewClusterProvider(
 				&restclient.Config{},
@@ -535,7 +539,8 @@ func TestListProjectMethod(t *testing.T) {
 				fUserClusterConnection,
 				"",
 				rbac.ExtractGroupPrefix,
-				fakeClient,
+				fakeSeedClient,
+				fakeMasterClient,
 				kubernetesClient,
 				false,
 				versions,
@@ -549,7 +554,7 @@ func TestListProjectMethod(t *testing.T) {
 				return nil, fmt.Errorf("cannot find clusterprovider for cluster %q", seed.Name)
 			}
 
-			endpointFun := project.ListEndpoint(userInfoGetter, test.NewFakeProjectProvider(), test.NewFakePrivilegedProjectProvider(), projectMemberProvider, projectMemberProvider, userProvider, clusterProviderGetter, test.CreateTestSeedsGetter(ctx, fakeClient))
+			endpointFun := project.ListEndpoint(userInfoGetter, test.NewFakeProjectProvider(), test.NewFakePrivilegedProjectProvider(), projectMemberProvider, projectMemberProvider, userProvider, clusterProviderGetter, test.CreateTestSeedsGetter(ctx, fakeSeedClient))
 
 			ctx = context.WithValue(ctx, middleware.UserCRContextKey, tc.ExistingAPIUser)
 

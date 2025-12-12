@@ -255,7 +255,7 @@ func TestCreateApplicationInstallation(t *testing.T) {
 				test.CompareWithResult(t, res, string(b))
 
 				for _, nsname := range tc.ExpectedNamespaces {
-					if err := cl.FakeClient.Get(context.Background(), types.NamespacedName{Name: nsname}, &corev1.Namespace{}); err != nil {
+					if err := cl.FakeSeedClient.Get(context.Background(), types.NamespacedName{Name: nsname}, &corev1.Namespace{}); err != nil {
 						t.Errorf("Could not get expected namespace %q: %v", nsname, err)
 					}
 				}
@@ -359,7 +359,7 @@ func TestDeleteApplication(t *testing.T) {
 			}
 
 			appInstalls := &appskubermaticv1.ApplicationInstallationList{}
-			if err := clients.FakeClient.List(context.Background(), appInstalls); err != nil {
+			if err := clients.FakeSeedClient.List(context.Background(), appInstalls); err != nil {
 				t.Fatalf("failed to list MachineDeployments: %v", err)
 			}
 
