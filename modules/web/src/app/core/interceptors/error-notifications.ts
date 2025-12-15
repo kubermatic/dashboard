@@ -13,13 +13,20 @@
 // limitations under the License.
 
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Injectable, Injector} from '@angular/core';
+import {Injectable, Injector, OnDestroy} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {Observable} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {SettingsService} from '@core/services/settings';
 import {AdminSettings} from '@shared/entity/settings';
 import {CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@app/shared/entity/application';
+import {
+  ErrorTrackingEntry,
+  ErrorThrottlingConfig,
+  DEFAULT_THROTTLING_CONFIG,
+  MILLISECONDS_PER_MINUTE,
+  MINUTES_PER_HOUR,
+} from './error-throttling.config';
 
 export interface APIError {
   error: Error;
@@ -36,7 +43,7 @@ enum Errors {
 }
 
 @Injectable()
-export class ErrorNotificationsInterceptor implements HttpInterceptor {
+export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy {
   private readonly _notificationService: NotificationService;
   // Array of partial error messages that should be silenced in the UI.
   private readonly _silenceErrArr = [
@@ -50,6 +57,11 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     'presets?name=',
     `applicationdefinitions/${CLUSTER_AUTOSCALING_APP_DEF_NAME}`,
   ];
+
+  // Error throttling properties
+  private readonly _errorTrackingMap = new Map<string, ErrorTrackingEntry>();
+  private readonly _throttlingConfig: ErrorThrottlingConfig = {...DEFAULT_THROTTLING_CONFIG};
+  private _cleanupIntervalHandle?: number;
 
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', Errors.InvalidCredentials],
@@ -76,7 +88,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
 
   constructor(
     private readonly _inj: Injector,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
   ) {
     this._notificationService = this._inj.get(NotificationService);
     this._settingsService = this._inj.get(SettingsService);
@@ -87,6 +99,14 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     this._settingsService.adminSettings.pipe(take(2)).subscribe(settings => {
       this.adminSettings = settings;
     });
+
+    // Start periodic cleanup of error tracking map
+    this._startCleanupInterval();
+  }
+
+  ngOnDestroy(): void {
+    this._stopCleanupInterval();
+    this._errorTrackingMap.clear();
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -94,32 +114,39 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       tap({
         next: () => {},
         error: (httpError: HttpErrorResponse) => {
-          if (this._shouldSilenceRequest(req)) {
-            return;
-          }
-
-          if (!httpError) {
-            return;
-          }
-
-          let error = this._toError(httpError);
-          if (this._shouldSilenceError(error)) {
-            return;
-          }
-
-          error = this._mapError(error);
-          this._notificationService.error(error.message, error.shortMessage);
+          this._handleHttpError(req, httpError);
         },
-      })
+      }),
     );
   }
 
+  private _handleHttpError(req: HttpRequest<any>, httpError: HttpErrorResponse): void {
+    if (this._shouldSilenceRequest(req) || !httpError) {
+      return;
+    }
+
+    let error = this._toError(httpError);
+    if (this._shouldSilenceError(error)) {
+      return;
+    }
+
+    const errorKey = this._generateErrorKey(req.url, httpError.status);
+    if (!this._shouldShowThrottledError(errorKey, req.url, httpError.status, error.message)) {
+      return;
+    }
+
+    error = this._mapError(error);
+    this._notificationService.error(error.message, error.shortMessage);
+  }
+
   private _mapError(error: Error): Error {
-    for (const key of this._errorMap.keys()) {
-      if (error.message.toLocaleLowerCase().includes(key.toLocaleLowerCase()) || error.message.match(key)) {
-        error.message = this._errorMap.get(key);
-        break;
-      }
+    const messageLower = error.message.toLowerCase();
+    const matchingKey = Array.from(this._errorMap.keys()).find(
+      key => messageLower.includes(key.toLowerCase()) || error.message.match(key),
+    );
+
+    if (matchingKey) {
+      error.message = this._errorMap.get(matchingKey);
     }
 
     return error;
@@ -152,5 +179,218 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
           code: httpError.status,
           shortMessage: httpError.statusText,
         };
+  }
+
+  private _generateErrorKey(url: string, status: number): string {
+    const normalizedUrl = this._normalizeUrl(url);
+    return `${normalizedUrl}|${status}`;
+  }
+
+  /**
+   * Normalize URL - skip common API prefix and take meaningful segments
+   *
+   * Examples:
+   *   /api/v2/projects/xxx/clusters/yyy/machinedeployments/md-name/nodes/metric
+   *     → /machinedeployments/md-name/nodes/metric
+   */
+  private _normalizeUrl(url: string): string {
+    try {
+      const {pathname} = new URL(url, window.location.origin);
+      const segments = pathname.split('/').filter(s => s.length > 0);
+
+      // Skip /api/v1|v2/projects/<projectId> prefix if present
+      const shouldSkipPrefix =
+        segments.length > 4 &&
+        segments[0] === 'api' &&
+        (segments[1] === 'v1' || segments[1] === 'v2') &&
+        segments[2] === 'projects';
+
+      const meaningfulSegments = shouldSkipPrefix ? segments.slice(4) : segments;
+
+      // Take last 3-4 segments (or all if less)
+      const takeCount = Math.min(4, meaningfulSegments.length);
+      const result = meaningfulSegments.slice(-takeCount);
+
+      return result.length > 0 ? '/' + result.join('/') : '/';
+    } catch {
+      // Fallback for malformed URLs
+      const parts = url
+        .split('?')[0]
+        .split('/')
+        .filter(s => s.length > 0);
+      if (parts.length === 0) return '/';
+
+      const takeCount = Math.min(3, parts.length);
+      return '/' + parts.slice(-takeCount).join('/');
+    }
+  }
+
+  private _startCleanupInterval(): void {
+    if (this._cleanupIntervalHandle) {
+      return;
+    }
+
+    this._cleanupIntervalHandle = window.setInterval(() => {
+      this._cleanupExpiredEntries();
+    }, this._throttlingConfig.cleanupIntervalMs);
+  }
+
+  private _cleanupExpiredEntries(): void {
+    const currentTimestampMs = Date.now();
+    const expiredKeys: string[] = [];
+
+    this._errorTrackingMap.forEach((entry, errorKey) => {
+      const timeSinceLastOccurrence = currentTimestampMs - entry.lastOccurrenceTimestampMs;
+      const isExpired = timeSinceLastOccurrence > this._throttlingConfig.entryExpirationMs;
+
+      if (isExpired) {
+        expiredKeys.push(errorKey);
+      }
+    });
+
+    expiredKeys.forEach(key => this._errorTrackingMap.delete(key));
+  }
+
+  private _stopCleanupInterval(): void {
+    if (this._cleanupIntervalHandle) {
+      window.clearInterval(this._cleanupIntervalHandle);
+      this._cleanupIntervalHandle = undefined;
+    }
+  }
+
+  private _shouldShowThrottledError(
+    errorKey: string,
+    requestUrl: string,
+    httpStatusCode: number,
+    errorMessage: string,
+  ): boolean {
+    // Early exit: throttling disabled
+    if (!this._throttlingConfig.enableThrottling) {
+      return true;
+    }
+
+    const currentTimestampMs = Date.now();
+    const entry = this._errorTrackingMap.get(errorKey);
+
+    // Early exit: first occurrence - always show
+    if (!entry) {
+      this._createNewErrorEntry(errorKey, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
+      return true;
+    }
+
+    this._updateErrorEntry(entry, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
+
+    // Early exit: reset conditions met (time threshold or status changed)
+    if (this._shouldResetError(entry, httpStatusCode, currentTimestampMs)) {
+      this._resetErrorEntry(entry, currentTimestampMs);
+      return true;
+    }
+
+    // Early exit: suppress if auto-muted
+    if (entry.isAutoMuted) {
+      return false;
+    }
+
+    // Early exit: suppress if not enough time passed
+    const {nextNotificationTimestampMs, totalOccurrenceCount} = entry;
+    const isStillThrottled = currentTimestampMs < nextNotificationTimestampMs;
+    if (isStillThrottled) {
+      return false;
+    }
+
+    return this._handleShowError(entry, errorKey, currentTimestampMs);
+  }
+
+  private _handleShowError(entry: ErrorTrackingEntry, errorKey: string, currentTimestampMs: number): boolean {
+    entry.notificationsDisplayedCount++;
+
+    // Check if should auto-mute after threshold
+    if (this._shouldAutoMute(entry)) {
+      this._muteError(entry, currentTimestampMs);
+      return true; // Show last notification before muting
+    }
+
+    // Calculate next show time with exponential backoff
+    this._updateNextShowTime(entry, currentTimestampMs);
+    return true;
+  }
+
+  private _createNewErrorEntry(
+    errorKey: string,
+    failedUrl: string,
+    httpStatusCode: number,
+    errorMessage: string,
+    timestampMs: number,
+  ): void {
+    this._errorTrackingMap.set(errorKey, {
+      errorKey,
+      totalOccurrenceCount: 1,
+      notificationsDisplayedCount: 1,
+      lastOccurrenceTimestampMs: timestampMs,
+      nextNotificationTimestampMs: timestampMs + this._throttlingConfig.initialDelayMs,
+      isAutoMuted: false,
+      lastErrorMessage: errorMessage,
+      lastHttpStatusCode: httpStatusCode,
+      lastFailedUrl: failedUrl,
+    });
+  }
+
+  private _updateErrorEntry(
+    entry: ErrorTrackingEntry,
+    failedUrl: string,
+    httpStatusCode: number,
+    errorMessage: string,
+    timestampMs: number,
+  ): void {
+    entry.totalOccurrenceCount++;
+    entry.lastOccurrenceTimestampMs = timestampMs;
+    entry.lastErrorMessage = errorMessage;
+    entry.lastHttpStatusCode = httpStatusCode;
+    entry.lastFailedUrl = failedUrl;
+  }
+
+  private _shouldResetError(
+    entry: ErrorTrackingEntry,
+    currentHttpStatusCode: number,
+    currentTimestampMs: number,
+  ): boolean {
+    const {isAutoMuted, autoMutedTimestampMs, lastHttpStatusCode} = entry;
+    if (!isAutoMuted || !autoMutedTimestampMs) {
+      return false;
+    }
+
+    const mutedDuration = currentTimestampMs - autoMutedTimestampMs;
+    const {muteResetHours} = this._throttlingConfig;
+    const resetThreshold = muteResetHours * MINUTES_PER_HOUR * MILLISECONDS_PER_MINUTE;
+    const timeExceeded = mutedDuration >= resetThreshold;
+    const statusChanged = lastHttpStatusCode !== currentHttpStatusCode;
+
+    return timeExceeded || statusChanged;
+  }
+
+  private _resetErrorEntry(entry: ErrorTrackingEntry, timestamp: number): void {
+    const {initialDelayMs} = this._throttlingConfig;
+    entry.isAutoMuted = false;
+    entry.autoMutedTimestampMs = undefined;
+    entry.totalOccurrenceCount = 1;
+    entry.notificationsDisplayedCount = 1;
+    entry.nextNotificationTimestampMs = timestamp + initialDelayMs;
+  }
+
+  private _shouldAutoMute(entry: ErrorTrackingEntry): boolean {
+    const {enableAutoMute, muteThreshold} = this._throttlingConfig;
+    return enableAutoMute && entry.notificationsDisplayedCount >= muteThreshold;
+  }
+
+  private _muteError(entry: ErrorTrackingEntry, timestamp: number): void {
+    entry.isAutoMuted = true;
+    entry.autoMutedTimestampMs = timestamp;
+  }
+
+  private _updateNextShowTime(entry: ErrorTrackingEntry, currentTimestampMs: number): void {
+    const {initialDelayMs, backoffMultiplier, maxDelayMs} = this._throttlingConfig;
+    const exponentialDelay = initialDelayMs * Math.pow(backoffMultiplier, entry.notificationsDisplayedCount - 1);
+    const nextDelayMs = Math.min(exponentialDelay, maxDelayMs);
+    entry.nextNotificationTimestampMs = currentTimestampMs + nextDelayMs;
   }
 }
