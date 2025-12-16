@@ -88,7 +88,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
   constructor(
     private readonly _inj: Injector,
-    private readonly _settingsService: SettingsService,
+    private readonly _settingsService: SettingsService
   ) {
     this._notificationService = this._inj.get(NotificationService);
     this._settingsService = this._inj.get(SettingsService);
@@ -116,7 +116,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
         error: (httpError: HttpErrorResponse) => {
           this._handleHttpError(req, httpError);
         },
-      }),
+      })
     );
   }
 
@@ -193,21 +193,25 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
    *     → /machinedeployments/md-name/nodes/metric
    */
   private _normalizeUrl(url: string): string {
+    const API_PREFIX_LENGTH = 4;
+    const MAX_SEGMENTS_COUNT = 4;
+    const FALLBACK_SEGMENTS_COUNT = 3;
+
     try {
       const {pathname} = new URL(url, window.location.origin);
       const segments = pathname.split('/').filter(s => s.length > 0);
 
       // Skip /api/v1|v2/projects/<projectId> prefix if present
       const shouldSkipPrefix =
-        segments.length > 4 &&
+        segments.length > API_PREFIX_LENGTH &&
         segments[0] === 'api' &&
         (segments[1] === 'v1' || segments[1] === 'v2') &&
         segments[2] === 'projects';
 
-      const meaningfulSegments = shouldSkipPrefix ? segments.slice(4) : segments;
+      const meaningfulSegments = shouldSkipPrefix ? segments.slice(API_PREFIX_LENGTH) : segments;
 
       // Take last 3-4 segments (or all if less)
-      const takeCount = Math.min(4, meaningfulSegments.length);
+      const takeCount = Math.min(MAX_SEGMENTS_COUNT, meaningfulSegments.length);
       const result = meaningfulSegments.slice(-takeCount);
 
       return result.length > 0 ? '/' + result.join('/') : '/';
@@ -219,7 +223,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
         .filter(s => s.length > 0);
       if (parts.length === 0) return '/';
 
-      const takeCount = Math.min(3, parts.length);
+      const takeCount = Math.min(FALLBACK_SEGMENTS_COUNT, parts.length);
       return '/' + parts.slice(-takeCount).join('/');
     }
   }
@@ -228,7 +232,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     errorKey: string,
     requestUrl: string,
     httpStatusCode: number,
-    errorMessage: string,
+    errorMessage: string
   ): boolean {
     // Early exit: throttling disabled
     if (!this._throttlingConfig.enableThrottling) {
@@ -297,7 +301,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     failedUrl: string,
     httpStatusCode: number,
     errorMessage: string,
-    timestampMs: number,
+    timestampMs: number
   ): void {
     this._errorTrackingMap.set(errorKey, {
       errorKey,
@@ -317,7 +321,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     failedUrl: string,
     httpStatusCode: number,
     errorMessage: string,
-    timestampMs: number,
+    timestampMs: number
   ): void {
     entry.totalOccurrenceCount++;
     entry.lastOccurrenceTimestampMs = timestampMs;
