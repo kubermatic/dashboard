@@ -19,14 +19,14 @@
 export const MILLISECONDS_PER_SECOND = 1000;
 export const SECONDS_PER_MINUTE = 60;
 export const MINUTES_PER_HOUR = 60;
-export const MILLISECONDS_PER_MINUTE = MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE;
-export const MILLISECONDS_PER_HOUR = MILLISECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+export const MILLISECONDS_PER_MINUTE = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND;
+export const MILLISECONDS_PER_HOUR = MINUTES_PER_HOUR * MILLISECONDS_PER_MINUTE;
 
 // ============================================
 // ERROR THROTTLING INTERFACES
 // ============================================
 
-export interface ErrorTrackingEntry {
+export interface ErrorEntry {
   errorKey: string;
   totalOccurrenceCount: number;
   notificationsDisplayedCount: number;
@@ -40,25 +40,15 @@ export interface ErrorTrackingEntry {
 }
 
 export interface ErrorThrottlingConfig {
-  /** Initial delay before showing next notification (ms) */
   initialDelayMs: number;
-  /** Maximum delay cap for exponential backoff (ms) */
   maxDelayMs: number;
-  /** Multiplier for exponential backoff (e.g., 2 = double delay each time) */
   backoffMultiplier: number;
-  /** Number of notifications before auto-muting an error */
   muteThreshold: number;
-  /** Hours after muting before resetting error tracking */
   muteResetHours: number;
-  /** Interval for cleaning up expired entries (ms) */
   cleanupIntervalMs: number;
-  /** Time after which inactive entries are removed (ms) */
   entryExpirationMs: number;
-  /** Enable/disable throttling (if false, show all errors) */
   enableThrottling: boolean;
-  /** Enable/disable auto-muting after threshold */
   enableAutoMute: boolean;
-  /** Enable/disable console logging for debugging */
   logThrottledErrors: boolean;
 }
 
@@ -66,15 +56,28 @@ export interface ErrorThrottlingConfig {
 // ERROR THROTTLING CONFIGURATION
 // ============================================
 
+// export const DEFAULT_THROTTLING_CONFIG: ErrorThrottlingConfig = {
+//   initialDelayMs: 10 * MILLISECONDS_PER_SECOND, // 10 seconds - Initial delay before showing next notification
+//   maxDelayMs: 20 * MILLISECONDS_PER_SECOND, // 20 seconds - Maximum delay cap for exponential backoff
+//   backoffMultiplier: 2, // Multiplier for exponential backoff (e.g., 2 = double delay each time)
+//   muteThreshold: 3, // Mute after 3 notifications - Number of notifications before auto-muting an error
+//   muteResetHours: 0.033, // ~2 minutes - Hours after muting before resetting error tracking
+//   cleanupIntervalMs: 5 * MILLISECONDS_PER_SECOND, // 5 seconds - Interval for cleaning up expired entries
+//   entryExpirationMs: 1 * MILLISECONDS_PER_MINUTE, // 1 minute - Time after which inactive entries are removed
+//   enableThrottling: true, // Enable/disable throttling (if false, show all errors)
+//   enableAutoMute: true, // Enable/disable auto-muting after threshold
+//   logThrottledErrors: true, // Enable/disable console logging for debugging
+// };
+
 export const DEFAULT_THROTTLING_CONFIG: ErrorThrottlingConfig = {
-  initialDelayMs: 10 * MILLISECONDS_PER_SECOND, // 10 seconds
-  maxDelayMs: 20 * MILLISECONDS_PER_SECOND, // 20 seconds
-  backoffMultiplier: 2,
-  muteThreshold: 3, // Mute after 3 notifications
-  muteResetHours: 0.033, // ~2 minutes
-  cleanupIntervalMs: 5 * MILLISECONDS_PER_SECOND, // 5 seconds
-  entryExpirationMs: 1 * MILLISECONDS_PER_MINUTE, // 1 minute
-  enableThrottling: true,
-  enableAutoMute: true,
-  logThrottledErrors: true,
+  initialDelayMs: 2 * MILLISECONDS_PER_HOUR, // 2 hours - Initial delay before showing next notification
+  maxDelayMs: 4 * MILLISECONDS_PER_HOUR, // 4 hours - Maximum delay cap for exponential backoff
+  backoffMultiplier: 2, // Multiplier for exponential backoff (e.g., 2 = double delay each time)
+  muteThreshold: 3, // Mute after 3 notifications - Number of notifications before auto-muting an error
+  muteResetHours: 24, // 24 hours - Hours after muting before resetting error tracking
+  cleanupIntervalMs: 10 * MILLISECONDS_PER_MINUTE, // 10 minutes - Interval for cleaning up expired entries
+  entryExpirationMs: 24 * MILLISECONDS_PER_HOUR, // 24 hours - Time after which inactive entries are removed
+  enableThrottling: true, // Enable/disable throttling (if false, show all errors)
+  enableAutoMute: true, // Enable/disable auto-muting after threshold
+  logThrottledErrors: false, // Disable console logging in production
 };
