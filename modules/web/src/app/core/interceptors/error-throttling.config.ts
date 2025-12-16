@@ -56,19 +56,6 @@ export interface ErrorThrottlingConfig {
 // ERROR THROTTLING CONFIGURATION
 // ============================================
 
-// export const DEFAULT_THROTTLING_CONFIG: ErrorThrottlingConfig = {
-//   initialDelayMs: 10 * MILLISECONDS_PER_SECOND, // 10 seconds - Initial delay before showing next notification
-//   maxDelayMs: 20 * MILLISECONDS_PER_SECOND, // 20 seconds - Maximum delay cap for exponential backoff
-//   backoffMultiplier: 2, // Multiplier for exponential backoff (e.g., 2 = double delay each time)
-//   muteThreshold: 3, // Mute after 3 notifications - Number of notifications before auto-muting an error
-//   muteResetHours: 0.033, // ~2 minutes - Hours after muting before resetting error tracking
-//   cleanupIntervalMs: 5 * MILLISECONDS_PER_SECOND, // 5 seconds - Interval for cleaning up expired entries
-//   entryExpirationMs: 1 * MILLISECONDS_PER_MINUTE, // 1 minute - Time after which inactive entries are removed
-//   enableThrottling: true, // Enable/disable throttling (if false, show all errors)
-//   enableAutoMute: true, // Enable/disable auto-muting after threshold
-//   logThrottledErrors: true, // Enable/disable console logging for debugging
-// };
-
 export const DEFAULT_THROTTLING_CONFIG: ErrorThrottlingConfig = {
   initialDelayMs: 2 * MILLISECONDS_PER_HOUR, // 2 hours - Initial delay before showing next notification
   maxDelayMs: 4 * MILLISECONDS_PER_HOUR, // 4 hours - Maximum delay cap for exponential backoff
