@@ -61,7 +61,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
   // Error throttling properties
   private readonly _errorTrackingMap = new Map<string, ErrorEntry>();
   private readonly _throttlingConfig: ErrorThrottlingConfig = {...DEFAULT_THROTTLING_CONFIG};
-  private _cleanupIntervalHandle?: number;
+  private readonly _maxMapSize = 100;
 
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', Errors.InvalidCredentials],
@@ -99,13 +99,9 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     this._settingsService.adminSettings.pipe(take(2)).subscribe(settings => {
       this.adminSettings = settings;
     });
-
-    // Start periodic cleanup of error tracking map
-    this._startCleanupInterval();
   }
 
   ngOnDestroy(): void {
-    this._stopCleanupInterval();
     this._errorTrackingMap.clear();
   }
 
@@ -244,6 +240,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
     // Early exit: first occurrence - always show
     if (!entry) {
+      // On-demand cleanup: check if map is at/above max size before adding new entry
+      if (this._errorTrackingMap.size >= this._maxMapSize) {
+        this._cleanupExpiredEntries();
+      }
       this._createErrorEntry(errorKey, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
       return true;
     }
@@ -365,17 +365,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     entry.nextNotificationTimestampMs = currentTimestampMs + nextDelayMs;
   }
 
-  // Cleanup Lifecycle
-
-  private _startCleanupInterval(): void {
-    if (this._cleanupIntervalHandle) {
-      return;
-    }
-
-    this._cleanupIntervalHandle = window.setInterval(() => {
-      this._cleanupExpiredEntries();
-    }, this._throttlingConfig.cleanupIntervalMs);
-  }
+  // On-Demand Cleanup
 
   private _cleanupExpiredEntries(): void {
     const currentTimestampMs = Date.now();
@@ -391,12 +381,5 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     });
 
     expiredKeys.forEach(key => this._errorTrackingMap.delete(key));
-  }
-
-  private _stopCleanupInterval(): void {
-    if (this._cleanupIntervalHandle) {
-      window.clearInterval(this._cleanupIntervalHandle);
-      this._cleanupIntervalHandle = undefined;
-    }
   }
 }
