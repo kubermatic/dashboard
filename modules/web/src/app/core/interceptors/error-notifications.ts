@@ -128,7 +128,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     }
 
     const errorKey = this._buildErrorKey(req.url, httpError.status);
-    if (!this._shouldShowNotification(errorKey, req.url, httpError.status, error.message)) {
+    if (this._shouldHideNotification(errorKey, req.url, httpError.status, error.message)) {
       return;
     }
 
@@ -220,49 +220,49 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     }
   }
 
-  private _shouldShowNotification(
+  private _shouldHideNotification(
     errorKey: string,
     requestUrl: string,
     httpStatusCode: number,
     errorMessage: string
   ): boolean {
-    // Early exit: throttling disabled
+    // Throttling disabled
     if (!this._throttlingConfig.enableThrottling) {
-      return true;
+      return false;
     }
 
     const currentTimestampMs = Date.now();
     const entry = this._errorTrackingMap.get(errorKey);
 
-    // Early exit: first occurrence - always show
+    // First occurrence
     if (!entry) {
       if (this._errorTrackingMap.size >= this._maxMapSize) {
         this._cleanupExpiredEntries();
       }
       this._createErrorEntry(errorKey, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
-      return true;
+      return false;
     }
 
     this._updateExistingEntry(entry, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
 
-    // Early exit: reset conditions met (time threshold or status changed)
+    // Reset conditions met
     if (this._shouldResetEntry(entry, httpStatusCode, currentTimestampMs)) {
       this._resetEntry(entry, currentTimestampMs);
+      return false;
+    }
+
+    // Auto-muted
+    if (entry.isAutoMuted) {
       return true;
     }
 
-    // Skip notification
-    if (entry.isAutoMuted) {
-      return false;
-    }
-
-    // Skip notification
+    // Still throttled
     const isStillThrottled = currentTimestampMs < entry.nextNotificationTimestampMs;
     if (isStillThrottled) {
-      return false;
+      return true;
     }
 
-    return this._processNotificationDisplay(entry, currentTimestampMs);
+    return !this._processNotificationDisplay(entry, currentTimestampMs);
   }
 
   private _processNotificationDisplay(entry: ErrorEntry, currentTimestampMs: number): boolean {
