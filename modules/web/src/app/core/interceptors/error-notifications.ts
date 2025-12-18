@@ -175,7 +175,6 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     return !!httpError.error && !!httpError.error.error;
   }
 
-  // Error Key Generation & URL Normalization
   private _buildErrorKey(url: string, status: number): string {
     const normalizedUrl = this._normalizeUrl(url);
     return `${normalizedUrl}|${status}`;
@@ -205,14 +204,11 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
         segments[2] === 'projects';
 
       const meaningfulSegments = shouldSkipPrefix ? segments.slice(API_PREFIX_LENGTH) : segments;
-
-      // Take last 3-4 segments (or all if less)
       const takeCount = Math.min(MAX_SEGMENTS_COUNT, meaningfulSegments.length);
       const result = meaningfulSegments.slice(-takeCount);
 
       return result.length > 0 ? '/' + result.join('/') : '/';
     } catch {
-      // Fallback for malformed URLs
       const parts = url
         .split('?')[0]
         .split('/')
@@ -240,7 +236,6 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
     // Early exit: first occurrence - always show
     if (!entry) {
-      // On-demand cleanup: check if map is at/above max size before adding new entry
       if (this._errorTrackingMap.size >= this._maxMapSize) {
         this._cleanupExpiredEntries();
       }
@@ -256,12 +251,12 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
       return true;
     }
 
-    // Skip notification if error is auto-muted
+    // Skip notification
     if (entry.isAutoMuted) {
       return false;
     }
 
-    // Skip notification if still within throttle delay period
+    // Skip notification
     const isStillThrottled = currentTimestampMs < entry.nextNotificationTimestampMs;
     if (isStillThrottled) {
       return false;
@@ -273,7 +268,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
   private _processNotificationDisplay(entry: ErrorEntry, currentTimestampMs: number): boolean {
     entry.notificationsDisplayedCount++;
 
-    // Auto-mute if threshold exceeded
+    // Mute: If Threshold reached
     if (this._shouldAutoMuteEntry(entry)) {
       this._muteEntry(entry, currentTimestampMs);
       return true;
