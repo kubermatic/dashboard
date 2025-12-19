@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/gorilla/securecookie"
 
@@ -376,11 +377,13 @@ func CreateOIDCKubeconfigEndpoint(
 				clientCmdAuth.AuthProvider = clientCmdAuthProvider
 			}
 
-			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
+			// Normalize email to lowercase to match how users are stored
+			email := strings.ToLower(claims.Email)
+			oidcKubeCfg.AuthInfos[email] = clientCmdAuth
 			// create default ctx
 			clientCmdCtx := clientcmdapi.NewContext()
 			clientCmdCtx.Cluster = req.ClusterID
-			clientCmdCtx.AuthInfo = claims.Email
+			clientCmdCtx.AuthInfo = email
 			oidcKubeCfg.Contexts[req.ClusterID] = clientCmdCtx
 			oidcKubeCfg.CurrentContext = req.ClusterID
 		}
@@ -517,12 +520,14 @@ func CreateOIDCKubeconfigSecretEndpoint(
 			clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
 			clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
 			clientCmdAuth.AuthProvider = clientCmdAuthProvider
-			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
+			// Normalize email to lowercase to match how users are stored
+			email := strings.ToLower(claims.Email)
+			oidcKubeCfg.AuthInfos[email] = clientCmdAuth
 
 			// create default ctx
 			clientCmdCtx := clientcmdapi.NewContext()
 			clientCmdCtx.Cluster = req.ClusterID
-			clientCmdCtx.AuthInfo = claims.Email
+			clientCmdCtx.AuthInfo = email
 			oidcKubeCfg.Contexts[req.ClusterID] = clientCmdCtx
 			oidcKubeCfg.CurrentContext = req.ClusterID
 		}
@@ -536,7 +541,9 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		if err := createKubeconfigSecret(ctx, client, oidcKubeCfg, claims.Email); err != nil {
+		// Use lowercase email for secret name consistency
+		email := strings.ToLower(claims.Email)
+		if err := createKubeconfigSecret(ctx, client, oidcKubeCfg, email); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 		return rsp, nil
