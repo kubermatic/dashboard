@@ -70,3 +70,4 @@ rules:
     - 15
 ignorePatterns:
   - "**/*.js"
+  - "dashboard/**"
