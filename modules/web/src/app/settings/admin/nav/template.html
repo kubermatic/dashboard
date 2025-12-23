@@ -146,14 +146,10 @@ limitations under the License.
     @if (isEnterpriseEdition) {
     <div class="sub-menu-item"
          routerLinkActive="active">
-      <div fxLayoutAlign="flex-start center">
-        <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
-           fxLayoutAlign=" center">
-          <span>{{adminPanelViewDisplayName.KyvernoPolicies}} </span>
-          <span class="km-label-primary"
-                matTooltip="Early access feature - still under development.">Beta</span>
-        </a>
-      </div>
+      <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
+         fxLayoutAlign=" center">
+        <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
+      </a>
     </div>
     }
     }
@@ -202,13 +198,10 @@ limitations under the License.
       <span>{{adminPanelViewDisplayName.OPA}}</span>
     </a>
     <a fxLayoutAlign=" center"
-       fxLayoutGap="5px"
        routerLinkActive="active"
        [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
        class="collapsed-sub-menu-item">
-      <span>{{adminPanelViewDisplayName.KyvernoPolicies}} </span>
-      <span class="km-label-primary"
-            matTooltip="Early access feature - still under development.">Beta</span>
+      <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
     </a>
     }
   </km-side-nav-field>
