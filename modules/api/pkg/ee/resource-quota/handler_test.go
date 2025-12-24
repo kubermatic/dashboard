@@ -64,10 +64,10 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				Name: projectName,
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
-			Quota: genQuota(resource.MustParse("5"), resource.MustParse("1235M"), resource.MustParse("125Gi")),
+			Quota: genQuota(resource.MustParse("5"), resource.MustParse("1235Mi"), resource.MustParse("125Gi")),
 		},
 		Status: kubermaticv1.ResourceQuotaStatus{
-			GlobalUsage: genQuota(resource.MustParse("2"), resource.MustParse("35M"), resource.MustParse("100Gi")),
+			GlobalUsage: genQuota(resource.MustParse("2"), resource.MustParse("35Mi"), resource.MustParse("100Gi")),
 		},
 	}
 	rq2 := &kubermaticv1.ResourceQuota{
@@ -83,10 +83,10 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				Name: anotherProjectName,
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
-			Quota: genQuota(resource.MustParse("0"), resource.MustParse("1234M"), resource.MustParse("0")),
+			Quota: genQuota(resource.MustParse("0"), resource.MustParse("1234Mi"), resource.MustParse("0")),
 		},
 		Status: kubermaticv1.ResourceQuotaStatus{
-			GlobalUsage: genQuota(resource.MustParse("0"), resource.MustParse("300M"), resource.MustParse("0")),
+			GlobalUsage: genQuota(resource.MustParse("0"), resource.MustParse("300Mi"), resource.MustParse("0")),
 		},
 	}
 
@@ -125,9 +125,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				for _, rq := range *resourceQuotaList {
 					var expectedQuota apiv2.Quota
 					if rq.Name == rq1.Name {
-						expectedQuota = genAPIQuota(5, 1.24, 134.22)
+						expectedQuota = genAPIQuota(5, 1.21, 125)
 					} else {
-						expectedQuota = genAPIQuota(0, 1.23, 0)
+						expectedQuota = genAPIQuota(0, 1.21, 0)
 					}
 					if !diff.DeepEqual(expectedQuota, rq.Quota) {
 						return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, rq.Quota))
@@ -182,12 +182,12 @@ func TestHandlerResourceQuotas(t *testing.T) {
 					return fmt.Errorf("expected list length %d, got %d", 1, listLen)
 				}
 				quota := resourceQuotaList[0]
-				expectedQuota := genAPIQuota(5, 2.47, 134.22)
+				expectedQuota := genAPIQuota(5, 2.41, 125)
 				if !diff.DeepEqual(expectedQuota, quota.Quota) {
 					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Quota))
 				}
 
-				expectedUsage := genAPIQuota(2, 0.34, 107.37)
+				expectedUsage := genAPIQuota(2, 0.33, 100)
 				if !diff.DeepEqual(expectedUsage, quota.Status.GlobalUsage) {
 					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Status.GlobalUsage))
 				}
@@ -448,7 +448,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withQuota(genAPIQuota(12, 10, 30)).
 				withGlobalUsage(genAPIQuota(2, 3, 5)).
 				withCalculatedQuota(genAPIQuota(6, 9, 65)).
-				withMessage("Calculated disk size (65G) exceeds resource quota (30G)").
+				withMessage("Calculated disk size (65Gi) exceeds resource quota (30G)").
 				build(),
 		},
 		{
@@ -504,7 +504,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withAnexia(2, 3000, 10).
+				withAnexia(2, 3072, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -524,7 +524,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withAzure(2, 3000, 10000).
+				withAzure(2, 3072, 10240).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -544,7 +544,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withDO(2, 3000, 10).
+				withDO(2, 3072, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -565,7 +565,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			RequestBody: newCalcReq().
 				withReplicas(2).
 				withDiskSize(10).
-				withGCP(2, 3000).
+				withGCP(2, 3072).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -599,13 +599,13 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ProjectID: test.GenDefaultProject().Name,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				newRQBuilder().
-					withQuota("12", "10G", "30G").
-					withGlobalUsage("2", "3G", "5G").
+					withQuota("12", "10Gi", "30Gi").
+					withGlobalUsage("2", "3Gi", "5Gi").
 					build()),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withKubevirt("2", "3G", "7G", "3G").
+				withKubevirt("2", "3072", "7", "3").
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -625,7 +625,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withNutanix(2, 3000, 10, true).
+				withNutanix(2, 3072, 10, true).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -645,7 +645,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withOpenstack(2, 3000, 10, 0).
+				withOpenstack(2, 3072, 10, 0).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -665,7 +665,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withOpenstack(2, 3000, 10, 20).
+				withOpenstack(2, 3072, 10, 20).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -685,7 +685,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withVMDirector(2, 3000, 10).
+				withVMDirector(2, 3072, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -705,7 +705,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withVsphere(2, 3000, 10).
+				withVsphere(2, 3072, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -725,7 +725,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withNutanix(2, 3000, 0, false).
+				withNutanix(2, 3072, 0, false).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -1009,10 +1009,10 @@ func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {
 				Name: projectName,
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
-			Quota: genQuota(resource.MustParse("5"), resource.MustParse("10G"), resource.MustParse("20Gi")),
+			Quota: genQuota(resource.MustParse("5"), resource.MustParse("10Gi"), resource.MustParse("20Gi")),
 		},
 		Status: kubermaticv1.ResourceQuotaStatus{
-			GlobalUsage: genQuota(resource.MustParse("3"), resource.MustParse("2000M"), resource.MustParse("10G")),
+			GlobalUsage: genQuota(resource.MustParse("3"), resource.MustParse("2000Mi"), resource.MustParse("10G")),
 		},
 	}
 }
