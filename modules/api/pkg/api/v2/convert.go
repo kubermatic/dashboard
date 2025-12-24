@@ -35,14 +35,16 @@ func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 
 	// Get memory and storage denoted in GB
 	if resourceDetails.Memory != nil && !resourceDetails.Memory.IsZero() {
-		memory := float64(resourceDetails.Memory.Value()) / math.Pow(1024, 3)
+		changeToBinary := TreatDecimalAsBinary(resourceDetails.Memory)
+		memory := float64(changeToBinary.Value()) / math.Pow(1024, 3)
 		// round to 2 decimal places
 		memory = math.Round(memory*100) / 100
 		quota.Memory = &memory
 	}
 	//
 	if resourceDetails.Storage != nil && !resourceDetails.Storage.IsZero() {
-		storage := float64(resourceDetails.Storage.Value()) / math.Pow(1024, 3)
+		changeToBinary := TreatDecimalAsBinary(resourceDetails.Storage)
+		storage := float64(changeToBinary.Value()) / math.Pow(1024, 3)
 		// round to 2 decimal places
 		storage = math.Round(storage*100) / 100
 		quota.Storage = &storage
@@ -64,7 +66,7 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	}
 
 	if quota.Memory != nil {
-		mem, err = resource.ParseQuantity(fmt.Sprintf("%fGi", *quota.Memory))
+		mem, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Memory))
 		if err != nil {
 			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
 		}
@@ -72,7 +74,7 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	}
 
 	if quota.Storage != nil {
-		storage, err = resource.ParseQuantity(fmt.Sprintf("%fGi", *quota.Storage))
+		storage, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Storage))
 		if err != nil {
 			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
 		}
@@ -80,4 +82,30 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	}
 
 	return resourceDetails, nil
+}
+
+// Convert memory from decimal units (K, M, G) to binary units (Ki, Mi, Gi)
+// so memory calculations use base-2 (1024) instead of base-10 (1000).
+func TreatDecimalAsBinary(q *resource.Quantity) resource.Quantity {
+	s := q.String()
+
+	var value int64
+	var unit string
+	fmt.Sscanf(s, "%d%s", &value, &unit)
+
+	var bytes int64
+	units := []string{"K", "M", "G", "T"}
+	exponent := 0
+	for i, u := range units {
+		if u == unit {
+			exponent = i + 1
+			break
+		}
+	}
+	if exponent == 0 {
+		return *q
+	}
+	bytes = value * int64(math.Pow(1024, float64(exponent)))
+
+	return *resource.NewQuantity(bytes, resource.BinarySI)
 }

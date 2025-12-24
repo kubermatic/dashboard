@@ -28,6 +28,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -266,20 +267,20 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuo
 			rdAvailable.CPU.Add(*quota.Spec.Quota.CPU)
 		}
 		if quota.Spec.Quota.Memory != nil {
-			rdAvailable.Memory.Add(*quota.Spec.Quota.Memory)
+			rdAvailable.Memory.Add(apiv2.TreatDecimalAsBinary(quota.Spec.Quota.Memory))
 		}
 		if quota.Spec.Quota.Storage != nil {
-			rdAvailable.Storage.Add(*quota.Spec.Quota.Storage)
+			rdAvailable.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Spec.Quota.Storage))
 		}
 
 		if quota.Status.GlobalUsage.CPU != nil {
 			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
 		}
 		if quota.Status.GlobalUsage.Memory != nil {
-			rdUsed.Memory.Add(*quota.Status.GlobalUsage.Memory)
+			rdUsed.Memory.Add(apiv2.TreatDecimalAsBinary(quota.Status.GlobalUsage.Memory))
 		}
 		if quota.Status.GlobalUsage.Storage != nil {
-			rdUsed.Storage.Add(*quota.Status.GlobalUsage.Storage)
+			rdUsed.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Status.GlobalUsage.Storage))
 		}
 	}
 
@@ -326,10 +327,10 @@ func CalculateResourceQuotaUpdateForProject(
 		newResourceCalculation.CPU.Add(*globalQuotaUsage.CPU)
 	}
 	if globalQuotaUsage.Memory != nil && newResourceCalculation.Memory != nil {
-		newResourceCalculation.Memory.Add(*globalQuotaUsage.Memory)
+		newResourceCalculation.Memory.Add(apiv2.TreatDecimalAsBinary(globalQuotaUsage.Memory))
 	}
 	if globalQuotaUsage.Storage != nil && newResourceCalculation.Storage != nil {
-		newResourceCalculation.Storage.Add(*globalQuotaUsage.Storage)
+		newResourceCalculation.Storage.Add(apiv2.TreatDecimalAsBinary(globalQuotaUsage.Storage))
 	}
 
 	// Subtract resources that are about to be replaced.
@@ -344,10 +345,10 @@ func CalculateResourceQuotaUpdateForProject(
 			newResourceCalculation.CPU.Sub(*replacedResourceCalculation.CPU)
 		}
 		if replacedResourceCalculation.Memory != nil && newResourceCalculation.Memory != nil {
-			newResourceCalculation.Memory.Sub(*replacedResourceCalculation.Memory)
+			newResourceCalculation.Memory.Sub(apiv2.TreatDecimalAsBinary(replacedResourceCalculation.Memory))
 		}
 		if replacedResourceCalculation.Storage != nil && newResourceCalculation.Storage != nil {
-			newResourceCalculation.Storage.Sub(*replacedResourceCalculation.Storage)
+			newResourceCalculation.Storage.Sub(apiv2.TreatDecimalAsBinary(replacedResourceCalculation.Storage))
 		}
 	}
 
@@ -484,7 +485,10 @@ func getAnexiaResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovi
 func getAWSResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.AWSSize.VCPUs)
 
-	if err := nc.WithMemory(int(provider.AWSSize.Memory), "Gi"); err != nil {
+	// Convert memory from GiB to MiB for resource quota calculation.
+	// Using GiB directly would lose fractional values (e.g., 3.75 GiB), so we round up in MiB.
+	mi := int(math.Ceil(float64(provider.AWSSize.Memory) * 1024))
+	if err := nc.WithMemory(mi, "Mi"); err != nil {
 		return err
 	}
 	if err := nc.WithStorage(provider.DiskSizeGB, "Gi"); err != nil {
@@ -549,16 +553,15 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	}
 	nc.WithCPUCount(cpus)
 
-	memory, err := resource.ParseQuantity(provider.KubevirtNodeSize.Memory)
+	memory, err := resource.ParseQuantity(provider.KubevirtNodeSize.Memory + "Mi")
 	if err != nil {
 		return fmt.Errorf("error parsing kubevirt node memory %q to resource quantity: %w", provider.KubevirtNodeSize.Memory, err)
 	}
 	nc.Memory = &memory
 
 	primaryDiskSize := provider.KubevirtNodeSize.PrimaryDiskSize
-	// Default to giga if unit not provided.
 	if _, err := strconv.Atoi(primaryDiskSize); err == nil {
-		primaryDiskSize += "G"
+		primaryDiskSize += "Gi"
 	}
 	storage, err := resource.ParseQuantity(primaryDiskSize)
 	if err != nil {
@@ -568,9 +571,8 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	// Add all secondary disks
 	for _, d := range provider.KubevirtNodeSize.SecondaryDisks {
 		secondaryDiskSize := d.Size
-		// Default to giga if unit not provided.
 		if _, err := strconv.Atoi(secondaryDiskSize); err == nil {
-			secondaryDiskSize += "G"
+			secondaryDiskSize += "Gi"
 		}
 		secondaryStorage, err := resource.ParseQuantity(secondaryDiskSize)
 		if err != nil {
