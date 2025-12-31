@@ -20,6 +20,9 @@ type OperatingSystemProfile struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// o s version
+	OSVersion string `json:"osVersion,omitempty"`
+
 	// operating system
 	OperatingSystem string `json:"operatingSystem,omitempty"`
 

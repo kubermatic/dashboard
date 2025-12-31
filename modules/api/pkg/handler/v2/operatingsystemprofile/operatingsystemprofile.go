@@ -186,6 +186,7 @@ func convertOperatingSystemProfileToAPIResponse(ospList *osmv1alpha1.OperatingSy
 			Name:                    osp.Name,
 			OperatingSystem:         string(osp.Spec.OSName),
 			SupportedCloudProviders: supportedOperatingSystems,
+			OSVersion:               osp.Spec.OSVersion,
 		}
 		resp = append(resp, ospModel)
 	}

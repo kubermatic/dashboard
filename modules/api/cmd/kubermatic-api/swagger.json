@@ -38834,6 +38834,10 @@
           "type": "string",
           "x-go-name": "OperatingSystem"
         },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        },
         "supportedCloudProviders": {
           "type": "array",
           "items": {
