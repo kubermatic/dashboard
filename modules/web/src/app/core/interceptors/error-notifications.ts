@@ -24,8 +24,7 @@ import {
   ErrorEntry,
   ErrorThrottlingConfig,
   DEFAULT_THROTTLING_CONFIG,
-  MILLISECONDS_PER_MINUTE,
-  MINUTES_PER_HOUR,
+  MILLISECONDS_PER_HOUR,
 } from './error-throttling.config';
 
 export interface APIError {
@@ -181,42 +180,20 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
   }
 
   /**
-   * Normalize URL - skip common API prefix and take meaningful segments
+   * Normalize URL - remove API version prefix and query parameters
    *
    * Examples:
    *   /api/v2/projects/xxx/clusters/yyy/machinedeployments/md-name/nodes/metric
-   *     → /machinedeployments/md-name/nodes/metric
+   *     → /projects/xxx/clusters/yyy/machinedeployments/md-name/nodes/metric
    */
   private _normalizeUrl(url: string): string {
-    const API_PREFIX_LENGTH = 4;
-    const MAX_SEGMENTS_COUNT = 4;
-    const FALLBACK_SEGMENTS_COUNT = 3;
-
     try {
       const {pathname} = new URL(url, window.location.origin);
-      const segments = pathname.split('/').filter(s => s.length > 0);
-
-      // Skip /api/v1|v2/projects/<projectId> prefix if present
-      const shouldSkipPrefix =
-        segments.length > API_PREFIX_LENGTH &&
-        segments[0] === 'api' &&
-        (segments[1] === 'v1' || segments[1] === 'v2') &&
-        segments[2] === 'projects';
-
-      const meaningfulSegments = shouldSkipPrefix ? segments.slice(API_PREFIX_LENGTH) : segments;
-      const takeCount = Math.min(MAX_SEGMENTS_COUNT, meaningfulSegments.length);
-      const result = meaningfulSegments.slice(-takeCount);
-
-      return result.length > 0 ? '/' + result.join('/') : '/';
+      // Remove /api/v1 or /api/v2 prefix if present
+      return pathname.replace(/^\/api\/v\d+\//, '/');
     } catch {
-      const parts = url
-        .split('?')[0]
-        .split('/')
-        .filter(s => s.length > 0);
-      if (parts.length === 0) return '/';
-
-      const takeCount = Math.min(FALLBACK_SEGMENTS_COUNT, parts.length);
-      return '/' + parts.slice(-takeCount).join('/');
+      // Fallback: strip query params manually if URL parsing fails
+      return url.split('?')[0];
     }
   }
 
@@ -335,7 +312,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
     const mutedDuration = currentTimestampMs - autoMutedTimestampMs;
     const {muteResetHours} = this._throttlingConfig;
-    const resetThreshold = muteResetHours * MINUTES_PER_HOUR * MILLISECONDS_PER_MINUTE;
+    const resetThreshold = muteResetHours * MILLISECONDS_PER_HOUR;
     const timeExceeded = mutedDuration >= resetThreshold;
     const statusChanged = lastHttpStatusCode !== currentHttpStatusCode;
 
@@ -364,17 +341,14 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
   private _cleanupExpiredEntries(): void {
     const currentTimestampMs = Date.now();
-    const expiredKeys: string[] = [];
 
     this._errorTrackingMap.forEach((entry, errorKey) => {
       const timeSinceLastOccurrence = currentTimestampMs - entry.lastOccurrenceTimestampMs;
       const isExpired = timeSinceLastOccurrence > this._throttlingConfig.entryExpirationMs;
 
       if (isExpired) {
-        expiredKeys.push(errorKey);
+        this._errorTrackingMap.delete(errorKey);
       }
     });
-
-    expiredKeys.forEach(key => this._errorTrackingMap.delete(key));
   }
 }
