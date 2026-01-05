@@ -84,6 +84,15 @@ export class DefaultsComponent implements OnInit, OnDestroy {
         settings.webTerminalOptions.enabled = settings.enableWebTerminal;
       }
 
+      // Soft migration for notifications settings.
+      if (!settings.notifications) {
+        settings.notifications = {
+          hideErrors: false,
+          hideErrorEvents: false,
+          enableThrottling: true,
+        };
+      }
+
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
           this._notificationService.success('Updated the admin settings');
