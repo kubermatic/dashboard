@@ -20,11 +20,12 @@ import {take, tap} from 'rxjs/operators';
 import {SettingsService} from '@core/services/settings';
 import {AdminSettings} from '@shared/entity/settings';
 import {CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@app/shared/entity/application';
+import {AppConfigService} from '@app/config.service';
 import {
   ErrorEntry,
   ErrorThrottlingConfig,
-  DEFAULT_THROTTLING_CONFIG,
   MILLISECONDS_PER_HOUR,
+  MILLISECONDS_PER_MINUTE,
 } from './error-throttling.config';
 
 export interface APIError {
@@ -58,9 +59,27 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
   ];
 
   // Error throttling properties
-  private readonly _errorTrackingMap = new Map<string, ErrorEntry>();
-  private readonly _throttlingConfig: ErrorThrottlingConfig = {...DEFAULT_THROTTLING_CONFIG};
   private readonly _maxMapSize = 100;
+  private readonly _errorTrackingMap = new Map<string, ErrorEntry>();
+  private _throttlingConfigCache: ErrorThrottlingConfig | null = null;
+
+  private get _throttlingConfig(): ErrorThrottlingConfig {
+    if (!this._throttlingConfigCache) {
+      const config = this._appConfigService.getConfig().error_throttling;
+      this._throttlingConfigCache = {
+        initialDelayMs: config.initial_delay_minutes * MILLISECONDS_PER_MINUTE,
+        maxDelayMs: config.max_delay_minutes * MILLISECONDS_PER_MINUTE,
+        backoffMultiplier: config.backoff_multiplier,
+        muteThreshold: config.mute_threshold,
+        muteResetHours: config.mute_reset_hours,
+        cleanupIntervalMs: config.cleanup_interval_minutes * MILLISECONDS_PER_MINUTE,
+        entryExpirationMs: config.entry_expiration_hours * MILLISECONDS_PER_HOUR,
+        enableThrottling: config.enable_throttling,
+        enableAutoMute: config.enable_auto_mute,
+      };
+    }
+    return this._throttlingConfigCache;
+  }
 
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', Errors.InvalidCredentials],
@@ -87,7 +106,8 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
   constructor(
     private readonly _inj: Injector,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _appConfigService: AppConfigService
   ) {
     this._notificationService = this._inj.get(NotificationService);
     this._settingsService = this._inj.get(SettingsService);

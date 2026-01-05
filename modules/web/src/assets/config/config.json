@@ -3,5 +3,17 @@
     "wizard_use_default_user": false,
     "wizard_default_domain_name": "Default"
   },
-  "postfix_page_title": "Kubermatic Kubernetes Platform"
+  "postfix_page_title": "Kubermatic Kubernetes Platform",
+  "error_throttling": {
+    "initial_delay_minutes": 2,
+    "max_delay_minutes": 10,
+    "backoff_multiplier": 2,
+    "mute_threshold": 3,
+    "mute_reset_hours": 24,
+    "cleanup_interval_minutes": 10,
+    "entry_expiration_hours": 24,
+    "enable_throttling": true,
+    "enable_auto_mute": true
+  }
 }
+

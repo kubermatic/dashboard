@@ -51,27 +51,3 @@ export interface ErrorThrottlingConfig {
   enableThrottling: boolean;
   enableAutoMute: boolean;
 }
-
-// ============================================
-// ERROR THROTTLING CONFIGURATION
-// ============================================
-
-const INITIAL_DELAY_HOURS = 2;
-const MAX_DELAY_HOURS = 4;
-const BACKOFF_MULTIPLIER = 2;
-const MUTE_NOTIFICATION_THRESHOLD = 3;
-const MUTE_RESET_HOURS = 24;
-const CLEANUP_INTERVAL_MINUTES = 10;
-const ENTRY_EXPIRATION_HOURS = 24;
-
-export const DEFAULT_THROTTLING_CONFIG: ErrorThrottlingConfig = {
-  initialDelayMs: INITIAL_DELAY_HOURS * MILLISECONDS_PER_HOUR,
-  maxDelayMs: MAX_DELAY_HOURS * MILLISECONDS_PER_HOUR,
-  backoffMultiplier: BACKOFF_MULTIPLIER,
-  muteThreshold: MUTE_NOTIFICATION_THRESHOLD,
-  muteResetHours: MUTE_RESET_HOURS,
-  cleanupIntervalMs: CLEANUP_INTERVAL_MINUTES * MILLISECONDS_PER_MINUTE,
-  entryExpirationMs: ENTRY_EXPIRATION_HOURS * MILLISECONDS_PER_HOUR,
-  enableThrottling: true,
-  enableAutoMute: true,
-};
