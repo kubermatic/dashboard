@@ -70,9 +70,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
         initialDelayMs: config.initial_delay_minutes * MILLISECONDS_PER_MINUTE,
         maxDelayMs: config.max_delay_minutes * MILLISECONDS_PER_MINUTE,
         backoffMultiplier: config.backoff_multiplier,
-        cleanupIntervalMs: config.cleanup_interval_minutes * MILLISECONDS_PER_MINUTE,
         entryExpirationMs: config.entry_expiration_hours * MILLISECONDS_PER_HOUR,
-        enableThrottling: config.enable_throttling,
       };
     }
     return this._throttlingConfigCache;
@@ -220,8 +218,8 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     httpStatusCode: number,
     errorMessage: string
   ): boolean {
-    // Throttling disabled
-    if (!this._throttlingConfig.enableThrottling) {
+    // Throttling disabled - check adminSettings flag
+    if (!this.adminSettings?.notifications?.enableThrottling) {
       return false;
     }
 

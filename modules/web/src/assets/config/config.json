@@ -8,9 +8,7 @@
     "initial_delay_minutes": 2,
     "max_delay_minutes": 10,
     "backoff_multiplier": 2,
-    "cleanup_interval_minutes": 10,
-    "entry_expiration_hours": 5,
-    "enable_throttling": true
+    "entry_expiration_hours": 5
   }
 }
 

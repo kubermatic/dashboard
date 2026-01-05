@@ -24,9 +24,7 @@ export interface ErrorThrottlingConfig {
   initial_delay_minutes?: number;
   max_delay_minutes?: number;
   backoff_multiplier?: number;
-  cleanup_interval_minutes?: number;
   entry_expiration_hours?: number;
-  enable_throttling?: boolean;
 }
 
 export interface Config {

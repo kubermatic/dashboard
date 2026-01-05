@@ -41,7 +41,5 @@ export interface ErrorThrottlingConfig {
   initialDelayMs: number;
   maxDelayMs: number;
   backoffMultiplier: number;
-  cleanupIntervalMs: number;
   entryExpirationMs: number;
-  enableThrottling: boolean;
 }

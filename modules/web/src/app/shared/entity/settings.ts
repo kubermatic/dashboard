@@ -130,6 +130,7 @@ export interface MLAOptions {
 export interface NotificationOptions {
   hideErrors: boolean;
   hideErrorEvents: boolean;
+  enableThrottling?: boolean;
 }
 
 export interface ProviderConfiguration {
@@ -279,5 +280,10 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   disableChangelogPopup: false,
   webTerminalOptions: {
     enabled: false,
+  },
+  notifications: {
+    hideErrors: false,
+    hideErrorEvents: false,
+    enableThrottling: true,
   },
 };
