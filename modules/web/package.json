@@ -113,7 +113,7 @@
     "@types/node": "22.13.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^18.3.5",
-    "@typescript-eslint/eslint-plugin": "8.49.0",
+    "@typescript-eslint/eslint-plugin": "8.52.0",
     "@typescript-eslint/parser": "8.49.0",
     "browserlist": "1.0.1",
     "btoa": "1.2.1",
