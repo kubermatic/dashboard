@@ -70,12 +70,9 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
         initialDelayMs: config.initial_delay_minutes * MILLISECONDS_PER_MINUTE,
         maxDelayMs: config.max_delay_minutes * MILLISECONDS_PER_MINUTE,
         backoffMultiplier: config.backoff_multiplier,
-        muteThreshold: config.mute_threshold,
-        muteResetHours: config.mute_reset_hours,
         cleanupIntervalMs: config.cleanup_interval_minutes * MILLISECONDS_PER_MINUTE,
         entryExpirationMs: config.entry_expiration_hours * MILLISECONDS_PER_HOUR,
         enableThrottling: config.enable_throttling,
-        enableAutoMute: config.enable_auto_mute,
       };
     }
     return this._throttlingConfigCache;
@@ -242,15 +239,9 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
 
     this._updateExistingEntry(entry, requestUrl, httpStatusCode, errorMessage, currentTimestampMs);
 
-    // Reset conditions met
-    if (this._shouldResetEntry(entry, httpStatusCode, currentTimestampMs)) {
-      this._resetEntry(entry, currentTimestampMs);
+    if (this._hasStatusCodeChanged(entry, httpStatusCode)) {
+      this._resetEntryThrottle(entry, currentTimestampMs);
       return false;
-    }
-
-    // Auto-muted
-    if (entry.isAutoMuted) {
-      return true;
     }
 
     // Still throttled
@@ -259,31 +250,21 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
       return true;
     }
 
-    return !this._processNotificationDisplay(entry, currentTimestampMs);
+    // Show notification and calculate next time
+    this._processNotificationDisplay(entry, currentTimestampMs);
+    return false;
   }
 
-  private _processNotificationDisplay(entry: ErrorEntry, currentTimestampMs: number): boolean {
+  private _processNotificationDisplay(entry: ErrorEntry, currentTimestampMs: number): void {
     entry.notificationsDisplayedCount++;
-
-    // Mute: If Threshold reached
-    if (this._shouldAutoMuteEntry(entry)) {
-      this._muteEntry(entry, currentTimestampMs);
-      return true;
-    }
-
-    // Apply exponential backoff for next notification
     this._calculateNextNotificationTime(entry, currentTimestampMs);
-    return true;
   }
 
-  private _shouldAutoMuteEntry(entry: ErrorEntry): boolean {
-    const {enableAutoMute, muteThreshold} = this._throttlingConfig;
-    return enableAutoMute && entry.notificationsDisplayedCount >= muteThreshold;
-  }
-
-  private _muteEntry(entry: ErrorEntry, timestamp: number): void {
-    entry.isAutoMuted = true;
-    entry.autoMutedTimestampMs = timestamp;
+  private _calculateNextNotificationTime(entry: ErrorEntry, currentTimestampMs: number): void {
+    const {initialDelayMs, backoffMultiplier, maxDelayMs} = this._throttlingConfig;
+    const exponentialDelay = initialDelayMs * Math.pow(backoffMultiplier, entry.notificationsDisplayedCount - 1);
+    const nextDelayMs = Math.min(exponentialDelay, maxDelayMs);
+    entry.nextNotificationTimestampMs = currentTimestampMs + nextDelayMs;
   }
 
   // Error Entry (Create/Update)
@@ -297,11 +278,9 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
   ): void {
     this._errorTrackingMap.set(errorKey, {
       errorKey,
-      totalOccurrenceCount: 1,
       notificationsDisplayedCount: 1,
       lastOccurrenceTimestampMs: timestampMs,
       nextNotificationTimestampMs: timestampMs + this._throttlingConfig.initialDelayMs,
-      isAutoMuted: false,
       lastErrorMessage: errorMessage,
       lastHttpStatusCode: httpStatusCode,
       lastFailedUrl: failedUrl,
@@ -315,49 +294,20 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor, OnDestroy
     errorMessage: string,
     timestampMs: number
   ): void {
-    entry.totalOccurrenceCount++;
     entry.lastOccurrenceTimestampMs = timestampMs;
     entry.lastErrorMessage = errorMessage;
     entry.lastHttpStatusCode = httpStatusCode;
     entry.lastFailedUrl = failedUrl;
   }
 
-  // Reset Logic
-
-  private _shouldResetEntry(entry: ErrorEntry, currentHttpStatusCode: number, currentTimestampMs: number): boolean {
-    const {isAutoMuted, autoMutedTimestampMs, lastHttpStatusCode} = entry;
-    if (!isAutoMuted || !autoMutedTimestampMs) {
-      return false;
-    }
-
-    const mutedDuration = currentTimestampMs - autoMutedTimestampMs;
-    const {muteResetHours} = this._throttlingConfig;
-    const resetThreshold = muteResetHours * MILLISECONDS_PER_HOUR;
-    const timeExceeded = mutedDuration >= resetThreshold;
-    const statusChanged = lastHttpStatusCode !== currentHttpStatusCode;
-
-    return timeExceeded || statusChanged;
+  private _hasStatusCodeChanged(entry: ErrorEntry, currentHttpStatusCode: number): boolean {
+    return entry.lastHttpStatusCode !== currentHttpStatusCode;
   }
 
-  private _resetEntry(entry: ErrorEntry, timestamp: number): void {
-    const {initialDelayMs} = this._throttlingConfig;
-    entry.isAutoMuted = false;
-    entry.autoMutedTimestampMs = undefined;
-    entry.totalOccurrenceCount = 1;
+  private _resetEntryThrottle(entry: ErrorEntry, currentTimestampMs: number): void {
     entry.notificationsDisplayedCount = 1;
-    entry.nextNotificationTimestampMs = timestamp + initialDelayMs;
+    entry.nextNotificationTimestampMs = currentTimestampMs + this._throttlingConfig.initialDelayMs;
   }
-
-  // Exponential Backoff Calculation
-
-  private _calculateNextNotificationTime(entry: ErrorEntry, currentTimestampMs: number): void {
-    const {initialDelayMs, backoffMultiplier, maxDelayMs} = this._throttlingConfig;
-    const exponentialDelay = initialDelayMs * Math.pow(backoffMultiplier, entry.notificationsDisplayedCount - 1);
-    const nextDelayMs = Math.min(exponentialDelay, maxDelayMs);
-    entry.nextNotificationTimestampMs = currentTimestampMs + nextDelayMs;
-  }
-
-  // On-Demand Cleanup
 
   private _cleanupExpiredEntries(): void {
     const currentTimestampMs = Date.now();

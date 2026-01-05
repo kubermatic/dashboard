@@ -8,12 +8,9 @@
     "initial_delay_minutes": 2,
     "max_delay_minutes": 10,
     "backoff_multiplier": 2,
-    "mute_threshold": 3,
-    "mute_reset_hours": 24,
     "cleanup_interval_minutes": 10,
-    "entry_expiration_hours": 24,
-    "enable_throttling": true,
-    "enable_auto_mute": true
+    "entry_expiration_hours": 5,
+    "enable_throttling": true
   }
 }
 

@@ -29,12 +29,9 @@ export const MILLISECONDS_PER_HOUR = MINUTES_PER_HOUR * MILLISECONDS_PER_MINUTE;
 
 export interface ErrorEntry {
   errorKey: string;
-  totalOccurrenceCount: number;
   notificationsDisplayedCount: number;
   lastOccurrenceTimestampMs: number;
   nextNotificationTimestampMs: number;
-  isAutoMuted: boolean;
-  autoMutedTimestampMs?: number;
   lastErrorMessage: string;
   lastHttpStatusCode: number;
   lastFailedUrl: string;
@@ -44,10 +41,7 @@ export interface ErrorThrottlingConfig {
   initialDelayMs: number;
   maxDelayMs: number;
   backoffMultiplier: number;
-  muteThreshold: number;
-  muteResetHours: number;
   cleanupIntervalMs: number;
   entryExpirationMs: number;
   enableThrottling: boolean;
-  enableAutoMute: boolean;
 }

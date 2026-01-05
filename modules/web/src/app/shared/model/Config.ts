@@ -24,12 +24,9 @@ export interface ErrorThrottlingConfig {
   initial_delay_minutes?: number;
   max_delay_minutes?: number;
   backoff_multiplier?: number;
-  mute_threshold?: number;
-  mute_reset_hours?: number;
   cleanup_interval_minutes?: number;
   entry_expiration_hours?: number;
   enable_throttling?: boolean;
-  enable_auto_mute?: boolean;
 }
 
 export interface Config {
