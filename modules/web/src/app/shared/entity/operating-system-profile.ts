@@ -16,4 +16,5 @@ export class OperatingSystemProfile {
   name: string;
   operatingSystem: string;
   supportedCloudProviders: string[];
+  osVersion?: string;
 }

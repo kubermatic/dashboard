@@ -25,12 +25,18 @@ import {
   KubeVirtSubnet,
 } from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {BehaviorSubject, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 
 export class NodeDataKubeVirtProvider {
   private readonly _debounce = 500;
+  private readonly _osImageVersion: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  readonly osImageVersion$ = this._osImageVersion.asObservable();
+
+  set osImageVersion(version: string) {
+    this._osImageVersion.next(version);
+  }
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
