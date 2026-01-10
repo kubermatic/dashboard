@@ -779,6 +779,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     if (!version) return true;
 
     const ospObject = this.operatingSystemProfiles.find(profile => profile.name === osp);
+    if (!ospObject) return false;
     return !ospObject?.osVersion || ospObject?.osVersion === version;
   }
 }

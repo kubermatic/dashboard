@@ -642,6 +642,8 @@ export class KubeVirtBasicNodeDataComponent
     if (selectedOSImage) {
       this._nodeDataService.kubeVirt.osImageVersion =
         this.osImageDropdownOptions?.find(image => image.link === selectedOSImage)?.version || '';
+    } else {
+      this._nodeDataService.kubeVirt.osImageVersion = '';
     }
     if (selectedOSImage && !this.osImageDropdownOptions.find(osImage => osImage.link === selectedOSImage)) {
       this._osImageCombobox.reset();
