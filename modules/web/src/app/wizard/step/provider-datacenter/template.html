@@ -40,6 +40,17 @@ limitations under the License.
   </mat-button-toggle-group>
   }
 
+  @if (form.get(controls.Provider).value === nodeProvider.ANEXIA) {
+  <div class="warning-card"
+       fxLayout="row"
+       fxLayoutAlign=" center">
+    <i class="km-icon-warning"></i>
+    <div>
+      {{ ANEXIA_DEPRECATED_MESSAGE }}
+    </div>
+  </div>
+  }
+
   @if (datacenters.length > 0) {
   <mat-card-header class="km-no-padding">
     <mat-card-title class="km-color-primary">Datacenter</mat-card-title>

@@ -29,6 +29,7 @@ import {Datacenter, getDatacenterProvider} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 
 enum Controls {
   Provider = 'provider',
@@ -58,6 +59,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
   datacenters: Datacenter[] = [];
   nodeProvider = NodeProvider;
   readonly controls = Controls;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
 
   constructor(
     private readonly _builder: FormBuilder,

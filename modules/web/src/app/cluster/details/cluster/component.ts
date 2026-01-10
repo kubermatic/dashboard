@@ -82,6 +82,7 @@ import {ShareKubeconfigComponent, ShareKubeconfigDialogMode} from './share-kubec
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {Preset} from '@shared/entity/preset';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-cluster-details',
@@ -101,6 +102,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly IPFamily = IPFamily;
   readonly clusterDeletionTooltip = 'Cluster is being deleted';
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
   adminSettings: AdminSettings;
   presetStatus: HealthStatus;
   encryptionStatus: HealthStatus;

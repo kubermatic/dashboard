@@ -49,6 +49,7 @@ import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil,
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 
 enum Column {
   Status = 'status',
@@ -75,6 +76,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
   private _enableEtcdBackups = false;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
   readonly Column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
