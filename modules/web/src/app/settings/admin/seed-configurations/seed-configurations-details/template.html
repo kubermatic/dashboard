@@ -110,6 +110,10 @@ limitations under the License.
                fxLayoutGap="10px"
                fxLayoutAlign=" center">
             <span class="km-provider-logo km-provider-logo-{{element[Column.Provider]}}"></span>
+            @if (element[Column.Provider] === nodeProvider.ANEXIA) {
+            <i class="km-icon-mask km-icon-warning"
+               [matTooltip]="ANEXIA_DEPRECATED_MESSAGE"></i>
+            }
           </div>
         </td>
       </ng-container>

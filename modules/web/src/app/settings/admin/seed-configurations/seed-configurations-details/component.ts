@@ -21,6 +21,8 @@ import {
   ProviderDetail,
   SeedOverviewDatasource,
 } from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {DatacenterService} from '@core/services/datacenter';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
@@ -44,6 +46,8 @@ enum Column {
 })
 export class SeedConfigurationDetailsComponent implements OnInit {
   readonly Column = Column;
+  readonly nodeProvider = NodeProvider;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
   datacenterDetailPerProvider: Record<string, DatacenterDetail[]> = {};
   isShowProviders: Record<string, boolean> = {};
   isLoadingDetails: boolean;

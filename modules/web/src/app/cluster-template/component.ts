@@ -22,6 +22,7 @@ import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,
 } from '@app/shared/components/add-cluster-from-template-dialog/component';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
@@ -73,6 +74,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   private _selectedProject: Project;
   private _unsubscribe = new Subject<void>();
   private _onChange = new Subject<void>();
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
 
   constructor(
     private readonly _ctService: ClusterTemplateService,

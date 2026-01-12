@@ -80,6 +80,10 @@ limitations under the License.
             @if (!!element?.cluster?.spec?.cloud) {
             <span class="km-provider-logo km-provider-logo-{{getProvider(element.cluster)}}"></span>
             }
+            @if (getProvider(element.cluster) === nodeProvider.ANEXIA) {
+            <i class="km-icon-warning"
+               [matTooltip]="ANEXIA_DEPRECATED_MESSAGE"></i>
+            }
 
           </div>
         </td>
