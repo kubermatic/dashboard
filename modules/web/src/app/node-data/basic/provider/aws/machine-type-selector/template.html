@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-aws-machine-type-selector">
+<div class="km-aws-machine-type-selector"
+     fxLayout="column">
   <div class="km-machine-type-selector-label km-text">
     {{label}} @if (required) {
     <span class="km-required">*</span>
     }
   </div>
 
-  <div class="km-machine-type-selector-panel km-border">
+  <div class="km-machine-type-selector-panel km-border"
+       fxLayout="column">
     <div class="km-machine-type-selector-search">
       <mat-form-field class="km-machine-type-selector-search-field">
         <mat-label>Search Size...</mat-label>

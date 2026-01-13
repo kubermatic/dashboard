@@ -374,43 +374,4 @@
     background-color: rgba(map.get($colors, primary-dark), 15%);
     border-color: map.get($colors, primary);
   }
-
-  // Machine type selector theme
-  .km-machine-type-selector {
-    --mat-table-background-color: #{map.get($colors, option-background)};
-
-    &-panel {
-      background-color: var(--mat-table-background-color);
-    }
-
-    &-search {
-      background-color: var(--mat-table-background-color);
-    }
-
-    &-tabs {
-      background-color: var(--mat-table-background-color);
-
-      .mat-mdc-tab-header {
-        background-color: var(--mat-table-background-color);
-        border-bottom: 1px solid map.get($colors, divider);
-      }
-
-      .mat-ink-bar {
-        background-color: map.get($colors, primary);
-      }
-
-      .mat-mdc-tab-body-content {
-        background-color: var(--mat-table-background-color);
-      }
-    }
-
-    &-tab-count {
-      color: map.get($colors, text);
-    }
-
-    &-table-container {
-      background-color: var(--mat-table-background-color);
-      border-top: 1px solid map.get($colors, divider);
-    }
-  }
 }

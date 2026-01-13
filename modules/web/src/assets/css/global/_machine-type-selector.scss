@@ -12,50 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use '../variables';
+@use "../variables";
 
-// Global styles for machine type selector component
+// Base styles for machine-type-selector components (reusable across providers)
 .km-machine-type-selector {
-  &-label {
-    font-size: variables.$font-size-body;
-    font-weight: variables.$font-weight-medium;
-    margin-bottom: 8px;
-
-    .km-required {
-      margin-left: 2px;
-    }
-  }
-
-  &-panel {
-    border-radius: variables.$border-radius;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
   &-search {
     padding: 14px 16px;
 
     &-field {
       width: 100%;
 
-      --mat-form-field-container-height: 52px;
-
-      .mat-mdc-form-field-infix {
-        padding-top: 16px;
-        padding-bottom: 16px;
-      }
-
-      .mat-mdc-text-field-wrapper {
-        font-size: 14px;
-      }
-
-      input::placeholder {
-        font-size: 14px;
-      }
-
       i {
         margin-right: 10px;
+      }
+
+      .mat-mdc-form-field-bottom-align::before {
+        display: none;
       }
     }
   }
@@ -65,18 +37,14 @@
       padding: 0 16px;
     }
 
-    .mat-mdc-tab-label-container {
-      .mat-mdc-tab {
-        font-size: variables.$font-size-body;
-        font-weight: 400;
-        min-width: 160px;
-        padding: 0 16px;
-      }
+    .mat-mdc-tab {
+      min-width: 160px;
+      padding: 0 16px;
     }
+  }
 
-    .mat-mdc-tab-body-wrapper {
-      flex: 1;
-    }
+  &-panel {
+    margin: 16px 0;
   }
 
   &-tab-count {
@@ -87,5 +55,11 @@
   &-table-container {
     max-height: 500px;
     overflow-y: auto;
+  }
+
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-bottom-align::before {
+      display: none;
+    }
   }
 }
