@@ -27,22 +27,21 @@ limitations under the License.
     <div class="km-machine-type-selector-search">
       <mat-form-field class="km-machine-type-selector-search-field">
         <mat-label>Search Size...</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onSearchChange($event)"
-          placeholder="Filter by name" />
-        <i matPrefix class="km-icon-mask km-icon-search"></i>
+        <input matInput
+               type="text"
+               [(ngModel)]="searchQuery"
+               (ngModelChange)="onSearchChange($event)"
+               placeholder="Filter by name" />
+        <i matPrefix
+           class="km-icon-mask km-icon-search"></i>
       </mat-form-field>
     </div>
 
-    <mat-tab-group
-      class="km-machine-type-selector-tabs"
-      mat-stretch-tabs="false"
-      animationDuration="0ms"
-      [selectedIndex]="selectedTabIndex"
-      (selectedIndexChange)="onTabChange($event)">
+    <mat-tab-group class="km-machine-type-selector-tabs"
+                   mat-stretch-tabs="false"
+                   animationDuration="0ms"
+                   [selectedIndex]="selectedTabIndex"
+                   (selectedIndexChange)="onTabChange($event)">
       <mat-tab>
         <ng-template mat-tab-label>
           <span>CPU / General</span>
@@ -133,9 +132,9 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           @if (element.price !== undefined) {
-            ${{element.price.toFixed(4)}}
+          ${{element.price.toFixed(4)}}
           } @else {
-            <span class="km-text-muted">-</span>
+          <span class="km-text-muted">-</span>
           }
         </td>
       </ng-container>
@@ -150,9 +149,9 @@ limitations under the License.
     }
 
     @if (filteredMachineTypes.length === 0 && !isLoading) {
-      <div class="km-empty-list-msg">
-        No machine types found
-      </div>
+    <div class="km-empty-list-msg">
+      No machine types found
+    </div>
     }
   </div>
 </ng-template>

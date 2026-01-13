@@ -148,7 +148,8 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   }
 
   private _applySearchFilter(): void {
-    const sourceOptions = this.selectedTabIndex === TabIndex.GPU ? this.gpuBasedMachineTypes : this.cpuBasedMachineTypes;
+    const sourceOptions =
+      this.selectedTabIndex === TabIndex.GPU ? this.gpuBasedMachineTypes : this.cpuBasedMachineTypes;
 
     if (!this.searchQuery) {
       this.filteredMachineTypes = [...sourceOptions];
