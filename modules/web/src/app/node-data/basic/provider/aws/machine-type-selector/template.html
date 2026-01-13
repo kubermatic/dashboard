@@ -22,7 +22,6 @@ limitations under the License.
   </div>
 
   <div class="km-machine-type-selector-panel km-border">
-    <!-- Search Bar -->
     <div class="km-machine-type-selector-search">
       <mat-form-field class="km-machine-type-selector-search-field">
         <mat-label>Search Size...</mat-label>
@@ -36,28 +35,25 @@ limitations under the License.
       </mat-form-field>
     </div>
 
-    <!-- Tab-based Category Selection -->
     <mat-tab-group
       class="km-machine-type-selector-tabs"
       mat-stretch-tabs="false"
       animationDuration="0ms"
       [selectedIndex]="selectedTabIndex"
       (selectedIndexChange)="onTabChange($event)">
-      <!-- CPU / General Tab -->
       <mat-tab>
         <ng-template mat-tab-label>
           <span>CPU / General</span>
-          <span class="km-machine-type-selector-tab-count">({{cpuOptions.length}})</span>
+          <span class="km-machine-type-selector-tab-count">({{cpuBasedMachineTypes.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
 
-      <!-- GPU / Accelerated Tab -->
       @if (showGpuFilter && hasGpuTypes) {
       <mat-tab>
         <ng-template mat-tab-label>
           <span>GPU / Accelerated</span>
-          <span class="km-machine-type-selector-tab-count">({{gpuOptions.length}})</span>
+          <span class="km-machine-type-selector-tab-count">({{gpuBasedMachineTypes.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
@@ -66,7 +62,6 @@ limitations under the License.
   </div>
 </div>
 
-<!-- Reusable Table Template -->
 <ng-template #machineTypeTable>
   <div class="km-machine-type-selector-table-container">
     @if (isLoading) {
@@ -80,10 +75,8 @@ limitations under the License.
     @if (!isLoading) {
     <table class="km-table km-machine-type-selector-table"
            mat-table
-           [dataSource]="filteredOptions"
+           [dataSource]="filteredMachineTypes"
            [trackBy]="trackById">
-      
-      <!-- Select Column -->
       <ng-container matColumnDef="select">
         <th mat-header-cell
             *matHeaderCellDef
@@ -97,7 +90,6 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -108,7 +100,6 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <!-- vCPU Column -->
       <ng-container matColumnDef="vcpus">
         <th mat-header-cell
             *matHeaderCellDef
@@ -117,7 +108,6 @@ limitations under the License.
             *matCellDef="let element">{{element.vcpus}}</td>
       </ng-container>
 
-      <!-- Memory Column -->
       <ng-container matColumnDef="memoryGB">
         <th mat-header-cell
             *matHeaderCellDef
@@ -126,7 +116,6 @@ limitations under the License.
             *matCellDef="let element">{{element.memory}} GB</td>
       </ng-container>
 
-      <!-- GPUs Column -->
       <ng-container matColumnDef="gpus">
         <th mat-header-cell
             *matHeaderCellDef
@@ -135,7 +124,6 @@ limitations under the License.
             *matCellDef="let element">{{element.gpus || 0}}</td>
       </ng-container>
 
-      <!-- Price Column -->
       <ng-container matColumnDef="pricePerHour">
         <th mat-header-cell
             *matHeaderCellDef
@@ -159,9 +147,9 @@ limitations under the License.
     </table>
     }
 
-    @if (filteredOptions.length === 0 && !isLoading) {
+    @if (filteredMachineTypes.length === 0 && !isLoading) {
       <div class="km-empty-list-msg">
-        No machine types found matching your criteria
+        No machine types found
       </div>
     }
   </div>

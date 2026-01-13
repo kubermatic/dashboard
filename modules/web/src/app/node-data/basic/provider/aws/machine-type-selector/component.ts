@@ -14,7 +14,6 @@
 
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   forwardRef,
@@ -37,6 +36,20 @@ export interface AWSMachineType {
   architecture?: string;
 }
 
+enum Column {
+  Select = 'select',
+  Name = 'name',
+  VCPUs = 'vcpus',
+  MemoryGB = 'memoryGB',
+  GPUs = 'gpus',
+  PricePerHour = 'pricePerHour',
+}
+
+enum TabIndex {
+  CPU = 0,
+  GPU = 1,
+}
+
 @Component({
   selector: 'km-aws-machine-type-selector',
   templateUrl: './template.html',
@@ -52,6 +65,8 @@ export interface AWSMachineType {
   standalone: false,
 })
 export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, ControlValueAccessor {
+  readonly Column = Column;
+
   @Input() options: AWSMachineType[] = [];
   @Input() label = 'Machine Type';
   @Input() required = false;
@@ -62,20 +77,18 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   @Output() machineTypeSelected = new EventEmitter<AWSMachineType>();
 
   searchQuery = '';
-  selectedTabIndex = 0;
+  selectedTabIndex = TabIndex.CPU;
   selectedMachineType = '';
 
-  cpuOptions: AWSMachineType[] = [];
-  gpuOptions: AWSMachineType[] = [];
-  filteredOptions: AWSMachineType[] = [];
+  cpuBasedMachineTypes: AWSMachineType[] = [];
+  gpuBasedMachineTypes: AWSMachineType[] = [];
+  filteredMachineTypes: AWSMachineType[] = [];
   hasGpuTypes = false;
   hasPriceData = false;
   displayedColumns: string[] = [];
 
   private _onChange: (value: string) => void = () => {};
   private _onTouched: () => void = () => {};
-
-  constructor(private readonly _cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this._categorizeOptions();
@@ -89,7 +102,6 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
 
   writeValue(value: string): void {
     this.selectedMachineType = value || '';
-    this._cdr.markForCheck();
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -116,7 +128,6 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     this._onTouched();
     this.selectionChange.emit(machineType.name);
     this.machineTypeSelected.emit(machineType);
-    this._cdr.markForCheck();
   }
 
   getDisplayName(option: AWSMachineType): string {
@@ -128,22 +139,22 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   }
 
   private _categorizeOptions(): void {
-    this.cpuOptions = this.options.filter(opt => !opt.gpus || opt.gpus === 0);
-    this.gpuOptions = this.options.filter(opt => opt.gpus && opt.gpus > 0);
-    this.hasGpuTypes = this.gpuOptions.length > 0;
+    this.cpuBasedMachineTypes = this.options.filter(opt => !opt.gpus || opt.gpus === 0);
+    this.gpuBasedMachineTypes = this.options.filter(opt => opt.gpus && opt.gpus > 0);
+    this.hasGpuTypes = this.gpuBasedMachineTypes.length > 0;
     this.hasPriceData = this.options.some(opt => opt.price !== undefined);
 
     this._applySearchFilter();
   }
 
   private _applySearchFilter(): void {
-    const sourceOptions = this.selectedTabIndex === 1 ? this.gpuOptions : this.cpuOptions;
+    const sourceOptions = this.selectedTabIndex === TabIndex.GPU ? this.gpuBasedMachineTypes : this.cpuBasedMachineTypes;
 
     if (!this.searchQuery) {
-      this.filteredOptions = [...sourceOptions];
+      this.filteredMachineTypes = [...sourceOptions];
     } else {
       const query = this.searchQuery.toLowerCase();
-      this.filteredOptions = sourceOptions.filter(
+      this.filteredMachineTypes = sourceOptions.filter(
         option =>
           option.name.toLowerCase().includes(query) ||
           (option.prettyName && option.prettyName.toLowerCase().includes(query))
@@ -151,19 +162,18 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     }
 
     this._updateDisplayedColumns();
-    this._cdr.markForCheck();
   }
 
   private _updateDisplayedColumns(): void {
-    const baseColumns = ['select', 'name', 'vcpus', 'memoryGB'];
+    const baseColumns = [Column.Select, Column.Name, Column.VCPUs, Column.MemoryGB];
     const optionalColumns = [];
 
-    if (this.selectedTabIndex === 1 || this.hasGpuTypes) {
-      optionalColumns.push('gpus');
+    if (this.selectedTabIndex === TabIndex.GPU || this.hasGpuTypes) {
+      optionalColumns.push(Column.GPUs);
     }
 
     if (this.hasPriceData) {
-      optionalColumns.push('pricePerHour');
+      optionalColumns.push(Column.PricePerHour);
     }
 
     this.displayedColumns = [...baseColumns, ...optionalColumns];
