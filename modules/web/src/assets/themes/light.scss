@@ -168,17 +168,17 @@ $theme-light: map.merge(
 
 html {
   // Card styling - Angular Material v20 uses --mat-card-* variables
-  --mat-card-elevated-container-color: white;
+  --mat-card-elevated-container-color: #{map.get($colors-light, option-background)};
   --mat-card-elevated-container-elevation: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-  --mat-card-outlined-container-color: white;
+  --mat-card-outlined-container-color: #{map.get($colors-light, option-background)};
   --mat-card-outlined-outline-color: rgba(0, 0, 0, 0.12);
   --mat-card-outlined-container-elevation: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
-  --mat-card-filled-container-color: white;
+  --mat-card-filled-container-color: #{map.get($colors-light, option-background)};
   --mat-card-filled-container-elevation: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
 
   // Table styling
-  --mat-table-background-color: white;
-  --mat-table-header-headline-color: #4d555c;
-  --mat-table-row-item-label-text-color: #4d555c;
-  --mat-table-row-item-outline-color: #e0e3e5;
+  --mat-table-background-color: #{map.get($colors-light, option-background)};
+  --mat-table-header-headline-color: #{map.get($colors-light, swagger-ui-input-text-color)};
+  --mat-table-row-item-label-text-color: #{map.get($colors-light, swagger-ui-input-text-color)};
+  --mat-table-row-item-outline-color: #{map.get($colors-light, search-outline)};
 }
