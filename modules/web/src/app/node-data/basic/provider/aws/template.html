@@ -28,7 +28,7 @@ limitations under the License.
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutGap="8px">
-    <km-aws-machine-type-selector [options]="machineTypeOptions"
+    <km-aws-machine-type-selector [options]="filteredSizes"
                                   [label]="sizeLabel"
                                   [required]="true"
                                   [showGpuFilter]="true"

@@ -83,7 +83,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   selectedArchitecture = Architecture.X64;
   private _sizes: AWSSize[] = [];
   filteredSizes: AWSSize[] = [];
-  machineTypeOptions: AWSSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
   isLoadingSizes = false;
@@ -192,17 +191,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     // Filter sizes by selected architecture.
     this.filteredSizes = this._sizes.filter(size => size.architecture === this.selectedArchitecture);
 
-    // Update machine type options for the new selector
-    this.machineTypeOptions = this.filteredSizes.map(size => ({
-      name: size.name,
-      pretty_name: size.pretty_name,
-      vcpus: size.vcpus,
-      memory: size.memory,
-      gpus: size.gpus,
-      price: size.price,
-      architecture: size.architecture,
-    }));
-
     // Reset selected size if it doesn't belong to the filtered set.
     const matchingSize = this.filteredSizes.find(size => size.name === this.selectedSize);
     if (!matchingSize) {
@@ -237,19 +225,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
-  sizeDisplayName(sizeName: string): string {
-    const size = this._sizes.find(size => size.name === sizeName);
-    if (!size) {
-      return sizeName;
-    }
-
-    let result = `${size.pretty_name} (${size.vcpus} vCPU`;
-    if (size.gpus) {
-      result = `${result}, ${size.gpus} GPU`;
-    }
-
-    return `${result}, ${size.memory} GB RAM, ${size.price} USD per hour)`;
-  }
 
   isDialogView(): boolean {
     // In the wizard we do not split extended and basic options.
@@ -277,18 +252,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setSizes(sizes: AWSSize[]): void {
     this._sizes = sizes.sort((a, b) => compare(a.price, b.price));
-
-    this.machineTypeOptions = this._sizes
-      .filter(size => size.architecture === this.selectedArchitecture)
-      .map(size => ({
-        name: size.name,
-        pretty_name: size.pretty_name,
-        vcpus: size.vcpus,
-        memory: size.memory,
-        gpus: size.gpus,
-        price: size.price,
-        architecture: size.architecture,
-      }));
 
     // If node data service contains defaults (i.e. in the edit dialog) then set size and architecture based on that.
     if (!this.selectedSize && this._nodeDataService.nodeData.spec.cloud.aws.instanceType) {
@@ -345,7 +308,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _clearSize(): void {
     this._sizes = [];
     this.filteredSizes = [];
-    this.machineTypeOptions = [];
     this.selectedSize = '';
     this.sizeLabel = SizeState.Empty;
     this.isLoadingSizes = false;
