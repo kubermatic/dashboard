@@ -154,8 +154,9 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
-    this.form.get(Controls.Size).valueChanges
-      .pipe(takeUntil(this._unsubscribe))
+    this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(size => this.onSizeChange(size));
 
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Size).valueChanges)
