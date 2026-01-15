@@ -225,7 +225,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
-
   isDialogView(): boolean {
     // In the wizard we do not split extended and basic options.
     return !this._nodeDataService.isInWizardMode();
