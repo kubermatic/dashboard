@@ -71,6 +71,9 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     if (changes.options) {
       this._categorizeOptions();
     }
+    if (changes.selectedMachineType && changes.selectedMachineType.currentValue) {
+      this._onChange(changes.selectedMachineType.currentValue);
+    }
   }
 
   ngOnInit(): void {

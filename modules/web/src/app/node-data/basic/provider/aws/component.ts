@@ -154,6 +154,10 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
+    this.form.get(Controls.Size).valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(size => this.onSizeChange(size));
+
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Size).valueChanges)
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -208,6 +212,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     if (!this.selectedSize && this.filteredSizes.length > 0) {
       const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
       this.selectedSize = cheapestInstance.name;
+      this.onSizeChange(this.selectedSize);
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
@@ -300,6 +305,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     if (!this.selectedSize && this.filteredSizes.length > 0) {
       const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
       this.selectedSize = cheapestInstance.name;
+      this.onSizeChange(this.selectedSize);
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
