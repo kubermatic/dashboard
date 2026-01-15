@@ -28,7 +28,6 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {AWSMachineType} from './machine-type-selector/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {Architecture, AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -84,7 +83,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   selectedArchitecture = Architecture.X64;
   private _sizes: AWSSize[] = [];
   filteredSizes: AWSSize[] = [];
-  machineTypeOptions: AWSMachineType[] = [];
+  machineTypeOptions: AWSSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
   isLoadingSizes = false;
@@ -191,7 +190,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     // Update machine type options for the new selector
     this.machineTypeOptions = this.filteredSizes.map(size => ({
       name: size.name,
-      prettyName: size.pretty_name,
+      pretty_name: size.pretty_name,
       vcpus: size.vcpus,
       memory: size.memory,
       gpus: size.gpus,
@@ -277,7 +276,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .filter(size => size.architecture === this.selectedArchitecture)
       .map(size => ({
         name: size.name,
-        prettyName: size.pretty_name,
+        pretty_name: size.pretty_name,
         vcpus: size.vcpus,
         memory: size.memory,
         gpus: size.gpus,

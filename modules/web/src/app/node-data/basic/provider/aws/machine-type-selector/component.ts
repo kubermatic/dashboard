@@ -12,29 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-
-export interface AWSMachineType {
-  name: string;
-  prettyName?: string;
-  vcpus: number;
-  memory: number;
-  gpus?: number;
-  price?: number;
-  description?: string;
-  architecture?: string;
-}
+import {AWSSize} from '@shared/entity/provider/aws';
 
 enum Column {
   Select = 'select',
@@ -67,22 +47,19 @@ enum TabIndex {
 export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, ControlValueAccessor {
   readonly Column = Column;
 
-  @Input() options: AWSMachineType[] = [];
+  @Input() options: AWSSize[] = [];
   @Input() label = 'Machine Type';
   @Input() required = false;
   @Input() showGpuFilter = true;
   @Input() isLoading = false;
-
-  @Output() selectionChange = new EventEmitter<string>();
-  @Output() machineTypeSelected = new EventEmitter<AWSMachineType>();
+  @Input() selectedMachineType = '';
 
   searchQuery = '';
   selectedTabIndex = TabIndex.CPU;
-  selectedMachineType = '';
 
-  cpuBasedMachineTypes: AWSMachineType[] = [];
-  gpuBasedMachineTypes: AWSMachineType[] = [];
-  filteredMachineTypes: AWSMachineType[] = [];
+  cpuOptions: AWSSize[] = [];
+  gpuOptions: AWSSize[] = [];
+  filteredOptions: AWSSize[] = [];
   hasGpuTypes = false;
   hasPriceData = false;
   displayedColumns: string[] = [];
@@ -90,14 +67,14 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   private _onChange: (value: string) => void = () => {};
   private _onTouched: () => void = () => {};
 
-  ngOnInit(): void {
-    this._categorizeOptions();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
       this._categorizeOptions();
     }
+  }
+
+  ngOnInit(): void {
+    this._categorizeOptions();
   }
 
   writeValue(value: string): void {
@@ -114,6 +91,7 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
 
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
+    this._updateDisplayedColumns();
     this._applySearchFilter();
   }
 
@@ -122,54 +100,65 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     this._applySearchFilter();
   }
 
-  onMachineTypeSelect(machineType: AWSMachineType): void {
+  onMachineTypeSelect(machineType: AWSSize): void {
     this.selectedMachineType = machineType.name;
     this._onChange(machineType.name);
     this._onTouched();
-    this.selectionChange.emit(machineType.name);
-    this.machineTypeSelected.emit(machineType);
   }
 
-  getDisplayName(option: AWSMachineType): string {
-    return option.prettyName || option.name;
+  getDisplayName(option: AWSSize): string {
+    return option.pretty_name || option.name;
   }
 
-  trackById(_: number, option: AWSMachineType): string {
+  trackById(_: number, option: AWSSize): string {
     return option.name;
   }
 
   private _categorizeOptions(): void {
-    this.cpuBasedMachineTypes = this.options.filter(opt => !opt.gpus || opt.gpus === 0);
-    this.gpuBasedMachineTypes = this.options.filter(opt => opt.gpus && opt.gpus > 0);
-    this.hasGpuTypes = this.gpuBasedMachineTypes.length > 0;
-    this.hasPriceData = this.options.some(opt => opt.price !== undefined);
+    const cpuTypes: AWSSize[] = [];
+    const gpuTypes: AWSSize[] = [];
+    let hasPricing = false;
 
+    for (const option of this.options) {
+      if (option.gpus && option.gpus > 0) {
+        gpuTypes.push(option);
+      } else {
+        cpuTypes.push(option);
+      }
+      if (!hasPricing && option.price !== undefined) {
+        hasPricing = true;
+      }
+    }
+
+    this.cpuOptions = cpuTypes;
+    this.gpuOptions = gpuTypes;
+    this.hasGpuTypes = gpuTypes.length > 0;
+    this.hasPriceData = hasPricing;
+
+    this._updateDisplayedColumns();
     this._applySearchFilter();
   }
 
   private _applySearchFilter(): void {
-    const sourceOptions =
-      this.selectedTabIndex === TabIndex.GPU ? this.gpuBasedMachineTypes : this.cpuBasedMachineTypes;
+    const sourceOptions = this.selectedTabIndex === TabIndex.GPU ? this.gpuOptions : this.cpuOptions;
 
     if (!this.searchQuery) {
-      this.filteredMachineTypes = [...sourceOptions];
+      this.filteredOptions = [...sourceOptions];
     } else {
       const query = this.searchQuery.toLowerCase();
-      this.filteredMachineTypes = sourceOptions.filter(
+      this.filteredOptions = sourceOptions.filter(
         option =>
           option.name.toLowerCase().includes(query) ||
-          (option.prettyName && option.prettyName.toLowerCase().includes(query))
+          (option.pretty_name && option.pretty_name.toLowerCase().includes(query))
       );
     }
-
-    this._updateDisplayedColumns();
   }
 
   private _updateDisplayedColumns(): void {
     const baseColumns = [Column.Select, Column.Name, Column.VCPUs, Column.MemoryGB];
     const optionalColumns = [];
 
-    if (this.selectedTabIndex === TabIndex.GPU || this.hasGpuTypes) {
+    if (this.selectedTabIndex === TabIndex.GPU) {
       optionalColumns.push(Column.GPUs);
     }
 

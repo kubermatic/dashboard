@@ -45,7 +45,7 @@ limitations under the License.
       <mat-tab>
         <ng-template mat-tab-label>
           <span>CPU / General</span>
-          <span class="km-machine-type-selector-tab-count">({{cpuBasedMachineTypes.length}})</span>
+          <span class="km-machine-type-selector-tab-count">({{cpuOptions.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
@@ -54,7 +54,7 @@ limitations under the License.
       <mat-tab>
         <ng-template mat-tab-label>
           <span>GPU / Accelerated</span>
-          <span class="km-machine-type-selector-tab-count">({{gpuBasedMachineTypes.length}})</span>
+          <span class="km-machine-type-selector-tab-count">({{gpuOptions.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
@@ -76,7 +76,7 @@ limitations under the License.
     @if (!isLoading) {
     <table class="km-table km-machine-type-selector-table"
            mat-table
-           [dataSource]="filteredMachineTypes"
+           [dataSource]="filteredOptions"
            [trackBy]="trackById">
       <ng-container matColumnDef="select">
         <th mat-header-cell
@@ -140,7 +140,7 @@ limitations under the License.
       </ng-container>
 
       <tr mat-header-row
-          *matHeaderRowDef="displayedColumns"
+          *matHeaderRowDef="displayedColumns; sticky: true"
           class="km-header-row"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns;"
@@ -148,7 +148,7 @@ limitations under the License.
     </table>
     }
 
-    @if (filteredMachineTypes.length === 0 && !isLoading) {
+    @if (filteredOptions.length === 0 && !isLoading) {
     <div class="km-empty-list-msg">
       No machine types found
     </div>
