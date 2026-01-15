@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.19
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.23
 
 ARG BUILDPLATFORM
 ARG TARGETARCH
@@ -20,16 +20,16 @@ ARG TARGETARCH
 LABEL maintainer="support@kubermatic.com"
 
 # Source: https://dl.k8s.io/release/stable-1.32.txt
-ENV KUBECTL_VERSION=v1.32.7
+ENV KUBECTL_VERSION=v1.34.3
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.17.4
+ENV HELM_VERSION=v3.18.5
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.4.22
+ENV K8SGPT_VERSION=v0.4.27
 
 # Source: https://github.com/derailed/k9s/releases
-ENV K9S_VERSION=v0.50.9
+ENV K9S_VERSION=v0.50.18
 
 # Source: https://github.com/kubernetes-sigs/krew/releases
 ENV KREW_VERSION=v0.4.5
