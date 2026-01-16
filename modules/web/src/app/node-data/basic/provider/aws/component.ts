@@ -85,6 +85,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   filteredSizes: AWSSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
+  isLoadingSizes = false;
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   selectedDiskType = '';
@@ -152,6 +153,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
+    this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(size => this.onSizeChange(size));
+
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Size).valueChanges)
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -195,6 +201,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     if (!this.selectedSize && this.filteredSizes.length > 0) {
       const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
       this.selectedSize = cheapestInstance.name;
+      this.onSizeChange(this.selectedSize);
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
@@ -216,20 +223,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.volumeType = diskType;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
-  }
-
-  sizeDisplayName(sizeName: string): string {
-    const size = this._sizes.find(size => size.name === sizeName);
-    if (!size) {
-      return sizeName;
-    }
-
-    let result = `${size.pretty_name} (${size.vcpus} vCPU`;
-    if (size.gpus) {
-      result = `${result}, ${size.gpus} GPU`;
-    }
-
-    return `${result}, ${size.memory} GB RAM, ${size.price} USD per hour)`;
   }
 
   isDialogView(): boolean {
@@ -275,9 +268,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     if (!this.selectedSize && this.filteredSizes.length > 0) {
       const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
       this.selectedSize = cheapestInstance.name;
+      this.onSizeChange(this.selectedSize);
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this.isLoadingSizes = false;
     this._cdr.detectChanges();
   }
 
@@ -314,6 +309,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.filteredSizes = [];
     this.selectedSize = '';
     this.sizeLabel = SizeState.Empty;
+    this.isLoadingSizes = false;
     this._sizeCombobox.reset();
     this._cdr.detectChanges();
   }
@@ -329,6 +325,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _onSizeLoading(): void {
     this.sizeLabel = SizeState.Loading;
+    this.isLoadingSizes = true;
     this._cdr.detectChanges();
   }
 

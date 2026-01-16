@@ -28,6 +28,15 @@ limitations under the License.
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutGap="8px">
+    <km-aws-machine-type-selector [options]="filteredSizes"
+                                  [label]="sizeLabel"
+                                  [required]="true"
+                                  [showGpuFilter]="true"
+                                  [isLoading]="isLoadingSizes"
+                                  [selectedMachineType]="selectedSize"
+                                  [formControlName]="Controls.Size">
+    </km-aws-machine-type-selector>
+
     <div [fxLayout]="isDialogView() ? 'row' : 'column'"
          fxLayoutGap="10px">
       <km-combobox [fxFlex]="isDialogView() ? '50' : '100'"
@@ -52,22 +61,6 @@ limitations under the License.
                          max="16000"
                          required />
     </div>
-
-    <km-combobox #sizeCombobox
-                 [required]="true"
-                 [grouped]="false"
-                 [selected]="selectedSize"
-                 [options]="filteredSizes"
-                 [formControlName]="Controls.Size"
-                 [valueFormatter]="sizeDisplayName.bind(this)"
-                 (changed)="onSizeChange($event)"
-                 [label]="sizeLabel"
-                 inputLabel="Select size..."
-                 filterBy="name">
-      <div *option="let size">
-        {{sizeDisplayName(size.name)}}
-      </div>
-    </km-combobox>
 
     <km-combobox #subnetCombobox
                  [required]="true"
