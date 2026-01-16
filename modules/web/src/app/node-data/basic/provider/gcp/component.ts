@@ -96,6 +96,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   machineTypes: GCPMachineSize[] = [];
   selectedMachineType = '';
   machineTypeLabel = MachineTypeState.Empty;
+  isLoadingMachineTypes = false;
   zones: GCPZone[] = [];
   selectedZone = '';
   zoneLabel = ZoneState.Empty;
@@ -167,10 +168,19 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     this.form
       .get(Controls.MachineType)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(machineType => {
+        if (machineType) {
+          this.onMachineTypeChange(machineType);
+        }
+      });
+
+    this.form
+      .get(Controls.MachineType)
       .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(machineType => {
-        if (machineType.select) {
+        if (machineType) {
           const payload = this._getQuotaCalculationPayload();
           this._quotaCalculationService.refreshQuotaCalculations(payload);
         }
@@ -198,15 +208,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   onMachineTypeChange(machineType: string): void {
     this._nodeDataService.nodeData.spec.cloud.gcp.machineType = machineType;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
-  }
-
-  sizeDisplayName(machineName: string): string {
-    const machine = this.machineTypes.find(size => size.name === machineName);
-    if (!machine) {
-      return machineName;
-    }
-
-    return `${machine.name} (${machine.description})`;
   }
 
   isDialogView(): boolean {
@@ -278,11 +279,13 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.machineTypes = [];
     this.selectedMachineType = '';
     this.machineTypeLabel = MachineTypeState.Empty;
+    this.isLoadingMachineTypes = false;
     this._cdr.detectChanges();
   }
 
   private _onMachineTypeLoading(): void {
     this.machineTypeLabel = MachineTypeState.Loading;
+    this.isLoadingMachineTypes = true;
     this._cdr.detectChanges();
   }
 
@@ -292,9 +295,11 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     if (!this.selectedMachineType && !_.isEmpty(this.machineTypes)) {
       this.selectedMachineType = this._findCheapestInstance(machineTypes).name;
+      this.onMachineTypeChange(this.selectedMachineType);
     }
 
     this.machineTypeLabel = this.selectedMachineType ? MachineTypeState.Ready : MachineTypeState.Empty;
+    this.isLoadingMachineTypes = false;
     this._cdr.detectChanges();
   }
 

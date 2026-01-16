@@ -57,21 +57,13 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <km-combobox #machineTypesCombobox
-               [required]="true"
-               [grouped]="false"
-               [selected]="selectedMachineType"
-               [options]="machineTypes"
-               [formControlName]="Controls.MachineType"
-               [valueFormatter]="sizeDisplayName.bind(this)"
-               (changed)="onMachineTypeChange($event)"
-               [label]="machineTypeLabel"
-               inputLabel="Select machine type..."
-               filterBy="name">
-    <div *option="let machineType">
-      {{machineType.name}} ({{machineType.description}})
-    </div>
-  </km-combobox>
+  <km-gcp-machine-type-selector [options]="machineTypes"
+                                [label]="machineTypeLabel"
+                                [required]="true"
+                                [isLoading]="isLoadingMachineTypes"
+                                [selectedMachineType]="selectedMachineType"
+                                [formControlName]="Controls.MachineType">
+  </km-gcp-machine-type-selector>
 
   <mat-checkbox class="preemptible-checkbox"
                 [formControlName]="Controls.Preemptible"
