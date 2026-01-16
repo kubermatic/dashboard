@@ -27,7 +27,7 @@ import (
 
 func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 	quota := Quota{}
-	gip := 1024 * 1024 * 1024
+	bytesPerGiB := 1024 * 1024 * 1024
 
 	if resourceDetails.CPU != nil {
 		cpu := resourceDetails.CPU.Value()
@@ -37,7 +37,7 @@ func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 	// Get memory and storage denoted in GB
 	if resourceDetails.Memory != nil && !resourceDetails.Memory.IsZero() {
 		changeToBinary := TreatDecimalAsBinary(resourceDetails.Memory)
-		memory := float64(changeToBinary.Value()) / float64(gip)
+		memory := float64(changeToBinary.Value()) / float64(bytesPerGiB)
 		// round to 2 decimal places
 		memory = math.Round(memory*100) / 100
 		quota.Memory = &memory
@@ -45,7 +45,7 @@ func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 
 	if resourceDetails.Storage != nil && !resourceDetails.Storage.IsZero() {
 		changeToBinary := TreatDecimalAsBinary(resourceDetails.Storage)
-		storage := float64(changeToBinary.Value()) / float64(gip)
+		storage := float64(changeToBinary.Value()) / float64(bytesPerGiB)
 		// round to 2 decimal places
 		storage = math.Round(storage*100) / 100
 		quota.Storage = &storage
@@ -77,7 +77,7 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	if quota.Storage != nil {
 		storage, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Storage))
 		if err != nil {
-			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
+			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Storage %w", err)
 		}
 		resourceDetails.Storage = &storage
 	}

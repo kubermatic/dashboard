@@ -53,6 +53,11 @@ const (
 	totalQuotaName                   = "totalquota"
 )
 
+const (
+	UnitMebi = "Mi"
+	UnitGibi = "Gi"
+)
+
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
 	// in: path
@@ -451,10 +456,10 @@ func MapProviderNodeTmplToResourceDetails(provider ProviderNodeTemplate, replica
 func getAlibabaResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.AlibabaInstanceType.CPUCoreCount)
 
-	if err := nc.WithMemory(int(provider.AlibabaInstanceType.MemorySize), "Gi"); err != nil {
+	if err := nc.WithMemory(int(provider.AlibabaInstanceType.MemorySize), UnitGibi); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.DiskSizeGB, "Gi"); err != nil {
+	if err := nc.WithStorage(provider.DiskSizeGB, UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -463,7 +468,7 @@ func getAlibabaResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprov
 func getAnexiaResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.AnexiaNodeSpec.CPUs)
 
-	if err := nc.WithMemory(int(provider.AnexiaNodeSpec.Memory), "Mi"); err != nil {
+	if err := nc.WithMemory(int(provider.AnexiaNodeSpec.Memory), UnitMebi); err != nil {
 		return err
 	}
 
@@ -476,7 +481,7 @@ func getAnexiaResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovi
 		}
 	}
 
-	if err := nc.WithStorage(int(diskSize), "Gi"); err != nil {
+	if err := nc.WithStorage(int(diskSize), UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -488,10 +493,10 @@ func getAWSResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider
 	// Convert memory from GiB to MiB for resource quota calculation.
 	// Using GiB directly would lose fractional values (e.g., 3.75 GiB), so we round up in MiB.
 	mi := int(math.Ceil(float64(provider.AWSSize.Memory) * 1024))
-	if err := nc.WithMemory(mi, "Mi"); err != nil {
+	if err := nc.WithMemory(mi, UnitMebi); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.DiskSizeGB, "Gi"); err != nil {
+	if err := nc.WithStorage(provider.DiskSizeGB, UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -500,11 +505,11 @@ func getAWSResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider
 func getAzureResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(int(provider.AzureSize.NumberOfCores))
 
-	if err := nc.WithMemory(int(provider.AzureSize.MemoryInMB), "Mi"); err != nil {
+	if err := nc.WithMemory(int(provider.AzureSize.MemoryInMB), UnitMebi); err != nil {
 		return err
 	}
 
-	if err := nc.WithStorage(int(provider.AzureSize.ResourceDiskSizeInMB+provider.AzureSize.OsDiskSizeInMB), "Mi"); err != nil {
+	if err := nc.WithStorage(int(provider.AzureSize.ResourceDiskSizeInMB+provider.AzureSize.OsDiskSizeInMB), UnitMebi); err != nil {
 		return err
 	}
 	return nil
@@ -513,10 +518,10 @@ func getAzureResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovid
 func getDOResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.DOSize.VCPUs)
 
-	if err := nc.WithMemory(provider.DOSize.Memory, "Mi"); err != nil {
+	if err := nc.WithMemory(provider.DOSize.Memory, UnitMebi); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.DOSize.Disk, "Gi"); err != nil {
+	if err := nc.WithStorage(provider.DOSize.Disk, UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -525,10 +530,10 @@ func getDOResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.
 func getGCPResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(int(provider.GCPSize.VCPUs))
 
-	if err := nc.WithMemory(int(provider.GCPSize.Memory), "Mi"); err != nil {
+	if err := nc.WithMemory(int(provider.GCPSize.Memory), UnitMebi); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.DiskSizeGB, "Gi"); err != nil {
+	if err := nc.WithStorage(provider.DiskSizeGB, UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -537,10 +542,10 @@ func getGCPResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider
 func getHetznerResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.HetznerSize.Cores)
 
-	if err := nc.WithMemory(int(provider.HetznerSize.Memory), "Gi"); err != nil {
+	if err := nc.WithMemory(int(provider.HetznerSize.Memory), UnitGibi); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.HetznerSize.Disk, "Gi"); err != nil {
+	if err := nc.WithStorage(provider.HetznerSize.Disk, UnitGibi); err != nil {
 		return err
 	}
 	return nil
@@ -553,7 +558,7 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	}
 	nc.WithCPUCount(cpus)
 
-	memory, err := resource.ParseQuantity(provider.KubevirtNodeSize.Memory + "Mi")
+	memory, err := resource.ParseQuantity(provider.KubevirtNodeSize.Memory + UnitMebi)
 	if err != nil {
 		return fmt.Errorf("error parsing kubevirt node memory %q to resource quantity: %w", provider.KubevirtNodeSize.Memory, err)
 	}
@@ -561,7 +566,7 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 
 	primaryDiskSize := provider.KubevirtNodeSize.PrimaryDiskSize
 	if _, err := strconv.Atoi(primaryDiskSize); err == nil {
-		primaryDiskSize += "Gi"
+		primaryDiskSize += UnitGibi
 	}
 	storage, err := resource.ParseQuantity(primaryDiskSize)
 	if err != nil {
@@ -572,7 +577,7 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	for _, d := range provider.KubevirtNodeSize.SecondaryDisks {
 		secondaryDiskSize := d.Size
 		if _, err := strconv.Atoi(secondaryDiskSize); err == nil {
-			secondaryDiskSize += "Gi"
+			secondaryDiskSize += UnitGibi
 		}
 		secondaryStorage, err := resource.ParseQuantity(secondaryDiskSize)
 		if err != nil {
@@ -588,12 +593,12 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 func getNutanixResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(int(provider.NutanixNodeSpec.CPUs))
 
-	if err := nc.WithMemory(int(provider.NutanixNodeSpec.MemoryMB), "Mi"); err != nil {
+	if err := nc.WithMemory(int(provider.NutanixNodeSpec.MemoryMB), UnitMebi); err != nil {
 		return err
 	}
 
 	if provider.NutanixNodeSpec.DiskSize != nil {
-		if err := nc.WithStorage(int(*provider.NutanixNodeSpec.DiskSize), "Gi"); err != nil {
+		if err := nc.WithStorage(int(*provider.NutanixNodeSpec.DiskSize), UnitGibi); err != nil {
 			return err
 		}
 	} else {
@@ -605,17 +610,17 @@ func getNutanixResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprov
 func getOpenstackResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.OpenstackSize.VCPUs)
 
-	if err := nc.WithMemory(provider.OpenstackSize.Memory, "Mi"); err != nil {
+	if err := nc.WithMemory(provider.OpenstackSize.Memory, UnitMebi); err != nil {
 		return err
 	}
 
 	if provider.DiskSizeGB == 0 {
-		if err := nc.WithStorage(provider.OpenstackSize.Disk, "Gi"); err != nil {
+		if err := nc.WithStorage(provider.OpenstackSize.Disk, UnitGibi); err != nil {
 			return err
 		}
 	} else {
 		// Setting custom disk size
-		if err := nc.WithStorage(provider.DiskSizeGB, "Gi"); err != nil {
+		if err := nc.WithStorage(provider.DiskSizeGB, UnitGibi); err != nil {
 			return err
 		}
 	}
@@ -626,12 +631,12 @@ func getOpenstackResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpr
 func getVSphereResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.VSphereNodeSpec.CPUs)
 
-	if err := nc.WithMemory(provider.VSphereNodeSpec.Memory, "Mi"); err != nil {
+	if err := nc.WithMemory(provider.VSphereNodeSpec.Memory, UnitMebi); err != nil {
 		return err
 	}
 
 	if provider.VSphereNodeSpec.DiskSizeGB != nil {
-		if err := nc.WithStorage(int(*provider.VSphereNodeSpec.DiskSizeGB), "Gi"); err != nil {
+		if err := nc.WithStorage(int(*provider.VSphereNodeSpec.DiskSizeGB), UnitGibi); err != nil {
 			return err
 		}
 	} else {
@@ -643,12 +648,12 @@ func getVSphereResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprov
 func getVMCloudDirectorResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(provider.VMDirectorNodeSpec.CPUCores * provider.VMDirectorNodeSpec.CPUs)
 
-	if err := nc.WithMemory(provider.VMDirectorNodeSpec.MemoryMB, "Mi"); err != nil {
+	if err := nc.WithMemory(provider.VMDirectorNodeSpec.MemoryMB, UnitMebi); err != nil {
 		return err
 	}
 
 	if provider.VMDirectorNodeSpec.DiskSizeGB != nil {
-		if err := nc.WithStorage(int(*provider.VMDirectorNodeSpec.DiskSizeGB), "Gi"); err != nil {
+		if err := nc.WithStorage(int(*provider.VMDirectorNodeSpec.DiskSizeGB), UnitGibi); err != nil {
 			return err
 		}
 	} else {
