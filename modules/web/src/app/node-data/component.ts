@@ -142,6 +142,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   clusterAutoscalerAppDefinition: ApplicationDefinition;
   autoscalerApplication: Application;
   clusterAutoscalerWarningMessage: string;
+  ospImageVersion: string;
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -351,8 +352,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         // We don't want to retain the existing value for OSP in the edit view since user explicitly
         // changed the selected operating system.
         this.selectedOperatingSystemProfile = null;
-        this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
-        this.setDefaultOperatingSystemProfiles();
+        this._getSupportedOperatingSystemProfiles();
       });
 
     forkJoin([
@@ -388,6 +388,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .subscribe(enable => {
         this._updateAutoscalerApplication(enable);
       });
+
+    this._nodeDataService.kubeVirt.osImageVersion$.pipe(takeUntil(this._unsubscribe)).subscribe(version => {
+      this.ospImageVersion = version;
+      this._getSupportedOperatingSystemProfiles();
+    });
   }
 
   ngOnDestroy(): void {
@@ -587,8 +592,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(finalize(() => (this.isLoadingOSProfiles = false)))
       .subscribe(profiles => {
         this.operatingSystemProfiles = profiles;
-        this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
-        this.setDefaultOperatingSystemProfiles();
+        this._getSupportedOperatingSystemProfiles();
       });
   }
 
@@ -700,7 +704,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return data;
   }
 
-  private getSupportedOperatingSystemProfiles(): string[] {
+  private _getSupportedOperatingSystemProfiles(): void {
     let cloudProvider = this.provider.toString();
     if (this.provider === NodeProvider.GCP) {
       // For machines, GCP needs to be replaced with gce.
@@ -710,13 +714,17 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       cloudProvider = 'vmware-cloud-director';
     }
 
-    return this.operatingSystemProfiles
+    let filteredOSP = this.operatingSystemProfiles
       .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value?.toLowerCase())
-      .filter(osp => osp.supportedCloudProviders.indexOf(cloudProvider) > -1)
-      .map(osp => osp.name);
+      .filter(osp => osp.supportedCloudProviders.indexOf(cloudProvider) > -1);
+    if (this.provider === NodeProvider.KUBEVIRT) {
+      filteredOSP = filteredOSP.filter(osp => this._checkOSPVersion(osp.name, this.ospImageVersion));
+    }
+    this.supportedOperatingSystemProfiles = filteredOSP.map(osp => osp.name);
+    this._setDefaultOperatingSystemProfiles(this.ospImageVersion);
   }
 
-  private setDefaultOperatingSystemProfiles(): void {
+  private _setDefaultOperatingSystemProfiles(version?: string): void {
     let ospValue = '';
     const selectedOperatingSystem = this.form.get(Controls.OperatingSystem).value;
     const dcOSP = this._datacenterSpec?.spec.operatingSystemProfiles?.[selectedOperatingSystem];
@@ -733,7 +741,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         ospValue = ospName;
       }
     }
-
+    if (this.provider === NodeProvider.KUBEVIRT && version) {
+      if (!this._checkOSPVersion(ospValue, version)) {
+        ospValue = '';
+      }
+    }
     this.form.get(Controls.OperatingSystemProfile).setValue({main: ospValue});
   }
 
@@ -761,5 +773,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._applicationService.applications = this._applicationService.applications.filter(
       app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME
     );
+  }
+
+  private _checkOSPVersion(osp: string, version: string): boolean {
+    if (!version) return true;
+
+    const ospObject = this.operatingSystemProfiles.find(profile => profile.name === osp);
+    if (!ospObject) return false;
+    return !ospObject?.osVersion || ospObject?.osVersion === version;
   }
 }

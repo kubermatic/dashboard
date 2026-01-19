@@ -2088,6 +2088,7 @@ type OperatingSystemProfile struct {
 	Name                    string   `json:"name"`
 	OperatingSystem         string   `json:"operatingSystem"`
 	SupportedCloudProviders []string `json:"supportedCloudProviders,omitempty"`
+	OSVersion               string   `json:"osVersion,omitempty"`
 }
 
 // ClusterServiceAccount represent a k8s service account to access cluster.
