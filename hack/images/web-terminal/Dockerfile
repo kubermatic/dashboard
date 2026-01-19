@@ -19,7 +19,7 @@ ARG TARGETARCH
 
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.32.txt
+# Source: https://dl.k8s.io/release/stable-1.34.txt
 ENV KUBECTL_VERSION=v1.34.3
 
 # Source: https://github.com/helm/helm/releases
@@ -100,12 +100,20 @@ USER ${USER}
 
 RUN mkdir ${USER_HOME}/bin/
 
-RUN wget https://rawgit.com/kubermatic/fubectl/master/fubectl.source -O ${USER_HOME}/bin/fubectl.source
+RUN wget https://raw.githubusercontent.com/kubermatic/fubectl/refs/heads/main/fubectl.source -O ${USER_HOME}/bin/fubectl.source
 
 USER 0
-RUN curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/${K8SGPT_VERSION}/k8sgpt_${TARGETARCH}.apk
 
-RUN apk add --allow-untrusted k8sgpt_${TARGETARCH}.apk
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+        APK_ARCH="x86_64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+        APK_ARCH="arm64"; \
+    fi && \
+	curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/${K8SGPT_VERSION}/k8sgpt_Linux_${APK_ARCH}.tar.gz && \
+    tar -xf k8sgpt_Linux_${APK_ARCH}.tar.gz && \
+    mv k8sgpt /usr/bin/k8sgpt && \
+    chmod +x /usr/bin/k8sgpt && \
+    rm k8sgpt_Linux_${APK_ARCH}.tar.gz
 
 USER ${USER}
 COPY .bashrc /tmp/
