@@ -33658,10 +33658,33 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "GCPMachineAccelerator": {
+      "type": "object",
+      "title": "GCPMachineAccelerator represents a GCP machine accelerator (GPU).",
+      "properties": {
+        "guestAcceleratorCount": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "GuestAcceleratorCount"
+        },
+        "guestAcceleratorType": {
+          "type": "string",
+          "x-go-name": "GuestAcceleratorType"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "GCPMachineSize": {
       "type": "object",
       "title": "GCPMachineSize represents a object of GCP machine size.",
       "properties": {
+        "accelerators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GCPMachineAccelerator"
+          },
+          "x-go-name": "Accelerators"
+        },
         "description": {
           "type": "string",
           "x-go-name": "Description"

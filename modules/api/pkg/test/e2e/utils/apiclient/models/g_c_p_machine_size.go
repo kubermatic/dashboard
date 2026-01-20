@@ -7,7 +7,9 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +18,9 @@ import (
 //
 // swagger:model GCPMachineSize
 type GCPMachineSize struct {
+
+	// accelerators
+	Accelerators []*GCPMachineAccelerator `json:"accelerators"`
 
 	// description
 	Description string `json:"description,omitempty"`
@@ -32,11 +37,75 @@ type GCPMachineSize struct {
 
 // Validate validates this g c p machine size
 func (m *GCPMachineSize) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateAccelerators(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this g c p machine size based on context it is used
+func (m *GCPMachineSize) validateAccelerators(formats strfmt.Registry) error {
+	if swag.IsZero(m.Accelerators) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Accelerators); i++ {
+		if swag.IsZero(m.Accelerators[i]) { // not required
+			continue
+		}
+
+		if m.Accelerators[i] != nil {
+			if err := m.Accelerators[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("accelerators" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("accelerators" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this g c p machine size based on the context it is used
 func (m *GCPMachineSize) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAccelerators(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GCPMachineSize) contextValidateAccelerators(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Accelerators); i++ {
+
+		if m.Accelerators[i] != nil {
+			if err := m.Accelerators[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("accelerators" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("accelerators" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

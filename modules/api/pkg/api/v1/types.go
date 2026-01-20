@@ -274,10 +274,18 @@ type GCPMachineSizeList []GCPMachineSize
 // GCPMachineSize represents a object of GCP machine size.
 // swagger:model GCPMachineSize
 type GCPMachineSize struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Memory      int64  `json:"memory"`
-	VCPUs       int64  `json:"vcpus"`
+	Name         string                  `json:"name"`
+	Description  string                  `json:"description"`
+	Memory       int64                   `json:"memory"`
+	VCPUs        int64                   `json:"vcpus"`
+	Accelerators []GCPMachineAccelerator `json:"accelerators,omitempty"`
+}
+
+// GCPMachineAccelerator represents a GCP machine accelerator (GPU).
+// swagger:model GCPMachineAccelerator
+type GCPMachineAccelerator struct {
+	GuestAcceleratorType  string `json:"guestAcceleratorType"`
+	GuestAcceleratorCount int64  `json:"guestAcceleratorCount"`
 }
 
 // GCPZone represents a object of GCP zone.
