@@ -68,7 +68,7 @@ enum MachineTypeState {
 @Component({
   selector: 'km-gcp-basic-node-data',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+  styleUrls: [],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
