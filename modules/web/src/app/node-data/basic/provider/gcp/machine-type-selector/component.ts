@@ -21,6 +21,12 @@ enum Column {
   Name = 'name',
   VCPUs = 'vcpus',
   MemoryGB = 'memoryGB',
+  GPUs = 'gpus',
+}
+
+enum TabIndex {
+  CPU = 0,
+  GPU = 1,
 }
 
 @Component({
@@ -43,11 +49,17 @@ export class GCPMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   @Input() options: GCPMachineSize[] = [];
   @Input() label = 'Machine Type';
   @Input() required = false;
+  @Input() showGpuFilter = true;
   @Input() isLoading = false;
   @Input() selectedMachineType = '';
 
   searchQuery = '';
+  selectedTabIndex = TabIndex.CPU;
+
+  cpuOptions: GCPMachineSize[] = [];
+  gpuOptions: GCPMachineSize[] = [];
   filteredOptions: GCPMachineSize[] = [];
+  hasGpuTypes = false;
   displayedColumns: string[] = [];
 
   private _onChange: (value: string) => void = () => {};
@@ -55,7 +67,7 @@ export class GCPMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
-      this._setOptions();
+      this._categorizeOptions();
     }
     if (changes.selectedMachineType && changes.selectedMachineType.currentValue) {
       this._onChange(changes.selectedMachineType.currentValue);
@@ -63,7 +75,13 @@ export class GCPMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
   }
 
   ngOnInit(): void {
-    this._setOptions();
+    this._categorizeOptions();
+  }
+
+  onTabChange(index: number): void {
+    this.selectedTabIndex = index;
+    this._updateDisplayedColumns();
+    this._applySearchFilter();
   }
 
   writeValue(value: string): void {
@@ -83,9 +101,9 @@ export class GCPMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     this._applySearchFilter();
   }
 
-  onMachineTypeSelect(machineType: GCPMachineSize): void {
-    this.selectedMachineType = machineType.name;
-    this._onChange(machineType.name);
+  onMachineTypeChange(machineTypeName: string): void {
+    this.selectedMachineType = machineTypeName;
+    this._onChange(machineTypeName);
     this._onTouched();
   }
 
@@ -97,22 +115,47 @@ export class GCPMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     return option.name;
   }
 
-  private _setOptions(): void {
-    this.filteredOptions = [...this.options];
-    this.displayedColumns = [Column.Select, Column.Name, Column.VCPUs, Column.MemoryGB];
+  private _categorizeOptions(): void {
+    const cpuTypes: GCPMachineSize[] = [];
+    const gpuTypes: GCPMachineSize[] = [];
+
+    for (const option of this.options) {
+      if (option.accelerators && option.accelerators.length > 0) {
+        gpuTypes.push(option);
+      } else {
+        cpuTypes.push(option);
+      }
+    }
+
+    this.cpuOptions = cpuTypes;
+    this.gpuOptions = gpuTypes;
+    this.hasGpuTypes = gpuTypes.length > 0;
+
+    this._updateDisplayedColumns();
     this._applySearchFilter();
   }
 
   private _applySearchFilter(): void {
+    const sourceOptions = this.selectedTabIndex === TabIndex.GPU ? this.gpuOptions : this.cpuOptions;
+
     if (!this.searchQuery) {
-      this.filteredOptions = [...this.options];
+      this.filteredOptions = [...sourceOptions];
     } else {
       const query = this.searchQuery.toLowerCase();
-      this.filteredOptions = this.options.filter(
-        option =>
-          option.name.toLowerCase().includes(query) ||
-          option.description.toLowerCase().includes(query)
+      this.filteredOptions = sourceOptions.filter(
+        option => option.name.toLowerCase().includes(query) || option.description.toLowerCase().includes(query)
       );
     }
+  }
+
+  private _updateDisplayedColumns(): void {
+    const baseColumns = [Column.Select, Column.Name, Column.VCPUs, Column.MemoryGB];
+    const optionalColumns = [];
+
+    if (this.selectedTabIndex === TabIndex.GPU) {
+      optionalColumns.push(Column.GPUs);
+    }
+
+    this.displayedColumns = [...baseColumns, ...optionalColumns];
   }
 }
