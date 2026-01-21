@@ -305,13 +305,17 @@
   }
 
   .mat-button-toggle-group {
+    --mat-button-toggle-background-color: transparent;
+    --mat-button-toggle-selected-state-background-color: transparent;
+
     background-color: transparent;
 
     .mat-button-toggle {
+      background-color: transparent;
       border-color: map.get($colors, divider);
 
       &.mat-button-toggle-checked {
-        --mat-standard-button-toggle-divider-color: #{map.get($colors, primary)};
+        --mat-button-toggle-divider-color: #{map.get($colors, primary)};
 
         background-color: transparent;
         border-color: map.get($colors, primary);
