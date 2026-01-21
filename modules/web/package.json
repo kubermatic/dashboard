@@ -104,7 +104,7 @@
   },
   "devDependencies": {
     "@angular/build": "^20.3.2",
-    "@angular/cli": "20.3.13",
+    "@angular/cli": "21.1.0",
     "@angular/compiler-cli": "20.3.1",
     "@jest/globals": "29.7.0",
     "@types/jest": "29.5.14",
