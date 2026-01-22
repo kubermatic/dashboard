@@ -411,7 +411,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
             });
             this._clusterSearchCache.set(project.id, identifiers);
             this._clusterSearchInFlight.delete(project.id);
-            this.dataSource.filter = this.dataSource.filter;
+            const currentFilter = this.dataSource.filter;
+            this.dataSource.filter = currentFilter || '';
             this._cdr.detectChanges();
           },
           () => {
