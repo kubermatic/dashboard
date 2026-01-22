@@ -303,11 +303,23 @@ func ListGCPSizes(ctx context.Context, machineFilter kubermaticv1.MachineFlavorF
 	req := computeService.MachineTypes.List(project, zone)
 	err = req.Pages(ctx, func(page *compute.MachineTypeList) error {
 		for _, machineType := range page.Items {
+			// Extract accelerators
+			var accelerators []apiv1.GCPMachineAccelerator
+			for _, acc := range machineType.Accelerators {
+				if acc.GuestAcceleratorCount > 0 {
+					accelerators = append(accelerators, apiv1.GCPMachineAccelerator{
+						GuestAcceleratorType:  acc.GuestAcceleratorType,
+						GuestAcceleratorCount: acc.GuestAcceleratorCount,
+					})
+				}
+			}
+
 			mt := apiv1.GCPMachineSize{
-				Name:        machineType.Name,
-				Description: machineType.Description,
-				Memory:      machineType.MemoryMb,
-				VCPUs:       machineType.GuestCpus,
+				Name:         machineType.Name,
+				Description:  machineType.Description,
+				Memory:       machineType.MemoryMb,
+				VCPUs:        machineType.GuestCpus,
+				Accelerators: accelerators,
 			}
 			sizes = append(sizes, mt)
 		}

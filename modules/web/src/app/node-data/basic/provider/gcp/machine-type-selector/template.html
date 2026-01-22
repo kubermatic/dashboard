@@ -1,0 +1,159 @@
+<!--
+Copyright 2026 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="km-gcp-machine-type-selector"
+     fxLayout="column">
+  <div class="km-machine-type-selector-label km-text">
+    {{label}} @if (required) {
+    <span class="km-required">*</span>
+    }
+  </div>
+
+  <div class="km-machine-type-selector-panel km-border"
+       fxLayout="column">
+    <div class="km-machine-type-selector-search">
+      <mat-form-field class="km-machine-type-selector-search-field">
+        <mat-label>Search Machine Type...</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="searchQuery"
+               (ngModelChange)="onSearchChange($event)"
+               placeholder="Filter by name or description" />
+        <i matPrefix
+           class="km-icon-mask km-icon-search"></i>
+      </mat-form-field>
+    </div>
+
+    <mat-tab-group class="km-machine-type-selector-tabs"
+                   mat-stretch-tabs="false"
+                   animationDuration="0ms"
+                   [selectedIndex]="selectedTabIndex"
+                   (selectedIndexChange)="onTabChange($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>CPU / General</span>
+          <span class="km-machine-type-selector-tab-count">({{cpuOptions.length}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+
+      @if (showGpuFilter && hasGpuTypes) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>GPU / Accelerated</span>
+          <span class="km-machine-type-selector-tab-count">({{gpuOptions.length}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+      }
+    </mat-tab-group>
+  </div>
+</div>
+
+<ng-template #machineTypeTable>
+  <div class="km-machine-type-selector-table-container">
+      @if (isLoading) {
+      <div class="km-row"
+           fxLayoutAlign="center center">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25" />
+      </div>
+      }
+      @if (!isLoading) {
+      <mat-radio-group [value]="selectedMachineType"
+                       (change)="onMachineTypeChange($event.value)">
+        <table class="km-table km-machine-type-selector-table"
+               mat-table
+               [dataSource]="filteredOptions"
+               [trackBy]="trackById">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-5"></th>
+            <td mat-cell
+                *matCellDef="let element">
+              <mat-radio-button [value]="element.name">
+              </mat-radio-button>
+            </td>
+          </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-35">Name</th>
+          <td mat-cell
+              *matCellDef="let element">
+            {{getDisplayName(element)}}
+            <div class="km-machine-type-description">{{element.description}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vcpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-10">vCPU</th>
+          <td mat-cell
+              *matCellDef="let element">{{element.vcpus}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="memoryGB">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-15">Memory</th>
+          <td mat-cell
+              *matCellDef="let element">{{(element.memory / 1024) | number:'1.0-0'}} GB</td>
+        </ng-container>
+
+        <ng-container matColumnDef="gpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell">GPUs</th>
+          <td mat-cell
+              *matCellDef="let element">
+            @if (element.accelerators && element.accelerators.length > 0) {
+              <div class="km-gpu-info">
+                @for (acc of element.accelerators; track acc.guestAcceleratorType) {
+                  <div class="km-gpu-item">
+                    <span class="km-gpu-count">{{acc.guestAcceleratorCount}}x</span>
+                    <span class="km-gpu-type">{{acc.guestAcceleratorType}}</span>
+                  </div>
+                }
+              </div>
+            }
+            @else {
+              <span>-</span>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+            class="km-header-row"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            class="km-mat-row"></tr>
+        </table>
+      </mat-radio-group>
+      }
+
+      @if (filteredOptions.length === 0 && !isLoading) {
+      <div class="km-empty-list-msg">
+        No machine types found
+      </div>
+      }
+    </div>
+</ng-template>

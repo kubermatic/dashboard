@@ -17,6 +17,12 @@ export class GCPMachineSize {
   description: string;
   memory: number;
   vcpus: number;
+  accelerators?: GCPMachineAccelerator[];
+}
+
+export class GCPMachineAccelerator {
+  guestAcceleratorType: string;
+  guestAcceleratorCount: number;
 }
 
 export class GCPDiskType {
