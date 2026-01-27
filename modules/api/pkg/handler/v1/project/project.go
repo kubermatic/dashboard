@@ -270,7 +270,11 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 
 		if req.DisplayAll && (userInfo.IsAdmin || userInfo.IsGlobalViewer) {
-			return getAllProjectsForAdmin(ctx, userInfo, projectProvider, memberProvider, userProvider, clusterProviderGetter, seedsGetter)
+			allProjects, err := getAllProjectsForAdmin(ctx, userInfo, projectProvider, memberProvider, userProvider, clusterProviderGetter, seedsGetter)
+			if err != nil {
+				return nil, err
+			}
+			return filterProjectsBySearch(ctx, allProjects, req.Search, clusterProviderGetter, seedsGetter)
 		}
 
 		var projects []*kubermaticv1.Project
@@ -361,7 +365,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		if len(errorList) > 0 {
 			return nil, utilerrors.NewWithDetails(http.StatusInternalServerError, "failed to get some projects, please examine details field for more info", errorList)
 		}
-		return apiProjects, nil
+		return filterProjectsBySearch(ctx, apiProjects, req.Search, clusterProviderGetter, seedsGetter)
 	}
 }
 
@@ -386,6 +390,93 @@ func getAllProjectsForAdmin(ctx context.Context, userInfo *provider.UserInfo, pr
 	}
 
 	return projects, nil
+}
+
+func filterProjectsBySearch(ctx context.Context, projects []*apiv1.Project, query string, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter) ([]*apiv1.Project, error) {
+	search := strings.TrimSpace(strings.ToLower(query))
+	if search == "" {
+		return projects, nil
+	}
+
+	allowedProjectIDs := sets.New[string]()
+	for _, project := range projects {
+		allowedProjectIDs.Insert(project.ID)
+	}
+
+	clusterMatchedProjectIDs, err := getProjectsMatchingClusterQuery(ctx, clusterProviderGetter, seedsGetter, search, allowedProjectIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	filtered := make([]*apiv1.Project, 0, len(projects))
+	for _, project := range projects {
+		if projectMatchesQuery(project, search, clusterMatchedProjectIDs) {
+			filtered = append(filtered, project)
+		}
+	}
+
+	return filtered, nil
+}
+
+func projectMatchesQuery(project *apiv1.Project, query string, clusterMatchedProjectIDs sets.Set[string]) bool {
+	if strings.Contains(strings.ToLower(project.Name), query) {
+		return true
+	}
+	if strings.Contains(strings.ToLower(project.ID), query) {
+		return true
+	}
+	for _, owner := range project.Owners {
+		if strings.Contains(strings.ToLower(owner.Name), query) {
+			return true
+		}
+	}
+	for key, value := range project.Labels {
+		if strings.Contains(strings.ToLower(key), query) || strings.Contains(strings.ToLower(value), query) {
+			return true
+		}
+	}
+	return clusterMatchedProjectIDs.Has(project.ID)
+}
+
+func getProjectsMatchingClusterQuery(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, query string, allowedProjectIDs sets.Set[string]) (sets.Set[string], error) {
+	projectIDs := sets.New[string]()
+	seeds, err := seedsGetter()
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
+	}
+
+	for seedName, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
+		clusterProvider, err := clusterProviderGetter(seed)
+		if err != nil {
+			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+			continue
+		}
+
+		clusters, err := clusterProvider.ListAll(ctx, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, cluster := range clusters.Items {
+			projectID := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
+			if projectID == "" {
+				continue
+			}
+			if allowedProjectIDs.Len() > 0 && !allowedProjectIDs.Has(projectID) {
+				continue
+			}
+			if strings.Contains(strings.ToLower(cluster.Spec.HumanReadableName), query) || strings.Contains(strings.ToLower(cluster.Name), query) {
+				projectIDs.Insert(projectID)
+			}
+		}
+	}
+
+	return projectIDs, nil
 }
 
 func isStatus(err error, status int32) bool {
@@ -622,6 +713,8 @@ func DecodeDelete(c context.Context, r *http.Request) (interface{}, error) {
 type ListReq struct {
 	// in: query
 	DisplayAll bool `json:"displayAll,omitempty"`
+	// in: query
+	Search string `json:"search,omitempty"`
 }
 
 func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
@@ -630,6 +723,7 @@ func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
 	var err error
 
 	queryParam := r.URL.Query().Get("displayAll")
+	searchParam := r.URL.Query().Get("search")
 
 	if queryParam != "" {
 		displayAll, err = strconv.ParseBool(queryParam)
@@ -638,6 +732,7 @@ func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
 		}
 	}
 	req.DisplayAll = displayAll
+	req.Search = searchParam
 
 	return req, nil
 }

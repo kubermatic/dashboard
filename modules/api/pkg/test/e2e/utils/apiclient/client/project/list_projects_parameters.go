@@ -65,6 +65,9 @@ type ListProjectsParams struct {
 	// DisplayAll.
 	DisplayAll *bool
 
+	// Search.
+	Search *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -129,6 +132,17 @@ func (o *ListProjectsParams) SetDisplayAll(displayAll *bool) {
 	o.DisplayAll = displayAll
 }
 
+// WithSearch adds the search to the list projects params
+func (o *ListProjectsParams) WithSearch(search *string) *ListProjectsParams {
+	o.SetSearch(search)
+	return o
+}
+
+// SetSearch adds the search to the list projects params
+func (o *ListProjectsParams) SetSearch(search *string) {
+	o.Search = search
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -149,6 +163,23 @@ func (o *ListProjectsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		if qDisplayAll != "" {
 
 			if err := r.SetQueryParam("displayAll", qDisplayAll); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Search != nil {
+
+		// query param search
+		var qrSearch string
+
+		if o.Search != nil {
+			qrSearch = *o.Search
+		}
+		qSearch := qrSearch
+		if qSearch != "" {
+
+			if err := r.SetQueryParam("search", qSearch); err != nil {
 				return err
 			}
 		}

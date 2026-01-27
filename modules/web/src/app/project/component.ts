@@ -234,7 +234,27 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSearch(query: string): void {
-    this.dataSource.filter = query;
+    const trimmedQuery = query?.trim() || '';
+    if (!trimmedQuery) {
+      this.dataSource.data = this.projects;
+      this.dataSource.filter = '';
+      this.isPaginatorVisible = this._isPaginatorVisible();
+      this._cdr.detectChanges();
+      return;
+    }
+
+    this.isProjectsLoading = true;
+    const displayAll = this.settings?.displayAllProjectsForAdmin ?? false;
+    this._projectService
+      .searchProjects(trimmedQuery, displayAll)
+      .pipe(take(1))
+      .subscribe(projects => {
+        this.dataSource.data = projects;
+        this.dataSource.filter = '';
+        this.isProjectsLoading = false;
+        this.isPaginatorVisible = this.paginator ? projects.length > this.paginator.pageSize : false;
+        this._cdr.detectChanges();
+      });
   }
 
   verifyQuotas(projects: Project[]): void {
