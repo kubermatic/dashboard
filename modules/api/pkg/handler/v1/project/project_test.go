@@ -429,8 +429,8 @@ func TestListProjectEndpoint(t *testing.T) {
 			}(),
 			ExpectedResponse: []apiv1.Project{
 				{
-					Spec:   apiv1.ProjectSpec{},
-					Status: "Active",
+					Spec:           apiv1.ProjectSpec{},
+					Status:         "Active",
 					ClustersNumber: 1,
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                "my-first-project-ID",
