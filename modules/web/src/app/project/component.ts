@@ -32,7 +32,6 @@ import {COOKIE_DI_TOKEN, Cookie} from '@app/config';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ClusterService} from '@core/services/cluster';
 import {GlobalModule} from '@core/services/global/module';
 import {NotificationService} from '@core/services/notification';
 import {PreviousRouteService} from '@core/services/previous-route';
@@ -83,8 +82,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   editionVersion: string = getEditionVersion();
   allowedOperatingSystems: AllowedOperatingSystems;
 
-  private _clusterSearchCache = new Map<string, string[]>();
-  private _clusterSearchInFlight = new Set<string>();
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
   private _quotaService: QuotaService;
@@ -128,7 +125,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _clusterService: ClusterService,
     private readonly _settingsService: SettingsService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie,
     private readonly _dialogModeService: DialogModeService
@@ -200,7 +196,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.projects = this._sortProjects(projects);
       this._loadCurrentUserRoles();
       this._sortProjectOwners();
-      this._purgeClusterSearchCache();
       this.dataSource.data = this.projects;
 
       if (this._shouldRedirectToProjectLandingPage()) {
@@ -239,11 +234,27 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSearch(query: string): void {
-    this.dataSource.filter = query;
-
-    if (query?.trim()) {
-      this._primeClusterSearchIndex();
+    const trimmedQuery = query?.trim() || '';
+    if (!trimmedQuery) {
+      this.dataSource.data = this.projects;
+      this.dataSource.filter = '';
+      this.isPaginatorVisible = this._isPaginatorVisible();
+      this._cdr.detectChanges();
+      return;
     }
+
+    this.isProjectsLoading = true;
+    const displayAll = this.settings?.displayAllProjectsForAdmin ?? false;
+    this._projectService
+      .searchProjects(trimmedQuery, displayAll)
+      .pipe(take(1))
+      .subscribe(projects => {
+        this.dataSource.data = projects;
+        this.dataSource.filter = '';
+        this.isProjectsLoading = false;
+        this.isPaginatorVisible = this.paginator ? projects.length > this.paginator.pageSize : false;
+        this._cdr.detectChanges();
+      });
   }
 
   verifyQuotas(projects: Project[]): void {
@@ -325,12 +336,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    // Check cluster names and IDs (loaded on-demand).
-    const clusterIdentifiers = this._clusterSearchCache.get(project.id);
-    if (clusterIdentifiers?.some(identifier => identifier.includes(query))) {
-      return true;
-    }
-
     return false;
   }
 
@@ -382,53 +387,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         p => p.id.toLowerCase()
       )
     );
-  }
-
-  private _primeClusterSearchIndex(): void {
-    if (!this.projects?.length) {
-      return;
-    }
-
-    this.projects.forEach(project => {
-      if (this._clusterSearchCache.has(project.id) || this._clusterSearchInFlight.has(project.id)) {
-        return;
-      }
-
-      this._clusterSearchInFlight.add(project.id);
-      this._clusterService
-        .clusters(project.id)
-        .pipe(take(1))
-        .subscribe(
-          clusters => {
-            const identifiers: string[] = [];
-            (clusters || []).forEach(cluster => {
-              if (cluster.name) {
-                identifiers.push(cluster.name.toLowerCase());
-              }
-              if (cluster.id) {
-                identifiers.push(cluster.id.toLowerCase());
-              }
-            });
-            this._clusterSearchCache.set(project.id, identifiers);
-            this._clusterSearchInFlight.delete(project.id);
-            const currentFilter = this.dataSource.filter;
-            this.dataSource.filter = currentFilter || '';
-            this._cdr.detectChanges();
-          },
-          () => {
-            this._clusterSearchInFlight.delete(project.id);
-          }
-        );
-    });
-  }
-
-  private _purgeClusterSearchCache(): void {
-    const projectIDs = new Set(this.projects.map(project => project.id));
-    for (const projectID of this._clusterSearchCache.keys()) {
-      if (!projectIDs.has(projectID)) {
-        this._clusterSearchCache.delete(projectID);
-      }
-    }
   }
 
   changeView(): void {

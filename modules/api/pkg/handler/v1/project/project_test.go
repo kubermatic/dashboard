@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -213,6 +214,7 @@ func TestListProjectEndpoint(t *testing.T) {
 		ExistingKubermaticObjects []ctrlruntimeclient.Object
 		ExistingAPIUser           *apiv1.User
 		DisplayAll                bool
+		Search                    string
 	}{
 		{
 			Name:       "scenario 1: list projects that John is the member of",
@@ -405,12 +407,57 @@ func TestListProjectEndpoint(t *testing.T) {
 				},
 			},
 		},
+		{
+			Name:       "scenario 5: list projects by cluster name search",
+			Body:       ``,
+			DisplayAll: false,
+			Search:     "alpha",
+			HTTPStatus: http.StatusOK,
+			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
+				test.GenProject("my-first-project", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenProject("my-second-project", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp().Add(time.Minute)),
+				test.GenUser("JohnID", "John", "john@acme.com"),
+				test.GenBinding("my-first-project-ID", "john@acme.com", "owners"),
+				test.GenBinding("my-second-project-ID", "john@acme.com", "owners"),
+				test.GenTestSeed(),
+				test.GenCluster("cluster-1-id", "alpha-cluster", "my-first-project-ID", test.DefaultCreationTimestamp()),
+			},
+			ExistingAPIUser: func() *apiv1.User {
+				apiUser := test.GenDefaultAPIUser()
+				apiUser.Email = "john@acme.com"
+				return apiUser
+			}(),
+			ExpectedResponse: []apiv1.Project{
+				{
+					Spec:   apiv1.ProjectSpec{},
+					Status: "Active",
+					ClustersNumber: 1,
+					ObjectMeta: apiv1.ObjectMeta{
+						ID:                "my-first-project-ID",
+						Name:              "my-first-project",
+						CreationTimestamp: apiv1.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC),
+					},
+					Owners: []apiv1.User{
+						{
+							ObjectMeta: apiv1.ObjectMeta{
+								Name: "John",
+							},
+							Email: "john@acme.com",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for _, tc := range testcases {
 		t.Run(tc.Name, func(t *testing.T) {
 			// test data
-			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/projects?displayAll=%v", tc.DisplayAll), strings.NewReader(tc.Body))
+			queryParams := []string{fmt.Sprintf("displayAll=%v", tc.DisplayAll)}
+			if tc.Search != "" {
+				queryParams = append(queryParams, fmt.Sprintf("search=%s", url.QueryEscape(tc.Search)))
+			}
+			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/projects?%s", strings.Join(queryParams, "&")), strings.NewReader(tc.Body))
 			res := httptest.NewRecorder()
 			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, []ctrlruntimeclient.Object{}, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
 			if err != nil {

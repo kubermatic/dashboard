@@ -106,6 +106,14 @@ export class ProjectService {
     return this._http.delete<Project>(url);
   }
 
+  searchProjects(query: string, displayAll: boolean): Observable<Project[]> {
+    const url = `${this._restRoot}/projects?displayAll=${displayAll}&search=${encodeURIComponent(query)}`;
+    return this._http.get<Project[]>(url).pipe(
+      map(projects => _.sortBy(projects, project => project.name.toLowerCase())),
+      catchError(() => of<Project[]>())
+    );
+  }
+
   selectProject(project: Project): void {
     let projectLandingPage: string;
     if (project?.status === ProjectStatus.Active) {
