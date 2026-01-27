@@ -1575,6 +1575,12 @@
             "x-go-name": "DisplayAll",
             "name": "displayAll",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Search",
+            "name": "search",
+            "in": "query"
           }
         ],
         "responses": {
