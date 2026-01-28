@@ -16,54 +16,87 @@ limitations under the License.
 <div class="event-rate-limit-config"
      title="Event Rate Limit Configuration">
   <mat-card-header class="km-no-padding">
-    <mat-card-title>Event Rate Limit Configuration
+    <mat-card-title>
+      Event Rate Limit Configuration
       <i class="km-icon-info km-pointer"
-         matTooltip="Limit requests to API Server to protect it from being flooded. Namespace is the only supported limit type at the moment. Hence, limits are applied per each namespace."></i>
+         matTooltip="Limit requests to API Server to protect it from being flooded."></i>
     </mat-card-title>
   </mat-card-header>
-  <form fxLayout="row"
-        fxLayoutGap="8px"
-        fxLayout.sm="column"
-        fxLayout.xs="column"
-        [formGroup]="form">
 
-    <div fxFlex
-         fxLayout="column">
-      <mat-form-field class="km-dropdown-with-suffix">
-        <mat-label>Limit Type</mat-label>
-        <mat-select [formControlName]="Controls.LimitType"
-                    title="Namespace is the only supported limit type"
-                    class="km-select-ellipsis"
-                    disableOptionCentering>
-          <mat-option value="Namespace">Namespace</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <km-number-stepper [formControlName]="Controls.QPS"
-                         id="km-event-rate-limit-qps-input"
-                         mode="errors"
-                         label="QPS"
-                         min="1"
-                         step="10"
-                         required />
+  <form [formGroup]="form">
+    <div formArrayName="eventRateLimitConfig"
+         fxLayout="column"
+         fxLayoutGap="16px">
+      @for (limit of eventRateLimitConfigArray.controls; track limit; let i = $index; let isLast = $last) {
+
+      <div [formGroupName]="i"
+           fxLayout="row"
+           fxLayoutAlign="start center"
+           fxLayoutGap="5px"
+           fxLayout.lt-md="column">
+
+        <mat-form-field class="km-dropdown-with-suffix"
+                        fxFlex="30">
+          <mat-label>Limit Type</mat-label>
+          <mat-select [formControlName]="Controls.LimitType"
+                      (selectionChange)="onChangeType($event.value, i)"
+                      disableOptionCentering>
+            @for (key of eventRateLimitTypeKeys; track key) {
+            @if(!ischosenType(eventRateLimitTypes[key], limit)) {
+            <mat-option [value]="eventRateLimitTypes[key]">{{key}}</mat-option>
+            }
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <km-number-stepper [formControlName]="Controls.QPS"
+                           [required]="isRequired(i)"
+                           [disabled]="!isRequired(i)"
+                           [forceFormFieldMinWidth]="false"
+                           [verticalButton]="isEditDialog"
+                           label="QPS"
+                           min="1"
+                           step="10"
+                           fxFlex />
+
+        <km-number-stepper [formControlName]="Controls.Burst"
+                           [required]="isRequired(i)"
+                           [disabled]="!isRequired(i)"
+                           [forceFormFieldMinWidth]="false"
+                           [verticalButton]="isEditDialog"
+                           label="Burst"
+                           min="1"
+                           step="10"
+                           fxFlex />
+
+        <km-number-stepper [formControlName]="Controls.CacheSize"
+                           [required]="isRequired(i)"
+                           [disabled]="!isRequired(i)"
+                           [forceFormFieldMinWidth]="false"
+                           [verticalButton]="isEditDialog"
+                           label="Cache Size"
+                           min="1"
+                           step="10"
+                           fxFlex />
+
+        <div class="delete-button-container"
+             fxFlex="none">
+          <button mat-icon-button
+                  type="button"
+                  color="warn"
+                  (click)="removeType(i)"
+                  [disabled]="blockDeletion(i)"
+                  [matTooltip]="isLast ? 'reset this limit' : 'Delete this limit'">
+            @if (isLast) {
+            <i class="km-icon-mask km-icon-reset"></i>
+            } @else {
+            <i class="km-icon-mask km-icon-delete"></i>
+            }
+          </button>
+        </div>
+
+      </div>
+      }
     </div>
-
-    <div fxFlex
-         fxLayout="column">
-      <km-number-stepper [formControlName]="Controls.Burst"
-                         id="km-event-rate-limit-burst-input"
-                         mode="errors"
-                         label="Burst"
-                         min="1"
-                         step="10"
-                         required />
-      <km-number-stepper [formControlName]="Controls.CacheSize"
-                         id="km-event-rate-limit-cache-size-input"
-                         mode="errors"
-                         label="Cache Size"
-                         step="10"
-                         min="1"
-                         required />
-    </div>
-
   </form>
 </div>

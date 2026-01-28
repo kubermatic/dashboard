@@ -379,13 +379,17 @@ export class KubeLB {
 }
 
 export class EventRateLimitConfig {
-  namespace: EventRateLimitConfigItem;
+  namespace?: EventRateLimitConfigItem;
+  server?: EventRateLimitConfigItem;
+  user?: EventRateLimitConfigItem;
+  sourceAndObjects?: EventRateLimitConfigItem;
 }
 
 export class EventRateLimitConfigItem {
   qps: number;
   burst: number;
   cacheSize: number;
+  limitType: string;
 }
 
 export class ClusterNetwork {

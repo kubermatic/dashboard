@@ -47,3 +47,23 @@ input[type='number'] {
 .mat-mdc-form-field.force-min-width {
   min-width: 135px;
 }
+
+.vertical-stepper-wrapper {
+  height: 45px;
+  margin-top: 2px;
+
+  .stepper-button {
+    &.vertical-top {
+      border-radius: 0 4px 0 0;
+    }
+
+    &.vertical-bottom {
+      border-radius: 0 0 4px;
+    }
+
+    &.mat-mdc-icon-button {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}

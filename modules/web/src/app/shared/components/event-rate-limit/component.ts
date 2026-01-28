@@ -12,25 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl, Validators} from '@angular/forms';
+import {Component, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  FormControl,
+  Validators,
+  FormGroup,
+  FormArray,
+} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {EventRateLimitConfig} from '@shared/entity/cluster';
-import {merge} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {EventRateLimitConfig, EventRateLimitConfigItem} from '@shared/entity/cluster';
+import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Controls {
+  EventRateLimitConfig = 'eventRateLimitConfig',
   QPS = 'qps',
   Burst = 'burst',
   CacheSize = 'cacheSize',
   LimitType = 'limitType',
 }
 
+enum EventRateLimitTypes {
+  Namespace = 'namespace',
+  Server = 'server',
+  User = 'user',
+  SourceAndObjects = 'sourceAndObjects',
+}
+
+const DEFAULT_Event_RATE_LIMIT_Config: EventRateLimitConfigItem = {
+  qps: 50,
+  burst: 100,
+  cacheSize: 4096,
+  limitType: 'namespace',
+};
+
 @Component({
   selector: 'km-wizard-cluster-event-rate-limit',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -48,46 +72,58 @@ enum Controls {
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;
 
+  form: FormGroup;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
   private readonly _minValue = 1;
-  private readonly _qpsDefault = 50;
-  private readonly _burstDefault = 100;
-  private readonly _cacheSizeDefault = 4096;
-  private readonly _defaultLimitType = 'Namespace';
+  private readonly MIN_EVENT_RATE_LIMIT_ELEMENTS = 2;
+  readonly eventRateLimitTypes = EventRateLimitTypes;
+  eventRateLimitTypeKeys = Object.keys(EventRateLimitTypes);
+  chosenEventRateLimitTypes: string[] = [];
+  isEditDialog = this._dialogModeService.isEditDialog;
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _dialogModeService: DialogModeService
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.QPS]: new FormControl(this.eventRateLimitConfig?.namespace?.qps || this._qpsDefault, [
-        Validators.required,
-        Validators.minLength(this._minValue),
-      ]),
-      [Controls.Burst]: new FormControl(this.eventRateLimitConfig?.namespace?.burst || this._burstDefault, [
-        Validators.required,
-        Validators.minLength(this._minValue),
-      ]),
-      [Controls.CacheSize]: new FormControl(this.eventRateLimitConfig?.namespace?.cacheSize || this._cacheSizeDefault, [
-        Validators.required,
-        Validators.minLength(this._minValue),
-      ]),
-      [Controls.LimitType]: new FormControl({value: this._defaultLimitType, disabled: true}),
-    });
+  get eventRateLimitConfigArray(): FormArray {
+    return this.form.get(Controls.EventRateLimitConfig) as FormArray;
+  }
 
-    merge(
-      this.form.get(Controls.QPS).valueChanges,
-      this.form.get(Controls.Burst).valueChanges,
-      this.form.get(Controls.CacheSize).valueChanges
-    )
-      .pipe(debounceTime(this._debounceTime))
+  ngOnInit(): void {
+    this.form = this._builder.group({[Controls.EventRateLimitConfig]: this._builder.array([])});
+    if (this.eventRateLimitConfig) {
+      Object.keys(this.eventRateLimitConfig).forEach(limitType => {
+        const config = this.eventRateLimitConfig[limitType];
+        this.addEventType(limitType, config.qps, config.burst, config.cacheSize);
+      });
+    } else {
+      this.addEventType(
+        DEFAULT_Event_RATE_LIMIT_Config.limitType,
+        DEFAULT_Event_RATE_LIMIT_Config.qps,
+        DEFAULT_Event_RATE_LIMIT_Config.burst,
+        DEFAULT_Event_RATE_LIMIT_Config.cacheSize
+      );
+    }
+
+    this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.eventRateLimitConfig = this._getEventRateLimitConfigPatch()));
+      .pipe(
+        tap(_ => {
+          this._refreshChosenTypes();
+          this.addTypeIfNeeded();
+        })
+      )
+      .pipe(debounceTime(this._debounceTime))
+      .subscribe(_ => {
+        {
+          this._clusterSpecService.eventRateLimitConfig = this._getEventRateLimitConfigPatch();
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -105,13 +141,84 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
     }
   }
 
+  addTypeIfNeeded(): void {
+    const lastFormControlGroup = this.eventRateLimitConfigArray.at(
+      this.eventRateLimitConfigArray.length - 1
+    ) as FormGroup;
+    if (this.eventRateLimitConfigArray.length < this.eventRateLimitTypeKeys.length) {
+      if (
+        lastFormControlGroup?.get(Controls.LimitType).value &&
+        lastFormControlGroup?.get(Controls.QPS).value &&
+        lastFormControlGroup?.get(Controls.Burst).value &&
+        lastFormControlGroup?.get(Controls.CacheSize).value
+      ) {
+        this.addEventType();
+      }
+    }
+  }
+
+  addEventType(limitType: string = null, qps: number = null, burst: number = null, cacheSize: number = null): void {
+    this.eventRateLimitConfigArray.push(
+      this._builder.group({
+        [Controls.QPS]: new FormControl(qps),
+        [Controls.Burst]: new FormControl(burst),
+        [Controls.CacheSize]: new FormControl(cacheSize),
+        [Controls.LimitType]: new FormControl(limitType),
+      })
+    );
+  }
+
+  onChangeType(value: string, index: number): void {
+    const controls = this.eventRateLimitConfigArray.at(index);
+    if (value) {
+      controls.get(Controls.QPS).setValidators([Validators.required, Validators.min(this._minValue)]);
+      controls.get(Controls.Burst).setValidators([Validators.required, Validators.min(this._minValue)]);
+      controls.get(Controls.CacheSize).setValidators([Validators.required, Validators.min(this._minValue)]);
+    }
+  }
+
+  isRequired(index: number): boolean {
+    return this.eventRateLimitConfigArray.at(index).get(Controls.LimitType).value ? true : false;
+  }
+
+  removeType(index: number): void {
+    const controls = this.eventRateLimitConfigArray.at(index);
+    if (index === this.eventRateLimitConfigArray.length - 1) {
+      controls.get(Controls.LimitType).setValue(null);
+      controls.get(Controls.QPS).setValue(null);
+      controls.get(Controls.Burst).setValue(null);
+      controls.get(Controls.CacheSize).setValue(null);
+    } else {
+      this.eventRateLimitConfigArray.removeAt(index);
+    }
+  }
+
+  ischosenType(type: string, control: FormGroup): boolean {
+    return this.chosenEventRateLimitTypes.includes(type) && control.get(Controls.LimitType).value !== type;
+  }
+
+  blockDeletion(index: number): boolean {
+    return !this.isRequired(index) || this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS;
+  }
+
   private _getEventRateLimitConfigPatch(): EventRateLimitConfig {
-    return {
-      namespace: {
-        qps: this.form.get(Controls.QPS).value,
-        burst: this.form.get(Controls.Burst).value,
-        cacheSize: this.form.get(Controls.CacheSize).value,
-      },
-    };
+    const ERLConfig: EventRateLimitConfig = {};
+    this.eventRateLimitConfigArray.controls.forEach(control => {
+      const type = control.get(Controls.LimitType).value;
+      if (type) {
+        ERLConfig[type] = {
+          qps: control.get(Controls.QPS).value,
+          burst: control.get(Controls.Burst).value,
+          cacheSize: control.get(Controls.CacheSize).value,
+        };
+      }
+    });
+    return ERLConfig;
+  }
+
+  private _refreshChosenTypes(): void {
+    this.chosenEventRateLimitTypes = this.eventRateLimitConfigArray.controls
+      .map(control => control.get(Controls.LimitType).value)
+      .filter(type => !!type);
   }
 }
