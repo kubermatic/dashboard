@@ -16,6 +16,8 @@
 
 .mat-mdc-card-header {
   .mat-mdc-card-title {
+    margin-bottom: 10px;
+
     i {
       margin-left: 0;
     }
@@ -25,4 +27,19 @@
 .event-rate-limit-config {
   margin-bottom: 10px;
   margin-top: 10px;
+
+  .mat-mdc-form-field.km-number-stepper-input {
+    min-width: unset;
+    width: 95px;
+  }
+
+  .mdc-icon-button {
+    margin-bottom: 20px;
+  }
+
+  .mat-mdc-card-title {
+    .mat-mdc-tooltip-trigger.km-icon-info {
+      margin: 0;
+    }
+  }
 }

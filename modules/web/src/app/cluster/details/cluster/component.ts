@@ -477,8 +477,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   editCluster(): void {
+    const maxWidth = '700px';
     this._dialogModeService.isEditDialog = true;
-    const modal = this._matDialog.open(EditClusterComponent);
+    const modal = this._matDialog.open(EditClusterComponent, {maxWidth});
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
     modal
