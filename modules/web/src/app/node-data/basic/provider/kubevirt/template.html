@@ -16,25 +16,17 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <km-kubevirt-machine-type-selector #machineTypeSelector
+                                     [instanceTypes]="instanceTypesForSelector"
+                                     [isLoading]="instanceTypesLoading"
+                                     [selectedInstanceTypeId]="form.get(Controls.InstanceType).value"
+                                     [formControlName]="Controls.InstanceType"
+                                     [required]="false"
+                                     fxFlex>
+  </km-kubevirt-machine-type-selector>
+
   <div fxLayout="row"
        fxLayoutGap="8px">
-    <km-combobox #instanceTypeCombobox
-                 [required]="false"
-                 [grouped]="true"
-                 [groups]="instanceTypeCategories"
-                 [selected]="selectedInstanceType?._id"
-                 [optionsGetter]="getInstanceTypeOptions.bind(this)"
-                 [valueFormatter]="instanceTypeDisplayName.bind(this)"
-                 [formControlName]="Controls.InstanceType"
-                 (changed)="onInstanceTypeChange($event)"
-                 [label]="instanceTypeLabel"
-                 inputLabel="Select instance type..."
-                 selectBy="_id"
-                 filterBy="name"
-                 fxFlex>
-      <div *option="let instanceType">{{instanceType.name}}</div>
-    </km-combobox>
-
     <km-combobox #preferenceCombobox
                  [required]="false"
                  [grouped]="true"
@@ -53,7 +45,6 @@ limitations under the License.
                  fxFlex>
       <div *option="let preference">{{preference.name}}</div>
     </km-combobox>
-
     <button mat-flat-button
             type="button"
             color="tertiary"
