@@ -212,7 +212,6 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     let memoryValue: string | undefined;
     let gpuCount = 0;
 
-    
     try {
       if (instanceType.spec) {
         const parsedSpec = JSON.parse(instanceType.spec);
