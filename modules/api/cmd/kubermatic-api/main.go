@@ -430,6 +430,8 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	policyTemplateProvider := policyTemplateProviderFactory(client)
 
+	userClusterConfigProvider := kubernetesprovider.NewUserClusterConfigProvider(defaultImpersonationClient.CreateImpersonatedClient, client)
+
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,
@@ -448,6 +450,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		seedsGetter:                                    seedsGetter,
 		seedClientGetter:                               seedClientGetter,
 		configGetter:                                   configGetter,
+		userClusterConfigProvider:                      userClusterConfigProvider,
 		addons:                                         addonProviderGetter,
 		addonConfigProvider:                            addonConfigProvider,
 		userInfoGetter:                                 userInfoGetter,
@@ -555,6 +558,7 @@ func createAPIHandler(
 		SeedsGetter:                                    prov.seedsGetter,
 		SeedsClientGetter:                              prov.seedClientGetter,
 		KubermaticConfigurationGetter:                  prov.configGetter,
+		UserClusterConfigProvider:                      prov.userClusterConfigProvider,
 		SSHKeyProvider:                                 prov.sshKey,
 		PrivilegedSSHKeyProvider:                       prov.privilegedSSHKeyProvider,
 		UserProvider:                                   prov.user,

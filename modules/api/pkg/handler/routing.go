@@ -179,6 +179,7 @@ type RoutingParams struct {
 	SeedsGetter                                    provider.SeedsGetter
 	SeedsClientGetter                              provider.SeedClientGetter
 	KubermaticConfigurationGetter                  provider.KubermaticConfigurationGetter
+	UserClusterConfigProvider                      provider.UserClusterConfigProvider
 	SSHKeyProvider                                 provider.SSHKeyProvider
 	PrivilegedSSHKeyProvider                       provider.PrivilegedSSHKeyProvider
 	UserProvider                                   provider.UserProvider

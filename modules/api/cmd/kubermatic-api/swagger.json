@@ -26743,6 +26743,90 @@
         }
       }
     },
+    "/api/v2/userclusterconfig/admissionplugins": {
+      "get": {
+        "description": "Get admission plugins configuration",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "userClusterConfig"
+        ],
+        "operationId": "getAdmissionPluginsConfiguration",
+        "responses": {
+          "200": {
+            "description": "UserClusterAdmissionPluginsConfiguration",
+            "schema": {
+              "$ref": "#/definitions/UserClusterAdmissionPluginsConfiguration"
+            }
+          },
+          "401": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          },
+          "403": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update admission plugins configuration",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "userClusterConfig"
+        ],
+        "operationId": "updateAdmissionPluginsConfiguration",
+        "parameters": [
+          {
+            "name": "Plugins",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserClusterAdmissionPluginsConfiguration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "UserClusterAdmissionPluginsConfiguration",
+            "schema": {
+              "$ref": "#/definitions/UserClusterAdmissionPluginsConfiguration"
+            }
+          },
+          "401": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          },
+          "403": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/users": {
       "get": {
         "description": "List users",
@@ -27874,6 +27958,16 @@
         "type": "string"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "AdmissionPluginsConfiguration": {
+      "type": "object",
+      "title": "AdmissionPluginsConfiguration contains global settings for admission plugins.",
+      "properties": {
+        "eventRateLimit": {
+          "$ref": "#/definitions/EventRateLimitPluginConfiguration"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "AgentPoolBasics": {
       "type": "object",
@@ -33194,6 +33288,27 @@
           "type": "integer",
           "format": "int32",
           "x-go-name": "QPS"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "EventRateLimitPluginConfiguration": {
+      "description": "Enforcement modes:\nEnforced=true: Plugin must be enabled; config cannot be overridden by users\nEnabled=true: Plugin enabled by default for new clusters, users can disable\nDefaultConfig: Applied when plugin is enabled and cluster has no config\n(always applied when Enforced=true, overwriting user config)",
+      "type": "object",
+      "title": "EventRateLimitPluginConfiguration configures the EventRateLimit admission plugin at global level.",
+      "properties": {
+        "defaultConfig": {
+          "$ref": "#/definitions/EventRateLimitConfig"
+        },
+        "enabled": {
+          "description": "Enabled indicates whether EventRateLimit should be enabled by default for new clusters.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "enforced": {
+          "description": "Enforced indicates whether EventRateLimit enablement is mandatory.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Enforced"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -41268,6 +41383,27 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "UserClusterAdmissionPluginsConfiguration": {
+      "type": "object",
+      "title": "AdmissionPluginsConfiguration represents an object holding admission plugins configuration.",
+      "properties": {
+        "eventRateLimit": {
+          "$ref": "#/definitions/EventRateLimitPluginConfiguration"
+        }
+      },
+      "x-go-name": "AdmissionPluginsConfiguration",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "UserClusterConfiguration": {
+      "type": "object",
+      "title": "UserClusterConfiguration represents an object that holds user cluster configuration from the Kubermatic configuration.",
+      "properties": {
+        "admissionPlugins": {
+          "$ref": "#/definitions/AdmissionPluginsConfiguration"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "UserSettings": {
       "type": "object",
