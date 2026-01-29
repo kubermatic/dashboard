@@ -23,6 +23,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
   standalone: false,
 })
 export class SearchFieldComponent implements OnInit, OnDestroy {
+  private static readonly _debounceMs = 500;
   @Output() queryChange = new EventEmitter<string>();
   formGroup: FormGroup;
   private _subscription = new Subscription();
@@ -30,7 +31,7 @@ export class SearchFieldComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formGroup = new FormGroup({query: new FormControl('')});
     this._subscription = this.formGroup.controls.query.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged())
+      .pipe(debounceTime(SearchFieldComponent._debounceMs), distinctUntilChanged())
       .subscribe(query => this.queryChange.emit(query ?? ''));
   }
 
