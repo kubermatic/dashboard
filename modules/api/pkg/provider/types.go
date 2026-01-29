@@ -174,6 +174,13 @@ func SecretKeySelectorValueFuncFactory(ctx context.Context, client ctrlruntimecl
 	}
 }
 
+type UserClusterConfigProvider interface {
+	// GetAdmissionPluginsConfiguration retrieves the admission plugins from the user cluster configuration in the Kubermatic configuration.
+	GetAdmissionPluginsConfiguration(ctx context.Context) (*kubermaticv1.AdmissionPluginsConfiguration, error)
+	// UpdateAdmissionPluginsConfiguration updates the admission plugins in the user cluster configuration in the Kubermatic configuration.
+	UpdateAdmissionPluginsConfiguration(ctx context.Context, userInfo *UserInfo, plugins apiv2.AdmissionPluginsConfiguration) (*kubermaticv1.AdmissionPluginsConfiguration, error)
+}
+
 // ProjectGetOptions allows to check the status of the Project.
 type ProjectGetOptions struct {
 	// IncludeUninitialized if set to true will skip the check if project is initialized. By default the call will return

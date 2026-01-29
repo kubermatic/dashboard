@@ -67,6 +67,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/seedoverview"
 	"k8c.io/dashboard/v2/pkg/handler/v2/seedsettings"
 	"k8c.io/dashboard/v2/pkg/handler/v2/user"
+	userclusterconfig "k8c.io/dashboard/v2/pkg/handler/v2/user_cluster_config"
 	"k8c.io/dashboard/v2/pkg/handler/v2/version"
 	"k8c.io/dashboard/v2/pkg/handler/v2/webterminal"
 )
@@ -169,6 +170,14 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/featuregates").
 		Handler(r.getFeatureGates())
+
+	mux.Methods(http.MethodGet).
+		Path("/userclusterconfig/admissionplugins").
+		Handler(r.getAdmissionPluginsConfiguration())
+
+	mux.Methods(http.MethodPatch).
+		Path("/userclusterconfig/admissionplugins").
+		Handler(r.updateAdmissionPluginsConfiguration())
 
 	// Defines a set of HTTP endpoints for interacting with Baremetal clusters
 	mux.Methods(http.MethodGet).
@@ -8920,6 +8929,54 @@ func (r Routing) getFeatureGates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(featuregates.GetEndpoint(r.featureGatesProvider)),
 		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/userclusterconfig/admissionplugins userClusterConfig getAdmissionPluginsConfiguration
+//
+//	Get admission plugins configuration
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: UserClusterAdmissionPluginsConfiguration
+//	  401: errorResponse
+//	  403: errorResponse
+func (r Routing) getAdmissionPluginsConfiguration() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(userclusterconfig.GetAdmissionPluginsConfiguration(r.userClusterConfigProvider)),
+		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v2/userclusterconfig/admissionplugins userClusterConfig updateAdmissionPluginsConfiguration
+//
+//	Update admission plugins configuration
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: UserClusterAdmissionPluginsConfiguration
+//	  401: errorResponse
+//	  403: errorResponse
+func (r Routing) updateAdmissionPluginsConfiguration() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(userclusterconfig.UpdateAdmissionPluginsConfiguration(r.userInfoGetter, r.userClusterConfigProvider)),
+		userclusterconfig.DecodeUpdateAdmissionPlugins,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

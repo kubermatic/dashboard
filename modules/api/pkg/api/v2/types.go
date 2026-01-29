@@ -1155,6 +1155,18 @@ type FeatureGates struct {
 	DisableUserSSHKey      *bool `json:"disableUserSSHKey,omitempty"`
 }
 
+// UserClusterConfiguration represents an object that holds user cluster configuration from the Kubermatic configuration.
+// swagger:model UserClusterConfiguration
+type UserClusterConfiguration struct {
+	AdmissionPlugins kubermaticv1.AdmissionPluginsConfiguration `json:"admissionPlugins,omitempty"`
+}
+
+// AdmissionPluginsConfiguration represents an object holding admission plugins configuration.
+// swagger:model UserClusterAdmissionPluginsConfiguration
+type AdmissionPluginsConfiguration struct {
+	kubermaticv1.AdmissionPluginsConfiguration
+}
+
 // ExternalClusterMachineDeploymentCloudSpec represents an object holding machine deployment cloud details.
 // swagger:model ExternalClusterMachineDeploymentCloudSpec
 type ExternalClusterMachineDeploymentCloudSpec struct {
