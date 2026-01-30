@@ -88,6 +88,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   private _quotaService: QuotaService;
   private _settingsChange = new EventEmitter<void>();
   private _searchSubject = new Subject<string>();
+  private _activeSearchQuery = '';
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   get isAdmin(): boolean {
@@ -207,7 +208,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.projects = this._sortProjects(projects);
       this._loadCurrentUserRoles();
       this._sortProjectOwners();
-      this.dataSource.data = this.projects;
+
+      if (this._activeSearchQuery) {
+        this._runSearch(this._activeSearchQuery);
+      } else {
+        this.dataSource.data = this.projects;
+      }
 
       if (this._shouldRedirectToProjectLandingPage()) {
         this._redirectToProjectLandingPage();
@@ -247,6 +253,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   onSearch(query: string): void {
     const trimmedQuery = query?.trim() || '';
     if (!trimmedQuery) {
+      this._activeSearchQuery = '';
       this._searchSubject.next('');
       this.dataSource.data = this.projects;
       this.dataSource.filter = '';
@@ -255,6 +262,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
+    this._activeSearchQuery = trimmedQuery;
     this._searchSubject.next(trimmedQuery);
   }
 
