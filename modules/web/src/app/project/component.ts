@@ -48,7 +48,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {QuotaService} from '../dynamic/enterprise/quotas/service';
 import {DeleteProjectConfirmationComponent} from './delete-project/component';
@@ -83,9 +83,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   allowedOperatingSystems: AllowedOperatingSystems;
 
   private readonly _maxOwnersLen = 30;
+  private static readonly _searchDebounceMs = 500;
   private _apiSettings: UserSettings;
   private _quotaService: QuotaService;
   private _settingsChange = new EventEmitter<void>();
+  private _searchSubject = new Subject<string>();
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   get isAdmin(): boolean {
@@ -192,6 +194,15 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.allowedOperatingSystems = settings.allowedOperatingSystems;
     });
 
+    this._searchSubject
+      .pipe(
+        debounceTime(ProjectComponent._searchDebounceMs),
+        distinctUntilChanged(),
+        filter(query => !!query)
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(query => this._runSearch(query));
+
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
       this.projects = this._sortProjects(projects);
       this._loadCurrentUserRoles();
@@ -236,6 +247,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   onSearch(query: string): void {
     const trimmedQuery = query?.trim() || '';
     if (!trimmedQuery) {
+      this._searchSubject.next('');
       this.dataSource.data = this.projects;
       this.dataSource.filter = '';
       this.isPaginatorVisible = this._isPaginatorVisible();
@@ -243,18 +255,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    this.isProjectsLoading = true;
-    const displayAll = this.settings?.displayAllProjectsForAdmin ?? false;
-    this._projectService
-      .searchProjects(trimmedQuery, displayAll)
-      .pipe(take(1))
-      .subscribe(projects => {
-        this.dataSource.data = projects;
-        this.dataSource.filter = '';
-        this.isProjectsLoading = false;
-        this.isPaginatorVisible = this.paginator ? projects.length > this.paginator.pageSize : false;
-        this._cdr.detectChanges();
-      });
+    this._searchSubject.next(trimmedQuery);
   }
 
   verifyQuotas(projects: Project[]): void {
@@ -337,6 +338,21 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     return false;
+  }
+
+  private _runSearch(query: string): void {
+    this.isProjectsLoading = true;
+    const displayAll = this.settings?.displayAllProjectsForAdmin ?? false;
+    this._projectService
+      .searchProjects(query, displayAll)
+      .pipe(take(1))
+      .subscribe(projects => {
+        this.dataSource.data = projects;
+        this.dataSource.filter = '';
+        this.isProjectsLoading = false;
+        this.isPaginatorVisible = this.paginator ? projects.length > this.paginator.pageSize : false;
+        this._cdr.detectChanges();
+      });
   }
 
   private _loadCurrentUserRoles(): void {

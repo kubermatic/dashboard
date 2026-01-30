@@ -15,7 +15,6 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'km-search-field',
@@ -23,16 +22,15 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
   standalone: false,
 })
 export class SearchFieldComponent implements OnInit, OnDestroy {
-  private static readonly _debounceMs = 500;
   @Output() queryChange = new EventEmitter<string>();
   formGroup: FormGroup;
   private _subscription = new Subscription();
 
   ngOnInit() {
     this.formGroup = new FormGroup({query: new FormControl('')});
-    this._subscription = this.formGroup.controls.query.valueChanges
-      .pipe(debounceTime(SearchFieldComponent._debounceMs), distinctUntilChanged())
-      .subscribe(query => this.queryChange.emit(query ?? ''));
+    this._subscription = this.formGroup.controls.query.valueChanges.subscribe(query => {
+      this.queryChange.emit(query ?? '');
+    });
   }
 
   isEmpty(): boolean {
