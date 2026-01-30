@@ -99,9 +99,11 @@ describe('ProjectComponent', () => {
   it('should use search endpoint to update data source', fakeAsync(() => {
     const projectService = TestBed.inject(ProjectService) as ProjectMockService;
     const searchSpy = jest.spyOn(projectService, 'searchProjects');
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    const debounceMs = 500;
 
     component.onSearch('new-project-1');
-    tick();
+    tick(debounceMs);
 
     expect(searchSpy).toHaveBeenCalledWith('new-project-1', false);
     expect(component.dataSource.data.length).toBe(1);
