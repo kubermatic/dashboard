@@ -136,6 +136,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isUserSshKeyEnabled = false;
   nodeProvider = NodeProvider;
   shareKubeconfigDialogMode = ShareKubeconfigDialogMode;
+  eventRateLimitTypes: string[];
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -195,6 +196,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(cluster => {
           this.cluster = cluster;
+          this.eventRateLimitTypes = Object.keys(cluster.spec.eventRateLimitConfig || {});
           this.isDualStackNetworkSelected = Cluster.isDualStackNetworkSelected(cluster);
           if (cluster?.status?.encryption?.phase) {
             this.encryptionStatus = getEncryptionAtRestHealthStatus(cluster.status.encryption.phase);

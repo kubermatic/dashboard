@@ -382,7 +382,7 @@ export class EventRateLimitConfig {
   namespace?: EventRateLimitConfigItem;
   server?: EventRateLimitConfigItem;
   user?: EventRateLimitConfigItem;
-  sourceAndObjects?: EventRateLimitConfigItem;
+  sourceAndObject?: EventRateLimitConfigItem;
 }
 
 export class EventRateLimitConfigItem {

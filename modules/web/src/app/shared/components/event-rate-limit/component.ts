@@ -40,10 +40,10 @@ enum EventRateLimitTypes {
   Namespace = 'namespace',
   Server = 'server',
   User = 'user',
-  SourceAndObjects = 'sourceAndObjects',
+  SourceAndObject = 'sourceAndObject',
 }
 
-const DEFAULT_Event_RATE_LIMIT_Config: EventRateLimitConfigItem = {
+const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
   qps: 50,
   burst: 100,
   cacheSize: 4096,
@@ -96,19 +96,6 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.EventRateLimitConfig]: this._builder.array([])});
-    if (this.eventRateLimitConfig) {
-      Object.keys(this.eventRateLimitConfig).forEach(limitType => {
-        const config = this.eventRateLimitConfig[limitType];
-        this.addEventType(limitType, config.qps, config.burst, config.cacheSize);
-      });
-    } else {
-      this.addEventType(
-        DEFAULT_Event_RATE_LIMIT_Config.limitType,
-        DEFAULT_Event_RATE_LIMIT_Config.qps,
-        DEFAULT_Event_RATE_LIMIT_Config.burst,
-        DEFAULT_Event_RATE_LIMIT_Config.cacheSize
-      );
-    }
 
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -133,27 +120,42 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   }
 
   writeValue(eventRateLimitConfig: EventRateLimitConfig) {
+    this.eventRateLimitConfig = eventRateLimitConfig;
+    this.eventRateLimitConfigArray.clear();
+
     if (eventRateLimitConfig) {
-      this.form.get(Controls.QPS).setValue(eventRateLimitConfig?.namespace?.qps, {emitEvent: false});
-      this.form.get(Controls.Burst).setValue(eventRateLimitConfig?.namespace?.burst, {emitEvent: false});
-      this.form.get(Controls.CacheSize).setValue(eventRateLimitConfig?.namespace?.cacheSize, {emitEvent: false});
-      this.eventRateLimitConfig = eventRateLimitConfig;
+      Object.keys(eventRateLimitConfig).forEach(limitType => {
+        const config = eventRateLimitConfig[limitType];
+        this.addEventType(limitType, config.qps, config.burst, config.cacheSize);
+      });
+    } else {
+      this.addEventType(
+        DEFAULT_EVENT_RATE_LIMIT_CONFIG.limitType,
+        DEFAULT_EVENT_RATE_LIMIT_CONFIG.qps,
+        DEFAULT_EVENT_RATE_LIMIT_CONFIG.burst,
+        DEFAULT_EVENT_RATE_LIMIT_CONFIG.cacheSize
+      );
     }
+    this._refreshChosenTypes();
   }
 
   addTypeIfNeeded(): void {
+    if (
+      this.eventRateLimitConfigArray.length < Object.keys(this.eventRateLimitConfig).length ||
+      this.eventRateLimitConfigArray.length >= this.eventRateLimitTypeKeys.length
+    ) {
+      return;
+    }
     const lastFormControlGroup = this.eventRateLimitConfigArray.at(
       this.eventRateLimitConfigArray.length - 1
     ) as FormGroup;
-    if (this.eventRateLimitConfigArray.length < this.eventRateLimitTypeKeys.length) {
-      if (
-        lastFormControlGroup?.get(Controls.LimitType).value &&
-        lastFormControlGroup?.get(Controls.QPS).value &&
-        lastFormControlGroup?.get(Controls.Burst).value &&
-        lastFormControlGroup?.get(Controls.CacheSize).value
-      ) {
-        this.addEventType();
-      }
+    if (
+      lastFormControlGroup?.get(Controls.LimitType).value &&
+      lastFormControlGroup?.get(Controls.QPS).value &&
+      lastFormControlGroup?.get(Controls.Burst).value &&
+      lastFormControlGroup?.get(Controls.CacheSize).value
+    ) {
+      this.addEventType();
     }
   }
 

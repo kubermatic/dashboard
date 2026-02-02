@@ -343,17 +343,19 @@ limitations under the License.
                                  [value]="isAdmissionPluginEnabled(plugin)" />
             }
 
-            @if (cluster?.spec?.eventRateLimitConfig?.namespace; as namespace) {
+            @if (eventRateLimitTypes?.length) {
             <km-property>
               <div key>Event Rate Limit Config</div>
+              @for (event of eventRateLimitTypes; track event) {
               <div value
                    fxLayout="row wrap"
                    fxLayoutGap="10px">
-                <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
-                <div><span class="km-text-muted">QPS:</span> {{namespace.qps}}</div>
-                <div><span class="km-text-muted">Burst:</span> {{namespace.burst}}</div>
-                <div><span class="km-text-muted">Cache Size:</span> {{namespace.cacheSize}}</div>
+                <div><span class="km-text-muted">Limit Type:</span> {{event}}</div>
+                <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig[event].qps}}</div>
+                <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig[event].burst}}</div>
+                <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig[event].cacheSize}}</div>
               </div>
+              }
             </km-property>
             }
 

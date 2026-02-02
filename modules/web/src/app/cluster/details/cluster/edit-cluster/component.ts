@@ -196,7 +196,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
-      [Controls.EventRateLimitConfig]: new FormControl(),
+      [Controls.EventRateLimitConfig]: new FormControl(this.eventRateLimitConfig),
       [Controls.Labels]: new FormControl(null),
       [Controls.Annotations]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
@@ -554,7 +554,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         namespace: null,
         server: null,
         user: null,
-        sourceAndObjects: null,
+        sourceAndObject: null,
       };
       const eventRateLimitConfigItems: EventRateLimitConfigItem[] = this.form.get(Controls.EventRateLimitConfig).value
         ?.eventRateLimitConfig;
