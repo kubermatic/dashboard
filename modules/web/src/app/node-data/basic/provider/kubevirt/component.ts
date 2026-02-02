@@ -74,6 +74,11 @@ enum Controls {
   Subnet = 'subnet',
 }
 
+enum ConfigurationMode {
+  PredefinedInstanceType = 'predefined',
+  CustomResources = 'custom',
+}
+
 enum InstanceTypeState {
   Ready = 'Instance Type',
   Loading = 'Loading...',
@@ -146,7 +151,9 @@ export class KubeVirtBasicNodeDataComponent
   @ViewChild('osImageCombobox') private _osImageCombobox: FilteredComboboxComponent;
   @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
+  readonly ConfigurationMode = ConfigurationMode;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
+  selectedConfigurationMode = ConfigurationMode.CustomResources;
   private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2000;
@@ -318,16 +325,59 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   preferenceDisplayName(preferenceId: string): string {
-    if (preferenceId) {
+    if (preferenceId && typeof preferenceId === 'string') {
       // only display name of selected preference
       return preferenceId.substring(preferenceId.indexOf(this._instanceTypeIDSeparator) + 1);
     }
-    return preferenceId;
+    return preferenceId || '';
   }
 
   osImageDisplayName(osImageLink: string): string {
     const osImage = this.osImageDropdownOptions?.find(image => image.link === osImageLink);
     return osImage ? `${osImage.version} - ${osImage.link}` : osImageLink;
+  }
+
+  onConfigurationModeChange(mode: ConfigurationMode): void {
+    // Clear instance type when switching to custom mode
+    this.form.get(Controls.InstanceType).setValue('');
+      
+    this.selectedConfigurationMode = mode;
+
+    if (mode === ConfigurationMode.CustomResources) {
+      
+      // Switching to custom mode: enable CPU/Memory fields
+      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
+      this.form.get(Controls.CPUs).setValidators(Validators.required);
+      this.form.get(Controls.CPUs).enable();
+      this.form.get(Controls.Memory).setValue(this._defaultMemory);
+      this.form.get(Controls.Memory).setValidators(Validators.required);
+      this.form.get(Controls.Memory).enable();
+
+      // Disable preference when switching to custom mode
+      const preferenceControl = this.form.get(Controls.Preference);
+      if (preferenceControl.enabled) {
+        preferenceControl.reset();
+        preferenceControl.disable();
+      }
+    } else {
+      // Switching to predefined mode: disable custom values
+      this.form.get(Controls.CPUs).setValue(null);
+      this.form.get(Controls.CPUs).setValidators([]);
+      this.form.get(Controls.CPUs).disable();
+      this.form.get(Controls.Memory).setValue(null);
+      this.form.get(Controls.Memory).setValidators([]);
+      this.form.get(Controls.Memory).disable();
+
+      // Re-enable preference if instance type is already selected
+      if (this.selectedInstanceType) {
+        const preferenceControl = this.form.get(Controls.Preference);
+        if (preferenceControl.disabled) {
+          preferenceControl.enable();
+        }
+      }
+    }
+
+    this._cdr.detectChanges();
   }
 
   onInstanceTypeChange(instanceTypeId: string): void {
@@ -338,12 +388,6 @@ export class KubeVirtBasicNodeDataComponent
 
       this.selectedInstanceTypeCpus = null;
       this.selectedInstanceTypeMemory = null;
-      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
-      this.form.get(Controls.CPUs).setValidators(Validators.required);
-      this.form.get(Controls.CPUs).enable();
-      this.form.get(Controls.Memory).setValue(this._defaultMemory);
-      this.form.get(Controls.Memory).setValidators(Validators.required);
-      this.form.get(Controls.Memory).enable();
 
       // Disable preference when no instance type selected
       const preferenceControl = this.form.get(Controls.Preference);
@@ -383,16 +427,9 @@ export class KubeVirtBasicNodeDataComponent
         // eslint-disable-next-line no-empty
       } catch (_) {}
 
-      this.form.get(Controls.CPUs).setValue(null);
-      this.form.get(Controls.CPUs).setValidators([]);
-      this.form.get(Controls.CPUs).disable();
-      this.form.get(Controls.Memory).setValue(null);
-      this.form.get(Controls.Memory).setValidators([]);
-      this.form.get(Controls.Memory).disable();
-
       // Enable preference when instance type is selected
       const preferenceControl = this.form.get(Controls.Preference);
-      if (preferenceControl.disabled) {
+      if (preferenceControl.disabled && this.selectedConfigurationMode === ConfigurationMode.PredefinedInstanceType) {
         preferenceControl.enable();
       }
 
@@ -683,25 +720,47 @@ export class KubeVirtBasicNodeDataComponent
 
   private _init(): void {
     if (this._initialData) {
-      this.form.get(Controls.Memory).setValue(parseInt(this._initialData.memory) || this._defaultMemory);
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
 
-      if (this._initialData.vcpus?.cores) {
-        this.form.get(Controls.CPUs).setValue(this._initialData.vcpus.cores);
-      } else {
-        this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
-      }
-
+      // Detect initial configuration mode based on existing data
       if (this._initialData.instancetype) {
+        // Has instance type: use predefined mode
+        this.selectedConfigurationMode = ConfigurationMode.PredefinedInstanceType;
         this.form.get(Controls.InstanceType).setValue(this._getSelectedInstanceTypeId(this._initialData.instancetype));
-      }
+        
+        if (this._initialData.preference) {
+          this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
+        }
 
-      if (this._initialData.preference) {
-        this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
+        // Disable custom CPU/Memory fields in predefined mode
+        this.form.get(Controls.CPUs).setValue(null);
+        this.form.get(Controls.CPUs).setValidators([]);
+        this.form.get(Controls.CPUs).disable();
+        this.form.get(Controls.Memory).setValue(null);
+        this.form.get(Controls.Memory).setValidators([]);
+        this.form.get(Controls.Memory).disable();
+      } else {
+        // No instance type: use custom mode
+        this.selectedConfigurationMode = ConfigurationMode.CustomResources;
+        
+        const cpuValue = this._initialData.vcpus?.cores 
+          ? this._initialData.vcpus.cores 
+          : (parseInt(this._initialData.cpus) || this._defaultCPUs);
+        const memoryValue = parseInt(this._initialData.memory) || this._defaultMemory;
+
+        this.form.get(Controls.CPUs).setValue(cpuValue);
+        this.form.get(Controls.CPUs).setValidators(Validators.required);
+        this.form.get(Controls.CPUs).enable();
+        this.form.get(Controls.Memory).setValue(memoryValue);
+        this.form.get(Controls.Memory).setValidators(Validators.required);
+        this.form.get(Controls.Memory).enable();
+
+        // Ensure preference is disabled in custom mode
+        this.form.get(Controls.Preference).disable();
       }
     }
   }

@@ -133,9 +133,9 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     this._applySearchFilter();
   }
 
-  onInstanceTypeSelect(instanceType: CategorizedInstanceType): void {
-    this.selectedInstanceTypeId = instanceType._id;
-    this._onChange(instanceType._id);
+  onInstanceTypeChange(instanceTypeId: string): void {
+    this.selectedInstanceTypeId = instanceTypeId;
+    this._onChange(instanceTypeId);
     this._onTouched();
   }
 
@@ -155,21 +155,15 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
       return;
     }
 
-    const kubermaticCpu: CategorizedInstanceType[] = [];
-    const kubermaticGpu: CategorizedInstanceType[] = [];
-    const customCpu: CategorizedInstanceType[] = [];
-    const customGpu: CategorizedInstanceType[] = [];
+    this.kubermaticCpuOptions = [];
+    this.kubermaticGpuOptions = [];
+    this.customCpuOptions = [];
+    this.customGpuOptions = [];
 
-    this._processCategory(KubeVirtInstanceTypeCategory.Kubermatic, kubermaticCpu, kubermaticGpu);
+    this._processCategory();
 
-    this._processCategory(KubeVirtInstanceTypeCategory.Custom, customCpu, customGpu);
-
-    this.kubermaticCpuOptions = kubermaticCpu;
-    this.kubermaticGpuOptions = kubermaticGpu;
-    this.customCpuOptions = customCpu;
-    this.customGpuOptions = customGpu;
-    this.hasKubermaticGpuTypes = kubermaticGpu.length > 0;
-    this.hasCustomGpuTypes = customGpu.length > 0;
+    this.hasKubermaticGpuTypes = this.kubermaticGpuOptions.length > 0;
+    this.hasCustomGpuTypes = this.customGpuOptions.length > 0;
 
     this._updateVisibleTabs();
     this._updateDisplayedColumns();
@@ -187,19 +181,30 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     this._applySearchFilter();
   }
 
-  private _processCategory(
-    category: string,
-    cpuArray: CategorizedInstanceType[],
-    gpuArray: CategorizedInstanceType[]
-  ): void {
-    const types = this.instanceTypes.instancetypes[category] || [];
-    types.forEach((instanceType: KubeVirtInstanceType) => {
-      const categorized = this._createCategorizedInstanceType(instanceType, category);
-      if (categorized._hasGPU) {
-        gpuArray.push(categorized);
-      } else {
-        cpuArray.push(categorized);
-      }
+  private _processCategory(): void {
+    Object.keys(this.instanceTypes.instancetypes).forEach(category => {
+      const types = this.instanceTypes.instancetypes[category] || [];
+
+      types.forEach((instanceType: KubeVirtInstanceType) => {
+        const categorized = this._createCategorizedInstanceType(instanceType, category);
+
+        switch (category) {
+          case KubeVirtInstanceTypeCategory.Kubermatic:
+            if (categorized._hasGPU) {
+              this.kubermaticGpuOptions.push(categorized);
+            } else {
+              this.kubermaticCpuOptions.push(categorized);
+            }
+            break;
+          case KubeVirtInstanceTypeCategory.Custom:
+            if (categorized._hasGPU) {
+              this.customGpuOptions.push(categorized);
+            } else {
+              this.customCpuOptions.push(categorized);
+            }
+            break;
+        }
+      });
     });
   }
 

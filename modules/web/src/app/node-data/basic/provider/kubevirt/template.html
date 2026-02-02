@@ -16,6 +16,20 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <mat-button-toggle-group class="km-button-toggle-group"
+                           group="configurationModeGroup"
+                           (change)="onConfigurationModeChange($event.value)">
+    <mat-button-toggle [value]="ConfigurationMode.CustomResources"
+                       [checked]="selectedConfigurationMode === ConfigurationMode.CustomResources">
+      Custom Configuration
+    </mat-button-toggle>
+    <mat-button-toggle [value]="ConfigurationMode.PredefinedInstanceType"
+                       [checked]="selectedConfigurationMode === ConfigurationMode.PredefinedInstanceType">
+      Instance Type
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  @if (selectedConfigurationMode === ConfigurationMode.PredefinedInstanceType) {
   <km-kubevirt-machine-type-selector #machineTypeSelector
                                      [instanceTypes]="instanceTypesForSelector"
                                      [isLoading]="instanceTypesLoading"
@@ -56,15 +70,24 @@ limitations under the License.
       <span>View</span>
     </button>
   </div>
+  }
 
-  @if (!form.get(Controls.CPUs).disabled) {
+  @if (selectedConfigurationMode === ConfigurationMode.CustomResources) {
   <km-number-stepper [formControlName]="Controls.CPUs"
                      mode="errors"
                      label="CPUs"
                      min="1"
-                     [disabled]="form.get(Controls.CPUs).disabled"
                      required />
-  } @else {
+
+  <km-number-stepper [formControlName]="Controls.Memory"
+                     mode="errors"
+                     label="Memory (MB)"
+                     min="1000"
+                     step="100"
+                     required />
+  }
+
+  @if (selectedConfigurationMode === ConfigurationMode.PredefinedInstanceType && selectedInstanceType) {
   <mat-form-field fxFlex>
     <mat-label>CPUs</mat-label>
     <input matInput
@@ -74,18 +97,7 @@ limitations under the License.
            disabled
            autocomplete="off" />
   </mat-form-field>
-  }
 
-
-  @if (!form.get(Controls.Memory).disabled) {
-  <km-number-stepper [formControlName]="Controls.Memory"
-                     mode="errors"
-                     label="Memory (MB)"
-                     min="1000"
-                     step="100"
-                     [disabled]="form.get(Controls.Memory).disabled"
-                     required />
-  } @else {
   <mat-form-field fxFlex>
     <mat-label>Memory</mat-label>
     <input matInput
@@ -96,7 +108,6 @@ limitations under the License.
            autocomplete="off" />
   </mat-form-field>
   }
-
 
   <km-combobox #subnetCombobox
                [selected]="selectedSubnet"
