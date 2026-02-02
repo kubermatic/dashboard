@@ -16,6 +16,8 @@ import {ChangeDetectionStrategy, Component, forwardRef, Input, OnChanges, OnInit
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
 
+const MEMORY_CONVERSION_FACTOR = 1024; // Convert MB to GB
+
 enum Column {
   Select = 'select',
   Name = 'name',
@@ -40,6 +42,7 @@ enum Column {
 })
 export class OpenstackMachineTypeSelectorComponent implements OnInit, OnChanges, ControlValueAccessor {
   readonly Column = Column;
+  readonly MemoryConversionFactor = MEMORY_CONVERSION_FACTOR;
 
   @Input() options: OpenstackFlavor[] = [];
   @Input() label = 'Flavor';
@@ -92,7 +95,7 @@ export class OpenstackMachineTypeSelectorComponent implements OnInit, OnChanges,
   }
 
   getDisplayName(option: OpenstackFlavor): string {
-    const memoryGB = option.memory / 1024;
+    const memoryGB = option.memory / MEMORY_CONVERSION_FACTOR;
     const cpuLabel = option.vcpus !== 1 ? 'CPUs' : 'CPU';
     return `${option.slug} - ${memoryGB} GB RAM, ${option.vcpus} ${cpuLabel}, ${option.disk} GB Disk`;
   }

@@ -94,7 +94,7 @@ limitations under the License.
             *matHeaderCellDef
             class="km-header-cell p-20">Memory</th>
         <td mat-cell
-            *matCellDef="let element">{{element.memory / 1024}} GB</td>
+            *matCellDef="let element">{{element.memory / MemoryConversionFactor}} GB</td>
       </ng-container>
 
       <ng-container matColumnDef="disk">
