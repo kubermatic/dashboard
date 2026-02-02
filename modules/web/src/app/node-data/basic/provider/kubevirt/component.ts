@@ -367,6 +367,9 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.Memory).setValidators([]);
       this.form.get(Controls.Memory).disable();
 
+      // Clear preference value when switching to instance type mode
+      this.form.get(Controls.Preference).setValue('');
+
       // Re-enable preference if instance type is already selected
       if (this.selectedInstanceType) {
         const preferenceControl = this.form.get(Controls.Preference);
@@ -444,7 +447,8 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   onPreferenceChange(preferenceId: string): void {
-    if (!preferenceId) {
+    if (!preferenceId || typeof preferenceId !== 'string') {
+      this.form.get(Controls.Preference).setValue('', {emitEvent: false});
       this.selectedPreference = null;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.preference = null;
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);

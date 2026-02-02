@@ -209,14 +209,8 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     });
   }
 
-  /**
-   * Parses instance type spec from JSON string and enriches with computed properties.
-   * The API returns spec as a JSON string containing CPU, memory, and GPU details.
-   */
-  private _parseInstanceTypeSpec(
-    instanceType: KubeVirtInstanceType,
-    category: string
-  ): ParsedInstanceType {
+  /** Parses instance type spec JSON and enriches with computed properties. */
+  private _parseInstanceTypeSpec(instanceType: KubeVirtInstanceType, category: string): ParsedInstanceType {
     const id = `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
     let cpuValue: number | undefined;
     let memoryValue: string | undefined;
