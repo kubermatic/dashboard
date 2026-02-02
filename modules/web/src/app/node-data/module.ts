@@ -46,6 +46,7 @@ import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component'
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
 import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-constraint-form/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
+import {OpenstackMachineTypeSelectorComponent} from './basic/provider/openstack/machine-type-selector/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
 import {NodeDataComponent} from './component';
 import {NodeDataDialogComponent} from './dialog/component';
@@ -77,6 +78,7 @@ const components = [
   GCPBasicNodeDataComponent,
   GCPExtendedNodeDataComponent,
   OpenstackBasicNodeDataComponent,
+  OpenstackMachineTypeSelectorComponent,
   OpenstackExtendedNodeDataComponent,
   AnexiaBasicNodeDataComponent,
   NodeDataComponent,
