@@ -340,11 +340,10 @@ export class KubeVirtBasicNodeDataComponent
   onConfigurationModeChange(mode: ConfigurationMode): void {
     // Clear instance type when switching to custom mode
     this.form.get(Controls.InstanceType).setValue('');
-      
+
     this.selectedConfigurationMode = mode;
 
     if (mode === ConfigurationMode.CustomResources) {
-      
       // Switching to custom mode: enable CPU/Memory fields
       this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
       this.form.get(Controls.CPUs).setValidators(Validators.required);
@@ -731,7 +730,7 @@ export class KubeVirtBasicNodeDataComponent
         // Has instance type: use predefined mode
         this.selectedConfigurationMode = ConfigurationMode.PredefinedInstanceType;
         this.form.get(Controls.InstanceType).setValue(this._getSelectedInstanceTypeId(this._initialData.instancetype));
-        
+
         if (this._initialData.preference) {
           this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
         }
@@ -746,10 +745,10 @@ export class KubeVirtBasicNodeDataComponent
       } else {
         // No instance type: use custom mode
         this.selectedConfigurationMode = ConfigurationMode.CustomResources;
-        
-        const cpuValue = this._initialData.vcpus?.cores 
-          ? this._initialData.vcpus.cores 
-          : (parseInt(this._initialData.cpus) || this._defaultCPUs);
+
+        const cpuValue = this._initialData.vcpus?.cores
+          ? this._initialData.vcpus.cores
+          : parseInt(this._initialData.cpus) || this._defaultCPUs;
         const memoryValue = parseInt(this._initialData.memory) || this._defaultMemory;
 
         this.form.get(Controls.CPUs).setValue(cpuValue);

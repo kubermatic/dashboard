@@ -35,7 +35,8 @@ enum TabIndex {
   CustomGPU = 3,
 }
 
-interface CategorizedInstanceType extends KubeVirtInstanceType {
+/** Instance type with parsed spec and computed display properties. */
+interface ParsedInstanceType extends KubeVirtInstanceType {
   _id: string;
   _cpuValue?: number;
   _memoryValue?: string;
@@ -82,11 +83,11 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
   searchQuery = '';
   selectedTabIndex = TabIndex.KubermaticCPU;
 
-  kubermaticCpuOptions: CategorizedInstanceType[] = [];
-  kubermaticGpuOptions: CategorizedInstanceType[] = [];
-  customCpuOptions: CategorizedInstanceType[] = [];
-  customGpuOptions: CategorizedInstanceType[] = [];
-  filteredOptions: CategorizedInstanceType[] = [];
+  kubermaticCpuOptions: ParsedInstanceType[] = [];
+  kubermaticGpuOptions: ParsedInstanceType[] = [];
+  customCpuOptions: ParsedInstanceType[] = [];
+  customGpuOptions: ParsedInstanceType[] = [];
+  filteredOptions: ParsedInstanceType[] = [];
   visibleTabs: TabIndex[] = [];
   displayedColumns: string[] = [];
 
@@ -145,7 +146,7 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     this._onTouched();
   }
 
-  trackById(_: number, instanceType: CategorizedInstanceType): string {
+  trackById(_: number, instanceType: ParsedInstanceType): string {
     return instanceType._id;
   }
 
@@ -186,21 +187,21 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
       const types = this.instanceTypes.instancetypes[category] || [];
 
       types.forEach((instanceType: KubeVirtInstanceType) => {
-        const categorized = this._createCategorizedInstanceType(instanceType, category);
+        const parsedSpec = this._parseInstanceTypeSpec(instanceType, category);
 
         switch (category) {
           case KubeVirtInstanceTypeCategory.Kubermatic:
-            if (categorized._hasGPU) {
-              this.kubermaticGpuOptions.push(categorized);
+            if (parsedSpec._hasGPU) {
+              this.kubermaticGpuOptions.push(parsedSpec);
             } else {
-              this.kubermaticCpuOptions.push(categorized);
+              this.kubermaticCpuOptions.push(parsedSpec);
             }
             break;
           case KubeVirtInstanceTypeCategory.Custom:
-            if (categorized._hasGPU) {
-              this.customGpuOptions.push(categorized);
+            if (parsedSpec._hasGPU) {
+              this.customGpuOptions.push(parsedSpec);
             } else {
-              this.customCpuOptions.push(categorized);
+              this.customCpuOptions.push(parsedSpec);
             }
             break;
         }
@@ -208,10 +209,14 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     });
   }
 
-  private _createCategorizedInstanceType(
+  /**
+   * Parses instance type spec from JSON string and enriches with computed properties.
+   * The API returns spec as a JSON string containing CPU, memory, and GPU details.
+   */
+  private _parseInstanceTypeSpec(
     instanceType: KubeVirtInstanceType,
     category: string
-  ): CategorizedInstanceType {
+  ): ParsedInstanceType {
     const id = `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
     let cpuValue: number | undefined;
     let memoryValue: string | undefined;
@@ -241,7 +246,7 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
   }
 
   private _applySearchFilter(): void {
-    let sourceOptions: CategorizedInstanceType[] = [];
+    let sourceOptions: ParsedInstanceType[] = [];
 
     switch (this.selectedTabIndex) {
       case TabIndex.KubermaticCPU:
