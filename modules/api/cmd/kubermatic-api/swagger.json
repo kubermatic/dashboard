@@ -30679,11 +30679,6 @@
         "updateWindow": {
           "$ref": "#/definitions/UpdateWindow"
         },
-        "useEventRateLimitAdmissionPlugin": {
-          "description": "If active the EventRateLimit admission plugin is configured at the apiserver",
-          "type": "boolean",
-          "x-go-name": "UseEventRateLimitAdmissionPlugin"
-        },
         "usePodNodeSelectorAdmissionPlugin": {
           "description": "If active the PodNodeSelector admission plugin is configured at the apiserver",
           "type": "boolean",
