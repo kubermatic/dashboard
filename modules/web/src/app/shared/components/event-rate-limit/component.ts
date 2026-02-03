@@ -22,9 +22,8 @@ import {
   FormGroup,
   FormArray,
 } from '@angular/forms';
-import {ClusterSpecService} from '@core/services/cluster-spec';
 import {EventRateLimitConfig, EventRateLimitConfigItem} from '@shared/entity/cluster';
-import {debounceTime, takeUntil, tap} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 
@@ -73,7 +72,6 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   @Input() eventRateLimitConfig: EventRateLimitConfig;
 
   form: FormGroup;
-  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   private readonly _minValue = 1;
   private readonly MIN_EVENT_RATE_LIMIT_ELEMENTS = 2;
@@ -84,7 +82,6 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _dialogModeService: DialogModeService
   ) {
     super();
@@ -97,26 +94,15 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.EventRateLimitConfig]: this._builder.array([])});
 
-    this.form.valueChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        tap(_ => {
-          this._refreshChosenTypes();
-          this.addTypeIfNeeded();
-        })
-      )
-      .pipe(debounceTime(this._debounceTime))
-      .subscribe(_ => {
-        {
-          this._clusterSpecService.eventRateLimitConfig = this._getEventRateLimitConfigPatch();
-        }
-      });
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._refreshChosenTypes();
+      this.addTypeIfNeeded();
+    });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._clusterSpecService.eventRateLimitConfig = null;
   }
 
   writeValue(eventRateLimitConfig: EventRateLimitConfig) {
@@ -190,6 +176,9 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
       controls.get(Controls.QPS).setValue(null);
       controls.get(Controls.Burst).setValue(null);
       controls.get(Controls.CacheSize).setValue(null);
+      controls.get(Controls.QPS).clearValidators();
+      controls.get(Controls.Burst).clearValidators();
+      controls.get(Controls.CacheSize).clearValidators();
     } else {
       this.eventRateLimitConfigArray.removeAt(index);
     }
@@ -201,21 +190,6 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   blockDeletion(index: number): boolean {
     return !this.isRequired(index) || this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS;
-  }
-
-  private _getEventRateLimitConfigPatch(): EventRateLimitConfig {
-    const ERLConfig: EventRateLimitConfig = {};
-    this.eventRateLimitConfigArray.controls.forEach(control => {
-      const type = control.get(Controls.LimitType).value;
-      if (type) {
-        ERLConfig[type] = {
-          qps: control.get(Controls.QPS).value,
-          burst: control.get(Controls.Burst).value,
-          cacheSize: control.get(Controls.CacheSize).value,
-        };
-      }
-    });
-    return ERLConfig;
   }
 
   private _refreshChosenTypes(): void {
