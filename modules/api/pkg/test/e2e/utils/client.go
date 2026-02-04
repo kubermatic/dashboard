@@ -599,7 +599,7 @@ func (r *TestClient) CreateHetznerCluster(projectID, dc, name, credential, versi
 	}
 
 	if replicas > 0 {
-		instanceSize := "cx23"
+		instanceSize := "cx32"
 
 		clusterSpec.NodeDeployment = &models.NodeDeployment{
 			Spec: &models.NodeDeploymentSpec{
