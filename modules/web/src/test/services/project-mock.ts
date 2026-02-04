@@ -41,4 +41,13 @@ export class ProjectMockService {
   get allProjects() {
     return of(fakeProjects());
   }
+
+  searchProjects(query: string, _displayAll: boolean): Observable<Project[]> {
+    const normalized = query.toLowerCase();
+    return of(
+      fakeProjects().filter(
+        project => project.name.toLowerCase().includes(normalized) || project.id.toLowerCase().includes(normalized)
+      )
+    );
+  }
 }

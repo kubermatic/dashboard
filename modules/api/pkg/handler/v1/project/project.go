@@ -270,7 +270,11 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 
 		if req.DisplayAll && (userInfo.IsAdmin || userInfo.IsGlobalViewer) {
-			return getAllProjectsForAdmin(ctx, userInfo, projectProvider, memberProvider, userProvider, clusterProviderGetter, seedsGetter)
+			allProjects, clusterMatchedProjectIDs, err := getAllProjectsForAdmin(ctx, userInfo, projectProvider, memberProvider, userProvider, clusterProviderGetter, seedsGetter, req.Search)
+			if err != nil {
+				return nil, err
+			}
+			return filterProjectsBySearch(allProjects, req.Search, clusterMatchedProjectIDs)
 		}
 
 		var projects []*kubermaticv1.Project
@@ -346,14 +350,18 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 
 		var apiProjects []*apiv1.Project
+		clusterMatchedProjectIDs := sets.New[string]()
 		for _, project := range projects {
 			projectOwners, err := common.GetOwnersForProject(ctx, userInfo, project, memberProvider, userProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
-			clustersNumber, err := getNumberOfClustersForProject(ctx, clusterProviderGetter, seedsGetter, project)
+			clustersNumber, matchesQuery, err := getNumberOfClustersForProjectAndMatch(ctx, clusterProviderGetter, seedsGetter, project, req.Search)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
+			}
+			if matchesQuery {
+				clusterMatchedProjectIDs.Insert(project.Name)
 			}
 			apiProjects = append(apiProjects, common.ConvertInternalProjectToExternal(project, projectOwners, clustersNumber))
 		}
@@ -361,31 +369,76 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		if len(errorList) > 0 {
 			return nil, utilerrors.NewWithDetails(http.StatusInternalServerError, "failed to get some projects, please examine details field for more info", errorList)
 		}
-		return apiProjects, nil
+		return filterProjectsBySearch(apiProjects, req.Search, clusterMatchedProjectIDs)
 	}
 }
 
-func getAllProjectsForAdmin(ctx context.Context, userInfo *provider.UserInfo, projectProvider provider.ProjectProvider, memberProvider provider.ProjectMemberProvider, userProvider provider.UserProvider, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter) ([]*apiv1.Project, error) {
+func getAllProjectsForAdmin(ctx context.Context, userInfo *provider.UserInfo, projectProvider provider.ProjectProvider, memberProvider provider.ProjectMemberProvider, userProvider provider.UserProvider, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, search string) ([]*apiv1.Project, sets.Set[string], error) {
 	projects := []*apiv1.Project{}
 	projectList, err := projectProvider.List(ctx, nil)
 	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
+		return nil, nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	clustersNumbers, err := getNumberOfClusters(ctx, clusterProviderGetter, seedsGetter)
+	allowedProjectIDs := sets.New[string]()
+	for _, project := range projectList {
+		allowedProjectIDs.Insert(project.Name)
+	}
+
+	clustersNumbers, clusterMatchedProjectIDs, err := getClusterCountsAndMatches(ctx, clusterProviderGetter, seedsGetter, search, allowedProjectIDs)
 	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
+		return nil, nil, common.KubernetesErrorToHTTPError(err)
 	}
 	for _, project := range projectList {
 		projectOwners, err := common.GetOwnersForProject(ctx, userInfo, project, memberProvider, userProvider)
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, nil, common.KubernetesErrorToHTTPError(err)
 		}
 
 		projects = append(projects, common.ConvertInternalProjectToExternal(project, projectOwners, clustersNumbers[project.Name]))
 	}
 
-	return projects, nil
+	return projects, clusterMatchedProjectIDs, nil
+}
+
+func filterProjectsBySearch(projects []*apiv1.Project, query string, clusterMatchedProjectIDs sets.Set[string]) ([]*apiv1.Project, error) {
+	search := strings.TrimSpace(strings.ToLower(query))
+	if search == "" {
+		return projects, nil
+	}
+
+	if clusterMatchedProjectIDs == nil {
+		clusterMatchedProjectIDs = sets.New[string]()
+	}
+
+	filtered := make([]*apiv1.Project, 0, len(projects))
+	for _, project := range projects {
+		if projectMatchesQuery(project, search, clusterMatchedProjectIDs) {
+			filtered = append(filtered, project)
+		}
+	}
+
+	return filtered, nil
+}
+
+func projectMatchesQuery(project *apiv1.Project, query string, clusterMatchedProjectIDs sets.Set[string]) bool {
+	if strings.Contains(strings.ToLower(project.Name), query) {
+		return true
+	}
+	if strings.Contains(strings.ToLower(project.ID), query) {
+		return true
+	}
+	for _, owner := range project.Owners {
+		if strings.Contains(strings.ToLower(owner.Name), query) {
+			return true
+		}
+	}
+	for key, value := range project.Labels {
+		if strings.Contains(strings.ToLower(key), query) || strings.Contains(strings.ToLower(value), query) {
+			return true
+		}
+	}
+	return clusterMatchedProjectIDs.Has(project.ID)
 }
 
 func isStatus(err error, status int32) bool {
@@ -622,6 +675,8 @@ func DecodeDelete(c context.Context, r *http.Request) (interface{}, error) {
 type ListReq struct {
 	// in: query
 	DisplayAll bool `json:"displayAll,omitempty"`
+	// in: query
+	Search string `json:"search,omitempty"`
 }
 
 func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
@@ -630,6 +685,7 @@ func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
 	var err error
 
 	queryParam := r.URL.Query().Get("displayAll")
+	searchParam := r.URL.Query().Get("search")
 
 	if queryParam != "" {
 		displayAll, err = strconv.ParseBool(queryParam)
@@ -638,6 +694,7 @@ func DecodeList(c context.Context, r *http.Request) (interface{}, error) {
 		}
 	}
 	req.DisplayAll = displayAll
+	req.Search = searchParam
 
 	return req, nil
 }
@@ -671,11 +728,53 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 	return clustersNumber, nil
 }
 
-func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter) (map[string]int, error) {
-	clustersNumber := map[string]int{}
+func getNumberOfClustersForProjectAndMatch(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, project *kubermaticv1.Project, query string) (int, bool, error) {
+	var clustersNumber int
+	var matchesQuery bool
+	search := strings.TrimSpace(strings.ToLower(query))
 	seeds, err := seedsGetter()
 	if err != nil {
-		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
+		return clustersNumber, matchesQuery, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
+	}
+
+	for seedName, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
+		clusterProvider, err := clusterProviderGetter(seed)
+		if err != nil {
+			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+			continue
+		}
+		clusters, err := clusterProvider.List(ctx, project, nil)
+		if err != nil {
+			return clustersNumber, matchesQuery, err
+		}
+		clustersNumber += len(clusters.Items)
+		if search == "" || matchesQuery {
+			continue
+		}
+		for _, cluster := range clusters.Items {
+			if strings.Contains(strings.ToLower(cluster.Spec.HumanReadableName), search) || strings.Contains(strings.ToLower(cluster.Name), search) {
+				matchesQuery = true
+				break
+			}
+		}
+	}
+
+	return clustersNumber, matchesQuery, nil
+}
+
+func getClusterCountsAndMatches(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, query string, allowedProjectIDs sets.Set[string]) (map[string]int, sets.Set[string], error) {
+	clustersNumber := map[string]int{}
+	clusterMatchedProjectIDs := sets.New[string]()
+	search := strings.TrimSpace(strings.ToLower(query))
+	seeds, err := seedsGetter()
+	if err != nil {
+		return nil, nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
 	}
 
 	for seedName, seed := range seeds {
@@ -692,15 +791,24 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 		}
 		clusters, err := clusterProvider.ListAll(ctx, nil)
 		if err != nil {
-			return clustersNumber, err
+			return clustersNumber, clusterMatchedProjectIDs, err
 		}
 		for _, cluster := range clusters.Items {
 			projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
 			if ok {
 				clustersNumber[projectName]++
+				if search == "" {
+					continue
+				}
+				if allowedProjectIDs.Len() > 0 && !allowedProjectIDs.Has(projectName) {
+					continue
+				}
+				if strings.Contains(strings.ToLower(cluster.Spec.HumanReadableName), search) || strings.Contains(strings.ToLower(cluster.Name), search) {
+					clusterMatchedProjectIDs.Insert(projectName)
+				}
 			}
 		}
 	}
 
-	return clustersNumber, nil
+	return clustersNumber, clusterMatchedProjectIDs, nil
 }

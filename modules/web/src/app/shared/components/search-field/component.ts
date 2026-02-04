@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'km-search-field',
   templateUrl: 'template.html',
   standalone: false,
 })
-export class SearchFieldComponent implements OnInit {
+export class SearchFieldComponent implements OnInit, OnDestroy {
   @Output() queryChange = new EventEmitter<string>();
   formGroup: FormGroup;
+  private _subscription = new Subscription();
 
   ngOnInit() {
     this.formGroup = new FormGroup({query: new FormControl('')});
-  }
-
-  onChange(query: string) {
-    this.queryChange.emit(query);
+    this._subscription = this.formGroup.controls.query.valueChanges.subscribe(query => {
+      this.queryChange.emit(query ?? '');
+    });
   }
 
   isEmpty(): boolean {
@@ -38,5 +39,9 @@ export class SearchFieldComponent implements OnInit {
 
   clear(): void {
     this.formGroup.controls.query.setValue('');
+  }
+
+  ngOnDestroy(): void {
+    this._subscription?.unsubscribe();
   }
 }

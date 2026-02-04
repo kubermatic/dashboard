@@ -145,6 +145,10 @@ describe('Admin Settings - Defaults Story', () => {
   });
 
   it('should go to cluster details page and make sure admin settings are reflected', () => {
+    Pages.Projects.open(projectName);
+    Pages.expect(View.Overview.Default);
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.select(clusterName);
 
     // Cleanup settings check
