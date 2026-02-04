@@ -97,7 +97,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form
+     this.form
       .get(Controls.Type)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -112,11 +112,6 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  onTypeChange(type: string): void {
-    this._nodeDataService.nodeData.spec.cloud.hetzner.type = type;
-    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   private _onTypeLoading(): void {
