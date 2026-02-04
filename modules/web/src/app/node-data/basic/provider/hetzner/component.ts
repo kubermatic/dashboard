@@ -97,7 +97,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-     this.form
+    this.form
       .get(Controls.Type)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
