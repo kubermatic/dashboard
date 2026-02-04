@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-gcp-machine-type-selector"
+<div class="km-hetzner-machine-type-selector"
      fxLayout="column">
   <div class="km-machine-type-selector-label km-text">
     {{label}} @if (required) {
@@ -26,7 +26,7 @@ limitations under the License.
        fxLayout="column">
     <div class="km-machine-type-selector-search">
       <mat-form-field class="km-machine-type-selector-search-field">
-        <mat-label>Search Machine Type...</mat-label>
+        <mat-label>Search Instance Type...</mat-label>
         <input matInput
                type="text"
                [(ngModel)]="searchQuery"
@@ -44,21 +44,19 @@ limitations under the License.
                    (selectedIndexChange)="onTabChange($event)">
       <mat-tab>
         <ng-template mat-tab-label>
-          <span>CPU / General</span>
-          <span class="km-machine-type-selector-tab-count">({{cpuOptions.length}})</span>
+          <span>Standard Instances</span>
+          <span class="km-machine-type-selector-tab-count">({{standardOptions.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
 
-      @if (showGpuFilter && hasGpuTypes) {
       <mat-tab>
         <ng-template mat-tab-label>
-          <span>GPU / Accelerated</span>
-          <span class="km-machine-type-selector-tab-count">({{gpuOptions.length}})</span>
+          <span>Dedicated vCPU Instances</span>
+          <span class="km-machine-type-selector-tab-count">({{dedicatedOptions.length}})</span>
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
-      }
     </mat-tab-group>
   </div>
 </div>
@@ -94,11 +92,10 @@ limitations under the License.
         <ng-container matColumnDef="name">
           <th mat-header-cell
               *matHeaderCellDef
-              class="km-header-cell p-35">Name</th>
+              class="km-header-cell p-10">Name</th>
           <td mat-cell
               *matCellDef="let element">
             {{getDisplayName(element)}}
-            <div class="km-machine-type-description">{{element.description}}</div>
           </td>
         </ng-container>
 
@@ -107,7 +104,7 @@ limitations under the License.
               *matHeaderCellDef
               class="km-header-cell p-10">vCPU</th>
           <td mat-cell
-              *matCellDef="let element">{{element.vcpus}}</td>
+              *matCellDef="let element">{{element.cores}}</td>
         </ng-container>
 
         <ng-container matColumnDef="memoryGB">
@@ -115,29 +112,15 @@ limitations under the License.
               *matHeaderCellDef
               class="km-header-cell p-15">Memory</th>
           <td mat-cell
-              *matCellDef="let element">{{(element.memory / 1024) | number:'1.0-0'}} GB</td>
+              *matCellDef="let element">{{element.memory}} GB</td>
         </ng-container>
 
-        <ng-container matColumnDef="gpus">
+        <ng-container matColumnDef="disk">
           <th mat-header-cell
               *matHeaderCellDef
-              class="km-header-cell">GPUs</th>
+              class="km-header-cell p-15">Disk</th>
           <td mat-cell
-              *matCellDef="let element">
-            @if (element.accelerators && element.accelerators.length > 0) {
-            <div class="km-gpu-info">
-              @for (acc of element.accelerators; track acc.guestAcceleratorType) {
-              <div class="km-gpu-item">
-                <span class="km-gpu-count">{{acc.guestAcceleratorCount}}x</span>
-                <span class="km-gpu-type">{{acc.guestAcceleratorType}}</span>
-              </div>
-              }
-            </div>
-            }
-            @else {
-            <span>-</span>
-            }
-          </td>
+              *matCellDef="let element">{{element.disk}} GB</td>
         </ng-container>
 
         <tr mat-header-row
@@ -152,7 +135,7 @@ limitations under the License.
 
     @if (filteredOptions.length === 0 && !isLoading) {
     <div class="km-empty-list-msg">
-      No machine types found
+      No instance types found
     </div>
     }
   </div>

@@ -16,17 +16,11 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <km-combobox [required]="true"
-               [grouped]="true"
-               [selected]="selectedType"
-               [groups]="groups"
-               [valueFormatter]="typeDisplayName.bind(this)"
-               [optionsGetter]="getTypes.bind(this)"
-               [formControlName]="Controls.Type"
-               (changed)="onTypeChange($event)"
-               [label]="typeLabel"
-               inputLabel="Select type..."
-               filterBy="name">
-    <div *option="let type">{{type.name}} ({{type.cores}} vCPU, {{type.memory}} GB RAM)</div>
-  </km-combobox>
+  <km-hetzner-machine-type-selector [options]="types"
+                                    [selectedMachineType]="selectedType"
+                                    [formControlName]="Controls.Type"
+                                    [label]="typeLabel"
+                                    [required]="true"
+                                    [isLoading]="isLoadingTypes">
+  </km-hetzner-machine-type-selector>
 </form>

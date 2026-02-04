@@ -43,6 +43,7 @@ import {BasicNodeDataComponent} from './basic/provider/component';
 import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
 import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
+import {HetznerMachineTypeSelectorComponent} from './basic/provider/hetzner/machine-type-selector/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
 import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-constraint-form/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
@@ -71,6 +72,7 @@ const components = [
   VSphereBasicNodeDataComponent,
   KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
+  HetznerMachineTypeSelectorComponent,
   AzureBasicNodeDataComponent,
   AzureExtendedNodeDataComponent,
   VSphereExtendedNodeDataComponent,
