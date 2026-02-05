@@ -18,8 +18,6 @@ limitations under the License.
   <mat-card-header class="km-no-padding">
     <mat-card-title>
       Event Rate Limit Configuration
-      <i class="km-icon-info km-pointer"
-         matTooltip="Limit requests to API Server to protect it from being flooded."></i>
     </mat-card-title>
   </mat-card-header>
 
@@ -39,6 +37,7 @@ limitations under the License.
                         fxFlex="30">
           <mat-label>Limit Type</mat-label>
           <mat-select [formControlName]="Controls.LimitType"
+                      [disabled]="disableAll"
                       (selectionChange)="onChangeType($event.value, i)"
                       disableOptionCentering>
             @for (key of eventRateLimitTypeKeys; track key) {
@@ -51,7 +50,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.QPS"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="!isRequired(i) || disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="QPS"
@@ -61,7 +60,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.Burst"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="!isRequired(i) || disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Burst"
@@ -71,7 +70,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.CacheSize"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="!isRequired(i) || disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Cache Size"

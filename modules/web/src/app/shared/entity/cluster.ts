@@ -391,6 +391,16 @@ export class EventRateLimitConfigItem {
   limitType: string;
 }
 
+export interface EventRateLimitPluginConfiguration {
+  enabled?: boolean;
+  enforced?: boolean;
+  defaultConfig?: EventRateLimitConfig;
+}
+
+export interface AdmissionPluginsConfiguration {
+  eventRateLimit?: EventRateLimitPluginConfiguration;
+}
+
 export class ClusterNetwork {
   ipFamily?: string;
   pods?: NetworkRanges;

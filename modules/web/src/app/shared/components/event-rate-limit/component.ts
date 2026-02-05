@@ -26,6 +26,7 @@ import {EventRateLimitConfig, EventRateLimitConfigItem} from '@shared/entity/clu
 import {takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import _ from 'lodash';
 
 enum Controls {
   EventRateLimitConfig = 'eventRateLimitConfig',
@@ -70,6 +71,7 @@ const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;
+  @Input() disableAll = false;
 
   form: FormGroup;
   readonly Controls = Controls;
@@ -108,8 +110,8 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   writeValue(eventRateLimitConfig: EventRateLimitConfig) {
     this.eventRateLimitConfig = eventRateLimitConfig;
     this.eventRateLimitConfigArray.clear();
-
-    if (eventRateLimitConfig) {
+    const eventRateLimitConfigKeys = eventRateLimitConfig ? Object.keys(eventRateLimitConfig) : [];
+    if (eventRateLimitConfigKeys.length > 0) {
       Object.keys(eventRateLimitConfig).forEach(limitType => {
         const config = eventRateLimitConfig[limitType];
         this.addEventType(limitType, config.qps, config.burst, config.cacheSize);
