@@ -126,8 +126,9 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   }
 
   addTypeIfNeeded(): void {
+    const configLength = this.eventRateLimitConfig ? Object.keys(this.eventRateLimitConfig).length : 0;
     if (
-      this.eventRateLimitConfigArray.length < Object.keys(this.eventRateLimitConfig).length ||
+      this.eventRateLimitConfigArray.length < configLength ||
       this.eventRateLimitConfigArray.length >= this.eventRateLimitTypeKeys.length
     ) {
       return;
@@ -157,34 +158,45 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   }
 
   onChangeType(value: string, index: number): void {
-    const controls = this.eventRateLimitConfigArray.at(index);
+    const group = this.eventRateLimitConfigArray.at(index) as FormGroup;
     if (value) {
-      controls.get(Controls.QPS).setValidators([Validators.required, Validators.min(this._minValue)]);
-      controls.get(Controls.Burst).setValidators([Validators.required, Validators.min(this._minValue)]);
-      controls.get(Controls.CacheSize).setValidators([Validators.required, Validators.min(this._minValue)]);
+      const validators = [Validators.required, Validators.min(this._minValue)];
+
+      [Controls.QPS, Controls.Burst, Controls.CacheSize].forEach(control => {
+        group.get(control).setValidators(validators);
+        group.get(control).updateValueAndValidity();
+      });
+
+      // Auto-populate defaults when type is selected
+      if (!group.get(Controls.QPS).value) {
+        group.patchValue({
+          [Controls.QPS]: DEFAULT_EVENT_RATE_LIMIT_CONFIG.qps,
+          [Controls.Burst]: DEFAULT_EVENT_RATE_LIMIT_CONFIG.burst,
+          [Controls.CacheSize]: DEFAULT_EVENT_RATE_LIMIT_CONFIG.cacheSize,
+        });
+      }
     }
   }
 
   isRequired(index: number): boolean {
-    return this.eventRateLimitConfigArray.at(index).get(Controls.LimitType).value ? true : false;
+    return !!this.eventRateLimitConfigArray.at(index).get(Controls.LimitType).value;
   }
 
   removeType(index: number): void {
-    const controls = this.eventRateLimitConfigArray.at(index);
+    const group = this.eventRateLimitConfigArray.at(index) as FormGroup;
     if (index === this.eventRateLimitConfigArray.length - 1) {
-      controls.get(Controls.LimitType).setValue(null);
-      controls.get(Controls.QPS).setValue(null);
-      controls.get(Controls.Burst).setValue(null);
-      controls.get(Controls.CacheSize).setValue(null);
-      controls.get(Controls.QPS).clearValidators();
-      controls.get(Controls.Burst).clearValidators();
-      controls.get(Controls.CacheSize).clearValidators();
+      group.get(Controls.LimitType).setValue(null);
+      [Controls.QPS, Controls.Burst, Controls.CacheSize].forEach(control => {
+        group.get(control).setValue(null);
+        group.get(control).clearValidators();
+        group.get(control).updateValueAndValidity();
+      });
     } else {
       this.eventRateLimitConfigArray.removeAt(index);
     }
   }
 
-  ischosenType(type: string, control: FormGroup): boolean {
+  isChosenType(type: string, control: FormGroup): boolean {
     return this.chosenEventRateLimitTypes.includes(type) && control.get(Controls.LimitType).value !== type;
   }
 

@@ -404,8 +404,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
 
     this.control(Controls.EventRateLimitConfig)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .pipe(debounceTime(this._debounceTime))
+      .valueChanges.pipe(debounceTime(this._debounceTime), takeUntil(this._unsubscribe))
       .subscribe((eventRate: {eventRateLimitConfig: EventRateLimitConfigItem[]}) => {
         const eventRateLimitConfig: EventRateLimitConfig = {};
         if (eventRate.eventRateLimitConfig?.length) {

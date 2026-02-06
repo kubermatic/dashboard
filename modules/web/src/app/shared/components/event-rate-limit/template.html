@@ -42,7 +42,7 @@ limitations under the License.
                       (selectionChange)="onChangeType($event.value, i)"
                       disableOptionCentering>
             @for (key of eventRateLimitTypeKeys; track key) {
-            @if(!ischosenType(eventRateLimitTypes[key], limit)) {
+            @if (!isChosenType(eventRateLimitTypes[key], limit)) {
             <mat-option [value]="eventRateLimitTypes[key]">{{key}}</mat-option>
             }
             }
