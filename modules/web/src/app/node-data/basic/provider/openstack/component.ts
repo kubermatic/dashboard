@@ -56,12 +56,6 @@ enum Controls {
   EnableConfigDrive = 'enableConfigDrive',
 }
 
-enum FlavorState {
-  Ready = 'Flavor',
-  Loading = 'Loading...',
-  Empty = 'No Flavors Available',
-}
-
 enum AvailabilityZoneState {
   Ready = 'Availability Zone',
   Loading = 'Loading...',
@@ -101,8 +95,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
-  @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
-
   @ViewChild('availabilityZoneCombobox') private readonly _availabilityZoneCombobox: FilteredComboboxComponent;
 
   @ViewChild('serverGroupCombobox') private readonly _serverGroupCombobox: FilteredComboboxComponent;
@@ -110,7 +102,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   readonly Controls = Controls;
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
-  flavorsLabel = FlavorState.Empty;
+  isLoadingFlavors = false;
   availabilityZones: OpenstackAvailabilityZone[] = [];
   selectedAvailabilityZone = '';
   availabilityZonesLabel = AvailabilityZoneState.Empty;
@@ -232,6 +224,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this.form
       .get(Controls.Flavor)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(flavor => this.onFlavorChange(flavor));
+
+    this.form
+      .get(Controls.Flavor)
       .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -275,16 +272,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
-  flavorDisplayName(slug: string): string {
-    const flavor = this.flavors.find(flavor => flavor.slug === slug);
-    const base = 1024;
-    return flavor
-      ? `${flavor.slug} - ${flavor.memory / base} GB RAM, ${flavor.vcpus} CPU${flavor.vcpus !== 1 ? 's' : ''}, ${
-          flavor.disk
-        } GB Disk`
-      : '';
-  }
-
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.openstack) {
       const instanceReadyCheckPeriod = duration(
@@ -324,8 +311,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _clearFlavor(): void {
     this.flavors = [];
     this.selectedFlavor = '';
-    this.flavorsLabel = FlavorState.Empty;
-    this._flavorCombobox.reset();
+    this.isLoadingFlavors = false;
     this._cdr.detectChanges();
   }
 
@@ -344,7 +330,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _onFlavorLoading(): void {
-    this.flavorsLabel = FlavorState.Loading;
+    this.isLoadingFlavors = true;
     this._cdr.detectChanges();
   }
 
@@ -356,7 +342,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.selectedFlavor = this.flavors[0].slug;
     }
 
-    this.flavorsLabel = !_.isEmpty(this.flavors) ? FlavorState.Ready : FlavorState.Empty;
+    this.isLoadingFlavors = false;
     this._cdr.detectChanges();
   }
 
