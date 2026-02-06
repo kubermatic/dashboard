@@ -191,7 +191,7 @@ $theme-dark: map.merge(
 html {
   // Base surface colors - define once, reference everywhere
   --km-surface-primary: #{map.get($colors-dark, sidenav-background-hover)}; // #202021
-  --km-surface-elevated: #{map.get($colors-dark, option-background)}; // #2b2b2c
+  --km-surface-elevated: #{map.get($colors-dark, sidenav-background-hover)}; // #202021
   --km-surface-dialog: #{map.get($background, dialog)}; // #2b2b2c
   --km-surface-toolbar: #{map.get($background, app-bar)}; // #2b2b2c
   --km-surface-card: #{map.get($background, card)}; // #202021
@@ -203,6 +203,7 @@ html {
   // Card styling
   --mat-card-elevated-container-color: var(--km-surface-primary);
   --mat-card-outlined-container-color: var(--km-surface-primary);
+  --mat-card-outlined-outline-color: rgba(255, 255, 255, 0.12);
   --mat-card-filled-container-color: var(--km-surface-primary);
 
   // Table styling
@@ -270,6 +271,13 @@ html {
 
   // Checkbox styling
   --mat-checkbox-disabled-selected-checkmark-color: var(--km-surface-primary);
+
+  // Option styling (for select, autocomplete, etc.)
+  --mat-option-selected-state-label-text-color: #{map.get($colors-dark, primary)}; 
+  --mat-option-label-text-color: rgba(255, 255, 255, 0.85);
+  --mat-option-hover-state-layer-color: rgba(255, 255, 255, 0.08);
+  --mat-option-focus-state-layer-color: rgba(255, 255, 255, 0.08);
+  --mat-option-selected-state-layer-color: rgba(255, 255, 255, 0.08);
 }
 
 // Make icons and logos white with 85% opacity.
