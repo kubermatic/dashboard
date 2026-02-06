@@ -37,11 +37,11 @@ enum TabIndex {
 
 /** Instance type with parsed spec and computed display properties. */
 interface ParsedInstanceType extends KubeVirtInstanceType {
-  _id: string;
-  _cpuValue?: number;
-  _memoryValue?: string;
-  _gpuCount: number;
-  _hasGPU: boolean;
+  id: string;
+  cpuValue?: number;
+  memoryValue?: string;
+  gpuCount: number;
+  hasGPU: boolean;
 }
 
 @Component({
@@ -59,10 +59,6 @@ interface ParsedInstanceType extends KubeVirtInstanceType {
 })
 export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, ControlValueAccessor {
   readonly Column = Column;
-
-  get hasSelection(): boolean {
-    return !!this.selectedInstanceTypeId;
-  }
 
   get hasKubermaticGpu(): boolean {
     return this.hasKubermaticGpuTypes;
@@ -140,14 +136,8 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     this._onTouched();
   }
 
-  clearSelection(): void {
-    this.selectedInstanceTypeId = '';
-    this._onChange('');
-    this._onTouched();
-  }
-
   trackById(_: number, instanceType: ParsedInstanceType): string {
-    return instanceType._id;
+    return instanceType.id;
   }
 
   private _categorizeOptions(): void {
@@ -191,14 +181,14 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
 
         switch (category) {
           case KubeVirtInstanceTypeCategory.Kubermatic:
-            if (parsedSpec._hasGPU) {
+            if (parsedSpec.hasGPU) {
               this.kubermaticGpuOptions.push(parsedSpec);
             } else {
               this.kubermaticCpuOptions.push(parsedSpec);
             }
             break;
           case KubeVirtInstanceTypeCategory.Custom:
-            if (parsedSpec._hasGPU) {
+            if (parsedSpec.hasGPU) {
               this.customGpuOptions.push(parsedSpec);
             } else {
               this.customCpuOptions.push(parsedSpec);
@@ -231,11 +221,11 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
 
     return {
       ...instanceType,
-      _id: id,
-      _cpuValue: cpuValue,
-      _memoryValue: memoryValue,
-      _gpuCount: gpuCount,
-      _hasGPU: gpuCount > 0,
+      id: id,
+      cpuValue: cpuValue,
+      memoryValue: memoryValue,
+      gpuCount: gpuCount,
+      hasGPU: gpuCount > 0,
     };
   }
 

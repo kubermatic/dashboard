@@ -39,17 +39,6 @@ limitations under the License.
         <i matPrefix
            class="km-icon-mask km-icon-search"></i>
       </mat-form-field>
-      @if (hasSelection) {
-      <button mat-flat-button
-              type="button"
-              color="tertiary"
-              class="km-machine-type-selector-clear"
-              (click)="clearSelection()">
-        <i class="km-icon-mask km-icon-remove"
-           matButtonIcon></i>
-        <span>Clear</span>
-      </button>
-      }
     </div>
 
     <mat-tab-group class="km-machine-type-selector-tabs"
@@ -127,7 +116,7 @@ limitations under the License.
               class="km-header-cell p-5"></th>
           <td mat-cell
               *matCellDef="let element">
-            <mat-radio-button [value]="element._id">
+            <mat-radio-button [value]="element.id">
             </mat-radio-button>
           </td>
         </ng-container>
@@ -148,8 +137,8 @@ limitations under the License.
               class="km-header-cell p-20">vCPU</th>
           <td mat-cell
               *matCellDef="let element">
-            @if (element._cpuValue) {
-            {{element._cpuValue}}
+            @if (element.cpuValue) {
+            {{element.cpuValue}}
             } @else {
             <span class="km-text-muted">-</span>
             }
@@ -162,8 +151,8 @@ limitations under the License.
               class="km-header-cell p-20">Memory</th>
           <td mat-cell
               *matCellDef="let element">
-            @if (element._memoryValue) {
-            {{element._memoryValue}}
+            @if (element.memoryValue) {
+            {{element.memoryValue}}
             } @else {
             <span class="km-text-muted">-</span>
             }
@@ -176,7 +165,7 @@ limitations under the License.
               class="km-header-cell p-20">GPUs</th>
           <td mat-cell
               *matCellDef="let element">
-            {{element._gpuCount}}
+            {{element.gpuCount}}
           </td>
         </ng-container>
 
