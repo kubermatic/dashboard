@@ -17,3 +17,6 @@ export const quotaWidgetCollapsibleWidth = 1200;
 
 export const ANEXIA_DEPRECATED_MESSAGE =
   'Anexia has been deprecated in KKP 2.30 and is planned to be removed. Please plan your migration to a supported provider to ensure continued service.';
+
+export const KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE =
+  'Kubernetes Dashboard is no longer maintained. This feature is deprecated and may be removed in a future release.';

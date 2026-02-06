@@ -36,6 +36,18 @@ limitations under the License.
 </mat-card>
 }
 
+@if (adminSettings.enableDashboard) {
+<mat-card class="warning-card">
+  <mat-card-content>
+    <div fxLayout="row"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>{{ KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE }}</div>
+    </div>
+  </mat-card-content>
+</mat-card>
+}
+
 @if (isLoaded()) {
 <div fxLayout="column">
   <div fxFlex

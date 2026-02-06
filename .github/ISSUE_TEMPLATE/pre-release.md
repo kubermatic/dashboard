@@ -59,6 +59,7 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check SSH key management from cluster details
 - [ ] Check RBAC management from cluster details
 - [ ] Check addon management from cluster details
+<!-- Note: Kubernetes Dashboard is deprecated upstream; however, this feature remains supported and should be tested. -->
 - [ ] Check connection to Kubernetes Dashboard from cluster details
 
 ### External Clusters

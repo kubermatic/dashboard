@@ -166,6 +166,8 @@ limitations under the License.
             <span>Enable Kubernetes Dashboard</span>
             <div class="km-icon-info km-pointer"
                  matTooltip='Show/Hide "Open Dashboard" button on cluster details and allow/block Kubernetes Dashboard access through the API.'></div>
+            <i class="km-icon-warning km-pointer"
+               [matTooltip]="KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE"></i>
           </div>
           <mat-checkbox [(ngModel)]="settings.enableDashboard"
                         (change)="onSettingsChange()"
