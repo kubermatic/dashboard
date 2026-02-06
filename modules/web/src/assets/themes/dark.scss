@@ -203,7 +203,7 @@ html {
   // Card styling
   --mat-card-elevated-container-color: var(--km-surface-primary);
   --mat-card-outlined-container-color: var(--km-surface-primary);
-  --mat-card-outlined-outline-color: rgba(255, 255, 255, 0.12);
+  --mat-card-outlined-outline-color: rgb(255 255 255 / 12%);
   --mat-card-filled-container-color: var(--km-surface-primary);
 
   // Table styling
@@ -215,7 +215,7 @@ html {
   // Dialog styling
   --mat-dialog-container-color: var(--km-surface-dialog);
   --mat-dialog-subhead-color: var(--km-text-secondary);
-  --mat-dialog-supporting-text-color: rgba(255, 255, 255, 0.6);
+  --mat-dialog-supporting-text-color: rgb(255 255 255 / 60%);
 
   // Stepper styling
   --mat-stepper-container-color: var(--km-surface-primary);
@@ -274,10 +274,10 @@ html {
 
   // Option styling (for select, autocomplete, etc.)
   --mat-option-selected-state-label-text-color: #{map.get($colors-dark, primary)}; 
-  --mat-option-label-text-color: rgba(255, 255, 255, 0.85);
-  --mat-option-hover-state-layer-color: rgba(255, 255, 255, 0.08);
-  --mat-option-focus-state-layer-color: rgba(255, 255, 255, 0.08);
-  --mat-option-selected-state-layer-color: rgba(255, 255, 255, 0.08);
+  --mat-option-label-text-color: rgb(255 255 255 / 85%);
+  --mat-option-hover-state-layer-color: rgb(255 255 255 / 8%);
+  --mat-option-focus-state-layer-color: rgb(255 255 255 / 8%);
+  --mat-option-selected-state-layer-color: rgb(255 255 255 / 8%);
 }
 
 // Make icons and logos white with 85% opacity.

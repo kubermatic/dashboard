@@ -188,7 +188,7 @@ html {
   // Card styling
   --mat-card-elevated-container-color: var(--km-surface-primary);
   --mat-card-outlined-container-color: var(--km-surface-primary);
-  --mat-card-outlined-outline-color: rgba(0, 0, 0, 0.12);
+  --mat-card-outlined-outline-color: rgb(0 0 0 / 12%);
   --mat-card-filled-container-color: var(--km-surface-primary);
 
   // Table styling
@@ -260,7 +260,7 @@ html {
   // Option styling (for select, autocomplete, etc.)
   --mat-option-selected-state-label-text-color: #{map.get($colors-light, primary)}; // #00517d
   --mat-option-label-text-color: #{map.get($foreground, text)}; // #4d555c
-  --mat-option-hover-state-layer-color: rgba(0, 0, 0, 0.04);
-  --mat-option-focus-state-layer-color: rgba(0, 0, 0, 0.04);
-  --mat-option-selected-state-layer-color: rgba(0, 0, 0, 0.04);
+  --mat-option-hover-state-layer-color: rgb(0 0 0 / 4%);
+  --mat-option-focus-state-layer-color: rgb(0 0 0 / 4%);
+  --mat-option-selected-state-layer-color: rgb(0 0 0 / 4%);
 }
