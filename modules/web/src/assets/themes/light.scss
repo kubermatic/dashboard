@@ -95,6 +95,12 @@ $background: map.merge(
     app-bar: #fff,
   )
 );
+$background: map.merge(
+  $background,
+  (
+    dialog: #fff,
+  )
+);
 $theme-light: map.merge(
   $theme-light,
   (
@@ -165,3 +171,96 @@ $theme-light: map.merge(
 
 @include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);
+
+html {
+  // Base surface colors - define once, reference everywhere
+  --km-surface-primary: #{map.get($colors-light, option-background)}; // white
+  --km-surface-elevated: #{map.get($colors-light, option-background)}; // white
+  --km-surface-dialog: #{map.get($background, dialog)}; // white
+  --km-surface-toolbar: #{map.get($background, app-bar)}; // white
+  --km-color-primary: #{map.get($colors-light, primary)}; // #00517d
+  --km-text-primary: #{map.get($colors-light, swagger-ui-input-text-color)}; // #4d555c
+  --km-text-secondary: #{map.get($foreground, text)}; // #4d555c
+  --km-text-tertiary: #{map.get($foreground, secondary-text)}; // #7e868f
+  --km-divider: #{map.get($colors-light, search-outline)}; // #e0e3e5
+  --km-slide-toggle-handle: #{map.get($colors-light, slide-toggle-handle-color)}; // #fafafa
+
+  // Card styling
+  --mat-card-elevated-container-color: var(--km-surface-primary);
+  --mat-card-outlined-container-color: var(--km-surface-primary);
+  --mat-card-outlined-outline-color: rgb(0 0 0 / 12%);
+  --mat-card-filled-container-color: var(--km-surface-primary);
+
+  // Table styling
+  --mat-table-background-color: var(--km-surface-primary);
+  --mat-table-header-headline-color: var(--km-text-primary);
+  --mat-table-row-item-label-text-color: var(--km-text-primary);
+  --mat-table-row-item-outline-color: var(--km-divider);
+
+  // Dialog styling
+  --mat-dialog-container-color: var(--km-surface-dialog);
+  --mat-dialog-subhead-color: var(--km-text-secondary);
+  --mat-dialog-supporting-text-color: var(--km-text-tertiary);
+
+  // Stepper styling
+  --mat-stepper-container-color: var(--km-surface-primary);
+
+  // Pagination styling
+  --mat-paginator-container-background-color: var(--km-surface-primary);
+
+  // Select styling
+  --mat-select-panel-background-color: var(--km-surface-elevated);
+
+  // Autocomplete styling
+  --mat-autocomplete-background-color: var(--km-surface-elevated);
+
+  // Menu styling
+  --mat-menu-container-color: var(--km-surface-elevated);
+
+  // Toolbar styling
+  --mat-toolbar-container-background-color: var(--km-surface-toolbar);
+
+  // Bottom sheet styling
+  --mat-bottom-sheet-container-background-color: var(--km-surface-dialog);
+
+  // Expansion panel styling
+  --mat-expansion-container-background-color: var(--km-surface-primary);
+
+  // Sidenav styling
+  --mat-sidenav-container-background-color: var(--km-surface-primary);
+
+  // Tree styling
+  --mat-tree-container-background-color: var(--km-surface-primary);
+
+  // Datepicker styling
+  --mat-datepicker-calendar-container-background-color: var(--km-surface-elevated);
+
+  // Timepicker styling
+  --mat-timepicker-container-background-color: var(--km-surface-elevated);
+
+  // FAB styling
+  --mat-fab-container-color: var(--km-color-primary);
+  --mat-fab-small-container-color: var(--km-color-primary);
+
+  // Button styling
+  --mat-button-filled-container-color: var(--km-surface-primary);
+  --mat-button-tonal-container-color: var(--km-surface-primary);
+  --mat-button-protected-container-color: var(--km-surface-primary);
+
+  // Button toggle styling
+  --mat-button-toggle-background-color: var(--km-surface-primary);
+  --mat-button-toggle-disabled-state-background-color: var(--km-surface-primary);
+
+  // Slide toggle styling
+  --mat-slide-toggle-handle-surface-color: var(--km-slide-toggle-handle);
+
+  // Checkbox styling
+  --mat-checkbox-disabled-selected-checkmark-color: var(--km-surface-primary);
+
+  // Option styling (for select, autocomplete, etc.)
+  --mat-option-selected-state-label-text-color: #{map.get($colors-light, primary)}; // #00517d
+  --mat-option-label-text-color: #{map.get($foreground, text)}; // #4d555c
+  --mat-option-hover-state-layer-color: rgb(0 0 0 / 4%);
+  --mat-option-focus-state-layer-color: rgb(0 0 0 / 4%);
+  --mat-option-selected-state-layer-color: rgb(0 0 0 / 4%);
+}
