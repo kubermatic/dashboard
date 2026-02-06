@@ -338,44 +338,38 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   onConfigurationModeChange(mode: ConfigurationMode): void {
-    // Clear instance type when switching to custom mode
     this.form.get(Controls.InstanceType).setValue('');
-
     this.selectedConfigurationMode = mode;
 
-    if (mode === ConfigurationMode.CustomResources) {
-      // Switching to custom mode: enable CPU/Memory fields
-      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
-      this.form.get(Controls.CPUs).setValidators(Validators.required);
-      this.form.get(Controls.CPUs).enable();
-      this.form.get(Controls.Memory).setValue(this._defaultMemory);
-      this.form.get(Controls.Memory).setValidators(Validators.required);
-      this.form.get(Controls.Memory).enable();
+    const isCustomMode = mode === ConfigurationMode.CustomResources;
+    const preferenceControl = this.form.get(Controls.Preference);
 
-      // Disable preference when switching to custom mode
-      const preferenceControl = this.form.get(Controls.Preference);
+    // Configure CPU and Memory
+    const cpuControl = this.form.get(Controls.CPUs);
+    const memoryControl = this.form.get(Controls.Memory);
+
+    cpuControl.setValue(isCustomMode ? this._defaultCPUs : null);
+    cpuControl.setValidators(isCustomMode ? Validators.required : []);
+    isCustomMode ? cpuControl.enable() : cpuControl.disable();
+
+    memoryControl.setValue(isCustomMode ? this._defaultMemory : null);
+    memoryControl.setValidators(isCustomMode ? Validators.required : []);
+    isCustomMode ? memoryControl.enable() : memoryControl.disable();
+
+    // Configure Instance Type validation
+    this.form.get(Controls.InstanceType).setValidators(isCustomMode ? [] : Validators.required);
+    this.form.get(Controls.InstanceType).updateValueAndValidity();
+
+    // Configure Preference
+    if (isCustomMode) {
       if (preferenceControl.enabled) {
         preferenceControl.reset();
         preferenceControl.disable();
       }
     } else {
-      // Switching to predefined mode: disable custom values
-      this.form.get(Controls.CPUs).setValue(null);
-      this.form.get(Controls.CPUs).setValidators([]);
-      this.form.get(Controls.CPUs).disable();
-      this.form.get(Controls.Memory).setValue(null);
-      this.form.get(Controls.Memory).setValidators([]);
-      this.form.get(Controls.Memory).disable();
-
-      // Clear preference value when switching to instance type mode
-      this.form.get(Controls.Preference).setValue('');
-
-      // Re-enable preference if instance type is already selected
-      if (this.selectedInstanceType) {
-        const preferenceControl = this.form.get(Controls.Preference);
-        if (preferenceControl.disabled) {
-          preferenceControl.enable();
-        }
+      preferenceControl.setValue('');
+      if (this.selectedInstanceType && preferenceControl.disabled) {
+        preferenceControl.enable();
       }
     }
 
@@ -739,6 +733,9 @@ export class KubeVirtBasicNodeDataComponent
           this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
         }
 
+        // Set instance type as required in predefined mode
+        this.form.get(Controls.InstanceType).setValidators(Validators.required);
+
         // Disable custom CPU/Memory fields in predefined mode
         this.form.get(Controls.CPUs).setValue(null);
         this.form.get(Controls.CPUs).setValidators([]);
@@ -754,6 +751,9 @@ export class KubeVirtBasicNodeDataComponent
           ? this._initialData.vcpus.cores
           : parseInt(this._initialData.cpus) || this._defaultCPUs;
         const memoryValue = parseInt(this._initialData.memory) || this._defaultMemory;
+
+        // Instance type is not required in custom mode
+        this.form.get(Controls.InstanceType).setValidators([]);
 
         this.form.get(Controls.CPUs).setValue(cpuValue);
         this.form.get(Controls.CPUs).setValidators(Validators.required);
