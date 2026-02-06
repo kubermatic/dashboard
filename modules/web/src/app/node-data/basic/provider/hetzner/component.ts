@@ -32,11 +32,6 @@ enum Controls {
   Type = 'type',
 }
 
-enum GroupTypes {
-  Dedicated = 'Dedicated vCPU Instances',
-  Standard = 'Standard Instances',
-}
-
 enum TypeState {
   Ready = 'Node Type',
   Loading = 'Loading...',
@@ -70,9 +65,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   selectedType = '';
   typeLabel = TypeState.Empty;
+  isLoadingTypes = false;
 
-  get groups(): string[] {
-    return Object.values(GroupTypes);
+  get types(): HetznerTypes {
+    return this._types;
   }
 
   private get _typesObservable(): Observable<HetznerTypes> {
@@ -118,24 +114,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     this._unsubscribe.complete();
   }
 
-  getTypes(group: GroupTypes): Type[] {
-    const key = Object.keys(GroupTypes).find(key => GroupTypes[key] === group);
-    return this._types[key.toLowerCase()];
-  }
-
-  onTypeChange(type: string): void {
-    this._nodeDataService.nodeData.spec.cloud.hetzner.type = type;
-    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
-  }
-
-  typeDisplayName(name: string): string {
-    const type = [...this._types.dedicated, ...this._types.standard].find(type => type.name === name);
-    return type ? `${type.name} (${type.cores} vCPU, ${type.memory} GB RAM)` : '';
-  }
-
   private _onTypeLoading(): void {
     this._clearType();
     this.typeLabel = TypeState.Loading;
+    this.isLoadingTypes = true;
     this._cdr.detectChanges();
   }
 
@@ -143,6 +125,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     this.selectedType = '';
     this._types = HetznerTypes.newHetznerTypes();
     this.typeLabel = TypeState.Empty;
+    this.isLoadingTypes = false;
     this._cdr.detectChanges();
   }
 
@@ -157,14 +140,17 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     }
 
     this.typeLabel = this.selectedType ? TypeState.Ready : TypeState.Empty;
+    this.isLoadingTypes = false;
     this._cdr.detectChanges();
   }
 
   private _getNodeData(): NodeData {
+    const type = this.form.get(Controls.Type)?.value || '';
     return {
       spec: {
         cloud: {
           hetzner: {
+            type: type,
             // network has to be the same as specified in cluster spec
             network: this._clusterSpecService.cluster.spec.cloud.hetzner.network,
           } as HetznerNodeSpec,
