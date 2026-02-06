@@ -52,9 +52,6 @@ type ClusterSpec struct {
 	// namespace2: <node-selectors-labels>
 	PodNodeSelectorAdmissionPluginConfig map[string]string `json:"podNodeSelectorAdmissionPluginConfig,omitempty"`
 
-	// If active the EventRateLimit admission plugin is configured at the apiserver
-	UseEventRateLimitAdmissionPlugin bool `json:"useEventRateLimitAdmissionPlugin,omitempty"`
-
 	// If active the PodNodeSelector admission plugin is configured at the apiserver
 	UsePodNodeSelectorAdmissionPlugin bool `json:"usePodNodeSelectorAdmissionPlugin,omitempty"`
 

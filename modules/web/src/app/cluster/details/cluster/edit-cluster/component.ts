@@ -32,6 +32,7 @@ import {
   ClusterSpecPatch,
   ContainerRuntime,
   EventRateLimitConfig,
+  EventRateLimitConfigItem,
   ExposeStrategy,
   InternalClusterSpecAnnotations,
   NetworkRanges,
@@ -195,7 +196,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
-      [Controls.EventRateLimitConfig]: new FormControl(),
+      [Controls.EventRateLimitConfig]: new FormControl(this.eventRateLimitConfig),
       [Controls.Labels]: new FormControl(null),
       [Controls.Annotations]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
@@ -415,15 +416,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
-
-    if (this.cluster.spec.useEventRateLimitAdmissionPlugin) {
-      const value = AdmissionPluginUtils.updateSelectedPluginArray(
-        this.form.get(Controls.AdmissionPlugins),
-        AdmissionPlugin.EventRateLimit
-      );
-      this.form.get(Controls.AdmissionPlugins).setValue(value);
-    }
-
     this.checkEnforcedFieldsState();
   }
 
@@ -548,7 +540,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
-        useEventRateLimitAdmissionPlugin: null,
         eventRateLimitConfig: null,
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
@@ -557,9 +548,28 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     } as ClusterPatch;
 
     if (this.isPluginEnabled(this.admissionPlugin.EventRateLimit)) {
-      patch.spec.eventRateLimitConfig = {
-        namespace: this.form.get(Controls.EventRateLimitConfig).value,
+      // Initialize with null values for all limit types to ensure the PATCH request
+      // explicitly clears any existing configuration not present in the current form.
+      const eventRateLimitConfig: EventRateLimitConfig = {
+        namespace: null,
+        server: null,
+        user: null,
+        sourceAndObject: null,
       };
+      const eventRateLimitConfigItems: EventRateLimitConfigItem[] = this.form.get(Controls.EventRateLimitConfig).value
+        ?.eventRateLimitConfig;
+      if (eventRateLimitConfigItems) {
+        eventRateLimitConfigItems.forEach(item => {
+          if (item.limitType) {
+            eventRateLimitConfig[item.limitType] = {
+              qps: item.qps,
+              burst: item.burst,
+              cacheSize: item.cacheSize,
+            };
+          }
+        });
+      }
+      patch.spec.eventRateLimitConfig = eventRateLimitConfig;
     }
 
     if (this.isExposeStrategyLoadBalancer()) {

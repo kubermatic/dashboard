@@ -123,6 +123,10 @@ export class ClusterSummaryComponent implements OnInit {
     );
   }
 
+  get eventRateLimitTypes(): string[] {
+    return Object.keys(this.cluster.spec.eventRateLimitConfig || {});
+  }
+
   private get isDualStackNetworkSelected(): boolean {
     return Cluster.isDualStackNetworkSelected(this.cluster);
   }

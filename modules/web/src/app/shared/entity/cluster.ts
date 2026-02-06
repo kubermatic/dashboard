@@ -355,7 +355,6 @@ export class ClusterSpec {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
-  useEventRateLimitAdmissionPlugin?: boolean;
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
@@ -379,13 +378,17 @@ export class KubeLB {
 }
 
 export class EventRateLimitConfig {
-  namespace: EventRateLimitConfigItem;
+  namespace?: EventRateLimitConfigItem;
+  server?: EventRateLimitConfigItem;
+  user?: EventRateLimitConfigItem;
+  sourceAndObject?: EventRateLimitConfigItem;
 }
 
 export class EventRateLimitConfigItem {
   qps: number;
   burst: number;
   cacheSize: number;
+  limitType: string;
 }
 
 export class ClusterNetwork {
@@ -562,7 +565,6 @@ export class ClusterSpecPatch {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
-  useEventRateLimitAdmissionPlugin?: boolean;
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;

@@ -41,6 +41,7 @@ limitations under the License.
   <mat-hint>{{hint}}</mat-hint>
   }
 </mat-form-field>
+@if (!verticalButton) {
 <button mat-icon-button
         class="stepper-button left"
         [disabled]="disabled"
@@ -53,3 +54,26 @@ limitations under the License.
         (click)="onIncrease()">
   +
 </button>
+
+} @else {
+<div fxLayout="column"
+     fxLayoutAlign="start center"
+     class="vertical-stepper-wrapper">
+
+  <button mat-icon-button
+          fxFlex="50"
+          class="stepper-button vertical-top"
+          [disabled]="disabled"
+          (click)="onIncrease()">
+    +
+  </button>
+
+  <button mat-icon-button
+          fxFlex="50"
+          class="stepper-button vertical-bottom"
+          [disabled]="disabled"
+          (click)="onDecrease()">
+    −
+  </button>
+</div>
+}

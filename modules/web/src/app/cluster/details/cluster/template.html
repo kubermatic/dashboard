@@ -452,22 +452,25 @@ limitations under the License.
             <km-property-boolean [label]="getAdmissionPluginName(plugin)"
                                  [value]="isAdmissionPluginEnabled(plugin)" />
             }
-            @if (cluster?.spec?.eventRateLimitConfig?.namespace) {
+            @if (eventRateLimitTypes?.length) {
             <km-property>
               <div key>Event Rate Limit Config</div>
+              @for (event of eventRateLimitTypes; track event) {
               <div value
                    fxLayout="row wrap"
-                   fxLayoutGap="10px">
-                <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
-                <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
+                   fxLayoutGap="10px"
+                   class="event-type">
+                <div><span class="km-text-muted">Limit Type:</span> {{event}}</div>
+                <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig[event].qps}}</div>
                 <div>
-                  <span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}
+                  <span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig[event].burst}}
                 </div>
                 <div>
                   <span class="km-text-muted">Cache Size:</span>
-                  {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
+                  {{cluster.spec.eventRateLimitConfig[event].cacheSize}}
                 </div>
               </div>
+              }
             </km-property>
             }
             @if (cluster?.spec?.podNodeSelectorAdmissionPluginConfig) {
