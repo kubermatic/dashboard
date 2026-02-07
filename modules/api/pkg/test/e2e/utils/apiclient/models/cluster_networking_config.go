@@ -46,7 +46,7 @@ type ClusterNetworkingConfig struct {
 	// Defaults to true.
 	NodeLocalDNSCacheEnabled bool `json:"nodeLocalDNSCacheEnabled,omitempty"`
 
-	// ProxyMode defines the kube-proxy mode ("ipvs" / "iptables" / "ebpf").
+	// ProxyMode defines the kube-proxy mode ("ipvs" / "iptables" / "ebpf" / "nftables").
 	// Defaults to "ipvs". "ebpf" disables kube-proxy and requires CNI support.
 	ProxyMode string `json:"proxyMode,omitempty"`
 

@@ -46,6 +46,7 @@ type Routing struct {
 	seedsGetter                                    provider.SeedsGetter
 	seedsClientGetter                              provider.SeedClientGetter
 	kubermaticConfigGetter                         provider.KubermaticConfigurationGetter
+	userClusterConfigProvider                      provider.UserClusterConfigProvider
 	sshKeyProvider                                 provider.SSHKeyProvider
 	privilegedSSHKeyProvider                       provider.PrivilegedSSHKeyProvider
 	userProvider                                   provider.UserProvider
@@ -114,6 +115,7 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		seedsGetter:                                    routingParams.SeedsGetter,
 		seedsClientGetter:                              routingParams.SeedsClientGetter,
 		kubermaticConfigGetter:                         routingParams.KubermaticConfigurationGetter,
+		userClusterConfigProvider:                      routingParams.UserClusterConfigProvider,
 		clusterProviderGetter:                          routingParams.ClusterProviderGetter,
 		addonProviderGetter:                            routingParams.AddonProviderGetter,
 		addonConfigProvider:                            routingParams.AddonConfigProvider,

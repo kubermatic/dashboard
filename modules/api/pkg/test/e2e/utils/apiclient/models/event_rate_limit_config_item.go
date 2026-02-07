@@ -17,13 +17,23 @@ import (
 // swagger:model EventRateLimitConfigItem
 type EventRateLimitConfigItem struct {
 
-	// burst
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:default=100
+	//
+	// Burst is the maximum burst size for this limit type.
 	Burst int32 `json:"burst,omitempty"`
 
-	// cache size
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:default=4096
+	// +optional
+	//
+	// CacheSize is the size of the LRU cache for this limit type.
 	CacheSize int32 `json:"cacheSize,omitempty"`
 
-	// QPS
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:default=50
+	//
+	// QPS is the queries per second allowed for this limit type.
 	QPS int32 `json:"qps,omitempty"`
 }
 

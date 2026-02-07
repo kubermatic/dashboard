@@ -83,6 +83,12 @@ type OpenstackCloudSpec struct {
 	// If NodePortsAllowedIPRange nor NodePortsAllowedIPRanges is set, the node port range can be accessed from anywhere.
 	NodePortsAllowedIPRange string `json:"nodePortsAllowedIPRange,omitempty"`
 
+	// NodeVolumeAttachLimit defines the maximum number of volumes that can be
+	// attached to a single node. If set, this value overrides the default
+	// OpenStack volume attachment limit.
+	// +optional
+	NodeVolumeAttachLimit uint64 `json:"nodeVolumeAttachLimit,omitempty"`
+
 	// password
 	Password string `json:"password,omitempty"`
 
