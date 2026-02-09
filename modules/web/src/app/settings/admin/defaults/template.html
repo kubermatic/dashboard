@@ -515,12 +515,12 @@ limitations under the License.
           <div fxFlexAlign=" center"
                fxLayout="column">
             <div>
-              <mat-checkbox [ngModel]="eventRateLimitConfig.enabled"
-                            [disabled]="eventRateLimitConfig.enforced"
+              <mat-checkbox [ngModel]="eventRateLimitConfig?.enabled"
+                            [disabled]="eventRateLimitConfig?.enforced"
                             (change)="onEventRateLimitConfigChange(eventRateConfigActions.Enabled, $event.checked)"
                             fxFlexAlign=" center">Default
               </mat-checkbox>
-              <mat-checkbox [ngModel]="eventRateLimitConfig.enforced"
+              <mat-checkbox [ngModel]="eventRateLimitConfig?.enforced"
                             (change)="onEventRateLimitConfigChange(eventRateConfigActions.Enforced, $event.checked)"
                             fxFlexAlign=" center">Enforce
               </mat-checkbox>

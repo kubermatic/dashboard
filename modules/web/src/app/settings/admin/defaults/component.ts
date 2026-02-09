@@ -19,11 +19,12 @@ import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
 import {
   EventRateLimitConfig,
   EventRateLimitConfigItem,
-  EventRateLimitPluginConfiguration,
+  GlobalEventRateLimitPluginConfiguration,
 } from '@app/shared/entity/cluster';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {BrandingService} from '@core/services/branding';
+import {EMPTY_EVENT_RATE_LIMIT_CONFIG} from '@app/shared/utils/admission-plugin';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -57,8 +58,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   isOpenIDAuthPluginEnabled = true;
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
   editionVersion: string = getEditionVersion();
-  eventRateLimitConfig: EventRateLimitPluginConfiguration;
-  eventRateLimitConfigSubject = new Subject<EventRateLimitPluginConfiguration>();
+  eventRateLimitConfig: GlobalEventRateLimitPluginConfiguration;
+  eventRateLimitConfigSubject = new Subject<GlobalEventRateLimitPluginConfiguration>();
   eventRateLimitConfigFormControl: FormControl = new FormControl();
   disableEventRateLimitConfigForm = true;
   isEventRateLimitUpdating = false;
@@ -129,17 +130,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
           this.eventRateLimitConfig = config.eventRateLimit;
           this.disableEventRateLimitConfigForm = !this.eventRateLimitConfig.enabled;
         } else {
-          this.eventRateLimitConfig = {
-            enabled: false,
-            enforced: false,
-            defaultConfig: {},
-          };
+          this.eventRateLimitConfig = EMPTY_EVENT_RATE_LIMIT_CONFIG;
         }
         this.eventRateLimitConfigFormControl.setValue(this.eventRateLimitConfig.defaultConfig, {emitEvent: false});
       });
 
     this.eventRateLimitConfigFormControl.valueChanges
       .pipe(takeUntil(this._unsubscribe))
+      .pipe(debounceTime(this._debounceTime))
       .subscribe((config: {eventRateLimitConfig: EventRateLimitConfigItem[]}) => {
         const newConfig: EventRateLimitConfig = {};
         let inValidConfig = false;
@@ -155,7 +153,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
           }
         });
 
-        if (!inValidConfig && !_.isEqual(newConfig, this.eventRateLimitConfig.defaultConfig)) {
+        if (!inValidConfig && !_.isEqual(newConfig, this.eventRateLimitConfig?.defaultConfig || {})) {
           this.onEventRateLimitConfigChange(EventRateConfigActions.DefaultConfig, newConfig);
         }
       });
@@ -288,7 +286,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   onEventRateLimitConfigChange(action: string, config: EventRateLimitConfig | boolean): void {
-    let updatePayload = _.cloneDeep(this.eventRateLimitConfig.defaultConfig);
+    let updatePayload = _.cloneDeep(this.eventRateLimitConfig?.defaultConfig || {});
     switch (action) {
       case EventRateConfigActions.Enabled:
         if (config) {

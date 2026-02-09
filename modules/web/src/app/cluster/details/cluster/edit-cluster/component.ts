@@ -16,6 +16,7 @@ import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/c
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS, NodeProvider} from '@app/shared/model/NodeProviderConstants';
@@ -109,6 +110,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   annotations: Record<string, string>;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
+  enforcedEventRateLimits: string[] = [];
   admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
@@ -159,7 +161,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _cdr: ChangeDetectorRef,
-    readonly branding: BrandingService
+    readonly branding: BrandingService,
+    private readonly _userClusterConfigService: UserClusterConfigService
   ) {}
 
   ngOnInit(): void {
@@ -168,6 +171,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(
       this.cluster.spec.podNodeSelectorAdmissionPluginConfig
     ) as Record<string, string>;
+
+    this._userClusterConfigService
+      .getAdmissionPluginsConfiguration()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(config => {
+        if (config.eventRateLimit.enforced) {
+          this.enforcedEventRateLimits = Object.keys(config.eventRateLimit.defaultConfig);
+        }
+      });
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
     this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks;
 

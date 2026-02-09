@@ -72,6 +72,7 @@ const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;
   @Input() disableAll = false;
+  @Input() isEnforcedByAdmin = false;
 
   form: FormGroup;
   readonly Controls = Controls;
@@ -95,7 +96,9 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.EventRateLimitConfig]: this._builder.array([])});
-
+    if (this.isEnforcedByAdmin) {
+      this.disableAll = true;
+    }
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._refreshChosenTypes();
       this.addTypeIfNeeded();
@@ -103,6 +106,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   }
 
   ngOnDestroy(): void {
+    this.form.reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
@@ -202,8 +206,8 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
     return this.chosenEventRateLimitTypes.includes(type) && control.get(Controls.LimitType).value !== type;
   }
 
-  blockDeletion(index: number): boolean {
-    return !this.isRequired(index) || this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS;
+  blockDeletion(): boolean {
+    return this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS || this.disableAll;
   }
 
   private _refreshChosenTypes(): void {

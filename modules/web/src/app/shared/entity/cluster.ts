@@ -391,14 +391,14 @@ export class EventRateLimitConfigItem {
   limitType: string;
 }
 
-export interface EventRateLimitPluginConfiguration {
+export interface GlobalEventRateLimitPluginConfiguration {
   enabled?: boolean;
   enforced?: boolean;
   defaultConfig?: EventRateLimitConfig;
 }
 
-export interface AdmissionPluginsConfiguration {
-  eventRateLimit?: EventRateLimitPluginConfiguration;
+export interface GlobalAdmissionPluginsConfiguration {
+  eventRateLimit?: GlobalEventRateLimitPluginConfiguration;
 }
 
 export class ClusterNetwork {

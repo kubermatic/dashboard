@@ -13,11 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="event-rate-limit-config"
-     title="Event Rate Limit Configuration">
+<div class="event-rate-limit-config">
   <mat-card-header class="km-no-padding">
     <mat-card-title>
       Event Rate Limit Configuration
+      @if (isEnforcedByAdmin) {
+      <i class="km-icon-info km-pointer"
+         matTooltip="Event rate limit configurations are enforced by the admin."></i>
+      }
     </mat-card-title>
   </mat-card-header>
 
@@ -50,7 +53,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.QPS"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i) || disableAll"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="QPS"
@@ -60,7 +63,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.Burst"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i) || disableAll"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Burst"
@@ -70,7 +73,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.CacheSize"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i) || disableAll"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Cache Size"

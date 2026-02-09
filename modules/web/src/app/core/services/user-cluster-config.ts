@@ -17,7 +17,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
-import {AdmissionPluginsConfiguration} from '@shared/entity/cluster';
+import {GlobalAdmissionPluginsConfiguration} from '@shared/entity/cluster';
 
 @Injectable({
   providedIn: 'root',
@@ -28,13 +28,15 @@ export class UserClusterConfigService {
 
   constructor(private readonly _httpClient: HttpClient) {}
 
-  getAdmissionPluginsConfiguration(): Observable<AdmissionPluginsConfiguration> {
+  getAdmissionPluginsConfiguration(): Observable<GlobalAdmissionPluginsConfiguration> {
     return this._httpClient
-      .get<AdmissionPluginsConfiguration>(this._admissionPluginsUrl)
-      .pipe(catchError(() => of({} as AdmissionPluginsConfiguration)));
+      .get<GlobalAdmissionPluginsConfiguration>(this._admissionPluginsUrl)
+      .pipe(catchError(() => of({} as GlobalAdmissionPluginsConfiguration)));
   }
 
-  patchAdmissionPluginsConfiguration(config: AdmissionPluginsConfiguration): Observable<AdmissionPluginsConfiguration> {
-    return this._httpClient.patch<AdmissionPluginsConfiguration>(this._admissionPluginsUrl, config);
+  patchAdmissionPluginsConfiguration(
+    config: GlobalAdmissionPluginsConfiguration
+  ): Observable<GlobalAdmissionPluginsConfiguration> {
+    return this._httpClient.patch<GlobalAdmissionPluginsConfiguration>(this._admissionPluginsUrl, config);
   }
 }

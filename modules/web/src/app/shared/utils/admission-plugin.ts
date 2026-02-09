@@ -14,12 +14,19 @@
 
 import {AbstractControl} from '@angular/forms';
 import {Datacenter} from '../entity/datacenter';
+import {GlobalEventRateLimitPluginConfiguration} from '../entity/cluster';
 
 export enum AdmissionPlugin {
   PodSecurityPolicy = 'PodSecurityPolicy',
   PodNodeSelector = 'PodNodeSelector',
   EventRateLimit = 'EventRateLimit',
 }
+
+export const EMPTY_EVENT_RATE_LIMIT_CONFIG: GlobalEventRateLimitPluginConfiguration = {
+  enabled: false,
+  enforced: false,
+  defaultConfig: {},
+};
 
 export class AdmissionPluginUtils {
   static getPluginName(name: string): string {
