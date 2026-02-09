@@ -17,25 +17,18 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
 
-  <div fxLayout="row"
-       fxLayoutGap="10px">
-    <km-combobox #flavorCombobox
-                 fxFlex
-                 [required]="true"
-                 [grouped]="false"
-                 [selected]="selectedFlavor"
-                 [valueFormatter]="flavorDisplayName.bind(this)"
-                 [options]="flavors"
-                 [formControlName]="Controls.Flavor"
-                 (changed)="onFlavorChange($event)"
-                 [label]="flavorsLabel"
-                 inputLabel="Select flavor..."
-                 filterBy="slug">
-      <div *option="let flavor">
-        {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
-      </div>
-    </km-combobox>
+  <km-openstack-machine-type-selector
+    [options]="flavors"
+    [selectedMachineType]="selectedFlavor"
+    [formControlName]="Controls.Flavor"
+    [label]="'Flavor'"
+    [required]="true"
+    [isLoading]="isLoadingFlavors">
+  </km-openstack-machine-type-selector>
 
+  <div fxLayout="row"
+       fxLayoutGap="10px"
+       fxLayoutAlign="start center">
     <mat-checkbox [formControlName]="Controls.UseCustomDisk"
                   class="custom-disk-size"
                   kmValueChangedIndicator>
