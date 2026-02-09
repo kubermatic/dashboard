@@ -378,17 +378,6 @@ func isValidVM(sku armcompute.ResourceSKU, location string) bool {
 	return true
 }
 
-func safeInt(s *string) int32 {
-	if s == nil {
-		return 0
-	}
-	val, err := strconv.Atoi(*s)
-	if err != nil {
-		return 0
-	}
-	return int32(val)
-}
-
 func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string) (interface{}, error) {
 	sizesClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
 	if err != nil {
@@ -409,26 +398,31 @@ func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilt
 			if sku.Name != nil {
 				vm.Name = *sku.Name
 				for _, cap := range sku.Capabilities {
-					if *cap.Name == "vCPUs" {
-						vm.NumberOfCores = safeInt(cap.Value)
+					if cap.Name == nil || cap.Value == nil {
+						continue
 					}
-					if *cap.Name == "GPUs" {
-						vm.NumberOfGPUs = safeInt(cap.Value)
+
+					val, err := strconv.ParseFloat(*cap.Value, 64)
+					if err != nil {
+						if *cap.Name == "AcceleratedNetworkingEnabled" && *cap.Value == "True" {
+							vm.AcceleratedNetworkingEnabled = true
+						}
+						continue
 					}
-					if *cap.Name == "OSVhdSizeMB" {
-						vm.OsDiskSizeInMB = safeInt(cap.Value)
-					}
-					if *cap.Name == "MaxResourceVolumeMB" {
-						vm.ResourceDiskSizeInMB = safeInt(cap.Value)
-					}
-					if *cap.Name == "MemoryGB" {
-						vm.MemoryInMB = safeInt(cap.Value) * 1024
-					}
-					if *cap.Name == "MaxDataDiskCount" {
-						vm.MaxDataDiskCount = safeInt(cap.Value)
-					}
-					if *cap.Name == "AcceleratedNetworkingEnabled" && *cap.Value == "True" {
-						vm.AcceleratedNetworkingEnabled = true
+
+					switch *cap.Name {
+					case "vCPUs":
+						vm.NumberOfCores = int32(val)
+					case "GPUs":
+						vm.NumberOfGPUs = int32(val)
+					case "OSVhdSizeMB":
+						vm.OsDiskSizeInMB = int32(val)
+					case "MaxResourceVolumeMB":
+						vm.ResourceDiskSizeInMB = int32(val)
+					case "MemoryGB":
+						vm.MemoryInMB = int32(val * 1024)
+					case "MaxDataDiskCount":
+						vm.MaxDataDiskCount = int32(val)
 					}
 				}
 				validSKUList = append(validSKUList, vm)

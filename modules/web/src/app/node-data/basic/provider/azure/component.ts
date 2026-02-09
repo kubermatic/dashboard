@@ -38,7 +38,6 @@ import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ComboboxControls} from '@shared/components/combobox/component';
 
 enum Controls {
   Size = 'size',
@@ -48,7 +47,7 @@ enum Controls {
   DataDiskSize = 'dataDiskSize',
 }
 
-enum SizeState {
+export enum SizeState {
   Ready = 'Node Size',
   Loading = 'Loading sizes...',
   Empty = 'No Sizes Available',
@@ -84,6 +83,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   private readonly _defaultDataDiskSize = 0;
 
   readonly Controls = Controls;
+  readonly SizeState = SizeState;
 
   allSizes: AzureSizes[] = [];
   currentSizes: AzureSizes[] = [];
@@ -162,6 +162,16 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setZones.bind(this));
 
+    this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(size => {
+        this.selectedSize = size || '';
+        if (this.selectedSize) {
+          this.onSizeChange(this.selectedSize);
+        }
+      });
+
     merge(
       this.form.get(Controls.ImageID).valueChanges,
       this.form.get(Controls.OSDiskSize).valueChanges,
@@ -212,16 +222,6 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       return 'Please select node size first.';
     }
     return '';
-  }
-
-  sizeDisplayName(sizeName: string): string {
-    const size = this.currentSizes.find(size => size.name === sizeName);
-    return size ? this.getSizeDisplayName(size) : sizeName;
-  }
-
-  getSizeDisplayName(s: AzureSizes): string {
-    const gpu = s.numberOfGPUs > 0 ? ` ${s.numberOfGPUs} GPU,` : '';
-    return `${s.name} (${s.numberOfCores} vCPU,${gpu} ${s.memoryInMB} MB RAM)`;
   }
 
   defaultOSDiskSize(): number {
@@ -346,7 +346,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     selectedSize.resourceDiskSizeInMB = this.form.get(Controls.DataDiskSize).value * memoryBase;
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
-      diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],
+      diskSizeGB: this.form.get(Controls.OSDiskSize).value,
       azureSize: {
         ...selectedSize,
       } as AzureSizes,
