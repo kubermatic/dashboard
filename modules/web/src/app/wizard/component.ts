@@ -167,6 +167,14 @@ export class WizardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe));
   }
 
+onCancel(): void {
+  this._wizard.reset();
+
+  const tail = this._cancelRouteByMode.get(this.wizardMode) ?? 'clusters';
+
+  this._router.navigate([`/projects/${this.project.id}/${tail}`]);
+}
+
   onNext(cluster: Cluster): void {
     this.creating = true;
     this._notificationService.success(`Created the ${cluster.name} cluster`);
@@ -265,6 +273,11 @@ export class WizardComponent implements OnInit, OnDestroy {
         return 'Create Cluster';
     }
   }
+
+  private readonly _cancelRouteByMode = new Map<WizardMode, string>([
+    [WizardMode.CreateClusterTemplate, 'clustertemplates'],
+    [WizardMode.EditClusterTemplate, 'clustertemplates']
+  ]);
 
   private _getCreateClusterModel(
     cluster: Cluster,
