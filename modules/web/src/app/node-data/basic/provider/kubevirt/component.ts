@@ -74,6 +74,11 @@ enum Controls {
   Subnet = 'subnet',
 }
 
+enum ConfigurationMode {
+  PredefinedInstanceType = 'predefined',
+  CustomResources = 'custom',
+}
+
 enum InstanceTypeState {
   Ready = 'Instance Type',
   Loading = 'Loading...',
@@ -141,13 +146,14 @@ export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator
   implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit
 {
-  @ViewChild('instanceTypeCombobox') private _instanceTypeCombobox: FilteredComboboxComponent;
   @ViewChild('preferenceCombobox') private _preferenceCombobox: FilteredComboboxComponent;
   @ViewChild('storageClassCombobox') private _storageClassCombobox: FilteredComboboxComponent;
   @ViewChild('osImageCombobox') private _osImageCombobox: FilteredComboboxComponent;
   @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
+  readonly ConfigurationMode = ConfigurationMode;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
+  selectedConfigurationMode = ConfigurationMode.CustomResources;
   private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2000;
@@ -160,6 +166,8 @@ export class KubeVirtBasicNodeDataComponent
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   selectedInstanceType: KubeVirtInstanceType;
   instanceTypeLabel = InstanceTypeState.Empty;
+  instanceTypesForSelector: KubeVirtInstanceTypeList;
+  instanceTypesLoading = false;
   selectedPreference: KubeVirtPreference;
   preferenceLabel = PreferenceState.Empty;
   osImageDropdownOptions: OSImageDropdownOption[];
@@ -222,15 +230,9 @@ export class KubeVirtBasicNodeDataComponent
     this.form
       .get(Controls.InstanceType)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .pipe(map(value => value[ComboboxControls.Select]))
       .subscribe(value => {
-        const preferenceControl = this.form.get(Controls.Preference);
-        if (value && preferenceControl.disabled) {
-          preferenceControl.enable();
-        } else if (!value && preferenceControl.enabled) {
-          preferenceControl.reset();
-          preferenceControl.disable();
-        }
+        // Call onInstanceTypeChange to handle all instance type logic
+        this.onInstanceTypeChange(value);
       });
 
     this.form
@@ -292,10 +294,6 @@ export class KubeVirtBasicNodeDataComponent
     this._unsubscribe.complete();
   }
 
-  get instanceTypeCategories(): string[] {
-    return Object.keys(this._instanceTypes?.instancetypes || {});
-  }
-
   get preferenceCategories(): string[] {
     return Object.keys(this._preferences?.preferences || {});
   }
@@ -306,18 +304,6 @@ export class KubeVirtBasicNodeDataComponent
 
   get isSubnetsRequired(): boolean {
     return !!this._clusterSpecService.cluster?.spec?.cloud?.kubevirt?.vpcName || this.subnets?.length > 0;
-  }
-
-  getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
-    return this._instanceTypes?.instancetypes?.[group] || [];
-  }
-
-  instanceTypeDisplayName(instanceTypeId: string): string {
-    if (instanceTypeId) {
-      // only display name of selected instance type
-      return instanceTypeId.substring(instanceTypeId.indexOf(this._instanceTypeIDSeparator) + 1);
-    }
-    return instanceTypeId;
   }
 
   getPreferenceOptions(group: string): KubeVirtPreference[] {
@@ -339,16 +325,55 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   preferenceDisplayName(preferenceId: string): string {
-    if (preferenceId) {
+    if (preferenceId && typeof preferenceId === 'string') {
       // only display name of selected preference
       return preferenceId.substring(preferenceId.indexOf(this._instanceTypeIDSeparator) + 1);
     }
-    return preferenceId;
+    return preferenceId || '';
   }
 
   osImageDisplayName(osImageLink: string): string {
     const osImage = this.osImageDropdownOptions?.find(image => image.link === osImageLink);
     return osImage ? `${osImage.version} - ${osImage.link}` : osImageLink;
+  }
+
+  onConfigurationModeChange(mode: ConfigurationMode): void {
+    this.form.get(Controls.InstanceType).setValue('');
+    this.selectedConfigurationMode = mode;
+
+    const isCustomMode = mode === ConfigurationMode.CustomResources;
+    const preferenceControl = this.form.get(Controls.Preference);
+
+    // Configure CPU and Memory
+    const cpuControl = this.form.get(Controls.CPUs);
+    const memoryControl = this.form.get(Controls.Memory);
+
+    cpuControl.setValue(isCustomMode ? this._defaultCPUs : null);
+    cpuControl.setValidators(isCustomMode ? Validators.required : []);
+    isCustomMode ? cpuControl.enable() : cpuControl.disable();
+
+    memoryControl.setValue(isCustomMode ? this._defaultMemory : null);
+    memoryControl.setValidators(isCustomMode ? Validators.required : []);
+    isCustomMode ? memoryControl.enable() : memoryControl.disable();
+
+    // Configure Instance Type validation
+    this.form.get(Controls.InstanceType).setValidators(isCustomMode ? [] : Validators.required);
+    this.form.get(Controls.InstanceType).updateValueAndValidity();
+
+    // Configure Preference
+    if (isCustomMode) {
+      if (preferenceControl.enabled) {
+        preferenceControl.reset();
+        preferenceControl.disable();
+      }
+    } else {
+      preferenceControl.setValue('');
+      if (this.selectedInstanceType && preferenceControl.disabled) {
+        preferenceControl.enable();
+      }
+    }
+
+    this._cdr.detectChanges();
   }
 
   onInstanceTypeChange(instanceTypeId: string): void {
@@ -359,12 +384,13 @@ export class KubeVirtBasicNodeDataComponent
 
       this.selectedInstanceTypeCpus = null;
       this.selectedInstanceTypeMemory = null;
-      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
-      this.form.get(Controls.CPUs).setValidators(Validators.required);
-      this.form.get(Controls.CPUs).enable();
-      this.form.get(Controls.Memory).setValue(this._defaultMemory);
-      this.form.get(Controls.Memory).setValidators(Validators.required);
-      this.form.get(Controls.Memory).enable();
+
+      // Disable preference when no instance type selected
+      const preferenceControl = this.form.get(Controls.Preference);
+      if (preferenceControl.enabled) {
+        preferenceControl.reset();
+        preferenceControl.disable();
+      }
     } else if (this._instanceTypes) {
       const tokens = instanceTypeId.split(this._instanceTypeIDSeparator);
       const category = tokens.shift();
@@ -397,23 +423,26 @@ export class KubeVirtBasicNodeDataComponent
         // eslint-disable-next-line no-empty
       } catch (_) {}
 
-      this.form.get(Controls.CPUs).setValue(null);
-      this.form.get(Controls.CPUs).setValidators([]);
-      this.form.get(Controls.CPUs).disable();
-      this.form.get(Controls.Memory).setValue(null);
-      this.form.get(Controls.Memory).setValidators([]);
-      this.form.get(Controls.Memory).disable();
+      // Enable preference when instance type is selected
+      const preferenceControl = this.form.get(Controls.Preference);
+      if (preferenceControl.disabled && this.selectedConfigurationMode === ConfigurationMode.PredefinedInstanceType) {
+        preferenceControl.enable();
+      }
 
-      const payload = this._getQuotaCalculationPayload();
-      if (payload) {
-        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      // Trigger quota calculation
+      if (this.isEnterpriseEdition) {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       }
     }
     this.form.updateValueAndValidity();
   }
 
   onPreferenceChange(preferenceId: string): void {
-    if (!preferenceId) {
+    if (!preferenceId || typeof preferenceId !== 'string') {
+      this.form.get(Controls.Preference).setValue('', {emitEvent: false});
       this.selectedPreference = null;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.preference = null;
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
@@ -508,43 +537,36 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private get _instanceTypesObservable(): Observable<KubeVirtInstanceTypeList> {
-    return this._nodeDataService.kubeVirt
-      .instanceTypes(this._clearInstanceType.bind(this), this._onInstanceTypeLoading.bind(this))
-      .pipe(
-        map(instanceTypes => {
-          if (instanceTypes?.instancetypes) {
-            Object.keys(instanceTypes.instancetypes).forEach(category => {
-              instanceTypes.instancetypes[category] = instanceTypes.instancetypes[category].map(
-                (instanceType: KubeVirtInstanceType) => ({
-                  _id: `${category}${this._instanceTypeIDSeparator}${instanceType.name}`,
-                  ...instanceType,
-                })
-              );
-            });
-          }
-          return instanceTypes;
-        })
-      );
+    return this._nodeDataService.kubeVirt.instanceTypes(
+      this._clearInstanceType.bind(this),
+      this._onInstanceTypeLoading.bind(this)
+    );
   }
 
   private _clearInstanceType(): void {
     this._instanceTypes = null;
     this.selectedInstanceType = null;
     this.instanceTypeLabel = InstanceTypeState.Empty;
-    this._instanceTypeCombobox.reset();
+    this.instanceTypesForSelector = null;
+    this.instanceTypesLoading = false;
+    this.form.get(Controls.InstanceType).setValue('');
     this._cdr.detectChanges();
   }
 
   private _onInstanceTypeLoading(): void {
     this.instanceTypeLabel = InstanceTypeState.Loading;
+    this.instanceTypesLoading = true;
     this._cdr.detectChanges();
   }
 
   private _setInstanceTypes(instanceTypes: KubeVirtInstanceTypeList): void {
     this._instanceTypes = instanceTypes;
+    this.instanceTypesForSelector = instanceTypes;
+    this.instanceTypesLoading = false;
     if (this._initialData?.instancetype) {
       const instanceTypeId = this._getSelectedInstanceTypeId(this._initialData.instancetype);
-      this.onInstanceTypeChange(instanceTypeId);
+      // Set form value which will trigger valueChanges subscription that calls onInstanceTypeChange
+      this.form.get(Controls.InstanceType).setValue(instanceTypeId);
     }
     this.instanceTypeLabel = Object.keys(this._instanceTypes?.instancetypes || {}).some(
       category => this._instanceTypes?.instancetypes?.[category]?.length
@@ -695,25 +717,53 @@ export class KubeVirtBasicNodeDataComponent
 
   private _init(): void {
     if (this._initialData) {
-      this.form.get(Controls.Memory).setValue(parseInt(this._initialData.memory) || this._defaultMemory);
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
 
-      if (this._initialData.vcpus?.cores) {
-        this.form.get(Controls.CPUs).setValue(this._initialData.vcpus.cores);
-      } else {
-        this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
-      }
-
+      // Detect initial configuration mode based on existing data
       if (this._initialData.instancetype) {
+        // Has instance type: use predefined mode
+        this.selectedConfigurationMode = ConfigurationMode.PredefinedInstanceType;
         this.form.get(Controls.InstanceType).setValue(this._getSelectedInstanceTypeId(this._initialData.instancetype));
-      }
 
-      if (this._initialData.preference) {
-        this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
+        if (this._initialData.preference) {
+          this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
+        }
+
+        // Set instance type as required in predefined mode
+        this.form.get(Controls.InstanceType).setValidators(Validators.required);
+
+        // Disable custom CPU/Memory fields in predefined mode
+        this.form.get(Controls.CPUs).setValue(null);
+        this.form.get(Controls.CPUs).setValidators([]);
+        this.form.get(Controls.CPUs).disable();
+        this.form.get(Controls.Memory).setValue(null);
+        this.form.get(Controls.Memory).setValidators([]);
+        this.form.get(Controls.Memory).disable();
+      } else {
+        // No instance type: use custom mode
+        this.selectedConfigurationMode = ConfigurationMode.CustomResources;
+
+        const cpuValue = this._initialData.vcpus?.cores
+          ? this._initialData.vcpus.cores
+          : parseInt(this._initialData.cpus) || this._defaultCPUs;
+        const memoryValue = parseInt(this._initialData.memory) || this._defaultMemory;
+
+        // Instance type is not required in custom mode
+        this.form.get(Controls.InstanceType).setValidators([]);
+
+        this.form.get(Controls.CPUs).setValue(cpuValue);
+        this.form.get(Controls.CPUs).setValidators(Validators.required);
+        this.form.get(Controls.CPUs).enable();
+        this.form.get(Controls.Memory).setValue(memoryValue);
+        this.form.get(Controls.Memory).setValidators(Validators.required);
+        this.form.get(Controls.Memory).enable();
+
+        // Ensure preference is disabled in custom mode
+        this.form.get(Controls.Preference).disable();
       }
     }
   }
@@ -729,7 +779,7 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getNodeData(): NodeData {
-    const instanceType = this.form.get(Controls.InstanceType).value[ComboboxControls.Select];
+    const instanceType = this.form.get(Controls.InstanceType).value;
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
     const nodeAffinityPreset = this.form.get(Controls.NodeAffinityPreset).value;
@@ -757,24 +807,28 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    let payload: ResourceQuotaCalculationPayload = {
-      replicas: this._nodeDataService.nodeData.count,
-      kubevirtNodeSize: {
-        [Controls.PrimaryDiskSize]: `${this.form.get(Controls.PrimaryDiskSize).value}`,
-      } as KubeVirtNodeSize,
-    };
-
-    const instanceTypeId = this.form.get(Controls.InstanceType).value[ComboboxControls.Select];
+    const instanceTypeId = this.form.get(Controls.InstanceType).value;
     const cpus = instanceTypeId ? this.selectedInstanceTypeCpus : this.form.get(Controls.CPUs).value;
     const memory = instanceTypeId ? this.selectedInstanceTypeMemory : this.form.get(Controls.Memory).value;
+    const diskSize = this.form.get(Controls.PrimaryDiskSize).value;
 
     if (!cpus || !memory) {
       return null;
     }
-    payload.kubevirtNodeSize = {
-      ...payload.kubevirtNodeSize,
-      [Controls.CPUs]: `${cpus}`,
-      [Controls.Memory]: instanceTypeId ? memory.slice(0, -1) : `${memory}`,
+
+    // Extract numeric values from memory (remove M suffix if present)
+    let memoryValue = memory;
+    if (typeof memory === 'string' && memory.endsWith('M')) {
+      memoryValue = memory.slice(0, -1);
+    }
+
+    let payload: ResourceQuotaCalculationPayload = {
+      replicas: this._nodeDataService.nodeData.count,
+      kubevirtNodeSize: {
+        cpus: `${cpus}`,
+        memory: `${memoryValue}`,
+        primaryDiskSize: `${diskSize}`,
+      } as KubeVirtNodeSize,
     };
 
     if (

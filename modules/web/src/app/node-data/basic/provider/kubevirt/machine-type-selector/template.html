@@ -1,0 +1,182 @@
+<!--
+Copyright 2026 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="km-kubevirt-machine-type-selector"
+     fxLayout="column">
+  <div class="km-machine-type-selector-label km-text">
+    {{label}} @if (required) {
+    <span class="km-required">*</span>
+    }
+  </div>
+
+  <div class="km-machine-type-selector-panel km-border"
+       fxLayout="column">
+    <div class="km-machine-type-selector-search"
+         fxLayout="row"
+         fxLayoutAlign="start center"
+         fxLayoutGap="8px">
+      <mat-form-field class="km-machine-type-selector-search-field"
+                      fxFlex>
+        <mat-label>Search Instance Type...</mat-label>
+        <input matInput
+               type="text"
+               [(ngModel)]="searchQuery"
+               (ngModelChange)="onSearchChange()"
+               placeholder="Filter by name" />
+        <i matPrefix
+           class="km-icon-mask km-icon-search"></i>
+      </mat-form-field>
+    </div>
+
+    <mat-tab-group class="km-machine-type-selector-tabs"
+                   mat-stretch-tabs="false"
+                   animationDuration="0ms"
+                   [selectedIndex]="activeTabIndex"
+                   (selectedIndexChange)="onTabChange($event)">
+      <!-- Kubermatic CPU Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>Kubermatic CPU</span>
+          <span class="km-machine-type-selector-tab-count">({{kubermaticCpuOptions?.length || 0}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+
+      <!-- Kubermatic GPU Tab -->
+      @if (showGpuFilter && hasKubermaticGpu) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>Kubermatic GPU</span>
+          <span class="km-machine-type-selector-tab-count">({{kubermaticGpuOptions?.length || 0}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+      }
+
+      <!-- Custom CPU Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>Custom CPU</span>
+          <span class="km-machine-type-selector-tab-count">({{customCpuOptions?.length || 0}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+
+      <!-- Custom GPU Tab -->
+      @if (showGpuFilter && hasCustomGpu) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span>Custom GPU</span>
+          <span class="km-machine-type-selector-tab-count">({{customGpuOptions?.length || 0}})</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="machineTypeTable" />
+      </mat-tab>
+      }
+    </mat-tab-group>
+  </div>
+</div>
+
+<ng-template #machineTypeTable>
+  <div class="km-machine-type-selector-table-container">
+    @if (isLoading) {
+    <div class="km-row"
+         fxLayoutAlign="center center">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    } @else if (filteredOptions.length === 0) {
+    <div class="km-row km-empty-list-msg"
+         fxLayoutAlign="center center">
+      No instance types found
+    </div>
+    } @else {
+    <mat-radio-group [value]="selectedInstanceTypeId"
+                     (change)="onInstanceTypeChange($event.value)">
+      <table class="km-table km-machine-type-selector-table"
+             mat-table
+             [dataSource]="filteredOptions"
+             [trackBy]="trackById">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-5"></th>
+          <td mat-cell
+              *matCellDef="let element">
+            <mat-radio-button [value]="element.id">
+            </mat-radio-button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">Name</th>
+          <td mat-cell
+              *matCellDef="let element">
+            {{element.name}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">vCPU</th>
+          <td mat-cell
+              *matCellDef="let element">
+            @if (element.cpuValue) {
+            {{element.cpuValue}}
+            } @else {
+            <span class="km-text-muted">-</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="memory">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">Memory</th>
+          <td mat-cell
+              *matCellDef="let element">
+            @if (element.memoryValue) {
+            {{element.memoryValue}}
+            } @else {
+            <span class="km-text-muted">-</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">GPUs</th>
+          <td mat-cell
+              *matCellDef="let element">
+            {{element.gpuCount}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+            class="km-header-row"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            class="km-mat-row"></tr>
+      </table>
+    </mat-radio-group>
+    }
+  </div>
+</ng-template>
