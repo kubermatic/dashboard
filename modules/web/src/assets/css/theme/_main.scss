@@ -52,9 +52,6 @@ $my-typography: mat.m2-define-typography-config(
   // that can be accessed from components' theme files.
   $merged-colors: map.merge($colors, $theme-colors);
 
-  // Generate Material v20 CSS variables from theme
-  @include mat.all-component-colors($theme);
-
   // Override default material themes.
   @include theme-material($merged-colors);
 

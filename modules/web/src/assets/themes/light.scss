@@ -87,17 +87,7 @@ $background: map.merge(
   $background,
   (
     background: #edeff0,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     app-bar: #fff,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     dialog: #fff,
   )
 );

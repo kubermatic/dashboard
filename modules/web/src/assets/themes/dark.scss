@@ -91,29 +91,9 @@ $background: map.merge(
   $background,
   (
     background: #000,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     hover: #2d2d2e,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     app-bar: #2b2b2c,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     card: #202021,
-  )
-);
-$background: map.merge(
-  $background,
-  (
     dialog: #2b2b2c,
   )
 );
@@ -273,7 +253,7 @@ html {
   --mat-checkbox-disabled-selected-checkmark-color: var(--km-surface-primary);
 
   // Option styling (for select, autocomplete, etc.)
-  --mat-option-selected-state-label-text-color: #{map.get($colors-dark, primary)}; 
+  --mat-option-selected-state-label-text-color: #{map.get($colors-dark, primary)};
   --mat-option-label-text-color: rgb(255 255 255 / 85%);
   --mat-option-hover-state-layer-color: rgb(255 255 255 / 8%);
   --mat-option-focus-state-layer-color: rgb(255 255 255 / 8%);
