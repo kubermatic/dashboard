@@ -65,6 +65,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
 
+  private readonly _cancelRouteByMode = new Map<WizardMode, View>([
+    [WizardMode.CreateUserCluster, View.Clusters],
+    [WizardMode.CreateClusterTemplate, View.ClusterTemplates],
+    [WizardMode.EditClusterTemplate, View.ClusterTemplates],
+    [WizardMode.CustomizeClusterTemplate, View.ClusterTemplates],
+  ]);
   private _stepper: MatStepper;
   private _unsubscribe: Subject<void> = new Subject<void>();
 
@@ -272,13 +278,6 @@ export class WizardComponent implements OnInit, OnDestroy {
         return 'Create Cluster';
     }
   }
-
-  private readonly _cancelRouteByMode = new Map<WizardMode, View>([
-    [WizardMode.CreateUserCluster, View.Clusters],
-    [WizardMode.CreateClusterTemplate, View.ClusterTemplates],
-    [WizardMode.EditClusterTemplate, View.ClusterTemplates],
-    [WizardMode.CustomizeClusterTemplate, View.ClusterTemplates],
-  ]);
 
   private _getCreateClusterModel(
     cluster: Cluster,
