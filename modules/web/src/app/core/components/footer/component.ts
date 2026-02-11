@@ -14,6 +14,7 @@
 
 import {Component, Input, SecurityContext} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {BrandingService} from '@core/services/branding';
 import {AdminSettings, CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 
@@ -29,7 +30,22 @@ export class FooterComponent {
   @Input() customLinks: CustomLink[] = [];
   @Input() authenticated: boolean;
 
-  constructor(private readonly _sanitizer: DomSanitizer) {}
+  constructor(
+    private readonly _sanitizer: DomSanitizer,
+    private readonly _brandingService: BrandingService
+  ) {}
+
+  get productName(): string {
+    return this._brandingService.getProductName();
+  }
+
+  get productUrl(): string {
+    return this._brandingService.getProductUrl();
+  }
+
+  get hideVersion(): boolean {
+    return this._brandingService.hideVersion;
+  }
 
   getCustomLinks(): CustomLink[] {
     return this.authenticated ? this.settings.customLinks : this.customLinks;

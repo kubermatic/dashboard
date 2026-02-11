@@ -1,0 +1,124 @@
+# Copyright 2025 The Kubermatic Kubernetes Platform contributors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+/*
+ * Kubermatic Dashboard — Custom Theme Template
+ *
+ * Mount this file via config.json:
+ *   { "branding": { "custom_css_url": "/path/to/custom-theme.css" } }
+ *
+ * Uncomment and change any variable below to override the default theme colors.
+ * The light theme defaults are shown as comments.
+ */
+
+:root {
+  /* ── Primary ────────────────────────────────────────── */
+  /* --km-color-primary: #00517d; */
+  /* --km-color-primary-hover: #003454; */
+  /* --km-color-primary-dark: #00517d; */
+
+  /* ── Secondary ──────────────────────────────────────── */
+  /* --km-color-secondary: #00c9c9; */
+  /* --km-color-secondary-hover: #00b2b2; */
+  /* --km-color-secondary-dark: #099; */
+
+  /* ── Indicators ─────────────────────────────────────── */
+  /* --km-color-indicator-green: #1dc67f; */
+  /* --km-color-indicator-orange: #f7b500; */
+  /* --km-color-indicator-red: #eb5757; */
+
+  /* ── Text ───────────────────────────────────────────── */
+  /* --km-color-text: #4d555c; */
+  /* --km-color-text-secondary: #7e868f; */
+  /* --km-color-text-disabled: #d2d7db; */
+  /* --km-color-footer-text: #a5aeb8; */
+  /* --km-color-muted-light: rgba(126, 134, 143, 0.6); */
+  /* --km-color-hint-color: rgba(126, 134, 143, 0.6); */
+
+  /* ── Background / Surface ───────────────────────────── */
+  /* --km-color-background: #edeff0; */
+  /* --km-color-background-app-bar: #fff; */
+  /* --km-color-background-card: white; */
+  /* --km-color-background-dialog: #fff; */
+  /* --km-color-background-hover: rgba(0, 0, 0, 0.04); */
+  /* --km-color-background-disabled-button: rgba(0, 0, 0, 0.12); */
+  /* --km-color-option-background: #fff; */
+  /* --km-color-option-background-hover: #f5f5f5; */
+
+  /* ── Dividers / Borders ─────────────────────────────── */
+  /* --km-color-divider: #e0e3e5; */
+  /* --km-color-divider-disabled: #eff1f2; */
+  /* --km-color-search-outline: #e0e3e5; */
+  /* --km-color-tab-divider: #cad1d9; */
+
+  /* ── Header ───────────────────────────────────────────── */
+  /* --km-color-header-text: #4d555c; */
+
+  /* ── Navigation ─────────────────────────────────────── */
+  /* --km-color-sidenav-active: #00517d; */
+  /* --km-color-sidenav-background-hover: #dce0e3; */
+  /* --km-color-sidenav-background-active: #c2d3dc; */
+  /* --km-color-sidenav-divider: #cad1d9; */
+  /* --km-color-side-nav-background-color: #edeff0; */
+  /* --km-color-collapsed-sidenav-background-hover: #edeff0; */
+  /* --km-color-project-selector-hover: #edeff0; */
+  /* --km-color-project-switch: #7e868f; */
+
+  /* ── Wizard / Stepper ───────────────────────────────── */
+  /* --km-color-wizard-step-active: #00517d; */
+  /* --km-color-wizard-step-background: #c7ebff; */
+  /* --km-color-wizard-step-background-active: #b9ccdf; */
+
+  /* ── Scrollbar ──────────────────────────────────────── */
+  /* --km-color-scrollbar: #a5aeb8; */
+  /* --km-color-scrollbar-background: #edeff0; */
+
+  /* ── Tooltip ────────────────────────────────────────── */
+  /* --km-color-tooltip-background: #00517d; */
+
+  /* ── Checkbox ───────────────────────────────────────── */
+  /* --km-color-checkbox-disabled: #e5e5e5; */
+  /* --km-color-checkbox-disabled-checked: #cad1c9; */
+  /* --km-color-checkbox-disabled-border: #d5d5d5; */
+
+  /* ── Shadows ────────────────────────────────────────── */
+  /* --km-color-shadow: 0 4px 4px rgba(0, 0, 0, 0.08); */
+  /* --km-color-shadow-dark: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12); */
+
+  /* ── Terminal ───────────────────────────────────────── */
+  /* --km-color-terminal-toolbar-hover: #4d555b; */
+  /* --km-color-terminal-toolbar-color: #edeff0; */
+  /* --km-color-terminal-toolbar-background: #2b3035; */
+  /* --km-color-terminal-box-shadow: #a5aeb8; */
+  /* --km-color-terminal-status-bar-color: #edeff0; */
+  /* --km-color-terminal-status-bar-background: #4d555c; */
+  /* --km-color-terminal-status-bar-border-color: #797979; */
+  /* --km-color-terminal-status-bar-reconnect-button: #2f70aa; */
+  /* --km-color-terminal-status-bar-close-button-hover: #484e54; */
+  /* --km-color-terminal-status-bar-button-border-color: #e0e3e5; */
+
+  /* ── Miscellaneous ──────────────────────────────────── */
+  /* --km-color-slide-toggle-handle-color: #fafafa; */
+  /* --km-color-estimate-quota-bar: #4ec3ea; */
+  /* --km-color-progress-bar-buffer: #dfe3e5; */
+  /* --km-color-swagger-ui-input-text-color: #4d555c; */
+  /* --km-color-announcement-banner-text: #edeff0; */
+
+  /* ── Font ───────────────────────────────────────────── */
+  /* --km-font-primary: 'Roboto', helvetica, arial, sans-serif; */
+
+  /* ── Frontpage Background ───────────────────────────── */
+  /* --km-background-color: #001930; */
+  /* --km-background-image: url('/assets/images/branding/bg.svg'); */
+}

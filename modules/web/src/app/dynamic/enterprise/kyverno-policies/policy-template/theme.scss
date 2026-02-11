@@ -19,12 +19,13 @@
 // END OF TERMS AND CONDITIONS
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-kyverno-policiy-template-list-component($colors) {
   .mat-mdc-card-title {
     .km-label-primary {
-        background-color: map.get($colors, primary);
-        color: map.get($colors, announcement-banner-text);
+        background-color: km-var($colors, primary);
+        color: km-var($colors, announcement-banner-text);
       }
   }
 }

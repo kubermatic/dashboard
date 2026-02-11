@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-api-docs-component($colors) {
   .km-swagger-container {
@@ -29,11 +30,11 @@
       .responses-header *,
       .response *,
       a.nostyle {
-        color: map.get($colors, text);
+        color: km-var($colors, text);
       }
 
       svg {
-        fill: map.get($colors, text);
+        fill: km-var($colors, text);
       }
 
       .scheme-container {
@@ -47,7 +48,7 @@
       input[type='search'],
       input[type='tel'],
       input[type='url'] {
-        color: map.get($colors, swagger-ui-input-text-color);
+        color: km-var($colors, swagger-ui-input-text-color);
       }
     }
   }

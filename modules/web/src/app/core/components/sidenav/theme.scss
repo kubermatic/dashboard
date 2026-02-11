@@ -14,40 +14,41 @@
 
 @use 'sass:map';
 @use 'sass:color';
+@use 'km-var' as *;
 
 @mixin theme-sidenav-component($colors) {
   .km-sidenav {
-    background-color: map.get($colors, background);
+    background-color: km-var($colors, background);
 
     span {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
 
     .mat-divider {
-      border-top-color: map.get($colors, sidenav-divider);
+      border-top-color: km-var($colors, sidenav-divider);
     }
 
     .menu-item a {
       &.active {
-        background-color: map.get($colors, sidenav-background-active);
+        background-color: km-var($colors, sidenav-background-active);
 
         i:first-child {
-          background-color: map.get($colors, primary-dark) !important;
+          background-color: km-var($colors, primary-dark) !important;
           filter: none !important;
         }
 
         span {
-          color: map.get($colors, primary-dark);
+          color: km-var($colors, primary-dark);
         }
       }
 
       &:not(.active):hover {
-        background-color: map.get($colors, sidenav-background-hover);
+        background-color: km-var($colors, sidenav-background-hover);
       }
     }
   }
 
   .menu-item {
-    background-color: map.get($colors, side-nav-background-color);
+    background-color: km-var($colors, side-nav-background-color);
   }
 }

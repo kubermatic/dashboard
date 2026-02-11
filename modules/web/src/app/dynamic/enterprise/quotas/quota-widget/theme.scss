@@ -1,16 +1,17 @@
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-quota-widget-component($colors) {
   .extended-progress {
     .property-usage-bar:not(.mat-warn) {
       /* stylelint-disable-next-line selector-class-pattern */
       .mdc-linear-progress__buffer-bar {
-        background-color: map.get($colors, estimate-quota-bar);
+        background-color: km-var($colors, estimate-quota-bar);
       }
     }
   }
 
   .estimated-quota-value {
-    color: map.get($colors, estimate-quota-bar);
+    color: km-var($colors, estimate-quota-bar);
   }
 }

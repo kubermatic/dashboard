@@ -30,6 +30,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {kmButtonToggleDefaultOptions, kmTooltipDefaultOptions} from '../app-config';
 import {KubermaticComponent} from './component';
+import {BrandingService} from '@core/services/branding';
 import {AppConfigService} from './config.service';
 import {DashboardComponent} from './dashboard/component';
 import {GoogleAnalyticsService} from './google-analytics.service';
@@ -39,8 +40,9 @@ const appInitializerFn = (
   appConfigService: AppConfigService,
   historyService: HistoryService,
   userService: UserService,
-  datacenterService: DatacenterService
-): (() => Promise<{}>) => {
+  datacenterService: DatacenterService,
+  brandingService: BrandingService
+): (() => Promise<void | {}>) => {
   return () => {
     historyService.init();
     userService.init();
@@ -48,7 +50,10 @@ const appInitializerFn = (
     return appConfigService
       .loadAppConfig()
       .then(() => appConfigService.loadUserGroupConfig())
-      .then(() => appConfigService.loadGitVersion());
+      .then(() => appConfigService.loadGitVersion())
+      .then(() => {
+        brandingService.init(appConfigService.getConfig().branding);
+      });
   };
 };
 
@@ -73,7 +78,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService, HistoryService, UserService, DatacenterService],
+      deps: [AppConfigService, HistoryService, UserService, DatacenterService, BrandingService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,

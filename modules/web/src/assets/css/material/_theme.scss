@@ -13,41 +13,42 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-material($colors) {
   // Cards.
   .mat-mdc-card {
-    color: map.get($colors, text);
+    color: km-var($colors, text);
   }
 
   .mat-mdc-card-content {
     p {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
 
     button {
       border: none;
-      color: map.get($colors, primary);
+      color: km-var($colors, primary);
     }
   }
 
   // Dialogs.
   .mat-mdc-dialog-container {
-    --mat-dialog-supporting-text-color: #{map.get($colors, text)};
+    --mat-dialog-supporting-text-color: #{km-var($colors, text)};
 
-    color: map.get($colors, text);
+    color: km-var($colors, text);
   }
 
   // Tables.
   .mat-mdc-table {
     .mat-mdc-header-cell,
     .mat-sort-header-button {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
 
     td {
       &.mat-mdc-cell {
-        border-top: 1px solid map.get($colors, divider);
+        border-top: 1px solid km-var($colors, divider);
       }
     }
 
@@ -64,7 +65,7 @@
       .mat-sort-header-arrow {
         .mat-sort-header-indicator {
           &::before {
-            background-color: map.get($colors, text);
+            background-color: km-var($colors, text);
           }
         }
       }
@@ -74,7 +75,7 @@
       .mat-sort-header-arrow {
         .mat-sort-header-indicator {
           &::before {
-            background-color: map.get($colors, text);
+            background-color: km-var($colors, text);
           }
         }
       }
@@ -83,32 +84,32 @@
 
   .mat-mdc-paginator {
     .mat-mdc-paginator-range-actions > .mat-mdc-icon-button:not([disabled]) {
-      color: map.get($colors, text-secondary);
+      color: km-var($colors, text-secondary);
     }
   }
 
   // Steppers.
   .mat-step-header {
     .mat-step-icon {
-      background: map.get($colors, divider);
-      color: map.get($colors, text-secondary);
+      background: km-var($colors, divider);
+      color: km-var($colors, text-secondary);
 
       &.mat-step-icon-selected,
       &.mat-step-icon-state-edit {
-        background: map.get($colors, wizard-step-background);
-        color: map.get($colors, primary);
+        background: km-var($colors, wizard-step-background);
+        color: km-var($colors, primary);
       }
     }
 
     .mat-step-label {
-      color: map.get($colors, text-secondary);
+      color: km-var($colors, text-secondary);
 
       &.mat-step-label-active {
-        color: map.get($colors, wizard-step-active);
+        color: km-var($colors, wizard-step-active);
       }
 
       &.mat-step-label-selected {
-        color: map.get($colors, wizard-step-active);
+        color: km-var($colors, wizard-step-active);
       }
     }
 
@@ -119,7 +120,7 @@
 
   // Menus.
   .mat-drawer-container {
-    --mat-sidenav-content-background-color: #{map.get($colors, background)};
+    --mat-sidenav-content-background-color: #{km-var($colors, background)};
 
     .mat-drawer-side {
       border: none;
@@ -129,25 +130,25 @@
   // Forms.
   mat-form-field {
     &.mat-mdc-form-field {
-      color: map.get($colors, hint-color);
+      color: km-var($colors, hint-color);
 
-      --mat-form-field-outlined-outline-color: #{map.get($colors, divider)};
-      --mat-form-field-outlined-disabled-outline-color: #{map.get($colors, divider-disabled)};
-      --mat-form-field-outlined-hover-outline-color: #{map.get($colors, secondary-dark)};
+      --mat-form-field-outlined-outline-color: #{km-var($colors, divider)};
+      --mat-form-field-outlined-disabled-outline-color: #{km-var($colors, divider-disabled)};
+      --mat-form-field-outlined-hover-outline-color: #{km-var($colors, secondary-dark)};
     }
 
   }
 
   .mat-mdc-select-arrow {
-    --mat-select-enabled-arrow-color: #{map.get($colors, text)};
+    --mat-select-enabled-arrow-color: #{km-var($colors, text)};
   }
 
   .mat-mdc-option {
-    background-color: map.get($colors, option-background);
-    color: map.get($colors, text);
+    background-color: km-var($colors, option-background);
+    color: km-var($colors, text);
 
     &:hover {
-      background-color: map.get($colors, option-background-hover);
+      background-color: km-var($colors, option-background-hover);
     }
   }
 
@@ -155,11 +156,11 @@
   .mat-mdc-button,
   .mat-mdc-unelevated-button,
   .mat-mdc-raised-button {
-    --mat-button-filled-container-color: #{map.get($colors, primary)};
+    --mat-button-filled-container-color: #{km-var($colors, primary)};
     --mat-button-filled-label-text-color: #fff;
 
     &:hover:not([disabled]) {
-      background-color: map.get($colors, primary-hover);
+      background-color: km-var($colors, primary-hover);
     }
 
     .km-icon-mask {
@@ -168,58 +169,58 @@
 
     &:disabled {
       .km-icon-mask {
-        background-color: map.get($colors, text);
+        background-color: km-var($colors, text);
         opacity: 30%;
       }
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: map.get($colors, secondary);
+      background-color: km-var($colors, secondary);
 
       &:hover {
-        background-color: map.get($colors, secondary-hover);
+        background-color: km-var($colors, secondary-hover);
       }
     }
 
     &.mat-tertiary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map.get($colors, project-switch);
-      color: map.get($colors, text-secondary);
+      border: 1px solid km-var($colors, project-switch);
+      color: km-var($colors, text-secondary);
 
       &:hover {
-        background-color: map.get($colors, background-hover);
+        background-color: km-var($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map.get($colors, text-secondary);
+        background-color: km-var($colors, text-secondary);
       }
     }
 
     &.mat-quaternary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map.get($colors, divider);
-      color: map.get($colors, text);
+      border: 1px solid km-var($colors, divider);
+      color: km-var($colors, text);
 
       &:hover {
-        background-color: map.get($colors, background-hover);
+        background-color: km-var($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map.get($colors, text);
+        background-color: km-var($colors, text);
       }
     }
 
     &.mat-pure:not([disabled]) {
       background-color: transparent;
       border: none;
-      color: map.get($colors, text-secondary);
+      color: km-var($colors, text-secondary);
 
       &:hover {
-        background-color: map.get($colors, background-hover);
+        background-color: km-var($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map.get($colors, text);
+        background-color: km-var($colors, text);
       }
     }
   }
@@ -230,22 +231,22 @@
 
   .mat-mdc-icon-button {
     .km-icon-mask {
-      background-color: map.get($colors, text);
+      background-color: km-var($colors, text);
     }
 
     &:hover:not([disabled]) {
-      background-color: map.get($colors, divider);
+      background-color: km-var($colors, divider);
     }
 
     &:disabled i {
-      background-color: map.get($colors, background-disabled-button);
+      background-color: km-var($colors, background-disabled-button);
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: map.get($colors, secondary);
+      background-color: km-var($colors, secondary);
 
       &:hover {
-        background-color: map.get($colors, secondary-hover);
+        background-color: km-var($colors, secondary-hover);
       }
 
       i {
@@ -255,21 +256,21 @@
 
     &.mat-tertiary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map.get($colors, divider);
+      border: 1px solid km-var($colors, divider);
 
       &:hover {
-        background-color: map.get($colors, background-hover);
+        background-color: km-var($colors, background-hover);
       }
     }
   }
 
   .mat-mdc-radio-button {
     &.mat-accent {
-      --mat-radio-selected-icon-color: #{map.get($colors, primary)};
+      --mat-radio-selected-icon-color: #{km-var($colors, primary)};
       --mat-radio-selected-pressed-icon-color: var(--mat-radio-selected-icon-color);
       --mat-radio-selected-hover-icon-color: var(--mat-radio-selected-icon-color);
       --mat-radio-selected-focus-icon-color: var(--mat-radio-selected-icon-color);
-      --mat-radio-unselected-icon-color: #{map.get($colors, text-secondary)};
+      --mat-radio-unselected-icon-color: #{km-var($colors, text-secondary)};
     }
   }
 
@@ -277,22 +278,22 @@
     &.mat-accent,
     button {
       // track color
-      --mat-slide-toggle-selected-track-color: #{map.get($colors, primary)};
+      --mat-slide-toggle-selected-track-color: #{km-var($colors, primary)};
       --mat-slide-toggle-selected-focus-track-color: var(--mat-slide-toggle-selected-track-color);
       --mat-slide-toggle-selected-hover-track-color: var(--mat-slide-toggle-selected-track-color);
       --mat-slide-toggle-selected-pressed-track-color: var(--mat-slide-toggle-selected-track-color);
-      --mat-slide-toggle-unselected-track-color: #{map.get($colors, divider)};
+      --mat-slide-toggle-unselected-track-color: #{km-var($colors, divider)};
       --mat-slide-toggle-unselected-focus-track-color: var(--mat-slide-toggle-unselected-track-color);
       --mat-slide-toggle-unselected-hover-track-color: var(--mat-slide-toggle-unselected-track-color);
       --mat-slide-toggle-unselected-pressed-track-color: var(--mat-slide-toggle-unselected-track-color);
 
       // handle color
-      --mat-slide-toggle-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-handle-surface-color: #{km-var($colors, slide-toggle-handle-color)};
       --mat-slide-toggle-selected-handle-color: #fafafa;
       --mat-slide-toggle-selected-focus-handle-color: var(--mat-slide-toggle-selected-handle-color);
       --mat-slide-toggle-selected-hover-handle-color: var(--mat-slide-toggle-selected-handle-color);
       --mat-slide-toggle-selected-pressed-handle-color: var(--mat-slide-toggle-selected-handle-color);
-      --mat-slide-toggle-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mat-slide-toggle-unselected-handle-color: #{km-var($colors, slide-toggle-handle-color)};
       --mat-slide-toggle-unselected-focus-handle-color: var(--mat-slide-toggle-unselected-handle-color);
       --mat-slide-toggle-unselected-hover-handle-color: var(--mat-slide-toggle-unselected-handle-color);
       --mat-slide-toggle-unselected-pressed-handle-color: var(--mat-slide-toggle-unselected-handle-color);
@@ -312,19 +313,19 @@
 
     .mat-button-toggle {
       background-color: transparent;
-      border-color: map.get($colors, divider);
+      border-color: km-var($colors, divider);
 
       &.mat-button-toggle-checked {
-        --mat-button-toggle-divider-color: #{map.get($colors, primary)};
+        --mat-button-toggle-divider-color: #{km-var($colors, primary)};
 
         background-color: transparent;
-        border-color: map.get($colors, primary);
+        border-color: km-var($colors, primary);
       }
     }
   }
 
   .mdc-checkbox {
-    --mat-checkbox-selected-icon-color: #{map.get($colors, primary)};
+    --mat-checkbox-selected-icon-color: #{km-var($colors, primary)};
     --mat-checkbox-selected-hover-icon-color: var(--mat-checkbox-selected-icon-color);
     --mat-checkbox-selected-focus-icon-color: var(--mat-checkbox-selected-icon-color);
     --mat-checkbox-selected-pressed-icon-color: var(--mat-checkbox-selected-icon-color);
@@ -337,27 +338,27 @@
   // Chips.
   .mat-mdc-chip {
     --mat-chip-elevated-container-color: transparent;
-    --mat-chip-label-text-color: #{map.get($colors, text)};
+    --mat-chip-label-text-color: #{km-var($colors, text)};
     --mat-chip-focus-state-layer-color: none;
     --mat-chip-hover-state-layer-color: none;
 
     .mat-mdc-chip-remove {
-      background-color: map.get($colors, text);
+      background-color: km-var($colors, text);
     }
 
     .mdc-evolution-chip__action--primary {
-      background: map.get($colors, divider);
-      border: 1px solid map.get($colors, divider);
+      background: km-var($colors, divider);
+      border: 1px solid km-var($colors, divider);
     }
 
     .km-chip-accent {
-      background-color: map.get($colors, background-card );
+      background-color: km-var($colors, background-card );
     }
   }
 
   .km-chip-list-with-input {
     .mat-mdc-chip-row {
-      border: 1px solid map.get($colors, divider);
+      border: 1px solid km-var($colors, divider);
 
       .mdc-evolution-chip__action--primary {
         background: transparent;
@@ -368,25 +369,25 @@
 
   // Tooltips.
   .mat-mdc-tooltip {
-    --mat-plain-tooltip-container-color: #{map.get($colors, tooltip-background)};
+    --mat-plain-tooltip-container-color: #{km-var($colors, tooltip-background)};
   }
 
   // Spinners.
   .mat-mdc-progress-spinner circle,
   .mat-mdc-spinner circle {
-    stroke: map.get($colors, primary-hover);
+    stroke: km-var($colors, primary-hover);
   }
 
   // Tab group.
   .mat-mdc-tab-group {
     .mat-mdc-tab-header {
-      border-bottom: 1px solid map.get($colors, tab-divider);
+      border-bottom: 1px solid km-var($colors, tab-divider);
     }
   }
 
   // Snackbar
   .mat-mdc-snack-bar-container {
-    --mat-snack-bar-container-color: #{map.get($colors, option-background)};
+    --mat-snack-bar-container-color: #{km-var($colors, option-background)};
   }
 
   // Progress bar
@@ -396,7 +397,7 @@
     .mdc-linear-progress__buffer-bar,
     /* stylelint-disable-next-line selector-class-pattern */
     .mdc-linear-progress__buffer-dots {
-      background-color: map.get($colors, divider);
+      background-color: km-var($colors, divider);
       transition: none;
     }
 
@@ -410,6 +411,6 @@
   }
 
   .mat-mdc-progress-bar.mat-accent {
-    --mat-progress-bar-active-indicator-color: #{map.get($colors, indicator-orange)};
+    --mat-progress-bar-active-indicator-color: #{km-var($colors, indicator-orange)};
   }
 }

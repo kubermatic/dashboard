@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-constraints-component($colors) {
   .km-pointer.row-disabled {
@@ -21,10 +22,10 @@
     }
 
     td {
-      color: map.get($colors, text-disabled);
+      color: km-var($colors, text-disabled);
 
       i {
-        background-color: map.get($colors, text-disabled);
+        background-color: km-var($colors, text-disabled);
       }
     }
   }

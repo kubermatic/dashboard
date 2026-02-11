@@ -14,15 +14,11 @@
 
 @use 'mixins';
 
-.km-header-logo {
-  background-image: url('/assets/images/branding/logo.svg');
-  background-repeat: no-repeat;
-}
-
 .km-frontpage-background {
-  @include mixins.background-image('/assets/images/branding/bg.svg', 100%);
-
   background-attachment: fixed;
+  background-image: var(--km-background-image, url('/assets/images/branding/bg.svg'));
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
 }
 

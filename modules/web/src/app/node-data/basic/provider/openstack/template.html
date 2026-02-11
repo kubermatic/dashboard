@@ -17,13 +17,12 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
 
-  <km-openstack-machine-type-selector
-    [options]="flavors"
-    [selectedMachineType]="selectedFlavor"
-    [formControlName]="Controls.Flavor"
-    [label]="'Flavor'"
-    [required]="true"
-    [isLoading]="isLoadingFlavors">
+  <km-openstack-machine-type-selector [options]="flavors"
+                                      [selectedMachineType]="selectedFlavor"
+                                      [formControlName]="Controls.Flavor"
+                                      [label]="'Flavor'"
+                                      [required]="true"
+                                      [isLoading]="isLoadingFlavors">
   </km-openstack-machine-type-selector>
 
   <div fxLayout="row"

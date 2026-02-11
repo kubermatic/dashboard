@@ -2,6 +2,5 @@
   "openstack": {
     "wizard_use_default_user": false,
     "wizard_default_domain_name": "Default"
-  },
-  "postfix_page_title": "Kubermatic Kubernetes Platform"
+  }
 }

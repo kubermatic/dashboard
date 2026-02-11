@@ -13,13 +13,14 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-footer-component($colors) {
   .km-footer {
-    background-color: map.get($colors, background);
+    background-color: km-var($colors, background);
 
     * {
-      color: map.get($colors, footer-text);
+      color: km-var($colors, footer-text);
     }
 
     i {

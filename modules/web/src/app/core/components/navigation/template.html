@@ -26,8 +26,12 @@ limitations under the License.
     </button>
     }
     <a class="km-header-logo"
-       [ngClass]="{'km-header-logo-border': currentView}"
-       routerLink="projects"></a>
+       [ngClass]="{'km-header-logo-border': currentView, 'km-logo-invert': shouldInvertLogo}"
+       routerLink="projects">
+      <img [src]="logoUrl"
+           alt=""
+           class="km-header-logo-img">
+    </a>
     <div class="km-text view-name">{{currentView}}</div>
     @if (isAuthenticated() && showMenuSwitchAndProjectSelector) {
     <km-project-selector [showSidenav]="showSidenav"

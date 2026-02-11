@@ -20,6 +20,29 @@ export interface Theme {
 
 export type EndOfLife = {[version: string]: string};
 
+export interface BrandingColors {
+  primary?: string;
+  secondary?: string;
+  header_bg?: string;
+  header_text?: string;
+}
+
+export interface BrandingConfig {
+  product_name?: string;
+  tagline?: string;
+  postfix_page_title?: string;
+  logo_url?: string;
+  logo_dark_url?: string;
+  favicon_url?: string;
+  background_url?: string;
+  product_url?: string;
+  custom_css_url?: string;
+  font_url?: string;
+  font_family?: string;
+  colors?: BrandingColors;
+  hide_version?: boolean;
+}
+
 export interface Config {
   openstack?: {
     wizard_use_default_user?: boolean;
@@ -37,6 +60,7 @@ export interface Config {
   enforced_theme?: string;
   end_of_life?: EndOfLife;
   postfix_page_title?: string;
+  branding?: BrandingConfig;
 }
 
 export interface UserGroupConfig {

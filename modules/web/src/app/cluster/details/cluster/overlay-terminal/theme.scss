@@ -13,9 +13,10 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-terminal-overlay-component($colors) {
   .overlay-terminal {
-    box-shadow: 0 -4px 4px -1px  map.get($colors, terminal-box-shadow);
+    box-shadow: 0 -4px 4px -1px  km-var($colors, terminal-box-shadow);
   }
 }

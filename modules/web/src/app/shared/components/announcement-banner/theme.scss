@@ -13,23 +13,24 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-announcement-banner-component($colors) {
   .announcement {
     background-color: rgb(map.get($colors, primary), 0.8);
 
     .km-icon-announcement {
-      background-color: map.get($colors, announcement-banner-text);
+      background-color: km-var($colors, announcement-banner-text);
     }
 
     p {
-      color: map.get($colors, announcement-banner-text);
+      color: km-var($colors, announcement-banner-text);
     }
 
     div {
       .mdc-button{
         &:hover {
-          background-color: map.get($colors, primary-hover);
+          background-color: km-var($colors, primary-hover);
         }
       }
     }

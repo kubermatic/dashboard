@@ -21,14 +21,16 @@ limitations under the License.
        fxLayoutAlign=" center"
        class="content">
     <div>
-      <a href="https://www.kubermatic.com/"
+      <a [href]="productUrl"
          target="_blank"
-         rel="noopener">powered by Kubermatic</a>
+         rel="noopener">powered by {{productName}}</a>
     </div>
 
+    @if (!hideVersion) {
     <div>{{getVersion()}}</div>
 
     <div id="km-edition">{{version?.edition}}</div>
+    }
 
     @if (settings.displayTermsOfService) {
     <div>

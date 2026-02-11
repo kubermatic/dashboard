@@ -31,6 +31,18 @@ header {
     height: 30px;
     margin-left: variables.$content-padding - 10px;
     width: 210px;
+
+    &.km-logo-invert {
+      filter: invert(0.25) brightness(100) contrast(100);
+      opacity: 85%;
+    }
+  }
+
+  .km-header-logo-img {
+    height: 100%;
+    max-width: 210px;
+    object-fit: contain;
+    width: auto;
   }
 
   .view-name {

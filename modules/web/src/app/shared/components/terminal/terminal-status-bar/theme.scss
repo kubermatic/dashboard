@@ -13,23 +13,24 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-terminal-status-bar-component($colors) {
   .toolbar-status-container {
-    background-color: map.get($colors, terminal-status-bar-background);
-    border-bottom: 1px solid map.get($colors, terminal-status-bar-border-color);
-    color: map.get($colors, terminal-status-bar-color);
+    background-color: km-var($colors, terminal-status-bar-background);
+    border-bottom: 1px solid km-var($colors, terminal-status-bar-border-color);
+    color: km-var($colors, terminal-status-bar-color);
 
     & button[mat-flat-button] {
-      background-color: map.get($colors, terminal-status-bar-reconnect-button);
+      background-color: km-var($colors, terminal-status-bar-reconnect-button);
     }
 
     & .close-terminal-button:hover {
-      background-color: map.get($colors, terminal-status-bar-close-button-hover);
+      background-color: km-var($colors, terminal-status-bar-close-button-hover);
     }
 
     & .button-border-box {
-      border: 1px solid map.get($colors, terminal-status-bar-button-border-color);
+      border: 1px solid km-var($colors, terminal-status-bar-button-border-color);
     }
   }
 }

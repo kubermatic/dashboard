@@ -13,13 +13,14 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-announcements-dialog-component($colors) {
   .announcements-dialog-content {
-    --mat-table-background-color:  #{map.get($colors, dialog)};
+    --mat-table-background-color:  #{km-var($colors, dialog)};
 
     .mat-mdc-row.unread-announcement {
-      background-color: map.get($colors, option-background-hover) !important;
+      background-color: km-var($colors, option-background-hover) !important;
     }
   }
 

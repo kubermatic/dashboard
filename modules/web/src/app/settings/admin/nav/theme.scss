@@ -13,28 +13,29 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-admin-sidenav-component($colors) {
   .km-sidenav {
-    background-color: map.get($colors, background);
+    background-color: km-var($colors, background);
 
     span {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
 
     .mat-divider {
-      border-top-color: map.get($colors, sidenav-divider);
+      border-top-color: km-var($colors, sidenav-divider);
     }
 
     .go-back a {
       &:hover {
-        background-color: map.get($colors, sidenav-background-hover);
+        background-color: km-var($colors, sidenav-background-hover);
       }
     }
 
     .km-label-primary {
-      background-color: map.get($colors, primary);
-      color: map.get($colors, announcement-banner-text);
+      background-color: km-var($colors, primary);
+      color: km-var($colors, announcement-banner-text);
     }
   }
 }

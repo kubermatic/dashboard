@@ -13,17 +13,18 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-install-addon-dialog-component($colors) {
   .install-addon-option {
-    box-shadow: 0 0 0 1px map.get($colors, divider);
+    box-shadow: 0 0 0 1px km-var($colors, divider);
 
     &:hover {
-      box-shadow: 0 0 0 2px map.get($colors, secondary);
+      box-shadow: 0 0 0 2px km-var($colors, secondary);
     }
 
     .option-desc {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
   }
 }

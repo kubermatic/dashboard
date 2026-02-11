@@ -16,6 +16,7 @@ import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
+import {BrandingService} from '@core/services/branding';
 
 @Component({
   selector: 'km-frontpage',
@@ -28,8 +29,13 @@ export class FrontpageComponent implements OnInit {
 
   constructor(
     private readonly _auth: Auth,
+    private readonly _brandingService: BrandingService,
     private readonly _router: Router
   ) {}
+
+  get tagline(): string {
+    return this._brandingService.getTagline();
+  }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {

@@ -13,14 +13,15 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-wizard-openstack-provider-basic($colors) {
   .wizard-openstack-button-toggle-group {
     &.mat-button-toggle-group {
       .mat-button-toggle {
         &.mat-button-toggle-checked {
-          background-color: map.get($colors, divider);
-          border-color: map.get($colors, divider);
+          background-color: km-var($colors, divider);
+          border-color: km-var($colors, divider);
         }
       }
     }

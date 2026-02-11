@@ -14,48 +14,49 @@
 
 @use 'sass:map';
 @use 'variables';
+@use 'km-var' as *;
 
 @mixin theme-editor-component($colors) {
   .editor {
     .header {
-      color: map.get($colors, text-secondary);
+      color: km-var($colors, text-secondary);
 
       &.card {
-        background-color: map.get($colors, background-card);
+        background-color: km-var($colors, background-card);
       }
 
       &.dialog {
-        background-color: map.get($colors, background-dialog);
+        background-color: km-var($colors, background-dialog);
       }
 
       &.focused {
-        color: map.get($colors, primary-dark);
+        color: km-var($colors, primary-dark);
       }
     }
 
     .monaco-editor {
-      box-shadow: 0 0 0 1px map.get($colors, divider);
+      box-shadow: 0 0 0 1px km-var($colors, divider);
 
       .margin {
-        background-color: map.get($colors, divider);
+        background-color: km-var($colors, divider);
 
         .line-numbers {
-          color: map.get($colors, text);
+          color: km-var($colors, text);
         }
       }
 
       &.focused {
-        box-shadow: 0 0 0 2px map.get($colors, primary-hover);
+        box-shadow: 0 0 0 2px km-var($colors, primary-hover);
       }
     }
 
     &:hover {
       .header {
-        color: map.get($colors, secondary-dark);
+        color: km-var($colors, secondary-dark);
       }
 
       .monaco-editor {
-        box-shadow: 0 0 0 2px map.get($colors, secondary-hover);
+        box-shadow: 0 0 0 2px km-var($colors, secondary-hover);
         transition: variables.$transition-all;
       }
     }

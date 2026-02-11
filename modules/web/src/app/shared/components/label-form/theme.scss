@@ -13,9 +13,10 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-label-form-component($colors) {
   .removed-label-form {
-    border-left: 5px solid map.get($colors, primary);
+    border-left: 5px solid km-var($colors, primary);
   }
 }

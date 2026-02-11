@@ -15,6 +15,7 @@
 @use 'sass:color';
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'km-var' as *;
 @import 'material/theme';
 @import 'global/theme';
 @import 'component';
@@ -51,6 +52,9 @@ $my-typography: mat.m2-define-typography-config(
   // Create merged colors map from custom and theme colors
   // that can be accessed from components' theme files.
   $merged-colors: map.merge($colors, $theme-colors);
+
+  // Emit CSS custom properties for runtime overrides.
+  @include emit-custom-properties($merged-colors);
 
   // Override default material themes.
   @include theme-material($merged-colors);

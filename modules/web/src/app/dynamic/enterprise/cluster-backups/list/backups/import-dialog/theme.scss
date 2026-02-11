@@ -19,18 +19,19 @@
 // END OF TERMS AND CONDITIONS
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-import-backup-component($colors) {
   .import-backup-dialog-content {
     .mat-tree {
-      border-color: map.get($colors, tab-divider);
+      border-color: km-var($colors, tab-divider);
     }
 
     .selected-node {
-      color: map.get($colors, sidenav-active);
+      color: km-var($colors, sidenav-active);
 
       i {
-        background-color: map.get($colors, sidenav-active);
+        background-color: km-var($colors, sidenav-active);
       }
     }
   }

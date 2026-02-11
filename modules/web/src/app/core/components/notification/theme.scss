@@ -13,15 +13,16 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-notification-component($colors) {
   km-notification {
-    background: map.get($colors, background-app-bar);
-    color: map.get($colors, text);
+    background: km-var($colors, background-app-bar);
+    color: km-var($colors, text);
 
     .notification-container {
       &.show-message-section > :nth-child(-n + 3) {
-        border-bottom: 1px solid map.get($colors, divider);
+        border-bottom: 1px solid km-var($colors, divider);
       }
     }
   }
