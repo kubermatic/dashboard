@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
@@ -377,7 +378,7 @@ func isValidVM(sku armcompute.ResourceSKU, location string) bool {
 	return true
 }
 
-func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string) (apiv1.AzureSizeList, error) {
+func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string) (interface{}, error) {
 	sizesClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for size client: %w", err)
@@ -388,53 +389,48 @@ func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilt
 		return nil, fmt.Errorf("failed to list SKU resource: %w", err)
 	}
 
-	// prepare set of valid VM size types from SKU resources
-	validSKUSet := make(map[string]struct{ AcceleratedNetworkingEnabled bool }, len(skuList))
-	for _, v := range skuList {
-		if isValidVM(v, location) {
-			skuInfo := struct{ AcceleratedNetworkingEnabled bool }{AcceleratedNetworkingEnabled: false}
-			for _, acc := range v.Capabilities {
-				if *acc.Name == "AcceleratedNetworkingEnabled" && *acc.Value == "True" {
-					skuInfo.AcceleratedNetworkingEnabled = true
+	// prepare a list of valid VM AzureSize types from SKU resources
+	var validSKUList apiv1.AzureSizeList
+
+	for _, sku := range skuList {
+		if isValidVM(sku, location) {
+			var vm apiv1.AzureSize
+			if sku.Name != nil {
+				vm.Name = *sku.Name
+				for _, cap := range sku.Capabilities {
+					if cap.Name == nil || cap.Value == nil {
+						continue
+					}
+
+					val, err := strconv.ParseFloat(*cap.Value, 64)
+					if err != nil {
+						if *cap.Name == "AcceleratedNetworkingEnabled" && *cap.Value == "True" {
+							vm.AcceleratedNetworkingEnabled = true
+						}
+						continue
+					}
+
+					switch *cap.Name {
+					case "vCPUs":
+						vm.NumberOfCores = int32(val)
+					case "GPUs":
+						vm.NumberOfGPUs = int32(val)
+					case "OSVhdSizeMB":
+						vm.OsDiskSizeInMB = int32(val)
+					case "MaxResourceVolumeMB":
+						vm.ResourceDiskSizeInMB = int32(val)
+					case "MemoryGB":
+						vm.MemoryInMB = int32(val * 1024)
+					case "MaxDataDiskCount":
+						vm.MaxDataDiskCount = int32(val)
+					}
 				}
-			}
-			validSKUSet[*v.Name] = skuInfo
-		}
-	}
-
-	// get all available VM size types for given location
-	listVMSize, err := sizesClient.ListVMSize(ctx, location)
-	if err != nil {
-		return nil, fmt.Errorf("failed to list sizes: %w", err)
-	}
-
-	var sizeList apiv1.AzureSizeList
-	for _, v := range listVMSize {
-		if v.Name != nil {
-			vmName := *v.Name
-
-			if _, okSKU := validSKUSet[vmName]; okSKU {
-				s := apiv1.AzureSize{
-					Name:          vmName,
-					NumberOfCores: *v.NumberOfCores,
-					// TODO: Use this to validate user-defined disk size.
-					OsDiskSizeInMB:               *v.OSDiskSizeInMB,
-					ResourceDiskSizeInMB:         *v.ResourceDiskSizeInMB,
-					MemoryInMB:                   *v.MemoryInMB,
-					MaxDataDiskCount:             *v.MaxDataDiskCount,
-					AcceleratedNetworkingEnabled: validSKUSet[vmName].AcceleratedNetworkingEnabled,
-				}
-
-				if gpus, okGPU := gpuInstanceFamilies[vmName]; okGPU {
-					s.NumberOfGPUs = gpus
-				}
-
-				sizeList = append(sizeList, s)
+				validSKUList = append(validSKUList, vm)
 			}
 		}
 	}
 
-	return filterMachineFlavorsForAzure(sizeList, machineFilter), nil
+	return filterMachineFlavorsForAzure(validSKUList, machineFilter), nil
 }
 
 func filterMachineFlavorsForAzure(instances apiv1.AzureSizeList, machineFilter kubermaticv1.MachineFlavorFilter) apiv1.AzureSizeList {

@@ -55,6 +55,10 @@
   &-table-container {
     max-height: 500px;
     overflow-y: auto;
+
+    .km-spinner {
+      margin: 24px auto;
+    }
   }
 
   .mat-mdc-form-field {

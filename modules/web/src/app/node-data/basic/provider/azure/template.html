@@ -16,18 +16,13 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <km-combobox [required]="true"
-               [grouped]="false"
-               [selected]="selectedSize"
-               [options]="currentSizes"
-               [formControlName]="Controls.Size"
-               [valueFormatter]="sizeDisplayName.bind(this)"
-               (changed)="onSizeChange($event)"
-               [label]="sizeLabel"
-               inputLabel="Select size..."
-               filterBy="name">
-    <div *option="let size">{{getSizeDisplayName(size)}}</div>
-  </km-combobox>
+  <km-azure-machine-type-selector [options]="currentSizes"
+                                  [label]="sizeLabel"
+                                  [required]="true"
+                                  [isLoading]="sizeLabel === SizeState.Loading"
+                                  [selectedMachineType]="selectedSize"
+                                  [formControlName]="Controls.Size">
+  </km-azure-machine-type-selector>
 
   <km-combobox [required]="false"
                [grouped]="false"
