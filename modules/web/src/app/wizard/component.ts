@@ -139,7 +139,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.loadingClusterTemplate = false;
     }
 
-    if (this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode) {
+    if (this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster) {
       this._quotaCalculationService
         .getQuotaExceed()
         .pipe(takeUntil(this._unsubscribe))
@@ -274,6 +274,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   private readonly _cancelRouteByMode = new Map<WizardMode, View>([
+    [WizardMode.CreateUserCluster, View.Clusters],
     [WizardMode.CreateClusterTemplate, View.ClusterTemplates],
     [WizardMode.EditClusterTemplate, View.ClusterTemplates],
     [WizardMode.CustomizeClusterTemplate, View.ClusterTemplates],

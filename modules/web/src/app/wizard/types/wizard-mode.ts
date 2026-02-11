@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export enum WizardMode {
+  CreateUserCluster = 'create-user-cluster',
   CreateClusterTemplate = 'create-cluster-template',
   EditClusterTemplate = 'edit-cluster-template',
   CustomizeClusterTemplate = 'customize-cluster-template',

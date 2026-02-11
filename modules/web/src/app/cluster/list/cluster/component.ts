@@ -48,6 +48,7 @@ import {EMPTY, Subject, combineLatest, iif, of, onErrorResumeNext} from 'rxjs';
 import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 
@@ -240,7 +241,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadWizard(): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
+    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
+      state: {mode: WizardMode.CreateUserCluster},
+    });
   }
 
   navigateToCluster(cluster: Cluster): void {
