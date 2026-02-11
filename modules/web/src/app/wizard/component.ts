@@ -44,6 +44,7 @@ import {
 } from '@shared/entity/application';
 import {WizardMode} from './types/wizard-mode';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
+import {View} from '@shared/entity/common';
 
 @Component({
   selector: 'km-wizard',
@@ -167,13 +168,13 @@ export class WizardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe));
   }
 
-onCancel(): void {
-  this._wizard.reset();
+  onCancel(): void {
+    this._wizard.reset();
 
-  const tail = this._cancelRouteByMode.get(this.wizardMode) ?? 'clusters';
+    const tail = this._cancelRouteByMode.get(this.wizardMode) ?? View.Clusters;
 
-  this._router.navigate([`/projects/${this.project.id}/${tail}`]);
-}
+    this._router.navigate([`/projects/${this.project.id}/${tail}`]);
+  }
 
   onNext(cluster: Cluster): void {
     this.creating = true;
@@ -274,9 +275,10 @@ onCancel(): void {
     }
   }
 
-  private readonly _cancelRouteByMode = new Map<WizardMode, string>([
-    [WizardMode.CreateClusterTemplate, 'clustertemplates'],
-    [WizardMode.EditClusterTemplate, 'clustertemplates']
+  private readonly _cancelRouteByMode = new Map<WizardMode, View>([
+    [WizardMode.CreateClusterTemplate, View.ClusterTemplates],
+    [WizardMode.EditClusterTemplate, View.ClusterTemplates],
+    [WizardMode.CustomizeClusterTemplate, View.ClusterTemplates],
   ]);
 
   private _getCreateClusterModel(
