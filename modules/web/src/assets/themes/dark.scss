@@ -108,53 +108,13 @@ $foreground: map.merge(
   $foreground,
   (
     text: rgb(255 255 255 / 85%),
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     secondary-text: #b8b8b8,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-text: #636363,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox: #656d75,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox-checked: #7e868f,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox-border: #b6b6b6,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled: #7c7c7c,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     divider: #464647,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-divider: #313132,
   )
 );
@@ -174,7 +134,6 @@ html {
   --km-surface-elevated: #{map.get($colors-dark, sidenav-background-hover)}; // #202021
   --km-surface-dialog: #{map.get($background, dialog)}; // #2b2b2c
   --km-surface-toolbar: #{map.get($background, app-bar)}; // #2b2b2c
-  --km-surface-card: #{map.get($background, card)}; // #202021
   --km-color-primary: #{map.get($colors-dark, primary)}; // #0072b0
   --km-text-primary: #{map.get($colors-dark, footer-text)}; // rgb(255 255 255 / 85%)
   --km-text-secondary: #{map.get($foreground, text)}; // rgb(255 255 255 / 85%)
@@ -195,7 +154,6 @@ html {
   // Dialog styling
   --mat-dialog-container-color: var(--km-surface-dialog);
   --mat-dialog-subhead-color: var(--km-text-secondary);
-  --mat-dialog-supporting-text-color: rgb(255 255 255 / 60%);
 
   // Stepper styling
   --mat-stepper-container-color: var(--km-surface-primary);
@@ -237,24 +195,15 @@ html {
   --mat-fab-container-color: var(--km-color-primary);
   --mat-fab-small-container-color: var(--km-color-primary);
 
-  // Button styling
-  --mat-button-filled-container-color: var(--km-surface-primary);
-  --mat-button-tonal-container-color: var(--km-surface-primary);
-  --mat-button-protected-container-color: var(--km-surface-primary);
-
   // Button toggle styling
-  --mat-button-toggle-background-color: var(--km-surface-primary);
   --mat-button-toggle-disabled-state-background-color: var(--km-surface-primary);
-
-  // Slide toggle styling
-  --mat-slide-toggle-handle-surface-color: var(--km-surface-card);
 
   // Checkbox styling
   --mat-checkbox-disabled-selected-checkmark-color: var(--km-surface-primary);
 
   // Option styling (for select, autocomplete, etc.)
-  --mat-option-selected-state-label-text-color: #{map.get($colors-dark, primary)};
-  --mat-option-label-text-color: rgb(255 255 255 / 85%);
+  --mat-option-selected-state-label-text-color: var(--km-color-primary);
+  --mat-option-label-text-color: var(--km-text-primary);
   --mat-option-hover-state-layer-color: rgb(255 255 255 / 8%);
   --mat-option-focus-state-layer-color: rgb(255 255 255 / 8%);
   --mat-option-selected-state-layer-color: rgb(255 255 255 / 8%);

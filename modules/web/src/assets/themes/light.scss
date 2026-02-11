@@ -102,53 +102,13 @@ $foreground: map.merge(
   $foreground,
   (
     text: #4d555c,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     secondary-text: #7e868f,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-text: #d2d7db,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox: #e5e5e5,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox-checked: #cad1c9,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-checkbox-border: #d5d5d5,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled: #eff1f2,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     divider: #e0e3e5,
-  )
-);
-$foreground: map.merge(
-  $foreground,
-  (
     disabled-divider: #eff1f2,
   )
 );
@@ -169,11 +129,9 @@ html {
   --km-surface-dialog: #{map.get($background, dialog)}; // white
   --km-surface-toolbar: #{map.get($background, app-bar)}; // white
   --km-color-primary: #{map.get($colors-light, primary)}; // #00517d
-  --km-text-primary: #{map.get($colors-light, swagger-ui-input-text-color)}; // #4d555c
+  --km-text-primary: #{map.get($foreground, text)}; // #4d555c
   --km-text-secondary: #{map.get($foreground, text)}; // #4d555c
-  --km-text-tertiary: #{map.get($foreground, secondary-text)}; // #7e868f
   --km-divider: #{map.get($colors-light, search-outline)}; // #e0e3e5
-  --km-slide-toggle-handle: #{map.get($colors-light, slide-toggle-handle-color)}; // #fafafa
 
   // Card styling
   --mat-card-elevated-container-color: var(--km-surface-primary);
@@ -190,7 +148,6 @@ html {
   // Dialog styling
   --mat-dialog-container-color: var(--km-surface-dialog);
   --mat-dialog-subhead-color: var(--km-text-secondary);
-  --mat-dialog-supporting-text-color: var(--km-text-tertiary);
 
   // Stepper styling
   --mat-stepper-container-color: var(--km-surface-primary);
@@ -232,23 +189,14 @@ html {
   --mat-fab-container-color: var(--km-color-primary);
   --mat-fab-small-container-color: var(--km-color-primary);
 
-  // Button styling
-  --mat-button-filled-container-color: var(--km-surface-primary);
-  --mat-button-tonal-container-color: var(--km-surface-primary);
-  --mat-button-protected-container-color: var(--km-surface-primary);
-
   // Button toggle styling
-  --mat-button-toggle-background-color: var(--km-surface-primary);
   --mat-button-toggle-disabled-state-background-color: var(--km-surface-primary);
-
-  // Slide toggle styling
-  --mat-slide-toggle-handle-surface-color: var(--km-slide-toggle-handle);
 
   // Checkbox styling
   --mat-checkbox-disabled-selected-checkmark-color: var(--km-surface-primary);
 
   // Option styling (for select, autocomplete, etc.)
-  --mat-option-selected-state-label-text-color: #{map.get($colors-light, primary)}; // #00517d
+  --mat-option-selected-state-label-text-color: var(--km-color-primary);
   --mat-option-label-text-color: #{map.get($foreground, text)}; // #4d555c
   --mat-option-hover-state-layer-color: rgb(0 0 0 / 4%);
   --mat-option-focus-state-layer-color: rgb(0 0 0 / 4%);
