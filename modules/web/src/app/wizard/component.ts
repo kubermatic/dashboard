@@ -169,8 +169,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   onCancel(): void {
-    this._wizard.reset();
-
     const tail = this._cancelRouteByMode.get(this.wizardMode) ?? View.Clusters;
 
     this._router.navigate([`/projects/${this.project.id}/${tail}`]);
