@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {BrandingService} from '@core/services/branding';
 import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -52,7 +53,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _historyService: HistoryService,
     private readonly _notificationService: NotificationService,
-    private readonly _projectService: ProjectService
+    private readonly _projectService: ProjectService,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {

@@ -17,6 +17,7 @@
     "font_url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
     "font_family": "'Inter', helvetica, arial, sans-serif",
     "hide_version": true,
+    "hide_documentation_links": true,
     "colors": {
       "primary": "#0052cc",
       "secondary": "#00b8d9",

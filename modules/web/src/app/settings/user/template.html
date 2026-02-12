@@ -50,11 +50,13 @@ limitations under the License.
         } @else {
         <div>
           No OIDC groups assigned.
+          @if (!branding.hideDocumentationLinks) {
           <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/iam-role-based-access-control/groups-support/"
              target="_blank"
              rel="noreferrer noopener"
              fxLayout="row inline"
              fxLayoutAlign=" center">Learn more <i class="km-icon-external-link i-18"></i></a>
+          }
         </div>
         }
       </div>

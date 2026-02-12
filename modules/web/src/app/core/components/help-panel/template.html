@@ -40,7 +40,7 @@ limitations under the License.
     </div>
     <div class="menu"
          fxLayout="column">
-      @if (!adminSettings?.disableChangelogPopup) {
+      @if (!adminSettings?.disableChangelogPopup && !branding.hideDocumentationLinks) {
       <div class="km-option-hover-bg"
            matRipple
            (click)="openChangelog()"

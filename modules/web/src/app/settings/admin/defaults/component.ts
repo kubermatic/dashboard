@@ -16,6 +16,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
+import {BrandingService} from '@core/services/branding';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -57,7 +58,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
     private readonly _featureGatesService: FeatureGateService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _branding: BrandingService
   ) {}
 
   get hiddenAnnotations(): string[] {
@@ -205,6 +207,9 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   getDocumentationLink(): string {
+    if (this._branding.hideDocumentationLinks) {
+      return '';
+    }
     return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/`;
   }
 

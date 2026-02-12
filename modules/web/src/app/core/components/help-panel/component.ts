@@ -17,6 +17,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
+import {BrandingService} from '@core/services/branding';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
@@ -45,7 +46,8 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _config: AppConfigService,
     private readonly _router: Router,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {
@@ -107,7 +109,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
 
   shouldShowPanel(): boolean {
     return (
-      !this.adminSettings.disableChangelogPopup ||
+      (!this.adminSettings.disableChangelogPopup && !this.branding.hideDocumentationLinks) ||
       this.adminSettings.displayAPIDocs ||
       this.adminSettings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel) ||
       !!this.adminSettings.announcements

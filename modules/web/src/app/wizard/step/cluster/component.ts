@@ -35,6 +35,7 @@ import {
   IPV6_CIDR_PATTERN_VALIDATOR,
   NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
+import {BrandingService} from '@core/services/branding';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -236,6 +237,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _featureGatesService: FeatureGateService,
+    readonly branding: BrandingService,
     wizard: WizardService
   ) {
     super(wizard);

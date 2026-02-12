@@ -41,6 +41,7 @@ export interface BrandingConfig {
   font_family?: string;
   colors?: BrandingColors;
   hide_version?: boolean;
+  hide_documentation_links?: boolean;
 }
 
 export interface Config {
