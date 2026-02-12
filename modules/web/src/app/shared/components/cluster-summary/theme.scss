@@ -13,10 +13,11 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-cluster-summary-component($colors) {
   .km-main,
   .km-main > div {
-    background-color: map.get($colors, background);
+    background-color: km-var($colors, background);
   }
 }

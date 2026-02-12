@@ -15,6 +15,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
+import {BrandingService} from '@core/services/branding';
 import {UserService} from '@core/services/user';
 import {merge, of, Subject} from 'rxjs';
 import {switchMapTo, take, takeUntil, filter} from 'rxjs/operators';
@@ -48,14 +49,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
   @Input() hasSecondarySidenav: boolean;
   showSidenav = true;
   currentView: string;
+  logoUrl: string;
+  shouldInvertLogo = false;
 
   constructor(
     private readonly _auth: Auth,
+    private readonly _brandingService: BrandingService,
     private readonly _userService: UserService,
     private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
+    this._brandingService.logoUrl$.pipe(takeUntil(this._unsubscribe)).subscribe(url => (this.logoUrl = url));
+    this._brandingService.shouldInvertLogo$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(invert => (this.shouldInvertLogo = invert));
+
     merge(of(true), this._onSettingsChange)
       .pipe(switchMapTo(this._userService.currentUserSettings))
       .pipe(takeUntil(this._unsubscribe))

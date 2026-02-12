@@ -13,13 +13,14 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-eol-component($colors) {
   .warning-border {
-    border-color: map.get($colors, indicator-orange);
+    border-color: km-var($colors, indicator-orange);
   }
 
   .error-border {
-    border-color: map.get($colors, indicator-red);
+    border-color: km-var($colors, indicator-red);
   }
 }

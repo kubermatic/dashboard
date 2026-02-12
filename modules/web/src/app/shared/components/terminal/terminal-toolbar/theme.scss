@@ -13,19 +13,20 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-terminal-toolbar-component($colors) {
   .toolbar-container {
-    background-color: map.get($colors, terminal-toolbar-background);
-    color: map.get($colors, terminal-toolbar-color);
+    background-color: km-var($colors, terminal-toolbar-background);
+    color: km-var($colors, terminal-toolbar-color);
 
     & .button-border-box {
-      border: 1px solid map.get($colors, terminal-status-bar-background);
+      border: 1px solid km-var($colors, terminal-status-bar-background);
     }
 
     & .mat-mdc-icon-button {
       &:hover:not([disabled]) {
-        background-color: map.get($colors, terminal-toolbar-hover);
+        background-color: km-var($colors, terminal-toolbar-hover);
       }
     }
   }

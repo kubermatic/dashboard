@@ -20,7 +20,7 @@ html,
 body {
   background-color: #edeff0;
   color: #4d555c;
-  font-family: variables.$font-primary;
+  font-family: var(--km-font-primary, #{variables.$font-primary});
   height: 100%;
   margin: 0;
   padding: 0;

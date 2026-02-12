@@ -71,6 +71,7 @@ $colors-dark: (
   slide-toggle-handle-color: #bdbdbd,
   hint-color: #b8b8b8b3,
   announcement-banner-text: #edeff0,
+  header-text: rgb(255 255 255 / 85%),
 );
 $colors-dark-palette: mat.$m2-blue-palette;
 $colors-dark-palette: map.merge(
@@ -210,7 +211,6 @@ html {
 }
 
 // Make icons and logos white with 85% opacity.
-.km-header-logo,
 .km-provider-logo,
 .km-addon-logo,
 .km-addon-logo-disabled,

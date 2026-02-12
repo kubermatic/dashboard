@@ -13,14 +13,15 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-preset-edit-dialog-component($colors) {
   .table {
-    border-color: map.get($colors, divider);
+    border-color: km-var($colors, divider);
   }
 
   .row {
-    border-bottom-color: map.get($colors, divider);
+    border-bottom-color: km-var($colors, divider);
   }
 
   .km-provider-logo {

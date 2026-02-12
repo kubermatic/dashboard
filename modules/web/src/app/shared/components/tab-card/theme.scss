@@ -14,14 +14,15 @@
 
 @use 'sass:map';
 @use 'variables';
+@use 'km-var' as *;
 
 @mixin theme-tab-card-component($colors) {
   .tab-card {
     .mat-mdc-tab-header {
-      border-bottom: 1px solid map.get($colors, tab-divider);
+      border-bottom: 1px solid km-var($colors, tab-divider);
 
       .mat-ink-bar {
-        background-color: map.get($colors, primary);
+        background-color: km-var($colors, primary);
       }
     }
   }
@@ -30,12 +31,12 @@
     .mat-mdc-tab-header {
       .mat-mdc-tab-label-container {
         .mat-mdc-tab:hover:not(.mdc-tab--active) {
-          background: map.get($colors, background-hover);
+          background: km-var($colors, background-hover);
         }
 
         .mdc-tab--active {
-          background: map.get($colors, background-card);
-          border-top: 2px solid map.get($colors, primary);
+          background: km-var($colors, background-card);
+          border-top: 2px solid km-var($colors, primary);
         }
       }
     }

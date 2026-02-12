@@ -13,81 +13,82 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-sidenav-field-component($colors) {
   .nav-field-label {
     &:not(.expanded) {
-      background-color: map.get($colors, side-nav-background-color);
+      background-color: km-var($colors, side-nav-background-color);
     }
 
     &.expanded {
-      background-color: map.get($colors, sidenav-background-active);
+      background-color: km-var($colors, sidenav-background-active);
 
       a {
         i {
-          background-color: map.get($colors, primary-dark);
+          background-color: km-var($colors, primary-dark);
           filter: none !important;
         }
 
         span {
-          color: map.get($colors, primary-dark);
+          color: km-var($colors, primary-dark);
         }
       }
     }
 
     &:hover:not(.expanded) {
-      background-color: map.get($colors, sidenav-background-hover);
+      background-color: km-var($colors, sidenav-background-hover);
     }
   }
 
   .menu-label {
-    color: map.get($colors, primary-dark);
+    color: km-var($colors, primary-dark);
     font-weight: bolder;
   }
 
   .collapsed-side-nav-bar:not(.expanded-menu) {
     button {
-      background-color: map.get($colors, text);
+      background-color: km-var($colors, text);
     }
 
     &:hover {
-      background-color: map.get($colors, sidenav-background-hover);
+      background-color: km-var($colors, sidenav-background-hover);
     }
   }
 
   .expanded-menu {
-    background-color: map.get($colors, sidenav-background-active);
+    background-color: km-var($colors, sidenav-background-active);
 
     button {
-      background-color: map.get($colors, primary-dark);
+      background-color: km-var($colors, primary-dark);
     }
   }
 
   .sub-menu-item {
     &:not(.active) {
-      background-color: map.get($colors, side-nav-background-color) !important;
+      background-color: km-var($colors, side-nav-background-color) !important;
 
       a {
         &:hover {
-          background-color: map.get($colors, sidenav-background-hover);
+          background-color: km-var($colors, sidenav-background-hover);
 
           span:not(.km-label-primary) {
-            color: map.get($colors, primary-dark);
+            color: km-var($colors, primary-dark);
           }
         }
       }
     }
 
     &.active {
-      background-color: map.get($colors, side-nav-background-color);
+      background-color: km-var($colors, side-nav-background-color);
 
       a {
         span:not(.km-label-primary) {
-          color: map.get($colors, primary-dark);
+          color: km-var($colors, primary-dark);
         }
 
         &::after {
-          background-color: map.get($colors, primary);
+          background-color: km-var($colors, primary);
         }
       }
     }
@@ -95,7 +96,7 @@
 
   .collapsed-sub-menu-item {
     span {
-      color: map.get($colors, text);
+      color: km-var($colors, text);
     }
 
     &:not(:last-child) {
@@ -103,10 +104,10 @@
     }
 
     &:hover {
-      background-color: map.get($colors, collapsed-sidenav-background-hover);
+      background-color: km-var($colors, collapsed-sidenav-background-hover);
 
       span {
-        color: map.get($colors, primary-dark);
+        color: km-var($colors, primary-dark);
       }
     }
 
@@ -114,16 +115,16 @@
       background-color: transparent !important;
 
       span {
-        color: map.get($colors, primary-dark);
+        color: km-var($colors, primary-dark);
       }
 
       &::after {
-        background-color: map.get($colors, primary);
+        background-color: km-var($colors, primary);
       }
     }
   }
 
   .side-nav-end {
-    background-color: map.get($colors, side-nav-background-color);
+    background-color: km-var($colors, side-nav-background-color);
   }
 }

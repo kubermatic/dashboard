@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-notification-panel-component($colors) {
   .notification-success-bg {
@@ -26,7 +27,7 @@
   }
 
   .notification-badge {
-    border: 1px solid map.get($colors, background-app-bar);
+    border: 1px solid km-var($colors, background-app-bar);
     color: #fff;
   }
 }

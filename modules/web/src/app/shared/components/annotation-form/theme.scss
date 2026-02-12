@@ -13,9 +13,10 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-annotation-form-component($colors) {
   .removed-annotation-form {
-    border-left: 5px solid map.get($colors, primary);
+    border-left: 5px solid km-var($colors, primary);
   }
 }

@@ -13,14 +13,15 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-addon-list-component($colors) {
   .addon-container {
     .addon-menu {
-      border-left: 1px solid map.get($colors, divider);
+      border-left: 1px solid km-var($colors, divider);
 
       &:hover {
-        background-color: map.get($colors, background-hover);
+        background-color: km-var($colors, background-hover);
       }
     }
   }

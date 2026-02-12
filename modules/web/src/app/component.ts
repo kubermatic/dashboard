@@ -25,6 +25,7 @@ import {Config} from '@shared/model/Config';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {BrandingService} from '@core/services/branding';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 
@@ -57,6 +58,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     private readonly appConfigService: AppConfigService,
     private readonly _settingsService: SettingsService,
     private readonly _pageTitleService: PageTitleService,
+    private readonly _brandingService: BrandingService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {
     this.version = this.appConfigService.getGitVersion();
@@ -110,7 +112,11 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   private _registerRouterWatch(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this._pageTitleService.setTitle(event.urlAfterRedirects, this.config.postfix_page_title);
+        const titlePostfix =
+          this.config.branding?.postfix_page_title ||
+          this.config.postfix_page_title ||
+          this._brandingService.getProductName();
+        this._pageTitleService.setTitle(event.urlAfterRedirects, titlePostfix);
         this._handleSidenav(event.urlAfterRedirects);
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
       }
@@ -150,5 +156,6 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     }
 
     positionElement.after(themeElement);
+    this._brandingService.injectCustomCss();
   }
 }

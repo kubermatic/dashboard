@@ -13,14 +13,15 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-applications-list-component($colors) {
   .mat-button-toggle-group {
     &.applications-view-switch {
       .mat-button-toggle {
         &.mat-button-toggle-checked {
-          background-color: map.get($colors, divider);
-          border-color: map.get($colors, divider);
+          background-color: km-var($colors, divider);
+          border-color: km-var($colors, divider);
         }
       }
     }
@@ -28,7 +29,7 @@
 
   .application-cards-view {
     .application-card {
-      box-shadow: 0 0 0 1px map.get($colors, divider);
+      box-shadow: 0 0 0 1px km-var($colors, divider);
     }
   }
 }

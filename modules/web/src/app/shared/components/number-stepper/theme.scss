@@ -13,17 +13,18 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-number-stepper-component($colors) {
   .mat-mdc-icon-button.stepper-button {
-    background-color: map.get($colors, divider);
+    background-color: km-var($colors, divider);
 
     &:hover {
-      background-color: map.get($colors, text-disabled) !important;
+      background-color: km-var($colors, text-disabled) !important;
     }
 
     &.left {
-      border-right: 1px solid map.get($colors, text-disabled);
+      border-right: 1px solid km-var($colors, text-disabled);
     }
   }
 }

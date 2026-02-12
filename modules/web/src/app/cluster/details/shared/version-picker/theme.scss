@@ -13,21 +13,22 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-version-picker-component($colors) {
   .version-picker-container {
     .km-version-picker {
       .mat-form-field-outline {
-        --mat-form-field-outlined-disabled-outline-color: #{map.get($colors, divider)};
+        --mat-form-field-outlined-disabled-outline-color: #{km-var($colors, divider)};
       }
 
       .version-picker-type {
-        border-color: map.get($colors, divider);
+        border-color: km-var($colors, divider);
       }
 
       .mat-mdc-form-field {
         .mat-mdc-select-value-text {
-          color: map.get($colors, text);
+          color: km-var($colors, text);
         }
 
         .mdc-notched-outline {
@@ -37,13 +38,13 @@
         }
 
         div.mat-mdc-form-field-flex label {
-          color: map.get($colors, text-secondary);
+          color: km-var($colors, text-secondary);
         }
       }
 
       &.km-version-picker-enabled:hover {
         .version-picker-type {
-          border-color: map.get($colors, secondary);
+          border-color: km-var($colors, secondary);
         }
 
         .mat-mdc-form-field {
@@ -51,14 +52,14 @@
             .mdc-notched-outline__leading,
             .mdc-notched-outline__notch,
             .mdc-notched-outline__trailing {
-              border-color: map.get($colors, secondary);
+              border-color: km-var($colors, secondary);
               border-width: 2px;
             }
           }
         }
 
         div.mat-mdc-form-field-flex label {
-          color: map.get($colors, secondary-dark);
+          color: km-var($colors, secondary-dark);
         }
       }
     }

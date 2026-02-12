@@ -13,15 +13,16 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-project-selector-component($colors) {
   .projects-container {
     i {
-      background-color: map.get($colors, text);
+      background-color: km-var($colors, text);
     }
 
     &:hover {
-      background-color: map.get($colors, project-selector-hover);
+      background-color: km-var($colors, project-selector-hover);
     }
   }
 }

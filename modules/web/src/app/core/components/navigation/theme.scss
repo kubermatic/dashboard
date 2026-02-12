@@ -13,14 +13,20 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-navigation-component($colors) {
   .navbar {
-    background-color: map.get($colors, background-app-bar);
-    box-shadow: map.get($colors, shadow);
+    background-color: km-var($colors, background-app-bar);
+    box-shadow: km-var($colors, shadow);
+    color: km-var($colors, header-text);
 
     .km-header-logo-border {
-      border-right: 1px solid map.get($colors, divider);
+      border-right: 1px solid km-var($colors, divider);
+    }
+
+    .view-name {
+      color: km-var($colors, header-text);
     }
   }
 }

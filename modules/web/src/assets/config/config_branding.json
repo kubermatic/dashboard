@@ -1,0 +1,27 @@
+{
+  "_comment": "Sample branding configuration",
+  "openstack": {
+    "wizard_use_default_user": false,
+    "wizard_default_domain_name": "Default"
+  },
+  "branding": {
+    "product_name": "Palmer Cloud",
+    "product_url": "https://palmercloud.com/",
+    "postfix_page_title": "Palmer Cloud",
+    "tagline": "Your Cloud, Your Rules",
+    "logo_url": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/kubernetes.svg",
+    "logo_dark_url": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/kubernetes.svg",
+    "favicon_url": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/kubernetes.svg",
+    "background_url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80",
+    "custom_css_url": "",
+    "font_url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+    "font_family": "'Inter', helvetica, arial, sans-serif",
+    "hide_version": true,
+    "colors": {
+      "primary": "#0052cc",
+      "secondary": "#00b8d9",
+      "header_bg": "#1a1a2e",
+      "header_text": "#ffffff"
+    }
+  }
+}

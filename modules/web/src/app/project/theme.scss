@@ -13,25 +13,26 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-project-component($colors) {
   .mat-button-toggle-group {
     &.project-view-switch {
       .mat-button-toggle {
         &.mat-button-toggle-checked {
-          background-color: map.get($colors, divider);
-          border-color: map.get($colors, divider);
+          background-color: km-var($colors, divider);
+          border-color: km-var($colors, divider);
         }
       }
     }
   }
 
   .km-initials-circle {
-    background-color: map.get($colors, background-card);
-    border: 2px solid map.get($colors, divider);
+    background-color: km-var($colors, background-card);
+    border: 2px solid km-var($colors, divider);
 
     &.accent {
-      background-color: map.get($colors, divider);
+      background-color: km-var($colors, divider);
     }
   }
 }

@@ -13,12 +13,13 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'km-var' as *;
 
 @mixin theme-property-usage-component($colors) {
   .property-usage-bar {
     /* stylelint-disable-next-line selector-class-pattern */
     .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
-      background-color: map.get($colors, divider);
+      background-color: km-var($colors, divider);
     }
   }
 }
