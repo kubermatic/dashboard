@@ -291,7 +291,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		WithObjects(allObjects...).
 		WithIndex(&corev1.Event{}, handlerv1common.EventFieldIndexerKey, handlerv1common.EventIndexer()).
 		Build()
-	kubernetesClient := fakerestclient.NewSimpleClientset(getRuntimeObjects(kubeObjects...)...)
+	kubernetesClient := fakerestclient.NewClientset(getRuntimeObjects(kubeObjects...)...)
 	// fakeImpersonationClient is used for seed cluster operations
 	fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 		return fakeSeedClient, nil

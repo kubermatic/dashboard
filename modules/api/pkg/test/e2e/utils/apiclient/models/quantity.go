@@ -74,6 +74,7 @@ package models
 // +protobuf.options.(gogoproto.goproto_stringer)=false
 // +k8s:deepcopy-gen=true
 // +k8s:openapi-gen=true
+// +k8s:openapi-model-package=io.k8s.apimachinery.pkg.api.resource
 //
 // swagger:model Quantity
 type Quantity interface{}

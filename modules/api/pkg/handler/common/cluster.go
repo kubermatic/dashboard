@@ -619,7 +619,7 @@ func PatchEndpoint(
 	}
 
 	// apply default values to the new cluster
-	if err := defaulting.DefaultClusterSpec(ctx, &newInternalCluster.Spec, defaultingTemplate, seed, config, cloudProvider); err != nil {
+	if err := defaulting.DefaultClusterSpec(ctx, &newInternalCluster.Spec, nil, defaultingTemplate, seed, config, cloudProvider); err != nil {
 		return nil, err
 	}
 

@@ -579,7 +579,7 @@ func TestListProjectMethod(t *testing.T) {
 			}
 
 			fUserClusterConnection := &fakeUserClusterConnection{fakeSeedClient}
-			kubernetesClient := fakerestclient.NewSimpleClientset()
+			kubernetesClient := fakerestclient.NewClientset()
 			clusterProvider := kubernetes.NewClusterProvider(
 				&restclient.Config{},
 				fakeImpersonationClient,
