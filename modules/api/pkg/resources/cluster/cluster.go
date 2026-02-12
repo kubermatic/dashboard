@@ -98,7 +98,7 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		return nil, nil, err
 	}
 
-	if err := defaulting.DefaultClusterSpec(ctx, spec, template, seed, config, cloudProvider); err != nil {
+	if err := defaulting.DefaultClusterSpec(ctx, spec, nil, template, seed, config, cloudProvider); err != nil {
 		return nil, nil, err
 	}
 

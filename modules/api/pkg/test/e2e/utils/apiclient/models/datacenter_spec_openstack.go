@@ -63,6 +63,12 @@ type DatacenterSpecOpenstack struct {
 	// This setting defaults to true.
 	ManageSecurityGroups bool `json:"manageSecurityGroups,omitempty"`
 
+	// NodeVolumeAttachLimit defines the maximum number of volumes that can be
+	// attached to a single node. If set, this value overrides the default
+	// OpenStack volume attachment limit.
+	// +optional
+	NodeVolumeAttachLimit uint64 `json:"nodeVolumeAttachLimit,omitempty"`
+
 	// Authentication region name
 	Region string `json:"region,omitempty"`
 
