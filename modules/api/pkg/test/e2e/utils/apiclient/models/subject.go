@@ -31,6 +31,8 @@ type Subject struct {
 	Kind string `json:"kind,omitempty"`
 
 	// Name of the object being referenced.
+	// +required
+	// +k8s:required
 	Name string `json:"name,omitempty"`
 
 	// Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty

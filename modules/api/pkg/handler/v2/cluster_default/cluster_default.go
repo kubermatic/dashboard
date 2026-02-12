@@ -203,7 +203,7 @@ func defaultClusterSpec(ctx context.Context, provider kubermaticv1.ProviderType,
 	cluster.Spec.ContainerRuntime = resources.ContainerRuntimeContainerd
 	cluster.Spec.Cloud = initializeCloudProviderSpec(dc, provider)
 
-	if err := defaulting.DefaultClusterSpec(ctx, &cluster.Spec, defaultClusterTemplate, seed, config, nil); err != nil {
+	if err := defaulting.DefaultClusterSpec(ctx, &cluster.Spec, cluster.Labels, defaultClusterTemplate, seed, config, nil); err != nil {
 		return nil, err
 	}
 
