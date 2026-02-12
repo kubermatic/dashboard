@@ -174,7 +174,9 @@ limitations under the License.
                         [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
                         id="km-enable-kubernetes-dashboard-setting">
             @if (!isKubernetesDashboardFeatureGatesEnabled()) {
-            <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled. Visit the
+            <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled.
+              @if (getDocumentationLink()) {
+              Visit the
               <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -184,6 +186,7 @@ limitations under the License.
                 documentation <i class="km-icon-external-link i-18"></i>
               </a>
               to learn more.
+              }
             </mat-hint>
             }
           </mat-checkbox>
@@ -203,7 +206,9 @@ limitations under the License.
                         (change)="onOIDCKubeconfigSettingsChange()"
                         id="km-enable-oidc-setting">
             @if (!isOIDCKubeCfgEndpointEnabled) {
-            <mat-hint>This feature is disabled. Visit the
+            <mat-hint>This feature is disabled.
+              @if (getDocumentationLink()) {
+              Visit the
               <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -213,6 +218,7 @@ limitations under the License.
                 documentation <i class="km-icon-external-link i-18"></i>
               </a>
               to learn more.
+              }
             </mat-hint>
             }
           </mat-checkbox>
@@ -246,7 +252,9 @@ limitations under the License.
                         (change)="onSettingsChange()"
                         id="km-disabled-admin-kubeconfig-setting">
             @if (!settings.enableOIDCKubeconfig) {
-            <mat-hint>This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+            <mat-hint>This feature requires the OIDC kubeconfig feature to be enabled.
+              @if (getDocumentationLink()) {
+              Visit the
               <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -256,6 +264,7 @@ limitations under the License.
                 documentation <i class="km-icon-external-link i-18"></i>
               </a>
               to learn more.
+              }
             </mat-hint>
             }
           </mat-checkbox>

@@ -19,14 +19,16 @@ limitations under the License.
   <div fxFlex>
     @if (!addons?.length) {
     <p>
-      Addons are extensions provided by Kubermatic to expand cluster capabilities,
+      Addons are extensions provided by Kubermatic to expand cluster capabilities.
+      @if (!branding.hideDocumentationLinks) {
       <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/concept/kkp-concepts/addons/"
          target="_blank"
          rel="noreferrer noopener"
          fxLayout="row inline"
          fxLayoutAlign=" center">
-        learn more about Addons <i class="km-icon-external-link i-18"></i>.
+        Learn more about Addons <i class="km-icon-external-link i-18"></i>.
       </a>
+      }
     </p>
     }
   </div>

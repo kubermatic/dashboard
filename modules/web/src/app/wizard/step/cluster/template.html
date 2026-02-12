@@ -136,12 +136,15 @@ limitations under the License.
               </mat-option>
               }
             </mat-select>
-            <mat-hint>Leave empty to use the default value. Check the documentation for more information
+            <mat-hint>Leave empty to use the default value.
+              @if (!branding.hideDocumentationLinks) {
+              Check the documentation for more information
               <a target="_blank"
                  rel="noopener"
                  fxLayout="row inline"
                  fxLayoutAlign=" center"
                  href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/expose-strategies/#configure-the-expose-strategy">here <i class="km-icon-external-link"></i></a>.
+              }
             </mat-hint>
           </mat-form-field>
           @if (isExposeStrategyLoadBalancer()) {
@@ -154,12 +157,15 @@ limitations under the License.
                         kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
             <ng-container hint>
               Use commas, space or enter key as the separators. This feature is dependent on cloud provider
-              capabilities. Check the documentation for more information&nbsp;
+              capabilities.
+              @if (!branding.hideDocumentationLinks) {
+              Check the documentation for more information&nbsp;
               <a target="_blank"
                  rel="noopener"
                  fxLayout="row inline"
                  fxLayoutAlign=" center"
                  href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/apiserver-policies/#api-server-allowed-source-ip-ranges">here <i class="km-icon-external-link"></i></a>.
+              }
             </ng-container>
           </km-chip-list>
           }

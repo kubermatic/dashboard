@@ -37,6 +37,7 @@ import {NotificationService} from '@core/services/notification';
 import {PreviousRouteService} from '@core/services/previous-route';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
+import {BrandingService} from '@core/services/branding';
 import {UserService} from '@core/services/user';
 import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/component';
 import {View} from '@shared/entity/common';
@@ -130,7 +131,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _dialogModeService: DialogModeService,
+    readonly branding: BrandingService
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);

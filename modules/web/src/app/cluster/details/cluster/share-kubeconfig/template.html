@@ -20,6 +20,7 @@ limitations under the License.
     Share <b>{{cluster.name}}</b> cluster with other users by giving them the following link that can be used to authenticate with an OIDC provider and then generate a kubeconfig file.
   </p>
   <p>
+    @if (!branding.hideDocumentationLinks) {
     <strong>
       Please <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
          target="_blank"
@@ -28,6 +29,7 @@ limitations under the License.
          rel="noopener">visit our documentation <i class="km-icon-external-link i-18"></i></a>
       for more details.
     </strong>
+    }
   </p>
   }
   <label class="km-radio-group-label">

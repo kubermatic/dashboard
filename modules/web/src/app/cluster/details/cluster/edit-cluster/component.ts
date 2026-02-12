@@ -20,6 +20,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS, NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {BSLListState} from '@app/wizard/step/cluster/component';
+import {BrandingService} from '@core/services/branding';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -157,7 +158,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
     private readonly _clusterBackupService: ClusterBackupService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {

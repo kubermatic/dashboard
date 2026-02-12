@@ -63,6 +63,10 @@ export class BrandingService {
     return !!this._config.hide_version;
   }
 
+  get hideDocumentationLinks(): boolean {
+    return !!this._config.hide_documentation_links;
+  }
+
   injectCustomCss(): void {
     if (!this._config.custom_css_url) {
       return;

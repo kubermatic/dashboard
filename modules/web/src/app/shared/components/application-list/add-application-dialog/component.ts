@@ -30,6 +30,7 @@ import {
   ApplicationVersion,
   getApplicationVersion,
 } from '@shared/entity/application';
+import {BrandingService} from '@core/services/branding';
 import {getEditionVersion} from '@shared/utils/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as y from 'js-yaml';
@@ -84,7 +85,8 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   constructor(
     public dialogRef: MatDialogRef<AddApplicationDialogComponent>,
     private readonly _builder: FormBuilder,
-    private readonly _applicationService: ApplicationService
+    private readonly _applicationService: ApplicationService,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {

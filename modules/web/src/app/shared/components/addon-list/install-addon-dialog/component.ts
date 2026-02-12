@@ -27,6 +27,7 @@ import {
 } from '@shared/entity/addon';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
+import {BrandingService} from '@core/services/branding';
 import {getEditionVersion} from '@shared/utils/common';
 import _ from 'lodash';
 
@@ -63,7 +64,8 @@ export class InstallAddonDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<Component>,
     private readonly _builder: FormBuilder,
-    private readonly _sanitizer: DomSanitizer
+    private readonly _sanitizer: DomSanitizer,
+    readonly branding: BrandingService
   ) {}
 
   hasLogo(name: string): boolean {

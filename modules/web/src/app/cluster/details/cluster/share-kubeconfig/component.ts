@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
+import {BrandingService} from '@core/services/branding';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
@@ -55,7 +56,8 @@ export class ShareKubeconfigComponent implements OnInit {
     private readonly _clusterService: ClusterService,
     private readonly _auth: Auth,
     private readonly _userService: UserService,
-    private readonly _matDialogRef: MatDialogRef<ShareKubeconfigComponent>
+    private readonly _matDialogRef: MatDialogRef<ShareKubeconfigComponent>,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {

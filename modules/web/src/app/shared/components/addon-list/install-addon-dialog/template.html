@@ -28,6 +28,7 @@ limitations under the License.
     <div class="select-addon-desc">
       <p>
         Addons are extensions provided by Kubermatic to expand cluster capabilities.
+        @if (!branding.hideDocumentationLinks) {
         <br />
         <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/architecture/concept/kkp-concepts/addons/"
            target="_blank"
@@ -36,6 +37,7 @@ limitations under the License.
            fxLayoutAlign=" center">
           Learn more about Addons <i class="km-icon-external-link i-18"></i>.
         </a>
+        }
       </p>
     </div>
     @for (installableAddon of installableAddons; track installableAddon) {

@@ -29,6 +29,7 @@ import {
   S3Client,
   UploadPartCommand,
 } from '@aws-sdk/client-s3';
+import {BrandingService} from '@core/services/branding';
 import {ClusterBackupService} from '@core/services/cluster-backup';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
@@ -96,7 +97,8 @@ export class UploadBackupsDialogComponent implements OnInit, OnDestroy {
     private readonly _builder: FormBuilder,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {

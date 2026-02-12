@@ -22,6 +22,7 @@ import {finalize, take, takeUntil} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
+import {BrandingService} from '@core/services/branding';
 import {AddonService} from '@core/services/addon';
 import {getEditionVersion} from '@shared/utils/common';
 import {DialogModeService} from '@app/core/services/dialog-mode';
@@ -55,7 +56,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _dialogModeService: DialogModeService,
+    readonly branding: BrandingService
   ) {}
 
   ngOnInit(): void {
