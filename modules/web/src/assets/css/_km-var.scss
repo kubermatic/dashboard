@@ -13,9 +13,6 @@
 // limitations under the License.
 
 @use 'sass:map';
-@use 'sass:meta';
-@use 'sass:list';
-@use 'sass:string';
 
 /// Returns `var(--km-color-#{$key}, #{fallback})` so runtime CSS custom
 /// properties can override any color while SCSS compilation still produces
