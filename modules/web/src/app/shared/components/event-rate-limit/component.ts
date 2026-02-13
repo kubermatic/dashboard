@@ -26,6 +26,7 @@ import {EventRateLimitConfig, EventRateLimitConfigItem} from '@shared/entity/clu
 import {takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import _ from 'lodash';
 
 enum Controls {
   EventRateLimitConfig = 'eventRateLimitConfig',
@@ -70,6 +71,8 @@ const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;
+  @Input() disableAll = false;
+  @Input() isEnforcedByAdmin = false;
 
   form: FormGroup;
   readonly Controls = Controls;
@@ -93,7 +96,9 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.EventRateLimitConfig]: this._builder.array([])});
-
+    if (this.isEnforcedByAdmin) {
+      this.disableAll = true;
+    }
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._refreshChosenTypes();
       this.addTypeIfNeeded();
@@ -101,6 +106,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   }
 
   ngOnDestroy(): void {
+    this.form.reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
@@ -108,8 +114,8 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   writeValue(eventRateLimitConfig: EventRateLimitConfig) {
     this.eventRateLimitConfig = eventRateLimitConfig;
     this.eventRateLimitConfigArray.clear();
-
-    if (eventRateLimitConfig) {
+    const eventRateLimitConfigKeys = eventRateLimitConfig ? Object.keys(eventRateLimitConfig) : [];
+    if (eventRateLimitConfigKeys.length > 0) {
       Object.keys(eventRateLimitConfig).forEach(limitType => {
         const config = eventRateLimitConfig[limitType];
         this.addEventType(limitType, config.qps, config.burst, config.cacheSize);
@@ -200,8 +206,8 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
     return this.chosenEventRateLimitTypes.includes(type) && control.get(Controls.LimitType).value !== type;
   }
 
-  blockDeletion(index: number): boolean {
-    return !this.isRequired(index) || this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS;
+  blockDeletion(): boolean {
+    return this.eventRateLimitConfigArray.length === this.MIN_EVENT_RATE_LIMIT_ELEMENTS || this.disableAll;
   }
 
   private _refreshChosenTypes(): void {

@@ -13,10 +13,18 @@
 // limitations under the License.
 
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {FeatureGateService} from '@app/core/services/feature-gate';
+import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
+import {
+  EventRateLimitConfig,
+  EventRateLimitConfigItem,
+  GlobalEventRateLimitPluginConfiguration,
+} from '@app/shared/entity/cluster';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {BrandingService} from '@core/services/branding';
+import {EMPTY_EVENT_RATE_LIMIT_CONFIG} from '@app/shared/utils/admission-plugin';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -28,6 +36,12 @@ import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE} from '@app/shared/constants/com
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
+
+enum EventRateConfigActions {
+  Enabled = 'enabled',
+  Enforced = 'enforced',
+  DefaultConfig = 'defaultConfig',
+}
 
 @Component({
   selector: 'km-defaults',
@@ -44,6 +58,12 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   isOpenIDAuthPluginEnabled = true;
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
   editionVersion: string = getEditionVersion();
+  eventRateLimitConfig: GlobalEventRateLimitPluginConfiguration;
+  eventRateLimitConfigSubject = new Subject<GlobalEventRateLimitPluginConfiguration>();
+  eventRateLimitConfigFormControl: FormControl = new FormControl();
+  disableEventRateLimitConfigForm = true;
+  isEventRateLimitUpdating = false;
+  eventRateConfigActions = EventRateConfigActions;
 
   readonly OperatingSystem = OperatingSystem;
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
@@ -59,7 +79,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _featureGatesService: FeatureGateService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _branding: BrandingService
+    private readonly _branding: BrandingService,
+    private readonly _userClusterConfigService: UserClusterConfigService
   ) {}
 
   get hiddenAnnotations(): string[] {
@@ -100,6 +121,57 @@ export class DefaultsComponent implements OnInit, OnDestroy {
           os => settings.allowedOperatingSystems[os] === true
         ));
     });
+
+    this._userClusterConfigService
+      .getAdmissionPluginsConfiguration()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(config => {
+        if (config?.eventRateLimit) {
+          this.eventRateLimitConfig = config.eventRateLimit;
+          this.disableEventRateLimitConfigForm = !this.eventRateLimitConfig.enabled;
+        } else {
+          this.eventRateLimitConfig = EMPTY_EVENT_RATE_LIMIT_CONFIG;
+        }
+        this.eventRateLimitConfigFormControl.setValue(this.eventRateLimitConfig.defaultConfig, {emitEvent: false});
+      });
+
+    this.eventRateLimitConfigFormControl.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(debounceTime(this._debounceTime))
+      .subscribe((config: {eventRateLimitConfig: EventRateLimitConfigItem[]}) => {
+        const newConfig: EventRateLimitConfig = {};
+        let inValidConfig = false;
+        config?.eventRateLimitConfig?.forEach((item, i) => {
+          if (item.limitType && item.qps && item.burst && item.cacheSize) {
+            newConfig[item.limitType] = {
+              qps: item.qps,
+              burst: item.burst,
+              cacheSize: item.cacheSize,
+            };
+          } else {
+            inValidConfig = config.eventRateLimitConfig.length - 1 === i ? inValidConfig : true;
+          }
+        });
+
+        if (!inValidConfig && !_.isEqual(newConfig, this.eventRateLimitConfig?.defaultConfig || {})) {
+          this.onEventRateLimitConfigChange(EventRateConfigActions.DefaultConfig, newConfig);
+        }
+      });
+
+    this.eventRateLimitConfigSubject
+      .pipe(
+        debounceTime(this._debounceTime),
+        switchMap(value => {
+          this.isEventRateLimitUpdating = true;
+          return this._userClusterConfigService.patchAdmissionPluginsConfiguration({eventRateLimit: value});
+        }),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(res => {
+        this.eventRateLimitConfig = res.eventRateLimit;
+        this.isEventRateLimitUpdating = false;
+        this._notificationService.success('Updated the Event Rate Limit configuration');
+      });
 
     this._settingsChange
       .pipe(
@@ -211,6 +283,38 @@ export class DefaultsComponent implements OnInit, OnDestroy {
       return '';
     }
     return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/`;
+  }
+
+  onEventRateLimitConfigChange(action: string, config: EventRateLimitConfig | boolean): void {
+    let updatePayload = _.cloneDeep(this.eventRateLimitConfig?.defaultConfig || {});
+    switch (action) {
+      case EventRateConfigActions.Enabled:
+        if (config) {
+          this.disableEventRateLimitConfigForm = false;
+        } else {
+          this.disableEventRateLimitConfigForm = true;
+          updatePayload = {} as EventRateLimitConfig;
+        }
+        this.eventRateLimitConfig.enabled = config as boolean;
+        this.isEventRateLimitUpdating = true;
+        this.eventRateLimitConfigSubject.next({...this.eventRateLimitConfig, defaultConfig: updatePayload});
+        break;
+      case EventRateConfigActions.Enforced:
+        if (config) {
+          this.eventRateLimitConfig.enabled = true;
+          this.disableEventRateLimitConfigForm = false;
+        }
+        this.eventRateLimitConfig.enforced = config as boolean;
+        this.isEventRateLimitUpdating = true;
+        this.eventRateLimitConfigSubject.next(this.eventRateLimitConfig);
+
+        break;
+      case EventRateConfigActions.DefaultConfig:
+        updatePayload = config as EventRateLimitConfig;
+        this.eventRateLimitConfigSubject.next({...this.eventRateLimitConfig, defaultConfig: updatePayload});
+        break;
+    }
+    this.isEventRateLimitUpdating = true;
   }
 
   private _checkLabels(staticLabels: StaticLabel[]): boolean {

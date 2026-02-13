@@ -175,6 +175,12 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     this.onTouch = _fn;
   }
 
+  setDisabledState(isDisabled: boolean): void {
+    // test this changes on different pages
+    this.disabled = isDisabled;
+    this._cdr.markForCheck();
+  }
+
   validate(_?: AbstractControl): ValidationErrors | null {
     if (this._valid) {
       return null;

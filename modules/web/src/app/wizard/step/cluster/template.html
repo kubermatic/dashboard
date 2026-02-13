@@ -353,7 +353,7 @@ limitations under the License.
                           disableOptionCentering>
                 @for (admissionPlugin of admissionPlugins; track admissionPlugin) {
                 <mat-option [value]="admissionPlugin"
-                            [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
+                            [disabled]="isAdmissionPluginEnforced(admissionPlugin)">
                   {{getPluginName(admissionPlugin)}}
                   @if (admissionPlugin === admissionPlugin.PodSecurityPolicy) {
                   <i class="km-icon-info km-pointer"
@@ -403,7 +403,8 @@ limitations under the License.
             }
             @if (isPluginEnabled(admissionPlugin.EventRateLimit)) {
             <div>
-              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)" />
+              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"
+                                                  [isEnforcedByAdmin]="admissionPluginsConfiguration?.eventRateLimit?.enforced" />
             </div>
             }
           </div>

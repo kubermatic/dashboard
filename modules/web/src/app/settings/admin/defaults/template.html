@@ -503,6 +503,38 @@ limitations under the License.
                           fxFlex />
           </div>
         </div>
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>Event Rate Limit</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Configure default event rate limits for user clusters."></div>
+          </div>
+          <div fxFlexAlign=" center"
+               fxLayout="column">
+            <div>
+              <mat-checkbox [ngModel]="eventRateLimitConfig?.enabled"
+                            [disabled]="eventRateLimitConfig?.enforced"
+                            (change)="onEventRateLimitConfigChange(eventRateConfigActions.Enabled, $event.checked)"
+                            fxFlexAlign=" center">Default
+              </mat-checkbox>
+              <mat-checkbox [ngModel]="eventRateLimitConfig?.enforced"
+                            (change)="onEventRateLimitConfigChange(eventRateConfigActions.Enforced, $event.checked)"
+                            fxFlexAlign=" center">Enforce
+              </mat-checkbox>
+            </div>
+            <div fxLayout="row">
+              <div fxFlexAlign=" center"
+                   fxLayout="row">
+                <km-wizard-cluster-event-rate-limit [formControl]="eventRateLimitConfigFormControl"
+                                                    [disableAll]="disableEventRateLimitConfigForm" />
+              </div>
+              <km-spinner-with-confirmation [isSaved]="!isEventRateLimitUpdating" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </mat-card-content>

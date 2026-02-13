@@ -181,6 +181,7 @@ type providers struct {
 	seedsGetter                                    provider.SeedsGetter
 	seedClientGetter                               provider.SeedClientGetter
 	configGetter                                   provider.KubermaticConfigurationGetter
+	userClusterConfigProvider                      provider.UserClusterConfigProvider
 	addons                                         provider.AddonProviderGetter
 	addonConfigProvider                            provider.AddonConfigProvider
 	userInfoGetter                                 provider.UserInfoGetter

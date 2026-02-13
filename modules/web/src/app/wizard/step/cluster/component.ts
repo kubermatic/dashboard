@@ -60,6 +60,7 @@ import {
   ProxyMode,
   EventRateLimitConfig,
   EventRateLimitConfigItem,
+  GlobalAdmissionPluginsConfiguration,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -88,6 +89,7 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
+import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -195,6 +197,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   isUserSshKeyEnabled = false;
   wizardMode: WizardMode;
+  admissionPluginsConfiguration: GlobalAdmissionPluginsConfiguration;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -238,6 +241,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _featureGatesService: FeatureGateService,
     readonly branding: BrandingService,
+    private readonly _userClusterConfigService: UserClusterConfigService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -305,7 +309,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
-          this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+          this._enforcedAdmissionPlugins(AdmissionPlugin.PodSecurityPolicy, datacenter.spec.enforcePodSecurityPolicy);
           this._enforceDisableCSIDriver(datacenter.spec.disableCsiDriver);
           this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
@@ -374,6 +378,22 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     });
 
     if (!this.clusterTemplateEditMode) {
+      this._userClusterConfigService
+        .getAdmissionPluginsConfiguration()
+        .pipe(take(1))
+        .subscribe(config => {
+          this.admissionPluginsConfiguration = config;
+          this._enforcedAdmissionPlugins(
+            AdmissionPlugin.EventRateLimit,
+            this.admissionPluginsConfiguration?.eventRateLimit?.enabled
+          );
+          if (this.admissionPluginsConfiguration?.eventRateLimit?.enabled) {
+            this.form
+              .get(Controls.EventRateLimitConfig)
+              .setValue(this.admissionPluginsConfiguration.eventRateLimit.defaultConfig);
+          }
+        });
+
       combineLatest([this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges])
         .pipe(
           filter(_ => {
@@ -396,7 +416,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.control(Controls.AdmissionPlugins)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
-        const selectedPlugins = this.form.get(Controls.AdmissionPlugins).value;
+        const selectedPlugins = this.form.get(Controls.AdmissionPlugins).value as AdmissionPlugin[];
         this._clusterSpecService.admissionPlugins = selectedPlugins;
         if (
           !selectedPlugins.includes(AdmissionPlugin.PodSecurityPolicy) &&
@@ -405,14 +425,22 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.control(Controls.PodNodeSelectorAdmissionPluginConfig).reset();
           this.onPodNodeSelectorAdmissionPluginConfigChange({});
         }
+
+        if (selectedPlugins.includes(AdmissionPlugin.EventRateLimit)) {
+          if (this.admissionPluginsConfiguration?.eventRateLimit?.enabled) {
+            this.control(Controls.EventRateLimitConfig).setValue(
+              this.admissionPluginsConfiguration.eventRateLimit?.defaultConfig ?? {}
+            );
+          }
+        }
       });
 
     this.control(Controls.EventRateLimitConfig)
       .valueChanges.pipe(debounceTime(this._debounceTime), takeUntil(this._unsubscribe))
       .subscribe((eventRate: {eventRateLimitConfig: EventRateLimitConfigItem[]}) => {
         const eventRateLimitConfig: EventRateLimitConfig = {};
-        if (eventRate.eventRateLimitConfig?.length) {
-          eventRate.eventRateLimitConfig.forEach(item => {
+        if (eventRate.eventRateLimitConfig) {
+          eventRate.eventRateLimitConfig.forEach((item: EventRateLimitConfigItem) => {
             if (item.limitType) {
               eventRateLimitConfig[item.limitType] = {
                 qps: item.qps,
@@ -633,6 +661,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
   }
 
+  isAdmissionPluginEnforced(admissionPlugin: AdmissionPlugin): boolean {
+    switch (admissionPlugin) {
+      case AdmissionPlugin.EventRateLimit:
+        return this.admissionPluginsConfiguration?.eventRateLimit?.enforced;
+      case AdmissionPlugin.PodSecurityPolicy:
+        return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
+      default:
+        return false;
+    }
+  }
+
   getPluginName(name: string): string {
     return AdmissionPluginUtils.getPluginName(name);
   }
@@ -829,7 +868,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.MLAMonitoring]: clusterSpec?.mla?.monitoringEnabled ?? this.controlValue(Controls.MLAMonitoring),
           [Controls.AdmissionPlugins]: clusterSpec?.admissionPlugins ?? this.controlValue(Controls.AdmissionPlugins),
           [Controls.EventRateLimitConfig]:
-            clusterSpec?.eventRateLimitConfig ?? this.controlValue(Controls.EventRateLimitConfig),
+            this.admissionPluginsConfiguration?.eventRateLimit?.defaultConfig ??
+            clusterSpec?.eventRateLimitConfig ??
+            this.controlValue(Controls.EventRateLimitConfig),
           [Controls.Labels]: cluster?.labels ?? this.controlValue(Controls.Labels),
           [Controls.Annotations]: cluster?.annotations ?? this.controlValue(Controls.Annotations),
           [Controls.PodNodeSelectorAdmissionPluginConfig]:
@@ -1028,13 +1069,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
-  private _enforcePodSecurityPolicy(isEnforced: boolean): void {
-    if (isEnforced) {
-      const value = AdmissionPluginUtils.updateSelectedPluginArray(
-        this.form.get(Controls.AdmissionPlugins),
-        AdmissionPlugin.PodSecurityPolicy
-      );
-      this.form.get(Controls.AdmissionPlugins).setValue(value);
+  private _enforcedAdmissionPlugins(admissionPlugin: AdmissionPlugin, isEnforced: boolean): void {
+    switch (admissionPlugin) {
+      case AdmissionPlugin.PodSecurityPolicy:
+        if (isEnforced) {
+          const value = AdmissionPluginUtils.updateSelectedPluginArray(
+            this.form.get(Controls.AdmissionPlugins),
+            AdmissionPlugin.PodSecurityPolicy
+          );
+          this.form.get(Controls.AdmissionPlugins).setValue(value);
+        }
+        break;
+      case AdmissionPlugin.EventRateLimit:
+        if (isEnforced) {
+          const value = AdmissionPluginUtils.updateSelectedPluginArray(
+            this.form.get(Controls.AdmissionPlugins),
+            AdmissionPlugin.EventRateLimit
+          );
+          this.form.get(Controls.AdmissionPlugins).setValue(value);
+        }
+        break;
+      default:
+        break;
     }
   }
 

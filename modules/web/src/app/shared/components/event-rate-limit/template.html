@@ -13,13 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="event-rate-limit-config"
-     title="Event Rate Limit Configuration">
+<div class="event-rate-limit-config">
   <mat-card-header class="km-no-padding">
     <mat-card-title>
       Event Rate Limit Configuration
+      @if (isEnforcedByAdmin) {
       <i class="km-icon-info km-pointer"
-         matTooltip="Limit requests to API Server to protect it from being flooded."></i>
+         matTooltip="Event rate limit configurations are enforced by the admin."></i>
+      }
     </mat-card-title>
   </mat-card-header>
 
@@ -39,6 +40,7 @@ limitations under the License.
                         fxFlex="30">
           <mat-label>Limit Type</mat-label>
           <mat-select [formControlName]="Controls.LimitType"
+                      [disabled]="disableAll"
                       (selectionChange)="onChangeType($event.value, i)"
                       disableOptionCentering>
             @for (key of eventRateLimitTypeKeys; track key) {
@@ -51,7 +53,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.QPS"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="QPS"
@@ -61,7 +63,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.Burst"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Burst"
@@ -71,7 +73,7 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.CacheSize"
                            [required]="isRequired(i)"
-                           [disabled]="!isRequired(i)"
+                           [disabled]="disableAll"
                            [forceFormFieldMinWidth]="false"
                            [verticalButton]="isEditDialog"
                            label="Cache Size"

@@ -119,7 +119,7 @@ limitations under the License.
         @if (isPluginEnabled(admissionPlugin.EventRateLimit)) {
         <div>
           <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"
-                                              [eventRateLimitConfig]="eventRateLimitConfig" />
+                                              [enforcedLimits]="enforcedEventRateLimits" />
         </div>
         }
       </div>
