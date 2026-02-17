@@ -1138,17 +1138,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     let newValue: ProxyMode;
     if (controlValueCNIPlugin === CNIPlugin.Cilium) {
       if (this.controlValue(Controls.Konnectivity)) {
-        this.availableProxyModes = [ProxyMode.iptables, ProxyMode.ebpf];
+        this.availableProxyModes = [ProxyMode.iptables, ProxyMode.ebpf, ProxyMode.nftables];
         if (proxyModeControl.value === ProxyMode.ipvs) {
           newValue = ProxyMode.ebpf;
         }
       } else {
-        this.availableProxyModes = [ProxyMode.iptables];
+        this.availableProxyModes = [ProxyMode.iptables, ProxyMode.nftables];
         newValue = ProxyMode.iptables;
       }
     } else {
       this.availableProxyModes =
-        controlValueCNIPlugin === CNIPlugin.None ? Object.values(ProxyMode) : [ProxyMode.ipvs, ProxyMode.iptables];
+        controlValueCNIPlugin === CNIPlugin.None
+          ? Object.values(ProxyMode)
+          : [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.nftables];
       if (proxyModeControl.pristine || !this.availableProxyModes.includes(proxyModeControl.value)) {
         newValue = this._defaultProxyMode || ProxyMode.ipvs;
       }
