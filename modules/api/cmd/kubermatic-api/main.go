@@ -142,7 +142,7 @@ func main() {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", velerov1.SchemeGroupVersion), zap.Error(err))
 	}
 
-	if err := kyvernov1.AddToScheme(scheme.Scheme); err != nil {
+	if err := kyvernov1.Install(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", kyvernov1.SchemeGroupVersion), zap.Error(err))
 	}
 
