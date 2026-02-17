@@ -275,14 +275,17 @@ limitations under the License.
                fxFlex="100"
                fxLayoutGap="5px">
             <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache"> Node Local DNS Cache </mat-checkbox>
-            <mat-checkbox [formControlName]="Controls.Konnectivity"
-                          [class.km-text-muted]="control(Controls.Konnectivity).disabled">
-              Konnectivity
+            <div fxLayoutAlign=" center">
+
+              <mat-checkbox [formControlName]="Controls.Konnectivity"
+                            [class.km-text-muted]="control(Controls.Konnectivity).disabled">
+                Konnectivity
+              </mat-checkbox>
               @if (!!control(Controls.Konnectivity).value && control(Controls.Konnectivity).disabled) {
               <i class="km-icon-info km-pointer"
                  matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
               }
-            </mat-checkbox>
+            </div>
             @if (isCiliumSelected()) {
             <mat-checkbox [formControlName]="Controls.CiliumIngress">Ingress <i class="km-icon-info km-pointer"
                  matTooltip="Enable Cilium kubernetes ingress support"></i></mat-checkbox>
