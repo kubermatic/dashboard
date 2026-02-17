@@ -444,6 +444,7 @@ export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
   ebpf = 'ebpf',
+  nftables = 'nftables',
 }
 
 export enum ExposeStrategy {
