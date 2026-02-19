@@ -124,7 +124,10 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   get showCreateClusterButton(): boolean {
     if (this.wizardMode) {
-      return this.last && this.wizardMode === WizardMode.CustomizeClusterTemplate;
+      return (
+        this.last &&
+        (this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster)
+      );
     }
     return this.last;
   }
