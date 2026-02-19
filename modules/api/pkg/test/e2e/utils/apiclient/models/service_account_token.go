@@ -40,6 +40,9 @@ type ServiceAccountToken struct {
 	// Invalidated indicates if the token must be regenerated
 	Invalidated bool `json:"invalidated,omitempty"`
 
+	// Labels that can be added to the resource
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// Name represents human readable name for the resource
 	Name string `json:"name,omitempty"`
 

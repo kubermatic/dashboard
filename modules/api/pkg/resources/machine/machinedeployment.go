@@ -69,6 +69,9 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
+	// Add Labels to Machine Deployment
+	md.Labels = nd.Labels
+
 	// OSP is an optional value passed via annotations with fallback logic:
 	// 1. Use existing non-empty annotation if present
 	// 2. Fall back to datacenter-level defaults when annotation is missing/empty

@@ -43,7 +43,7 @@ type Cluster struct {
 	// inherited labels
 	InheritedLabels map[string]string `json:"inheritedLabels,omitempty"`
 
-	// labels
+	// Labels that can be added to the resource
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// machine deployment count
