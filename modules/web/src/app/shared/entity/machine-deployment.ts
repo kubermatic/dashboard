@@ -16,6 +16,7 @@ import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} fr
 
 export class MachineDeployment {
   annotations?: object;
+  labels?: Record<string, string>;
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
@@ -44,6 +45,7 @@ export class MachineDeploymentStatus {
 
 export class MachineDeploymentPatch {
   annotations?: object;
+  labels?: Record<string, string>;
   spec: MachineDeploymentSpecPatch;
 }
 

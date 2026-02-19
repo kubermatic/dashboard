@@ -35,6 +35,7 @@ export class NodeService {
     const machineDeployment: MachineDeployment = {
       name: nodeData.name,
       annotations: nodeData.annotations,
+      labels: nodeData.labels,
       spec: {
         template: nodeData.spec,
         replicas: nodeData.count,
@@ -55,6 +56,7 @@ export class NodeService {
   private static _createPatch(data: DialogDataOutput): MachineDeploymentPatch {
     const patch: MachineDeploymentPatch = {
       annotations: data.nodeData.annotations,
+      labels: data.nodeData.labels,
       spec: {
         replicas: data.nodeData.count,
         template: data.nodeData.spec,
@@ -133,6 +135,7 @@ export class NodeService {
           maxReplicas: md.spec.maxReplicas,
           creationTimestamp: md.creationTimestamp,
           annotations: md.annotations,
+          labels: md.labels,
         } as NodeData,
         projectID: projectID,
       } as DialogDataInput,

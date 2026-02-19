@@ -125,6 +125,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   labels: Record<string, string>;
   annotations: Record<string, string>;
   machineDeploymentAnnotations: Record<string, string>;
+  machineDeploymentLabels: Record<string, string>;
   taints: Taint[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   selectedOperatingSystemProfile: string;
@@ -474,6 +475,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._nodeDataService.annotations = this.annotations;
   }
 
+  onMachineDeploymentLabelsChange(labels: Record<string, string>): void {
+    this.machineDeploymentLabels = labels;
+    this._nodeDataService.machineDeploymentLabels = this.machineDeploymentLabels;
+  }
+
   onMachineDeploymentAnnotationsChange(annotations: Record<string, string>): void {
     this.machineDeploymentAnnotations = annotations;
     this._nodeDataService.machineDeploymentAnnotations = this.machineDeploymentAnnotations;
@@ -538,6 +544,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this.onAnnotationsChange(this._nodeDataService.nodeData.spec.annotations);
     this.onTaintsChange(this._nodeDataService.nodeData.spec.taints);
     this.onMachineDeploymentAnnotationsChange(this._nodeDataService.nodeData.annotations);
+    this.onMachineDeploymentLabelsChange(this._nodeDataService.nodeData.labels);
     this.form.get(Controls.UpgradeOnBoot).setValue(!!upgradeOnBoot);
     this.form.get(Controls.DisableAutoUpdate).setValue(!!disableAutoUpdate);
 
