@@ -152,7 +152,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   get displayQuotaInWizard(): boolean {
-    return this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode;
+    return this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster;
   }
 
   get nodeHasAdvanceSettings(): boolean {
