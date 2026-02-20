@@ -605,7 +605,7 @@ limitations under the License.
                    matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
                 }
                 <i class="km-icon-warning km-pointer"
-                   matTooltip="OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be removed in the future, Kyverno has replaced it as an Enterprise Edition feature for policy management.."></i>
+                   [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
               </div>
             </mat-checkbox>
             @if (isEnterpriseEdition) {

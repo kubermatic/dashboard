@@ -243,11 +243,16 @@ limitations under the License.
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration"
                     kmValueChangedIndicator>
-        OPA Integration
-        @if (isEnforced(Controls.OPAIntegration)) {
-        <i class="km-icon-info km-pointer"
-           matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
-        }
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
+          <span>OPA Integration</span>
+          @if (isEnforced(Controls.OPAIntegration)) {
+          <i class="km-icon-info km-pointer"
+             matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+          }
+          <i class="km-icon-warning km-pointer"
+             [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
+        </div>
       </mat-checkbox>
 
       @if (isEnterpriseEdition) {
