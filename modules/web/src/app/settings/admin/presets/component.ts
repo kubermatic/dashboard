@@ -124,7 +124,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
             presetStats$.push(this._presetService.getPresetStatsBy(preset.name));
           });
           this.isBusyCounter++;
-          return forkJoin(presetStats$);
+          return presetStats$.length > 0 ? forkJoin(presetStats$) : of([]);
         }),
         takeUntil(this._unsubscribe)
       )
