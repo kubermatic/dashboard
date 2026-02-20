@@ -31065,6 +31065,13 @@
           },
           "x-go-name": "Annotations"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "spec": {
           "$ref": "#/definitions/NodeDeploymentSpec"
         }

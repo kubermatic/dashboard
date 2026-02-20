@@ -169,6 +169,7 @@ export class NodeDataService {
       minReplicas: md.spec.minReplicas,
       maxReplicas: md.spec.maxReplicas,
       annotations: md.annotations,
+      labels: md.labels,
     } as NodeData;
   }
 

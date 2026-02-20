@@ -348,12 +348,6 @@ limitations under the License.
                         title="Machine Deployment Annotations"
                         (annotationsChange)="onMachineDeploymentAnnotationsChange($event)" />
     @if (isProvider(NodeProvider.KUBEVIRT)) {
-    <!-- <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
-                        title="Machine Deployment Labels"
-                        [annotations]="machineDeploymentLabels"
-                        [infoTooltip]="'labels for the virtual machine created against this machine deployment'"
-                        (annotationsChange)="onMachineDeploymentLabelsChange($event)" /> -->
-
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Machine Deployment Labels"
                    [asyncKeyValidators]="asyncLabelValidators"

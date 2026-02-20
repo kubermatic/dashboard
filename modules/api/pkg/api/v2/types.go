@@ -278,6 +278,7 @@ type ClusterTemplateInfo struct {
 
 type ClusterTemplateNodeDeployment struct {
 	Annotations map[string]string        `json:"annotations,omitempty"`
+	Labels      map[string]string        `json:"labels,omitempty"`
 	Spec        apiv1.NodeDeploymentSpec `json:"spec"`
 }
 

@@ -119,6 +119,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
       nodeDeployment: {
         name: this.data.nodeData.name,
         annotations: annotations,
+        labels: this.data.nodeData.labels,
         spec: {
           template: this.data.nodeData.spec,
           replicas: this.data.nodeData.count,

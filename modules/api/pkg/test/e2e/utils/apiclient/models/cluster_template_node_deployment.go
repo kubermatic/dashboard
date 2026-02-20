@@ -21,6 +21,9 @@ type ClusterTemplateNodeDeployment struct {
 	// annotations
 	Annotations map[string]string `json:"annotations,omitempty"`
 
+	// labels
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// spec
 	Spec *NodeDeploymentSpec `json:"spec,omitempty"`
 }
