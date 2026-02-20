@@ -35,6 +35,7 @@ export class MachineDeploymentService {
     md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
     md.spec.template.annotations = AnnotationFormComponent.filterNullifiedKeys(md.spec.template.annotations);
     md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
+    md.labels = LabelFormComponent.filterNullifiedKeys(md.labels);
 
     const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments`;
     return this._httpClient.post<MachineDeployment>(url, md);

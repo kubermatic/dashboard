@@ -130,6 +130,11 @@ export class NodeDataService {
     this._nodeData.spec.labels = labels;
   }
 
+  set machineDeploymentLabels(labels: Record<string, string>) {
+    delete this._nodeData.labels;
+    this._nodeData.labels = labels;
+  }
+
   set annotations(annotations: Record<string, string>) {
     delete this._nodeData.spec.annotations;
     this._nodeData.spec.annotations = annotations;
@@ -164,6 +169,7 @@ export class NodeDataService {
       minReplicas: md.spec.minReplicas,
       maxReplicas: md.spec.maxReplicas,
       annotations: md.annotations,
+      labels: md.labels,
     } as NodeData;
   }
 

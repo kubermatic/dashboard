@@ -46,6 +46,9 @@ type User struct {
 	// IsGlobalViewer indicates GlobalViewer role
 	IsGlobalViewer bool `json:"isGlobalViewer,omitempty"`
 
+	// Labels that can be added to the resource
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// LastSeen holds a time in UTC format when the user has been using the API last time
 	// Format: date-time
 	LastSeen strfmt.DateTime `json:"lastSeen,omitempty"`

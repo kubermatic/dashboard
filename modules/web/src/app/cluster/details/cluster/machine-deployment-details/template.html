@@ -184,7 +184,9 @@ limitations under the License.
           <router-outlet name="quota-widget"
                          (activate)="onActivate($event)" />
         </div>
-        <div fxFlex="100%">
+        <div fxFlex="100%"
+             fxLayout="row"
+             fxLayoutAlign="start start">
           @if (machineDeployment.spec.template.labels) {
           <km-property fxFlex="50%">
             <div key>Node Labels</div>
@@ -216,6 +218,14 @@ limitations under the License.
             <div key>Machine Deployment Annotations</div>
             <div value>
               <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)" />
+            </div>
+          </km-property>
+          }
+          @if (machineDeployment.labels) {
+          <km-property fxFlex="50%">
+            <div key>Machine Deployment Labels</div>
+            <div value>
+              <km-labels [labels]="machineDeployment.labels" />
             </div>
           </km-property>
           }

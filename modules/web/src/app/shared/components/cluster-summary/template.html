@@ -935,6 +935,14 @@ limitations under the License.
               </div>
             </km-property>
             }
+            @if (machineDeployment.labels) {
+            <km-property>
+              <div key>Machine Deployment Labels</div>
+              <div value>
+                <km-labels [labels]="machineDeployment.labels" />
+              </div>
+            </km-property>
+            }
           </div>
         </div>
 

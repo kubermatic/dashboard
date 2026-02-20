@@ -813,6 +813,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 		NodeDeployment: &apiv2.ClusterTemplateNodeDeployment{
 			Spec:        initialNodeDeployment.Spec,
 			Annotations: initialNodeDeployment.Annotations,
+			Labels:      initialNodeDeployment.Labels,
 		},
 		Applications: apps,
 	}

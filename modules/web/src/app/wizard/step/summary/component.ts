@@ -77,6 +77,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     const md: MachineDeployment = {
       name: data.name,
       annotations: data.annotations,
+      labels: data.labels,
       spec: {
         template: data.spec,
         replicas: data.count,
