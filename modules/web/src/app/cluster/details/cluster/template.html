@@ -14,35 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-@if (cluster?.spec?.opaIntegration?.enabled || nodeDc?.spec?.provider === nodeProvider.ANEXIA) {
+@if (nodeDc?.spec?.provider === nodeProvider.ANEXIA) {
 <mat-card class="warning-card">
   <mat-card-content>
-    @if (cluster?.spec?.opaIntegration?.enabled) {
-    <div fxLayout="row"
-         fxLayoutAlign=" center">
-      <i class="km-icon-warning"></i>
-      <div>OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be <strong>removed in the future</strong>, Kyverno has replaced it as an Enterprise Edition feature for policy management.</div>
-    </div>
-    }
-
-    @if (nodeDc?.spec?.provider === nodeProvider.ANEXIA) {
     <div fxLayout="row"
          fxLayoutAlign=" center">
       <i class="km-icon-warning"></i>
       <div>{{ ANEXIA_DEPRECATED_MESSAGE }}</div>
-    </div>
-    }
-  </mat-card-content>
-</mat-card>
-}
-
-@if (adminSettings.enableDashboard) {
-<mat-card class="warning-card">
-  <mat-card-content>
-    <div fxLayout="row"
-         fxLayoutAlign=" center">
-      <i class="km-icon-warning"></i>
-      <div>{{ KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE }}</div>
     </div>
   </mat-card-content>
 </mat-card>
@@ -96,7 +74,10 @@ limitations under the License.
          [matTooltip]="getOpenDashboardTooltip()">
         <i class="km-icon-mask km-icon-external-link"
            matButtonIcon></i>
-        <span>Open Dashboard</span>
+        <span>Open Dashboard
+          <i class="km-icon-warning km-pointer km-dashboard-deprecation-warning"
+             [matTooltip]="KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE"></i>
+        </span>
       </a>
       }
       @if (adminSettings.enableOIDCKubeconfig && isWebTerminalEnabled()) {
@@ -413,7 +394,14 @@ limitations under the License.
           <div fxFlex="33"
                class="container-spacing">
             <div fxLayout="row"
-                 class="section-header">OPA</div>
+                 fxLayoutAlign=" center"
+                 class="section-header">
+              <span>OPA</span>
+              @if (cluster?.spec?.opaIntegration?.enabled) {
+              <i class="km-icon-warning km-pointer km-opa-deprecation-warning"
+                 [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
+              }
+            </div>
             @if (!cluster?.spec?.opaIntegration?.enabled) {
             <km-property-boolean label="Policy Control"
                                  [value]="cluster?.spec?.opaIntegration?.enabled" />
@@ -623,6 +611,11 @@ limitations under the License.
     </km-tab>
     @if (cluster.spec.opaIntegration?.enabled) {
     <km-tab label="OPA Constraints">
+      <ng-template #tabLabel>
+        OPA Constraints
+        <i class="km-icon-warning km-pointer-warning km-opa-warning"
+           [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
+      </ng-template>
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
@@ -631,6 +624,11 @@ limitations under the License.
     }
     @if (cluster.spec.opaIntegration?.enabled) {
     <km-tab label="OPA Gatekeeper Config">
+      <ng-template #tabLabel>
+        OPA Gatekeeper Config
+        <i class="km-icon-warning km-pointer km-opa-warning"
+           [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
+      </ng-template>
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"
                             [projectID]="projectID"

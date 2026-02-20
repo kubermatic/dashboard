@@ -52,7 +52,7 @@ import {
   generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
-import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE, OPA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
@@ -137,6 +137,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
   readonly NodeProvider = NodeProvider;
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
+  readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
   private readonly _nameMinLen = 3;
   private readonly ENCRYPTION_KEY_ANNOTATION = 'kubermatic.io/encryption-key';
   private _settings: AdminSettings;

@@ -20,6 +20,11 @@ limitations under the License.
                  dynamicHeight>
     @for (tab of tabs; track tab; let i = $index) {
     <mat-tab [label]="tab.label">
+      @if (tab.labelTemplate) {
+      <ng-template mat-tab-label>
+        <ng-container *ngTemplateOutlet="tab.labelTemplate" />
+      </ng-template>
+      }
       <div class="tab-content">
         <mat-card appearance="outlined">
           <ng-container *ngTemplateOutlet="tab.template" />

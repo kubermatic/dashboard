@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
+import {Component, Input, TemplateRef, ViewChild, ContentChild} from '@angular/core';
 
 @Component({
   selector: 'km-tab',
@@ -22,4 +22,5 @@ import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 export class TabComponent {
   @Input() label: string;
   @ViewChild(TemplateRef) template: TemplateRef<any>;
+  @ContentChild('tabLabel') labelTemplate: TemplateRef<any>;
 }

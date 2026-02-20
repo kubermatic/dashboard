@@ -75,7 +75,7 @@ import {
   generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
-import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE, OPA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
 import * as y from 'js-yaml';
@@ -208,6 +208,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly IPFamily = IPFamily;
   readonly NodeProvider = NodeProvider;
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
+  readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
