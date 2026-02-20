@@ -44,8 +44,13 @@ export class ApiDocsComponent implements OnInit {
         requestSnippetsEnabled: true,
         url: `${this._document.location.origin}/api/swagger.json`,
         requestInterceptor: req => {
-          const token = this._auth.getBearerToken();
-          req.headers.authorization = 'Bearer ' + token;
+          const hasAuthorizationHeader = !!(req.headers['Authorization'] || req.headers['authorization']);
+          if (!hasAuthorizationHeader) {
+            const token = this._auth.getBearerToken();
+            if (token) {
+              req.headers['Authorization'] = 'Bearer ' + token;
+            }
+          }
           return req;
         },
       });
