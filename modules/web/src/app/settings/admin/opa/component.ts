@@ -16,6 +16,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {Context} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {DynamicTab} from '@shared/model/dynamic-tab';
+import {OPA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -29,6 +30,7 @@ import {takeUntil} from 'rxjs/operators';
 export class AdminSettingsOPAComponent implements OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Context = Context;
+  readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
   private _dynamicTabs = new Set<DynamicTabComponent>();
 
   get dynamicTabs(): DynamicTabComponent[] {
