@@ -110,4 +110,11 @@ limitations under the License.
     </div>
     }
   </form>
+  @if (provider === Providers.ANEXIA) {
+  <div fxLayout="row"
+       fxLayoutAlign=" center">
+    <i class="km-icon-warning"></i>
+    <div>{{ ANEXIA_DEPRECATED_MESSAGE }}</div>
+  </div>
+  }
 </div>

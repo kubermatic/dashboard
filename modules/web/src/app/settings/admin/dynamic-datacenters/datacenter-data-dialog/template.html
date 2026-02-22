@@ -21,8 +21,9 @@ limitations under the License.
 
   <form [formGroup]="form"
         fxLayout="column"
-        fxLayoutGap="8px">
-    <mat-form-field fxFlex>
+        fxLayoutGap="20px">
+    <mat-form-field fxFlex
+                    subscriptSizing="dynamic">
       <mat-label>Name</mat-label>
       <input required
              matInput
@@ -44,7 +45,8 @@ limitations under the License.
       }
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    subscriptSizing="dynamic">
       <mat-label>Provider</mat-label>
       <mat-select required
                   disableOptionCentering
@@ -60,6 +62,15 @@ limitations under the License.
         </mat-option>
         }
       </mat-select>
+      @if (form.get(controls.Provider).value === 'anexia') {
+      <mat-hint>
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
+          <i class="km-icon-warning"></i>
+          <div>{{ ANEXIA_DEPRECATED_MESSAGE }}</div>
+        </div>
+      </mat-hint>
+      }
       @if (form.get(controls.Provider).hasError('required')) {
       <mat-error>
         <strong>Required</strong>
@@ -67,7 +78,8 @@ limitations under the License.
       }
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    subscriptSizing="dynamic">
       <mat-label>Seed</mat-label>
       <mat-select required
                   disableOptionCentering
@@ -87,7 +99,8 @@ limitations under the License.
       }
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    subscriptSizing="dynamic">
       <mat-label>Country</mat-label>
       <mat-select required
                   disableOptionCentering
@@ -121,7 +134,8 @@ limitations under the License.
       }
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    subscriptSizing="dynamic">
       <mat-label>Location</mat-label>
       <input required
              matInput
