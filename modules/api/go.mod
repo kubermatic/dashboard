@@ -325,7 +325,7 @@ require (
 	github.com/sigstore/k8s-manifest-sigstore v0.5.4 // indirect
 	github.com/sigstore/protobuf-specs v0.5.0 // indirect
 	github.com/sigstore/rekor v1.3.10 // indirect
-	github.com/sigstore/sigstore v1.10.3 // indirect
+	github.com/sigstore/sigstore v1.10.4 // indirect
 	github.com/sigstore/sigstore-go v0.7.3 // indirect
 	github.com/sigstore/timestamp-authority v1.2.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
