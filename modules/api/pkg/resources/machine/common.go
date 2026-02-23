@@ -218,9 +218,15 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		datastore = defaultIfEmpty(c.Spec.Cloud.VSphere.Datastore, dc.Spec.VSphere.DefaultDatastore)
 	}
 
+	// Determine network configuration - prefer Networks array over deprecated VMNetName
+	vmNetName := ""
+	if len(c.Spec.Cloud.VSphere.Networks) > 0 {
+		vmNetName = c.Spec.Cloud.VSphere.Networks[0]
+	}
+
 	config := &vsphere.RawConfig{
 		TemplateVMName:   providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VSphere.Template},
-		VMNetName:        providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.VMNetName},
+		VMNetName:        providerconfig.ConfigVarString{Value: vmNetName},
 		CPUs:             int32(nodeSpec.Cloud.VSphere.CPUs),
 		MemoryMB:         int64(nodeSpec.Cloud.VSphere.Memory),
 		DiskSizeGB:       nodeSpec.Cloud.VSphere.DiskSizeGB,
@@ -360,10 +366,10 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 	switch {
 	case nodeSpec.Cloud.VMwareCloudDirector.Network != "":
 		networks = append(networks, providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VMwareCloudDirector.Network})
-	case c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork != "":
-		networks = append(networks, providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork})
 	case len(c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks) > 0:
-		networks = append(networks, providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks[0]})
+		for _, network := range c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks {
+			networks = append(networks, providerconfig.ConfigVarString{Value: network})
+		}
 	}
 
 networkLoop:
@@ -593,18 +599,10 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 	// if users have chosen to use an instance type instead of custom cpu value, we should skip setting the cpu value
 	// explicitly as the value will be ignored either ways and the instance type resources will be used instead.
 	if nodeSpec.Cloud.Kubevirt.Instancetype == nil {
-		// defaulting for both flags regarding virtual machine cpu assignment:
-		// - EnableDedicatedCPUs defaults (false) to .resources.requests/limits
-		// - UsePodResourcesCPU defaults (false) to .domain.cpu
-		// as long as we have the deprecated and new flag we need to account for 4 cases:
-		//
-		// | Old Flag (EnableDedicatedCPUs) | New Flag (UsePodResourcesCPU) | Source for KubeVirt VM CPU |
-		// |---------|---------|---------|
-		// | true | false | .domain.cpu |
-		// | true | true | .domain.cpu |
-		// | false | false | .domain.cpu |
-		// | false | true | .resources.requests/limits |
-		if !dc.Spec.Kubevirt.EnableDedicatedCPUs && dc.Spec.Kubevirt.UsePodResourcesCPU {
+		// defaulting for virtual machine cpu assignment:
+		// UsePodResourcesCPU defaults (false) to .domain.cpu
+		// UsePodResourcesCPU (true) uses .resources.requests/limits
+		if dc.Spec.Kubevirt.UsePodResourcesCPU {
 			config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 		} else {
 			vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)

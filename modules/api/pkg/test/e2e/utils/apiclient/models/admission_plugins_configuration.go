@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// AdmissionPluginsConfiguration AdmissionPluginsConfiguration contains global settings for admission plugins.
+// AdmissionPluginsConfiguration AdmissionPluginsConfiguration represents an object holding admission plugins configuration.
 //
 // swagger:model AdmissionPluginsConfiguration
 type AdmissionPluginsConfiguration struct {

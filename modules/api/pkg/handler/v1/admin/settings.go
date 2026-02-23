@@ -187,6 +187,13 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 	if settings.EnableShareCluster != nil {
 		enableShareCluster = *settings.EnableShareCluster
 	}
+
+	// Convert WebTerminalOptions to EnableWebTerminal for backward compatibility
+	enableWebTerminal := false
+	if settings.WebTerminalOptions != nil && settings.WebTerminalOptions.Enabled != nil {
+		enableWebTerminal = *settings.WebTerminalOptions.Enabled
+	}
+
 	s := apiv2.GlobalSettings{
 		CustomLinks:                      settings.CustomLinks,
 		DefaultNodeCount:                 settings.DefaultNodeCount,
@@ -194,7 +201,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		DisplayAPIDocs:                   settings.DisplayAPIDocs,
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
-		EnableWebTerminal:                settings.EnableWebTerminal,
+		EnableWebTerminal:                enableWebTerminal,
 		EnableShareCluster:               enableShareCluster,
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		EnableClusterBackups:             settings.EnableClusterBackups,

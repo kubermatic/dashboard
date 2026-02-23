@@ -1107,9 +1107,10 @@ func newAPIPreset(preset *kubermaticv1.Preset, enabled bool) apiv2.Preset {
 					provider.VMwareCloudDirector = &apiv2.VMwareCloudDirectorAPIPreset{
 						OVDCNetworks: preset.Spec.VMwareCloudDirector.OVDCNetworks,
 					}
-				} else {
+				} else if len(preset.Spec.VMwareCloudDirector.OVDCNetworks) > 0 {
+					// Use OVDCNetworks array even in the else case
 					provider.VMwareCloudDirector = &apiv2.VMwareCloudDirectorAPIPreset{
-						OVDCNetwork: preset.Spec.VMwareCloudDirector.OVDCNetwork,
+						OVDCNetwork: preset.Spec.VMwareCloudDirector.OVDCNetworks[0],
 					}
 				}
 			}

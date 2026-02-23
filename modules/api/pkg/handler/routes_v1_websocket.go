@@ -222,7 +222,13 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		if (settings.Spec.WebTerminalOptions != nil && (settings.Spec.WebTerminalOptions.Enabled == nil || !*settings.Spec.WebTerminalOptions.Enabled)) || (settings.Spec.WebTerminalOptions == nil && !settings.Spec.EnableWebTerminal) {
+		// Check if Web Terminal is enabled via WebTerminalOptions
+		webTerminalEnabled := false
+		if settings.Spec.WebTerminalOptions != nil && settings.Spec.WebTerminalOptions.Enabled != nil {
+			webTerminalEnabled = *settings.Spec.WebTerminalOptions.Enabled
+		}
+
+		if !webTerminalEnabled {
 			log.Logger.Debug(utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings"))
 			return
 		}

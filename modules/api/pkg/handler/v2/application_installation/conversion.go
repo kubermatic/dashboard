@@ -24,6 +24,7 @@ import (
 	appskubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/yaml"
 )
 
 func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.ApplicationInstallation) *apiv2.ApplicationInstallation {
@@ -48,7 +49,6 @@ func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.Applicatio
 			},
 			ReconciliationInterval: in.Spec.ReconciliationInterval,
 			DeployOptions:          in.Spec.DeployOptions,
-			Values:                 in.Spec.Values,
 			ValuesBlock:            in.Spec.ValuesBlock,
 		},
 		Status: &apiv2.ApplicationInstallationStatus{
@@ -98,6 +98,15 @@ func convertInternalToAPIApplicationInstallationForList(in *appskubermaticv1.App
 }
 
 func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInstallationBody) *appskubermaticv1.ApplicationInstallation {
+	// Migrate deprecated Values field to ValuesBlock for backward compatibility
+	valuesBlock := app.Spec.ValuesBlock
+	if len(app.Spec.Values.Raw) > 0 && valuesBlock == "" {
+		// Convert JSON to YAML
+		if y, err := yaml.JSONToYAML(app.Spec.Values.Raw); err == nil {
+			valuesBlock = string(y)
+		}
+	}
+
 	return &appskubermaticv1.ApplicationInstallation{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       appskubermaticv1.ApplicationInstallationKindName,
@@ -122,8 +131,7 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 			},
 			ReconciliationInterval: app.Spec.ReconciliationInterval,
 			DeployOptions:          app.Spec.DeployOptions,
-			Values:                 app.Spec.Values,
-			ValuesBlock:            app.Spec.ValuesBlock,
+			ValuesBlock:            valuesBlock,
 		},
 	}
 }

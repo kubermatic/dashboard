@@ -30516,7 +30516,7 @@
       "type": "object",
       "properties": {
         "coreDNSReplicas": {
-          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.\nDeprecated: This field should not be used anymore, use cluster.componentsOverride.coreDNS.replicas\ninstead. Only one of the two fields can be set at any time.",
+          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.\n\nDeprecated: This field should not be used anymore, use cluster.componentsOverride.coreDNS.replicas\ninstead. Only one of the two fields can be set at any time.",
           "type": "integer",
           "format": "int32",
           "x-go-name": "CoreDNSReplicas"
@@ -31948,7 +31948,7 @@
           "x-go-name": "DNSPolicy"
         },
         "enableDedicatedCpus": {
-          "description": "Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.\nDefaults to false.\nDeprecated: Use .kubevirt.usePodResourcesCPU instead.",
+          "description": "Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.\nDefaults to false.\n\nDeprecated: Use .kubevirt.usePodResourcesCPU instead.",
           "type": "boolean",
           "x-go-name": "EnableDedicatedCPUs"
         },
@@ -41656,7 +41656,7 @@
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
-          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\n\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
         },
@@ -41760,7 +41760,7 @@
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
-          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\n\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
         },
@@ -42119,7 +42119,7 @@
           "x-go-name": "Username"
         },
         "vmNetName": {
-          "description": "The name of the vSphere network.\nDeprecated: Use networks instead.\n+optional",
+          "description": "The name of the vSphere network.\n\nDeprecated: Use networks instead.\n+optional",
           "type": "string",
           "x-go-name": "VMNetName"
         }
