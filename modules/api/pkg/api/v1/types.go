@@ -1401,7 +1401,6 @@ func newPublicVMwareCloudDirectorCloudSpec(internal *kubermaticv1.VMwareCloudDir
 	}
 
 	return &PublicVMwareCloudDirectorCloudSpec{
-		OVDCNetwork:  internal.OVDCNetwork,
 		OVDCNetworks: internal.OVDCNetworks,
 	}
 }

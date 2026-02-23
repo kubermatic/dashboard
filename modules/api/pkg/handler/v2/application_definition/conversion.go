@@ -70,7 +70,6 @@ func convertAPItoInternalApplicationDefinitionBody(appDef *apiv2.ApplicationDefi
 			DisplayName:        appDef.Spec.DisplayName,
 			Description:        appDef.Spec.Description,
 			Method:             appDef.Spec.Method,
-			DefaultValues:      appDef.Spec.DefaultValues,
 			DefaultValuesBlock: appDef.Spec.DefaultValuesBlock,
 			Versions:           appDef.Spec.Versions,
 			DocumentationURL:   appDef.Spec.DocumentationURL,

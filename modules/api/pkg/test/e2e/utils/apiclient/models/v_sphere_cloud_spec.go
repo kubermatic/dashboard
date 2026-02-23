@@ -62,6 +62,7 @@ type VSphereCloudSpec struct {
 	Username string `json:"username,omitempty"`
 
 	// The name of the vSphere network.
+	//
 	// Deprecated: Use networks instead.
 	// +optional
 	VMNetName string `json:"vmNetName,omitempty"`

@@ -43,6 +43,7 @@ type DatacenterSpecKubevirt struct {
 
 	// Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.
 	// Defaults to false.
+	//
 	// Deprecated: Use .kubevirt.usePodResourcesCPU instead.
 	EnableDedicatedCPUs bool `json:"enableDedicatedCpus,omitempty"`
 

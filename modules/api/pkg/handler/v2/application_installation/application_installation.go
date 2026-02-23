@@ -18,8 +18,6 @@ package applicationinstallation
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -34,9 +32,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"sigs.k8s.io/yaml"
 )
 
 func ListApplicationInstallations(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -102,12 +98,6 @@ func CreateApplicationInstallation(userInfoGetter provider.UserInfoGetter, proje
 		}
 
 		internalAppInstall := convertAPItoInternalApplicationInstallationBody(&req.Body)
-
-		// if the values field is set, convert all of its values into the valuesBlock field.
-		// we do this as values is a deprecated field
-		if err := migrateValuesToValuesBlock(&internalAppInstall.Spec); err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert values into valuesBlock field: %v", err))
-		}
 
 		if err := client.Create(ctx, internalAppInstall); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -214,12 +204,6 @@ func UpdateApplicationInstallation(userInfoGetter provider.UserInfoGetter, proje
 		newAppInstall := convertAPItoInternalApplicationInstallationBody(&req.Body)
 		currentAppInstall.Spec = newAppInstall.Spec
 
-		// if the values field is set, convert all of its values into the valuesBlock field.
-		// we do this as values is a deprecated field
-		if err := migrateValuesToValuesBlock(&currentAppInstall.Spec); err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert values into valuesBlock field: %v", err))
-		}
-
 		err = client.Update(ctx, currentAppInstall)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -235,16 +219,4 @@ func genericNamespaceReconciler(name string) reconciling.NamedNamespaceReconcile
 			return n, nil
 		}
 	}
-}
-
-func migrateValuesToValuesBlock(ais *appskubermaticv1.ApplicationInstallationSpec) error {
-	if len(ais.Values.Raw) > 0 && string(ais.Values.Raw) != "{}" {
-		y, err := yaml.JSONToYAML(ais.Values.Raw)
-		if err != nil {
-			return err
-		}
-		ais.ValuesBlock = string(y)
-		ais.Values = runtime.RawExtension{}
-	}
-	return nil
 }

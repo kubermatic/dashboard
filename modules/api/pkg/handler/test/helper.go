@@ -2357,7 +2357,7 @@ func GenApiApplicationDefinition(name string) apiv2.ApplicationDefinition {
 
 func GenApiApplicationDefinitionWithDefaultValues(name string) apiv2.ApplicationDefinition {
 	ad := GenApiApplicationDefinition(name)
-	ad.Spec.DefaultValues = &runtime.RawExtension{Raw: []byte(`{"key": "value"}`)}
+	ad.Spec.DefaultValuesBlock = `{"key": "value"}`
 	return ad
 }
 

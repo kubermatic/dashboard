@@ -28,11 +28,7 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	appskubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
-	"k8s.io/apimachinery/pkg/runtime"
-	"sigs.k8s.io/yaml"
 )
 
 func ListApplicationDefinitions(applicationDefinitionProvider provider.ApplicationDefinitionProvider) endpoint.Endpoint {
@@ -83,13 +79,6 @@ func CreateApplicationDefinition(userInfoGetter provider.UserInfoGetter, applica
 		}
 
 		inApp := convertAPItoInternalApplicationDefinitionBody(&req.Body)
-
-		// if the defaultValues field is set, convert all of its defaultValues into the defaultValuesBlock field.
-		// we do this as defaultValues is a deprecated field
-		if err := migrateDefaultValuesToDefaultValuesBlock(&inApp.Spec); err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert defaultValues into defaultValuesBlock field: %v", err))
-		}
-
 		appdef, err := applicationDefinitionProvider.CreateUnsecured(ctx, inApp)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -120,13 +109,6 @@ func UpdateApplicationDefinition(userInfoGetter provider.UserInfoGetter, applica
 
 		reqAppDef := convertAPItoInternalApplicationDefinitionBody(&req.Body)
 		curAppDef.Spec = reqAppDef.Spec
-
-		// if the defaultValues field is set, convert all of its defaultValues into the defaultValuesBlock field.
-		// we do this as defaultValues is a deprecated field
-		if err := migrateDefaultValuesToDefaultValuesBlock(&curAppDef.Spec); err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert defaultValues into defaultValuesBlock field: %v", err))
-		}
-
 		resAppDef, err := applicationDefinitionProvider.UpdateUnsecured(ctx, curAppDef)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -214,16 +196,4 @@ func DeleteApplicationDefinition(userInfoGetter provider.UserInfoGetter, applica
 
 		return nil, nil
 	}
-}
-
-func migrateDefaultValuesToDefaultValuesBlock(ads *appskubermaticv1.ApplicationDefinitionSpec) error {
-	if ads.DefaultValues != nil && len(ads.DefaultValues.Raw) > 0 {
-		y, err := yaml.JSONToYAML(ads.DefaultValues.Raw)
-		if err != nil {
-			return err
-		}
-		ads.DefaultValuesBlock = string(y)
-		ads.DefaultValues = &runtime.RawExtension{}
-	}
-	return nil
 }
