@@ -28,6 +28,7 @@ import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -73,6 +74,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers = INTERNAL_NODE_PROVIDERS;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
   seeds: string[] = [];
   form: FormGroup;
   requiredEmails: string[] = [];

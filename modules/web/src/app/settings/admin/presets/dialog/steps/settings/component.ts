@@ -16,6 +16,7 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Mode} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import {DatacenterService} from '@core/services/datacenter';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -59,6 +60,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
   readonly Mode = Mode;
+  readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
 
   constructor(
     private readonly _builder: FormBuilder,
