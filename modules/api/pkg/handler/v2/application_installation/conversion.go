@@ -19,13 +19,12 @@ package applicationinstallation
 import (
 	"sort"
 
-	"sigs.k8s.io/yaml"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	appskubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/yaml"
 )
 
 func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.ApplicationInstallation) *apiv2.ApplicationInstallation {
