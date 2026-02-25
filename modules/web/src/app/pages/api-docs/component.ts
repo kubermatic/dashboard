@@ -44,8 +44,20 @@ export class ApiDocsComponent implements OnInit {
         requestSnippetsEnabled: true,
         url: `${this._document.location.origin}/api/swagger.json`,
         requestInterceptor: req => {
-          const token = this._auth.getBearerToken();
-          req.headers.authorization = 'Bearer ' + token;
+          const authHeader = req.headers['Authorization'] || req.headers['authorization'];
+          const bearerPrefix = 'Bearer ';
+
+          // Add Bearer prefix to raw tokens from Swagger UI Authorize dialog
+          if (authHeader && !authHeader.startsWith(bearerPrefix)) {
+            req.headers['Authorization'] = `${bearerPrefix}${authHeader}`;
+          } else if (!authHeader) {
+            // Fall back to logged-in user's session token
+            const token = this._auth.getBearerToken();
+            if (token) {
+              req.headers['Authorization'] = `${bearerPrefix}${token}`;
+            }
+          }
+
           return req;
         },
       });
