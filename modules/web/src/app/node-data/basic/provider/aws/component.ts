@@ -98,7 +98,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
-  @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
   @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
 
   constructor(
@@ -310,7 +309,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.selectedSize = '';
     this.sizeLabel = SizeState.Empty;
     this.isLoadingSizes = false;
-    this._sizeCombobox.reset();
     this._cdr.detectChanges();
   }
 
