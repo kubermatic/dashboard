@@ -1205,6 +1205,9 @@ func GenTestMachineDeployment(name, rawProviderSpec string, selector map[string]
 			},
 			Replicas: &replicas,
 			Template: clusterv1alpha1.MachineTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: selector,
+				},
 				Spec: clusterv1alpha1.MachineSpec{
 					ProviderSpec: clusterv1alpha1.ProviderSpec{
 						Value: &runtime.RawExtension{

@@ -160,12 +160,20 @@ func OutputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 
 	hasDynamicConfig := md.Spec.Template.Spec.ConfigSource != nil
 
+	// Filter out selector labels from template labels before returning to UI
+	filteredLabels := make(map[string]string)
+	for k, v := range md.Spec.Template.Labels {
+		if _, isSelector := md.Spec.Selector.MatchLabels[k]; !isSelector {
+			filteredLabels[k] = v
+		}
+	}
+
 	return &apiv1.NodeDeployment{
 		ObjectMeta: apiv1.ObjectMeta{
 			ID:                md.Name,
 			Name:              md.Name,
 			Annotations:       md.Annotations,
-			Labels:            md.Labels,
+			Labels:            filteredLabels,
 			DeletionTimestamp: deletionTimestamp,
 			CreationTimestamp: apiv1.NewTime(md.CreationTimestamp.Time),
 		},
@@ -558,10 +566,24 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 	// Only the fields from NodeDeploymentSpec will be updated by a patch.
 	// It ensures that the name and resource version are set and the selector stays the same.
 	machineDeployment.Annotations = patchedMachineDeployment.Annotations
-	machineDeployment.Labels = patchedMachineDeployment.Labels
 	machineDeployment.Spec.Template.Spec = patchedMachineDeployment.Spec.Template.Spec
 	machineDeployment.Spec.Replicas = patchedMachineDeployment.Spec.Replicas
 	machineDeployment.Spec.Paused = patchedMachineDeployment.Spec.Paused
+
+	if patchedMachineDeployment.Spec.Template.Labels != nil {
+		newLabels := make(map[string]string)
+		for k, v := range patchedMachineDeployment.Spec.Template.Labels {
+			// Filter out any selector labels from template labels.
+			if _, isSelector := patchedMachineDeployment.Spec.Selector.MatchLabels[k]; !isSelector {
+				newLabels[k] = v
+			}
+		}
+		// Ensure original selector match labels are preserved
+		for k, v := range machineDeployment.Spec.Selector.MatchLabels {
+			newLabels[k] = v
+		}
+		machineDeployment.Spec.Template.Labels = newLabels
+	}
 
 	if err := client.Update(ctx, machineDeployment); err != nil {
 		return nil, fmt.Errorf("failed to update machine deployment: %w", err)
