@@ -110,7 +110,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   annotations: Record<string, string>;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
-  enforcedEventRateLimits: string[] = [];
+  isEnforcedByAdmin = false;
   admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
@@ -177,8 +177,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .getAdmissionPluginsConfiguration()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(config => {
-        if (config.eventRateLimit.enforced) {
-          this.enforcedEventRateLimits = Object.keys(config.eventRateLimit.defaultConfig);
+        if (config?.eventRateLimit?.enforced) {
+          this.isEnforcedByAdmin = config.eventRateLimit.enforced;
         }
       });
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
