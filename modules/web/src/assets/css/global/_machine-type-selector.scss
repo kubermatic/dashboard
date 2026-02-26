@@ -14,7 +14,7 @@
 
 @use "../variables";
 
-// Base styles for machine-type-selector components (reusable across providers)
+// Wizard
 .km-machine-type-selector {
   &-search {
     padding: 14px 16px;
@@ -64,6 +64,23 @@
   .mat-mdc-form-field {
     .mat-mdc-form-field-bottom-align::before {
       display: none;
+    }
+  }
+}
+
+
+
+// Dialog
+km-basic-node-data {
+  & .km-machine-type-selector {
+    &-search-field {
+      width: 100%;
+
+      i {
+        margin-right: 12px;
+        position: relative;
+        top: -4px;
+      }
     }
   }
 }
