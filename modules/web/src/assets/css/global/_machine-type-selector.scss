@@ -14,7 +14,7 @@
 
 @use "../variables";
 
-// Wizard
+// Wizard / Dialog
 .km-machine-type-selector {
   &-search {
     padding: 14px 16px;
@@ -23,6 +23,7 @@
       width: 100%;
 
       i {
+        margin-bottom: 4px;
         margin-right: 10px;
       }
 
@@ -69,17 +70,19 @@
 }
 
 // Dialog
-.km-machine-type-selector-search {
-  & .mat-mdc-form-field-flex label {
-    margin-left: 10px;
-  }
+km-node-data-dialog km-basic-node-data {
+  .km-machine-type-selector-search {
+    .mat-mdc-form-field-flex label {
+      margin-left: 10px;
+    }
 
-  & .km-machine-type-selector {
-    &-search-field {
-      .mat-mdc-form-field-icon-prefix {
-        i {
-          margin-bottom: 7px;
-          margin-right: 12px;
+    & .km-machine-type-selector {
+      &-search-field {
+        .mat-mdc-form-field-icon-prefix {
+          i {
+            margin-bottom: 7px;
+            margin-right: 12px;
+          }
         }
       }
     }
