@@ -997,6 +997,9 @@ type ClusterSpec struct {
 	// If active the PodNodeSelector admission plugin is configured at the apiserver
 	UsePodNodeSelectorAdmissionPlugin bool `json:"usePodNodeSelectorAdmissionPlugin,omitempty"`
 
+	// If active the EventRateLimit admission plugin is configured at the apiserver
+	UseEventRateLimitAdmissionPlugin bool `json:"useEventRateLimitAdmissionPlugin,omitempty"`
+
 	// EnableUserSSHKeyAgent control whether the UserSSHKeyAgent will be deployed in the user cluster or not.
 	// If it was enabled, the agent will be deployed and used to sync the user ssh keys, that the user attach
 	// to the created cluster. If the agent was disabled, it won't be deployed in the user cluster, thus after
@@ -1021,7 +1024,7 @@ type ClusterSpec struct {
 	//  namespace2: <node-selectors-labels>
 	PodNodeSelectorAdmissionPluginConfig map[string]string `json:"podNodeSelectorAdmissionPluginConfig,omitempty"`
 
-	// EventRateLimitConfig allows configuring the EventRateLimit admission plugin
+	// EventRateLimitConfig allows configuring the EventRateLimit admission plugin (if enabled via useEventRateLimitAdmissionPlugin)
 	// to create limits on Kubernetes event generation. The EventRateLimit plugin is capable of comparing incoming Events
 	// to several configured buckets based on the type of event rate limit.
 	EventRateLimitConfig *kubermaticv1.EventRateLimitConfig `json:"eventRateLimitConfig,omitempty"`
@@ -1089,6 +1092,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UpdateWindow                         *kubermaticv1.UpdateWindow             `json:"updateWindow,omitempty"`
 		UsePodSecurityPolicyAdmissionPlugin  bool                                   `json:"usePodSecurityPolicyAdmissionPlugin,omitempty"`
 		UsePodNodeSelectorAdmissionPlugin    bool                                   `json:"usePodNodeSelectorAdmissionPlugin,omitempty"`
+		UseEventRateLimitAdmissionPlugin     bool                                   `json:"useEventRateLimitAdmissionPlugin,omitempty"`
 		EnableUserSSHKeyAgent                *bool                                  `json:"enableUserSSHKeyAgent,omitempty"`
 		KubeLB                               *kubermaticv1.KubeLB                   `json:"kubelb,omitempty"`
 		BackupConfig                         *kubermaticv1.BackupConfig             `json:"backupConfig,omitempty"`
@@ -1135,6 +1139,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UpdateWindow:                         cs.UpdateWindow,
 		UsePodSecurityPolicyAdmissionPlugin:  cs.UsePodSecurityPolicyAdmissionPlugin,
 		UsePodNodeSelectorAdmissionPlugin:    cs.UsePodNodeSelectorAdmissionPlugin,
+		UseEventRateLimitAdmissionPlugin:     cs.UseEventRateLimitAdmissionPlugin,
 		EnableUserSSHKeyAgent:                cs.EnableUserSSHKeyAgent,
 		KubeLB:                               cs.KubeLB,
 		BackupConfig:                         cs.BackupConfig,
