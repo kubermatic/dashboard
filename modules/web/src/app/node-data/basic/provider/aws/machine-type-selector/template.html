@@ -75,7 +75,7 @@ limitations under the License.
     }
     @if (!isLoading) {
     <mat-radio-group [value]="selectedMachineType"
-                     (change)="onMachineTypeSelect($event)">
+                     (change)="onMachineTypeSelect($event.value)">
       <table class="km-table km-machine-type-selector-table"
              mat-table
              [dataSource]="filteredOptions"

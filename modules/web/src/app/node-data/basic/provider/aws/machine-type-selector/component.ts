@@ -103,9 +103,9 @@ export class AWSMachineTypeSelectorComponent implements OnInit, OnChanges, Contr
     this._applySearchFilter();
   }
 
-  onMachineTypeSelect(machineType: AWSSize): void {
-    this.selectedMachineType = machineType.name;
-    this._onChange(machineType.name);
+  onMachineTypeSelect(machineTypeName: string): void {
+    this.selectedMachineType = machineTypeName;
+    this._onChange(machineTypeName);
     this._onTouched();
   }
 
