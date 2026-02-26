@@ -1031,7 +1031,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenDefaultAPIUser(),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1047,7 +1047,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenDefaultAPIUser(),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1063,7 +1063,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenDefaultAPIUser(),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1079,7 +1079,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenDefaultAPIUser(),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1095,7 +1095,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenDefaultAPIUser(),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1111,7 +1111,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenAPIUser("John", "john@acme.com"),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),
@@ -1128,7 +1128,7 @@ func TestPatchNodeDeployment(t *testing.T) {
 			project:                    test.GenDefaultProject().Name,
 			ExistingAPIUser:            test.GenAPIUser("John", "john@acme.com"),
 			NodeDeploymentID:           "venus",
-			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)},
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, map[string]string{"machine": "md-" + test.DefaultClusterID + "-venus"}, false)},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				genTestCluster(true),

@@ -69,9 +69,6 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
-	// Add Labels to Machine Deployment
-	md.Labels = nd.Labels
-
 	// OSP is an optional value passed via annotations with fallback logic:
 	// 1. Use existing non-empty annotation if present
 	// 2. Fall back to datacenter-level defaults when annotation is missing/empty
@@ -93,7 +90,19 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	md.Spec.Selector.MatchLabels = map[string]string{
 		"machine": fmt.Sprintf("md-%s-%s", c.Name, rand.String(10)),
 	}
-	md.Spec.Template.Labels = md.Spec.Selector.MatchLabels
+	// keep the selector labels in the template labels.
+	md.Spec.Template.Labels = make(map[string]string)
+	for k, v := range md.Spec.Selector.MatchLabels {
+		md.Spec.Template.Labels[k] = v
+	}
+
+	if nd.Labels != nil {
+		for key, value := range nd.Labels {
+			if _, exists := md.Spec.Selector.MatchLabels[key]; !exists {
+				md.Spec.Template.Labels[key] = value
+			}
+		}
+	}
 	md.Spec.Template.Spec.Labels = nd.Spec.Template.Labels
 	if md.Spec.Template.Spec.Labels == nil {
 		md.Spec.Template.Spec.Labels = make(map[string]string)
