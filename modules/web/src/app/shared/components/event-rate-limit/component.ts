@@ -213,8 +213,11 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
         group.get(control).updateValueAndValidity();
       });
     } else {
+      const limitType = group.get(Controls.LimitType).value;
       this.eventRateLimitConfigArray.removeAt(index);
-      delete this.eventRateLimitConfig[group.get(Controls.LimitType).value];
+      if (this.eventRateLimitConfig && limitType) {
+        delete this.eventRateLimitConfig[limitType];
+      }
       this.form.updateValueAndValidity();
     }
   }

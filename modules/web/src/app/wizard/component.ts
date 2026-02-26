@@ -317,7 +317,9 @@ export class WizardComponent implements OnInit, OnDestroy {
       };
     }
 
-    clusterModel.cluster.spec.useEventRateLimitAdmissionPlugin = clusterModel.cluster.spec.admissionPlugins?.includes(AdmissionPlugin.EventRateLimit);
+    clusterModel.cluster.spec.useEventRateLimitAdmissionPlugin = clusterModel.cluster.spec.admissionPlugins?.includes(
+      AdmissionPlugin.EventRateLimit
+    );
 
     const encryptionEnabled = cluster.spec?.encryptionConfiguration?.enabled;
     const encryptionKey = this._clusterSpecService.encryptionAtRestKey;
