@@ -600,7 +600,7 @@ export class KubeVirtBasicNodeDataComponent
     this._preferences = null;
     this.selectedPreference = null;
     this.preferenceLabel = PreferenceState.Empty;
-    this._preferenceCombobox.reset();
+    this._preferenceCombobox?.reset();
     this._cdr.detectChanges();
   }
 
