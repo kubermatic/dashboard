@@ -45,6 +45,7 @@ import {
 import {WizardMode} from './types/wizard-mode';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 import {View} from '@shared/entity/common';
+import {AdmissionPlugin} from '@app/shared/utils/admission-plugin';
 
 @Component({
   selector: 'km-wizard',
@@ -315,6 +316,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }
+
+    clusterModel.cluster.spec.useEventRateLimitAdmissionPlugin = clusterModel.cluster.spec.admissionPlugins?.includes(AdmissionPlugin.EventRateLimit);
 
     const encryptionEnabled = cluster.spec?.encryptionConfiguration?.enabled;
     const encryptionKey = this._clusterSpecService.encryptionAtRestKey;

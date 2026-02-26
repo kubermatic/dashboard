@@ -214,6 +214,8 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
       });
     } else {
       this.eventRateLimitConfigArray.removeAt(index);
+      delete this.eventRateLimitConfig[group.get(Controls.LimitType).value];
+      this.form.updateValueAndValidity();
     }
   }
 
