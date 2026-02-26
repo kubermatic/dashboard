@@ -68,18 +68,19 @@
   }
 }
 
-
-
 // Dialog
-km-basic-node-data {
+.km-machine-type-selector-search {
+  & .mat-mdc-form-field-flex label {
+    margin-left: 10px;
+  }
+
   & .km-machine-type-selector {
     &-search-field {
-      width: 100%;
-
-      i {
-        margin-right: 12px;
-        position: relative;
-        top: -4px;
+      .mat-mdc-form-field-icon-prefix {
+        i {
+          margin-bottom: 7px;
+          margin-right: 12px;
+        }
       }
     }
   }
