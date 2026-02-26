@@ -574,7 +574,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		newLabels := make(map[string]string)
 		for k, v := range patchedMachineDeployment.Spec.Template.Labels {
 			// Filter out any selector labels from template labels.
-			if _, isSelector := patchedMachineDeployment.Spec.Selector.MatchLabels[k]; !isSelector {
+			if _, isSelector := machineDeployment.Spec.Selector.MatchLabels[k]; !isSelector {
 				newLabels[k] = v
 			}
 		}

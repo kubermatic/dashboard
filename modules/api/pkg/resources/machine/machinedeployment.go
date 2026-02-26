@@ -98,7 +98,9 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 
 	if nd.Labels != nil {
 		for key, value := range nd.Labels {
-			md.Spec.Template.Labels[key] = value
+			if _, exists := md.Spec.Selector.MatchLabels[key]; !exists {
+				md.Spec.Template.Labels[key] = value
+			}
 		}
 	}
 	md.Spec.Template.Spec.Labels = nd.Spec.Template.Labels
