@@ -1415,6 +1415,18 @@ limitations under the License.
               <div key>IP Allocation Mode</div>
               <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.ipAllocationMode}}</div>
             </km-property>
+            @if (machineDeployment.spec.template.cloud.vmwareclouddirector.network) {
+            <km-property>
+              <div key>Network</div>
+              <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.network}}</div>
+            </km-property>
+            }
+            @if (machineDeployment.spec.template.cloud.vmwareclouddirector.additionalNetworks?.length) {
+            <km-property>
+              <div key>Additional Networks</div>
+              <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.additionalNetworks.join(', ')}}</div>
+            </km-property>
+            }
             @if (machineDeployment.spec.template.cloud.vmwareclouddirector.vapp) {
             <km-property>
               <div key>VApp</div>
