@@ -569,6 +569,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.OIDC = patchedCluster.Spec.OIDC
 	newInternalCluster.Spec.UsePodSecurityPolicyAdmissionPlugin = patchedCluster.Spec.UsePodSecurityPolicyAdmissionPlugin
 	newInternalCluster.Spec.UsePodNodeSelectorAdmissionPlugin = patchedCluster.Spec.UsePodNodeSelectorAdmissionPlugin
+	newInternalCluster.Spec.UseEventRateLimitAdmissionPlugin = patchedCluster.Spec.UseEventRateLimitAdmissionPlugin
 	newInternalCluster.Spec.AdmissionPlugins = patchedCluster.Spec.AdmissionPlugins
 	newInternalCluster.Spec.AuditLogging = patchedCluster.Spec.AuditLogging
 	newInternalCluster.Spec.UpdateWindow = patchedCluster.Spec.UpdateWindow
@@ -1173,6 +1174,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			AuditLogging:                         internalCluster.Spec.AuditLogging,
 			UsePodSecurityPolicyAdmissionPlugin:  internalCluster.Spec.UsePodSecurityPolicyAdmissionPlugin,
 			UsePodNodeSelectorAdmissionPlugin:    internalCluster.Spec.UsePodNodeSelectorAdmissionPlugin,
+			UseEventRateLimitAdmissionPlugin:     internalCluster.Spec.UseEventRateLimitAdmissionPlugin,
 			EnableUserSSHKeyAgent:                internalCluster.Spec.EnableUserSSHKeyAgent,
 			BackupConfig:                         internalCluster.Spec.BackupConfig,
 			KubeLB:                               internalCluster.Spec.KubeLB,

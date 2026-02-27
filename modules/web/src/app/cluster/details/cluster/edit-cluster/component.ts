@@ -110,7 +110,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   annotations: Record<string, string>;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
-  enforcedEventRateLimits: string[] = [];
+  isEnforcedByAdmin = false;
   admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
@@ -177,9 +177,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .getAdmissionPluginsConfiguration()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(config => {
-        if (config.eventRateLimit.enforced) {
-          this.enforcedEventRateLimits = Object.keys(config.eventRateLimit.defaultConfig);
-        }
+        this.isEnforcedByAdmin = !!config?.eventRateLimit?.enforced;
       });
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
     this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks;
@@ -433,6 +431,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
+
+    if (this.cluster.spec.useEventRateLimitAdmissionPlugin) {
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.get(Controls.AdmissionPlugins),
+        AdmissionPlugin.EventRateLimit
+      );
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
+    }
+
     this.checkEnforcedFieldsState();
   }
 
@@ -557,6 +564,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
+        useEventRateLimitAdmissionPlugin: this.form
+          .get(Controls.AdmissionPlugins)
+          .value?.includes(AdmissionPlugin.EventRateLimit),
         eventRateLimitConfig: null,
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,

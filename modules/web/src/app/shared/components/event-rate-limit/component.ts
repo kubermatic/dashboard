@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   FormBuilder,
   NG_VALIDATORS,
@@ -69,7 +78,7 @@ const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
   ],
   standalone: false,
 })
-export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnChanges, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;
   @Input() disableAll = false;
   @Input() isEnforcedByAdmin = false;
@@ -103,6 +112,12 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
       this._refreshChosenTypes();
       this.addTypeIfNeeded();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.isEnforcedByAdmin) {
+      this.disableAll = changes.isEnforcedByAdmin.currentValue;
+    }
   }
 
   ngOnDestroy(): void {
@@ -198,7 +213,12 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
         group.get(control).updateValueAndValidity();
       });
     } else {
+      const limitType = group.get(Controls.LimitType).value;
       this.eventRateLimitConfigArray.removeAt(index);
+      if (this.eventRateLimitConfig && limitType) {
+        delete this.eventRateLimitConfig[limitType];
+      }
+      this.form.updateValueAndValidity();
     }
   }
 
