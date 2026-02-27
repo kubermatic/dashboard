@@ -167,12 +167,74 @@ limitations under the License.
         }
         }
         @if (machineDeployment.spec.template.cloud.vmwareclouddirector; as vmwareclouddirector) {
+        <km-property>
+          <div key>CPUs</div>
+          <div value>{{vmwareclouddirector.cpus}}</div>
+        </km-property>
+        <km-property>
+          <div key>Cores per CPU</div>
+          <div value>{{vmwareclouddirector.cpuCores}}</div>
+        </km-property>
+        <km-property>
+          <div key>Memory</div>
+          <div value>{{vmwareclouddirector.memoryMB}} MB</div>
+        </km-property>
+        <km-property>
+          <div key>Disk Size</div>
+          <div value>{{vmwareclouddirector.diskSizeGB}} GB</div>
+        </km-property>
+        @if (vmwareclouddirector.diskIOPS) {
+        <km-property>
+          <div key>Disk IOPS</div>
+          <div value>{{vmwareclouddirector.diskIOPS}}</div>
+        </km-property>
+        }
+        <km-property>
+          <div key>Storage Profile</div>
+          <div value>{{vmwareclouddirector.storageProfile}}</div>
+        </km-property>
+        @if (vmwareclouddirector.placementPolicy) {
+        <km-property>
+          <div key>Placement Policy</div>
+          <div value>{{vmwareclouddirector.placementPolicy}}</div>
+        </km-property>
+        }
+        @if (vmwareclouddirector.sizingPolicy) {
+        <km-property>
+          <div key>Sizing Policy</div>
+          <div value>{{vmwareclouddirector.sizingPolicy}}</div>
+        </km-property>
+        }
+        <km-property>
+          <div key>IP Allocation Mode</div>
+          <div value>{{vmwareclouddirector.ipAllocationMode}}</div>
+        </km-property>
+        @if (vmwareclouddirector.network) {
+        <km-property>
+          <div key>Network</div>
+          <div value>{{vmwareclouddirector.network}}</div>
+        </km-property>
+        }
+        @if (vmwareclouddirector.additionalNetworks?.length) {
+        <km-property>
+          <div key>Additional Networks</div>
+          <div value>{{vmwareclouddirector.additionalNetworks.join(', ')}}</div>
+        </km-property>
+        }
         @if (vmwareclouddirector.vapp) {
         <km-property>
           <div key>VApp</div>
           <div value>{{vmwareclouddirector.vapp}}</div>
         </km-property>
         }
+        <km-property>
+          <div key>Catalog</div>
+          <div value>{{vmwareclouddirector.catalog}}</div>
+        </km-property>
+        <km-property>
+          <div key>Template</div>
+          <div value>{{vmwareclouddirector.template}}</div>
+        </km-property>
         }
         <km-property>
           <div key>Created</div>
