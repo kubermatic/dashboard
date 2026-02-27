@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.23-node-20-kind-0.29-14
+FROM quay.io/kubermatic/build:go-1.23-node-20-kind-0.29-15
 LABEL maintainer="support@kubermatic.com"
 
 ENV NG_CLI_ANALYTICS=ci
