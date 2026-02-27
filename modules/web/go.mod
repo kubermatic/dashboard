@@ -2,7 +2,7 @@ module k8c.io/dashboard/web
 
 go 1.22.0
 
-toolchain go1.22.5
+toolchain go1.22.12
 
 require (
 	github.com/prometheus/client_golang v1.20.5
