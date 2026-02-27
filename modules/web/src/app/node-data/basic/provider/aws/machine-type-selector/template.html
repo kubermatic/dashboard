@@ -74,78 +74,79 @@ limitations under the License.
     </div>
     }
     @if (!isLoading) {
-    <table class="km-table km-machine-type-selector-table"
-           mat-table
-           [dataSource]="filteredOptions"
-           [trackBy]="trackById">
-      <ng-container matColumnDef="select">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-5"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <mat-radio-button [value]="element.name"
-                            [checked]="element.name === selectedMachineType"
-                            (change)="onMachineTypeSelect(element)">
-          </mat-radio-button>
-        </td>
-      </ng-container>
+    <mat-radio-group [value]="selectedMachineType"
+                     (change)="onMachineTypeSelect($event.value)">
+      <table class="km-table km-machine-type-selector-table"
+             mat-table
+             [dataSource]="filteredOptions"
+             [trackBy]="trackById">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-5"></th>
+          <td mat-cell
+              *matCellDef="let element">
+            <mat-radio-button [value]="element.name">
+            </mat-radio-button>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-20">Name</th>
-        <td mat-cell
-            *matCellDef="let element">
-          {{getDisplayName(element)}} @if (element.architecture) {<span class="km-label-primary secondary">{{element.architecture}}</span>}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">Name</th>
+          <td mat-cell
+              *matCellDef="let element">
+            {{getDisplayName(element)}} @if (element.architecture) {<span class="km-label-primary secondary">{{element.architecture}}</span>}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="vcpus">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-20">vCPU</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.vcpus}}</td>
-      </ng-container>
+        <ng-container matColumnDef="vcpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">vCPU</th>
+          <td mat-cell
+              *matCellDef="let element">{{element.vcpus}}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="memoryGB">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-20">Memory</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.memory}} GB</td>
-      </ng-container>
+        <ng-container matColumnDef="memoryGB">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">Memory</th>
+          <td mat-cell
+              *matCellDef="let element">{{element.memory}} GB</td>
+        </ng-container>
 
-      <ng-container matColumnDef="gpus">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-20">GPUs</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.gpus || 0}}</td>
-      </ng-container>
+        <ng-container matColumnDef="gpus">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-20">GPUs</th>
+          <td mat-cell
+              *matCellDef="let element">{{element.gpus || 0}}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="pricePerHour">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">Price ($/hr)</th>
-        <td mat-cell
-            *matCellDef="let element">
-          @if (element.price !== undefined) {
-          ${{element.price.toFixed(4)}}
-          } @else {
-          <span class="km-text-muted">-</span>
-          }
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="pricePerHour">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell p-15">Price ($/hr)</th>
+          <td mat-cell
+              *matCellDef="let element">
+            @if (element.price !== undefined) {
+            ${{element.price.toFixed(4)}}
+            } @else {
+            <span class="km-text-muted">-</span>
+            }
+          </td>
+        </ng-container>
 
-      <tr mat-header-row
-          *matHeaderRowDef="displayedColumns; sticky: true"
-          class="km-header-row"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns;"
-          class="km-mat-row"></tr>
-    </table>
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+            class="km-header-row"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            class="km-mat-row"></tr>
+      </table>
+    </mat-radio-group>
     }
 
     @if (filteredOptions.length === 0 && !isLoading) {
