@@ -57,6 +57,10 @@ type DatacenterSpecKubevirt struct {
 	// kubevirt-<infra-storageClass-name>
 	InfraStorageClasses []*KubeVirtInfraStorageClass `json:"infraStorageClasses"`
 
+	// Optional: InfraVolumeSnapshotClasses contains a list of KubeVirt infra cluster VolumeSnapshotClasses names used
+	// to initialise VolumeSnapshotClasses in the tenant cluster.
+	InfraVolumeSnapshotClasses []*KubeVirtInfraVolumeSnapshotClass `json:"infraVolumeSnapshotClasses"`
+
 	// Optional: MatchSubnetAndStorageLocation if set to true, the region and zone of the subnet and storage class must match. For
 	// example, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.
 	// otherwise KKP will reject the creation of the machine deployment and eventually the cluster.
@@ -94,6 +98,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInfraStorageClasses(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInfraVolumeSnapshotClasses(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -169,6 +177,32 @@ func (m *DatacenterSpecKubevirt) validateInfraStorageClasses(formats strfmt.Regi
 					return ve.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) validateInfraVolumeSnapshotClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.InfraVolumeSnapshotClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.InfraVolumeSnapshotClasses); i++ {
+		if swag.IsZero(m.InfraVolumeSnapshotClasses[i]) { // not required
+			continue
+		}
+
+		if m.InfraVolumeSnapshotClasses[i] != nil {
+			if err := m.InfraVolumeSnapshotClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("infraVolumeSnapshotClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("infraVolumeSnapshotClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -303,6 +337,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInfraVolumeSnapshotClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCsiDriverOperator(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -363,6 +401,26 @@ func (m *DatacenterSpecKubevirt) contextValidateInfraStorageClasses(ctx context.
 					return ve.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateInfraVolumeSnapshotClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.InfraVolumeSnapshotClasses); i++ {
+
+		if m.InfraVolumeSnapshotClasses[i] != nil {
+			if err := m.InfraVolumeSnapshotClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("infraVolumeSnapshotClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("infraVolumeSnapshotClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

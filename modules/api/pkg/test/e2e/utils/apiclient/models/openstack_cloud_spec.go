@@ -72,6 +72,20 @@ type OpenstackCloudSpec struct {
 	// +optional
 	LoadBalancerClasses []*LoadBalancerClass `json:"loadBalancerClasses"`
 
+	// LoadBalancerFloatingIPPool holds the name of the external network to be used
+	// for LoadBalancer floating IP allocation.
+	//
+	// When specified, LoadBalancer type Services will receive floating IPs from this pool
+	// instead of the FloatingIPPool. This allows using different external networks for
+	// cluster infrastructure (router) vs. LoadBalancer services.
+	// If not specified, FloatingIPPool is used for LoadBalancers for backward compatibility.
+	//
+	// This field sets a cluster-wide default for LoadBalancers. Services can override
+	// this default by using the `loadbalancer.openstack.org/class` annotation to select
+	// a specific LoadBalancerClass.
+	// +optional
+	LoadBalancerFloatingIPPool string `json:"loadBalancerFloatingIPPool,omitempty"`
+
 	// Network holds the name of the internal network
 	// When specified, all worker nodes will be attached to this network. If not specified, a network, subnet & router will be created.
 	//

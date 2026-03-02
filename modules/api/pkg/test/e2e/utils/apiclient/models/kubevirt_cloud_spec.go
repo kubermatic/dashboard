@@ -47,6 +47,9 @@ type KubevirtCloudSpec struct {
 	// VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt.
 	VPCName string `json:"vpcName,omitempty"`
 
+	// VolumeSnapshotClasses defines a list of volume snapshot classes for the infrastructure cluster.
+	VolumeSnapshotClasses []*KubeVirtInfraVolumeSnapshotClass `json:"volumeSnapshotClasses"`
+
 	// credentials reference
 	CredentialsReference *GlobalSecretKeySelector `json:"credentialsReference,omitempty"`
 
@@ -63,6 +66,10 @@ func (m *KubevirtCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateStorageClasses(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVolumeSnapshotClasses(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -132,6 +139,32 @@ func (m *KubevirtCloudSpec) validateStorageClasses(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *KubevirtCloudSpec) validateVolumeSnapshotClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.VolumeSnapshotClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.VolumeSnapshotClasses); i++ {
+		if swag.IsZero(m.VolumeSnapshotClasses[i]) { // not required
+			continue
+		}
+
+		if m.VolumeSnapshotClasses[i] != nil {
+			if err := m.VolumeSnapshotClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("volumeSnapshotClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("volumeSnapshotClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *KubevirtCloudSpec) validateCredentialsReference(formats strfmt.Registry) error {
 	if swag.IsZero(m.CredentialsReference) { // not required
 		return nil
@@ -182,6 +215,10 @@ func (m *KubevirtCloudSpec) ContextValidate(ctx context.Context, formats strfmt.
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateVolumeSnapshotClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCredentialsReference(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -226,6 +263,26 @@ func (m *KubevirtCloudSpec) contextValidateStorageClasses(ctx context.Context, f
 					return ve.ValidateName("storageClasses" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("storageClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *KubevirtCloudSpec) contextValidateVolumeSnapshotClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.VolumeSnapshotClasses); i++ {
+
+		if m.VolumeSnapshotClasses[i] != nil {
+			if err := m.VolumeSnapshotClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("volumeSnapshotClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("volumeSnapshotClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
