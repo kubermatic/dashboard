@@ -237,10 +237,11 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 // - concatenated with kubermatic standard from yaml manifests.
 func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, datacenter *kubermaticv1.Datacenter) (instancetypeListWrapper, error) {
 	instancetypes := instancetypeListWrapper{}
-	customInstancetypes := kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeList{}
+	clusterInstancetypes := kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeList{}
 	standardInstancetypes := kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
+	namespaceInstancetypes := kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
 	// "custom" (cluster-wide)
-	if err := client.List(ctx, &customInstancetypes); err != nil {
+	if err := client.List(ctx, &clusterInstancetypes); err != nil {
 		return instancetypes, err
 	}
 	// "standard" (namespaced)
@@ -248,16 +249,37 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 		standardInstancetypes.Items = kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
 	}
 
+	// "custom" (namespaced)
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
+		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(datacenter.Spec.Kubevirt.NamespacedMode.Namespace)); err != nil {
+			return instancetypes, err
+		}
+	} else {
+		if err := client.List(ctx, &namespaceInstancetypes); err != nil {
+			return instancetypes, err
+		}
+	}
 	// Wrap
-	if len(customInstancetypes.Items) > 0 || len(standardInstancetypes.Items) > 0 {
+	if len(clusterInstancetypes.Items) > 0 || len(standardInstancetypes.Items) > 0 || len(namespaceInstancetypes.Items) > 0 {
 		instancetypes.items = make([]instancetypeWrapper, 0)
 	}
-	for i := range customInstancetypes.Items {
-		w := customInstancetypeWrapper{&customInstancetypes.Items[i]}
+	for i := range clusterInstancetypes.Items {
+		w := customInstancetypeWrapper{&clusterInstancetypes.Items[i]}
 		instancetypes.items = append(instancetypes.items, &w)
 	}
+
+	standardNames := sets.New[string]()
 	for i := range standardInstancetypes.Items {
+		standardNames.Insert(standardInstancetypes.Items[i].Name)
 		w := standardInstancetypeWrapper{&standardInstancetypes.Items[i]}
+		instancetypes.items = append(instancetypes.items, &w)
+	}
+	for i := range namespaceInstancetypes.Items {
+		// Skip if already added from standard instancetypes to avoid duplicates
+		if standardNames.Has(namespaceInstancetypes.Items[i].Name) {
+			continue
+		}
+		w := standardInstancetypeWrapper{&namespaceInstancetypes.Items[i]}
 		instancetypes.items = append(instancetypes.items, &w)
 	}
 

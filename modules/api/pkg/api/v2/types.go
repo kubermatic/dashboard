@@ -1162,7 +1162,7 @@ type UserClusterConfiguration struct {
 	AdmissionPlugins kubermaticv1.AdmissionPluginsConfiguration `json:"admissionPlugins,omitempty"`
 }
 
-// AdmissionPluginsConfiguration represents an object holding admission plugins configuration.
+// AdmissionPluginsConfiguration contains global settings for admission plugins.
 // swagger:model UserClusterAdmissionPluginsConfiguration
 type AdmissionPluginsConfiguration struct {
 	kubermaticv1.AdmissionPluginsConfiguration

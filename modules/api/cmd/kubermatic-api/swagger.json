@@ -41573,7 +41573,7 @@
     },
     "UserClusterAdmissionPluginsConfiguration": {
       "type": "object",
-      "title": "AdmissionPluginsConfiguration represents an object holding admission plugins configuration.",
+      "title": "AdmissionPluginsConfiguration contains global settings for admission plugins.",
       "properties": {
         "eventRateLimit": {
           "$ref": "#/definitions/EventRateLimitPluginConfiguration"
