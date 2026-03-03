@@ -31973,6 +31973,14 @@
           },
           "x-go-name": "InfraStorageClasses"
         },
+        "infraVolumeSnapshotClasses": {
+          "description": "Optional: InfraVolumeSnapshotClasses contains a list of KubeVirt infra cluster VolumeSnapshotClasses names used\nto initialise VolumeSnapshotClasses in the tenant cluster.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubeVirtInfraVolumeSnapshotClass"
+          },
+          "x-go-name": "InfraVolumeSnapshotClasses"
+        },
         "matchSubnetAndStorageLocation": {
           "description": "Optional: MatchSubnetAndStorageLocation if set to true, the region and zone of the subnet and storage class must match. For\nexample, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.\notherwise KKP will reject the creation of the machine deployment and eventually the cluster.",
           "type": "boolean",
@@ -36163,6 +36171,27 @@
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
+    "KubeVirtInfraVolumeSnapshotClass": {
+      "type": "object",
+      "properties": {
+        "deletionPolicy": {
+          "description": "Optional: DeletionPolicy defines how the VolumeSnapshotClass should be deleted. Defaults to Delete.",
+          "type": "string",
+          "x-go-name": "DeletionPolicy"
+        },
+        "infraVolumeSnapshotClass": {
+          "description": "InfraVolumeSnapshotClass of the volume snapshot class to use on the infrastructure cluster.",
+          "type": "string",
+          "x-go-name": "InfraVolumeSnapshotClass"
+        },
+        "isDefaultClass": {
+          "description": "Optional: IsDefaultClass. If true, the created VolumeSnapshotClass in the tenant cluster will be annotated with:\nsnapshot.storage.kubernetes.io/is-default-class: true\nIf missing or false, annotation will be:\nsnapshot.storage.kubernetes.io/is-default-class: false",
+          "type": "boolean",
+          "x-go-name": "IsDefaultClass"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
     "KubeVirtSubnet": {
       "type": "object",
       "title": "KubeVirtSubnet represents a KubeVirt Subnet.",
@@ -36322,6 +36351,14 @@
           "description": "SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
           "type": "string",
           "x-go-name": "SubnetName"
+        },
+        "volumeSnapshotClasses": {
+          "description": "VolumeSnapshotClasses defines a list of volume snapshot classes for the infrastructure cluster.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubeVirtInfraVolumeSnapshotClass"
+          },
+          "x-go-name": "VolumeSnapshotClasses"
         },
         "vpcName": {
           "description": "VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt.",
@@ -38768,6 +38805,11 @@
             "$ref": "#/definitions/LoadBalancerClass"
           },
           "x-go-name": "LoadBalancerClasses"
+        },
+        "loadBalancerFloatingIPPool": {
+          "description": "LoadBalancerFloatingIPPool holds the name of the external network to be used\nfor LoadBalancer floating IP allocation.\n\nWhen specified, LoadBalancer type Services will receive floating IPs from this pool\ninstead of the FloatingIPPool. This allows using different external networks for\ncluster infrastructure (router) vs. LoadBalancer services.\nIf not specified, FloatingIPPool is used for LoadBalancers for backward compatibility.\n\nThis field sets a cluster-wide default for LoadBalancers. Services can override\nthis default by using the `loadbalancer.openstack.org/class` annotation to select\na specific LoadBalancerClass.\n+optional",
+          "type": "string",
+          "x-go-name": "LoadBalancerFloatingIPPool"
         },
         "network": {
           "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.\n\nNote that the network is internal if the \"External\" field is set to false",
