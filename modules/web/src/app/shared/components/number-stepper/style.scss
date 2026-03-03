@@ -19,9 +19,11 @@
 }
 
 input[type='number'] {
+  appearance: textfield; // Hides native spinners in Firefox
+
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
-    appearance: none;
+    appearance: none; // Hides native spinners in WebKit browsers (Chrome, Safari, Edge)
   }
 }
 
