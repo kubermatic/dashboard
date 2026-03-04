@@ -43,6 +43,15 @@
   margin-top: 30px;
 }
 
+.warning-container {
+  margin-bottom: 10px;
+  margin-left: 30px;
+
+  i {
+    font-size: 18px;
+  }
+}
+
 km-search-field {
   font-size: variables.$font-size-subhead;
 
