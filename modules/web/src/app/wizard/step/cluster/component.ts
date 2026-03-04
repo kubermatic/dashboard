@@ -217,6 +217,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
+  private readonly _nftablesDefaultMinimumK8sVersion = '1.33.0';
   private readonly _cniCiliumApplicationName = 'cilium';
   private readonly _debounceTime = 500;
 
@@ -497,8 +498,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._setDefaultCNIVersion(cniVersions.cniDefaultVersion);
       });
 
-    this.control(Controls.Konnectivity)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(this.control(Controls.Konnectivity).valueChanges, this.control(Controls.Version).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._updateAvailableProxyModes();
       });
@@ -1153,7 +1154,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           ? Object.values(ProxyMode)
           : [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.nftables];
       if (proxyModeControl.pristine || !this.availableProxyModes.includes(proxyModeControl.value)) {
-        newValue = this._defaultProxyMode || ProxyMode.ipvs;
+        const version = this.controlValue(Controls.Version);
+        const isVersionAboveMinVersion = version && gte(coerce(version), this._nftablesDefaultMinimumK8sVersion);
+
+        newValue = isVersionAboveMinVersion ? ProxyMode.nftables : ProxyMode.ipvs;
       }
     }
     if (newValue && newValue !== proxyModeControl.value) {
