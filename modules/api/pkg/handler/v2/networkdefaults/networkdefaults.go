@@ -146,7 +146,6 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType, clusterVersion 
 			NodeCIDRMaskSize:        resources.DefaultNodeCIDRMaskSizeIPv6,
 			NodePortsAllowedIPRange: resources.IPv6MatchAnyCIDR,
 		},
-		ProxyMode:                resources.GetDefaultProxyMode(provider, clusterVersion),
 		NodeLocalDNSCacheEnabled: resources.DefaultNodeLocalDNSCacheEnabled,
 		ClusterExposeStrategy:    defaulting.DefaultExposeStrategy,
 		TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
@@ -155,10 +154,6 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType, clusterVersion 
 
 func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDefaults, templateClusterNetwork kubermaticv1.ClusterNetworkingConfig, provider kubermaticv1.ProviderType, exposeStrategy kubermaticv1.ExposeStrategy, clusterVersion semver.Semver) apiv2.NetworkDefaults {
 	defaultClusterNetwork := defaulting.DefaultClusterNetwork(templateClusterNetwork, provider, exposeStrategy, clusterVersion)
-
-	if defaultClusterNetwork.ProxyMode != "" {
-		networkDefaults.ProxyMode = defaultClusterNetwork.ProxyMode
-	}
 
 	if defaultClusterNetwork.NodeLocalDNSCacheEnabled != nil {
 		networkDefaults.NodeLocalDNSCacheEnabled = *defaultClusterNetwork.NodeLocalDNSCacheEnabled

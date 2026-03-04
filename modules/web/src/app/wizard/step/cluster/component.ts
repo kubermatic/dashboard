@@ -212,12 +212,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
-  private _defaultProxyMode: ProxyMode;
   private _auditWebhookBackendChangesSubscription: Subscription;
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
-  private readonly _nftablesDefaultMinimumK8sVersion = '1.33.0';
+  private readonly _nftablesDefaultMinimumK8sVersion = '1.35.0';
   private readonly _cniCiliumApplicationName = 'cilium';
   private readonly _debounceTime = 500;
 
@@ -943,7 +942,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._handleCNIPluginChanges();
         this._updateAvailableProxyModes();
         this._fetchCNIPlugins();
-        this._defaultProxyMode = clusterSpec?.clusterNetwork?.proxyMode;
 
         if (cluster.annotations?.[ClusterAnnotation.InitialCNIValuesRequest]) {
           this.cniApplicationValues = cluster.annotations[ClusterAnnotation.InitialCNIValuesRequest];
