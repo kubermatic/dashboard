@@ -200,7 +200,11 @@ func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDe
 }
 
 func GenerateNetworkDefaults(provider kubermaticv1.ProviderType, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate) apiv2.NetworkDefaults {
-	networkDefaults := generateNetworkDefaults(provider, defaultClusterTemplate.Spec.Version)
+	var clusterVersion semver.Semver
+	if defaultClusterTemplate != nil {
+		clusterVersion = defaultClusterTemplate.Spec.Version
+	}
+	networkDefaults := generateNetworkDefaults(provider, clusterVersion)
 
 	// Check if kubermatic config has Expose strategy
 	if config.Spec.ExposeStrategy != "" {
