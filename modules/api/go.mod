@@ -70,8 +70,8 @@ require (
 	google.golang.org/api v0.259.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.0-rc.0.0.20260302215044-8144f5410522
-	k8c.io/kubermatic/v2 v2.30.0-rc.0.0.20260302215044-8144f5410522
+	k8c.io/kubermatic/sdk/v2 v2.30.0-rc.1.0.20260305104947-103dbe16422a
+	k8c.io/kubermatic/v2 v2.30.0-rc.1.0.20260305104947-103dbe16422a
 	k8c.io/machine-controller/sdk v1.64.1
 	k8c.io/operating-system-manager v1.8.1-0.20260122092708-a75b71800e7c
 	k8c.io/reconciler v0.5.0
@@ -104,6 +104,8 @@ replace k8s.io/client-go => k8s.io/client-go v0.35.0
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
+
+replace k8c.io/application-catalog-manager => github.com/kubermatic/application-catalog-manager v0.2.0-rc.6
 
 replace github.com/theupdateframework/go-tuf/v2 => github.com/theupdateframework/go-tuf/v2 v2.0.2
 
@@ -385,6 +387,7 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	k8c.io/application-catalog-manager v0.0.0-00010101000000-000000000000 // indirect
 	k8c.io/kubelb v1.3.1 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.35.0 // indirect

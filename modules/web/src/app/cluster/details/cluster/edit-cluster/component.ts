@@ -110,7 +110,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   annotations: Record<string, string>;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
-  isEnforcedByAdmin = false;
+  isEventRateLimitEnforcedByAdmin = false;
   admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
@@ -177,7 +177,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .getAdmissionPluginsConfiguration()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(config => {
-        this.isEnforcedByAdmin = !!config?.eventRateLimit?.enforced;
+        this.isEventRateLimitEnforcedByAdmin = !!config?.eventRateLimit?.enforced;
       });
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
     this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks;
@@ -477,6 +477,17 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
+  }
+
+  isAdmissionPluginEnforced(admissionPlugin: AdmissionPlugin): boolean {
+    switch (admissionPlugin) {
+      case AdmissionPlugin.EventRateLimit:
+        return this.isEventRateLimitEnforcedByAdmin;
+      case AdmissionPlugin.PodSecurityPolicy:
+        return this.isPodSecurityPolicyEnforced();
+      default:
+        return false;
+    }
   }
 
   isEnforced(control: Controls): boolean {
