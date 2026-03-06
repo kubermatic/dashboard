@@ -23,7 +23,7 @@ import (
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-	"k8c.io/kubermatic/sdk/v2/semver"
+	ksemver "k8c.io/kubermatic/sdk/v2/semver"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
 	"k8s.io/utils/ptr"
@@ -34,15 +34,14 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 		name                         string
 		provider                     kubermaticv1.ProviderType
 		templateClusterNetwork       kubermaticv1.ClusterNetworkingConfig
-		clusterVersion               *semver.Semver
 		exposeStrategy               kubermaticv1.ExposeStrategy
+		clusterVersion               ksemver.Semver
 		expectedFinalNetworkDefaults apiv2.NetworkDefaults
 	}{
 		{
 			name:                   "empty cluster network config from template",
 			provider:               kubermaticv1.AWSCloudProvider,
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{},
-			clusterVersion:         semver.NewSemverOrDie("1.34.0"),
 			expectedFinalNetworkDefaults: apiv2.NetworkDefaults{
 				IPv4: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "172.25.0.0/16",
@@ -66,7 +65,6 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 			name:                   "empty cluster network config from template kubevirt",
 			provider:               kubermaticv1.KubevirtCloudProvider,
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{},
-			clusterVersion:         semver.NewSemverOrDie("1.34.0"),
 			expectedFinalNetworkDefaults: apiv2.NetworkDefaults{
 				IPv4: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "172.26.0.0/16",
@@ -90,7 +88,6 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 			name:                   "empty cluster network config from template hetzner",
 			provider:               kubermaticv1.HetznerCloudProvider,
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{},
-			clusterVersion:         semver.NewSemverOrDie("1.34.0"),
 			expectedFinalNetworkDefaults: apiv2.NetworkDefaults{
 				IPv4: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "172.25.0.0/16",
@@ -111,9 +108,8 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 			},
 		},
 		{
-			name:           "filled cluster network config from template ipv4",
-			provider:       kubermaticv1.AWSCloudProvider,
-			clusterVersion: semver.NewSemverOrDie("1.34.0"),
+			name:     "filled cluster network config from template ipv4",
+			provider: kubermaticv1.AWSCloudProvider,
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
 				IPFamily: "IPv4",
 				Pods: kubermaticv1.NetworkRanges{
@@ -153,7 +149,6 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 			name:           "filled cluster network config from template dual stack",
 			provider:       kubermaticv1.KubevirtCloudProvider,
 			exposeStrategy: kubermaticv1.ExposeStrategyLoadBalancer,
-			clusterVersion: semver.NewSemverOrDie("1.34.0"),
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
 				IPFamily: "IPv4+IPv6",
 				Pods: kubermaticv1.NetworkRanges{
@@ -194,8 +189,8 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			networkDefaults := generateNetworkDefaults(tc.provider, *tc.clusterVersion)
-			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, tc.templateClusterNetwork, tc.provider, tc.exposeStrategy, *tc.clusterVersion)
+			networkDefaults := generateNetworkDefaults(tc.provider)
+			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, tc.templateClusterNetwork, tc.provider, tc.exposeStrategy, tc.clusterVersion)
 			assert.Equal(t, tc.expectedFinalNetworkDefaults, networkDefaults)
 		})
 	}

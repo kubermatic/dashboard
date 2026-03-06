@@ -31,7 +31,7 @@ import (
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	kubermaticprovider "k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-	"k8c.io/kubermatic/sdk/v2/semver"
+	ksemver "k8c.io/kubermatic/sdk/v2/semver"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -132,7 +132,7 @@ func GetNetworkDefaultsEndpoint(
 	}
 }
 
-func generateNetworkDefaults(provider kubermaticv1.ProviderType, clusterVersion semver.Semver) apiv2.NetworkDefaults {
+func generateNetworkDefaults(provider kubermaticv1.ProviderType) apiv2.NetworkDefaults {
 	return apiv2.NetworkDefaults{
 		IPv4: &apiv2.NetworkDefaultsIPFamily{
 			PodsCIDR:                resources.GetDefaultPodCIDRIPv4(provider),
@@ -146,14 +146,13 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType, clusterVersion 
 			NodeCIDRMaskSize:        resources.DefaultNodeCIDRMaskSizeIPv6,
 			NodePortsAllowedIPRange: resources.IPv6MatchAnyCIDR,
 		},
-		ProxyMode:                resources.GetDefaultProxyMode(provider, clusterVersion),
 		NodeLocalDNSCacheEnabled: resources.DefaultNodeLocalDNSCacheEnabled,
 		ClusterExposeStrategy:    defaulting.DefaultExposeStrategy,
 		TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 	}
 }
 
-func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDefaults, templateClusterNetwork kubermaticv1.ClusterNetworkingConfig, provider kubermaticv1.ProviderType, exposeStrategy kubermaticv1.ExposeStrategy, clusterVersion semver.Semver) apiv2.NetworkDefaults {
+func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDefaults, templateClusterNetwork kubermaticv1.ClusterNetworkingConfig, provider kubermaticv1.ProviderType, exposeStrategy kubermaticv1.ExposeStrategy, clusterVersion ksemver.Semver) apiv2.NetworkDefaults {
 	defaultClusterNetwork := defaulting.DefaultClusterNetwork(templateClusterNetwork, provider, exposeStrategy, clusterVersion)
 
 	if defaultClusterNetwork.ProxyMode != "" {
@@ -200,11 +199,7 @@ func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDe
 }
 
 func GenerateNetworkDefaults(provider kubermaticv1.ProviderType, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate) apiv2.NetworkDefaults {
-	var clusterVersion semver.Semver
-	if defaultClusterTemplate != nil {
-		clusterVersion = defaultClusterTemplate.Spec.Version
-	}
-	networkDefaults := generateNetworkDefaults(provider, clusterVersion)
+	networkDefaults := generateNetworkDefaults(provider)
 
 	// Check if kubermatic config has Expose strategy
 	if config.Spec.ExposeStrategy != "" {
