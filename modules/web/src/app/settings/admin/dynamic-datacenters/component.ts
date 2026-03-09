@@ -110,8 +110,12 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       return '';
     }
 
-    const country = countryCodeLookup.byIso(code);
-    return country ? country.country : code;
+    try {
+      const country = countryCodeLookup.byIso(code);
+      return country ? country.country : code;
+    } catch {
+      return code;
+    }
   }
 
   private _setCountries(datacenters: Datacenter[]) {

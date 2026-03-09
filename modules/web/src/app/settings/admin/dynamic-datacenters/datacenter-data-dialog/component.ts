@@ -204,8 +204,12 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    const country = countryCodeLookup.byIso(code);
-    return country ? country.country : code;
+    try {
+      const country = countryCodeLookup.byIso(code);
+      return country ? country.country : code;
+    } catch {
+      return code;
+    }
   }
 
   getObservable(): Observable<Datacenter> | void {
