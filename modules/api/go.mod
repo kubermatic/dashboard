@@ -70,10 +70,10 @@ require (
 	google.golang.org/api v0.259.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.0-rc.1.0.20260305104947-103dbe16422a
-	k8c.io/kubermatic/v2 v2.30.0-rc.1.0.20260305104947-103dbe16422a
-	k8c.io/machine-controller/sdk v1.64.1
-	k8c.io/operating-system-manager v1.8.1-0.20260122092708-a75b71800e7c
+	k8c.io/kubermatic/sdk/v2 v2.30.0-rc.2.0.20260309153422-d89263047fe9
+	k8c.io/kubermatic/v2 v2.30.0-rc.2.0.20260309153422-d89263047fe9
+	k8c.io/machine-controller/sdk v1.65.0
+	k8c.io/operating-system-manager v1.10.0
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.0
 	k8s.io/apiextensions-apiserver v0.35.0
@@ -131,7 +131,7 @@ require (
 	github.com/Azure/go-autorest/logger v0.2.2 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.1 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.6.0 // indirect
-	github.com/BurntSushi/toml v1.5.0 // indirect
+	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/IGLOU-EU/go-wildcard v1.0.3 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
@@ -368,14 +368,14 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.47.0 // indirect
 	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc // indirect
-	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/mod v0.32.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/term v0.39.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
-	golang.org/x/tools v0.40.0 // indirect
+	golang.org/x/tools v0.41.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260122232226-8e98ce8d340d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260122232226-8e98ce8d340d // indirect
@@ -391,7 +391,7 @@ require (
 	k8c.io/kubelb v1.3.1 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.35.0 // indirect
-	k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b // indirect
+	k8s.io/gengo/v2 v2.0.0-20251215205346-5ee0d033ba5b // indirect
 	k8s.io/kube-aggregator v0.35.0 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
 	k8s.io/pod-security-admission v0.33.1 // indirect
