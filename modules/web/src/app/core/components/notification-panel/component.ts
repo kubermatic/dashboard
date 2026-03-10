@@ -19,6 +19,7 @@ import {NotificationType} from '@core/components/notification/component';
 import {Notification, NotificationService} from '@core/services/notification';
 
 import {slideOut} from '@shared/animations/slide';
+import {CLOSE_PANEL_TOOLTIP} from '@app/shared/constants/common';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -38,6 +39,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   unseenNotificationsCount = 0;
   readonly NotificationType = NotificationType;
+  readonly CLOSE_PANEL_TOOLTIP = CLOSE_PANEL_TOOLTIP;
 
   constructor(
     private readonly _notificationService: NotificationService,

@@ -34,6 +34,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {major, minor} from 'semver';
+import {MACHINE_COUNT_TOOLTIP} from '@app/shared/constants/common';
 
 enum Column {
   Status = 'status',
@@ -53,6 +54,7 @@ enum Column {
 })
 export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly column = Column;
+  readonly MACHINE_COUNT_TOOLTIP = MACHINE_COUNT_TOOLTIP;
   @Input() cluster: ExternalCluster;
   @Input() machineDeployments: ExternalMachineDeployment[] = [];
   @Input() projectID: string;

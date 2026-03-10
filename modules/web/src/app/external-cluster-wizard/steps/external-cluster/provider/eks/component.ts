@@ -65,6 +65,7 @@ import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/co
 import {EKSArchitecture} from '@app/shared/entity/provider/eks';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
+import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
 
 enum Controls {
   Vpc = 'vpc',
@@ -141,6 +142,7 @@ export class EKSClusterSettingsComponent
 {
   readonly Controls = Controls;
   readonly Architecture = EKSArchitecture;
+  readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
   readonly DEFAULT_INSTANCE_TYPES = ['t3.medium', 'a1.medium'];
   vpcLabel = VpcState.Ready;
   vpcs: EKSVpc[] = [];

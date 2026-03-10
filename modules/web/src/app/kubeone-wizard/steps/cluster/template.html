@@ -27,7 +27,7 @@ limitations under the License.
       </mat-card-header>
       <div>
         <p class="manifest-message">
-          Created by using `<code matTooltip="Click to copy"
+          Created by using `<code [matTooltip]="CLICK_TO_COPY_TOOLTIP"
                 class="km-copy"
                 (click)="copyManifestCommand()"><b>{{manifestCommand}}</b></code>`.
         </p>

@@ -35,6 +35,7 @@ import {Project} from '@app/shared/entity/project';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import * as y from 'js-yaml';
 import {Observable, Subject, take, takeUntil} from 'rxjs';
+import {DEFAULT_POLICY_TOOLTIP, ENFORCED_POLICY_TOOLTIP} from '@app/shared/constants/common';
 
 export interface AddPolicyTemplateDialogConfig {
   mode: PolicyTemplateDialogMode;
@@ -71,6 +72,8 @@ enum Controls {
 export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
+  readonly DEFAULT_POLICY_TOOLTIP = DEFAULT_POLICY_TOOLTIP;
+  readonly ENFORCED_POLICY_TOOLTIP = ENFORCED_POLICY_TOOLTIP;
   scopes = Scopes;
   severityOptions = Object.values(PolicySeverity);
   form: FormGroup;

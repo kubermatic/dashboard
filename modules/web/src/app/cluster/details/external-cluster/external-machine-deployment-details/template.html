@@ -25,7 +25,7 @@ limitations under the License.
          [ngClass]="machineDeploymentHealthStatus?.icon"></i>
       <span ngxClipboard
             [cbContent]="machineDeployment.name"
-            matTooltip="Click to copy"
+            [matTooltip]="CLICK_TO_COPY_TOOLTIP"
             class="km-copy">{{machineDeployment.name}}</span>
     </mat-card-title>
     <div fxFlex></div>
@@ -62,7 +62,7 @@ limitations under the License.
             / {{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
           @if (machineDeployment.status?.readyReplicas > machineDeployment.spec.replicas) {
           <div class="km-icon-info km-pointer"
-               matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
+               [matTooltip]="MACHINE_AVAILABILITY_TOOLTIP"></div>
           }
         </div>
       </km-property>

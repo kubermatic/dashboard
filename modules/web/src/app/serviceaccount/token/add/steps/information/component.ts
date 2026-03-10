@@ -15,6 +15,7 @@
 import {Component, forwardRef, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
@@ -37,6 +38,8 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
   standalone: false,
 })
 export class ServiceAccountTokenInformationStepComponent extends BaseFormValidator implements OnInit {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+
   get token(): string {
     return this._service.token;
   }

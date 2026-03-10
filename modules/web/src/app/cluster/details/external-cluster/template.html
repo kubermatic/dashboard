@@ -18,7 +18,7 @@ limitations under the License.
   <button mat-icon-button
           color="tertiary"
           (click)="goBack()"
-          matTooltip="Go back to the cluster list">
+          [matTooltip]="GO_BACK_TO_CLUSTER_LIST_TOOLTIP">
     <i class="km-icon-mask km-icon-arrow-left"></i>
   </button>
   <div fxFlex></div>
@@ -35,7 +35,7 @@ limitations under the License.
          class="cluster-health km-pointer"></i>
       <span ngxClipboard
             [cbContent]="cluster.name"
-            matTooltip="Click to copy"
+            [matTooltip]="CLICK_TO_COPY_TOOLTIP"
             class="cluster-name km-copy">{{cluster.name}}</span>
       <span class="km-label-primary">External</span>
       @if (isImportedCluster) {
@@ -92,7 +92,7 @@ limitations under the License.
         <div value
              ngxClipboard
              [cbContent]="cluster?.id"
-             matTooltip="Click to copy"
+             [matTooltip]="CLICK_TO_COPY_TOOLTIP"
              class="km-copy">
           {{cluster?.id}}
         </div>

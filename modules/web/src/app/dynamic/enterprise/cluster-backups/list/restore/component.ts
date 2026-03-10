@@ -38,6 +38,7 @@ import {UserService} from '@app/core/services/user';
 import {HealthStatus, StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {DELETE_SELECTED_TOOLTIP} from '@app/shared/constants/common';
 
 enum ClusterState {
   Ready = 'Clusters',
@@ -56,6 +57,7 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
+  readonly DELETE_SELECTED_TOOLTIP = DELETE_SELECTED_TOOLTIP;
   isAdmin = false;
   dataSource = new MatTableDataSource<ClusterRestore>();
   clusters: Cluster[];

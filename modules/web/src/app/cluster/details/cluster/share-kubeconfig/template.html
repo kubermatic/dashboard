@@ -69,7 +69,7 @@ limitations under the License.
         <div class="km-code-block km-copy"
              ngxClipboard
              [cbContent]="installCommands.brewInstallCommand"
-             matTooltip="Click to copy">
+             [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.brewInstallCommand}}
         </div>
       </li>
@@ -78,7 +78,7 @@ limitations under the License.
         <div class="km-code-block km-copy"
              ngxClipboard
              [cbContent]="installCommands.chocoInstallCommand"
-             matTooltip="Click to copy">
+             [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.chocoInstallCommand}}
         </div>
       </li>
@@ -93,7 +93,7 @@ limitations under the License.
         <div class="km-code-block km-copy"
              ngxClipboard
              [cbContent]="installCommands.krewInstallCommand"
-             matTooltip="Click to copy">
+             [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.krewInstallCommand}}
         </div>
       </li>
@@ -102,7 +102,7 @@ limitations under the License.
   }
   @if (dialogTitle === shareKubeConfigDialogMode.Share) {
   <div class="km-code-block km-copy"
-       matTooltip="Click to copy"
+       [matTooltip]="CLICK_TO_COPY_TOOLTIP"
        ngxClipboard
        [cbContent]="kubeconfigLink">{{kubeconfigLink}}</div>
   }

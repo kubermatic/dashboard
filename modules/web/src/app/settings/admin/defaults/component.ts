@@ -32,7 +32,7 @@ import {VeleroChecksumAlgorithm} from '@shared/entity/backup';
 import {Member} from '@shared/entity/member';
 import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
 import {getEditionVersion, objectDiff} from '@shared/utils/common';
-import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE, OPA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -69,6 +69,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
+  readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();

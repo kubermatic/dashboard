@@ -27,7 +27,7 @@ END OF TERMS AND CONDITIONS
       Delete
       <b ngxClipboard
          [cbContent]="getcbContent()"
-         matTooltip="Click to copy"
+         [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{getcbContent()}}</b>
       {{type}} permanently?
     </p>
@@ -37,7 +37,7 @@ END OF TERMS AND CONDITIONS
       Type
       <b ngxClipboard
          [cbContent]="getcbContent()"
-         matTooltip="Click to copy"
+         [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">yes</b>
       to delete all selected {{type}}s permanently?
     </p>

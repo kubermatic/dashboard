@@ -14,6 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {Project} from '@shared/entity/project';
 
 @Component({
@@ -22,6 +23,7 @@ import {Project} from '@shared/entity/project';
   standalone: false,
 })
 export class DeleteProjectConfirmationComponent {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   @Input() project: Project;
   verificationInput = '';
 

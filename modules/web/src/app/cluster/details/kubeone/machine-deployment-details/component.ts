@@ -35,6 +35,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {major, minor} from 'semver';
+import {CLICK_TO_COPY_TOOLTIP, MACHINE_AVAILABILITY_TOOLTIP} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-kubeone-machine-deployment-details',
@@ -43,6 +44,8 @@ import {major, minor} from 'semver';
   standalone: false,
 })
 export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly MACHINE_AVAILABILITY_TOOLTIP = MACHINE_AVAILABILITY_TOOLTIP;
   machineDeployment: ExternalMachineDeployment;
   machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];

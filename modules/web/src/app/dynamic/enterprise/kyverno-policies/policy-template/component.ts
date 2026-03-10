@@ -42,6 +42,7 @@ import {NotificationService} from '@app/core/services/notification';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {ParamsService} from '@app/core/services/params';
 import {HealthStatus, StatusIcon} from '@app/shared/utils/health-status';
+import {DEFAULT_POLICY_TOOLTIP, ENFORCED_POLICY_TOOLTIP} from '@app/shared/constants/common';
 
 enum PolicyTemplateStatus {
   Active = 'Active',
@@ -54,6 +55,8 @@ enum PolicyTemplateStatus {
   standalone: false,
 })
 export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
+  readonly DEFAULT_POLICY_TOOLTIP = DEFAULT_POLICY_TOOLTIP;
+  readonly ENFORCED_POLICY_TOOLTIP = ENFORCED_POLICY_TOOLTIP;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   projectID: string;

@@ -19,7 +19,7 @@ limitations under the License.
         id="km-delete-cluster-dialog">
     <p>Delete
       <b (click)="copy(cluster.name)"
-         matTooltip="Click to copy"
+         [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{cluster.name}}</b>
       cluster permanently?
     </p>

@@ -48,7 +48,7 @@ limitations under the License.
       <button mat-icon-button
               fxLayoutAlign="center center"
               (click)="close()"
-              matTooltip="Close panel">
+              [matTooltip]="CLOSE_PANEL_TOOLTIP">
         <i class="km-icon-mask km-icon-arrow-up"></i>
       </button>
     </div>

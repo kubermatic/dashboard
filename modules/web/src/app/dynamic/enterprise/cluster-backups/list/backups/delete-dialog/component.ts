@@ -20,6 +20,7 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
 
 export interface DeleteBackupDialogConfig {
@@ -34,6 +35,7 @@ export interface DeleteBackupDialogConfig {
   standalone: false,
 })
 export class DeleteBackupDialogComponent {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   type = this._config.type;
   backups = this._config.backups;
   bslName = this._config.bslName;

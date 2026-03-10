@@ -32,6 +32,7 @@ import {NotificationService} from 'app/core/services/notification';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {MACHINE_COUNT_TOOLTIP} from '@app/shared/constants/common';
 
 enum AKSNodePoolState {
   ProvisioningState = 'provisioningState',
@@ -58,6 +59,7 @@ enum Column {
 })
 export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly column = Column;
+  readonly MACHINE_COUNT_TOOLTIP = MACHINE_COUNT_TOOLTIP;
   @Input() cluster: ExternalCluster;
   @Input() machineDeployments: ExternalMachineDeployment[] = [];
   @Input() projectID: string;

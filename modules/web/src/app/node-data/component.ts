@@ -64,6 +64,7 @@ import _ from 'lodash';
 import {ParamsService, PathParam} from '@app/core/services/params';
 import {EditApplicationDialogComponent} from '@app/shared/components/application-list/edit-application-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
+import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -120,6 +121,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly maxReplicasCount = 1000;
   readonly autoscalerMinReplicasCount = 1;
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
+  readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
 
   @Input() provider: NodeProvider;
   labels: Record<string, string>;

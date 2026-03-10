@@ -23,7 +23,7 @@ limitations under the License.
   <div class="notification-headline km-pointer"
        fxLayoutAlign=" center"
        (click)="copyHeadlineToClipboard()"
-       matTooltip="Click to copy">
+       [matTooltip]="CLICK_TO_COPY_TOOLTIP">
     {{getHeadline()}}
   </div>
 
@@ -37,7 +37,7 @@ limitations under the License.
   @if (showMessageSection()) {
   <div class="notification-message km-pointer"
        (click)="copyMessageToClipboard()"
-       matTooltip="Click to copy">
+       [matTooltip]="CLICK_TO_COPY_TOOLTIP">
     @if (!hasLongMessage() || !isMessageCollapsed) {
     {{message}}
     } @else {

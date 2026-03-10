@@ -18,6 +18,7 @@ import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ClusterService} from '@core/services/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -39,6 +40,7 @@ enum InstallCommands {
   standalone: false,
 })
 export class ShareKubeconfigComponent implements OnInit {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() dialogTitle: ShareKubeconfigDialogMode;

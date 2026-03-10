@@ -20,6 +20,7 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ClusterRestore} from '@app/shared/entity/backup';
 
 export interface DeleteRestoreDialogConfig {
@@ -32,6 +33,7 @@ export interface DeleteRestoreDialogConfig {
   standalone: false,
 })
 export class DeleteRestoreDialogComponent {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   verificationInput = '';
   restores = this._config.restores;
 

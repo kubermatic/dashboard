@@ -33,6 +33,7 @@ import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '../update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';
+import {CLICK_TO_COPY_TOOLTIP, MACHINE_AVAILABILITY_TOOLTIP} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -41,6 +42,8 @@ import {HealthStatus} from '@shared/utils/health-status';
   standalone: false,
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly MACHINE_AVAILABILITY_TOOLTIP = MACHINE_AVAILABILITY_TOOLTIP;
   private readonly _refreshTime = 10;
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
   machineDeployment: ExternalMachineDeployment;

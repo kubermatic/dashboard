@@ -98,7 +98,7 @@ limitations under the License.
                       [cbContent]="internalIP"
                       (click)="$event.stopPropagation()"
                       ngxClipboard
-                      matTooltip="click to copy">{{internalIP}}</span>
+                      [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{internalIP}}</span>
                 }
               </div>
             </div>
@@ -113,7 +113,7 @@ limitations under the License.
                       [cbContent]="externalIP"
                       (click)="$event.stopPropagation()"
                       ngxClipboard
-                      matTooltip="click to copy">{{externalIP}}</span>
+                      [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{externalIP}}</span>
                 }
               </div>
             </div>
@@ -241,7 +241,7 @@ limitations under the License.
                 @if (getSystem(element) === 'Container Linux') {
                 <km-chip text="EOL"
                          type="error"
-                         matTooltip="Container Linux has reached its end of life and is no longer maintained or updated." />
+                         [matTooltip]="CONTAINER_LINUX_EOL_TOOLTIP" />
                 }
               </div>
             </km-property>

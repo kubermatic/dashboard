@@ -21,6 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {Cluster, Finalizer} from '@shared/entity/cluster';
 import {AdminSettings} from '@shared/entity/settings';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
@@ -32,6 +33,7 @@ import {take, takeUntil} from 'rxjs/operators';
   standalone: false,
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @ViewChild('clusterNameInput', {static: true})
