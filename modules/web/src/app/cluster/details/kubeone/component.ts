@@ -20,7 +20,7 @@ import {ClusterService} from '@core/services/cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
-import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
+import {CLICK_TO_COPY_TOOLTIP, GO_BACK_TO_CLUSTER_LIST_TOOLTIP} from '@app/shared/constants/common';
 import {ContainerRuntime, MasterVersion} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
@@ -41,6 +41,7 @@ import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 })
 export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly GO_BACK_TO_CLUSTER_LIST_TOOLTIP = GO_BACK_TO_CLUSTER_LIST_TOOLTIP;
   readonly Provider = ExternalClusterProvider;
   readonly ContainerRuntime = ContainerRuntime;
   private readonly _refreshTime = 10;

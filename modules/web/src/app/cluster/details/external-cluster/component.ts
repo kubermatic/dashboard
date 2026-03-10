@@ -33,7 +33,7 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
 import {MasterVersion} from '@shared/entity/cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
-import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
+import {CLICK_TO_COPY_TOOLTIP, GO_BACK_TO_CLUSTER_LIST_TOOLTIP} from '@app/shared/constants/common';
 import {View} from '@app/shared/entity/common';
 
 @Component({
@@ -44,6 +44,7 @@ import {View} from '@app/shared/entity/common';
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly GO_BACK_TO_CLUSTER_LIST_TOOLTIP = GO_BACK_TO_CLUSTER_LIST_TOOLTIP;
   readonly Provider = ExternalClusterProvider;
   readonly ExternalClusterState = ExternalClusterState;
   private readonly _refreshTime = 10;
