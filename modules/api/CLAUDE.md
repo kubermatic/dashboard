@@ -8,14 +8,8 @@ Go REST API server for the KKP Dashboard. Sits between Angular UI and Kubernetes
 make build                          # Build binary (EE default)
 make build KUBERMATIC_EDITION=ce    # Build CE edition
 make kubermatic-api                 # Build API binary only
-make clean                          # Clean build artifacts
-make lint                           # Run golangci-lint
-make fmt                            # Format code
-make vet                            # Go vet
-make verify                         # Run all verification checks
 make api-test                       # Run API tests
 make update-codegen                 # Regenerate code (deepcopy, swagger, API client)
-make check-dependencies             # Verify go.mod/go.sum
 make update-kkp                     # Update KKP/SDK dependencies
 ```
 

@@ -11,14 +11,12 @@ KUBERMATIC_EDITION=ce npm start     # Dev CE edition
 npm run build                       # Production build
 npm run build:themes                # Build + extract theme bundles
 
-npm test                            # Jest unit tests (watch)
 npm run test:ci                     # Jest with coverage
 npm run e2e:mock                    # Cypress E2E with mocked API
 npm run e2e                         # Cypress E2E against dev server
 
 npm run check                       # All checks (TS, SCSS, licenses)
 npm run fix                         # Auto-fix all (TS, SCSS, HTML, licenses)
-npm run format                      # ESLint + Prettier formatting
 ```
 
 ## Key Directories
