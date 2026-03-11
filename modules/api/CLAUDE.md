@@ -1,15 +1,36 @@
 # KKP Dashboard — Go REST API
 
-Go REST API server sitting between the Angular UI and Kubernetes clusters. gorilla/mux routing, Go-Kit endpoint abstraction, controller-runtime for K8s API access. Auth via OIDC + Service Account JWT tokens.
+Go REST API server for the KKP Dashboard. Sits between Angular UI and Kubernetes clusters. Uses gorilla/mux routing, Go-Kit endpoint abstraction, and controller-runtime for Kubernetes API access. Authentication via OIDC + Service Account JWT tokens.
 
-## Common Commands
+## Build Commands
 
 ```bash
-make build                       # Build binary (EE default, set KUBERMATIC_EDITION=ce for CE)
-make lint                        # golangci-lint
-make api-test                    # Run tests
-make update-codegen              # Regenerate after type/API changes
+make build                          # Build binary (EE default)
+make build KUBERMATIC_EDITION=ce    # Build CE edition
+make kubermatic-api                 # Build API binary only
+make clean                          # Clean build artifacts
+make lint                           # Run golangci-lint
+make fmt                            # Format code
+make vet                            # Go vet
+make verify                         # Run all verification checks
+make api-test                       # Run API tests
+make update-codegen                 # Regenerate code (deepcopy, swagger, API client)
+make check-dependencies             # Verify go.mod/go.sum
+make update-kkp                     # Update KKP/SDK dependencies
 ```
+
+## Key Directories
+
+- `cmd/kubermatic-api/` — Entry point, server startup, CE/EE wrapper functions
+- `pkg/handler/` — HTTP handlers, routing, middleware (v1 legacy, v2 current)
+- `pkg/handler/v2/` — Current API endpoint handlers
+- `pkg/provider/` — Business logic interfaces (ProjectProvider, ClusterProvider, etc.)
+- `pkg/provider/kubernetes/` — Provider implementations using Kubernetes API
+- `pkg/api/v1/`, `pkg/api/v2/` — Request/response models
+- `pkg/ee/` — Enterprise Edition features (backups, quotas, groups, kyverno, metering)
+- `pkg/handler/auth/` — Authentication middleware
+- `pkg/validation/` — Input validation
+- `pkg/test/` — Test utilities and mock providers
 
 ## Architecture
 
@@ -20,16 +41,7 @@ HTTP Request → Middleware (auth, RBAC, context) → Handler → Provider → K
 - **Handlers** (`pkg/handler/`): Parse HTTP, delegate to providers, encode responses. Go-Kit endpoint pattern. v2 is current, v1 is legacy.
 - **Providers** (`pkg/provider/`): Business logic interfaces. Implementations in `pkg/provider/kubernetes/` use impersonation clients for RBAC.
 - **Middleware** (`pkg/handler/middleware/`): Token verification (OIDC/JWT), user context injection, RBAC checks.
-- **Seed-scoped providers**: Per-seed providers (cluster, addon, alertmanager) accessed via getter functions like `ClusterProviderGetter`.
-
-## Key Directories
-
-- `cmd/kubermatic-api/` — Entry point, CE/EE wrapper functions
-- `pkg/handler/v2/` — Current API endpoint handlers (~42 resource types)
-- `pkg/provider/` — Business logic interfaces + `kubernetes/` implementations
-- `pkg/api/v2/` — Request/response models (v1 is legacy)
-- `pkg/ee/` — Enterprise Edition features (has own CLAUDE.md)
-- `pkg/test/` — Test utilities and mock providers
+- **Seed-scoped providers**: Many providers are per-seed (cluster, addon, alertmanager). Accessed via getter functions like `ClusterProviderGetter`.
 
 ## CE/EE Build Tags
 
@@ -38,8 +50,7 @@ HTTP Request → Middleware (auth, RBAC, context) → Handler → Provider → K
 //go:build !ee   // CE-only code (stubs)
 ```
 
-- CE stubs in `cmd/kubermatic-api/wrappers_ce.go` return `nil` for EE providers. 
-- EE implementations in `pkg/ee/`. See `pkg/ee/CLAUDE.md` for the full EE feature pattern.
+CE stubs in `cmd/kubermatic-api/wrappers_ce.go` return `nil` for EE providers. EE implementations in `pkg/ee/`.
 
 ## Import Aliases
 
@@ -56,6 +67,20 @@ See the full alias table: @agent_docs/import-aliases.md
 3. Register route in `pkg/handler/routing.go`
 4. Use middleware for auth/RBAC
 
-### Testing
+### Adding EE-Only Feature
 
-Handler tests use mock providers from `pkg/test/`. Run with `go test -tags "ee"` or `go test -tags "ce"` for edition-specific tests.
+1. Create EE handler wrapper in `wrappers_ee.go`
+2. Create CE stub in `wrappers_ce.go` (return `nil`)
+3. Implement in `pkg/ee/`
+4. Use feature gates if needed: `options.featureGates.Enabled(features.FeatureName)`
+
+## Testing
+
+```bash
+go test -v ./pkg/handler/v2/cluster/...          # Test specific package
+go test -v ./pkg/handler/v1/project -run TestName # Single test
+go test -tags "ee" -v ./pkg/handler/...           # EE tests
+go test -tags "ce" -v ./pkg/handler/...           # CE tests
+```
+
+Handler tests use mock providers from `pkg/test/`.
