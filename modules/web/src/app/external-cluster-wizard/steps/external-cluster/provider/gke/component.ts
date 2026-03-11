@@ -57,6 +57,7 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
+import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -139,6 +140,7 @@ export class GKEClusterSettingsComponent
 {
   readonly Controls = Controls;
   readonly KubernetesVersionMode = KubernetesVersionMode;
+  readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
   readonly DISK_SIZE_MIN_VALUE = 10;
   readonly DISK_SIZE_MAX_VALUE = 65536;
   readonly AUTOSCALING_MIN_VALUE = 1;

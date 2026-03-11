@@ -99,12 +99,12 @@ END OF TERMS AND CONDITIONS
       <mat-checkbox [formControlName]="controls.Default">
         Default Policy
         <i class="km-icon-info km-pointer"
-           matTooltip="Default policies are automatically applied to new clusters. Users can delete them afterwards."></i>
+           [matTooltip]="DEFAULT_POLICY_TOOLTIP"></i>
       </mat-checkbox>
       <mat-checkbox [formControlName]="controls.Enforced">
         Enforce Policy
         <i class="km-icon-info km-pointer"
-           matTooltip="Enforced policies will be applied to all targeted clusters. Users can't delete them."></i>
+           [matTooltip]="ENFORCED_POLICY_TOOLTIP"></i>
       </mat-checkbox>
       <span>
         <mat-checkbox [formControlName]="controls.NamespacedPolicy">

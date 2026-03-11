@@ -15,6 +15,7 @@
 import {DOCUMENT} from '@angular/common';
 import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatSnackBarRef} from '@angular/material/snack-bar';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {EMPTY, fromEvent, interval, merge, Subject, takeWhile} from 'rxjs';
 import {map, scan, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -35,6 +36,7 @@ export class NotificationComponent implements OnInit, AfterViewInit, OnDestroy {
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;
   private _type: NotificationType;
 
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   readonly headlineMaxLength = 38;
   readonly messageMaxLength = 128;
 

@@ -20,6 +20,7 @@ import {KubeOneWizardService} from '@core/services/kubeone-wizard/wizard';
 import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluster';
 import {KubeOneClusterSpec, KubeOneSSHKeySpec} from '@shared/entity/kubeone-cluster';
 import {KmValidators} from '@shared/validators/validators';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ClipboardService} from 'ngx-clipboard';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
@@ -50,6 +51,7 @@ enum Controls {
   standalone: false,
 })
 export class KubeOneClusterStepComponent extends StepBase implements OnInit {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   readonly Controls = Controls;
   readonly manifestCommand = 'kubeone config dump -m kubeone.yaml -t tf.json';
 

@@ -65,6 +65,7 @@ import {EKSSecurityGroup} from '@shared/entity/provider/eks';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
+import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -132,6 +133,7 @@ export class AKSClusterSettingsComponent
 {
   readonly Controls = Controls;
   readonly Mode = Mode;
+  readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
   readonly ErrorType = ErrorType;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;

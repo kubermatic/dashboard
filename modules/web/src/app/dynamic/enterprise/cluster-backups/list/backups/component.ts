@@ -53,6 +53,7 @@ import {filter, forkJoin, Observable, Subject, switchMap, take, takeUntil} from 
 import {AddRestoreDialogComponent, AddRestoreDialogConfig} from '../restore/add-dialog/component';
 import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
+import {DELETE_SELECTED_TOOLTIP} from '@app/shared/constants/common';
 
 enum ClusterState {
   Ready = 'Clusters',
@@ -79,6 +80,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
   readonly backupType = BackupType;
+  readonly DELETE_SELECTED_TOOLTIP = DELETE_SELECTED_TOOLTIP;
   isAdmin = false;
   dataSource = new MatTableDataSource<ClusterBackup>();
   clusters: Cluster[];

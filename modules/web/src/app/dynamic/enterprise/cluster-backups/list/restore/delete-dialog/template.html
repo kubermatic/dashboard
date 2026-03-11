@@ -28,7 +28,7 @@ END OF TERMS AND CONDITIONS
       Delete
       <b ngxClipboard
          [cbContent]="restores[0].name"
-         matTooltip="Click to copy"
+         [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{restores[0].name}}</b>
       restore permanently?
     </p>
@@ -38,7 +38,7 @@ END OF TERMS AND CONDITIONS
       Type
       <b ngxClipboard
          [cbContent]="'yes'"
-         matTooltip="Click to copy"
+         [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">yes</b>
       to delete all selected restores permanently?
     </p>

@@ -36,6 +36,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import * as semver from 'semver';
+import {CLICK_TO_COPY_TOOLTIP, CONTAINER_LINUX_EOL_TOOLTIP} from '@app/shared/constants/common';
 
 enum Column {
   stateArrow = 'stateArrow',
@@ -58,6 +59,8 @@ enum ToggleableColumn {
   standalone: false,
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly CONTAINER_LINUX_EOL_TOOLTIP = CONTAINER_LINUX_EOL_TOOLTIP;
   @Input() cluster: Cluster;
   @Input() mdName: string;
   @Input() nodes: Node[] = [];

@@ -51,7 +51,7 @@ END OF TERMS AND CONDITIONS
         @if (selectedScheduleBackups.length) {
         <button mat-flat-button
                 type="button"
-                matTooltip="Delete selected"
+                [matTooltip]="DELETE_SELECTED_TOOLTIP"
                 (click)="deleteScheduleBackups(selectedScheduleBackups)">
           <i class="km-icon-mask km-icon-delete"
              matButtonIcon></i>

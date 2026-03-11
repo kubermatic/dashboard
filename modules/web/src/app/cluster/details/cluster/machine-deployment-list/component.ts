@@ -33,6 +33,12 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {
+  CLICK_TO_COPY_TOOLTIP,
+  CONTAINER_LINUX_EOL_TOOLTIP,
+  MACHINE_AVAILABILITY_TOOLTIP,
+  MACHINE_COUNT_TOOLTIP,
+} from '@app/shared/constants/common';
 
 enum Column {
   Status = 'status',
@@ -52,6 +58,10 @@ enum Column {
 })
 export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Column = Column;
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly CONTAINER_LINUX_EOL_TOOLTIP = CONTAINER_LINUX_EOL_TOOLTIP;
+  readonly MACHINE_AVAILABILITY_TOOLTIP = MACHINE_AVAILABILITY_TOOLTIP;
+  readonly MACHINE_COUNT_TOOLTIP = MACHINE_COUNT_TOOLTIP;
   dataSource = new MatTableDataSource<MachineDeployment>();
   displayedColumns: string[] = Object.values(Column);
   @Input() cluster: Cluster;

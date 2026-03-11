@@ -22,6 +22,7 @@ import {NodeMetrics} from '@shared/entity/metrics';
 import {Node, NodeIPAddress} from '@shared/entity/node';
 import {HealthStatus, getNodeHealthStatus} from '@shared/utils/health-status';
 import {NodeUtils} from '@shared/utils/node';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -33,6 +34,7 @@ import {takeUntil} from 'rxjs/operators';
   standalone: false,
 })
 export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   @Input() cluster: ExternalCluster;
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();

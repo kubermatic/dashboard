@@ -37,6 +37,11 @@ import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/heal
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {
+  CLICK_TO_COPY_TOOLTIP,
+  CONTAINER_LINUX_EOL_TOOLTIP,
+  MACHINE_AVAILABILITY_TOOLTIP,
+} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -45,6 +50,9 @@ import {take, takeUntil} from 'rxjs/operators';
   standalone: false,
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
+  readonly CONTAINER_LINUX_EOL_TOOLTIP = CONTAINER_LINUX_EOL_TOOLTIP;
+  readonly MACHINE_AVAILABILITY_TOOLTIP = MACHINE_AVAILABILITY_TOOLTIP;
   machineDeployment: MachineDeployment;
   machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];

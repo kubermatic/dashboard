@@ -39,6 +39,7 @@ import {DeleteBackupDialogComponent, DeleteBackupDialogConfig} from '../backups/
 import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from '../backups/add-dialog/component';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {DELETE_SELECTED_TOOLTIP} from '@app/shared/constants/common';
 
 enum ClusterState {
   Ready = 'Clusters',
@@ -57,6 +58,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
+  readonly DELETE_SELECTED_TOOLTIP = DELETE_SELECTED_TOOLTIP;
   isAdmin = false;
   dataSource = new MatTableDataSource<ClusterBackup>();
   clusters: Cluster[];

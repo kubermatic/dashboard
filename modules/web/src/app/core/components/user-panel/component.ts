@@ -20,6 +20,7 @@ import {Auth} from '@core/services/auth/service';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
+import {CLOSE_PANEL_TOOLTIP} from '@app/shared/constants/common';
 import {Member} from '@shared/entity/member';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -32,6 +33,7 @@ import {takeUntil} from 'rxjs/operators';
   standalone: false,
 })
 export class UserPanelComponent implements OnInit, OnDestroy {
+  readonly CLOSE_PANEL_TOOLTIP = CLOSE_PANEL_TOOLTIP;
   user: Member;
   private _isOpen = false;
   private _unsubscribe: Subject<void> = new Subject<void>();

@@ -91,7 +91,7 @@ limitations under the License.
                       [cbContent]="internalIP"
                       (click)="$event.stopPropagation()"
                       ngxClipboard
-                      matTooltip="click to copy">{{internalIP}}</span>
+                      [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{internalIP}}</span>
                 }
               </div>
             </div>
@@ -106,7 +106,7 @@ limitations under the License.
                       [cbContent]="externalIP"
                       (click)="$event.stopPropagation()"
                       ngxClipboard
-                      matTooltip="click to copy">{{externalIP}}</span>
+                      [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{externalIP}}</span>
                 }
               </div>
             </div>

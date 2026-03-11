@@ -84,6 +84,8 @@ import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {Preset} from '@shared/entity/preset';
 import {
   ANEXIA_DEPRECATED_MESSAGE,
+  CLICK_TO_COPY_TOOLTIP,
+  GO_BACK_TO_CLUSTER_LIST_TOOLTIP,
   KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE,
   OPA_DEPRECATED_MESSAGE,
 } from '@app/shared/constants/common';
@@ -107,8 +109,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly clusterDeletionTooltip = 'Cluster is being deleted';
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
   readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
+  readonly GO_BACK_TO_CLUSTER_LIST_TOOLTIP = GO_BACK_TO_CLUSTER_LIST_TOOLTIP;
   adminSettings: AdminSettings;
   presetStatus: HealthStatus;
   encryptionStatus: HealthStatus;

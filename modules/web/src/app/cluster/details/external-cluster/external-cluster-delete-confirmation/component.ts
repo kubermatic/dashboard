@@ -25,6 +25,7 @@ import {DeleteExternalClusterAction, ExternalCluster, ExternalClusterProvider} f
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-external-cluster-delete-confirmation',
@@ -33,6 +34,7 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
   standalone: false,
 })
 export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDestroy, AfterContentChecked {
+  readonly CLICK_TO_COPY_TOOLTIP = CLICK_TO_COPY_TOOLTIP;
   readonly Provider = ExternalClusterProvider;
   inputName = '';
   settings: AdminSettings;
