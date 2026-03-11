@@ -39,6 +39,8 @@ HTTP Request → Middleware (auth, RBAC, context) → Handler → Provider → K
 
 ## CE/EE Build Tags
 
+**CRITICAL**: EE-only code must be in `pkg/ee/` with `//go:build ee` tag. CE stubs must be in `cmd/kubermatic-api/wrappers_ce.go` returning `nil`. EE implementations go in `pkg/ee/` with `//go:build ee`. This ensures clean separation and prevents accidental imports.
+
 ```go
 //go:build ee    // EE-only code
 //go:build !ee   // CE-only code (stubs)
@@ -46,11 +48,6 @@ HTTP Request → Middleware (auth, RBAC, context) → Handler → Provider → K
 
 CE stubs in `cmd/kubermatic-api/wrappers_ce.go` return `nil` for EE providers. EE implementations in `pkg/ee/`.
 
-## Import Aliases
-
-The linter enforces specific import aliases — builds will fail with incorrect ones.
-
-See the full alias table: @agent_docs/import-aliases.md
 
 ## Patterns
 

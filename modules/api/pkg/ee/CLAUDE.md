@@ -6,14 +6,6 @@ EE-only features compiled with `//go:build ee`: cluster backups (Velero), resour
 **Build tag:** `//go:build ee`
 **Pattern per feature:** handler → provider interface → kubernetes implementation → CE stub
 
-### Structure
-- `clusterbackup/` — Velero backup/restore/schedule + BSL management
-- `resource-quota/` — Resource quota enforcement per project
-- `group-project-binding/` — Group-based RBAC for projects
-- `kyverno/` — Kyverno policy engine integration
-- `metering/` — Usage metering reports
-- `provider/` — EE-specific provider interfaces
-
 ## HOW
 
 ### Adding an EE Feature
