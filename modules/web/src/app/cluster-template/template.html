@@ -23,23 +23,22 @@ limitations under the License.
        fxLayoutAlign=" center"
        class="header">
     <km-search-field (queryChange)="onSearch($event)" />
-    <div fxFlex
-         fxLayoutAlign="end center">
-      <div>
-        <router-outlet name="quota-widget"
-                       (activate)="onActivate($event)" />
-      </div>
-      <span [matTooltip]="!can(Permission.Create) ? projectViewOnlyToolTip : ''">
-        <button mat-flat-button
-                type="button"
-                (click)="create()"
-                [disabled]="!can(Permission.Create) || isGroupConfigLoading">
-          <i class="km-icon-mask km-icon-add"
-             matButtonIcon></i>
-          <span>Create Cluster Template</span>
-        </button>
-      </span>
+    <div fxFlex></div>
+    <div fxLayoutAlign="center center"
+         class="km-cluster-template-quota">
+      <router-outlet name="quota-widget"
+                     (activate)="onActivate($event)" />
     </div>
+    <span [matTooltip]="!can(Permission.Create) ? projectViewOnlyToolTip : ''">
+      <button mat-flat-button
+              type="button"
+              (click)="create()"
+              [disabled]="!can(Permission.Create) || isGroupConfigLoading">
+        <i class="km-icon-mask km-icon-add"
+           matButtonIcon></i>
+        <span>Create Cluster Template</span>
+      </button>
+    </span>
   </div>
 
   <mat-card-content>
