@@ -407,7 +407,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOperatingSystemAllowed(os: OperatingSystem): boolean {
-    if (this.dialogEditMode || this.wizardMode !== WizardMode.CreateClusterTemplate) {
+    if (this.dialogEditMode) {
       return this.isOperatingSystemSupported(os) && (this.allowedOperatingSystems[os] || this.currentNodeOS === os);
     }
     return this.isOperatingSystemSupported(os) && this.allowedOperatingSystems[os];
@@ -556,7 +556,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           },
         };
       default:
-        return {ubuntu: {distUpgradeOnBoot: false}};
+        return {};
     }
   }
 
@@ -590,8 +590,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this.dialogEditMode || (this.wizardMode && this.wizardMode !== WizardMode.CreateClusterTemplate)) {
+    // dialogEditMode: preserve current OS unconditionally (editing existing node)
+    if (this.dialogEditMode) {
       return this._nodeDataService.operatingSystem;
+    }
+    // wizardMode: only keep current OS if it's allowed (respects global + project restrictions)
+    if (this.wizardMode && this.wizardMode !== WizardMode.CreateClusterTemplate) {
+      const currentOS = this._nodeDataService.operatingSystem;
+      if (currentOS && this.allowedOperatingSystems[currentOS] && this.isOperatingSystemSupported(currentOS)) {
+        return currentOS;
+      }
     }
 
     if (this._datacenterSpec) {
