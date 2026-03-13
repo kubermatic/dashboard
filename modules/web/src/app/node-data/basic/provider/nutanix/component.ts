@@ -35,7 +35,7 @@ import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
 import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/entity/provider/nutanix';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
-import {getDefaultForOS} from '@shared/utils/provider';
+import {getDefaultForOS} from '@shared/utils/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';

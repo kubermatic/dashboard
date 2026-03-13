@@ -40,7 +40,7 @@ import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {SettingsService} from '@core/services/settings';
-import {getDefaultForOS} from '@shared/utils/provider';
+import {getDefaultForOS} from '@shared/utils/node';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
