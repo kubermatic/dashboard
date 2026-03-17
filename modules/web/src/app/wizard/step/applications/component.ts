@@ -17,6 +17,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {StepRegistry} from '@app/wizard/config';
 import {StepBase} from '@app/wizard/step/base';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ApplicationService} from '@core/services/application';
 import {NodeDataService} from '@core/services/node-data/service';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -30,9 +31,8 @@ import {
   ApplicationSettings,
 } from '@shared/entity/application';
 import * as y from 'js-yaml';
-import _, {merge} from 'lodash';
-import {forkJoin, of, takeUntil} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import _ from 'lodash';
+import {forkJoin, switchMap, of, takeUntil} from 'rxjs';
 
 enum Controls {
   Applications = 'applications',
@@ -59,6 +59,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   readonly ApplicationsListView = ApplicationsListView;
 
   applications: Application[] = [];
+  wizardMode: WizardMode;
 
   private _applicationSettings: ApplicationSettings;
 
@@ -73,6 +74,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   }
 
   ngOnInit(): void {
+    this.wizardMode = window.history.state?.mode;
+
     this.form = this._builder.group({
       [Controls.Applications]: this._builder.control(''),
     });
@@ -92,64 +95,76 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
         }
         return application;
       }) || [];
-
-    merge(this._clusterSpecService.datacenterChanges, this._applicationService.applicationChanges)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this.loadDefaultAndEnforcedApplications();
+    this._loadDefaultAndEnforcedApplications();
+    if (this.wizardMode !== WizardMode.CustomizeClusterTemplate && this.wizardMode !== WizardMode.EditClusterTemplate) {
+      this._clusterSpecService.datacenterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+        this._applicationService.applications = [];
+        this.applications = [];
+        this._loadDefaultAndEnforcedApplications();
       });
 
-    this._nodeDataService.nodeDataChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(nodeData => {
-          const clusterAutoscalingApp = this.applications.find(
-            application => application.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
-          );
-          if (clusterAutoscalingApp) {
-            if (!nodeData.enableClusterAutoscalingApp) {
-              this.onApplicationDeleted(clusterAutoscalingApp);
+      this._nodeDataService.nodeDataChanges
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(
+          switchMap(nodeData => {
+            const clusterAutoscalingApp = this.applications.find(
+              application => application.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+            );
+            if (clusterAutoscalingApp) {
+              if (!nodeData.enableClusterAutoscalingApp) {
+                this.onApplicationDeleted(clusterAutoscalingApp);
+              }
+            } else if (nodeData.enableClusterAutoscalingApp) {
+              return this._applicationService.getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME);
             }
-          } else if (nodeData.enableClusterAutoscalingApp) {
-            return this._applicationService.getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME);
+            return of(null);
+          })
+        )
+        .subscribe(appDef => {
+          if (appDef) {
+            const application = this.createApplicationInstallation(appDef);
+            this.onApplicationAdded(application);
           }
-          return of(null);
-        })
-      )
-      .subscribe(appDef => {
-        if (appDef) {
-          const application = this.createApplicationInstallation(appDef);
-          this.onApplicationAdded(application);
-        }
-      });
+        });
 
-    this._onApplicationsChanged();
+      this._onApplicationsChanged();
+    }
   }
 
-  private loadDefaultAndEnforcedApplications() {
-    const defaultAndEnforcedApplications = this._applicationService.applicationDefinitions.filter(
-      application => application.spec.default || application.spec.enforced
-    );
-
-    // Fetch individual application definitions and create ApplicationInstallations
-    forkJoin(
-      defaultAndEnforcedApplications.map(application =>
-        this._applicationService.getApplicationDefinition(application.name)
+  private _loadDefaultAndEnforcedApplications() {
+    this._applicationService
+      .listApplicationDefinitions()
+      .pipe(
+        switchMap(apps => {
+          const defaultAndEnforcedApplications = apps.filter(application => {
+            return (
+              (application.spec.default || application.spec.enforced) &&
+              (!application.spec.selector?.datacenters ||
+                application.spec.selector?.datacenters?.includes(this._clusterSpecService.datacenter))
+            );
+          });
+          return forkJoin(
+            defaultAndEnforcedApplications.map(application =>
+              this._applicationService.getApplicationDefinition(application.name)
+            )
+          );
+        })
       )
-    ).subscribe(applicationDefinitions => {
-      applicationDefinitions.forEach(appDef => {
-        if (appDef.name === 'k8sgpt') {
-          appDef.spec.enforced = true;
-        }
+      // Fetch individual application definitions and create ApplicationInstallations
+      .subscribe(applicationDefinitions => {
+        applicationDefinitions.forEach(appDef => {
+          if (appDef.name === 'k8sgpt') {
+            appDef.spec.enforced = true;
+          }
 
-        if (appDef.name === 'cert-manager') {
-          appDef.spec.default = true;
-        }
+          if (appDef.name === 'cert-manager') {
+            appDef.spec.default = true;
+          }
 
-        const applicationInstallation = this.createApplicationInstallation(appDef);
-        this.onApplicationAdded(applicationInstallation);
+          const applicationInstallation = this.createApplicationInstallation(appDef);
+          this.onApplicationAdded(applicationInstallation);
+        });
       });
-    });
   }
 
   private createApplicationInstallation(appDef: ApplicationDefinition): Application {
@@ -191,6 +206,9 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
 
   onApplicationAdded(application: Application): void {
     application.id = `${application.name}/${application.spec.namespace.name}`;
+    if (this.applications.find(app => app.id === application.id)) {
+      return;
+    }
     this.applications = [...this.applications, application];
     this._onApplicationsChanged();
   }
