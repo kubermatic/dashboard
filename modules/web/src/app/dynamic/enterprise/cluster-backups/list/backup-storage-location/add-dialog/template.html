@@ -46,7 +46,7 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The bucket in which to store backups.</mat-hint>
-      @if (form.get(Controls.Name).hasError('required')) {
+      @if (form.get(Controls.Bucket).hasError('required')) {
       <mat-error>
         <strong>Required</strong>
       </mat-error>
@@ -69,12 +69,14 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.AccessKeyId"
              matInput
              kmInputPassword>
+      <mat-hint>Optional. Leave empty for anonymous S3 access.</mat-hint>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Secret Access Key</mat-label>
       <input [formControlName]="Controls.SecretAccessKey"
              matInput
              kmInputPassword>
+      <mat-hint>Optional. Leave empty for anonymous S3 access.</mat-hint>
     </mat-form-field>
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>Backup Sync Period</mat-label>
@@ -103,12 +105,32 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.Region"
              matInput>
       <mat-hint>The AWS region where the bucket is located.</mat-hint>
+      @if (form.get(Controls.Region).hasError('required')) {
+      <mat-error>
+        <strong>Required</strong>
+      </mat-error>
+      }
+      @if (form.get(Controls.Region).hasError('invalidDnsName')) {
+      <mat-error>
+        Region must be a valid DNS name.
+      </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Endpoints</mat-label>
+      <mat-label>Endpoint URL</mat-label>
       <input [formControlName]="Controls.Endpoints"
              matInput>
       <mat-hint>Specify the AWS S3 URL here.</mat-hint>
+      @if (form.get(Controls.Endpoints).hasError('required')) {
+      <mat-error>
+        <strong>Required</strong>
+      </mat-error>
+      }
+      @if (form.get(Controls.Endpoints).hasError('invalidEndpointUrl')) {
+      <mat-error>
+        Endpoint URL must start with http:// or https:// and contain a valid DNS host.
+      </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Default Checksum Algorithm</mat-label>
