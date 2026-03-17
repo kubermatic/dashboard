@@ -39,6 +39,11 @@ import (
 var reStandardSize = regexp.MustCompile("(^cx|^cpx)")
 var reDedicatedSize = regexp.MustCompile("(^ccx)")
 
+// reDiscontinuedSize matches server types discontinued in most locations but still returned by the API.
+// cpx11-cpx51: AMD shared vCPUs, unavailable in FSN/NBG/HEL/SIN since Jan 2026.
+// https://docs.hetzner.cloud/changelog
+var reDiscontinuedSize = regexp.MustCompile("^cpx[1-5]1$")
+
 func HetznerSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, projectID, clusterID string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
@@ -99,6 +104,8 @@ func HetznerSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFi
 		return apiv1.HetznerSizeList{}, fmt.Errorf("failed to list sizes: %w", err)
 	}
 
+	sizes = filterDeprecated(sizes)
+
 	sizeList := apiv1.HetznerSizeList{}
 
 	for _, size := range sizes {
@@ -119,6 +126,21 @@ func HetznerSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFi
 	}
 
 	return filterHetznerByQuota(sizeList, machineFilter), nil
+}
+
+func filterDeprecated(sizes []*hcloud.ServerType) []*hcloud.ServerType {
+	if len(sizes) == 0 {
+		return sizes
+	}
+
+	filtered := make([]*hcloud.ServerType, 0, len(sizes))
+	for _, size := range sizes {
+		if size.IsDeprecated() || reDiscontinuedSize.MatchString(size.Name) {
+			continue
+		}
+		filtered = append(filtered, size)
+	}
+	return filtered
 }
 
 func filterHetznerByQuota(instances apiv1.HetznerSizeList, machineFilter kubermaticv1.MachineFlavorFilter) apiv1.HetznerSizeList {
