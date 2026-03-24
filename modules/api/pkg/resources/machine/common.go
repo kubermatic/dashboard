@@ -218,15 +218,10 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		datastore = defaultIfEmpty(c.Spec.Cloud.VSphere.Datastore, dc.Spec.VSphere.DefaultDatastore)
 	}
 
-	// Determine network configuration - prefer Networks array over deprecated VMNetName
-	vmNetName := ""
-	if len(c.Spec.Cloud.VSphere.Networks) > 0 {
-		vmNetName = c.Spec.Cloud.VSphere.Networks[0]
-	}
-
 	config := &vsphere.RawConfig{
-		TemplateVMName:   providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VSphere.Template},
-		VMNetName:        providerconfig.ConfigVarString{Value: vmNetName},
+		TemplateVMName: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VSphere.Template},
+		//nolint:staticcheck
+		VMNetName:        providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.VMNetName},
 		CPUs:             int32(nodeSpec.Cloud.VSphere.CPUs),
 		MemoryMB:         int64(nodeSpec.Cloud.VSphere.Memory),
 		DiskSizeGB:       nodeSpec.Cloud.VSphere.DiskSizeGB,
@@ -242,6 +237,10 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 	}
 
 	if len(c.Spec.Cloud.VSphere.Networks) > 0 {
+		//nolint:staticcheck
+		if c.Spec.Cloud.VSphere.VMNetName != "" {
+			return nil, errors.New("both vmNetName and networks are set in the cluster spec, please use only networks and remove the deprecated vmNetName field")
+		}
 		config.Networks = make([]providerconfig.ConfigVarString, len(c.Spec.Cloud.VSphere.Networks))
 		for i, network := range c.Spec.Cloud.VSphere.Networks {
 			config.Networks[i].Value = network
