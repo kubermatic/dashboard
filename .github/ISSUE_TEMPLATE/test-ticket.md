@@ -6,15 +6,12 @@ labels: kind/testing, sig/ui
 ---
 
 ### Summary
-
 <!-- What is being tested and why. Link to the related PR, issue, or epic. -->
 **Testing scope:**
-
 **Related:** <!-- PR/Issue/Epic link -->
 - PR: <!-- paste PR URL here -->
 
 ### Type of Testing
-
 - [ ] New Feature
 - [ ] Bug Fix / Regression
 - [ ] UI/UX
@@ -23,27 +20,24 @@ labels: kind/testing, sig/ui
 - [ ] Upgrade / Migration
 - [ ] Other:
 
-
 ### Test Depth
-
 <!-- Smoke: verify core flow works end-to-end. Full/Deep: cover edge cases, RBAC, error states, providers. -->
-
 - [ ] Smoke
 - [ ] Full / Deep
 
-
 ### Prerequisites
-
 <!-- Environment setup, feature flags, admin settings, or test data required before testing begins. -->
 <!-- ⚠️ WARNING: Do not include sensitive API tokens, kubeconfigs, or passwords in this issue. -->
-
+<!--
+- [ ] Feature flag enabled in admin panel (if applicable)
+- [ ] Seed datacenter configured with at least one provider (e.g. AWS, GCP)
+- [ ] Admin and member user accounts available for RBAC testing
+-->
 **Environment:**
 - [ ] Provider Specific Setup (If Applicable):
 
-
 ### Test Scenarios
-
-<!-- List test cases below. Check the box to indicate a passing test. If a test fails, leave it unchecked and add details. -->
+<!-- Check the box to mark a passing test. Leave unchecked and add notes for failures. -->
 
 - [ ] **Scenario 1: Happy path**
   - **Steps:**
@@ -51,7 +45,7 @@ labels: kind/testing, sig/ui
     2.
     3.
   - **Expected:**
-  - **Actual / Notes:** <!-- Fill in if the test failed or behaved unexpectedly -->
+  - **Actual / Notes:**
 
 - [ ] **Scenario 2: [Description]**
   - **Steps:**
@@ -59,32 +53,26 @@ labels: kind/testing, sig/ui
   - **Expected:**
   - **Actual / Notes:**
 
-
 ### Edge Cases & Boundary Conditions
-
 <!-- Test error states, empty states, permission boundaries, and invalid inputs. -->
-
-<!-- Examples:
-- [ ] Empty states display correctly
-- [ ] Error messages are clear and actionable
+<!--
+- [ ] Member user cannot access admin-only settings
+- [ ] Invalid input shows validation error, no crash
 -->
-
 - [ ]
 
-
-### Screenshots / Attachments (If Applicable)
-
-<!-- Attach any relevant screenshots, screen recordings, or console logs of bugs encountered during testing. -->
-
+### Screenshots / Attachments
+<!-- Attach screenshots, screen recordings, or console logs for any failures. -->
 
 ### Acceptance Criteria
-
-<!-- Clear definition of done. What must be true for this ticket to be signed off as passed? -->
-
+<!-- What must be true for this ticket to be signed off as passed? -->
+<!--
+- [ ] Works end-to-end on at least one provider
+- [ ] No console errors during normal flow
+-->
 - [ ]
 
 ## Blockers & Follow-ups
-
 **Blockers** (testing cannot proceed):
 - [ ]
 
@@ -92,11 +80,9 @@ labels: kind/testing, sig/ui
 - [ ]
 
 ## Important Links
-
 <!-- Add links to relevant docs, design specs, or related issues -->
 
 ### Test Environment
-
 - **UI Version:**
 - **API Version:**
 - **K8s Version:**
