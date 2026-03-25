@@ -6,9 +6,9 @@ labels: kind/testing, sig/ui
 ---
 
 ### Summary
-<!-- What is being tested and why. Link to the related PR, issue, or epic. -->
-**Testing scope:**
-**Related:** <!-- PR/Issue/Epic link -->
+**Testing scope:** <!-- Brief description of what is being tested and why -->
+**Related:**
+- Issue: <!-- paste Issue URL here -->
 - PR: <!-- paste PR URL here -->
 
 ### Type of Testing
