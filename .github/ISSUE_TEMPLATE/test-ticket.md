@@ -1,12 +1,15 @@
 ---
 name: Test Ticket
 about: Structured manual/QA testing ticket for features, bug fixes, or regression testing
-title: "QA: [Feature or Bug Name]"
-labels: kind/testing, sig/ui
+title: "[Testing Issue] - Test Release [X.XX]"
+labels: sig/ui
 ---
 
 ### Summary
-**Testing scope:** <!-- Brief description of what is being tested and why -->
+
+**Testing scope:** 
+<!-- Brief description of what is being tested and why -->
+
 **Related:**
 - Issue: <!-- paste Issue URL here -->
 - PR: <!-- paste PR URL here -->
@@ -19,11 +22,6 @@ labels: kind/testing, sig/ui
 - [ ] Security / Permissions (RBAC)
 - [ ] Upgrade / Migration
 - [ ] Other:
-
-### Test Depth
-<!-- Smoke: verify core flow works end-to-end. Full/Deep: cover edge cases, RBAC, error states, providers. -->
-- [ ] Smoke
-- [ ] Full / Deep
 
 ### Prerequisites
 <!-- Environment setup, feature flags, admin settings, or test data required before testing begins. -->
@@ -72,15 +70,8 @@ labels: kind/testing, sig/ui
 -->
 - [ ]
 
-## Blockers & Follow-ups
-**Blockers** (testing cannot proceed):
-- [ ]
-
-**Known Issues** (to document):
-- [ ]
-
-## Important Links
-<!-- Add links to relevant docs, design specs, or related issues -->
+### Notes
+<!-- Document any specific instructions, workarounds, blockers, or known issues discovered during testing. -->
 
 ### Test Environment
 - **UI Version:**
