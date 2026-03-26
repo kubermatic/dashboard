@@ -40,6 +40,7 @@ import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {SettingsService} from '@core/services/settings';
+import {getDefaultForOS} from '@shared/utils/node';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
@@ -191,7 +192,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
-        this._setDefaultImage(OperatingSystem.Ubuntu);
+        if (this._nodeDataService.operatingSystem) {
+          this._setDefaultImage(this._nodeDataService.operatingSystem);
+        }
         this._enforceFloatingIP(dc.spec.openstack.enforceFloatingIP);
         this._enforceConfigDrive(dc);
       });
@@ -380,7 +383,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _setDefaultImage(os: OperatingSystem): void {
-    let defaultImage = this._getDefaultImage(os);
+    let defaultImage = getDefaultForOS(os, this._images);
 
     if (_.isEmpty(this._defaultImage)) {
       this._defaultImage = defaultImage;
@@ -392,21 +395,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this.form.get(Controls.Image).setValue(defaultImage);
     this._cdr.detectChanges();
-  }
-
-  private _getDefaultImage(os: OperatingSystem): string {
-    switch (os) {
-      case OperatingSystem.Ubuntu:
-        return this._images.ubuntu;
-      case OperatingSystem.RHEL:
-        return this._images.rhel;
-      case OperatingSystem.Flatcar:
-        return this._images.flatcar;
-      case OperatingSystem.RockyLinux:
-        return this._images.rockylinux;
-      default:
-        return this._images.ubuntu;
-    }
   }
 
   private _enforceFloatingIP(isEnforced: boolean): void {

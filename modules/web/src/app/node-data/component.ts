@@ -139,6 +139,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   wizardMode: WizardMode;
+  isTemplateEditOrCustomize = false;
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
@@ -203,6 +204,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   ngOnInit(): void {
     this.wizardMode = window.history.state?.mode;
+    this.isTemplateEditOrCustomize =
+      this.wizardMode === WizardMode.EditClusterTemplate || this.wizardMode === WizardMode.CustomizeClusterTemplate;
     this.projectId = this._params.get(PathParam.ProjectID);
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
@@ -448,7 +451,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOperatingSystemAllowed(os: OperatingSystem): boolean {
-    if (this.dialogEditMode || this.wizardMode !== WizardMode.CreateClusterTemplate) {
+    if (this.dialogEditMode || this.isTemplateEditOrCustomize) {
       return this.isOperatingSystemSupported(os) && (this.allowedOperatingSystems[os] || this.currentNodeOS === os);
     }
     return this.isOperatingSystemSupported(os) && this.allowedOperatingSystems[os];
@@ -631,7 +634,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           },
         };
       default:
-        return {ubuntu: {distUpgradeOnBoot: false}};
+        return {};
     }
   }
 
@@ -665,8 +668,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this.dialogEditMode || (this.wizardMode && this.wizardMode !== WizardMode.CreateClusterTemplate)) {
+    // dialogEditMode or template edit/customize: preserve current OS unconditionally
+    if (this.dialogEditMode || this.isTemplateEditOrCustomize) {
       return this._nodeDataService.operatingSystem;
+    }
+    // other wizard modes: only keep current OS if it's allowed (respects global + project restrictions)
+    if (this.wizardMode) {
+      const currentOS = this._nodeDataService.operatingSystem;
+      if (currentOS && this.allowedOperatingSystems[currentOS] && this.isOperatingSystemSupported(currentOS)) {
+        return currentOS;
+      }
     }
 
     if (this._datacenterSpec) {
