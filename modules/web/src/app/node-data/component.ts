@@ -139,6 +139,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   wizardMode: WizardMode;
+  isTemplateEditOrCustomize = false;
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
@@ -156,12 +157,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   get displayQuotaInWizard(): boolean {
     return this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster;
-  }
-
-  get isTemplateEditOrCustomize(): boolean {
-    return (
-      this.wizardMode === WizardMode.EditClusterTemplate || this.wizardMode === WizardMode.CustomizeClusterTemplate
-    );
   }
 
   get nodeHasAdvanceSettings(): boolean {
@@ -209,6 +204,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   ngOnInit(): void {
     this.wizardMode = window.history.state?.mode;
+    this.isTemplateEditOrCustomize =
+      this.wizardMode === WizardMode.EditClusterTemplate || this.wizardMode === WizardMode.CustomizeClusterTemplate;
     this.projectId = this._params.get(PathParam.ProjectID);
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
