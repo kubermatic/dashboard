@@ -200,23 +200,27 @@ describe('NodeDataComponent', () => {
   });
 
   describe('isTemplateEditOrCustomize', () => {
-    it('should return true for EditClusterTemplate', () => {
+    it('should be true for EditClusterTemplate', () => {
       component.wizardMode = WizardMode.EditClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       expect(component.isTemplateEditOrCustomize).toBe(true);
     });
 
-    it('should return true for CustomizeClusterTemplate', () => {
+    it('should be true for CustomizeClusterTemplate', () => {
       component.wizardMode = WizardMode.CustomizeClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       expect(component.isTemplateEditOrCustomize).toBe(true);
     });
 
-    it('should return false for CreateUserCluster', () => {
+    it('should be false for CreateUserCluster', () => {
       component.wizardMode = WizardMode.CreateUserCluster;
+      component.isTemplateEditOrCustomize = false;
       expect(component.isTemplateEditOrCustomize).toBe(false);
     });
 
-    it('should return false for CreateClusterTemplate', () => {
+    it('should be false for CreateClusterTemplate', () => {
       component.wizardMode = WizardMode.CreateClusterTemplate;
+      component.isTemplateEditOrCustomize = false;
       expect(component.isTemplateEditOrCustomize).toBe(false);
     });
   });
@@ -278,6 +282,7 @@ describe('NodeDataComponent', () => {
 
     it('should allow a disabled OS in edit template mode if it is the current OS', () => {
       component.wizardMode = WizardMode.EditClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       component.dialogEditMode = false;
       component.currentNodeOS = OperatingSystem.Ubuntu;
       expect(component.isOperatingSystemAllowed(OperatingSystem.Ubuntu)).toBe(true);
@@ -285,6 +290,7 @@ describe('NodeDataComponent', () => {
 
     it('should allow a disabled OS in customize template mode if it is the current OS', () => {
       component.wizardMode = WizardMode.CustomizeClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       component.dialogEditMode = false;
       component.currentNodeOS = OperatingSystem.Ubuntu;
       expect(component.isOperatingSystemAllowed(OperatingSystem.Ubuntu)).toBe(true);
@@ -298,6 +304,7 @@ describe('NodeDataComponent', () => {
 
     it('should not allow a disabled OS in template edit mode if it is not the current OS', () => {
       component.wizardMode = WizardMode.EditClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       component.dialogEditMode = false;
       component.currentNodeOS = OperatingSystem.Flatcar;
       expect(component.isOperatingSystemAllowed(OperatingSystem.Ubuntu)).toBe(false);
@@ -305,6 +312,7 @@ describe('NodeDataComponent', () => {
 
     it('should not allow an unsupported OS even if it is the current OS in template edit mode', () => {
       component.wizardMode = WizardMode.EditClusterTemplate;
+      component.isTemplateEditOrCustomize = true;
       component.provider = NodeProvider.ANEXIA;
       component.currentNodeOS = OperatingSystem.Ubuntu;
       expect(component.isOperatingSystemAllowed(OperatingSystem.Ubuntu)).toBe(false);
