@@ -158,6 +158,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster;
   }
 
+  get isTemplateEditOrCustomize(): boolean {
+    return (
+      this.wizardMode === WizardMode.EditClusterTemplate || this.wizardMode === WizardMode.CustomizeClusterTemplate
+    );
+  }
+
   get nodeHasAdvanceSettings(): boolean {
     return NodeProviderConstants.nodeHasAdvanceSettings(this._clusterSpecService.provider);
   }
@@ -448,7 +454,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOperatingSystemAllowed(os: OperatingSystem): boolean {
-    if (this.dialogEditMode) {
+    if (this.dialogEditMode || this.isTemplateEditOrCustomize) {
       return this.isOperatingSystemSupported(os) && (this.allowedOperatingSystems[os] || this.currentNodeOS === os);
     }
     return this.isOperatingSystemSupported(os) && this.allowedOperatingSystems[os];
@@ -665,12 +671,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    // dialogEditMode: preserve current OS unconditionally (editing existing node)
-    if (this.dialogEditMode) {
+    // dialogEditMode or template edit/customize: preserve current OS unconditionally
+    if (this.dialogEditMode || this.isTemplateEditOrCustomize) {
       return this._nodeDataService.operatingSystem;
     }
-    // wizardMode: only keep current OS if it's allowed (respects global + project restrictions)
-    if (this.wizardMode && this.wizardMode !== WizardMode.CreateClusterTemplate) {
+    // other wizard modes: only keep current OS if it's allowed (respects global + project restrictions)
+    if (this.wizardMode) {
       const currentOS = this._nodeDataService.operatingSystem;
       if (currentOS && this.allowedOperatingSystems[currentOS] && this.isOperatingSystemSupported(currentOS)) {
         return currentOS;
