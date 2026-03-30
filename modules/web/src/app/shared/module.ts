@@ -136,6 +136,7 @@ import {SSHKeyListComponent} from './components/ssh-key-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
+import {DisabledTooltipDirective} from './directives/disabled-tooltip';
 import {InputPasswordDirective} from './directives/input-password';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
@@ -278,6 +279,7 @@ const components = [
 
 const directives = [
   AutofocusDirective,
+  DisabledTooltipDirective,
   ThrottleClickDirective,
   OptionDirective,
   InputPasswordDirective,

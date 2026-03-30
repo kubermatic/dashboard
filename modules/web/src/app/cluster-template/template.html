@@ -29,16 +29,16 @@ limitations under the License.
       <router-outlet name="quota-widget"
                      (activate)="onActivate($event)" />
     </div>
-    <span [matTooltip]="!can(Permission.Create) ? projectViewOnlyToolTip : ''">
-      <button mat-flat-button
-              type="button"
-              (click)="create()"
-              [disabled]="!can(Permission.Create) || isGroupConfigLoading">
-        <i class="km-icon-mask km-icon-add"
-           matButtonIcon></i>
-        <span>Create Cluster Template</span>
-      </button>
-    </span>
+    <button mat-flat-button
+            type="button"
+            kmDisabledTooltip
+            (click)="create()"
+            [disabled]="!can(Permission.Create) || isGroupConfigLoading"
+            [matTooltip]="!can(Permission.Create) ? DISABLED_TOOLTIP_MESSAGE : ''">
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
+      <span>Create Cluster Template</span>
+    </button>
   </div>
 
   <mat-card-content>
@@ -128,20 +128,23 @@ limitations under the License.
             }
             @case (false) {
             <button mat-icon-button
-                    matTooltip="Edit Cluster Template"
+                    kmDisabledTooltip
+                    [matTooltip]="!canEdit(element) ? DISABLED_TOOLTIP_MESSAGE : 'Edit Cluster Template'"
                     (click)="editClusterTemplate(element)"
                     [disabled]="!canEdit(element)">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
             <button mat-icon-button
                     [attr.id]="'km-template-instance-' + element.name"
-                    matTooltip="Create Cluster from Template"
+                    kmDisabledTooltip
+                    [matTooltip]="!canCreateCluster() ? DISABLED_TOOLTIP_MESSAGE : 'Create Cluster from Template'"
                     (click)="createCluster(element)"
                     [disabled]="!canCreateCluster()">
               <i class="km-icon-mask km-icon-cluster-from-template"></i>
             </button>
             <button mat-icon-button
-                    matTooltip="Delete Cluster Template"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete(element) ? DISABLED_TOOLTIP_MESSAGE : 'Delete Cluster Template'"
                     (click)="delete(element)"
                     [disabled]="!canDelete(element)">
               <i class="km-icon-mask km-icon-delete"></i>

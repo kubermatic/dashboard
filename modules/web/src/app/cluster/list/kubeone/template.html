@@ -31,7 +31,9 @@ limitations under the License.
     </div>
     <button id="km-import-kubeone-cluster-btn"
             mat-flat-button
+            kmDisabledTooltip
             [disabled]="!can(Permission.Create)"
+            [matTooltip]="!can(Permission.Create) ? DISABLED_TOOLTIP_MESSAGE : ''"
             (click)="importKubeOneCluster()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
@@ -120,7 +122,8 @@ limitations under the License.
                          color="accent" />
             } @else {
             <button mat-icon-button
-                    matTooltip="Disconnect Cluster"
+                    kmDisabledTooltip
+                    [matTooltip]="!can(Permission.Delete) ? DISABLED_TOOLTIP_MESSAGE : 'Disconnect Cluster'"
                     (click)="disconnectClusterDialog(element, $event)"
                     [disabled]="!can(Permission.Delete)">
               <i class="km-icon-mask km-icon-disconnect"></i>

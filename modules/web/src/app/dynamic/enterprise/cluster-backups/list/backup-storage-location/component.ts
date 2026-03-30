@@ -37,6 +37,7 @@ import {GroupConfig} from '@app/shared/model/Config';
 import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
 import {StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {DISABLED_TOOLTIP_MESSAGE} from '@app/shared/constants/common';
 
 @Component({
   selector: 'km-backup-storage-locations-list',
@@ -52,6 +53,7 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<BackupStorageLocation>();
   backupStorageLocations: BackupStorageLocation[] = [];
   columns = ['status', 'name', 'bucket', 'region', 'validation', 'actions'];
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

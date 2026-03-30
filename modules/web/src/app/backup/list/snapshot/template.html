@@ -20,7 +20,9 @@ limitations under the License.
     <mat-card-title>Snapshots</mat-card-title>
     <button mat-flat-button
             type="button"
+            kmDisabledTooltip
             [disabled]="!canAdd"
+            [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''"
             (click)="add()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
@@ -122,7 +124,8 @@ limitations under the License.
             @case (false) {
             <button mat-icon-button
                     [attr.id]="'km-delete-snapshot-' + backup.name"
-                    matTooltip="Delete Snapshot"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete ? DISABLED_TOOLTIP_MESSAGE : 'Delete Snapshot'"
                     (click)="delete(backup); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

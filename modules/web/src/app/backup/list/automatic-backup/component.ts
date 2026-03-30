@@ -38,6 +38,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {forkJoin, of, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {DISABLED_TOOLTIP_MESSAGE} from '@shared/constants/common';
 
 @Component({
   selector: 'km-automatic-backup-list',
@@ -54,6 +55,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   private _clusters = new Map<string, Cluster>();
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
 
   get trackByID(): TrackByFunction<EtcdBackupConfig> {
     return (_: number, backup: EtcdBackupConfig): string => backup.name;

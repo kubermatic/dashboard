@@ -59,8 +59,10 @@ END OF TERMS AND CONDITIONS
         }
         <button mat-flat-button
                 type="button"
+                kmDisabledTooltip
                 (click)="addScheduleBackup()"
-                [disabled]="!canAdd">
+                [disabled]="!canAdd"
+                [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
           <i class="km-icon-mask km-icon-add"
              matButtonIcon></i>
           <span>Create Cluster Schedule</span>
@@ -199,7 +201,8 @@ END OF TERMS AND CONDITIONS
           <div fxLayoutAlign="end"
                class="km-table-actions">
             <button mat-icon-button
-                    matTooltip="Delete Backup"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete ? DISABLED_TOOLTIP_MESSAGE : 'Delete Backup'"
                     (click)="deleteScheduleBackups([element]); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

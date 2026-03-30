@@ -47,6 +47,7 @@ import {
 import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {SettingsService} from '@app/core/services/settings';
+import {DISABLED_TOOLTIP_MESSAGE} from '@shared/constants/common';
 
 @Component({
   selector: 'km-create-resource-panel',
@@ -66,8 +67,7 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @Output() refreshBackups = new EventEmitter<void>();
 
   areExternalClustersEnabled = false;
-  projectViewOnlyToolTip =
-    'You do not have permission to perform this action. Contact the project owner to change your membership role';
+  readonly projectViewOnlyToolTip = DISABLED_TOOLTIP_MESSAGE;
 
   private _user: Member;
   private _currentGroupConfig: GroupConfig;

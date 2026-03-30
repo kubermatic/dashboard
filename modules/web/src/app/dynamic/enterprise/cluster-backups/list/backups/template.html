@@ -58,8 +58,10 @@ END OF TERMS AND CONDITIONS
         }
         <button mat-flat-button
                 type="button"
+                kmDisabledTooltip
                 (click)="uploadBackups()"
-                [disabled]="!canAdd">
+                [disabled]="!canAdd"
+                [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
           <i class="km-icon-mask km-icon-upload"
              matButtonIcon></i>
           <span>Upload Backups</span>
@@ -67,16 +69,20 @@ END OF TERMS AND CONDITIONS
         @if (clusters?.length) {
         <button mat-flat-button
                 type="button"
+                kmDisabledTooltip
                 (click)="importBackups()"
-                [disabled]="!canAdd">
+                [disabled]="!canAdd"
+                [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
           <i class="km-icon-mask km-icon-import"
              matButtonIcon></i>
           <span>Import External Backups</span>
         </button>
         <button mat-flat-button
                 type="button"
+                kmDisabledTooltip
                 (click)="addBackup()"
-                [disabled]="!canAdd">
+                [disabled]="!canAdd"
+                [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
           <i class="km-icon-mask km-icon-add"
              matButtonIcon></i>
           <span>Create Cluster Backup</span>
@@ -233,14 +239,16 @@ END OF TERMS AND CONDITIONS
           <div fxLayoutAlign="end"
                class="km-table-actions">
             <button mat-icon-button
-                    matTooltip="Restore Backup"
+                    kmDisabledTooltip
+                    [matTooltip]="getRestoreBackupTooltip(element)"
                     (click)="restoreBackup(element); $event.stopPropagation()"
                     [disabled]="!canAdd || !isRunning(element.spec.status)">
               <i class="km-icon-mask km-icon-restore"></i>
             </button>
 
             <button mat-icon-button
-                    matTooltip="Delete Backup"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete ? DISABLED_TOOLTIP_MESSAGE : 'Delete Backup'"
                     (click)="deleteBackups([element]); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

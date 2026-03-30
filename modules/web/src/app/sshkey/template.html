@@ -21,8 +21,10 @@ limitations under the License.
     <button id="km-add-ssh-key-top-btn"
             mat-flat-button
             type="button"
+            kmDisabledTooltip
             (click)="addSshKey()"
-            [disabled]="!canAdd()">
+            [disabled]="!canAdd()"
+            [matTooltip]="!canAdd() ? DISABLED_TOOLTIP_MESSAGE : ''">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
       <span>Add SSH Key</span>
@@ -94,7 +96,8 @@ limitations under the License.
             @case (false) {
             <button mat-icon-button
                     [attr.id]="'km-delete-sshkey-' + element.name"
-                    matTooltip="Delete SSH key"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete() ? DISABLED_TOOLTIP_MESSAGE : 'Delete SSH key'"
                     (click)="deleteSshKey(element, $event)"
                     [disabled]="!canDelete()">
               <i class="km-icon-mask km-icon-delete"></i>

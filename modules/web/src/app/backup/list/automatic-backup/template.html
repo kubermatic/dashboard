@@ -20,8 +20,10 @@ limitations under the License.
     <mat-card-title>Automatic Backups</mat-card-title>
     <button mat-flat-button
             type="button"
+            kmDisabledTooltip
             (click)="add()"
-            [disabled]="!canAdd">
+            [disabled]="!canAdd"
+            [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
       <span>Add Automatic Backup</span>
@@ -158,7 +160,8 @@ limitations under the License.
             @case (false) {
             <button mat-icon-button
                     [attr.id]="'km-delete-backup-' + backup.name"
-                    matTooltip="Delete Automatic Backup"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete ? DISABLED_TOOLTIP_MESSAGE : 'Delete Automatic Backup'"
                     (click)="delete(backup); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

@@ -28,8 +28,10 @@ END OF TERMS AND CONDITIONS
     </mat-card-title>
     <button mat-flat-button
             type="button"
+            kmDisabledTooltip
             (click)="addBackupStorageLocation()"
-            [disabled]="!canAdd">
+            [disabled]="!canAdd"
+            [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : ''">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
       <span>Create Backup Storage Location</span>
@@ -130,14 +132,16 @@ END OF TERMS AND CONDITIONS
           <div fxLayoutAlign="end"
                class="km-table-actions">
             <button mat-icon-button
-                    matTooltip="Edit"
+                    kmDisabledTooltip
+                    [matTooltip]="!canAdd ? DISABLED_TOOLTIP_MESSAGE : 'Edit'"
                     (click)="editBSL(element); $event.stopPropagation()"
                     [disabled]="!canAdd">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
 
             <button mat-icon-button
-                    matTooltip="Delete Backup Storage Location"
+                    kmDisabledTooltip
+                    [matTooltip]="!canDelete ? DISABLED_TOOLTIP_MESSAGE : 'Delete Backup Storage Location'"
                     (click)="deleteBSL(element); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

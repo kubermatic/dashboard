@@ -34,6 +34,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
+import {DISABLED_TOOLTIP_MESSAGE} from '@shared/constants/common';
 
 @Component({
   selector: 'km-sshkey',
@@ -51,6 +52,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKey>();
   isUserSshKeyEnabled = true;
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

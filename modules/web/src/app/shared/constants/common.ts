@@ -41,6 +41,10 @@ export const DEFAULT_POLICY_TOOLTIP =
 export const ENFORCED_POLICY_TOOLTIP =
   "Enforced policies will be applied to all targeted clusters. Users can't delete them.";
 
+// Permission tooltip
+export const DISABLED_TOOLTIP_MESSAGE =
+  'You do not have permission to perform this action. Contact the project owner to change your membership role.';
+
 // Common action tooltips
 export const CLICK_TO_COPY_TOOLTIP = 'Click to copy';
 export const GENERATE_NAME_TOOLTIP = 'Generate name';
