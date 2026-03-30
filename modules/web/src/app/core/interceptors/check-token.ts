@@ -14,22 +14,13 @@
 
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {Auth} from '@core/services/auth/service';
 import {Observable} from 'rxjs';
 
 @Injectable()
 export class CheckTokenInterceptor implements HttpInterceptor {
-  constructor(
-    private auth: Auth,
-    private router: Router
-  ) {}
-
+  // TODO: Add proper auth check once /api/v2/auth/status endpoint is available.
+  // For now, pass-through — the AuthInterceptor handles 401s and redirects to login.
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.auth.authenticated()) {
-      this.router.navigate(['']);
-    }
-
     return next.handle(req);
   }
 }

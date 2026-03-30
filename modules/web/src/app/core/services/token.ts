@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Inject, Injectable} from '@angular/core';
-import moment from 'moment';
-import {CookieService} from 'ngx-cookie-service';
-import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {Injectable} from '@angular/core';
+// import moment from 'moment';
+// import {CookieService} from 'ngx-cookie-service';
+// import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
 
 @Injectable()
 export class TokenService {
-  private readonly _baseTime = 1000;
+  // private readonly _baseTime = 1000;
   private _token: string;
 
   constructor(
-    private readonly _cookieService: CookieService,
-    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
+    // private readonly _cookieService: CookieService,
+    // @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
   set token(token: string) {
@@ -36,8 +36,8 @@ export class TokenService {
   }
 
   hasExpired(): boolean {
-    const token = this._cookieService.get(this._cookie.token) || this._token;
-    return token ? moment().isBefore(moment(this.decodeToken(token).exp * this._baseTime)) : false;
+    // TODO: add a service to check when the token will be expiered, when that happen we will check if the time in the service is done then return false
+    return  true;
   }
 
   decodeToken(token: string): any {
