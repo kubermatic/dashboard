@@ -103,7 +103,7 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250910181357-589584f
 replace k8s.io/client-go => k8s.io/client-go v0.35.0
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
-replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
+// replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
 
 replace k8c.io/application-catalog-manager => github.com/kubermatic/application-catalog-manager v0.2.0-rc.6
 
@@ -402,6 +402,8 @@ require (
 	k8s.io/gengo/v2 v2.0.0-20251215205346-5ee0d033ba5b // indirect
 	k8s.io/kube-aggregator v0.35.0 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
+	k8s.io/kube-proxy v0.33.4 // indirect
+	k8s.io/kubelet v0.33.4 // indirect
 	k8s.io/pod-security-admission v0.33.1 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.4.1 // indirect
