@@ -17,6 +17,7 @@ import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {BrandingService} from '@core/services/branding';
+import {environment} from '@environments/environment';
 
 @Component({
   selector: 'km-frontpage',
@@ -33,6 +34,8 @@ export class FrontpageComponent implements OnInit {
     private readonly _router: Router
   ) {}
 
+  readonly loginURL = `${environment.newRestRoot}/auth/login`;
+
   get tagline(): string {
     return this._brandingService.getTagline();
   }
@@ -48,12 +51,6 @@ export class FrontpageComponent implements OnInit {
     if (this._auth.authenticated()) {
       this._router.navigate(['/projects']);
     }
-
-    this._auth.setNonce();
-  }
-
-  getOIDCProviderURL(): string {
-    return this._auth.getOIDCProviderURL();
   }
 
   login(): void {

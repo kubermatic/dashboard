@@ -77,11 +77,13 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    const token = this._auth.getBearerToken();
     this._auth.logout().subscribe(_ => {
       this._settingsService.refreshCustomLinks();
       if (this._appConfigService.getConfig().oidc_logout_url) {
-        this._auth.oidcProviderLogout(token);
+        // TODO: id_token_hint is no longer available since the token is in an HttpOnly cookie.
+        // Without it, the OIDC provider may not know which session to end.
+        // Investigate returning the id_token from the backend logout endpoint or a dedicated endpoint.
+        this._auth.oidcProviderLogout('');
       } else {
         this._router.navigate(['']);
         this._document.defaultView.location.reload();
