@@ -521,10 +521,10 @@ type OpenstackReq struct {
 	// Domain OpenStack domain name
 	Domain string
 	// in: header
-	// OpenstackTenant OpenStack tenant name (depreciated in favor of Project instead)
+	// OpenstackTenant OpenStack tenant name (deprecated in favor of Project instead)
 	OpenstackTenant string
 	// in: header
-	// OpenstackTenantID OpenStack tenant ID (depreciated in favor of  ProjectID instead)
+	// OpenstackTenantID OpenStack tenant ID (deprecated in favor of ProjectID instead)
 	OpenstackTenantID string
 	// in: header
 	// OpenstackProject OpenStack project name
@@ -550,7 +550,7 @@ type OpenstackReq struct {
 	Credential string
 }
 
-// GetProjectOrDefaultToTenant returns the the project if defined otherwise fallback to tenant.
+// GetProjectOrDefaultToTenant returns the project if defined otherwise fallback to tenant.
 func (r OpenstackReq) GetProjectOrDefaultToTenant() string {
 	if len(r.OpenstackProject) > 0 {
 		return r.OpenstackProject
@@ -559,7 +559,7 @@ func (r OpenstackReq) GetProjectOrDefaultToTenant() string {
 	}
 }
 
-// GetProjectIdOrDefaultToTenantId returns the the projectID if defined otherwise fallback to tenantID.
+// GetProjectIdOrDefaultToTenantId returns the projectID if defined otherwise fallback to tenantID.
 func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
 	if len(r.OpenstackProjectID) > 0 {
 		return r.OpenstackProjectID

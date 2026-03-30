@@ -35,13 +35,13 @@ type GlobalSettings struct {
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
 
-	// DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.
+	// DisplayAPIDocs controls whether a link to the KKP API documentation is shown in the footer.
 	DisplayAPIDocs bool `json:"displayAPIDocs,omitempty"`
 
 	// DisplayDemoInfo controls whether a "Demo System" hint is shown in the footer.
 	DisplayDemoInfo bool `json:"displayDemoInfo,omitempty"`
 
-	// DisplayDemoInfo controls whether a a link to TOS is shown in the footer.
+	// DisplayTermsOfService controls whether a link to TOS is shown in the footer.
 	DisplayTermsOfService bool `json:"displayTermsOfService,omitempty"`
 
 	// EnableClusterBackups enables the Cluster Backup feature in the dashboard.

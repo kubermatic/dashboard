@@ -2217,9 +2217,9 @@ type GlobalSettings struct {
 	DefaultNodeCount int8 `json:"defaultNodeCount"`
 	// DisplayDemoInfo controls whether a "Demo System" hint is shown in the footer.
 	DisplayDemoInfo bool `json:"displayDemoInfo"`
-	// DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.
+	// DisplayAPIDocs controls whether a link to the KKP API documentation is shown in the footer.
 	DisplayAPIDocs bool `json:"displayAPIDocs"`
-	// DisplayDemoInfo controls whether a a link to TOS is shown in the footer.
+	// DisplayTermsOfService controls whether a link to TOS is shown in the footer.
 	DisplayTermsOfService bool `json:"displayTermsOfService"`
 	// EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.
 	EnableDashboard bool `json:"enableDashboard"`
