@@ -51,11 +51,11 @@ describe('AddProjectDialogComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the component', waitForAsync(() => {
+  it('should create the add project dialog component', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should initialize projectAllowedOperatingSystems from admin defaults', () => {
+  it('should initialize project allowed operating systems with only enabled entries from admin defaults', () => {
     const expected: Record<string, boolean> = {};
     Object.keys(DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems)
       .filter(os => DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems[os])
@@ -64,7 +64,7 @@ describe('AddProjectDialogComponent', () => {
     expect(component.projectAllowedOperatingSystems).toEqual(expected);
   });
 
-  it('should call createProject method with allowedOperatingSystems', fakeAsync(() => {
+  it('should pass the selected operating systems in the project spec when creating a project', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');
 
     const expected: Record<string, boolean> = {};
@@ -87,7 +87,7 @@ describe('AddProjectDialogComponent', () => {
     );
   }));
 
-  it('should only include enabled operating systems from admin settings', () => {
+  it('should exclude disabled operating systems and only include enabled ones from admin settings', () => {
     component.adminAllowedOperatingSystems = {
       ubuntu: true,
       flatcar: true,
