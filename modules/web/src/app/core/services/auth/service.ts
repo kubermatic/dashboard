@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
-import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
@@ -25,6 +24,8 @@ import {OIDCProviders} from '@app/shared/model/Config';
 interface AuthStatusResponse {
   expires_at: number;
 }
+
+export const AUTOREDIRECT_COOKIE = 'autoredirect';
 
 @Injectable()
 export class Auth {
@@ -39,8 +40,7 @@ export class Auth {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _cookieService: CookieService,
-    private readonly _appConfigService: AppConfigService,
-    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   init(): Promise<void> {
@@ -76,7 +76,7 @@ export class Auth {
   }
 
   login(): void {
-    this._cookieService.set(this._cookie.autoredirect, 'true', 1, '/', null, false, 'Strict');
+    this._cookieService.set(AUTOREDIRECT_COOKIE, 'true', 1, '/', null, false, 'Strict');
   }
 
   logout(): Observable<boolean> {

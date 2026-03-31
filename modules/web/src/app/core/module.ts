@@ -63,10 +63,8 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {SettingsService} from '@core/services/settings';
 import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {ThemeInformerService} from '@core/services/theme-informer';
-import {TokenService} from '@core/services/token';
 import {PresetsService} from '@core/services/wizard/presets';
 import {SharedModule} from '@shared/module';
-import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';
 import {CreateServiceAccountDialogComponent} from '../serviceaccount/create-dialog/component';
@@ -77,7 +75,7 @@ import {ProjectSelectorComponent} from './components/navigation/project/componen
 import {NotificationPanelComponent} from './components/notification-panel/component';
 import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
-import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
+import {AuthInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterBackupService} from './services/cluster-backup';
 import {SSHKeyGuard} from './services/ssh-key/guard';
 import {KyvernoService} from './services/kyverno';
@@ -113,7 +111,6 @@ const services = [
   PresetsService,
   PreviousRouteService,
   ThemeInformerService,
-  TokenService,
   PageTitleService,
   OPAService,
   ClusterSpecService,
@@ -158,11 +155,6 @@ const interceptors = [
   },
   {
     provide: HTTP_INTERCEPTORS,
-    useClass: CheckTokenInterceptor,
-    multi: true,
-  },
-  {
-    provide: HTTP_INTERCEPTORS,
     useClass: LoaderInterceptor,
     multi: true,
   },
@@ -180,7 +172,6 @@ const interceptors = [
   providers: [
     ...services,
     ...interceptors,
-    {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })

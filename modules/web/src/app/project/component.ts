@@ -17,7 +17,6 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Inject,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -28,7 +27,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {COOKIE_DI_TOKEN, Cookie} from '@app/config';
+import {AUTOREDIRECT_COOKIE} from '@core/services/auth/service';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -130,7 +129,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
-    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie,
     private readonly _dialogModeService: DialogModeService,
     readonly branding: BrandingService
   ) {
@@ -643,8 +641,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _shouldRedirectToProjectLandingPage(): boolean {
-    const autoredirect: boolean = this._cookieService.get(this._cookie.autoredirect) === 'true';
-    this._cookieService.delete(this._cookie.autoredirect, '/');
+    const autoredirect: boolean = this._cookieService.get(AUTOREDIRECT_COOKIE) === 'true';
+    this._cookieService.delete(AUTOREDIRECT_COOKIE, '/');
     return this.projects.length === 1 && autoredirect;
   }
 
