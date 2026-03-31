@@ -17,6 +17,7 @@ limitations under the License.
 package kubermaticdashboard
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -282,5 +283,30 @@ func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		a.clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.WriteHeader(http.StatusOK)
+	})
+}
+
+type authStatusResponse struct {
+	ExpiresAt int64 `json:"expires_at"`
+}
+
+func (a *authHandler) statusHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tokenCookie, err := r.Cookie(idTokenCookieName)
+		if err != nil {
+			http.Error(w, "not authenticated", http.StatusUnauthorized)
+			return
+		}
+
+		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenCookie.Value)
+		if err != nil {
+			http.Error(w, "invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(authStatusResponse{
+			ExpiresAt: claims.Expiry.Unix(),
+		})
 	})
 }
