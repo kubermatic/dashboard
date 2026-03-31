@@ -1137,7 +1137,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 
 	kubermaticdashboard.
 		NewAuthHandler(r.stateStore, r.oidcIssuerVerifier).
-		Options(r.defaultServerOptions()...).
 		Install(mux)
 
 	kubernetesdashboard.
