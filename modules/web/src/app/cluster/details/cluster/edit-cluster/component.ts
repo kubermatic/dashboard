@@ -511,7 +511,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
-    // If KubeLB is enforced or explicitly enabled at the datacenter level, enable it
+    // If KubeLB is enabled explicitly at the datacenter level, enable it
     if (datacenter.spec.kubelb && datacenter.spec.kubelb?.enabled) {
       return true;
     }
