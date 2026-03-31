@@ -557,16 +557,19 @@ limitations under the License.
             @if (isKubeLBEnabled) {
             <div fxLayout="row"
                  fxLayoutAlign=" center"
-                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''">
+                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''"
+                 [matTooltipDisabled]="!isKubeLBEnforced">
               <mat-checkbox [formControlName]="Controls.KubeLB"
                             [disabled]="isKubeLBEnforced">
                 Kubermatic KubeLB
               </mat-checkbox>
+              @if (!isKubeLBEnforced) {
               <i class="km-icon-info km-pointer"
                  [matTooltip]="'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
+              }
             </div>
             }
-            @if (form.get(Controls.KubeLB).value) {
+            @if (isKubeLBEnabled) {
             <div class="km-suboption">
               <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
                 Use LoadBalancer Class
