@@ -89,6 +89,20 @@ export class ClusterSummaryComponent implements OnInit {
     return this.seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
+  get kubeLBAssignPublicIPWarning(): boolean {
+    if (!this.cluster?.spec?.kubelb?.enabled) {
+      return false;
+    }
+    const nodeCloud = this.machineDeployment?.spec?.template?.cloud;
+    if (this.provider === NodeProvider.AZURE) {
+      return !nodeCloud?.azure?.assignPublicIP;
+    }
+    if (this.provider === NodeProvider.AWS) {
+      return !nodeCloud?.aws?.assignPublicIP;
+    }
+    return false;
+  }
+
   get hasNetworkConfiguration(): boolean {
     return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
   }

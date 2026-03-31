@@ -325,7 +325,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(({datacenter, seedSettings}) => {
         this._seedSettings = seedSettings;
-        // Update isKubeLBEnabled with seed settings
+        // Update with seed-level fallback (enableForAllDatacenters)
         this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, seedSettings);
       });
 
@@ -569,7 +569,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.EncryptionAtRestKey).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+      .subscribe(_ => {
+        this._clusterSpecService.cluster = this._getClusterEntity();
+      });
 
     if (!this.cniApplicationValues) {
       this._applicationService
@@ -1279,8 +1281,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         kubelb: {
           enabled: this.controlValue(Controls.KubeLB),
-          useLoadBalancerClass: this.controlValue(Controls.KubeLBUseLoadBalancerClass),
-          enableGatewayAPI: this.controlValue(Controls.KubeLBEnableGatewayAPI),
+          useLoadBalancerClass: this.controlValue(Controls.KubeLB)
+            ? this.controlValue(Controls.KubeLBUseLoadBalancerClass)
+            : false,
+          enableGatewayAPI: this.controlValue(Controls.KubeLB)
+            ? this.controlValue(Controls.KubeLBEnableGatewayAPI)
+            : false,
         },
         disableCsiDriver: this.controlValue(Controls.DisableCSIDriver),
         mla: {
@@ -1356,10 +1362,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
-    return !!(
-      datacenter.spec.kubelb?.enforced ||
-      datacenter.spec.kubelb?.enabled ||
-      seedSettings?.kubelb?.enableForAllDatacenters
-    );
+    // If KubeLB is enforced or explicitly enabled at the datacenter level, enable it
+    if (datacenter.spec.kubelb && datacenter.spec.kubelb?.enabled) {
+      return true;
+    }
+    // If KubeLB is explicitly configured at the datacenter level with enabled: false, respect that
+    if (
+      datacenter.spec.kubelb &&
+      (datacenter.spec.kubelb.enabled === undefined || datacenter.spec.kubelb.enabled === false)
+    ) {
+      return false;
+    }
+    // Fall back to seed-level setting
+    return !!seedSettings?.kubelb?.enableForAllDatacenters;
   }
 }
