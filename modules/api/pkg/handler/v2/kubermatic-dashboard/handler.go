@@ -77,6 +77,10 @@ func (a *authHandler) Install(router *mux.Router) {
 	router.Methods(http.MethodPost).
 		Path("/auth/logout").
 		Handler(a.logoutHandler())
+
+	router.Methods(http.MethodGet).
+		Path("/auth/status").
+		Handler(a.statusHandler())
 }
 
 // NewAuthHandler creates a new Handler for KKP dashboard authentication.
