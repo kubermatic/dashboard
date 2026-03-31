@@ -24,7 +24,6 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {AppConfigService} from '@app/config.service';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
-import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -95,7 +94,6 @@ export class OpenstackDefaultCredentialsComponent extends BaseFormValidator impl
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
     private readonly _credentialsTypeService: OpenstackCredentialsTypeService,
-    private readonly _auth: Auth,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Basic');
@@ -231,7 +229,6 @@ export class OpenstackDefaultCredentialsComponent extends BaseFormValidator impl
     this.form.reset();
     const config = this._appConfigService.getConfig();
     if (config.openstack && config.openstack.wizard_use_default_user) {
-      this.form.get(Controls.Username).setValue(this._auth.getUsername());
     }
   }
 

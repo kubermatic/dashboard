@@ -18,35 +18,61 @@ import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
-import {Observable} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import {TokenService} from '../token';
+import {Observable, of, Subscription, timer} from 'rxjs';
+import {map, take, catchError, switchMap} from 'rxjs/operators';
 import {OIDCProviders} from '@app/shared/model/Config';
+
+interface AuthStatusResponse {
+  expires_at: number;
+}
 
 @Injectable()
 export class Auth {
   private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
+  private readonly _statusUrl = `${environment.newRestRoot}/auth/status`;
+  private readonly _refreshUrl = `${environment.newRestRoot}/auth/refresh`;
   private readonly _logoutUrl = `${environment.newRestRoot}/auth/logout`;
+  private readonly _refreshBufferMs = 60 * 1000; // refresh 1 minute before expiry
+  private _expiresAt: number = 0;
+  private _refreshSub: Subscription = null;
 
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _cookieService: CookieService,
     private readonly _appConfigService: AppConfigService,
-    private readonly _tokenService: TokenService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
-  authenticated(): boolean {
-    return this._tokenService.hasExpired();
+  init(): Promise<void> {
+    return this.checkStatus();
   }
 
-  getUsername(): string {
-    if (this._cookieService.get(this._cookie.token)) {
-      const tokenExp = this._tokenService.decodeToken(this._cookieService.get(this._cookie.token));
-      return tokenExp.name;
-    }
+  checkStatus(): Promise<void> {
+    return new Promise<void>(resolve => {
+      this._httpClient.get<AuthStatusResponse>(this._statusUrl).pipe(
+        catchError(() => {
+          this._expiresAt = 0;
+          return of(null);
+        })
+      ).subscribe(response => {
+        if (response) {
+          this._expiresAt = response.expires_at;
+          this._scheduleRefresh();
+        }
+        resolve();
+      });
+    });
+  }
 
-    return '';
+  authenticated(): boolean {
+    if (this._expiresAt === 0) {
+      return false;
+    }
+    return Date.now() < this._expiresAt * 1000;
+  }
+
+  get expiresAt(): number {
+    return this._expiresAt;
   }
 
   login(): void {
@@ -54,8 +80,12 @@ export class Auth {
   }
 
   logout(): Observable<boolean> {
+    this._cancelRefresh();
     return this._httpClient.post(this._logoutUrl, null).pipe(
-      map(() => true),
+      map(() => {
+        this._expiresAt = 0;
+        return true;
+      }),
       take(1)
     );
   }
@@ -80,6 +110,36 @@ export class Auth {
           break;
       }
       window.location.href = logoutUrl.toString();
+    }
+  }
+
+  private _scheduleRefresh(): void {
+    this._cancelRefresh();
+    const msUntilExpiry = this._expiresAt * 1000 - Date.now();
+    const msUntilRefresh = msUntilExpiry - this._refreshBufferMs;
+
+    if (msUntilRefresh <= 0) {
+      return;
+    }
+
+    this._refreshSub = timer(msUntilRefresh).pipe(
+      switchMap(() => this._httpClient.post(this._refreshUrl, null)),
+      catchError(() => {
+        this._expiresAt = 0;
+        window.location.href = '/';
+        return of(null);
+      })
+    ).subscribe(response => {
+      if (response !== null) {
+        this.checkStatus();
+      }
+    });
+  }
+
+  private _cancelRefresh(): void {
+    if (this._refreshSub) {
+      this._refreshSub.unsubscribe();
+      this._refreshSub = null;
     }
   }
 }

@@ -35,11 +35,6 @@ export class TokenService {
     return this._token;
   }
 
-  hasExpired(): boolean {
-    // TODO: add a service to check when the token will be expiered, when that happen we will check if the time in the service is done then return false
-    return  true;
-  }
-
   decodeToken(token: string): any {
     if (token) {
       const parts = token.split('.');
