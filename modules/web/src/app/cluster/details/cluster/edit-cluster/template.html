@@ -316,7 +316,7 @@ limitations under the License.
         }
       </div>
       }
-      @if (form.get(Controls.KubeLB).value) {
+      @if ((isKubeLBEnabled || isKubeLBEnabledForCluster()) && form.get(Controls.KubeLB).value) {
       <div class="km-suboption">
         <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
           Use LoadBalancer Class
