@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse} from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpErrorResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable, throwError, BehaviorSubject} from 'rxjs';
@@ -31,7 +39,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         // Only handle 401s for API requests, and don't retry the refresh call itself.
-        if (error.status === 401 && !req.url.startsWith(this._refreshUrl) && !req.url.startsWith(this._statusUrl)) {
+        if (
+          error.status === HttpStatusCode.Unauthorized &&
+          !req.url.startsWith(this._refreshUrl) &&
+          !req.url.startsWith(this._statusUrl)
+        ) {
           return this._handle401(req, next);
         }
         return throwError(() => error);
@@ -59,7 +71,7 @@ export class AuthInterceptor implements HttpInterceptor {
         // Retry the original request — browser will send the new cookie.
         return next.handle(req);
       }),
-      catchError((refreshError) => {
+      catchError(refreshError => {
         this._isRefreshing = false;
         this._refreshDone$.next(true);
         // Refresh failed — redirect to login page.

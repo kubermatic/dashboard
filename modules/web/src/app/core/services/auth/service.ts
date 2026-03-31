@@ -27,13 +27,16 @@ interface AuthStatusResponse {
 
 export const AUTOREDIRECT_COOKIE = 'autoredirect';
 
+const SECONDS_TO_MS = 1000;
+const REFRESH_BUFFER_SECONDS = 60;
+
 @Injectable()
 export class Auth {
   private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
   private readonly _statusUrl = `${environment.newRestRoot}/auth/status`;
   private readonly _refreshUrl = `${environment.newRestRoot}/auth/refresh`;
   private readonly _logoutUrl = `${environment.newRestRoot}/auth/logout`;
-  private readonly _refreshBufferMs = 60 * 1000; // refresh 1 minute before expiry
+  private readonly _refreshBufferMs = REFRESH_BUFFER_SECONDS * SECONDS_TO_MS;
   private _expiresAt: number = 0;
   private _refreshSub: Subscription = null;
 
@@ -49,18 +52,21 @@ export class Auth {
 
   checkStatus(): Promise<void> {
     return new Promise<void>(resolve => {
-      this._httpClient.get<AuthStatusResponse>(this._statusUrl).pipe(
-        catchError(() => {
-          this._expiresAt = 0;
-          return of(null);
-        })
-      ).subscribe(response => {
-        if (response) {
-          this._expiresAt = response.expires_at;
-          this._scheduleRefresh();
-        }
-        resolve();
-      });
+      this._httpClient
+        .get<AuthStatusResponse>(this._statusUrl)
+        .pipe(
+          catchError(() => {
+            this._expiresAt = 0;
+            return of(null);
+          })
+        )
+        .subscribe(response => {
+          if (response) {
+            this._expiresAt = response.expires_at;
+            this._scheduleRefresh();
+          }
+          resolve();
+        });
     });
   }
 
@@ -68,7 +74,7 @@ export class Auth {
     if (this._expiresAt === 0) {
       return false;
     }
-    return Date.now() < this._expiresAt * 1000;
+    return Date.now() < this._expiresAt * SECONDS_TO_MS;
   }
 
   get expiresAt(): number {
@@ -115,25 +121,27 @@ export class Auth {
 
   private _scheduleRefresh(): void {
     this._cancelRefresh();
-    const msUntilExpiry = this._expiresAt * 1000 - Date.now();
+    const msUntilExpiry = this._expiresAt * SECONDS_TO_MS - Date.now();
     const msUntilRefresh = msUntilExpiry - this._refreshBufferMs;
 
     if (msUntilRefresh <= 0) {
       return;
     }
 
-    this._refreshSub = timer(msUntilRefresh).pipe(
-      switchMap(() => this._httpClient.post(this._refreshUrl, null)),
-      catchError(() => {
-        this._expiresAt = 0;
-        window.location.href = '/';
-        return of(null);
-      })
-    ).subscribe(response => {
-      if (response !== null) {
-        this.checkStatus();
-      }
-    });
+    this._refreshSub = timer(msUntilRefresh)
+      .pipe(
+        switchMap(() => this._httpClient.post(this._refreshUrl, null)),
+        catchError(() => {
+          this._expiresAt = 0;
+          window.location.href = '/';
+          return of(null);
+        })
+      )
+      .subscribe(response => {
+        if (response !== null) {
+          this.checkStatus();
+        }
+      });
   }
 
   private _cancelRefresh(): void {

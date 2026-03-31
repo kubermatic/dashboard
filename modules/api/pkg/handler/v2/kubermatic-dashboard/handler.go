@@ -19,46 +19,14 @@ package kubermaticdashboard
 import (
 	"net/http"
 
-	"github.com/go-kit/kit/endpoint"
-	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
 
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
-// Handler defines the interface for registering auth routes.
-type Handler interface {
-	Install(*mux.Router)
-	Middlewares(...endpoint.Middleware) Handler
-	Options(...httptransport.ServerOption) Handler
-}
-
-type baseHandler struct {
-	middlewares []endpoint.Middleware
-	options     []httptransport.ServerOption
-}
-
-func (h *baseHandler) chain(ep endpoint.Endpoint) endpoint.Endpoint {
-	for i := len(h.middlewares) - 1; i >= 0; i-- {
-		ep = h.middlewares[i](ep)
-	}
-	return ep
-}
-
 type authHandler struct {
-	baseHandler
 	stateStore         authtypes.StateStore
 	oidcIssuerVerifier authtypes.OIDCIssuerVerifier
-}
-
-func (a *authHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
-	a.middlewares = middlewares
-	return a
-}
-
-func (a *authHandler) Options(options ...httptransport.ServerOption) Handler {
-	a.options = options
-	return a
 }
 
 func (a *authHandler) Install(router *mux.Router) {
@@ -84,7 +52,7 @@ func (a *authHandler) Install(router *mux.Router) {
 }
 
 // NewAuthHandler creates a new Handler for KKP dashboard authentication.
-func NewAuthHandler(stateStore authtypes.StateStore, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) Handler {
+func NewAuthHandler(stateStore authtypes.StateStore, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) *authHandler {
 	return &authHandler{
 		stateStore:         stateStore,
 		oidcIssuerVerifier: oidcIssuerVerifier,

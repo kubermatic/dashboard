@@ -169,11 +169,7 @@ const interceptors = [
   declarations: [...components],
   exports: [...components],
   imports: [CommonModule, RouterModule, SharedModule, GlobalModule, NoopAnimationsModule],
-  providers: [
-    ...services,
-    ...interceptors,
-    provideHttpClient(withInterceptorsFromDi()),
-  ],
+  providers: [...services, ...interceptors, provideHttpClient(withInterceptorsFromDi())],
 })
 export class CoreModule {
   static injector: Injector;
