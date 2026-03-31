@@ -54,13 +54,17 @@ export class AddProjectDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const enabledOperatingSystems = Object.keys(this.adminAllowedOperatingSystems).filter(
+      os => this.adminAllowedOperatingSystems[os]
+    );
+
     this.form = new FormGroup({
       [Controls.Name]: new FormControl('', [Validators.required]),
       [Controls.Labels]: new FormControl(''),
-      [Controls.AllowedOperatingSystems]: new FormControl(
-        Object.keys(this.adminAllowedOperatingSystems).filter(os => this.adminAllowedOperatingSystems[os])
-      ),
+      [Controls.AllowedOperatingSystems]: new FormControl(enabledOperatingSystems),
     });
+
+    this.onOperatingSystemChange(enabledOperatingSystems);
   }
 
   onOperatingSystemChange(operatingSystems: string[]): void {
