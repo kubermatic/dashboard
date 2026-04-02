@@ -110,16 +110,16 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         CBSL_SYNC_PERIOD
       ),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? '', [
-        Validators.required,
         this._dnsNameValidator(),
       ]),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? '', [
-        Validators.required,
         this._endpointURLValidator(),
       ]),
       [Controls.ChecksumAlgorithm]: this._builder.control(this._config.bslObject?.spec.config?.checksumAlgorithm ?? ''),
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
+
+    this._updateRegionAndEndpointValidators(this.form.get(Controls.AddCustomConfig).value);
 
     if (this._config.bslObject) {
       this.form.get(Controls.Name).disable();
@@ -139,6 +139,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       .get(Controls.AddCustomConfig)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((value: boolean) => {
+        this._updateRegionAndEndpointValidators(value);
         let config: BackupStorageLocationConfig;
         if (this._config.bslObject?.name) {
           config = this._config.bslObject.spec.config;
@@ -264,5 +265,24 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         return {invalidEndpointUrl: true};
       }
     };
+  }
+
+  private _updateRegionAndEndpointValidators(addCustomConfig: boolean): void {
+    const regionControl = this.form.get(Controls.Region);
+    const endpointControl = this.form.get(Controls.Endpoints);
+
+    const regionValidators = [this._dnsNameValidator()];
+    const endpointValidators = [this._endpointURLValidator()];
+
+    if (!addCustomConfig) {
+      regionValidators.unshift(Validators.required);
+      endpointValidators.unshift(Validators.required);
+    }
+
+    regionControl.setValidators(regionValidators);
+    endpointControl.setValidators(endpointValidators);
+
+    regionControl.updateValueAndValidity({emitEvent: false});
+    endpointControl.updateValueAndValidity({emitEvent: false});
   }
 }
