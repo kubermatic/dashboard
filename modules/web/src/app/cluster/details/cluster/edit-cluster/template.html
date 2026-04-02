@@ -391,12 +391,6 @@ limitations under the License.
       </mat-checkbox>
       }
 
-      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
-      <mat-checkbox [formControlName]="Controls.RouterReconciliation">
-        Skip Router Reconciliation
-      </mat-checkbox>
-      }
-
       @if (!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled) {
       <mat-form-field class="bsl-field">
         <mat-label>{{backupStorageLocationLabel}}</mat-label>
@@ -414,6 +408,12 @@ limitations under the License.
         </mat-error>
         }
       </mat-form-field>
+      }
+
+      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
+      <mat-checkbox [formControlName]="Controls.RouterReconciliation">
+        Skip Router Reconciliation
+      </mat-checkbox>
       }
 
       <km-label-form title="Labels"
