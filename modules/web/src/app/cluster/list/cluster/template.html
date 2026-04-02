@@ -42,17 +42,21 @@ limitations under the License.
     </div>
     <button mat-flat-button
             type="button"
+            kmDisabledTooltip
             [disabled]="!can(Permission.Create) || !clusterTemplates?.length"
+            [matTooltip]="getCreateFromTemplateTooltip()"
             (click)="selectTemplate()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
-      <span [matTooltip]="isInitialized && !clusterTemplates?.length ? 'No cluster templates available' : ''">Create Clusters From Template
+      <span>Create Clusters From Template
       </span>
     </button>
     <button id="km-add-cluster-top-btn"
             mat-flat-button
             type="button"
+            kmDisabledTooltip
             [disabled]="!can(Permission.Create)"
+            [matTooltip]="!can(Permission.Create) ? DISABLED_TOOLTIP_MESSAGE : ''"
             (click)="loadWizard()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
@@ -215,7 +219,8 @@ limitations under the License.
             @case (false) {
             <button mat-icon-button
                     [attr.id]="'km-delete-cluster-' + element.name"
-                    matTooltip="Delete Cluster"
+                    kmDisabledTooltip
+                    [matTooltip]="!can(Permission.Delete) ? DISABLED_TOOLTIP_MESSAGE : 'Delete Cluster'"
                     (click)="deleteClusterDialog(element, $event)"
                     [disabled]="!can(Permission.Delete) || isRestoring(element.id)">
               <i class="km-icon-mask km-icon-delete"></i>

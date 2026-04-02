@@ -30,9 +30,11 @@ END OF TERMS AND CONDITIONS
     <km-search-field class="search"
                      (queryChange)="onSearch($event)" />
     <button mat-flat-button
+            kmDisabledTooltip
             [color]="projectID ?  'primary' : 'quaternary'"
             (click)="addTemplate(mode.Add)"
-            [disabled]="!hasOwnerRole">
+            [disabled]="!hasOwnerRole"
+            [matTooltip]="!hasOwnerRole ? DISABLED_TOOLTIP_MESSAGE : ''">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
       <span>Create Policy Template</span>
@@ -127,20 +129,25 @@ END OF TERMS AND CONDITIONS
                class="km-table-actions">
             @if (element.spec.visibility === scopes.Global && !!projectID) {
             <button mat-icon-button
+                    kmDisabledTooltip
                     (click)="addTemplate(mode.Copy, element)"
                     [disabled]="!hasOwnerRole"
-                    matTooltip="Create a copy of this template in the current project">
+                    [matTooltip]="!hasOwnerRole ? DISABLED_TOOLTIP_MESSAGE : 'Create a copy of this template in the current project'">
               <i class="km-icon-mask km-icon-copy"></i>
             </button>
             }
             <button mat-icon-button
+                    kmDisabledTooltip
                     (click)="addTemplate(mode.Edit, element)"
-                    [disabled]="isToggleDisabled(element)">
+                    [disabled]="isToggleDisabled(element)"
+                    [matTooltip]="isToggleDisabled(element) ? getDisabledActionTooltip(element) : 'Edit Policy Template'">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
             <button mat-icon-button
+                    kmDisabledTooltip
                     (click)="deleteTemplate(element.name)"
-                    [disabled]="isToggleDisabled(element)">
+                    [disabled]="isToggleDisabled(element)"
+                    [matTooltip]="isToggleDisabled(element) ? getDisabledActionTooltip(element) : 'Delete Policy Template'">
               <i class="km-icon-mask km-icon-delete"></i>
             </button>
           </div>

@@ -22,7 +22,7 @@ import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,
 } from '@app/shared/components/add-cluster-from-template-dialog/component';
-import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {ANEXIA_DEPRECATED_MESSAGE, DISABLED_TOOLTIP_MESSAGE} from '@app/shared/constants/common';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
@@ -61,8 +61,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['name', 'scope', 'provider', 'region', 'created', 'actions'];
   dataSource = new MatTableDataSource<any>();
   isGroupConfigLoading: boolean;
-  projectViewOnlyToolTip =
-    'You do not have permission to perform this action. Contact the project owner to change your membership role';
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
   clusterTemplateFragment = this._route.snapshot.fragment;
   nodeProvider = NodeProvider;
 

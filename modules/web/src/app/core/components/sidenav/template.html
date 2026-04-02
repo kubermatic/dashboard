@@ -37,6 +37,7 @@ limitations under the License.
                        [isSidenavCollapsed]="isSidenavCollapsed">
       @if (!isSidenavCollapsed) {
       <div class="sub-menu-item"
+           [matTooltip]="getTooltip(view.Clusters)"
            [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
         <a id="km-nav-item-clusters"
            fxLayoutAlign=" center"
@@ -46,6 +47,7 @@ limitations under the License.
       </div>
       @if (adminSettings.enableExternalClusterImport) {
       <div class="sub-menu-item"
+           [matTooltip]="getTooltip(view.ExternalClusters)"
            [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
         <a id="km-nav-item-external-clusters"
            fxLayoutAlign=" center"
@@ -56,6 +58,7 @@ limitations under the License.
       }
       @if (adminSettings.enableExternalClusterImport) {
       <div class="sub-menu-item"
+           [matTooltip]="getTooltip(view.KubeOneClusters)"
            [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
         <a id="km-nav-item-kubeone-clusters"
            fxLayoutAlign=" center"
@@ -68,14 +71,16 @@ limitations under the License.
 
       @if (isSidenavCollapsed) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Clusters)"
+         [routerLink]="isDisabledField(view.Clusters) ? getRouterLink(view.Clusters) : null"
+         [matTooltip]="getTooltip(view.Clusters)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
         <span>Clusters</span>
       </a>
       @if (adminSettings.enableExternalClusterImport) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.ExternalClusters)"
+         [routerLink]="isDisabledField(view.ExternalClusters) ? getRouterLink(view.ExternalClusters) : null"
+         [matTooltip]="getTooltip(view.ExternalClusters)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
         <span>External Clusters</span>
@@ -83,7 +88,8 @@ limitations under the License.
       }
       @if (adminSettings.enableExternalClusterImport) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.KubeOneClusters)"
+         [routerLink]="isDisabledField(view.KubeOneClusters) ? getRouterLink(view.KubeOneClusters) : null"
+         [matTooltip]="getTooltip(view.KubeOneClusters)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
         <span>KubeOne Clusters</span>
@@ -113,6 +119,7 @@ limitations under the License.
                        [isSidenavCollapsed]="isSidenavCollapsed">
       @if (!isSidenavCollapsed) {
       <div [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}"
+           [matTooltip]="getTooltip(view.Backups)"
            class="sub-menu-item">
         <a id="km-nav-item-backups"
            fxLayoutAlign=" center"
@@ -120,7 +127,7 @@ limitations under the License.
           <span>Automatic Backups</span>
         </a>
       </div>
-      <div [matTooltip]="getTooltip(view.Backups)"
+      <div [matTooltip]="getTooltip(view.Snapshots)"
            [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
@@ -128,7 +135,7 @@ limitations under the License.
           <span>Snapshots</span>
         </a>
       </div>
-      <div [matTooltip]="getTooltip(view.Backups)"
+      <div [matTooltip]="getTooltip(view.Restores)"
            [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
@@ -139,19 +146,22 @@ limitations under the License.
       }
       @if (isSidenavCollapsed) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Backups)"
+         [routerLink]="isDisabledField(view.Backups) ? getRouterLink(view.Backups) : null"
+         [matTooltip]="getTooltip(view.Backups)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}">
         <span>Automatic Backups</span>
       </a>
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Snapshots)"
+         [routerLink]="isDisabledField(view.Snapshots) ? getRouterLink(view.Snapshots) : null"
+         [matTooltip]="getTooltip(view.Snapshots)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}">
         <span>Snapshots</span>
       </a>
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Restores)"
+         [routerLink]="isDisabledField(view.Restores) ? getRouterLink(view.Restores) : null"
+         [matTooltip]="getTooltip(view.Restores)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}">
         <span>Restores</span>
@@ -166,6 +176,7 @@ limitations under the License.
                        [isSidenavCollapsed]="isSidenavCollapsed">
       @if (!isSidenavCollapsed) {
       <div [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}"
+           [matTooltip]="getTooltip(view.ClusterBackup)"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ClusterBackup)">
@@ -173,6 +184,7 @@ limitations under the License.
         </a>
       </div>
       <div [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}"
+           [matTooltip]="getTooltip(view.ClusterSchedule)"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ClusterSchedule)">
@@ -180,6 +192,7 @@ limitations under the License.
         </a>
       </div>
       <div [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
+           [matTooltip]="getTooltip(view.ClusterRestore)"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ClusterRestore)">
@@ -187,6 +200,7 @@ limitations under the License.
         </a>
       </div>
       <div [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}"
+           [matTooltip]="getTooltip(view.BackupStorageLocation)"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.BackupStorageLocation)">
@@ -196,25 +210,29 @@ limitations under the License.
       }
       @if (isSidenavCollapsed) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.ClusterBackup)"
+         [routerLink]="isDisabledField(view.ClusterBackup) ? getRouterLink(view.ClusterBackup) : null"
+         [matTooltip]="getTooltip(view.ClusterBackup)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}">
         <span>Backups</span>
       </a>
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.ClusterSchedule)"
+         [routerLink]="isDisabledField(view.ClusterSchedule) ? getRouterLink(view.ClusterSchedule) : null"
+         [matTooltip]="getTooltip(view.ClusterSchedule)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}">
         <span>Schedules</span>
       </a>
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.ClusterRestore)"
+         [routerLink]="isDisabledField(view.ClusterRestore) ? getRouterLink(view.ClusterRestore) : null"
+         [matTooltip]="getTooltip(view.ClusterRestore)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
         <span>Restores</span>
       </a>
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.BackupStorageLocation)"
+         [routerLink]="isDisabledField(view.BackupStorageLocation) ? getRouterLink(view.BackupStorageLocation) : null"
+         [matTooltip]="getTooltip(view.BackupStorageLocation)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}">
         <span>Storage Locations</span>
@@ -246,6 +264,7 @@ limitations under the License.
       @if (!isSidenavCollapsed) {
       @if (isUserSshKeyEnabled) {
       <div [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
+           [matTooltip]="getTooltip(view.SSHKeys)"
            class="sub-menu-item">
         <a id="km-nav-item-sshkeys"
            fxLayoutAlign=" center"
@@ -255,6 +274,7 @@ limitations under the License.
       </div>
       }
       <div [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}"
+           [matTooltip]="getTooltip(view.Members)"
            class="sub-menu-item">
         <a id="km-nav-item-members"
            fxLayoutAlign=" center"
@@ -264,6 +284,7 @@ limitations under the License.
       </div>
       @if (isEnterpriseEdition) {
       <div [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}"
+           [matTooltip]="getTooltip(view.Groups)"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.Groups)">
@@ -272,6 +293,7 @@ limitations under the License.
       </div>
       }
       <div [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}"
+           [matTooltip]="getTooltip(view.ServiceAccounts)"
            class="sub-menu-item">
         <a id="km-nav-item-service-accounts"
            fxLayoutAlign=" center"
@@ -283,28 +305,32 @@ limitations under the License.
       @if (isSidenavCollapsed) {
       @if (isUserSshKeyEnabled) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.SSHKeys)"
+         [routerLink]="isDisabledField(view.SSHKeys) ? getRouterLink(view.SSHKeys) : null"
+         [matTooltip]="getTooltip(view.SSHKeys)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}">
         <span>SSH Keys</span>
       </a>
       }
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Members)"
+         [routerLink]="isDisabledField(view.Members) ? getRouterLink(view.Members) : null"
+         [matTooltip]="getTooltip(view.Members)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}">
         <span>Members</span>
       </a>
       @if (isEnterpriseEdition) {
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.Groups)"
+         [routerLink]="isDisabledField(view.Groups) ? getRouterLink(view.Groups) : null"
+         [matTooltip]="getTooltip(view.Groups)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !isDisabledField(view.Groups)}">
         <span>Groups</span>
       </a>
       }
       <a fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(view.ServiceAccounts)"
+         [routerLink]="isDisabledField(view.ServiceAccounts) ? getRouterLink(view.ServiceAccounts) : null"
+         [matTooltip]="getTooltip(view.ServiceAccounts)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}">
         <span>Service Accounts</span></a>

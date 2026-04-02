@@ -57,6 +57,32 @@
         }
       }
     }
+
+    &.km-disabled {
+      cursor: not-allowed;
+      pointer-events: auto;
+
+      a {
+        pointer-events: none;
+      }
+    }
+  }
+
+  .sub-menu-item,
+  .collapsed-sub-menu-item {
+    &.km-disabled {
+      cursor: not-allowed;
+      pointer-events: auto;
+
+      a {
+        pointer-events: none;
+      }
+    }
+  }
+
+  a.collapsed-sub-menu-item.km-disabled {
+    cursor: not-allowed;
+    pointer-events: auto;
   }
 
   .mat-divider {

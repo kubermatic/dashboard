@@ -42,7 +42,7 @@ import {NotificationService} from '@app/core/services/notification';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {ParamsService} from '@app/core/services/params';
 import {HealthStatus, StatusIcon} from '@app/shared/utils/health-status';
-import {DEFAULT_POLICY_TOOLTIP, ENFORCED_POLICY_TOOLTIP} from '@app/shared/constants/common';
+import {DEFAULT_POLICY_TOOLTIP, DISABLED_TOOLTIP_MESSAGE, ENFORCED_POLICY_TOOLTIP} from '@app/shared/constants/common';
 
 enum PolicyTemplateStatus {
   Active = 'Active',
@@ -57,6 +57,7 @@ enum PolicyTemplateStatus {
 export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
   readonly DEFAULT_POLICY_TOOLTIP = DEFAULT_POLICY_TOOLTIP;
   readonly ENFORCED_POLICY_TOOLTIP = ENFORCED_POLICY_TOOLTIP;
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   projectID: string;
@@ -125,6 +126,16 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
 
   isToggleDisabled(template: PolicyTemplate): boolean {
     return !this.hasOwnerRole || (this.hasOwnerRole && template.spec.visibility === Scopes.Global && !!this.projectID);
+  }
+
+  getDisabledActionTooltip(template: PolicyTemplate): string {
+    if (!this.hasOwnerRole) {
+      return this.DISABLED_TOOLTIP_MESSAGE;
+    }
+    if (template.spec.visibility === Scopes.Global && !!this.projectID) {
+      return 'Global policy templates cannot be modified from a project';
+    }
+    return '';
   }
 
   onSearch(query: string): void {

@@ -33,6 +33,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, map, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {DISABLED_TOOLTIP_MESSAGE} from '@shared/constants/common';
 
 enum Column {
   Status = 'status',
@@ -53,6 +54,7 @@ export class KubeOneClusterListComponent implements OnInit, OnChanges, OnDestroy
   readonly Provider = ExternalClusterProvider;
   readonly Column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
   clusters: ExternalCluster[] = [];
   isInitialized = false;
   dataSource = new MatTableDataSource<ExternalCluster>();

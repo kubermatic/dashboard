@@ -50,7 +50,7 @@ import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-wid
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
-import {ANEXIA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {ANEXIA_DEPRECATED_MESSAGE, DISABLED_TOOLTIP_MESSAGE} from '@app/shared/constants/common';
 
 enum Column {
   Status = 'status',
@@ -78,6 +78,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _projectChange$ = new Subject<void>();
   private _enableEtcdBackups = false;
   readonly ANEXIA_DEPRECATED_MESSAGE = ANEXIA_DEPRECATED_MESSAGE;
+  readonly DISABLED_TOOLTIP_MESSAGE = DISABLED_TOOLTIP_MESSAGE;
   readonly Column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
@@ -238,6 +239,16 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   can(permission: Permission): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, permission);
+  }
+
+  getCreateFromTemplateTooltip(): string {
+    if (!this.can(Permission.Create)) {
+      return this.DISABLED_TOOLTIP_MESSAGE;
+    }
+    if (this.isInitialized && !this.clusterTemplates?.length) {
+      return 'No cluster templates available';
+    }
+    return '';
   }
 
   loadWizard(): void {

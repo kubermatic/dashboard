@@ -31,7 +31,9 @@ limitations under the License.
     </div>
     <button id="km-add-external-cluster-btn"
             mat-flat-button
+            kmDisabledTooltip
             [disabled]="!can(Permission.Create)"
+            [matTooltip]="!can(Permission.Create) ? DISABLED_TOOLTIP_MESSAGE : ''"
             (click)="addExternalCluster()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
@@ -40,7 +42,9 @@ limitations under the License.
 
     <button id="km-create-external-cluster-btn"
             mat-flat-button
+            kmDisabledTooltip
             [disabled]="!can(Permission.Create)"
+            [matTooltip]="!can(Permission.Create) ? DISABLED_TOOLTIP_MESSAGE : ''"
             (click)="openWizard()">
       <i class="km-icon-mask km-icon-add"
          matButtonIcon></i>
@@ -138,7 +142,8 @@ limitations under the License.
             }
             @case (false) {
             <button mat-icon-button
-                    matTooltip="Disconnect Cluster"
+                    kmDisabledTooltip
+                    [matTooltip]="!can(Permission.Delete) ? DISABLED_TOOLTIP_MESSAGE : 'Disconnect Cluster'"
                     (click)="disconnectClusterDialog(element, $event)"
                     [disabled]="!can(Permission.Delete)">
               <i class="km-icon-mask km-icon-disconnect"></i>
@@ -146,7 +151,8 @@ limitations under the License.
             @if ((!element?.labels || element?.labels['is-imported'] !== 'true') && !isClusterDeleted(element)) {
             <button mat-icon-button
                     [attr.id]="'km-delete-cluster-' + element.name"
-                    matTooltip="Delete Cluster"
+                    kmDisabledTooltip
+                    [matTooltip]="!can(Permission.Delete) ? DISABLED_TOOLTIP_MESSAGE : 'Delete Cluster'"
                     (click)="deleteClusterDialog(element, $event)"
                     [disabled]="!can(Permission.Delete)">
               <i class="km-icon-mask km-icon-delete"></i>
