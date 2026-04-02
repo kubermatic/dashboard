@@ -158,11 +158,17 @@ func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteR
 }
 
 // Exchange converts an authorization code into a token.
-func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (authtypes.OIDCToken, error) {
+// An optional codeVerifier can be passed for PKCE support.
+func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (authtypes.OIDCToken, error) {
 	clientCtx := oidc.ClientContext(ctx, o.httpClient)
 	oauth2Config := o.oauth2Config(overwriteRedirectURI)
 
-	tokens, err := oauth2Config.Exchange(clientCtx, code)
+	var opts []oauth2.AuthCodeOption
+	if len(codeVerifier) > 0 && codeVerifier[0] != "" {
+		opts = append(opts, oauth2.SetAuthURLParam("code_verifier", codeVerifier[0]))
+	}
+
+	tokens, err := oauth2Config.Exchange(clientCtx, code, opts...)
 	if err != nil {
 		return authtypes.OIDCToken{}, err
 	}
