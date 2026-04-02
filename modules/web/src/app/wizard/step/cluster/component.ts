@@ -1371,7 +1371,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (datacenter.spec.kubelb && datacenter.spec.kubelb?.enabled) {
       return true;
     }
-    // If KubeLB is explicitly configured at the datacenter level with enabled: false, respect that
+    // If KubeLB is configured at the datacenter level but not explicitly enabled, don't fall through to seed settings
     if (
       datacenter.spec.kubelb &&
       (datacenter.spec.kubelb.enabled === undefined || datacenter.spec.kubelb.enabled === false)
