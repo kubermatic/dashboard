@@ -50,7 +50,8 @@ type OIDCIssuer interface {
 	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string
 
 	// Exchange converts an authorization code into a token.
-	Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error)
+	// An optional codeVerifier can be passed for PKCE support.
+	Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (OIDCToken, error)
 
 	// RefreshAccessToken uses a refresh token to obtain a new OIDC token.
 	RefreshAccessToken(ctx context.Context, refreshToken string) (OIDCToken, error)
@@ -138,6 +139,8 @@ type OIDCConfiguration struct {
 type AuthState struct {
 	// Nonce is a random value used to prevent replay attacks.
 	Nonce string
+	// CodeVerifier is the PKCE code verifier used to prove the authorization request origin.
+	CodeVerifier string
 	// CreatedAt records when the state was created, used for TTL-based cleanup.
 	CreatedAt time.Time
 }
