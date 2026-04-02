@@ -1,4 +1,6 @@
 {
   "/api/v1/*": "/$1",
+  "/api/v2/auth/status": "/authstatus",
+  "/api/v2/auth/refresh": "/authrefresh",
   "/api/v2/*": "/$1"
 }
