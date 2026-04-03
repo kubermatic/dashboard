@@ -40,13 +40,18 @@ trap cleanup EXIT SIGINT SIGTERM
 
 # Kyverno causes conflicts with Kubernetes Admission APIs and thus resulting in inconsistent swagger spec generation on each run. Ignoring Kyverno APIs is not possible
 # as it would break the generation of the Kyverno API client. So instead we are excluding the conflicting APIs/models "k8s.io/api/admissionregistration".
+
+# grpc-gateway's protoc-gen-openapiv2 and sigstore/rekor-tiles contain "extendee" in protobuf
+# annotations, which the swagger classifier misinterprets as an unknown swagger annotation "extendee".
 run_swagger generate spec \
   --tags=ee \
   --scan-models \
   -o ${TMP_SWAGGER} \
   -x github.com/sigstore/rekor/pkg/generated/models \
   -x k8s.io/api/admissionregistration/* \
-  -x k8c.io/kubermatic/*
+  -x k8c.io/kubermatic/* \
+  -x github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/* \
+  -x github.com/sigstore/rekor-tiles/*
 
 rm -r ../../pkg/test/e2e/utils/apiclient/
 mkdir -p ../../pkg/test/e2e/utils/apiclient/
