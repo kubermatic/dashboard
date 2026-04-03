@@ -1,8 +1,4 @@
 {
-  "authstatus": {
-    "expires_at": 9999999999
-  },
-  "authrefresh": {},
   "dc": [
     {
       "metadata": {
@@ -181,6 +177,7 @@
         "enforcePodSecurityPolicy": false
       }
     },
+
     {
       "metadata": {
         "name": "test-openstack-dc"
