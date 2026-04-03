@@ -89,6 +89,33 @@ export class ClusterSummaryComponent implements OnInit {
     return this.seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
+  get kubeLBAssignPublicIPWarning(): boolean {
+    // Check all sources: cluster spec, datacenter enforced/enabled, and seed-level setting
+    // Respect explicit datacenter disable (enabled === false)
+    const dcKubeLB = this.datacenter?.spec?.kubelb;
+    let isKubeLBActive = !!this.cluster?.spec?.kubelb?.enabled;
+    if (!isKubeLBActive) {
+      if (dcKubeLB?.enabled === false) {
+        isKubeLBActive = false;
+      } else if (dcKubeLB?.enforced || dcKubeLB?.enabled) {
+        isKubeLBActive = true;
+      } else {
+        isKubeLBActive = !!this.seedSettings?.kubelb?.enableForAllDatacenters;
+      }
+    }
+    if (!isKubeLBActive) {
+      return false;
+    }
+    const nodeCloud = this.machineDeployment?.spec?.template?.cloud;
+    if (this.provider === NodeProvider.AZURE) {
+      return !nodeCloud?.azure?.assignPublicIP;
+    }
+    if (this.provider === NodeProvider.AWS) {
+      return !nodeCloud?.aws?.assignPublicIP;
+    }
+    return false;
+  }
+
   get hasNetworkConfiguration(): boolean {
     return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
   }
