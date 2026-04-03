@@ -50,7 +50,8 @@ type OIDCIssuer interface {
 	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string
 
 	// Exchange converts an authorization code into a token.
-	Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error)
+	// An optional codeVerifier can be passed for PKCE support.
+	Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (OIDCToken, error)
 
 	// RefreshAccessToken uses a refresh token to obtain a new OIDC token.
 	RefreshAccessToken(ctx context.Context, refreshToken string) (OIDCToken, error)
@@ -132,4 +133,24 @@ type OIDCConfiguration struct {
 	OfflineAccessAsScope bool
 	// SkipTLSVerify skip TLS verification for the token issuer
 	SkipTLSVerify bool
+}
+
+// AuthState holds the server-side state for an in-progress OAuth authorization code flow.
+type AuthState struct {
+	// Nonce is a random value used to prevent replay attacks.
+	Nonce string
+	// CodeVerifier is the PKCE code verifier used to prove the authorization request origin.
+	CodeVerifier string
+	// CreatedAt records when the state was created, used for TTL-based cleanup.
+	CreatedAt time.Time
+}
+
+// StateStore manages server-side OAuth state entries between login redirect and callback.
+type StateStore interface {
+	// Store saves an AuthState keyed by the given state token.
+	Store(state string, authState AuthState)
+	// Get retrieves an AuthState by its state token. Returns false if not found.
+	Get(state string) (AuthState, bool)
+	// Delete removes an AuthState entry (one-time use after callback).
+	Delete(state string)
 }

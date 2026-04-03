@@ -101,6 +101,8 @@ type Routing struct {
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
+	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
+	stateStore                                     authtypes.StateStore
 	versions                                       kubermatic.Versions
 	caBundle                                       *x509.CertPool
 	features                                       features.FeatureGate
@@ -170,6 +172,8 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		applicationDefinitionProvider:                  routingParams.ApplicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: routingParams.PrivilegedOperatingSystemProfileProviderGetter,
 		oidcIssuerVerifierProviderGetter:               routingParams.OIDCIssuerVerifierProviderGetter,
+		oidcIssuerVerifier:                             routingParams.OIDCIssuerVerifier,
+		stateStore:                                     routingParams.StateStore,
 		versions:                                       routingParams.Versions,
 		caBundle:                                       routingParams.CABundle,
 		features:                                       routingParams.Features,
