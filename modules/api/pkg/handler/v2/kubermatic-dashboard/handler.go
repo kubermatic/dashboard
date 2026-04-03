@@ -339,8 +339,10 @@ func (a *authHandler) statusHandler() http.Handler {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(authStatusResponse{
+		if err := json.NewEncoder(w).Encode(authStatusResponse{
 			ExpiresAt: claims.Expiry.Unix(),
-		})
+		}); err != nil {
+			http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
+		}
 	})
 }

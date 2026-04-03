@@ -71,10 +71,12 @@ export class Auth {
   }
 
   authenticated(): boolean {
-    if (this._expiresAt === 0) {
-      return false;
+    if (this._expiresAt > 0 && Date.now() < this._expiresAt * SECONDS_TO_MS) {
+      return true;
     }
-    return Date.now() < this._expiresAt * SECONDS_TO_MS;
+    // Fallback: check if token cookie is readable (non-HttpOnly environments like e2e tests).
+    // In production the cookie is HttpOnly so this returns false, relying on the status endpoint.
+    return !!this._cookieService.get('token');
   }
 
   get expiresAt(): number {
