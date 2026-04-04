@@ -116,7 +116,11 @@ func (a *authHandler) loginHandler() http.Handler {
 }
 
 const (
-	idTokenCookieName        = "token"
+	idTokenCookieName = "token"
+	// Max characters per cookie (staying under the 4KB browser limit)
+	maxCookieSize = 3800
+	// The maximum number of "slots" to check or clear (safety margin)
+	maxNumOfTokenCookies     = 6
 	refreshTokenCookieName   = "refresh_token"
 	refreshTokenCookieMaxAge = 2592000 // 30 days
 )
@@ -185,27 +189,22 @@ func (a *authHandler) callbackHandler() http.Handler {
 			http.Error(w, "received an already expired id_token", http.StatusInternalServerError)
 			return
 		}
-		http.SetCookie(w, &http.Cookie{
-			Name:     idTokenCookieName,
-			Value:    oidcTokens.IDToken,
-			MaxAge:   tokenMaxAge,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-			Path:     "/",
-		})
+
+		tokenValue := oidcTokens.IDToken
+		if len(tokenValue) <= maxCookieSize {
+			// Standard single cookie
+			setNamedCookie(w, idTokenCookieName, tokenValue, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+		} else {
+			// Chunked cookies: token-0, token-1, etc.
+			chunks := chunkString(tokenValue, maxCookieSize)
+			for i, chunk := range chunks {
+				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+			}
+		}
 
 		// 7. Set refresh_token cookie (if present).
 		if oidcTokens.RefreshToken != "" {
-			http.SetCookie(w, &http.Cookie{
-				Name:     refreshTokenCookieName,
-				Value:    oidcTokens.RefreshToken,
-				MaxAge:   refreshTokenCookieMaxAge,
-				HttpOnly: true,
-				Secure:   oidcConfig.CookieSecureMode,
-				SameSite: http.SameSiteLaxMode,
-				Path:     "/api/v2/auth",
-			})
+			setNamedCookie(w, refreshTokenCookieName, oidcTokens.RefreshToken, "/api/v2/auth", refreshTokenCookieMaxAge, oidcConfig.CookieSecureMode)
 		}
 
 		// 8. Clear nonce cookie.
@@ -230,7 +229,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 1. Read refresh_token from cookie.
 		refreshCookie, err := r.Cookie(refreshTokenCookieName)
 		if err != nil {
-			a.clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, oidcConfig.CookieSecureMode)
 			http.Error(w, "missing refresh_token cookie", http.StatusUnauthorized)
 			return
 		}
@@ -238,7 +237,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 2. Refresh tokens.
 		oidcTokens, err := a.oidcIssuerVerifier.RefreshAccessToken(r.Context(), refreshCookie.Value)
 		if err != nil {
-			a.clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, oidcConfig.CookieSecureMode)
 			http.Error(w, "token refresh failed", http.StatusUnauthorized)
 			return
 		}
@@ -246,13 +245,13 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 3. Verify new id_token.
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), oidcTokens.IDToken)
 		if err != nil {
-			a.clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, oidcConfig.CookieSecureMode)
 			http.Error(w, "failed to verify refreshed id_token", http.StatusUnauthorized)
 			return
 		}
 
 		if claims.Email == "" {
-			a.clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, oidcConfig.CookieSecureMode)
 			http.Error(w, "email claim is missing from refreshed id_token", http.StatusUnauthorized)
 			return
 		}
@@ -260,63 +259,72 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 4. Set new id_token cookie with Max-Age matching the token's expiry.
 		tokenMaxAge := int(time.Until(claims.Expiry.Time).Seconds())
 		if tokenMaxAge <= 0 {
-			a.clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, oidcConfig.CookieSecureMode)
 			http.Error(w, "received an already expired id_token from refresh", http.StatusUnauthorized)
 			return
 		}
-		http.SetCookie(w, &http.Cookie{
-			Name:     idTokenCookieName,
-			Value:    oidcTokens.IDToken,
-			MaxAge:   tokenMaxAge,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-			Path:     "/",
-		})
+
+		tokenValue := oidcTokens.IDToken
+		if len(tokenValue) <= maxCookieSize {
+			// Standard single cookie
+			setNamedCookie(w, idTokenCookieName, tokenValue, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+		} else {
+			// Chunked cookies: token-0, token-1, etc.
+			chunks := chunkString(tokenValue, maxCookieSize)
+			for i, chunk := range chunks {
+				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+			}
+		}
 
 		// 5. Set new refresh_token cookie (if rotated).
 		if oidcTokens.RefreshToken != "" {
-			http.SetCookie(w, &http.Cookie{
-				Name:     refreshTokenCookieName,
-				Value:    oidcTokens.RefreshToken,
-				MaxAge:   refreshTokenCookieMaxAge,
-				HttpOnly: true,
-				Secure:   oidcConfig.CookieSecureMode,
-				SameSite: http.SameSiteLaxMode,
-				Path:     "/api/v2/auth",
-			})
+			setNamedCookie(w, refreshTokenCookieName, oidcTokens.RefreshToken, "/api/v2/auth", refreshTokenCookieMaxAge, oidcConfig.CookieSecureMode)
 		}
 
 		w.WriteHeader(http.StatusOK)
 	})
 }
 
-// clearAuthCookies removes both auth cookies.
-func (a *authHandler) clearAuthCookies(w http.ResponseWriter, secureMode bool) {
+func setNamedCookie(w http.ResponseWriter, name, value, path string, maxAge int, secureMode bool) {
+
 	http.SetCookie(w, &http.Cookie{
-		Name:     idTokenCookieName,
-		Value:    "",
-		MaxAge:   -1,
+		Name:     name,
+		Value:    value,
+		MaxAge:   maxAge,
 		HttpOnly: true,
 		Secure:   secureMode,
 		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
-	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     refreshTokenCookieName,
-		Value:    "",
-		MaxAge:   -1,
-		HttpOnly: true,
-		Secure:   secureMode,
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/api/v2/auth",
+		Path:     path,
 	})
 }
 
 func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		a.clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
+		clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.WriteHeader(http.StatusOK)
+	})
+}
+
+func clearAuthCookies(w http.ResponseWriter, secureMode bool) {
+	clearNamedCookie(w, idTokenCookieName, "/", secureMode)
+	clearNamedCookie(w, refreshTokenCookieName, "/api/v2/auth", secureMode)
+	// Clear potential chunks (token-0, token-1, etc.)
+	for i := range maxNumOfTokenCookies {
+		chunkName := fmt.Sprintf("%s-%d", idTokenCookieName, i)
+		clearNamedCookie(w, chunkName, "/", secureMode)
+	}
+
+}
+
+func clearNamedCookie(w http.ResponseWriter, name, path string, secureMode bool) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     name,
+		Value:    "",
+		MaxAge:   -1,
+		HttpOnly: true,
+		Secure:   secureMode,
+		SameSite: http.SameSiteLaxMode,
+		Path:     path,
 	})
 }
 
@@ -345,4 +353,16 @@ func (a *authHandler) statusHandler() http.Handler {
 			http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
 		}
 	})
+}
+
+func chunkString(token string, chunkSize int) []string {
+	var chunks []string
+	for i := 0; i < len(token); i += chunkSize {
+		end := i + chunkSize
+		if end > len(token) {
+			end = len(token)
+		}
+		chunks = append(chunks, token[i:end])
+	}
+	return chunks
 }
