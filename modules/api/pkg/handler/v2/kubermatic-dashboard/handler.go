@@ -24,9 +24,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
 	apimachineryrand "k8s.io/apimachinery/pkg/util/rand"
 )
@@ -198,7 +200,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 			// Chunked cookies: token-0, token-1, etc.
 			chunks := chunkString(tokenValue, maxCookieSize)
 			for i, chunk := range chunks {
-				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i+1), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
 			}
 		}
 
@@ -217,8 +219,25 @@ func (a *authHandler) callbackHandler() http.Handler {
 			SameSite: http.SameSiteLaxMode,
 		})
 
-		// 9. Redirect to frontend root.
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		// 9. Redirect to frontend landing page.
+		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
+		if err != nil {
+			fmt.Println("faild to get user info", err)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+
+		landingPageURI := "/"
+
+		if userInfo.Spec.Settings.SelectedProjectID != "" {
+			projectID := userInfo.Spec.Settings.SelectedProjectID
+			if userInfo.Spec.Settings.UseClustersView {
+				landingPageURI = fmt.Sprintf("/projects/%s/clusters", projectID)
+			} else {
+				landingPageURI = fmt.Sprintf("/projects/%s/overview", projectID)
+			}
+		}
+		http.Redirect(w, r, landingPageURI, http.StatusSeeOther)
 	})
 }
 
@@ -269,10 +288,10 @@ func (a *authHandler) refreshHandler() http.Handler {
 			// Standard single cookie
 			setNamedCookie(w, idTokenCookieName, tokenValue, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
 		} else {
-			// Chunked cookies: token-0, token-1, etc.
+			// Chunked cookies: token-1, token-2, etc.
 			chunks := chunkString(tokenValue, maxCookieSize)
 			for i, chunk := range chunks {
-				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
+				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i+1), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
 			}
 		}
 
@@ -300,8 +319,47 @@ func setNamedCookie(w http.ResponseWriter, name, value, path string, maxAge int,
 
 func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tokenCookie, err := r.Cookie(idTokenCookieName)
+		if err != nil {
+			http.Error(w, "missing token cookie", http.StatusBadRequest)
+			return
+		}
+
+		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenCookie.Value)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		if claims.Email == "" {
+			http.Error(w, "email claim is missing from id_token", http.StatusInternalServerError)
+			return
+		}
+
+		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("faild to get user info: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// check for oidcLogoutURL
+		kubermaticConfig, err := a.kubermaticConfigProvider(r.Context())
+		redirectPath := "/"
+
+		if err != nil {
+			fmt.Println("faild to get UI configurations", err)
+		} else {
+			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenCookie.Value)
+		}
+
+		a.userProvider.InvalidateToken(r.Context(), userInfo, tokenCookie.Value, claims.Expiry)
 		clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{
+			"redirect": redirectPath,
+		})
+
 	})
 }
 
@@ -336,7 +394,13 @@ func (a *authHandler) statusHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenCookie, err := r.Cookie(idTokenCookieName)
 		if err != nil {
-			http.Error(w, "not authenticated", http.StatusUnauthorized)
+			fmt.Println("token is requiered to get the status")
+			w.Header().Set("Content-Type", "application/json")
+			if err := json.NewEncoder(w).Encode(authStatusResponse{
+				ExpiresAt: 0,
+			}); err != nil {
+				http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
+			}
 			return
 		}
 
@@ -365,4 +429,47 @@ func chunkString(token string, chunkSize int) []string {
 		chunks = append(chunks, token[i:end])
 	}
 	return chunks
+}
+
+func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfiguration, token string) string {
+	redirectPath := "/"
+	var uiConfig map[string]interface{}
+	if kubermaticConfig.Spec.UI.Config != "" {
+		err := json.Unmarshal([]byte(kubermaticConfig.Spec.UI.Config), &uiConfig)
+		if err != nil {
+			fmt.Println("faild to unmarshal UI configurations", err)
+			return redirectPath
+		}
+	}
+	if value, ok := uiConfig["oidc_logout_url"]; ok {
+		if oidcLogoutURLStr, ok := value.(string); ok && oidcLogoutURLStr != "" {
+			oidcLogoutURL, err := url.Parse(oidcLogoutURLStr)
+			if err != nil {
+				fmt.Println("faild to create the OIDC Logout URL from UI configurations", err)
+				return redirectPath
+			}
+			provider := ""
+			if oidcProvider, ok := uiConfig["oidc_provider"].(string); ok {
+				provider = strings.ToLower(oidcProvider)
+			} else {
+				fmt.Println("faild to get the OIDC Logout Provider from UI configurations", err)
+				return redirectPath
+			}
+			urlQuery := oidcLogoutURL.Query()
+
+			if provider == "keycloak" {
+				urlQuery.Set("post_logout_redirect_uri", redirectPath)
+				urlQuery.Set("id_token_hint", token)
+			} else {
+				if urlQuery.Has("redirectUri") {
+					urlQuery.Set("redirectUri", redirectPath)
+				} else {
+					urlQuery.Set("redirect_uri", redirectPath)
+				}
+			}
+			oidcLogoutURL.RawQuery = urlQuery.Encode()
+			return oidcLogoutURL.String()
+		}
+	}
+	return redirectPath
 }

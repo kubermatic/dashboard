@@ -14,12 +14,11 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
-import {Observable, of, Subscription, timer} from 'rxjs';
-import {map, take, catchError, switchMap} from 'rxjs/operators';
-import {OIDCProviders} from '@app/shared/model/Config';
+import {of, Subscription, timer} from 'rxjs';
+import { Observable } from 'rxjs-compat';
+import {catchError, switchMap} from 'rxjs/operators';
 
 interface AuthStatusResponse {
   expires_at: number;
@@ -30,9 +29,12 @@ export const AUTOREDIRECT_COOKIE = 'autoredirect';
 const SECONDS_TO_MS = 1000;
 const REFRESH_BUFFER_SECONDS = 60;
 
+class logoutRes {
+  redirect: string
+}
+
 @Injectable()
 export class Auth {
-  private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
   private readonly _statusUrl = `${environment.newRestRoot}/auth/status`;
   private readonly _refreshUrl = `${environment.newRestRoot}/auth/refresh`;
   private readonly _logoutUrl = `${environment.newRestRoot}/auth/logout`;
@@ -43,7 +45,6 @@ export class Auth {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _cookieService: CookieService,
-    private readonly _appConfigService: AppConfigService
   ) {}
 
   init(): Promise<void> {
@@ -79,46 +80,9 @@ export class Auth {
     return !!this._cookieService.get('token');
   }
 
-  get expiresAt(): number {
-    return this._expiresAt;
-  }
-
-  login(): void {
-    this._cookieService.set(AUTOREDIRECT_COOKIE, 'true', 1, '/', null, false, 'Strict');
-  }
-
-  logout(): Observable<boolean> {
+  logout(): Observable<logoutRes> {
     this._cancelRefresh();
-    return this._httpClient.post(this._logoutUrl, null).pipe(
-      map(() => {
-        this._expiresAt = 0;
-        return true;
-      }),
-      take(1)
-    );
-  }
-
-  oidcProviderLogout(token: string): void {
-    const config = this._appConfigService.getConfig();
-    if (config.oidc_logout_url) {
-      const logoutUrl = new URL(config.oidc_logout_url);
-      switch (config.oidc_provider?.toLowerCase()) {
-        case OIDCProviders.Keycloak:
-          logoutUrl.searchParams.set('post_logout_redirect_uri', this._redirectUri);
-          if (token) {
-            logoutUrl.searchParams.set('id_token_hint', token);
-          }
-          break;
-        default:
-          if (logoutUrl.searchParams.has('redirectUri')) {
-            logoutUrl.searchParams.set('redirectUri', this._redirectUri);
-          } else {
-            logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
-          }
-          break;
-      }
-      window.location.href = logoutUrl.toString();
-    }
+    return this._httpClient.post<logoutRes>(this._logoutUrl, null).pipe(catchError(() => of(null)))
   }
 
   private _scheduleRefresh(): void {
@@ -140,7 +104,7 @@ export class Auth {
         })
       )
       .subscribe(response => {
-        if (response !== null) {
+        if (response) {
           this.checkStatus();
         }
       });

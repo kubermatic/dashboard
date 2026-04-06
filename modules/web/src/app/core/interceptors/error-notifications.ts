@@ -49,7 +49,6 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     'providers/gke/validatecredentials',
     'presets?name=',
     `applicationdefinitions/${CLUSTER_AUTOSCALING_APP_DEF_NAME}`,
-    'api/v2/auth/status',
   ];
 
   private readonly _errorMap = new Map<string, string>([

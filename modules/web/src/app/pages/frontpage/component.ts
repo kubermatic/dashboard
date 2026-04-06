@@ -52,8 +52,4 @@ export class FrontpageComponent implements OnInit {
       this._router.navigate(['/projects']);
     }
   }
-
-  login(): void {
-    this._auth.login();
-  }
 }
