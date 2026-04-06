@@ -20,6 +20,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {UserService} from '../user';
+import {Auth} from './service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -37,10 +38,13 @@ export class AdminGuard implements CanActivate {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  // TODO: Add proper auth check once /api/v2/auth/status endpoint is available.
-  // For now, always allow — the AuthInterceptor handles 401s and redirects to login.
+  constructor(
+    private readonly _authService: Auth,
+  ) {}
+  // TODO: remove this method — the Auth Interceptor handles 401s and redirects to login.
+  // For now, check expiresAt.
   canActivate(_route: ActivatedRouteSnapshot, _snap: RouterStateSnapshot): boolean {
-    return true;
+    return this._authService.authenticated();
   }
 }
 

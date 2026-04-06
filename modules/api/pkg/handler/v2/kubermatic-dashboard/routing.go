@@ -21,12 +21,15 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 type authHandler struct {
-	stateStore         authtypes.StateStore
-	oidcIssuerVerifier authtypes.OIDCIssuerVerifier
+	stateStore               authtypes.StateStore
+	oidcIssuerVerifier       authtypes.OIDCIssuerVerifier
+	userProvider             provider.UserProvider
+	kubermaticConfigProvider provider.KubermaticConfigurationGetter
 }
 
 func (a *authHandler) Install(router *mux.Router) {
@@ -52,9 +55,11 @@ func (a *authHandler) Install(router *mux.Router) {
 }
 
 // NewAuthHandler creates a new Handler for KKP dashboard authentication.
-func NewAuthHandler(stateStore authtypes.StateStore, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) *authHandler {
+func NewAuthHandler(stateStore authtypes.StateStore, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, userProvider provider.UserProvider, kubermaticConfigProvider provider.KubermaticConfigurationGetter) *authHandler {
 	return &authHandler{
-		stateStore:         stateStore,
-		oidcIssuerVerifier: oidcIssuerVerifier,
+		stateStore:               stateStore,
+		oidcIssuerVerifier:       oidcIssuerVerifier,
+		userProvider:             userProvider,
+		kubermaticConfigProvider: kubermaticConfigProvider,
 	}
 }
