@@ -631,7 +631,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-
   private _isPaginatorVisible(): boolean {
     return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }

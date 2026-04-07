@@ -16,8 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
-import {of, Subscription, timer} from 'rxjs';
-import { Observable } from 'rxjs-compat';
+import {Observable, of, Subscription, timer} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
 
 interface AuthStatusResponse {
@@ -29,8 +28,8 @@ export const AUTOREDIRECT_COOKIE = 'autoredirect';
 const SECONDS_TO_MS = 1000;
 const REFRESH_BUFFER_SECONDS = 60;
 
-class logoutRes {
-  redirect: string
+interface LogoutResponse {
+  redirect: string;
 }
 
 @Injectable()
@@ -44,7 +43,7 @@ export class Auth {
 
   constructor(
     private readonly _httpClient: HttpClient,
-    private readonly _cookieService: CookieService,
+    private readonly _cookieService: CookieService
   ) {}
 
   init(): Promise<void> {
@@ -80,9 +79,9 @@ export class Auth {
     return !!this._cookieService.get('token');
   }
 
-  logout(): Observable<logoutRes> {
+  logout(): Observable<LogoutResponse> {
     this._cancelRefresh();
-    return this._httpClient.post<logoutRes>(this._logoutUrl, null).pipe(catchError(() => of(null)))
+    return this._httpClient.post<LogoutResponse>(this._logoutUrl, null).pipe(catchError(() => of(null)));
   }
 
   private _scheduleRefresh(): void {
