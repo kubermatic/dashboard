@@ -17,8 +17,10 @@ limitations under the License.
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"testing"
 
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
@@ -28,6 +30,9 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func Test_filterInstancetypes(t *testing.T) {
@@ -188,5 +193,271 @@ func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.Virtu
 		Memory: kvinstancetypev1alpha1.MemoryInstancetype{
 			Guest: resource.MustParse(memory),
 		},
+	}
+}
+
+// newFakeClient builds a controller-runtime fake client with the KubeVirt
+// instancetype scheme registered and the given objects pre-created.
+func newFakeClient(objs ...ctrlruntimeclient.Object) ctrlruntimeclient.Client {
+	scheme := runtime.NewScheme()
+	_ = kvinstancetypev1alpha1.AddToScheme(scheme)
+	return fake.NewClientBuilder().
+		WithScheme(scheme).
+		WithObjects(objs...).
+		Build()
+}
+
+func Test_kubeVirtInstancetypes(t *testing.T) {
+	ctx := context.Background()
+
+	// Standard instancetype names that ship via embedded manifests.
+	standardNames := []string{"standard-2", "standard-4", "standard-8"}
+
+	tests := []struct {
+		name      string
+		dc        *kubermaticv1.Datacenter
+		objects   []ctrlruntimeclient.Object // pre-existing objects in the fake cluster
+		wantNames map[apiv2.VirtualMachineInstancetypeCategory][]string
+		wantErr   bool
+	}{
+		{
+			name: "non-namespaced mode: only cluster-wide custom + kubermatic standards",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				&kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "cluster-custom-1"},
+					Spec:       getInstancetypeSpec(4, "8Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				apiv2.InstancetypeCustom:     {"cluster-custom-1"},
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
+		{
+			name: "non-namespaced mode: does NOT list namespaced instancetypes (cross-tenant leak fix)",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						// NamespacedMode is nil → non-namespaced mode
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				// Namespaced instancetype in some tenant namespace — must NOT appear.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "tenant-it", Namespace: "tenant-ns-1"},
+					Spec:       getInstancetypeSpec(2, "4Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
+		{
+			name: "namespaced mode: user-created instancetype categorized as custom",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						NamespacedMode: &kubermaticv1.NamespacedMode{
+							Enabled:   true,
+							Namespace: "infra-ns",
+						},
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "user-created", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(4, "16Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				apiv2.InstancetypeCustom:     {"user-created"},
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
+		{
+			name: "namespaced mode: lingering standard instancetypes are filtered out from custom list",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						NamespacedMode: &kubermaticv1.NamespacedMode{
+							Enabled:   true,
+							Namespace: "infra-ns",
+						},
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				// Previously reconciled standard instancetypes still live in the namespace.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(2, "8Gi"),
+				},
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(4, "16Gi"),
+				},
+				// Plus a real user-created one.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "my-flavor", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(8, "32Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				// standard-2 and standard-4 must appear under Kubermatic (from manifests),
+				// NOT duplicated under Custom from the namespace listing.
+				apiv2.InstancetypeCustom:     {"my-flavor"},
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
+		{
+			name: "defaults disabled: standard instancetypes not returned, lingering ones in namespace filtered",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						DisableDefaultInstanceTypes: true,
+						NamespacedMode: &kubermaticv1.NamespacedMode{
+							Enabled:   true,
+							Namespace: "infra-ns",
+						},
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				// These linger from before defaults were disabled.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(2, "8Gi"),
+				},
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(4, "16Gi"),
+				},
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-8", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(8, "32Gi"),
+				},
+				// A real user-created instancetype.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "my-custom", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(16, "64Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				// No Kubermatic standards should appear at all (disabled).
+				// Lingering standard-2/4/8 must NOT leak through as Custom.
+				apiv2.InstancetypeCustom: {"my-custom"},
+			},
+		},
+		{
+			name: "defaults disabled, namespaced mode, only lingering standards: empty result",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						DisableDefaultInstanceTypes: true,
+						NamespacedMode: &kubermaticv1.NamespacedMode{
+							Enabled:   true,
+							Namespace: "infra-ns",
+						},
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				// Only previously-reconciled standard instancetypes linger in the
+				// namespace — no user-created custom ones exist.  With defaults
+				// disabled these must all be filtered out, yielding an empty result.
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(2, "8Gi"),
+				},
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(4, "16Gi"),
+				},
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-8", Namespace: "infra-ns"},
+					Spec:       getInstancetypeSpec(8, "32Gi"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{},
+		},
+		{
+			name: "defaults disabled, no namespaced mode: empty result",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						DisableDefaultInstanceTypes: true,
+					},
+				},
+			},
+			objects:   []ctrlruntimeclient.Object{},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := newFakeClient(tt.objects...)
+			got, err := kubeVirtInstancetypes(ctx, client, tt.dc)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("kubeVirtInstancetypes() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			gotNames := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
+			for _, item := range got.items {
+				cat := item.Category()
+				gotNames[cat] = append(gotNames[cat], item.GetObjectMeta().GetName())
+			}
+
+			// Sort for deterministic comparison.
+			for cat := range gotNames {
+				sort.Strings(gotNames[cat])
+			}
+			for cat := range tt.wantNames {
+				sort.Strings(tt.wantNames[cat])
+			}
+
+			// Remove empty slices for clean comparison.
+			for cat, names := range gotNames {
+				if len(names) == 0 {
+					delete(gotNames, cat)
+				}
+			}
+			for cat, names := range tt.wantNames {
+				if len(names) == 0 {
+					delete(tt.wantNames, cat)
+				}
+			}
+
+			if !reflect.DeepEqual(gotNames, tt.wantNames) {
+				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", gotNames, tt.wantNames)
+			}
+
+			// Additionally verify wrapper types / categories.
+			for _, item := range got.items {
+				switch item.(type) {
+				case *customInstancetypeWrapper:
+					if item.Category() != apiv2.InstancetypeCustom {
+						t.Errorf("customInstancetypeWrapper should have category Custom, got %v", item.Category())
+					}
+				case *standardInstancetypeWrapper:
+					if item.Category() != apiv2.InstancetypeKubermatic {
+						t.Errorf("standardInstancetypeWrapper should have category Kubermatic, got %v", item.Category())
+					}
+				case *customNamespacedInstancetypeWrapper:
+					if item.Category() != apiv2.InstancetypeCustom {
+						t.Errorf("customNamespacedInstancetypeWrapper should have category Custom, got %v", item.Category())
+					}
+				default:
+					t.Errorf("unexpected wrapper type %T for %s", item, item.GetObjectMeta().GetName())
+				}
+			}
+		})
 	}
 }
