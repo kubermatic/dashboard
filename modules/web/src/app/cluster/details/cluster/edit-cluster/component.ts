@@ -534,10 +534,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
         this.backupStorageLocationsList = cbslList.filter(bsl => this._isBackupStorageLocationAvailable(bsl));
-        this.backupStorageLocationLabel = this.backupStorageLocationsList.length ? BSLListState.Ready : BSLListState.Empty;
+        this.backupStorageLocationLabel = this.backupStorageLocationsList.length
+          ? BSLListState.Ready
+          : BSLListState.Empty;
 
         const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
-        if (backupStorageLocationControl && !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)) {
+        if (
+          backupStorageLocationControl &&
+          !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)
+        ) {
           backupStorageLocationControl.reset();
         }
       });
