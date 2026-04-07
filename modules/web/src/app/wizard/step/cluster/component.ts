@@ -312,14 +312,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => {
-        this._selectedProjectID = project.id;
-        if (this.isEnterpriseEdition) {
-          this._getCBSL(project.id);
-        }
-      });
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
+      this._selectedProjectID = project.id;
+      if (this.isEnterpriseEdition) {
+        this._getCBSL(project.id);
+      }
+    });
 
     this._fetchCNIPlugins();
 
@@ -1277,10 +1275,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
         this.backupStorageLocationsList = cbslList.filter(bsl => this._isBackupStorageLocationAvailable(bsl));
-        this.backupStorageLocationLabel = this.backupStorageLocationsList.length ? BSLListState.Ready : BSLListState.Empty;
+        this.backupStorageLocationLabel = this.backupStorageLocationsList.length
+          ? BSLListState.Ready
+          : BSLListState.Empty;
 
         const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
-        if (backupStorageLocationControl && !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)) {
+        if (
+          backupStorageLocationControl &&
+          !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)
+        ) {
           backupStorageLocationControl.reset();
         }
       });
