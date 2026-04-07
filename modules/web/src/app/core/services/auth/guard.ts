@@ -38,11 +38,13 @@ export class AdminGuard implements CanActivate {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly _authService: Auth) {}
-  // TODO: remove this method — the Auth Interceptor handles 401s and redirects to login.
-  // For now, check expiresAt.
-  canActivate(_route: ActivatedRouteSnapshot, _snap: RouterStateSnapshot): boolean {
-    return this._authService.authenticated();
+  constructor(
+    private readonly _authService: Auth,
+    private readonly _router: Router
+  ) {}
+
+  canActivate(_route: ActivatedRouteSnapshot, _snap: RouterStateSnapshot): boolean | UrlTree {
+    return this._authService.authenticated() || this._router.parseUrl('/');
   }
 }
 
