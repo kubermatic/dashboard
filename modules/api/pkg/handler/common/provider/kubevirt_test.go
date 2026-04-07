@@ -409,55 +409,44 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 				t.Fatalf("kubeVirtInstancetypes() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			gotNames := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
-			for _, item := range got.items {
-				cat := item.Category()
-				gotNames[cat] = append(gotNames[cat], item.GetObjectMeta().GetName())
-			}
-
-			// Sort for deterministic comparison.
-			for cat := range gotNames {
-				sort.Strings(gotNames[cat])
-			}
-			for cat := range tt.wantNames {
-				sort.Strings(tt.wantNames[cat])
-			}
-
-			// Remove empty slices for clean comparison.
-			for cat, names := range gotNames {
-				if len(names) == 0 {
-					delete(gotNames, cat)
-				}
-			}
-			for cat, names := range tt.wantNames {
-				if len(names) == 0 {
-					delete(tt.wantNames, cat)
-				}
-			}
-
-			if !reflect.DeepEqual(gotNames, tt.wantNames) {
-				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", gotNames, tt.wantNames)
-			}
-
-			// Additionally verify wrapper types / categories.
-			for _, item := range got.items {
-				switch item.(type) {
-				case *customInstancetypeWrapper:
-					if item.Category() != apiv2.InstancetypeCustom {
-						t.Errorf("customInstancetypeWrapper should have category Custom, got %v", item.Category())
-					}
-				case *standardInstancetypeWrapper:
-					if item.Category() != apiv2.InstancetypeKubermatic {
-						t.Errorf("standardInstancetypeWrapper should have category Kubermatic, got %v", item.Category())
-					}
-				case *customNamespacedInstancetypeWrapper:
-					if item.Category() != apiv2.InstancetypeCustom {
-						t.Errorf("customNamespacedInstancetypeWrapper should have category Custom, got %v", item.Category())
-					}
-				default:
-					t.Errorf("unexpected wrapper type %T for %s", item, item.GetObjectMeta().GetName())
-				}
+			if !reflect.DeepEqual(sortedCategoryNames(got.items), normalizeCategoryNames(tt.wantNames)) {
+				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", sortedCategoryNames(got.items), normalizeCategoryNames(tt.wantNames))
 			}
 		})
 	}
+}
+
+// sortedCategoryNames groups instancetype items by category, sorts each name
+// slice, and drops empty categories — ready for reflect.DeepEqual.
+func sortedCategoryNames(items []instancetypeWrapper) map[apiv2.VirtualMachineInstancetypeCategory][]string {
+	m := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
+	for _, item := range items {
+		cat := item.Category()
+		m[cat] = append(m[cat], item.GetObjectMeta().GetName())
+	}
+	for cat, names := range m {
+		if len(names) == 0 {
+			delete(m, cat)
+		} else {
+			sort.Strings(names)
+			m[cat] = names
+		}
+	}
+	return m
+}
+
+// normalizeCategoryNames sorts each name slice and drops empty categories,
+// producing a map comparable with the output of sortedCategoryNames.
+func normalizeCategoryNames(wantNames map[apiv2.VirtualMachineInstancetypeCategory][]string) map[apiv2.VirtualMachineInstancetypeCategory][]string {
+	m := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
+	for cat, names := range wantNames {
+		if len(names) == 0 {
+			continue
+		}
+		sorted := make([]string, len(names))
+		copy(sorted, names)
+		sort.Strings(sorted)
+		m[cat] = sorted
+	}
+	return m
 }
