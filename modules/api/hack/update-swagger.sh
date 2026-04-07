@@ -32,6 +32,6 @@ cd $API/cmd/kubermatic-api/
 # To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/*
 #
 # this workaround will be removed once api will be totally removed from kubermatic repository
-run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/* -x github.com/sigstore/rekor/pkg/generated/models -x k8s.io/api/admissionregistration/*
+run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/* -x github.com/sigstore/rekor/pkg/generated/models -x k8s.io/api/admissionregistration/* -x github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/* -x github.com/sigstore/rekor-tiles/*
 echodate "Completed."
 run_swagger validate swagger.json
