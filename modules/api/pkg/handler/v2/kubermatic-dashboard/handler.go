@@ -119,9 +119,9 @@ func (a *authHandler) loginHandler() http.Handler {
 
 const (
 	idTokenCookieName = "token"
-	// Max characters per cookie (staying under the 4KB browser limit)
+	// Max characters per cookie (staying under the 4KB browser limit).
 	maxCookieSize = 3800
-	// The maximum number of "slots" to check or clear (safety margin)
+	// The maximum number of "slots" to check or clear (safety margin).
 	maxNumOfTokenCookies     = 6
 	refreshTokenCookieName   = "refresh_token"
 	refreshTokenCookieMaxAge = 2592000 // 30 days
@@ -224,7 +224,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 		// 9. Redirect to frontend landing page.
 		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
 		if err != nil {
-			fmt.Println("faild to get user info", err)
+			fmt.Println("failed to get user info", err)
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
@@ -309,7 +309,6 @@ func (a *authHandler) refreshHandler() http.Handler {
 }
 
 func setNamedCookie(w http.ResponseWriter, name, value, path string, maxAge int, secureMode bool) {
-
 	http.SetCookie(w, &http.Cookie{
 		Name:     name,
 		Value:    value,
@@ -342,7 +341,7 @@ func (a *authHandler) logoutHandler() http.Handler {
 
 		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("faild to get user info: %v", err), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf("failed to get user info: %v", err), http.StatusInternalServerError)
 			return
 		}
 
@@ -351,12 +350,15 @@ func (a *authHandler) logoutHandler() http.Handler {
 		redirectPath := "/"
 
 		if err != nil {
-			fmt.Println("faild to get UI configurations", err)
+			fmt.Println("failed to get UI configurations", err)
 		} else {
 			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, buildBaseURL(r))
 		}
 
-		a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry)
+		if err := a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry); err != nil {
+			http.Error(w, fmt.Sprintf("failed to invalidate token: %v", err), http.StatusInternalServerError)
+			return
+		}
 		clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(map[string]string{
@@ -364,7 +366,6 @@ func (a *authHandler) logoutHandler() http.Handler {
 		}); err != nil {
 			http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
 		}
-
 	})
 }
 
@@ -376,7 +377,6 @@ func clearAuthCookies(w http.ResponseWriter, secureMode bool) {
 		chunkName := fmt.Sprintf("%s-%d", idTokenCookieName, i+1)
 		clearNamedCookie(w, chunkName, "/", secureMode)
 	}
-
 }
 
 func clearNamedCookie(w http.ResponseWriter, name, path string, secureMode bool) {
@@ -399,7 +399,7 @@ func (a *authHandler) statusHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
-			fmt.Println("token is requiered to get the status")
+			fmt.Println("token is required to get the status")
 			w.Header().Set("Content-Type", "application/json")
 			if err := json.NewEncoder(w).Encode(authStatusResponse{
 				ExpiresAt: 0,
@@ -451,7 +451,7 @@ func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfigura
 	if kubermaticConfig.Spec.UI.Config != "" {
 		err := json.Unmarshal([]byte(kubermaticConfig.Spec.UI.Config), &uiConfig)
 		if err != nil {
-			fmt.Println("faild to unmarshal UI configurations", err)
+			fmt.Println("failed to unmarshal UI configurations", err)
 			return redirectPath
 		}
 	}
@@ -459,19 +459,17 @@ func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfigura
 		if oidcLogoutURLStr, ok := value.(string); ok && oidcLogoutURLStr != "" {
 			oidcLogoutURL, err := url.Parse(oidcLogoutURLStr)
 			if err != nil {
-				fmt.Println("faild to create the OIDC Logout URL from UI configurations", err)
+				fmt.Println("failed to create the OIDC Logout URL from UI configurations", err)
 				return redirectPath
 			}
-			provider := ""
-			if oidcProvider, ok := uiConfig["oidc_provider"].(string); ok {
-				provider = strings.ToLower(oidcProvider)
-			} else {
-				fmt.Println("faild to get the OIDC Logout Provider from UI configurations", err)
+			oidcProvider, ok := uiConfig["oidc_provider"].(string)
+			if !ok {
+				fmt.Println("failed to get the OIDC Logout Provider from UI configurations")
 				return redirectPath
 			}
 			urlQuery := oidcLogoutURL.Query()
 
-			if provider == "keycloak" {
+			if strings.ToLower(oidcProvider) == "keycloak" {
 				urlQuery.Set("post_logout_redirect_uri", redirectPath)
 				urlQuery.Set("id_token_hint", token)
 			} else {

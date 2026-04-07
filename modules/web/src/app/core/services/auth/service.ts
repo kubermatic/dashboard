@@ -23,8 +23,6 @@ interface AuthStatusResponse {
   expires_at: number;
 }
 
-export const AUTOREDIRECT_COOKIE = 'autoredirect';
-
 const SECONDS_TO_MS = 1000;
 const REFRESH_BUFFER_SECONDS = 60;
 
