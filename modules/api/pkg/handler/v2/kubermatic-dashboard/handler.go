@@ -192,12 +192,14 @@ func (a *authHandler) callbackHandler() http.Handler {
 			return
 		}
 
+		clearAuthCookies(w, oidcConfig.CookieSecureMode)
+
 		tokenValue := oidcTokens.IDToken
 		if len(tokenValue) <= maxCookieSize {
 			// Standard single cookie
 			setNamedCookie(w, idTokenCookieName, tokenValue, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
 		} else {
-			// Chunked cookies: token-0, token-1, etc.
+			// Chunked cookies: token-1, token-2, etc.
 			chunks := chunkString(tokenValue, maxCookieSize)
 			for i, chunk := range chunks {
 				setNamedCookie(w, fmt.Sprintf("%s-%d", idTokenCookieName, i+1), chunk, "/", tokenMaxAge, oidcConfig.CookieSecureMode)
@@ -283,6 +285,8 @@ func (a *authHandler) refreshHandler() http.Handler {
 			return
 		}
 
+		clearAuthCookies(w, oidcConfig.CookieSecureMode)
+
 		tokenValue := oidcTokens.IDToken
 		if len(tokenValue) <= maxCookieSize {
 			// Standard single cookie
@@ -319,13 +323,13 @@ func setNamedCookie(w http.ResponseWriter, name, value, path string, maxAge int,
 
 func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tokenCookie, err := r.Cookie(idTokenCookieName)
+		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
 			http.Error(w, "missing token cookie", http.StatusBadRequest)
 			return
 		}
 
-		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenCookie.Value)
+		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenValue)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusInternalServerError)
 			return
@@ -349,16 +353,17 @@ func (a *authHandler) logoutHandler() http.Handler {
 		if err != nil {
 			fmt.Println("faild to get UI configurations", err)
 		} else {
-			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenCookie.Value)
+			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, buildBaseURL(r))
 		}
 
-		a.userProvider.InvalidateToken(r.Context(), userInfo, tokenCookie.Value, claims.Expiry)
+		a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry)
 		clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{
+		if err := json.NewEncoder(w).Encode(map[string]string{
 			"redirect": redirectPath,
-		})
+		}); err != nil {
+			http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
+		}
 
 	})
 }
@@ -366,9 +371,9 @@ func (a *authHandler) logoutHandler() http.Handler {
 func clearAuthCookies(w http.ResponseWriter, secureMode bool) {
 	clearNamedCookie(w, idTokenCookieName, "/", secureMode)
 	clearNamedCookie(w, refreshTokenCookieName, "/api/v2/auth", secureMode)
-	// Clear potential chunks (token-0, token-1, etc.)
+	// Clear potential chunks (token-1, token-2, etc.)
 	for i := range maxNumOfTokenCookies {
-		chunkName := fmt.Sprintf("%s-%d", idTokenCookieName, i)
+		chunkName := fmt.Sprintf("%s-%d", idTokenCookieName, i+1)
 		clearNamedCookie(w, chunkName, "/", secureMode)
 	}
 
@@ -392,7 +397,7 @@ type authStatusResponse struct {
 
 func (a *authHandler) statusHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tokenCookie, err := r.Cookie(idTokenCookieName)
+		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
 			fmt.Println("token is requiered to get the status")
 			w.Header().Set("Content-Type", "application/json")
@@ -404,7 +409,7 @@ func (a *authHandler) statusHandler() http.Handler {
 			return
 		}
 
-		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenCookie.Value)
+		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenValue)
 		if err != nil {
 			http.Error(w, "invalid token", http.StatusUnauthorized)
 			return
@@ -431,8 +436,17 @@ func chunkString(token string, chunkSize int) []string {
 	return chunks
 }
 
-func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfiguration, token string) string {
-	redirectPath := "/"
+// buildBaseURL constructs the base URL (scheme + host) from the incoming request.
+func buildBaseURL(r *http.Request) string {
+	scheme := "https"
+	if r.TLS == nil {
+		scheme = "http"
+	}
+	return fmt.Sprintf("%s://%s", scheme, r.Host)
+}
+
+func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfiguration, token, baseURL string) string {
+	redirectPath := baseURL + "/"
 	var uiConfig map[string]interface{}
 	if kubermaticConfig.Spec.UI.Config != "" {
 		err := json.Unmarshal([]byte(kubermaticConfig.Spec.UI.Config), &uiConfig)

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// import {DOCUMENT} from '@angular/common';
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
@@ -40,7 +39,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
     private readonly _elementRef: ElementRef,
     private readonly _router: Router,
     private readonly _auth: Auth,
-    private readonly _userService: UserService,
+    private readonly _userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +77,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
         this._isOpen = false;
         delete this.user;
       }
-    })
+    });
   }
 
   goToAccount(): void {
