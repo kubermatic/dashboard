@@ -18,7 +18,6 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSelectChange} from '@angular/material/select';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
-import {AddBackupStorageLocationDialogComponent} from '@app/dynamic/enterprise/cluster-backups/list/backup-storage-location/add-dialog/component';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS, NodeProvider} from '@app/shared/model/NodeProviderConstants';
@@ -548,7 +547,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       });
   }
 
-  onBackupStorageLocationSelectionChange(event: MatSelectChange<string>): void {
+  async onBackupStorageLocationSelectionChange(event: MatSelectChange<string>): Promise<void> {
     if (event.value !== this.createBackupStorageLocationOptionValue) {
       return;
     }
@@ -557,6 +556,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     const previousValue = this.cluster.spec?.backupConfig?.backupStorageLocation?.name ?? '';
     backupStorageLocationControl.setValue(previousValue, {emitEvent: false});
 
+    const AddBackupStorageLocationDialogComponent = await DynamicModule.AddBackupStorageLocationDialogComponent;
+    if (!AddBackupStorageLocationDialogComponent) {
+      return;
+    }
     this._matDialog
       .open(AddBackupStorageLocationDialogComponent, {
         data: {projectID: this.projectID},

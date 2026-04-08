@@ -28,7 +28,6 @@ import {ApplicationService} from '@app/core/services/application';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {ProjectService} from '@app/core/services/project';
-import {AddBackupStorageLocationDialogComponent} from '@app/dynamic/enterprise/cluster-backups/list/backup-storage-location/add-dialog/component';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {
@@ -1235,7 +1234,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
   }
 
-  onBackupStorageLocationSelectionChange(event: MatSelectChange): void {
+  async onBackupStorageLocationSelectionChange(event: MatSelectChange): Promise<void> {
     if (event.value !== this.createBackupStorageLocationOptionValue) {
       return;
     }
@@ -1244,6 +1243,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const previousValue = this._clusterSpecService.cluster?.spec?.backupConfig?.backupStorageLocation?.name ?? '';
     backupStorageLocationControl.setValue(previousValue, {emitEvent: false});
 
+    const AddBackupStorageLocationDialogComponent = await DynamicModule.AddBackupStorageLocationDialogComponent;
+    if (!AddBackupStorageLocationDialogComponent) {
+      return;
+    }
     this._matDialog
       .open(AddBackupStorageLocationDialogComponent, {
         data: {projectID: this._selectedProjectID},
