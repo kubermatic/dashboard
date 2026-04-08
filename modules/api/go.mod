@@ -102,8 +102,8 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250910181357-589584f
 
 replace k8s.io/client-go => k8s.io/client-go v0.35.0
 
-// Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
-replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
+// Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L659
+replace k8c.io/kubeone => k8c.io/kubeone v1.12.3
 
 replace k8c.io/application-catalog-manager => github.com/kubermatic/application-catalog-manager v0.2.0-rc.6
 
