@@ -25,7 +25,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/iam v1.41.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.3
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.5
-	github.com/aws/smithy-go v1.24.0
+	github.com/aws/smithy-go v1.24.2
 	github.com/coreos/go-oidc v2.3.0+incompatible
 	github.com/cristim/ec2-instances-info v0.0.0-20221130144415-da4474e2a3d1
 	github.com/digitalocean/godo v1.145.0
@@ -157,7 +157,7 @@ require (
 	github.com/aptible/supercronic v0.2.34 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.1 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.8 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.16 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.16 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.16 // indirect
