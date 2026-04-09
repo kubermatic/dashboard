@@ -27,4 +27,5 @@ updates:
       - dependencies
       - docs/none
       - release-note-none
+      - test-issue/none
       - ok-to-test
