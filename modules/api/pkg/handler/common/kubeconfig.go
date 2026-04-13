@@ -361,6 +361,7 @@ func CreateOIDCKubeconfigEndpoint(
 						"--oidc-client-id=" + oidcIssuerVerifier.OIDCConfig().ClientID,
 						"--oidc-client-secret=" + oidcIssuerVerifier.OIDCConfig().ClientSecret,
 						"--oidc-extra-scope=email",
+						"--oidc-extra-scope=groups",
 					},
 					InteractiveMode:    clientcmdapi.NeverExecInteractiveMode,
 					ProvideClusterInfo: false,
