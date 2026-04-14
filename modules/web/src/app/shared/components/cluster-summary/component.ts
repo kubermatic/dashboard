@@ -90,14 +90,14 @@ export class ClusterSummaryComponent implements OnInit {
   }
 
   get kubeLBAssignPublicIPWarning(): boolean {
-    // Check all sources: cluster spec, datacenter enforced/enabled, and seed-level setting
-    // Respect explicit datacenter disable (enabled === false)
     const dcKubeLB = this.datacenter?.spec?.kubelb;
     let isKubeLBActive = !!this.cluster?.spec?.kubelb?.enabled;
     if (!isKubeLBActive) {
-      if (dcKubeLB?.enabled === false) {
+      if (dcKubeLB?.enforced) {
+        isKubeLBActive = true;
+      } else if (dcKubeLB?.enabled === false) {
         isKubeLBActive = false;
-      } else if (dcKubeLB?.enforced || dcKubeLB?.enabled) {
+      } else if (dcKubeLB?.enabled) {
         isKubeLBActive = true;
       } else {
         isKubeLBActive = !!this.seedSettings?.kubelb?.enableForAllDatacenters;
