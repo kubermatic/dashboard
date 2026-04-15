@@ -244,18 +244,31 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 	if err := client.List(ctx, &clusterInstancetypes); err != nil {
 		return instancetypes, err
 	}
-	// "standard" (namespaced)
-	if datacenter.Spec.Kubevirt != nil && !datacenter.Spec.Kubevirt.DisableDefaultInstanceTypes {
-		standardInstancetypes.Items = kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
+	// Always fetch the full set of kubermatic standard instancetypes once.
+	// We need the names to filter lingering instances from the namespace even
+	// when defaults are disabled, so a single call covers both use-cases.
+	allStandardItems := kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
+	allStandardNames := sets.New[string]()
+	for _, si := range allStandardItems {
+		allStandardNames.Insert(si.Name)
 	}
 
-	// "custom" (namespaced)
+	// Only expose standard instancetypes when not disabled.
+	if datacenter.Spec.Kubevirt != nil && !datacenter.Spec.Kubevirt.DisableDefaultInstanceTypes {
+		standardInstancetypes.Items = allStandardItems
+	}
+
+	// "custom" (namespaced) — only in namespaced mode, list user-created
+	// instancetypes from the configured namespace.  In non-namespaced mode
+	// we skip this entirely: before the namespaced-mode feature was added
+	// only cluster-wide custom and kubermatic standard instancetypes were
+	// returned, and listing all namespaces would leak cross-tenant data.
 	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
-		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(datacenter.Spec.Kubevirt.NamespacedMode.Namespace)); err != nil {
-			return instancetypes, err
+		namespace := datacenter.Spec.Kubevirt.NamespacedMode.Namespace
+		if namespace == "" {
+			return instancetypes, fmt.Errorf("namespaced mode enabled but no namespace configured")
 		}
-	} else {
-		if err := client.List(ctx, &namespaceInstancetypes); err != nil {
+		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(namespace)); err != nil {
 			return instancetypes, err
 		}
 	}
@@ -268,18 +281,17 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 		instancetypes.items = append(instancetypes.items, &w)
 	}
 
-	standardNames := sets.New[string]()
 	for i := range standardInstancetypes.Items {
-		standardNames.Insert(standardInstancetypes.Items[i].Name)
 		w := standardInstancetypeWrapper{&standardInstancetypes.Items[i]}
 		instancetypes.items = append(instancetypes.items, &w)
 	}
 	for i := range namespaceInstancetypes.Items {
-		// Skip if already added from standard instancetypes to avoid duplicates
-		if standardNames.Has(namespaceInstancetypes.Items[i].Name) {
+		// Skip kubermatic standard instancetypes (already added above, or
+		// disabled but still lingering in the namespace from prior reconciliation).
+		if allStandardNames.Has(namespaceInstancetypes.Items[i].Name) {
 			continue
 		}
-		w := standardInstancetypeWrapper{&namespaceInstancetypes.Items[i]}
+		w := customNamespacedInstancetypeWrapper{&namespaceInstancetypes.Items[i]}
 		instancetypes.items = append(instancetypes.items, &w)
 	}
 
@@ -578,6 +590,20 @@ func (it *standardInstancetypeWrapper) Category() apiv2.VirtualMachineInstancety
 }
 
 func (it *standardInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+	return it.VirtualMachineInstancetype.Spec
+}
+
+// customNamespacedInstancetypeWrapper wraps a namespaced VirtualMachineInstancetype
+// that was created by the user (not by the kubermatic reconciler).
+type customNamespacedInstancetypeWrapper struct {
+	*kvinstancetypev1alpha1.VirtualMachineInstancetype
+}
+
+func (it *customNamespacedInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
+	return apiv2.InstancetypeCustom
+}
+
+func (it *customNamespacedInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
 	return it.VirtualMachineInstancetype.Spec
 }
 
