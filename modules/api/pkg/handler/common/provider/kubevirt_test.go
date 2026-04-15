@@ -26,6 +26,8 @@ import (
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
+	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -170,7 +172,7 @@ func newInstancetype(category apiv2.VirtualMachineInstancetypeCategory, cpu uint
 	case apiv2.InstancetypeCustom:
 		instancetype := &kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{
 			ObjectMeta: metav1.ObjectMeta{
-				Name: "small-1",
+				Name: instancetypeName(cpu, memory),
 			},
 			Spec: getInstancetypeSpec(cpu, memory),
 		}
@@ -198,20 +200,53 @@ func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.Virtu
 
 // newFakeClient builds a controller-runtime fake client with the KubeVirt
 // instancetype scheme registered and the given objects pre-created.
-func newFakeClient(objs ...ctrlruntimeclient.Object) ctrlruntimeclient.Client {
+func newFakeClient(t *testing.T, objs ...ctrlruntimeclient.Object) ctrlruntimeclient.Client {
+	t.Helper()
 	scheme := runtime.NewScheme()
-	_ = kvinstancetypev1alpha1.AddToScheme(scheme)
+	if err := kvinstancetypev1alpha1.AddToScheme(scheme); err != nil {
+		t.Fatalf("failed to register KubeVirt instancetype scheme: %v", err)
+	}
 	return fake.NewClientBuilder().
 		WithScheme(scheme).
 		WithObjects(objs...).
 		Build()
 }
 
+// standardNamesFromManifests derives the set of kubermatic standard instancetype
+// names from the actual embedded manifests, so tests stay correct when manifests
+// are added or renamed without any code changes.
+func standardNamesFromManifests(t *testing.T) []string {
+	t.Helper()
+	client := newFakeClient(t)
+	items := kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
+	names := make([]string, 0, len(items))
+	for _, it := range items {
+		names = append(names, it.Name)
+	}
+	sort.Strings(names)
+	return names
+}
+
 func Test_kubeVirtInstancetypes(t *testing.T) {
 	ctx := context.Background()
 
-	// Standard instancetype names that ship via embedded manifests.
-	standardNames := []string{"standard-2", "standard-4", "standard-8"}
+	// Derive standard names from the actual embedded manifests so the test
+	// stays correct even when manifests are added or renamed.
+	standardNames := standardNamesFromManifests(t)
+
+	// staleStandardsInstanceTypes returns namespace-scoped VirtualMachineInstancetype objects
+	// whose names match the standard set — simulating instancetypes that were
+	// previously reconciled into a namespace and still exist there.
+	staleStandardsInstanceTypes := func(namespace string) []ctrlruntimeclient.Object {
+		objs := make([]ctrlruntimeclient.Object, 0, len(standardNames))
+		for _, name := range standardNames {
+			objs = append(objs, &kvinstancetypev1alpha1.VirtualMachineInstancetype{
+				ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: namespace},
+				Spec:       getInstancetypeSpec(2, "8Gi"),
+			})
+		}
+		return objs
+	}
 
 	tests := []struct {
 		name      string
@@ -282,7 +317,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 			},
 		},
 		{
-			name: "namespaced mode: lingering standard instancetypes are filtered out from custom list",
+			name: "namespaced mode: existing standard instancetypes are filtered out from custom list",
 			dc: &kubermaticv1.Datacenter{
 				Spec: kubermaticv1.DatacenterSpec{
 					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
@@ -293,22 +328,13 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 					},
 				},
 			},
-			objects: []ctrlruntimeclient.Object{
-				// Previously reconciled standard instancetypes still live in the namespace.
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(2, "8Gi"),
-				},
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(4, "16Gi"),
-				},
+			objects: append(staleStandardsInstanceTypes("infra-ns"),
 				// Plus a real user-created one.
 				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
 					ObjectMeta: metav1.ObjectMeta{Name: "my-flavor", Namespace: "infra-ns"},
 					Spec:       getInstancetypeSpec(8, "32Gi"),
 				},
-			},
+			),
 			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
 				// standard-2 and standard-4 must appear under Kubermatic (from manifests),
 				// NOT duplicated under Custom from the namespace listing.
@@ -317,7 +343,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 			},
 		},
 		{
-			name: "defaults disabled: standard instancetypes not returned, lingering ones in namespace filtered",
+			name: "defaults disabled: standard instancetypes not returned, existing ones in namespace filtered",
 			dc: &kubermaticv1.Datacenter{
 				Spec: kubermaticv1.DatacenterSpec{
 					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
@@ -329,26 +355,13 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 					},
 				},
 			},
-			objects: []ctrlruntimeclient.Object{
-				// These linger from before defaults were disabled.
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(2, "8Gi"),
-				},
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(4, "16Gi"),
-				},
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-8", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(8, "32Gi"),
-				},
+			objects: append(staleStandardsInstanceTypes("infra-ns"),
 				// A real user-created instancetype.
 				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
 					ObjectMeta: metav1.ObjectMeta{Name: "my-custom", Namespace: "infra-ns"},
 					Spec:       getInstancetypeSpec(16, "64Gi"),
 				},
-			},
+			),
 			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
 				// No Kubermatic standards should appear at all (disabled).
 				// Lingering standard-2/4/8 must NOT leak through as Custom.
@@ -356,7 +369,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 			},
 		},
 		{
-			name: "defaults disabled, namespaced mode, only lingering standards: empty result",
+			name: "defaults disabled, namespaced mode, only existing standards: empty result",
 			dc: &kubermaticv1.Datacenter{
 				Spec: kubermaticv1.DatacenterSpec{
 					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
@@ -368,23 +381,10 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 					},
 				},
 			},
-			objects: []ctrlruntimeclient.Object{
-				// Only previously-reconciled standard instancetypes linger in the
-				// namespace — no user-created custom ones exist.  With defaults
-				// disabled these must all be filtered out, yielding an empty result.
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-2", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(2, "8Gi"),
-				},
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-4", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(4, "16Gi"),
-				},
-				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
-					ObjectMeta: metav1.ObjectMeta{Name: "standard-8", Namespace: "infra-ns"},
-					Spec:       getInstancetypeSpec(8, "32Gi"),
-				},
-			},
+			// Only previously-reconciled standard instancetypes exist in the
+			// namespace — no user-created custom ones exist.  With defaults
+			// disabled these must all be filtered out, yielding an empty result.
+			objects:   staleStandardsInstanceTypes("infra-ns"),
 			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{},
 		},
 		{
@@ -403,50 +403,28 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := newFakeClient(tt.objects...)
+			client := newFakeClient(t, tt.objects...)
 			got, err := kubeVirtInstancetypes(ctx, client, tt.dc)
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("kubeVirtInstancetypes() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if !reflect.DeepEqual(sortedCategoryNames(got.items), normalizeCategoryNames(tt.wantNames)) {
-				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", sortedCategoryNames(got.items), normalizeCategoryNames(tt.wantNames))
+			if gotNames := sortedCategoryNames(got.items); !reflect.DeepEqual(gotNames, tt.wantNames) {
+				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", gotNames, tt.wantNames)
 			}
 		})
 	}
 }
 
-// sortedCategoryNames groups instancetype items by category, sorts each name
-// slice, and drops empty categories — ready for reflect.DeepEqual.
+// sortedCategoryNames groups instancetype items by category and sorts each
+// name slice, producing a map ready for reflect.DeepEqual against tt.wantNames.
 func sortedCategoryNames(items []instancetypeWrapper) map[apiv2.VirtualMachineInstancetypeCategory][]string {
 	m := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
 	for _, item := range items {
-		cat := item.Category()
-		m[cat] = append(m[cat], item.GetObjectMeta().GetName())
+		m[item.Category()] = append(m[item.Category()], item.GetObjectMeta().GetName())
 	}
-	for cat, names := range m {
-		if len(names) == 0 {
-			delete(m, cat)
-		} else {
-			sort.Strings(names)
-			m[cat] = names
-		}
-	}
-	return m
-}
-
-// normalizeCategoryNames sorts each name slice and drops empty categories,
-// producing a map comparable with the output of sortedCategoryNames.
-func normalizeCategoryNames(wantNames map[apiv2.VirtualMachineInstancetypeCategory][]string) map[apiv2.VirtualMachineInstancetypeCategory][]string {
-	m := make(map[apiv2.VirtualMachineInstancetypeCategory][]string)
-	for cat, names := range wantNames {
-		if len(names) == 0 {
-			continue
-		}
-		sorted := make([]string, len(names))
-		copy(sorted, names)
-		sort.Strings(sorted)
-		m[cat] = sorted
+	for cat := range m {
+		sort.Strings(m[cat])
 	}
 	return m
 }
