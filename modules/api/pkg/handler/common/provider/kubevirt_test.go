@@ -234,10 +234,10 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 	// stays correct even when manifests are added or renamed.
 	standardNames := standardNamesFromManifests(t)
 
-	// staleStandardsInstanceTypes returns namespace-scoped VirtualMachineInstancetype objects
+	// staleStandardInstanceTypes returns namespace-scoped VirtualMachineInstancetype objects
 	// whose names match the standard set — simulating instancetypes that were
 	// previously reconciled into a namespace and still exist there.
-	staleStandardsInstanceTypes := func(namespace string) []ctrlruntimeclient.Object {
+	staleStandardInstanceTypes := func(namespace string) []ctrlruntimeclient.Object {
 		objs := make([]ctrlruntimeclient.Object, 0, len(standardNames))
 		for _, name := range standardNames {
 			objs = append(objs, &kvinstancetypev1alpha1.VirtualMachineInstancetype{
@@ -328,7 +328,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 					},
 				},
 			},
-			objects: append(staleStandardsInstanceTypes("infra-ns"),
+			objects: append(staleStandardInstanceTypes("infra-ns"),
 				// Plus a real user-created one.
 				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
 					ObjectMeta: metav1.ObjectMeta{Name: "my-flavor", Namespace: "infra-ns"},
@@ -355,7 +355,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 					},
 				},
 			},
-			objects: append(staleStandardsInstanceTypes("infra-ns"),
+			objects: append(staleStandardInstanceTypes("infra-ns"),
 				// A real user-created instancetype.
 				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
 					ObjectMeta: metav1.ObjectMeta{Name: "my-custom", Namespace: "infra-ns"},
@@ -384,7 +384,7 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 			// Only previously-reconciled standard instancetypes exist in the
 			// namespace — no user-created custom ones exist.  With defaults
 			// disabled these must all be filtered out, yielding an empty result.
-			objects:   staleStandardsInstanceTypes("infra-ns"),
+			objects:   staleStandardInstanceTypes("infra-ns"),
 			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{},
 		},
 		{
