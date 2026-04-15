@@ -264,7 +264,11 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 	// only cluster-wide custom and kubermatic standard instancetypes were
 	// returned, and listing all namespaces would leak cross-tenant data.
 	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
-		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(datacenter.Spec.Kubevirt.NamespacedMode.Namespace)); err != nil {
+		namespace := datacenter.Spec.Kubevirt.NamespacedMode.Namespace
+		if namespace == "" {
+			return instancetypes, fmt.Errorf("namespaced mode enabled but no namespace configured")
+		}
+		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(namespace)); err != nil {
 			return instancetypes, err
 		}
 	}
