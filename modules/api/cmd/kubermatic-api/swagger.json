@@ -36496,6 +36496,16 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "KyvernoControllerSettings": {
+      "type": "object",
+      "title": "KyvernoControllerSettings configures resource requirements for a Kyverno controller.",
+      "properties": {
+        "resources": {
+          "$ref": "#/definitions/ResourceRequirements"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
     "KyvernoPolicyNamespace": {
       "description": "This is relevant only if a Kyverno Policy resource is created because a Kyverno Policy is namespaced.\nFor Kyverno ClusterPolicy, this field is ignored.",
       "type": "object",
@@ -36530,10 +36540,22 @@
       "type": "object",
       "title": "KyvernoSettings contains settings for the Kyverno component as part of the cluster control plane. This component is responsible for policy management.",
       "properties": {
+        "admissionController": {
+          "$ref": "#/definitions/KyvernoControllerSettings"
+        },
+        "backgroundController": {
+          "$ref": "#/definitions/KyvernoControllerSettings"
+        },
+        "cleanupController": {
+          "$ref": "#/definitions/KyvernoControllerSettings"
+        },
         "enabled": {
           "description": "Controls whether Kyverno is deployed or not.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "reportsController": {
+          "$ref": "#/definitions/KyvernoControllerSettings"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"

@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -19,15 +20,209 @@ type KyvernoSettings struct {
 
 	// Controls whether Kyverno is deployed or not.
 	Enabled bool `json:"enabled,omitempty"`
+
+	// admission controller
+	AdmissionController *KyvernoControllerSettings `json:"admissionController,omitempty"`
+
+	// background controller
+	BackgroundController *KyvernoControllerSettings `json:"backgroundController,omitempty"`
+
+	// cleanup controller
+	CleanupController *KyvernoControllerSettings `json:"cleanupController,omitempty"`
+
+	// reports controller
+	ReportsController *KyvernoControllerSettings `json:"reportsController,omitempty"`
 }
 
 // Validate validates this kyverno settings
 func (m *KyvernoSettings) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateAdmissionController(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateBackgroundController(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCleanupController(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReportsController(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this kyverno settings based on context it is used
+func (m *KyvernoSettings) validateAdmissionController(formats strfmt.Registry) error {
+	if swag.IsZero(m.AdmissionController) { // not required
+		return nil
+	}
+
+	if m.AdmissionController != nil {
+		if err := m.AdmissionController.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("admissionController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("admissionController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) validateBackgroundController(formats strfmt.Registry) error {
+	if swag.IsZero(m.BackgroundController) { // not required
+		return nil
+	}
+
+	if m.BackgroundController != nil {
+		if err := m.BackgroundController.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("backgroundController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("backgroundController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) validateCleanupController(formats strfmt.Registry) error {
+	if swag.IsZero(m.CleanupController) { // not required
+		return nil
+	}
+
+	if m.CleanupController != nil {
+		if err := m.CleanupController.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cleanupController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cleanupController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) validateReportsController(formats strfmt.Registry) error {
+	if swag.IsZero(m.ReportsController) { // not required
+		return nil
+	}
+
+	if m.ReportsController != nil {
+		if err := m.ReportsController.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("reportsController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("reportsController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this kyverno settings based on the context it is used
 func (m *KyvernoSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdmissionController(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBackgroundController(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCleanupController(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReportsController(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *KyvernoSettings) contextValidateAdmissionController(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AdmissionController != nil {
+		if err := m.AdmissionController.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("admissionController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("admissionController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) contextValidateBackgroundController(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BackgroundController != nil {
+		if err := m.BackgroundController.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("backgroundController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("backgroundController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) contextValidateCleanupController(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CleanupController != nil {
+		if err := m.CleanupController.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cleanupController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cleanupController")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KyvernoSettings) contextValidateReportsController(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ReportsController != nil {
+		if err := m.ReportsController.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("reportsController")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("reportsController")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
