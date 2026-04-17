@@ -70,8 +70,8 @@ require (
 	google.golang.org/api v0.259.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260415180131-faeb070b0b34
-	k8c.io/kubermatic/v2 v2.30.1-0.20260415180131-faeb070b0b34
+	k8c.io/kubermatic/sdk/v2 v2.30.2-0.20260417230431-0f9b829647b6
+	k8c.io/kubermatic/v2 v2.30.2-0.20260417230431-0f9b829647b6
 	k8c.io/machine-controller/sdk v1.65.0
 	k8c.io/operating-system-manager v1.10.3
 	k8c.io/reconciler v0.5.0
@@ -283,7 +283,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/moby/locker v1.0.1 // indirect
-	github.com/moby/spdystream v0.5.0 // indirect
+	github.com/moby/spdystream v0.5.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/mozillazg/docker-credential-acr-helper v0.4.0 // indirect
