@@ -374,6 +374,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             this.allowedOperatingSystems[os] = projectOS[os] ?? false;
           });
       }
+      this._nodeDataService.allowedOperatingSystems = this.allowedOperatingSystems;
       this._setDefaultOS();
       this._manageMDAutoUpdate(settings);
     });
