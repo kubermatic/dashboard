@@ -14,8 +14,6 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {ProjectService} from '@app/core/services/project';
-import {SettingsService} from '@app/core/services/settings';
 import {FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {VSphereVMGroup} from '@app/shared/entity/provider/vsphere';
 import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
@@ -31,8 +29,7 @@ import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {forkJoin, merge, Observable, of} from 'rxjs';
+import {merge, Observable, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
@@ -95,8 +92,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _settingsService: SettingsService,
-    private readonly _projectService: ProjectService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -128,25 +123,12 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this._nodeDataService.nodeData.spec.operatingSystem
     );
 
-    forkJoin([
-      this._settingsService.adminSettings.pipe(take(1)),
-      this._projectService.selectedProject.pipe(take(1)),
-    ])
+    this._nodeDataService.allowedOperatingSystems$
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([adminSettings, selectedProject]) => {
-        if (adminSettings.allowedOperatingSystems) {
-          this.allowedOperatingSystems = {...adminSettings.allowedOperatingSystems};
-          const projectAllowedOS = selectedProject?.spec?.allowedOperatingSystems;
-          if (!_.isEmpty(projectAllowedOS)) {
-            Object.keys(this.allowedOperatingSystems)
-              .filter(os => this.allowedOperatingSystems[os])
-              .forEach(os => {
-                this.allowedOperatingSystems[os] = projectAllowedOS[os] ?? false;
-              });
-          }
-          if (this._templates) {
-            this._setDefaultTemplate();
-          }
+      .subscribe(allowedOS => {
+        this.allowedOperatingSystems = allowedOS;
+        if (this._templates) {
+          this._setDefaultTemplate();
         }
       });
 
