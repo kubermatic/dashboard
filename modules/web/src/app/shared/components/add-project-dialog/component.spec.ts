@@ -51,12 +51,26 @@ describe('AddProjectDialogComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the component', waitForAsync(() => {
+  it('should create the add project dialog component', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should call createProject method', fakeAsync(() => {
+  it('should initialize project allowed operating systems with only enabled entries from admin defaults', () => {
+    const expected: Record<string, boolean> = {};
+    Object.keys(DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems)
+      .filter(os => DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems[os])
+      .forEach(os => (expected[os] = true));
+
+    expect(component.projectAllowedOperatingSystems).toEqual(expected);
+  });
+
+  it('should pass the selected operating systems in the project spec when creating a project', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');
+
+    const expected: Record<string, boolean> = {};
+    Object.keys(DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems)
+      .filter(os => DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems[os])
+      .forEach(os => (expected[os] = true));
 
     component.form.controls.name.patchValue('test');
     component.getObservable().subscribe();
@@ -64,6 +78,34 @@ describe('AddProjectDialogComponent', () => {
     tick();
     flush();
 
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        spec: expect.objectContaining({
+          allowedOperatingSystems: expected,
+        }),
+      })
+    );
   }));
+
+  it('should exclude disabled operating systems and only include enabled ones from admin settings', () => {
+    component.adminAllowedOperatingSystems = {
+      ubuntu: true,
+      flatcar: true,
+      amzn2: true,
+      rhel: false,
+      rockylinux: false,
+    };
+    component.ngOnInit();
+
+    const expected: Record<string, boolean> = {};
+    Object.keys(component.adminAllowedOperatingSystems)
+      .filter(os => component.adminAllowedOperatingSystems[os])
+      .forEach(os => (expected[os] = true));
+
+    expect(component.projectAllowedOperatingSystems).toEqual(expected);
+
+    // Also verify disabled OS are NOT present
+    expect(component.projectAllowedOperatingSystems).not.toHaveProperty('rhel');
+    expect(component.projectAllowedOperatingSystems).not.toHaveProperty('rockylinux');
+  });
 });
