@@ -39,11 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         // Only handle 401s for API requests, and don't retry the refresh call itself.
-        if (
-          error.status === HttpStatusCode.Unauthorized &&
-          !req.url.startsWith(this._refreshUrl) &&
-          !req.url.startsWith(this._statusUrl)
-        ) {
+        if (error.status === HttpStatusCode.Unauthorized && !req.url.startsWith(this._statusUrl)) {
           return this._handle401(req, next);
         }
         return throwError(() => error);
