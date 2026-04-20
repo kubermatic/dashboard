@@ -14,18 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package kubermaticdashboard
+package authflow
 
 import (
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"golang.org/x/oauth2"
 
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -38,23 +37,6 @@ const (
 	nonceCookieMaxAge = 180
 	callbackPath      = "/api/v2/auth/callback"
 )
-
-const pkceVerifierLen = 64
-
-// generateCodeVerifier creates a cryptographically random PKCE code verifier (RFC 7636).
-func generateCodeVerifier() (string, error) {
-	buf := make([]byte, pkceVerifierLen)
-	if _, err := rand.Read(buf); err != nil {
-		return "", fmt.Errorf("failed to generate code verifier: %w", err)
-	}
-	return base64.RawURLEncoding.EncodeToString(buf), nil
-}
-
-// deriveCodeChallenge computes the S256 code challenge from a code verifier.
-func deriveCodeChallenge(verifier string) string {
-	hash := sha256.Sum256([]byte(verifier))
-	return base64.RawURLEncoding.EncodeToString(hash[:])
-}
 
 // appendPKCEParams adds code_challenge and code_challenge_method to an auth URL.
 func appendPKCEParams(authURL, codeChallenge string) string {
@@ -77,11 +59,7 @@ func (a *authHandler) loginHandler() http.Handler {
 		nonce := apimachineryrand.String(apimachineryrand.IntnRange(10, 15))
 		state := apimachineryrand.String(apimachineryrand.IntnRange(10, 15))
 
-		codeVerifier, err := generateCodeVerifier()
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to generate PKCE code verifier: %v", err), http.StatusInternalServerError)
-			return
-		}
+		codeVerifier := oauth2.GenerateVerifier()
 
 		a.stateStore.Store(state, authtypes.AuthState{
 			Nonce:        nonce,
@@ -96,7 +74,7 @@ func (a *authHandler) loginHandler() http.Handler {
 
 		redirectURI := buildRedirectURI(r)
 		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
-		authURL = appendPKCEParams(authURL, deriveCodeChallenge(codeVerifier))
+		authURL = appendPKCEParams(authURL, oauth2.S256ChallengeFromVerifier(codeVerifier))
 
 		encodedNonce, err := oidcConfig.SecureCookie.Encode(nonceCookieName, nonce)
 		if err != nil {
