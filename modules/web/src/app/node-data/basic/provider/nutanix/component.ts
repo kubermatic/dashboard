@@ -35,6 +35,7 @@ import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
 import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/entity/provider/nutanix';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {getDefaultForOS} from '@shared/utils/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
@@ -170,7 +171,11 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._images = dc.spec?.nutanix?.images)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
+      .subscribe(_ => {
+        if (this._nodeDataService.operatingSystem) {
+          this._setDefaultImage(this._nodeDataService.operatingSystem);
+        }
+      });
 
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._images))
@@ -424,7 +429,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultImage(os: OperatingSystem): void {
-    let defaultImage = this._getDefaultImage(os);
+    let defaultImage = getDefaultForOS(os, this._images);
 
     if (_.isEmpty(this._defaultImage)) {
       this._defaultImage = defaultImage;
@@ -436,21 +441,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
 
     this.form.get(Controls.ImageName).setValue(defaultImage);
     this._cdr.detectChanges();
-  }
-
-  private _getDefaultImage(os: OperatingSystem): string {
-    switch (os) {
-      case OperatingSystem.Ubuntu:
-        return this._images?.ubuntu;
-      case OperatingSystem.RHEL:
-        return this._images?.rhel;
-      case OperatingSystem.Flatcar:
-        return this._images?.flatcar;
-      case OperatingSystem.RockyLinux:
-        return this._images?.rockylinux;
-      default:
-        return this._images?.ubuntu;
-    }
   }
 
   private _getNodeData(): NodeData {
