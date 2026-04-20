@@ -123,14 +123,12 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this._nodeDataService.nodeData.spec.operatingSystem
     );
 
-    this._nodeDataService.allowedOperatingSystems$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(allowedOS => {
-        this.allowedOperatingSystems = allowedOS;
-        if (this._templates) {
-          this._setDefaultTemplate();
-        }
-      });
+    this._nodeDataService.allowedOperatingSystems$.pipe(takeUntil(this._unsubscribe)).subscribe(allowedOS => {
+      this.allowedOperatingSystems = allowedOS;
+      if (this._templates) {
+        this._setDefaultTemplate();
+      }
+    });
 
     merge(
       this.form.get(Controls.Memory).valueChanges,
