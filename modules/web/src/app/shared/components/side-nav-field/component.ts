@@ -15,6 +15,7 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AdminPanelSections, AdminPanelView, ProjectSidenavSection, View} from '@app/shared/entity/common';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {shrinkGrow} from '@shared/animations/grow';
 @Component({
   selector: 'km-side-nav-field',
@@ -122,7 +123,7 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
     if (url === View.Clusters) {
       return (
         (urlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOneClusters)) ||
-        (!!urlArray.find(x => x === View.Wizard) && !mode)
+        (!!urlArray.find(x => x === View.Wizard) && (!mode || mode === WizardMode.CreateUserCluster))
       );
     } else if (url === View.ExternalClusters) {
       return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);

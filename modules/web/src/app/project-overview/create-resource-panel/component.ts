@@ -128,7 +128,9 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   }
 
   openClusterWizard(): void {
-    this._router.navigate([`/projects/${this.project.id}/wizard`]);
+    this._router.navigate([`/projects/${this.project.id}/wizard`], {
+      state: {mode: WizardMode.CreateUserCluster},
+    });
   }
 
   openExternalClusterWizard(): void {

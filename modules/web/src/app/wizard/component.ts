@@ -39,6 +39,7 @@ import {ApplicationService} from '@core/services/application';
 import {Application} from '@shared/entity/application';
 import {WizardMode} from './types/wizard-mode';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
+import {View} from '@shared/entity/common';
 
 @Component({
   selector: 'km-wizard',
@@ -59,6 +60,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
 
+  private readonly _cancelRouteByMode = new Map<WizardMode, View>([
+    [WizardMode.CreateUserCluster, View.Clusters],
+    [WizardMode.CreateClusterTemplate, View.ClusterTemplates],
+    [WizardMode.EditClusterTemplate, View.ClusterTemplates],
+    [WizardMode.CustomizeClusterTemplate, View.ClusterTemplates],
+  ]);
   private _stepper: MatStepper;
   private _unsubscribe: Subject<void> = new Subject<void>();
 
@@ -112,7 +119,10 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   get showCreateClusterButton(): boolean {
     if (this.wizardMode) {
-      return this.last && this.wizardMode === WizardMode.CustomizeClusterTemplate;
+      return (
+        this.last &&
+        (this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster)
+      );
     }
     return this.last;
   }
@@ -133,7 +143,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.loadingClusterTemplate = false;
     }
 
-    if (this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode) {
+    if (this.wizardMode === WizardMode.CustomizeClusterTemplate || this.wizardMode === WizardMode.CreateUserCluster) {
       this._quotaCalculationService
         .getQuotaExceed()
         .pipe(takeUntil(this._unsubscribe))
@@ -160,6 +170,12 @@ export class WizardComponent implements OnInit, OnDestroy {
       .create(this.project.id, createCluster)
       .pipe(switchMap(cluster => this._clusterService.cluster(this.project.id, cluster.id)))
       .pipe(takeUntil(this._unsubscribe));
+  }
+
+  onCancel(): void {
+    const tail = this._cancelRouteByMode.get(this.wizardMode) ?? View.Clusters;
+
+    this._router.navigate([`/projects/${this.project.id}/${tail}`]);
   }
 
   onNext(cluster: Cluster): void {
