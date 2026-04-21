@@ -29,7 +29,6 @@ import {catchError, filter, switchMap, take} from 'rxjs/operators';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private readonly _refreshUrl = `${environment.newRestRoot}/auth/refresh`;
-  private readonly _statusUrl = `${environment.newRestRoot}/auth/status`;
   private _isRefreshing = false;
   private _refreshDone$ = new BehaviorSubject<boolean>(false);
 
@@ -39,7 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         // Only handle 401s for API requests, and don't retry the refresh call itself.
-        if (error.status === HttpStatusCode.Unauthorized && !req.url.startsWith(this._statusUrl)) {
+        if (error.status === HttpStatusCode.Unauthorized && !req.url.startsWith(this._refreshUrl)) {
           return this._handle401(req, next);
         }
         return throwError(() => error);
