@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
 import {Observable, of, Subscription, timer} from 'rxjs';
-import {catchError, switchMap} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 
 interface AuthStatusResponse {
   expires_at: number;
@@ -52,17 +52,15 @@ export class Auth {
     return new Promise<void>(resolve => {
       this._httpClient
         .get<AuthStatusResponse>(this._statusUrl)
-        .pipe(
-          catchError(() => {
-            this._expiresAt = 0;
-            return of(null);
-          })
-        )
+        .pipe(catchError(() => of(null)))
         .subscribe(response => {
-          if (response) {
-            this._expiresAt = response.expires_at;
-            this._scheduleRefresh();
+          this._expiresAt = response?.expires_at ?? 0;
+          const msUntilExpiry = this._expiresAt * SECONDS_TO_MS - Date.now();
+          if (msUntilExpiry <= this._refreshBufferMs) {
+            this._refreshToken(resolve);
+            return;
           }
+          this._scheduleRefresh();
           resolve();
         });
     });
@@ -91,20 +89,7 @@ export class Auth {
       return;
     }
 
-    this._refreshSub = timer(msUntilRefresh)
-      .pipe(
-        switchMap(() => this._httpClient.post(this._refreshUrl, null)),
-        catchError(() => {
-          this._expiresAt = 0;
-          window.location.href = '/';
-          return of(null);
-        })
-      )
-      .subscribe(response => {
-        if (response) {
-          this.checkStatus();
-        }
-      });
+    this._refreshSub = timer(msUntilRefresh).subscribe(() => this._refreshToken());
   }
 
   private _cancelRefresh(): void {
@@ -112,5 +97,19 @@ export class Auth {
       this._refreshSub.unsubscribe();
       this._refreshSub = null;
     }
+  }
+
+  private _refreshToken(onComplete?: () => void): void {
+    this._httpClient.post<AuthStatusResponse>(this._refreshUrl, null).subscribe({
+      next: res => {
+        this._expiresAt = res.expires_at;
+        this._scheduleRefresh();
+        onComplete?.();
+      },
+      error: () => {
+        this._expiresAt = 0;
+        onComplete?.();
+      },
+    });
   }
 }

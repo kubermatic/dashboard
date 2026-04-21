@@ -282,7 +282,12 @@ func (a *authHandler) refreshHandler() http.Handler {
 			setNamedCookie(w, refreshTokenCookieName, oidcTokens.RefreshToken, "/api/v2/auth", refreshTokenCookieMaxAge, oidcConfig.CookieSecureMode)
 		}
 
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(authStatusResponse{
+			ExpiresAt: claims.Expiry.Unix(),
+		}); err != nil {
+			http.Error(w, fmt.Sprintf("failed to encode response: %v", err), http.StatusInternalServerError)
+		}
 	})
 }
 
