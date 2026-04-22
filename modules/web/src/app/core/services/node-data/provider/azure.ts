@@ -141,7 +141,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(take(1))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
@@ -161,8 +161,7 @@ export class NodeDataAzureProvider {
 
               return onErrorResumeNext(of({} as AzureZones));
             })
-          )
-          .pipe(take(1));
+          );
       }
     }
   }
