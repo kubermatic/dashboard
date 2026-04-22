@@ -110,10 +110,6 @@ export class NodeDataService {
     return this._allowedOperatingSystems$.asObservable();
   }
 
-  get allowedOperatingSystems(): AllowedOperatingSystems {
-    return this._allowedOperatingSystems$.value;
-  }
-
   set allowedOperatingSystems(value: AllowedOperatingSystems) {
     this._allowedOperatingSystems$.next(value);
   }
