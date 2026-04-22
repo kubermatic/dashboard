@@ -12,7 +12,7 @@ This approach assumes that you have all required dependencies available on your 
 
 ## Preparation
 
-Install the application dependencies by running:
+Install the application dependencies by running within the `modules/web` directory:
 
 ```bash
 npm ci
@@ -24,7 +24,7 @@ There are multiple ways to start the application. We'll describe all of them sho
 
 ### Using the Remote API
 
-The easiest way to start the Dashboard is by running:
+The easiest way to start the Dashboard is by running within the `modules/web` directory:
 
 ```bash
 npm start
@@ -37,6 +37,11 @@ It is always based on our latest `main` build, but be aware that it might be uns
 
 In order to start the KKP API locally, refer to the [Kubermatic](https://github.com/kubermatic/kubermatic) repository
 documentation.
+In short you can run the API server against the `dev.kubermatic.io` environment as follows:
+```bash
+rm -f modules/api/_build/kubermatic-api
+KUBERMATIC_EDITION=ee ./modules/api/hack/run-api.sh
+```
 
 Once you have started your local API, start the Dashboard by running:
 
