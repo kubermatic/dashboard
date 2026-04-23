@@ -31,6 +31,7 @@ import (
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
 	controllerutil "k8c.io/kubermatic/v2/pkg/controller/util"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
+	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
@@ -246,6 +247,7 @@ func (p *ClusterProvider) List(ctx context.Context, project *kubermaticv1.Projec
 	if err := p.client.List(ctx, projectClusters, listOpts); err != nil {
 		// ignore error if cluster is unreachable
 		if kubenetutil.IsConnectionRefused(err) {
+			log.Logger.Warn("cannot connect to seed cluster, returning empty user cluster list")
 			return projectClusters, nil
 		}
 		return nil, fmt.Errorf("failed to list clusters: %w", err)
