@@ -38,10 +38,11 @@ import {VSphereService} from '@core/services/provider/vsphere';
 import {PresetsService} from '@core/services/wizard/presets';
 import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {AllowedOperatingSystems, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import _ from 'lodash';
-import {ReplaySubject} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAnexiaProvider} from './provider/anexia';
 import {NodeDataAWSProvider} from './provider/aws';
@@ -58,6 +59,9 @@ export class NodeDataService {
   private readonly _config: NodeDataConfig;
   private _nodeData: NodeData = NodeData.NewEmptyNodeData();
   private _operatingSystemChanges = new ReplaySubject<OperatingSystem>();
+  private _allowedOperatingSystems$ = new BehaviorSubject<AllowedOperatingSystems>(
+    DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems
+  );
 
   readonly nodeDataChanges = new ReplaySubject<NodeData>();
 
@@ -100,6 +104,14 @@ export class NodeDataService {
 
   get operatingSystemChanges(): ReplaySubject<OperatingSystem> {
     return this._operatingSystemChanges;
+  }
+
+  get allowedOperatingSystems$(): Observable<AllowedOperatingSystems> {
+    return this._allowedOperatingSystems$.asObservable();
+  }
+
+  set allowedOperatingSystems(value: AllowedOperatingSystems) {
+    this._allowedOperatingSystems$.next(value);
   }
 
   set operatingSystemSpec(spec: OperatingSystemSpec) {
