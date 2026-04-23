@@ -29,9 +29,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              fxLayoutGap="10px">
           <i [ngClass]="getTypeIcon()"></i>
-          <span>{{events.length}} event@if (events.length !== 1) {
-            s
-            }</span>
+          <span>{{events.length}} {{events.length === 1 ? 'event' : 'events'}}</span>
         </div>
       </div>
     </mat-card-title>
