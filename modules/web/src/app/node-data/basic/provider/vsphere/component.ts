@@ -14,7 +14,6 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {SettingsService} from '@app/core/services/settings';
 import {FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {VSphereVMGroup} from '@app/shared/entity/provider/vsphere';
 import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
@@ -93,7 +92,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _settingsService: SettingsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -125,9 +123,10 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this._nodeDataService.nodeData.spec.operatingSystem
     );
 
-    this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
-      if (settings.allowedOperatingSystems) {
-        this.allowedOperatingSystems = settings.allowedOperatingSystems;
+    this._nodeDataService.allowedOperatingSystems$.pipe(takeUntil(this._unsubscribe)).subscribe(allowedOS => {
+      this.allowedOperatingSystems = allowedOS;
+      if (this._templates) {
+        this._setDefaultTemplate();
       }
     });
 
