@@ -23,6 +23,7 @@ module.exports = {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
     '^@core/(.*)$': '<rootDir>/src/app/core/$1',
     '^@shared/(.*)$': '<rootDir>/src/app/shared/$1',
+    '^@dynamic/(.*)$': '<rootDir>/src/app/dynamic/$1',
     '^@assets/(.*)$': '<rootDir>/src/assets/$1',
     '^@environments/(.*)$': '<rootDir>/src/environments/$1',
     '^@test/(.*)$': '<rootDir>/src/test/$1',

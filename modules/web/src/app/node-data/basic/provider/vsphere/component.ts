@@ -28,6 +28,7 @@ import {NodeCloudSpec, NodeSpec, OperatingSystemSpec, VSphereNodeSpec} from '@sh
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
+import {getDefaultForOS} from '@shared/utils/node';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, Observable, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -194,22 +195,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     }
     this.initiallySelectedOS = null;
 
-    switch (os) {
-      case OperatingSystem.Ubuntu:
-        this._defaultTemplate = this._templates.ubuntu;
-        break;
-      case OperatingSystem.Flatcar:
-        this._defaultTemplate = this._templates.flatcar;
-        break;
-      case OperatingSystem.RHEL:
-        this._defaultTemplate = this._templates.rhel;
-        break;
-      case OperatingSystem.RockyLinux:
-        this._defaultTemplate = this._templates.rockylinux;
-        break;
-      default:
-        this._defaultTemplate = '';
-    }
+    this._defaultTemplate = getDefaultForOS(os, this._templates);
 
     this.form.get(Controls.Template).setValue(this._defaultTemplate);
   }
