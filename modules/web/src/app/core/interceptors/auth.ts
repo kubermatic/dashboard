@@ -12,67 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  HttpClient,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpErrorResponse,
-  HttpStatusCode,
-} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Auth} from '@core/services/auth/service';
 import {environment} from '@environments/environment';
-import {Observable, throwError, BehaviorSubject} from 'rxjs';
-import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private readonly _refreshUrl = `${environment.newRestRoot}/auth/refresh`;
-  private _isRefreshing = false;
-  private _refreshDone$ = new BehaviorSubject<boolean>(false);
+  private readonly _restRoot: string = environment.restRoot;
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private _auth: Auth) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        // Only handle 401s for API requests, and don't retry the refresh call itself.
-        if (error.status === HttpStatusCode.Unauthorized && !req.url.startsWith(this._refreshUrl)) {
-          return this._handle401(req, next);
-        }
-        return throwError(() => error);
-      })
-    );
-  }
+    const token = this._auth.getBearerToken();
+    // Filter requests made to our backend starting with 'restRoot' and append request header
+    // with token.
+    if (req.url.startsWith(this._restRoot) && token.length) {
+      const authReq = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${token}`),
+      });
 
-  private _handle401(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this._isRefreshing) {
-      // Another request already triggered a refresh — wait for it to complete, then retry.
-      return this._refreshDone$.pipe(
-        filter(done => done),
-        take(1),
-        switchMap(() => next.handle(req))
-      );
+      return next.handle(authReq);
     }
 
-    this._isRefreshing = true;
-    this._refreshDone$.next(false);
-
-    return this._http.post(this._refreshUrl, null).pipe(
-      switchMap(() => {
-        this._isRefreshing = false;
-        this._refreshDone$.next(true);
-        // Retry the original request — browser will send the new cookie.
-        return next.handle(req);
-      }),
-      catchError(refreshError => {
-        this._isRefreshing = false;
-        this._refreshDone$.next(true);
-        // Refresh failed — redirect to login page.
-        window.location.href = '/';
-        return throwError(() => refreshError);
-      })
-    );
+    return next.handle(req);
   }
 }

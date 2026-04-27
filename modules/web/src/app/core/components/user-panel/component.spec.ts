@@ -13,16 +13,21 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
 import {ProjectMockService} from '@test/services/project-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {UserPanelComponent} from './component';
 
@@ -40,6 +45,8 @@ describe('UserPanelComponent', () => {
         {provide: UserService, useClass: UserMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: Auth, useClass: AuthMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
@@ -54,15 +61,16 @@ describe('UserPanelComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should call logout and redirect when user logs out', () => {
+  it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
     authService = fixture.debugElement.injector.get(Auth) as any;
+    const spyNavigate = jest.spyOn(router, 'navigate');
     const spyLogOut = jest.spyOn(authService, 'logout');
 
-    // jsdom does not support navigation, so just verify logout was called
     component.logout();
 
+    expect(spyNavigate).toHaveBeenCalled();
     expect(spyLogOut).toHaveBeenCalled();
-  });
+  }));
 
   it('should not display user information after logout', waitForAsync(() => {
     fixture.detectChanges();

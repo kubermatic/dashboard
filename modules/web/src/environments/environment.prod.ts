@@ -26,5 +26,7 @@ export const environment = {
   newRestRoot: '/api/v2',
   wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
   avoidWebsockets: false,
+  oidcProviderUrl: `${protocol}//${host}/dex/auth`,
+  oidcConnectorId: null,
   animations: true,
 };

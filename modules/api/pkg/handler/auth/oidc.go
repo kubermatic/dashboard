@@ -26,7 +26,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/coreos/go-oidc"
@@ -158,17 +157,11 @@ func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteR
 }
 
 // Exchange converts an authorization code into a token.
-// An optional codeVerifier can be passed for PKCE support.
-func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (authtypes.OIDCToken, error) {
+func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (authtypes.OIDCToken, error) {
 	clientCtx := oidc.ClientContext(ctx, o.httpClient)
 	oauth2Config := o.oauth2Config(overwriteRedirectURI)
 
-	var opts []oauth2.AuthCodeOption
-	if len(codeVerifier) > 0 && codeVerifier[0] != "" {
-		opts = append(opts, oauth2.SetAuthURLParam("code_verifier", codeVerifier[0]))
-	}
-
-	tokens, err := oauth2Config.Exchange(clientCtx, code, opts...)
+	tokens, err := oauth2Config.Exchange(clientCtx, code)
 	if err != nil {
 		return authtypes.OIDCToken{}, err
 	}
@@ -341,68 +334,4 @@ func (c combinedExtractor) Extract(r *http.Request) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("haven't found an OIDC token, tried %d extractors", len(c.extractors))
-}
-
-const (
-	// DefaultStateTTL is how long a state entry remains valid before it expires.
-	DefaultStateTTL = 5 * time.Minute
-	// DefaultStateCleanupInterval is how often the cleanup goroutine runs.
-	DefaultStateCleanupInterval = 1 * time.Minute
-)
-
-// InMemoryStateStore implements authtypes.StateStore using an in-memory map.
-type InMemoryStateStore struct {
-	mu              sync.RWMutex
-	states          map[string]authtypes.AuthState
-	ttl             time.Duration
-	cleanupInterval time.Duration
-}
-
-// NewInMemoryStateStore creates a new InMemoryStateStore and starts a background cleanup goroutine.
-func NewInMemoryStateStore(ttl, cleanupInterval time.Duration) *InMemoryStateStore {
-	s := &InMemoryStateStore{
-		states:          make(map[string]authtypes.AuthState),
-		ttl:             ttl,
-		cleanupInterval: cleanupInterval,
-	}
-	go s.startCleanup()
-	return s
-}
-
-// Store saves an AuthState keyed by the given state token.
-func (s *InMemoryStateStore) Store(state string, authState authtypes.AuthState) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.states[state] = authState
-}
-
-// Get retrieves an AuthState by its state token.
-func (s *InMemoryStateStore) Get(state string) (authtypes.AuthState, bool) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	authState, ok := s.states[state]
-	return authState, ok
-}
-
-// Delete removes an AuthState entry.
-func (s *InMemoryStateStore) Delete(state string) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	delete(s.states, state)
-}
-
-// startCleanup runs a background loop that removes expired state entries.
-func (s *InMemoryStateStore) startCleanup() {
-	ticker := time.NewTicker(s.cleanupInterval)
-	defer ticker.Stop()
-	for range ticker.C {
-		s.mu.Lock()
-		now := time.Now()
-		for state, authState := range s.states {
-			if now.Sub(authState.CreatedAt) > s.ttl {
-				delete(s.states, state)
-			}
-		}
-		s.mu.Unlock()
-	}
 }

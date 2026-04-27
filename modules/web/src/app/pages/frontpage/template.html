@@ -21,7 +21,8 @@ limitations under the License.
      mat-raised-button
      class="login-button"
      id="login-button"
-     href="{{loginURL}}">Sign in</a>
+     href="{{getOIDCProviderURL()}}"
+     (click)="login()">Sign in</a>
 </div>
 
 <div class="km-frontpage-background"></div>
