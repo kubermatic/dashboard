@@ -128,7 +128,7 @@ func (o *IssuerVerifier) oauth2Config(overwriteRedirectURI string, scopes ...str
 }
 
 // Exchange converts an authorization code into a token.
-func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (authtypes.OIDCToken, error) {
+func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string) (authtypes.OIDCToken, error) {
 	if code != AuthorizationCode {
 		return authtypes.OIDCToken{}, errors.New("incorrect code")
 	}

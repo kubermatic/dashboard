@@ -486,7 +486,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		applicationDefinitionProvider:                  applicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
 		oidcIssuerVerifierProviderGetter:               oidcIssuerVerifierProviderGetter,
-		oidcIssuerVerifier:                             oidcIssuerVerifier,
 	}, nil
 }
 
@@ -614,8 +613,6 @@ func createAPIHandler(
 		ApplicationDefinitionProvider:                  prov.applicationDefinitionProvider,
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
 		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
-		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
-		StateStore:                                     auth.NewInMemoryStateStore(auth.DefaultStateTTL, auth.DefaultStateCleanupInterval),
 		Versions:                                       options.versions,
 		CABundle:                                       options.caBundle.CertPool(),
 		Features:                                       options.featureGates,

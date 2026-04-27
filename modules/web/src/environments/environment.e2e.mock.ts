@@ -22,5 +22,7 @@ export const environment = {
   newRestRoot: '/api/v2',
   wsRoot: '',
   avoidWebsockets: true,
+  oidcProviderUrl: '',
+  oidcConnectorId: '',
   animations: false,
 };

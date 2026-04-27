@@ -16,6 +16,7 @@ import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {Auth} from '@core/services/auth/service';
 import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
 import 'swagger-ui-dist/swagger-ui.css';
 
@@ -26,6 +27,7 @@ import 'swagger-ui-dist/swagger-ui.css';
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
+    private readonly _auth: Auth,
     private readonly _appConfigService: AppConfigService,
     private readonly _router: Router,
     @Inject(DOCUMENT) private readonly _document: Document
@@ -41,11 +43,32 @@ export class ApiDocsComponent implements OnInit {
         tryItOutEnabled: true,
         requestSnippetsEnabled: true,
         url: `${this._document.location.origin}/api/swagger.json`,
+        requestInterceptor: req => {
+          const authHeader = req.headers['Authorization'] || req.headers['authorization'];
+          const bearerPrefix = 'Bearer ';
+
+          // Add Bearer prefix to raw tokens from Swagger UI Authorize dialog
+          if (authHeader && !authHeader.startsWith(bearerPrefix)) {
+            req.headers['Authorization'] = `${bearerPrefix}${authHeader}`;
+          } else if (!authHeader) {
+            // Fall back to logged-in user's session token
+            const token = this._auth.getBearerToken();
+            if (token) {
+              req.headers['Authorization'] = `${bearerPrefix}${token}`;
+            }
+          }
+
+          return req;
+        },
       });
     });
   }
 
   backToApp(): void {
-    this._router.navigate(['/projects']);
+    if (this._auth.authenticated()) {
+      this._router.navigate(['/projects']);
+    } else {
+      this._router.navigate(['']);
+    }
   }
 }

@@ -179,3 +179,6 @@ export class KyvernoPoliciesConfig implements Viewable {
   create?: boolean;
   delete?: boolean;
 }
+export enum OIDCProviders {
+  Keycloak = 'keycloak',
+}

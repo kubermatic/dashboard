@@ -56,6 +56,7 @@ export class Root {
       window.btoa(JSON.stringify(signature));
 
     cy.setCookie('token', token);
+    cy.setCookie('nonce', nonce);
     cy.setCookie('autoredirect', 'true');
   }
 }

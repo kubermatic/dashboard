@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
+import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
 import {CLOSE_PANEL_TOOLTIP} from '@app/shared/constants/common';
@@ -39,7 +42,10 @@ export class UserPanelComponent implements OnInit, OnDestroy {
     private readonly _elementRef: ElementRef,
     private readonly _router: Router,
     private readonly _auth: Auth,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService,
+    private readonly _appConfigService: AppConfigService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
@@ -71,13 +77,22 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this._auth.logout().subscribe(res => {
-      if (res) {
-        window.location.href = res.redirect;
+    const token = this._auth.getBearerToken();
+    this._auth.logout().subscribe(_ => {
+      this._settingsService.refreshCustomLinks();
+      if (this._appConfigService.getConfig().oidc_logout_url) {
+        this._auth.oidcProviderLogout(token);
+      } else {
+        this._router.navigate(['']);
+        this._document.defaultView.location.reload();
         this._isOpen = false;
         delete this.user;
       }
     });
+  }
+
+  login(): void {
+    this._auth.login();
   }
 
   goToAccount(): void {

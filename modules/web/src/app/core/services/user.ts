@@ -21,7 +21,7 @@ import {AppConfigService} from '@app/config.service';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member';
-import {Auth} from './auth/service';
+import {TokenService} from './token';
 import {DEFAULT_USER_SETTINGS, UserSettings} from '@shared/entity/settings';
 import {webSocket} from 'rxjs/webSocket';
 
@@ -37,12 +37,12 @@ export class UserService {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _appConfigService: AppConfigService,
-    private readonly _auth: Auth
+    private readonly _tokenService: TokenService
   ) {}
 
   init(): void {
     iif(
-      () => this._auth.authenticated(),
+      () => this._tokenService.hasExpired(),
       environment.avoidWebsockets ? this._getCurrentUser() : this._getCurrentUserWebSocket(),
       EMPTY
     )
@@ -57,7 +57,7 @@ export class UserService {
     const url = `${this.restRoot}/me`;
     const observable = this._httpClient.get<Member>(url).pipe(catchError(_ => of<Member>()));
     return this._refreshTimer$
-      .pipe(switchMap(_ => iif(() => this._auth.authenticated(), observable, EMPTY)))
+      .pipe(switchMap(_ => iif(() => this._tokenService.hasExpired(), observable, EMPTY)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
