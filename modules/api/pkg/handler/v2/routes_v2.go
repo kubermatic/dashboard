@@ -32,6 +32,7 @@ import (
 	applicationdefinition "k8c.io/dashboard/v2/pkg/handler/v2/application_definition"
 	applicationinstallation "k8c.io/dashboard/v2/pkg/handler/v2/application_installation"
 	applicationsettings "k8c.io/dashboard/v2/pkg/handler/v2/application_settings"
+	"k8c.io/dashboard/v2/pkg/handler/v2/authflow"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupcredentials"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupdestinations"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -1133,6 +1134,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies").
 		Handler(r.listVMwareCloudDirectorComputePoliciesNoCredentials())
+
+	authflow.
+		NewAuthHandler(r.stateStore, r.oidcIssuerVerifier, r.userProvider, r.kubermaticConfigGetter).
+		Install(mux)
 
 	kubernetesdashboard.
 		NewLoginHandler(r.settingsProvider).
