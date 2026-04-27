@@ -615,6 +615,7 @@ func createAPIHandler(
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
 		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
 		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
+		AuthflowRedirectURI:                            options.oidcAuthflowRedirectURI,
 		StateStore:                                     auth.NewInMemoryStateStore(auth.DefaultStateTTL, auth.DefaultStateCleanupInterval),
 		Versions:                                       options.versions,
 		CABundle:                                       options.caBundle.CertPool(),

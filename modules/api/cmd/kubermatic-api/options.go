@@ -63,6 +63,7 @@ type serverRunOptions struct {
 	oidcIssuerClientID             string
 	oidcIssuerClientSecret         string
 	oidcIssuerRedirectURI          string
+	oidcAuthflowRedirectURI        string
 	oidcIssuerCookieHashKey        string
 	oidcIssuerCookieSecureMode     bool
 	oidcSkipTLSVerify              bool
@@ -99,6 +100,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.oidcIssuerClientID, "oidc-issuer-client-id", "", "Issuer client ID")
 	flag.StringVar(&s.oidcIssuerClientSecret, "oidc-issuer-client-secret", "", "OpenID client secret")
 	flag.StringVar(&s.oidcIssuerRedirectURI, "oidc-issuer-redirect-uri", "", "Callback URL for OpenID responses.")
+	flag.StringVar(&s.oidcAuthflowRedirectURI, "oidc-authflow-redirect-uri", "", "Redirect URI for the dashboard OAuth authorization code flow. Defaults to https://<request-host>/api/v2/auth/callback.")
 	flag.StringVar(&s.oidcIssuerCookieHashKey, "oidc-issuer-cookie-hash-key", "", "Hash key authenticates the cookie value using HMAC. It is recommended to use a key with 32 or 64 bytes.")
 	flag.BoolVar(&s.oidcIssuerCookieSecureMode, "oidc-issuer-cookie-secure-mode", true, "When true cookie received only with HTTPS. Set false for local deployment with HTTP")
 	flag.BoolVar(&s.oidcIssuerOfflineAccessAsScope, "oidc-issuer-offline-access-as-scope", true, "Set it to false if OIDC provider requires to set \"access_type=offline\" query param when accessing the refresh token")

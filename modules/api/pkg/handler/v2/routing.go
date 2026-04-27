@@ -103,6 +103,7 @@ type Routing struct {
 	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
 	stateStore                                     authtypes.StateStore
+	authflowRedirectURI                            string
 	versions                                       kubermatic.Versions
 	caBundle                                       *x509.CertPool
 	features                                       features.FeatureGate
@@ -174,6 +175,7 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		oidcIssuerVerifierProviderGetter:               routingParams.OIDCIssuerVerifierProviderGetter,
 		oidcIssuerVerifier:                             routingParams.OIDCIssuerVerifier,
 		stateStore:                                     routingParams.StateStore,
+		authflowRedirectURI:                            routingParams.AuthflowRedirectURI,
 		versions:                                       routingParams.Versions,
 		caBundle:                                       routingParams.CABundle,
 		features:                                       routingParams.Features,

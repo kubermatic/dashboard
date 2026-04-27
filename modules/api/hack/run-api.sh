@@ -57,6 +57,7 @@ API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-id=$OIDC_ISSUER_CLIENT_ID"
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-secret=$OIDC_ISSUER_CLIENT_SECRET"
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-redirect-uri=$OIDC_ISSUER_REDIRECT_URI"
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-cookie-hash-key=$OIDC_ISSUER_COOKIE_HASH_KEY"
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-authflow-redirect-uri=http://127.0.0.1:8080/api/v2/auth/callback"
 
 echodate "Starting API..."
 set -x

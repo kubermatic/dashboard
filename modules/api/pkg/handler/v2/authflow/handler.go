@@ -43,13 +43,14 @@ func appendPKCEParams(authURL, codeChallenge string) string {
 	return authURL + "&code_challenge=" + url.QueryEscape(codeChallenge) + "&code_challenge_method=S256"
 }
 
-// buildRedirectURI constructs the callback URL from the incoming request's host.
-func buildRedirectURI(r *http.Request) string {
-	scheme := "https"
-	if r.TLS == nil {
-		scheme = "http"
+// buildRedirectURI returns the configured redirect URI if set, otherwise
+// defaults to https://<host>/api/v2/auth/callback.
+func (a *authHandler) buildRedirectURI(r *http.Request) string {
+	if a.redirectURI != "" {
+		return a.redirectURI
 	}
-	return fmt.Sprintf("%s://%s%s", scheme, r.Host, callbackPath)
+
+	return fmt.Sprintf("https://%s%s", r.Host, callbackPath)
 }
 
 func (a *authHandler) loginHandler() http.Handler {
@@ -72,7 +73,7 @@ func (a *authHandler) loginHandler() http.Handler {
 			scopes = append(scopes, "offline_access")
 		}
 
-		redirectURI := buildRedirectURI(r)
+		redirectURI := a.buildRedirectURI(r)
 		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
 		authURL = appendPKCEParams(authURL, oauth2.S256ChallengeFromVerifier(codeVerifier))
 
@@ -144,7 +145,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 		}
 
 		// 4. Exchange authorization code for tokens with PKCE code_verifier.
-		redirectURI := buildRedirectURI(r)
+		redirectURI := a.buildRedirectURI(r)
 		oidcTokens, err := a.oidcIssuerVerifier.Exchange(r.Context(), code, redirectURI, authState.CodeVerifier)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to exchange code for tokens: %v", err), http.StatusInternalServerError)
