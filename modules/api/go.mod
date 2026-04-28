@@ -61,7 +61,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.11.1
 	github.com/vmware-tanzu/velero v1.16.0
 	github.com/vmware/go-vcloud-director/v2 v2.26.1
@@ -71,7 +71,7 @@ require (
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.233.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8c.io/kubeone v1.10.0
+	k8c.io/kubeone v1.12.3
 	k8c.io/kubermatic/sdk/v2 v2.29.7-0.20260417171333-21b5f9045f34
 	k8c.io/kubermatic/v2 v2.29.7-0.20260417171333-21b5f9045f34
 	k8c.io/machine-controller/sdk v1.64.1
@@ -105,7 +105,7 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250701173324-9bd5c66
 replace k8s.io/client-go => k8s.io/client-go v0.33.4
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
-replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
+replace k8c.io/kubeone => k8c.io/kubeone v1.12.3
 
 replace github.com/theupdateframework/go-tuf/v2 => github.com/theupdateframework/go-tuf/v2 v2.0.2
 
@@ -370,16 +370,16 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
-	golang.org/x/mod v0.27.0 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/term v0.34.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/mod v0.29.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sync v0.18.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/term v0.37.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
-	golang.org/x/tools v0.36.0 // indirect
+	golang.org/x/tools v0.38.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250728155136-f173205681a0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250728155136-f173205681a0 // indirect
@@ -397,6 +397,8 @@ require (
 	k8s.io/gengo/v2 v2.0.0-20250207200755-1244d31929d7 // indirect
 	k8s.io/kube-aggregator v0.33.4 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
+	k8s.io/kube-proxy v0.33.4 // indirect
+	k8s.io/kubelet v0.33.4 // indirect
 	k8s.io/pod-security-admission v0.33.1 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.3.0 // indirect
