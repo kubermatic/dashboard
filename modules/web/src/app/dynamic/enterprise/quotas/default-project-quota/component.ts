@@ -22,6 +22,7 @@ import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, filter, switchMap, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   CPU = 'cpu',
@@ -42,7 +43,7 @@ export class DefaultProjectQuotaComponent implements OnInit, OnDestroy {
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
   form: FormGroup;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 

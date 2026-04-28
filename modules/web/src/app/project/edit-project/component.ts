@@ -53,7 +53,7 @@ export class EditProjectComponent implements OnInit {
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   labels: object;
   form: FormGroup;
-  projectQouta: QuotaDetails;
+  projectQuota: QuotaDetails;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
   user: Member;
   isMember: boolean;
@@ -111,13 +111,13 @@ export class EditProjectComponent implements OnInit {
   onNext(project: Project): void {
     this._matDialogRef.close(project);
 
-    if (this.isEnterpriseEdition && this.user.isAdmin && this.projectQouta) {
+    if (this.isEnterpriseEdition && this.user.isAdmin && this.projectQuota) {
       const quotaVariables = {
         cpu: this.form?.controls?.cpuQuota?.value,
         memory: this.form?.controls?.memoryQuota?.value,
         storage: this.form?.controls?.storageQuota?.value,
       };
-      this._quotaService.updateQuota(this.projectQouta?.name, quotaVariables).subscribe();
+      this._quotaService.updateQuota(this.projectQuota?.name, quotaVariables).subscribe();
     }
     this._notificationService.success(`Updated the ${this.project.name} project`);
   }
@@ -145,10 +145,10 @@ export class EditProjectComponent implements OnInit {
     if (this.isMember && this.isEnterpriseEdition) {
       this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
         if (quota) {
-          this.projectQouta = quota;
-          this.form.get(Controls.CPUQuota).setValue(this.projectQouta.quota.cpu);
-          this.form.get(Controls.MemoryQuota).setValue(this.projectQouta.quota.memory);
-          this.form.get(Controls.StorageQuota).setValue(this.projectQouta.quota.storage);
+          this.projectQuota = quota;
+          this.form.get(Controls.CPUQuota).setValue(this.projectQuota.quota.cpu);
+          this.form.get(Controls.MemoryQuota).setValue(this.projectQuota.quota.memory);
+          this.form.get(Controls.StorageQuota).setValue(this.projectQuota.quota.storage);
         }
       });
     }

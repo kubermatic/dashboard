@@ -22,9 +22,10 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataDigitalOceanProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -45,7 +46,7 @@ export class NodeDataDigitalOceanProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.DIGITALOCEAN))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -68,7 +69,7 @@ export class NodeDataDigitalOceanProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(

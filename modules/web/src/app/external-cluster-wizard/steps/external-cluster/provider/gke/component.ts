@@ -58,6 +58,7 @@ import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/component
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
 import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -176,7 +177,7 @@ export class GKEClusterSettingsComponent
   @ViewChild('machineTypesCombobox')
   private readonly _machineTypesCombobox: FilteredComboboxComponent;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _builder: FormBuilder,

@@ -34,6 +34,7 @@ import {OpenstackCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {debounceTime, filter, takeUntil, tap} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   Credentials = 'credentials',
@@ -73,7 +74,7 @@ export enum Mode {
   standalone: false,
 })
 export class OpenstackCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   readonly CredentialsType = CredentialsType;
   isPresetSelected = false;

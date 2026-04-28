@@ -19,7 +19,7 @@ import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
-import {sidenavCollapsibleWidth} from '@shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, sidenavCollapsibleWidth} from '@shared/constants/common';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
@@ -42,7 +42,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   currentUser: Member;
   isSidenavCollapsed: boolean;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _unsubscribe = new Subject<void>();
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
 

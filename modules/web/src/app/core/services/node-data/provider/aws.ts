@@ -24,9 +24,10 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {AWSService} from '@core/services/provider/aws';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataAWSProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -67,7 +68,7 @@ export class NodeDataAWSProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._awsService.getSizes(selectedProject, this._clusterDataService.cluster.id)))
@@ -90,7 +91,7 @@ export class NodeDataAWSProvider {
       case NodeDataMode.Wizard:
         return this._clusterDataService.clusterChanges
           .pipe(filter(_ => this._clusterDataService.provider === NodeProvider.AWS))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -125,7 +126,7 @@ export class NodeDataAWSProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._awsService.getSubnets(selectedProject, this._clusterDataService.cluster.id)))

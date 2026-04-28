@@ -22,9 +22,10 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, startWith, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataNutanixProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -39,7 +40,7 @@ export class NodeDataNutanixProvider {
       case NodeDataMode.Wizard:
         return merge(this._clusterSpecService.clusterChanges, this._clusterSpecService.providerSpecChanges)
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(map(() => this._clusterSpecService.cluster))
           .pipe(
             switchMap(cluster =>
@@ -66,7 +67,7 @@ export class NodeDataNutanixProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._nutanixService.getSubnets(selectedProject, this._clusterSpecService.cluster.id)))
@@ -89,7 +90,7 @@ export class NodeDataNutanixProvider {
       case NodeDataMode.Wizard:
         return merge(this._clusterSpecService.clusterChanges, this._clusterSpecService.providerSpecChanges)
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(switchMap(() => this._projectService.selectedProject.pipe(take(1))))
           .pipe(
             switchMap(project => {
@@ -114,7 +115,7 @@ export class NodeDataNutanixProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
@@ -144,7 +145,7 @@ export class NodeDataNutanixProvider {
         return merge(this._clusterSpecService.clusterChanges, this._clusterSpecService.providerSpecChanges)
           .pipe(startWith(true))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(switchMap(() => this._projectService.selectedProject.pipe(take(1))))
           .pipe(
             switchMap(project => {
@@ -169,7 +170,7 @@ export class NodeDataNutanixProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(

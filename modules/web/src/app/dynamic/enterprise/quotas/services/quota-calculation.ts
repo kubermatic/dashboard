@@ -5,12 +5,13 @@ import {merge, Observable, Subject} from 'rxjs';
 import {debounceTime, filter, shareReplay, startWith, switchMap, tap} from 'rxjs/operators';
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuotaCalculationService {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly _newRestRoot: string = environment.newRestRoot;
   private _quotaExceeded$ = new Subject<boolean>();
   private _refresh$ = new Subject<void>();

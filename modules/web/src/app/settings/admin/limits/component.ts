@@ -20,6 +20,7 @@ import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 @Component({
   selector: 'km-limits',
@@ -31,7 +32,7 @@ export class LimitsComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 

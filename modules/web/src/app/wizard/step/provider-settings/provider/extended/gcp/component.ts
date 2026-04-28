@@ -33,6 +33,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   Network = 'network',
@@ -70,7 +71,7 @@ enum SubNetworkState {
   standalone: false,
 })
 export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _onNetworkChange = new EventEmitter<void>();
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;

@@ -47,6 +47,7 @@ import {
   NetworkState,
   SecurityGroupState,
 } from '../shared/types/state';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -88,7 +89,7 @@ export class OpenstackProviderExtendedCredentialsComponent
   private readonly _ipv6SubnetIDCombobox: FilteredComboboxComponent;
   @ViewChild('ipv6SubnetPoolCombobox')
   private readonly _ipv6SubnetPoolCombobox: FilteredComboboxComponent;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly _networkChangeSubject = new Subject<string>();
   readonly Controls = Controls;
   isPresetSelected = false;

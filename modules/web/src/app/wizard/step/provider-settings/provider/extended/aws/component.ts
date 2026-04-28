@@ -23,6 +23,7 @@ import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -49,7 +50,7 @@ enum Controls {
   standalone: false,
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   isLoadingSecurityGroups = false;
   securityGroups: string[] = [];

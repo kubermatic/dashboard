@@ -32,6 +32,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -67,7 +68,7 @@ enum VPCState {
   standalone: false,
 })
 export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   isPresetSelected = false;
   vpcIDs: AWSVPC[] = [];

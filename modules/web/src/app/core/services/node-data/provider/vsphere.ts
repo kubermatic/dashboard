@@ -23,9 +23,10 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext, startWith} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataVSphereProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -46,7 +47,7 @@ export class NodeDataVSphereProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(map(() => this._clusterSpecService.cluster))
           .pipe(
             switchMap(cluster =>
@@ -74,7 +75,7 @@ export class NodeDataVSphereProvider {
           );
       case NodeDataMode.Dialog:
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(project => this._vsphereService.getTagCategories(project.id, this._clusterSpecService.cluster.id))
@@ -102,7 +103,7 @@ export class NodeDataVSphereProvider {
         return this._clusterSpecService.clusterChanges
           .pipe(startWith(true))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(map(() => this._clusterSpecService.cluster))
           .pipe(
             switchMap(cluster =>
@@ -130,7 +131,7 @@ export class NodeDataVSphereProvider {
           );
       case NodeDataMode.Dialog:
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(project =>
@@ -155,7 +156,7 @@ export class NodeDataVSphereProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(map(() => this._clusterSpecService.cluster))
           .pipe(
             switchMap(cluster =>
@@ -183,7 +184,7 @@ export class NodeDataVSphereProvider {
           );
       case NodeDataMode.Dialog:
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(project => this._vsphereService.getVMGroups(project.id, this._clusterSpecService.cluster.id)))
           .pipe(

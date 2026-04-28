@@ -28,6 +28,7 @@ import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
 import {expandCollapse} from '@app/shared/animations/expand';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export interface LoadBalancerClassDialogData {
   loadBalancerClasses?: OpenstackLoadBalancerClass[];
@@ -78,7 +79,7 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   expandedStates: boolean[] = [];
 
   private readonly _unsubscribe = new Subject<void>();
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   // Credential tracking
   private _domain = '';

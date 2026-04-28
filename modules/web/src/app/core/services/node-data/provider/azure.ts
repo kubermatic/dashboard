@@ -24,9 +24,10 @@ import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BehaviorSubject, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataAzureProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   acceleratedNetworking = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -51,7 +52,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.AZURE && !!c?.spec?.cloud?.dc))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
@@ -113,7 +114,7 @@ export class NodeDataAzureProvider {
                 !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet
             )
           )
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
             switchMap(_ =>

@@ -38,7 +38,7 @@ import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
 import {QuotaService} from '../service';
-import {quotaWidgetCollapsibleWidth} from '@shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, quotaWidgetCollapsibleWidth} from '@shared/constants/common';
 import {getProgressBarAccent} from '../utils/common';
 
 @Component({
@@ -49,7 +49,7 @@ import {getProgressBarAccent} from '../utils/common';
 })
 export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly _showDetails$ = new BehaviorSubject(false);
   private readonly _getPercentage = getPercentage;
   private _user: Member;
@@ -75,7 +75,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   quotaDetails: QuotaDetails;
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
-  showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
+  showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounceTime));
   calculationInProgress$: Observable<boolean>;
   isCollapsed: boolean;
   getProgressBarAccent = getProgressBarAccent;

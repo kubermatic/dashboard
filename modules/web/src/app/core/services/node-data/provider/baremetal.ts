@@ -21,9 +21,10 @@ import {TinkerbellOSImageList} from '@shared/entity/provider/baremetal';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataBaremetalProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -36,7 +37,7 @@ export class NodeDataBaremetalProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.datacenterChanges
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.BAREMETAL))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(datacenter => this._baremetalService.getOSImages(datacenter)))
@@ -51,7 +52,7 @@ export class NodeDataBaremetalProvider {
           );
       case NodeDataMode.Dialog: {
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._baremetalService.getOSImages(this._clusterSpecService.datacenter)))
           .pipe(

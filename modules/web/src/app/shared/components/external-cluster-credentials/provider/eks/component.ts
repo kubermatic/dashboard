@@ -18,6 +18,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil, debounceTime, tap} from 'rxjs/operators';
 import {ProjectService} from '@core/services/project';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -45,7 +46,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   regions: string[] = [];
   regionLabel = RegionState.Ready;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
