@@ -181,7 +181,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     super();
   }
 
-  @ViewChild('quotaWidgetContainer', {read: ViewContainerRef}) set quotaWidgetContainer(ref: ViewContainerRef) {
+  @ViewChild('quotaWidgetContainerDialog', {read: ViewContainerRef}) set quotaWidgetContainerDialog(
+    ref: ViewContainerRef
+  ) {
+    this._initQuotaWidget(ref);
+  }
+
+  @ViewChild('quotaWidgetContainerNonDialog', {read: ViewContainerRef}) set quotaWidgetContainerNonDialog(
+    ref: ViewContainerRef
+  ) {
+    this._initQuotaWidget(ref);
+  }
+
+  private _initQuotaWidget(ref: ViewContainerRef): void {
     if (ref && this.isEnterpriseEdition && !this.quotaWidgetComponentRef) {
       this.quotaWidgetComponentRef = ref.createComponent(QuotaWidgetComponent).instance;
       this.quotaWidgetComponentRef.projectId = this.projectId;

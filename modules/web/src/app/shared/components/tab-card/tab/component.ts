@@ -22,5 +22,5 @@ import {Component, Input, TemplateRef, ViewChild, ContentChild} from '@angular/c
 export class TabComponent {
   @Input() label: string;
   @ViewChild(TemplateRef) template: TemplateRef<any>;
-  @ContentChild('tabLabel') labelTemplate: TemplateRef<any>;
+  @ContentChild(TemplateRef) labelTemplate: TemplateRef<any>;
 }
