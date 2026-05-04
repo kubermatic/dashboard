@@ -33,8 +33,7 @@ limitations under the License.
       <i [matTooltip]="getStatus()"
          [ngClass]="getStatusColor()"
          class="cluster-health km-pointer"></i>
-      <span ngxClipboard
-            [cbContent]="cluster.name"
+      <span [cdkCopyToClipboard]="cluster.name"
             [matTooltip]="CLICK_TO_COPY_TOOLTIP"
             class="cluster-name km-copy">{{cluster.name}}</span>
       <span class="km-label-primary">KubeOne</span>
@@ -79,8 +78,7 @@ limitations under the License.
       <km-property>
         <div key>Cluster ID</div>
         <div value
-             ngxClipboard
-             [cbContent]="cluster?.id"
+             [cdkCopyToClipboard]="cluster?.id"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP"
              class="km-copy">
           {{cluster?.id}}

@@ -44,15 +44,13 @@ limitations under the License.
         <div class="km-code-block km-copy"
              fxLayoutAlign=" center"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP"
-             ngxClipboard
-             [cbContent]="'kubectl get csr'">
+             [cdkCopyToClipboard]="'kubectl get csr'">
           <i class="km-icon-mask km-icon-terminal i-16"></i>&nbsp;kubectl get csr
         </div>
         <div class="km-code-block km-copy"
              fxLayoutAlign=" center"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP"
-             ngxClipboard
-             [cbContent]="'kubectl certificate approve [csr-name]'">
+             [cdkCopyToClipboard]="'kubectl certificate approve [csr-name]'">
           <i class="km-icon-mask km-icon-terminal i-16"></i>&nbsp;kubectl certificate approve [csr-name]
         </div>
       </div>

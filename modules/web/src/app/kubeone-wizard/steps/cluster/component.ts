@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Clipboard} from '@angular/cdk/clipboard';
 import {Component, forwardRef, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {StepRegistry} from '@app/kubeone-wizard/config';
@@ -21,7 +22,6 @@ import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluste
 import {KubeOneClusterSpec, KubeOneSSHKeySpec} from '@shared/entity/kubeone-cluster';
 import {KmValidators} from '@shared/validators/validators';
 import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
-import {ClipboardService} from 'ngx-clipboard';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
@@ -60,7 +60,7 @@ export class KubeOneClusterStepComponent extends StepBase implements OnInit {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _clusterSpecService: KubeOneClusterSpecService,
-    private readonly _clipboardService: ClipboardService,
+    private readonly _clipboardService: Clipboard,
     wizard: KubeOneWizardService
   ) {
     super(wizard, StepRegistry.Cluster);

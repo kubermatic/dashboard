@@ -26,8 +26,7 @@ END OF TERMS AND CONDITIONS
     @if (restores.length === 1) {
     <p>
       Delete
-      <b ngxClipboard
-         [cbContent]="restores[0].name"
+      <b [cdkCopyToClipboard]="restores[0].name"
          [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{restores[0].name}}</b>
       restore permanently?
@@ -36,8 +35,7 @@ END OF TERMS AND CONDITIONS
     @if (restores.length > 1) {
     <p>
       Type
-      <b ngxClipboard
-         [cbContent]="'yes'"
+      <b [cdkCopyToClipboard]="'yes'"
          [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">yes</b>
       to delete all selected restores permanently?

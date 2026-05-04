@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Clipboard} from '@angular/cdk/clipboard';
 import {AfterContentChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {AdminSettings} from '@shared/entity/settings';
 import _ from 'lodash';
-import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
 import {finalize, take} from 'rxjs/operators';
 import {DeleteExternalClusterAction, ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
@@ -51,7 +51,7 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
 
   constructor(
     private readonly _clusterService: ClusterService,
-    private readonly _clipboardService: ClipboardService,
+    private readonly _clipboardService: Clipboard,
     private readonly _dialogRef: MatDialogRef<ExternalClusterDeleteConfirmationComponent>,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
