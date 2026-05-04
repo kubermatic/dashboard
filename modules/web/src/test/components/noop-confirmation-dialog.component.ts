@@ -18,7 +18,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from '@shared/module';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
-@Component({template: ''})
+@Component({selector: 'km-noop-confirm-dialog', template: ''})
 export class NoopConfirmDialogComponent {}
 
 @NgModule({

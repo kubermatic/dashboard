@@ -17,7 +17,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 // NoopTokenDialogComponent is only a workaround to trigger change detection
-@Component({template: ''})
+@Component({selector: 'km-noop-token-dialog', template: ''})
 export class NoopTokenDialogComponent {}
 
 const TEST_DIRECTIVES = [NoopTokenDialogComponent];
