@@ -19,6 +19,7 @@ package authflow
 import (
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -26,30 +27,71 @@ import (
 
 	"golang.org/x/oauth2"
 
-	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
 	apimachineryrand "k8s.io/apimachinery/pkg/util/rand"
 )
 
 const (
-	nonceCookieName   = "nonce"
-	nonceCookieMaxAge = 180
-	callbackPath      = "/api/v2/auth/callback"
+	// oauthStateCookieName is the short-lived encrypted cookie that carries the CSRF
+	// state token, nonce, and PKCE code verifier across the login → OIDC → callback cycle.
+	oauthStateCookieName   = "_oauth_state"
+	oauthStateCookieMaxAge = 300 // 5 minutes
+	callbackPath           = "/api/v2/auth/callback"
 )
+
+// oauthStateCookie is the payload stored in the encrypted _oauth_state cookie.
+type oauthStateCookie struct {
+	State        string
+	Nonce        string
+	CodeVerifier string
+}
 
 // appendPKCEParams adds code_challenge and code_challenge_method to an auth URL.
 func appendPKCEParams(authURL, codeChallenge string) string {
 	return authURL + "&code_challenge=" + url.QueryEscape(codeChallenge) + "&code_challenge_method=S256"
 }
 
-// buildRedirectURI constructs the callback URL from the incoming request's host.
-func buildRedirectURI(r *http.Request) string {
-	scheme := "https"
-	if r.TLS == nil {
-		scheme = "http"
+// isLocalHost reports whether the request's host is a loopback address (localhost or 127.0.0.1).
+func isLocalHost(r *http.Request) bool {
+	host := r.Host
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		host = h
 	}
-	return fmt.Sprintf("%s://%s%s", scheme, r.Host, callbackPath)
+	return host == "localhost" || host == "127.0.0.1"
+}
+
+// requestScheme returns the scheme to use when deriving a URL from the request.
+// Behind a TLS-terminating ingress r.TLS is nil, so this is only meaningful for
+// loopback (local dev) where there's no proxy in front.
+func requestScheme(r *http.Request) string {
+	if r.TLS == nil {
+		return "http"
+	}
+	return "https"
+}
+
+// schemeAndHost decides which scheme + host to use for an outbound URL.
+// For loopback (local dev) it uses the request itself so the flow stays local.
+// Otherwise it uses --oidc-issuer-redirect-uri, which carries the correct https
+// scheme even behind TLS-terminating ingress where r.TLS is always nil.
+// Falls back to the request if the redirect URI is missing or malformed.
+func (a *authHandler) schemeAndHost(r *http.Request) (scheme, host string) {
+	if isLocalHost(r) {
+		return requestScheme(r), r.Host
+	}
+	if uri, err := a.oidcIssuerVerifier.GetRedirectURI(callbackPath); err == nil {
+		if u, err := url.Parse(uri); err == nil && u.Host != "" {
+			return u.Scheme, u.Host
+		}
+	}
+	return requestScheme(r), r.Host
+}
+
+// getCallbackURI returns the full callback URL for the OIDC redirect.
+func (a *authHandler) getCallbackURI(r *http.Request) string {
+	scheme, host := a.schemeAndHost(r)
+	return fmt.Sprintf("%s://%s%s", scheme, host, callbackPath)
 }
 
 func (a *authHandler) loginHandler() http.Handler {
@@ -61,10 +103,25 @@ func (a *authHandler) loginHandler() http.Handler {
 
 		codeVerifier := oauth2.GenerateVerifier()
 
-		a.stateStore.Store(state, authtypes.AuthState{
+		// Encode state, nonce, and PKCE verifier into a single signed+encrypted cookie.
+		encodedStateCookie, err := oidcConfig.SecureCookie.Encode(oauthStateCookieName, oauthStateCookie{
+			State:        state,
 			Nonce:        nonce,
 			CodeVerifier: codeVerifier,
-			CreatedAt:    time.Now(),
+		})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to encode state cookie: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     oauthStateCookieName,
+			Value:    encodedStateCookie,
+			MaxAge:   oauthStateCookieMaxAge,
+			HttpOnly: true,
+			Secure:   oidcConfig.CookieSecureMode,
+			SameSite: http.SameSiteLaxMode,
+			Path:     "/",
 		})
 
 		scopes := []string{"openid", "email", "profile", "groups"}
@@ -72,24 +129,10 @@ func (a *authHandler) loginHandler() http.Handler {
 			scopes = append(scopes, "offline_access")
 		}
 
-		redirectURI := buildRedirectURI(r)
+		redirectURI := a.getCallbackURI(r)
 		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
 		authURL = appendPKCEParams(authURL, oauth2.S256ChallengeFromVerifier(codeVerifier))
-
-		encodedNonce, err := oidcConfig.SecureCookie.Encode(nonceCookieName, nonce)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to encode nonce cookie: %v", err), http.StatusInternalServerError)
-			return
-		}
-
-		http.SetCookie(w, &http.Cookie{
-			Name:     nonceCookieName,
-			Value:    encodedNonce,
-			MaxAge:   nonceCookieMaxAge,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-		})
+		authURL = authURL + "&nonce=" + url.QueryEscape(nonce)
 
 		http.Redirect(w, r, authURL, http.StatusSeeOther)
 	})
@@ -117,35 +160,39 @@ func (a *authHandler) callbackHandler() http.Handler {
 			return
 		}
 
-		// 2. Look up nonce from state store and delete (one-time use).
-		authState, ok := a.stateStore.Get(state)
-		if !ok {
-			http.Error(w, "invalid or expired state parameter", http.StatusBadRequest)
-			return
-		}
-		a.stateStore.Delete(state)
-
-		// 3. Read and validate nonce cookie.
-		nonceCookie, err := r.Cookie(nonceCookieName)
+		// 2. Read and decode the _oauth_state cookie.
+		stateCookie, err := r.Cookie(oauthStateCookieName)
 		if err != nil {
-			http.Error(w, "missing nonce cookie", http.StatusBadRequest)
+			http.Error(w, "missing state cookie", http.StatusBadRequest)
 			return
 		}
 
-		var decodedNonce string
-		if err := oidcConfig.SecureCookie.Decode(nonceCookieName, nonceCookie.Value, &decodedNonce); err != nil {
-			http.Error(w, fmt.Sprintf("failed to decode nonce cookie: %v", err), http.StatusBadRequest)
+		var storedState oauthStateCookie
+		if err := oidcConfig.SecureCookie.Decode(oauthStateCookieName, stateCookie.Value, &storedState); err != nil {
+			http.Error(w, fmt.Sprintf("failed to decode state cookie: %v", err), http.StatusBadRequest)
 			return
 		}
 
-		if decodedNonce != authState.Nonce {
-			http.Error(w, "nonce mismatch", http.StatusBadRequest)
+		// 3. CSRF check: the state param from the OIDC provider must match what we stored.
+		if storedState.State != state {
+			http.Error(w, "state mismatch", http.StatusBadRequest)
 			return
 		}
 
-		// 4. Exchange authorization code for tokens with PKCE code_verifier.
-		redirectURI := buildRedirectURI(r)
-		oidcTokens, err := a.oidcIssuerVerifier.Exchange(r.Context(), code, redirectURI, authState.CodeVerifier)
+		// Clear the state cookie — it is one-time use.
+		http.SetCookie(w, &http.Cookie{
+			Name:     oauthStateCookieName,
+			Value:    "",
+			MaxAge:   -1,
+			HttpOnly: true,
+			Secure:   oidcConfig.CookieSecureMode,
+			SameSite: http.SameSiteLaxMode,
+			Path:     "/",
+		})
+
+		// 4. Exchange authorization code for tokens with PKCE code_verifier from the cookie.
+		redirectURI := a.getCallbackURI(r)
+		oidcTokens, err := a.oidcIssuerVerifier.Exchange(r.Context(), code, redirectURI, storedState.CodeVerifier)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to exchange code for tokens: %v", err), http.StatusInternalServerError)
 			return
@@ -155,6 +202,12 @@ func (a *authHandler) callbackHandler() http.Handler {
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), oidcTokens.IDToken)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Validate the nonce claim binds the id_token to this auth request.
+		if claims.Nonce != storedState.Nonce {
+			http.Error(w, "nonce mismatch", http.StatusBadRequest)
 			return
 		}
 
@@ -189,17 +242,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 			setNamedCookie(w, refreshTokenCookieName, oidcTokens.RefreshToken, "/api/v2/auth", refreshTokenCookieMaxAge, oidcConfig.CookieSecureMode)
 		}
 
-		// 8. Clear nonce cookie.
-		http.SetCookie(w, &http.Cookie{
-			Name:     nonceCookieName,
-			Value:    "",
-			MaxAge:   -1,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-		})
-
-		// 9. Redirect to frontend landing page.
+		// 8. Redirect to frontend landing page.
 		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
 		if err != nil {
 			fmt.Println("failed to get user info", err)
@@ -335,7 +378,7 @@ func (a *authHandler) logoutHandler() http.Handler {
 		if err != nil {
 			fmt.Println("failed to get UI configurations", err)
 		} else {
-			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, buildBaseURL(r))
+			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, a.getBaseURL(r))
 		}
 
 		if err := a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry); err != nil {
@@ -419,13 +462,10 @@ func chunkString(token string, chunkSize int) []string {
 	return chunks
 }
 
-// buildBaseURL constructs the base URL (scheme + host) from the incoming request.
-func buildBaseURL(r *http.Request) string {
-	scheme := "https"
-	if r.TLS == nil {
-		scheme = "http"
-	}
-	return fmt.Sprintf("%s://%s", scheme, r.Host)
+// getBaseURL returns the scheme+host used for logout redirect URIs.
+func (a *authHandler) getBaseURL(r *http.Request) string {
+	scheme, host := a.schemeAndHost(r)
+	return fmt.Sprintf("%s://%s", scheme, host)
 }
 
 func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfiguration, token, baseURL string) string {

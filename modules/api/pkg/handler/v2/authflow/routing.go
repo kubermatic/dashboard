@@ -27,7 +27,6 @@ import (
 )
 
 type authHandler struct {
-	stateStore               authtypes.StateStore
 	oidcIssuerVerifier       authtypes.OIDCIssuerVerifier
 	tokenExtractor           authtypes.TokenExtractor
 	userProvider             provider.UserProvider
@@ -57,9 +56,8 @@ func (a *authHandler) Install(router *mux.Router) {
 }
 
 // NewAuthHandler creates a new Handler for KKP dashboard authentication.
-func NewAuthHandler(stateStore authtypes.StateStore, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, userProvider provider.UserProvider, kubermaticConfigProvider provider.KubermaticConfigurationGetter) *authHandler {
+func NewAuthHandler(oidcIssuerVerifier authtypes.OIDCIssuerVerifier, userProvider provider.UserProvider, kubermaticConfigProvider provider.KubermaticConfigurationGetter) *authHandler {
 	return &authHandler{
-		stateStore:         stateStore,
 		oidcIssuerVerifier: oidcIssuerVerifier,
 		tokenExtractor: handlerauth.NewCombinedExtractor(
 			handlerauth.NewCookieHeaderBearerTokenExtractor(idTokenCookieName),
