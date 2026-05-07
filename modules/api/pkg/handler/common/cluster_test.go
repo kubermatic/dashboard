@@ -17,15 +17,26 @@ limitations under the License.
 package common
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/sdk/v2/semver"
 
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
+	ctrlruntimefake "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestExternalCCMMigration(t *testing.T) {
@@ -216,4 +227,115 @@ func TestExternalCCMMigration(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGetMetricsEndpointBYOCNIUnavailableReturnsEmptyMetrics(t *testing.T) {
+	t.Parallel()
+
+	scheme := runtime.NewScheme()
+	utilruntime.Must(corev1.AddToScheme(scheme))
+	utilruntime.Must(v1beta1.AddToScheme(scheme))
+
+	cluster := &kubermaticv1.Cluster{
+		ObjectMeta: metav1.ObjectMeta{Name: "cluster-1"},
+		Spec: kubermaticv1.ClusterSpec{
+			CNIPlugin: &kubermaticv1.CNIPluginSettings{Type: kubermaticv1.CNIPluginTypeNone},
+		},
+	}
+
+	project := &kubermaticv1.Project{ObjectMeta: metav1.ObjectMeta{Name: "project-1"}}
+	node := &corev1.Node{ObjectMeta: metav1.ObjectMeta{Name: "node-1"}}
+
+	baseClient := ctrlruntimefake.NewClientBuilder().
+		WithScheme(scheme).
+		WithObjects(node).
+		Build()
+
+	seedClient := ctrlruntimefake.NewClientBuilder().
+		WithScheme(scheme).
+		Build()
+
+	clusterProvider := &fakeClusterProvider{
+		adminClient: &fakeFailingNodeMetricsClient{
+			Client: baseClient,
+			err:    apierrors.NewServiceUnavailable("the server is currently unable to handle the request"),
+		},
+	}
+
+	ctx := context.WithValue(t.Context(), middleware.ClusterProviderContextKey, clusterProvider)
+	ctx = context.WithValue(ctx, middleware.PrivilegedClusterProviderContextKey, &fakePrivilegedClusterProvider{
+		cluster:    cluster,
+		seedClient: seedClient,
+	})
+
+	resp, err := GetMetricsEndpoint(
+		ctx,
+		adminUserInfoGetter,
+		project.Name,
+		cluster.Name,
+		&fakeProjectProvider{},
+		&fakePrivilegedProjectProvider{project: project},
+	)
+	require.NoError(t, err)
+
+	metrics, ok := resp.(*apiv1.ClusterMetrics)
+	require.Truef(t, ok, "expected *apiv1.ClusterMetrics, got %T", resp)
+	require.Equal(t, cluster.Name, metrics.Name, "returned metrics name should equal cluster name")
+}
+
+type fakeFailingNodeMetricsClient struct {
+	ctrlruntimeclient.Client
+	err error
+}
+
+func (c *fakeFailingNodeMetricsClient) List(ctx context.Context, list ctrlruntimeclient.ObjectList, opts ...ctrlruntimeclient.ListOption) error {
+	if _, ok := list.(*v1beta1.NodeMetricsList); ok {
+		return c.err
+	}
+
+	return c.Client.List(ctx, list, opts...)
+}
+
+type fakeClusterProvider struct {
+	provider.ClusterProvider
+	adminClient ctrlruntimeclient.Client
+}
+
+func (p *fakeClusterProvider) GetAdminClientForUserCluster(_ context.Context, _ *kubermaticv1.Cluster) (ctrlruntimeclient.Client, error) {
+	return p.adminClient, nil
+}
+
+type fakePrivilegedClusterProvider struct {
+	provider.PrivilegedClusterProvider
+	cluster    *kubermaticv1.Cluster
+	seedClient ctrlruntimeclient.Client
+}
+
+func (p *fakePrivilegedClusterProvider) GetUnsecured(_ context.Context, _ *kubermaticv1.Project, _ string, _ *provider.ClusterGetOptions) (*kubermaticv1.Cluster, error) {
+	return p.cluster, nil
+}
+
+func (p *fakePrivilegedClusterProvider) GetSeedClusterAdminRuntimeClient() ctrlruntimeclient.Client {
+	return p.seedClient
+}
+
+type fakeProjectProvider struct {
+	provider.ProjectProvider
+}
+
+type fakePrivilegedProjectProvider struct {
+	provider.PrivilegedProjectProvider
+	project *kubermaticv1.Project
+}
+
+func (p *fakePrivilegedProjectProvider) GetUnsecured(_ context.Context, _ string, _ *provider.ProjectGetOptions) (*kubermaticv1.Project, error) {
+	return p.project, nil
+}
+
+func adminUserInfoGetter(_ context.Context, _ string) (*provider.UserInfo, error) {
+	return &provider.UserInfo{
+		IsAdmin: true,
+		Email:   "admin@example.com",
+		Groups:  []string{"admins"},
+	}, nil
 }
