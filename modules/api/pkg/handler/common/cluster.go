@@ -798,6 +798,13 @@ func GetMetricsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGet
 	if err := dynamicClient.List(ctx, allNodeMetricsList); err != nil {
 		// Happens during cluster creation when the CRD is not setup yet
 		if !meta.IsNoMatchError(err) {
+			if apierrors.IsServiceUnavailable(err) && cluster.Spec.CNIPlugin != nil && cluster.Spec.CNIPlugin.Type == kubermaticv1.CNIPluginTypeNone {
+				// Return empty metrics with 200 status code if the cluster is using BYO CNI and the metrics endpoint is unavailable.
+				// This is because cluster unavailability is expected as long as the user cluster admins didn't set up CNI themselves.
+				// Meanwhile we don't want to bother KKP admins with alerts about an error that is not actionable for them.
+				kubermaticlog.Logger.With("cluster", cluster.Name).Warn("returning empty cluster metrics for BYO CNI user cluster since it is unavailable")
+				return &apiv1.ClusterMetrics{Name: cluster.Name}, nil
+			}
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	}
