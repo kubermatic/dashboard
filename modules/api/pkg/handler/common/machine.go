@@ -37,12 +37,14 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
 	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
 	"k8c.io/machine-controller/sdk/bootstrap"
 
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -455,6 +457,13 @@ func ListMachineDeploymentMetrics(ctx context.Context, userInfoGetter provider.U
 	if err := dynamicClient.List(ctx, allNodeMetricsList); err != nil {
 		// Happens during cluster creation when the CRD is not setup yet
 		if !meta.IsNoMatchError(err) {
+			if apierrors.IsServiceUnavailable(err) && cluster.Spec.CNIPlugin != nil && cluster.Spec.CNIPlugin.Type == kubermaticv1.CNIPluginTypeNone {
+				// Return empty metrics with 200 status code if the cluster is using BYO CNI and the metrics endpoint is unavailable.
+				// This is because cluster unavailability is expected as long as the user cluster admins didn't set up CNI themselves.
+				// Meanwhile we don't want to bother KKP admins with alerts about an error that is not actionable for them.
+				kubermaticlog.Logger.With("cluster", cluster.Name).Warn("returning empty node metrics for BYO CNI user cluster since it is unavailable")
+				return make([]apiv1.NodeMetric, 0), nil
+			}
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	}
