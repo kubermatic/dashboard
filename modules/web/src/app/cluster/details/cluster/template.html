@@ -611,7 +611,7 @@ limitations under the License.
     </km-tab>
     @if (cluster.spec.opaIntegration?.enabled) {
     <km-tab label="OPA Constraints">
-      <ng-template>
+      <ng-template kmTabLabel>
         OPA Constraints
         <i class="km-icon-warning km-pointer-warning km-opa-warning"
            [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
@@ -624,7 +624,7 @@ limitations under the License.
     }
     @if (cluster.spec.opaIntegration?.enabled) {
     <km-tab label="OPA Gatekeeper Config">
-      <ng-template>
+      <ng-template kmTabLabel>
         OPA Gatekeeper Config
         <i class="km-icon-warning km-pointer km-opa-warning"
            [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>

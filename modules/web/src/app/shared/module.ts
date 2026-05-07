@@ -91,6 +91,7 @@ import {SideNavExpansionMenuComponent} from '@shared/components/side-nav-field/c
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {TabLabelDirective} from '@shared/components/tab-card/tab/label.directive';
 import {TerminalComponent} from '@shared/components/terminal/component';
 import {TerminalStatusBarComponent} from '@shared/components/terminal/terminal-status-bar/component';
 import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-toolbar/component';
@@ -284,6 +285,7 @@ const directives = [
   OptionDirective,
   InputPasswordDirective,
   ValueChangedIndicatorDirective,
+  TabLabelDirective,
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2026 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, TemplateRef, ViewChild, ContentChild} from '@angular/core';
-import {TabLabelDirective} from './label.directive';
+import {Directive, TemplateRef} from '@angular/core';
 
-@Component({
-  selector: 'km-tab',
-  templateUrl: 'template.html',
+@Directive({
+  selector: '[kmTabLabel]',
   standalone: false,
 })
-export class TabComponent {
-  @Input() label: string;
-  @ViewChild(TemplateRef) template: TemplateRef<any>;
-  @ContentChild(TabLabelDirective) private _labelDirective?: TabLabelDirective;
-
-  get labelTemplate(): TemplateRef<unknown> | undefined {
-    return this._labelDirective?.templateRef;
-  }
+export class TabLabelDirective {
+  constructor(public templateRef: TemplateRef<unknown>) {}
 }
