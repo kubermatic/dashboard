@@ -29,7 +29,7 @@
     "noUnusedParameters": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "lib": ["ES2020", "dom"],
+    "lib": ["ES2022", "dom"],
     "useDefineForClassFields": false
   }
 }
