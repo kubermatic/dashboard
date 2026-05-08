@@ -64,8 +64,7 @@ import _ from 'lodash';
 import {ParamsService, PathParam} from '@app/core/services/params';
 import {EditApplicationDialogComponent} from '@app/shared/components/application-list/edit-application-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
-import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
-import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, GENERATE_NAME_TOOLTIP} from '@shared/constants/common';
 
 enum Controls {
   Name = 'name',

@@ -57,8 +57,7 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
-import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
-import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, GENERATE_NAME_TOOLTIP} from '@shared/constants/common';
 
 enum Controls {
   Name = 'name',
