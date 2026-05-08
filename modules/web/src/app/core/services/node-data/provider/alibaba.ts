@@ -24,9 +24,10 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {AlibabaService} from '@core/services/provider/alibaba';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataAlibabaProvider {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
@@ -51,7 +52,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -79,7 +80,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
@@ -118,7 +119,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -145,7 +146,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -180,7 +181,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -207,7 +208,7 @@ export class NodeDataAlibabaProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))

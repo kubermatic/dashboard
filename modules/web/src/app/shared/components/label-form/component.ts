@@ -163,8 +163,8 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     this.initialLabels = this.labels;
 
     this.form?.valueChanges.subscribe(value => {
-      this.removedLabels = this.removedLabels.filter(removedlabel => {
-        return !value.labels.some(label => removedlabel?.key === label?.key);
+      this.removedLabels = this.removedLabels.filter(removedLabel => {
+        return !value.labels.some(label => removedLabel?.key === label?.key);
       });
     });
   }

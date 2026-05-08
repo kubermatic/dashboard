@@ -24,7 +24,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {AdminSettings, CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
-import {sidenavCollapsibleWidth} from '@shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, sidenavCollapsibleWidth} from '@shared/constants/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   adminSettings: AdminSettings;
   isUserSshKeyEnabled = false;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);

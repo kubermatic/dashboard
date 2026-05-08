@@ -65,7 +65,7 @@ import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/co
 import {EKSArchitecture} from '@app/shared/entity/provider/eks';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
-import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, GENERATE_NAME_TOOLTIP} from '@shared/constants/common';
 
 enum Controls {
   Vpc = 'vpc',
@@ -166,7 +166,7 @@ export class EKSClusterSettingsComponent
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   @ViewChild('vpcCombobox')
   private readonly _vpcCombobox: FilteredComboboxComponent;

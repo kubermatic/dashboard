@@ -18,6 +18,7 @@ import {MachineFlavorFilter} from '@shared/entity/datacenter';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   MinCPU = 'minCPU',
@@ -51,7 +52,7 @@ export class MachineFlavorFilterComponent extends BaseFormValidator implements O
   readonly onChange = new EventEmitter<MachineFlavorFilter>();
 
   readonly Controls = Controls;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly minValue = 0;
   private readonly defaultValue = 0;
 

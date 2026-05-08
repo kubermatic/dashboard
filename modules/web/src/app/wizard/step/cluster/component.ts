@@ -94,6 +94,7 @@ import {
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
 import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -223,7 +224,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
   private readonly _nftablesDefaultMinimumK8sVersion = '1.35.0';
   private readonly _cniCiliumApplicationName = 'cilium';
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;

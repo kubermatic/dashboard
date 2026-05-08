@@ -17,6 +17,7 @@ import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@a
 import {Cluster, MachineNetwork} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export enum Controls {
   MachineNetworks = 'machineNetworks',
@@ -35,7 +36,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _formArray: FormArray;
   private _unsubscribe = new Subject<void>();
 

@@ -22,9 +22,10 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {OpenStackService} from '@core/services/provider/openstack';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export class NodeDataOpenstackProvider {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _nodeDataService: NodeDataService,

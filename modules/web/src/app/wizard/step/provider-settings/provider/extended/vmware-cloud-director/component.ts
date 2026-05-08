@@ -44,6 +44,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   OvdcNetworks = 'ovdcNetworks',
@@ -88,7 +89,7 @@ enum StorageProfileState {
 })
 export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _alwaysEnabledControls = [Controls.StorageProfile, Controls.Filesystem];
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private readonly _defaultFilesystem = Filesystem.EXT4;
   readonly Controls = Controls;
   readonly fstypes = [Filesystem.XFS, Filesystem.EXT4];

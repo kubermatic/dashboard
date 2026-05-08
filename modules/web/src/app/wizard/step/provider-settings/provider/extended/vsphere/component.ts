@@ -48,6 +48,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import {NodeDataService} from '@app/core/services/node-data/service';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   Networks = 'networks',
@@ -97,7 +98,7 @@ enum TagCategoryState {
   standalone: false,
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
   private _username = '';

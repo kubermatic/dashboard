@@ -64,7 +64,7 @@ import _ from 'lodash';
 import {ParamsService, PathParam} from '@app/core/services/params';
 import {EditApplicationDialogComponent} from '@app/shared/components/application-list/edit-application-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
-import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, GENERATE_NAME_TOOLTIP} from '@shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -112,7 +112,7 @@ enum ClusterAutoscalingWarning {
   standalone: false,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounce = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _datacenterSpec: Datacenter;
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
@@ -318,7 +318,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       });
 
     this._clusterSpecService.clusterChanges
-      .pipe(debounceTime(this._debounce))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;

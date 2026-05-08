@@ -36,6 +36,7 @@ import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE, OPA_DEPRECATED_MESSAGE} from '@
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum EventRateConfigActions {
   Enabled = 'enabled',
@@ -70,7 +71,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
   readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 

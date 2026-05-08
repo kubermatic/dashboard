@@ -22,6 +22,7 @@ import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 @Component({
   selector: 'km-admin-settings',
@@ -34,7 +35,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 

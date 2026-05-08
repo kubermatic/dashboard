@@ -24,6 +24,7 @@ import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, 
 import {NutanixCluster, NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 export enum Controls {
   Username = 'username',
@@ -62,7 +63,7 @@ enum ClusterState {
 export class NutanixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @ViewChild('clusterCombobox')
   private readonly _clusterCombobox: FilteredComboboxComponent;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   clusters: NutanixCluster[] = [];
   clusterLabel = ClusterState.Empty;

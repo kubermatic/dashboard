@@ -33,6 +33,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
 import {CloudSpec, Cluster, ClusterSpec, NutanixCloudSpec, NutanixCSIConfig} from '@shared/entity/cluster';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   ProjectName = 'projectName',
@@ -71,7 +72,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   readonly _alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
   @ViewChild('projectCombobox')
   private readonly _projectCombobox: FilteredComboboxComponent;
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   readonly fstypes = ['xfs', 'ext4'];
   private _username = '';

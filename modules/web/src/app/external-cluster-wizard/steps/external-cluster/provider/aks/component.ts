@@ -65,7 +65,7 @@ import {EKSSecurityGroup} from '@shared/entity/provider/eks';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ProjectService} from '@core/services/project';
-import {GENERATE_NAME_TOOLTIP} from '@app/shared/constants/common';
+import {DEFAULT_DEBOUNCE_TIME_MS, GENERATE_NAME_TOOLTIP} from '@shared/constants/common';
 
 enum Controls {
   Name = 'name',
@@ -161,7 +161,7 @@ export class AKSClusterSettingsComponent
   @ViewChild('vmSizeCombobox')
   private readonly _vmSizeCombobox: FilteredComboboxComponent;
 
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
 
   constructor(
     private readonly _builder: FormBuilder,

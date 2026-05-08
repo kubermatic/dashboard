@@ -46,6 +46,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 
 enum Controls {
   Username = 'username',
@@ -79,7 +80,7 @@ enum ProjectState {
   standalone: false,
 })
 export class OpenstackDefaultCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   readonly Controls = Controls;
   readonly Modes = Mode;
   isPresetSelected = false;
