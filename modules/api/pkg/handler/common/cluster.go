@@ -764,7 +764,7 @@ func GetMetricsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGet
 				// Return empty metrics with 200 status code if the cluster is using BYO CNI and the metrics endpoint is unavailable.
 				// This is because cluster unavailability is expected as long as the user cluster admins didn't set up CNI themselves.
 				// Meanwhile we don't want to bother KKP admins with alerts about an error that is not actionable for them.
-				kubermaticlog.Logger.With("cluster", cluster.Name).Warn("returning empty cluster metrics for BYO CNI user cluster since it is unavailable")
+				kubermaticlog.Logger.With("cluster", cluster.Name, "error", err).Warn("returning empty cluster metrics for BYO CNI user cluster since it is unavailable")
 				return &apiv1.ClusterMetrics{Name: cluster.Name}, nil
 			}
 			return nil, common.KubernetesErrorToHTTPError(err)
