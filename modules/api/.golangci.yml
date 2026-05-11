@@ -105,6 +105,7 @@ linters:
         - '-ST1005'
         # very opinionated naming conventions
         - '-ST1003'
+        - '-SA1019'
   exclusions:
     generated: lax
     presets:
