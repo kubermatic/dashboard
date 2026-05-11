@@ -19,8 +19,7 @@ limitations under the License.
   <mat-dialog-content>
     <p>
       Delete
-      <b ngxClipboard
-         [cbContent]="project.name"
+      <b [cdkCopyToClipboard]="project.name"
          [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{project.name}}</b>
       project permanently?

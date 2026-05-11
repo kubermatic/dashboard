@@ -2,9 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "dist/out-tsc/spec",
-    "baseUrl": "./src",
-    "module": "CommonJS",
-    "target": "ES2015",
     "types": [
       "jest"
     ]

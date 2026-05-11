@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ClipboardModule} from '@angular/cdk/clipboard';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CommonModule, DecimalPipe} from '@angular/common';
 import {ModuleWithProviders, NgModule, Type} from '@angular/core';
@@ -99,7 +100,6 @@ import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-y
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {SizeFormatterPipe} from '@shared/pipes/size';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {ClipboardModule} from 'ngx-clipboard';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {AddProjectDialogComponent} from './components/add-project-dialog/component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/component';

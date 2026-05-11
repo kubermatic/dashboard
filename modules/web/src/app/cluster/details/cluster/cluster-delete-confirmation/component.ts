@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Clipboard} from '@angular/cdk/clipboard';
 import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -22,7 +23,6 @@ import {SettingsService} from '@core/services/settings';
 import {Cluster, Finalizer} from '@shared/entity/cluster';
 import {AdminSettings} from '@shared/entity/settings';
 import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
-import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
@@ -48,7 +48,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     private readonly _settingsService: SettingsService,
     private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
-    private readonly _clipboardService: ClipboardService,
+    private readonly _clipboardService: Clipboard,
     private readonly _notificationService: NotificationService
   ) {}
 

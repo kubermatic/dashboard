@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {inject, NgModule, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
 import {MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS} from '@angular/material/button-toggle';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
 import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
@@ -36,25 +36,23 @@ import {DashboardComponent} from './dashboard/component';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {AppRoutingModule} from './routing';
 
-const appInitializerFn = (
-  appConfigService: AppConfigService,
-  historyService: HistoryService,
-  userService: UserService,
-  datacenterService: DatacenterService,
-  brandingService: BrandingService
-): (() => Promise<void | {}>) => {
-  return () => {
-    historyService.init();
-    userService.init();
-    datacenterService.init();
-    return appConfigService
-      .loadAppConfig()
-      .then(() => appConfigService.loadUserGroupConfig())
-      .then(() => appConfigService.loadGitVersion())
-      .then(() => {
-        brandingService.init(appConfigService.getConfig().branding);
-      });
-  };
+const appInitializerFn = (): Promise<void> => {
+  const appConfigService = inject(AppConfigService);
+  const historyService = inject(HistoryService);
+  const userService = inject(UserService);
+  const datacenterService = inject(DatacenterService);
+  const brandingService = inject(BrandingService);
+
+  historyService.init();
+  userService.init();
+  datacenterService.init();
+  return appConfigService
+    .loadAppConfig()
+    .then(() => appConfigService.loadUserGroupConfig())
+    .then(() => appConfigService.loadGitVersion())
+    .then(() => {
+      brandingService.init(appConfigService.getConfig().branding);
+    });
 };
 
 const appearance: MatFormFieldDefaultOptions = {
@@ -73,13 +71,8 @@ const appearance: MatFormFieldDefaultOptions = {
   ],
   declarations: [KubermaticComponent, DashboardComponent],
   providers: [
-    AppConfigService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInitializerFn,
-      multi: true,
-      deps: [AppConfigService, HistoryService, UserService, DatacenterService, BrandingService],
-    },
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideAppInitializer(appInitializerFn),
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: kmTooltipDefaultOptions,
@@ -92,6 +85,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS,
       useValue: kmButtonToggleDefaultOptions,
     },
+    AppConfigService,
     CookieService,
     ProjectService,
     UserService,

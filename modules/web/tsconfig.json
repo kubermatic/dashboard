@@ -15,8 +15,8 @@
       "@test/*": ["test/*"],
       "app/*": ["app/*"]
     },
-    "moduleResolution": "Node",
-    "module": "ES2020",
+    "moduleResolution": "bundler",
+    "module": "ES2022",
     "target": "ES2022",
     "strict": false,
     "sourceMap": true,
@@ -29,7 +29,7 @@
     "noUnusedParameters": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "lib": ["ES2020", "dom"],
+    "lib": ["ES2022", "dom"],
     "useDefineForClassFields": false
   }
 }

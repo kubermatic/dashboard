@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Clipboard} from '@angular/cdk/clipboard';
 import {Component, Input} from '@angular/core';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {ClipboardService} from 'ngx-clipboard';
 import {finalize, take} from 'rxjs/operators';
 
 @Component({
@@ -34,7 +34,7 @@ export class CopyJoiningScriptButtonComponent {
 
   constructor(
     private readonly _machineDeploymentService: MachineDeploymentService,
-    private readonly _clipboardService: ClipboardService
+    private readonly _clipboardService: Clipboard
   ) {}
 
   copyJoiningScript(): void {

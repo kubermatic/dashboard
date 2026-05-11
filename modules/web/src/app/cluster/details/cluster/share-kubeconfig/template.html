@@ -67,8 +67,7 @@ limitations under the License.
       <li>
         On Linux / macOS
         <div class="km-code-block km-copy"
-             ngxClipboard
-             [cbContent]="installCommands.brewInstallCommand"
+             [cdkCopyToClipboard]="installCommands.brewInstallCommand"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.brewInstallCommand}}
         </div>
@@ -76,8 +75,7 @@ limitations under the License.
       <li>
         On Windows (Chocolatey)
         <div class="km-code-block km-copy"
-             ngxClipboard
-             [cbContent]="installCommands.chocoInstallCommand"
+             [cdkCopyToClipboard]="installCommands.chocoInstallCommand"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.chocoInstallCommand}}
         </div>
@@ -91,8 +89,7 @@ limitations under the License.
              rel="noopener">installation docs <i class="km-icon-external-link i-18"></i></a>.
         </P>
         <div class="km-code-block km-copy"
-             ngxClipboard
-             [cbContent]="installCommands.krewInstallCommand"
+             [cdkCopyToClipboard]="installCommands.krewInstallCommand"
              [matTooltip]="CLICK_TO_COPY_TOOLTIP">
           {{installCommands.krewInstallCommand}}
         </div>
@@ -103,8 +100,7 @@ limitations under the License.
   @if (dialogTitle === shareKubeConfigDialogMode.Share) {
   <div class="km-code-block km-copy"
        [matTooltip]="CLICK_TO_COPY_TOOLTIP"
-       ngxClipboard
-       [cbContent]="kubeconfigLink">{{kubeconfigLink}}</div>
+       [cdkCopyToClipboard]="kubeconfigLink">{{kubeconfigLink}}</div>
   }
 </mat-dialog-content>
 <mat-dialog-actions>

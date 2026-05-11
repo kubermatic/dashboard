@@ -25,8 +25,7 @@ END OF TERMS AND CONDITIONS
     @if ((backups?.length === 1) || !!bslName) {
     <p>
       Delete
-      <b ngxClipboard
-         [cbContent]="getcbContent()"
+      <b [cdkCopyToClipboard]="getcbContent()"
          [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">{{getcbContent()}}</b>
       {{type}} permanently?
@@ -35,8 +34,7 @@ END OF TERMS AND CONDITIONS
     @if ((backups?.length > 1)) {
     <p>
       Type
-      <b ngxClipboard
-         [cbContent]="getcbContent()"
+      <b [cdkCopyToClipboard]="getcbContent()"
          [matTooltip]="CLICK_TO_COPY_TOOLTIP"
          class="km-copy">yes</b>
       to delete all selected {{type}}s permanently?

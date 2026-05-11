@@ -32,7 +32,6 @@ Object.defineProperties(window, {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     value: {getRandomValues: () => [2, 4, 8, 16]},
   },
-  URL: {value: {createObjectURL: () => {}}},
   getComputedStyle: {
     value: () => {
       return {
@@ -57,3 +56,9 @@ Object.defineProperties(window, {
   },
   CSS: {value: null},
 });
+
+// Mock URL.createObjectURL which jsdom does not implement,
+// without replacing the URL constructor (needed by Angular's MockPlatformLocation).
+if (typeof URL !== 'undefined' && !URL.createObjectURL) {
+  URL.createObjectURL = () => '';
+}

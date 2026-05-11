@@ -95,9 +95,8 @@ limitations under the License.
               <div fxLayout="column">
                 @for (internalIP of addresses.internalIPs; track internalIP) {
                 <span class="km-copy"
-                      [cbContent]="internalIP"
+                      [cdkCopyToClipboard]="internalIP"
                       (click)="$event.stopPropagation()"
-                      ngxClipboard
                       [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{internalIP}}</span>
                 }
               </div>
@@ -110,9 +109,8 @@ limitations under the License.
               <div fxLayout="column">
                 @for (externalIP of addresses.externalIPs; track externalIP) {
                 <span class="km-copy"
-                      [cbContent]="externalIP"
+                      [cdkCopyToClipboard]="externalIP"
                       (click)="$event.stopPropagation()"
-                      ngxClipboard
                       [matTooltip]="CLICK_TO_COPY_TOOLTIP">{{externalIP}}</span>
                 }
               </div>

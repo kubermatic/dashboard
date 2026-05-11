@@ -23,8 +23,7 @@ limitations under the License.
       <i class="machine-deployment-health km-pointer"
          [matTooltip]="machineDeploymentHealthStatus?.message"
          [ngClass]="machineDeploymentHealthStatus?.icon"></i>
-      <span ngxClipboard
-            [cbContent]="machineDeployment.name"
+      <span [cdkCopyToClipboard]="machineDeployment.name"
             [matTooltip]="CLICK_TO_COPY_TOOLTIP"
             class="km-copy">{{machineDeployment.name}}</span>
     </mat-card-title>
