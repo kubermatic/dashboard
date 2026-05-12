@@ -566,6 +566,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.Cloud = patchedCluster.Spec.Cloud
 	newInternalCluster.Spec.MachineNetworks = patchedCluster.Spec.MachineNetworks
 	newInternalCluster.Spec.Version = patchedCluster.Spec.Version
+	//nolint:staticcheck
 	newInternalCluster.Spec.OIDC = patchedCluster.Spec.OIDC
 	newInternalCluster.Spec.UsePodSecurityPolicyAdmissionPlugin = patchedCluster.Spec.UsePodSecurityPolicyAdmissionPlugin
 	newInternalCluster.Spec.UsePodNodeSelectorAdmissionPlugin = patchedCluster.Spec.UsePodNodeSelectorAdmissionPlugin
@@ -1173,9 +1174,10 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 		Labels:          internalCluster.Labels,
 		InheritedLabels: internalCluster.Status.InheritedLabels,
 		Spec: apiv1.ClusterSpec{
-			Cloud:                                internalCluster.Spec.Cloud,
-			Version:                              internalCluster.Spec.Version,
-			MachineNetworks:                      internalCluster.Spec.MachineNetworks,
+			Cloud:           internalCluster.Spec.Cloud,
+			Version:         internalCluster.Spec.Version,
+			MachineNetworks: internalCluster.Spec.MachineNetworks,
+			//nolint:staticcheck
 			OIDC:                                 internalCluster.Spec.OIDC,
 			UpdateWindow:                         internalCluster.Spec.UpdateWindow,
 			AuditLogging:                         internalCluster.Spec.AuditLogging,

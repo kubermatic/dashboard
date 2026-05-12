@@ -247,11 +247,15 @@ func GetOidcKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.User
 	clientCmdAuth := clientcmdapi.NewAuthInfo()
 	clientCmdAuthProvider := &clientcmdapi.AuthProviderConfig{Config: map[string]string{}}
 	clientCmdAuthProvider.Name = oidc
+	//nolint:staticcheck
 	clientCmdAuthProvider.Config["idp-issuer-url"] = cluster.Spec.OIDC.IssuerURL
+	//nolint:staticcheck
 	clientCmdAuthProvider.Config["client-id"] = cluster.Spec.OIDC.ClientID
+	//nolint:staticcheck
 	if cluster.Spec.OIDC.ClientSecret != "" {
 		clientCmdAuthProvider.Config["client-secret"] = cluster.Spec.OIDC.ClientSecret
 	}
+	//nolint:staticcheck
 	if cluster.Spec.OIDC.ExtraScopes != "" {
 		clientCmdAuthProvider.Config["extra-scopes"] = cluster.Spec.OIDC.ExtraScopes
 	}
@@ -270,8 +274,11 @@ func GetClusterOidcEndpoint(ctx context.Context, userInfoGetter provider.UserInf
 	}
 
 	return apiv2.OIDCSpec{
-		IssuerURL:    cluster.Spec.OIDC.IssuerURL,
-		ClientID:     cluster.Spec.OIDC.ClientID,
+		//nolint:staticcheck
+		IssuerURL: cluster.Spec.OIDC.IssuerURL,
+		//nolint:staticcheck
+		ClientID: cluster.Spec.OIDC.ClientID,
+		//nolint:staticcheck
 		ClientSecret: cluster.Spec.OIDC.ClientSecret,
 	}, nil
 }

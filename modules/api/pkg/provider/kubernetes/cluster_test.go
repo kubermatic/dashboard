@@ -72,6 +72,7 @@ func TestCreateCluster(t *testing.T) {
 			project:         genDefaultProject(),
 			spec: func() *kubermaticv1.ClusterSpec {
 				spec := genClusterSpec("test-k8s")
+				//nolint:staticcheck
 				spec.OIDC = kubermaticv1.OIDCSettings{
 					IssuerURL: "http://test",
 					ClientID:  "test",
