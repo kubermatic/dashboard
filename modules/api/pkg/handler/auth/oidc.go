@@ -131,7 +131,9 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 		}
 	}
 	if rawNonce, found := claims["nonce"]; found {
-		oidcClaims.Nonce = rawNonce.(string)
+		if nonce, ok := rawNonce.(string); ok {
+			oidcClaims.Nonce = nonce
+		}
 	}
 	if rawExp, found := claims["exp"]; found {
 		exp := rawExp.(float64)

@@ -43,7 +43,7 @@ const appInitializerFn = (): Promise<void> => {
   const userService = inject(UserService);
   const datacenterService = inject(DatacenterService);
   const brandingService = inject(BrandingService);
-  const authService = inject(Auth)
+  const authService = inject(Auth);
 
   historyService.init();
   return authService.init().then(() => {
@@ -56,7 +56,7 @@ const appInitializerFn = (): Promise<void> => {
       .then(() => {
         brandingService.init(appConfigService.getConfig().branding);
       });
-  })
+  });
 };
 
 const appearance: MatFormFieldDefaultOptions = {

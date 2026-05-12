@@ -17,6 +17,8 @@ limitations under the License.
 package authflow
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -28,8 +30,6 @@ import (
 	"golang.org/x/oauth2"
 
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-
-	apimachineryrand "k8s.io/apimachinery/pkg/util/rand"
 )
 
 const (
@@ -45,6 +45,14 @@ type oauthStateCookie struct {
 	State        string
 	Nonce        string
 	CodeVerifier string
+}
+
+func randomURLSafeString(nBytes int) (string, error) {
+	b := make([]byte, nBytes)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return base64.RawURLEncoding.EncodeToString(b), nil
 }
 
 // appendPKCEParams adds code_challenge and code_challenge_method to an auth URL.
@@ -98,8 +106,16 @@ func (a *authHandler) loginHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		oidcConfig := a.oidcIssuerVerifier.OIDCConfig()
 
-		nonce := apimachineryrand.String(apimachineryrand.IntnRange(10, 15))
-		state := apimachineryrand.String(apimachineryrand.IntnRange(10, 15))
+		nonce, err := randomURLSafeString(32)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to generate nonce: %v", err), http.StatusInternalServerError)
+			return
+		}
+		state, err := randomURLSafeString(32)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to generate state: %v", err), http.StatusInternalServerError)
+			return
+		}
 
 		codeVerifier := oauth2.GenerateVerifier()
 
@@ -141,9 +157,7 @@ func (a *authHandler) loginHandler() http.Handler {
 const (
 	idTokenCookieName = "token"
 	// Max characters per cookie (staying under the 4KB browser limit).
-	maxCookieSize = 3800
-	// The maximum number of "slots" to check or clear (safety margin).
-	maxNumOfTokenCookies     = 6
+	maxCookieSize            = 3800
 	refreshTokenCookieName   = "refresh_token"
 	refreshTokenCookieMaxAge = 2592000 // 30 days
 )
@@ -223,7 +237,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 			return
 		}
 
-		clearAuthCookies(w, oidcConfig.CookieSecureMode)
+		clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 
 		tokenValue := oidcTokens.IDToken
 		if len(tokenValue) <= maxCookieSize {
@@ -271,7 +285,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 1. Read refresh_token from cookie.
 		refreshCookie, err := r.Cookie(refreshTokenCookieName)
 		if err != nil {
-			clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "missing refresh_token cookie", http.StatusUnauthorized)
 			return
 		}
@@ -279,7 +293,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 2. Refresh tokens.
 		oidcTokens, err := a.oidcIssuerVerifier.RefreshAccessToken(r.Context(), refreshCookie.Value)
 		if err != nil {
-			clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "token refresh failed", http.StatusUnauthorized)
 			return
 		}
@@ -287,13 +301,13 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 3. Verify new id_token.
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), oidcTokens.IDToken)
 		if err != nil {
-			clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "failed to verify refreshed id_token", http.StatusUnauthorized)
 			return
 		}
 
 		if claims.Email == "" {
-			clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "email claim is missing from refreshed id_token", http.StatusUnauthorized)
 			return
 		}
@@ -301,12 +315,12 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 4. Set new id_token cookie with Max-Age matching the token's expiry.
 		tokenMaxAge := int(time.Until(claims.Expiry.Time).Seconds())
 		if tokenMaxAge <= 0 {
-			clearAuthCookies(w, oidcConfig.CookieSecureMode)
+			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "received an already expired id_token from refresh", http.StatusUnauthorized)
 			return
 		}
 
-		clearAuthCookies(w, oidcConfig.CookieSecureMode)
+		clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 
 		tokenValue := oidcTokens.IDToken
 		if len(tokenValue) <= maxCookieSize {
@@ -350,13 +364,13 @@ func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
-			http.Error(w, "missing token cookie", http.StatusBadRequest)
+			http.Error(w, "missing token cookie", http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenValue)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusUnauthorized)
 			return
 		}
 
@@ -385,7 +399,7 @@ func (a *authHandler) logoutHandler() http.Handler {
 			http.Error(w, fmt.Sprintf("failed to invalidate token: %v", err), http.StatusInternalServerError)
 			return
 		}
-		clearAuthCookies(w, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
+		clearAuthCookies(w, r, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(map[string]string{
 			"redirect": redirectPath,
@@ -395,13 +409,14 @@ func (a *authHandler) logoutHandler() http.Handler {
 	})
 }
 
-func clearAuthCookies(w http.ResponseWriter, secureMode bool) {
+func clearAuthCookies(w http.ResponseWriter, r *http.Request, secureMode bool) {
 	clearNamedCookie(w, idTokenCookieName, "/", secureMode)
 	clearNamedCookie(w, refreshTokenCookieName, "/api/v2/auth", secureMode)
-	// Clear potential chunks (token-1, token-2, etc.)
-	for i := range maxNumOfTokenCookies {
-		chunkName := fmt.Sprintf("%s-%d", idTokenCookieName, i+1)
-		clearNamedCookie(w, chunkName, "/", secureMode)
+	chunkPrefix := idTokenCookieName + "-"
+	for _, c := range r.Cookies() {
+		if strings.HasPrefix(c.Name, chunkPrefix) {
+			clearNamedCookie(w, c.Name, "/", secureMode)
+		}
 	}
 }
 
@@ -425,7 +440,6 @@ func (a *authHandler) statusHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
-			fmt.Println("token is required to get the status")
 			w.Header().Set("Content-Type", "application/json")
 			if err := json.NewEncoder(w).Encode(authStatusResponse{
 				ExpiresAt: 0,
