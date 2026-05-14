@@ -78,3 +78,7 @@ func DecodePutResourceQuotasReq(_ context.Context, r *http.Request) (interface{}
 func DecodeCalculateProjectResourceQuotaUpdateReq(c context.Context, r *http.Request) (interface{}, error) {
 	return resourcequota.DecodeCalculateProjectResourceQuotaUpdateReq(c, r)
 }
+
+func DecodeProjectQuotaReq(c context.Context, r *http.Request) (interface{}, error) {
+	return resourcequota.DecodeProjectQuotaReq(c, r)
+}

@@ -61,6 +61,9 @@ GetResourceQuotaParams contains all the parameters to send to the API endpoint
 */
 type GetResourceQuotaParams struct {
 
+	// Encoding.
+	Encoding *string
+
 	// QuotaName.
 	Name string
 
@@ -117,6 +120,17 @@ func (o *GetResourceQuotaParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithEncoding adds the encoding to the get resource quota params
+func (o *GetResourceQuotaParams) WithEncoding(encoding *string) *GetResourceQuotaParams {
+	o.SetEncoding(encoding)
+	return o
+}
+
+// SetEncoding adds the encoding to the get resource quota params
+func (o *GetResourceQuotaParams) SetEncoding(encoding *string) {
+	o.Encoding = encoding
+}
+
 // WithName adds the quotaName to the get resource quota params
 func (o *GetResourceQuotaParams) WithName(quotaName string) *GetResourceQuotaParams {
 	o.SetName(quotaName)
@@ -135,6 +149,23 @@ func (o *GetResourceQuotaParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
+
+	if o.Encoding != nil {
+
+		// query param encoding
+		var qrEncoding string
+
+		if o.Encoding != nil {
+			qrEncoding = *o.Encoding
+		}
+		qEncoding := qrEncoding
+		if qEncoding != "" {
+
+			if err := r.SetQueryParam("encoding", qEncoding); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param quota_name
 	if err := r.SetPathParam("quota_name", o.Name); err != nil {

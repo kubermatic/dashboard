@@ -172,7 +172,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 	addDefaultAnnotations(&s.Annotations)
 
 	if settings.DefaultProjectResourceQuota != nil {
-		crdQuota, err := apiv2.ConvertToCRDQuota(settings.DefaultProjectResourceQuota.Quota)
+		crdQuota, err := apiv2.ConvertToCRDQuota(settings.DefaultProjectResourceQuota.Quota, "")
 		if err != nil {
 			return kubermaticv1.SettingSpec{}, err
 		}
@@ -233,7 +233,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 	addDefaultAnnotations(&s.Annotations)
 
 	if settings.DefaultProjectResourceQuota != nil {
-		apiQuota := apiv2.ConvertToAPIQuota(settings.DefaultProjectResourceQuota.Quota)
+		apiQuota := apiv2.ConvertToAPIQuota(settings.DefaultProjectResourceQuota.Quota, "")
 		s.DefaultProjectResourceQuota = &apiv2.ProjectResourceQuota{
 			Quota: apiQuota,
 		}
