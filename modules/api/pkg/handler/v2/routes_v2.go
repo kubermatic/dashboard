@@ -10314,7 +10314,7 @@ func (r Routing) getProjectQuota() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(resourcequota.GetForProjectEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.resourceQuotaProvider)),
-		common.DecodeGetProject,
+		resourcequota.DecodeProjectQuotaReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

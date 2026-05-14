@@ -61,6 +61,9 @@ DeleteResourceQuotaParams contains all the parameters to send to the API endpoin
 */
 type DeleteResourceQuotaParams struct {
 
+	// Encoding.
+	Encoding *string
+
 	// QuotaName.
 	Name string
 
@@ -117,6 +120,17 @@ func (o *DeleteResourceQuotaParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithEncoding adds the encoding to the delete resource quota params
+func (o *DeleteResourceQuotaParams) WithEncoding(encoding *string) *DeleteResourceQuotaParams {
+	o.SetEncoding(encoding)
+	return o
+}
+
+// SetEncoding adds the encoding to the delete resource quota params
+func (o *DeleteResourceQuotaParams) SetEncoding(encoding *string) {
+	o.Encoding = encoding
+}
+
 // WithName adds the quotaName to the delete resource quota params
 func (o *DeleteResourceQuotaParams) WithName(quotaName string) *DeleteResourceQuotaParams {
 	o.SetName(quotaName)
@@ -135,6 +149,23 @@ func (o *DeleteResourceQuotaParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
+
+	if o.Encoding != nil {
+
+		// query param encoding
+		var qrEncoding string
+
+		if o.Encoding != nil {
+			qrEncoding = *o.Encoding
+		}
+		qEncoding := qrEncoding
+		if qEncoding != "" {
+
+			if err := r.SetQueryParam("encoding", qEncoding); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param quota_name
 	if err := r.SetPathParam("quota_name", o.Name); err != nil {

@@ -66,6 +66,9 @@ type PutResourceQuotaParams struct {
 	// Body.
 	Body *models.Quota
 
+	// Encoding.
+	Encoding *string
+
 	// QuotaName.
 	Name string
 
@@ -133,6 +136,17 @@ func (o *PutResourceQuotaParams) SetBody(body *models.Quota) {
 	o.Body = body
 }
 
+// WithEncoding adds the encoding to the put resource quota params
+func (o *PutResourceQuotaParams) WithEncoding(encoding *string) *PutResourceQuotaParams {
+	o.SetEncoding(encoding)
+	return o
+}
+
+// SetEncoding adds the encoding to the put resource quota params
+func (o *PutResourceQuotaParams) SetEncoding(encoding *string) {
+	o.Encoding = encoding
+}
+
 // WithName adds the quotaName to the put resource quota params
 func (o *PutResourceQuotaParams) WithName(quotaName string) *PutResourceQuotaParams {
 	o.SetName(quotaName)
@@ -154,6 +168,23 @@ func (o *PutResourceQuotaParams) WriteToRequest(r runtime.ClientRequest, reg str
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
+		}
+	}
+
+	if o.Encoding != nil {
+
+		// query param encoding
+		var qrEncoding string
+
+		if o.Encoding != nil {
+			qrEncoding = *o.Encoding
+		}
+		qEncoding := qrEncoding
+		if qEncoding != "" {
+
+			if err := r.SetQueryParam("encoding", qEncoding); err != nil {
+				return err
+			}
 		}
 	}
 

@@ -25867,6 +25867,12 @@
             "x-go-name": "Accumulate",
             "name": "accumulate",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Encoding",
+            "name": "encoding",
+            "in": "query"
           }
         ],
         "responses": {
@@ -25904,6 +25910,12 @@
         "summary": "Creates a new Resource Quota.",
         "operationId": "createResourceQuota",
         "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Encoding",
+            "name": "encoding",
+            "in": "query"
+          },
           {
             "name": "Body",
             "in": "body",
@@ -25963,6 +25975,12 @@
             "name": "quota_name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Encoding",
+            "name": "encoding",
+            "in": "query"
           }
         ],
         "responses": {
@@ -26003,6 +26021,12 @@
             "name": "quota_name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Encoding",
+            "name": "encoding",
+            "in": "query"
           },
           {
             "name": "Body",
@@ -26048,6 +26072,12 @@
             "name": "quota_name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Encoding",
+            "name": "encoding",
+            "in": "query"
           }
         ],
         "responses": {
@@ -40271,13 +40301,13 @@
           "x-go-name": "CPU"
         },
         "memory": {
-          "description": "Memory represents the RAM amount. Denoted in GB, rounded to 2 decimal places.",
+          "description": "Memory represents the RAM amount. Denoted in GiB, rounded to 2 decimal places.",
           "type": "number",
           "format": "double",
           "x-go-name": "Memory"
         },
         "storage": {
-          "description": "Storage represents the disk size. Denoted in GB, rounded to 2 decimal places.",
+          "description": "Storage represents the disk size. Denoted in GiB, rounded to 2 decimal places.",
           "type": "number",
           "format": "double",
           "x-go-name": "Storage"
