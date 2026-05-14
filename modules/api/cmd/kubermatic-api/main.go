@@ -56,7 +56,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	kubeovnv1 "github.com/kubeovn/kube-ovn/pkg/apis/kubeovn/v1"
-	kyvernov1 "github.com/kyverno/kyverno/api/kyverno/v1"
 	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
@@ -140,10 +139,6 @@ func main() {
 
 	if err := velerov1.AddToScheme(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", velerov1.SchemeGroupVersion), zap.Error(err))
-	}
-
-	if err := kyvernov1.Install(scheme.Scheme); err != nil {
-		log.Fatalw("failed to register scheme", zap.Stringer("api", kyvernov1.SchemeGroupVersion), zap.Error(err))
 	}
 
 	if err := kubeovnv1.AddToScheme(scheme.Scheme); err != nil {
