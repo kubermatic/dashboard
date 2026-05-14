@@ -125,6 +125,7 @@ func (p *ClusterProvider) New(ctx context.Context, project *kubermaticv1.Project
 		return nil, errors.New("project and/or userInfo and/or cluster is missing but required")
 	}
 	// share kubeconfig feature is contrary to cluster OIDC setting
+	//nolint:staticcheck
 	if p.oidcKubeConfEndpoint && !reflect.DeepEqual(cluster.Spec.OIDC, kubermaticv1.OIDCSettings{}) {
 		return nil, errors.New("can not set OIDC for the cluster when share config feature is enabled")
 	}
@@ -162,6 +163,7 @@ func (p *ClusterProvider) NewUnsecured(ctx context.Context, project *kubermaticv
 		return nil, errors.New("project and/or cluster is missing but required")
 	}
 	// share kubeconfig feature is contrary to cluster OIDC setting
+	//nolint:staticcheck
 	if p.oidcKubeConfEndpoint && !reflect.DeepEqual(cluster.Spec.OIDC, kubermaticv1.OIDCSettings{}) {
 		return nil, errors.New("can not set OIDC for the cluster when share config feature is enabled")
 	}

@@ -218,9 +218,10 @@ func convertInternalDefaultClusterToExternal(internalCluster *kubermaticv1.Clust
 		Labels:          internalCluster.Labels,
 		InheritedLabels: internalCluster.Status.InheritedLabels,
 		Spec: apiv1.ClusterSpec{
-			Cloud:                                internalCluster.Spec.Cloud,
-			Version:                              internalCluster.Spec.Version,
-			MachineNetworks:                      internalCluster.Spec.MachineNetworks,
+			Cloud:           internalCluster.Spec.Cloud,
+			Version:         internalCluster.Spec.Version,
+			MachineNetworks: internalCluster.Spec.MachineNetworks,
+			//nolint:staticcheck
 			OIDC:                                 internalCluster.Spec.OIDC,
 			UpdateWindow:                         internalCluster.Spec.UpdateWindow,
 			AuditLogging:                         internalCluster.Spec.AuditLogging,

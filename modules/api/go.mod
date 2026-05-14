@@ -70,9 +70,9 @@ require (
 	google.golang.org/api v0.272.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260417233531-7c75eca908bc
-	k8c.io/kubermatic/v2 v2.30.1-0.20260417233531-7c75eca908bc
-	k8c.io/machine-controller/sdk v1.65.0
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260513051628-a34f1ca3e200
+	k8c.io/kubermatic/v2 v2.30.1-0.20260513051628-a34f1ca3e200
+	k8c.io/machine-controller/sdk v1.65.1-0.20260507074018-ac7dcb0be66b
 	k8c.io/operating-system-manager v1.10.3
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.1
@@ -413,7 +413,6 @@ require (
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8c.io/application-catalog-manager v0.0.0-00010101000000-000000000000 // indirect
-	k8c.io/kubelb v1.3.5 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.35.1 // indirect
 	k8s.io/gengo/v2 v2.0.0-20251215205346-5ee0d033ba5b // indirect

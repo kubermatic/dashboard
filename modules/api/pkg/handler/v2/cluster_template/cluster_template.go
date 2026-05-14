@@ -783,9 +783,10 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 			InheritedLabels: template.InheritedClusterLabels,
 			Credential:      template.Credential,
 			Spec: apiv1.ClusterSpec{
-				Cloud:                                template.Spec.Cloud,
-				MachineNetworks:                      template.Spec.MachineNetworks,
-				Version:                              template.Spec.Version,
+				Cloud:           template.Spec.Cloud,
+				MachineNetworks: template.Spec.MachineNetworks,
+				Version:         template.Spec.Version,
+				//nolint:staticcheck
 				OIDC:                                 template.Spec.OIDC,
 				UpdateWindow:                         template.Spec.UpdateWindow,
 				UsePodSecurityPolicyAdmissionPlugin:  template.Spec.UsePodSecurityPolicyAdmissionPlugin,
