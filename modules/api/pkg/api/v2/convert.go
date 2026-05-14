@@ -67,7 +67,7 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	}
 
 	if quota.Memory != nil {
-		mem, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Memory))
+		mem, err = resource.ParseQuantity(fmt.Sprintf("%fGi", *quota.Memory))
 		if err != nil {
 			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
 		}
@@ -75,7 +75,7 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 	}
 
 	if quota.Storage != nil {
-		storage, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Storage))
+		storage, err = resource.ParseQuantity(fmt.Sprintf("%fGi", *quota.Storage))
 		if err != nil {
 			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Storage %w", err)
 		}
