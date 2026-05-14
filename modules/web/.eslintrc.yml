@@ -45,9 +45,9 @@ rules:
     - error
     - allowShortCircuit: true
       allowTernary: true
-  node/no-unpublished-import: off
-  node/no-extraneous-require: error
-  node/no-unpublished-require: error
+  n/no-unpublished-import: off
+  n/no-extraneous-require: error
+  n/no-unpublished-require: error
   rxjs/no-ignored-observable: error
   rxjs/no-nested-subscribe: error
   rxjs/no-unbound-methods: error
