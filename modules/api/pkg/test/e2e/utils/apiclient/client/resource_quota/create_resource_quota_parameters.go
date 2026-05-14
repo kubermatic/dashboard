@@ -64,9 +64,6 @@ type CreateResourceQuotaParams struct {
 	// Body.
 	Body CreateResourceQuotaBody
 
-	// Encoding.
-	Encoding *string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -131,17 +128,6 @@ func (o *CreateResourceQuotaParams) SetBody(body CreateResourceQuotaBody) {
 	o.Body = body
 }
 
-// WithEncoding adds the encoding to the create resource quota params
-func (o *CreateResourceQuotaParams) WithEncoding(encoding *string) *CreateResourceQuotaParams {
-	o.SetEncoding(encoding)
-	return o
-}
-
-// SetEncoding adds the encoding to the create resource quota params
-func (o *CreateResourceQuotaParams) SetEncoding(encoding *string) {
-	o.Encoding = encoding
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *CreateResourceQuotaParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -151,23 +137,6 @@ func (o *CreateResourceQuotaParams) WriteToRequest(r runtime.ClientRequest, reg 
 	var res []error
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
-	}
-
-	if o.Encoding != nil {
-
-		// query param encoding
-		var qrEncoding string
-
-		if o.Encoding != nil {
-			qrEncoding = *o.Encoding
-		}
-		qEncoding := qrEncoding
-		if qEncoding != "" {
-
-			if err := r.SetQueryParam("encoding", qEncoding); err != nil {
-				return err
-			}
-		}
 	}
 
 	if len(res) > 0 {

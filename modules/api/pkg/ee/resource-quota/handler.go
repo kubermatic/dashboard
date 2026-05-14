@@ -63,18 +63,6 @@ type getResourceQuota struct {
 	// in: path
 	// required: true
 	Name string `json:"quota_name"`
-
-	// in: query
-	// required: false
-	Encoding string `json:"encoding,omitempty"`
-}
-
-// projectQuotaReq wraps common.GetProjectRq with the optional encoding query
-// parameter so the project-quota GET endpoint can opt in to decimal SI math.
-type projectQuotaReq struct {
-	common.GetProjectRq
-	// Encoding is read from ?encoding=...
-	Encoding string
 }
 
 // swagger:parameters calculateProjectResourceQuotaUpdate
@@ -124,18 +112,10 @@ type listResourceQuotas struct {
 	// in: query
 	// required: false
 	Accumulate bool `json:"accumulate,omitempty"`
-
-	// in: query
-	// required: false
-	Encoding string `json:"encoding,omitempty"`
 }
 
 // swagger:parameters createResourceQuota
 type createResourceQuota struct {
-	// in: query
-	// required: false
-	Encoding string `json:"encoding,omitempty"`
-
 	// in: body
 	// required: true
 	Body struct {
@@ -150,10 +130,6 @@ type putResourceQuota struct {
 	// in: path
 	// required: true
 	Name string `json:"quota_name"`
-
-	// in: query
-	// required: false
-	Encoding string `json:"encoding,omitempty"`
 
 	// in: body
 	// required: true
@@ -172,13 +148,6 @@ func (m createResourceQuota) Validate() error {
 	return nil
 }
 
-// encodingFromRequest returns the optional `?encoding=` query parameter.
-// Empty string means "legacy PR-7729 behavior"; "decimal" opts in to decimal
-// SI math.
-func encodingFromRequest(r *http.Request) string {
-	return r.URL.Query().Get("encoding")
-}
-
 func DecodeResourceQuotaReq(r *http.Request) (interface{}, error) {
 	var req getResourceQuota
 
@@ -188,20 +157,7 @@ func DecodeResourceQuotaReq(r *http.Request) (interface{}, error) {
 		return nil, utilerrors.NewBadRequest("`quota_name` cannot be empty")
 	}
 
-	req.Encoding = encodingFromRequest(r)
-
 	return req, nil
-}
-
-func DecodeProjectQuotaReq(c context.Context, r *http.Request) (interface{}, error) {
-	pReq, err := common.DecodeGetProject(c, r)
-	if err != nil {
-		return nil, err
-	}
-	return projectQuotaReq{
-		GetProjectRq: pReq.(common.GetProjectRq),
-		Encoding:     encodingFromRequest(r),
-	}, nil
 }
 
 func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
@@ -220,7 +176,6 @@ func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
 		}
 	}
 	req.Accumulate = accumulate
-	req.Encoding = encodingFromRequest(r)
 
 	return req, nil
 }
@@ -231,8 +186,6 @@ func DecodeCreateResourceQuotaReq(r *http.Request) (interface{}, error) {
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, utilerrors.NewBadRequest("%v", err)
 	}
-
-	req.Encoding = encodingFromRequest(r)
 
 	return req, nil
 }
@@ -248,8 +201,6 @@ func DecodePutResourceQuotaReq(r *http.Request) (interface{}, error) {
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
-
-	req.Encoding = encodingFromRequest(r)
 
 	return req, nil
 }
@@ -293,17 +244,13 @@ func GetResourceQuota(ctx context.Context, request interface{}, provider provide
 		humanReadableName = project.Spec.Name
 	}
 
-	return convertToAPIStruct(resourceQuota, humanReadableName, req.Encoding), nil
+	return convertToAPIStruct(resourceQuota, humanReadableName), nil
 }
 
 func GetResourceQuotaForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
 	quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuota, error) {
-	req, ok := request.(projectQuotaReq)
-	if !ok {
-		return nil, utilerrors.NewBadRequest("invalid request")
-	}
-	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, req.GetProjectRq, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
+	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
 	if err != nil {
 		return nil, err
 	}
@@ -313,21 +260,10 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 		return nil, nil
 	}
 
-	return convertToAPIStruct(projectResourceQuota, projectName, req.Encoding), nil
+	return convertToAPIStruct(projectResourceQuota, projectName), nil
 }
 
-// quantityForBinaryArith returns a binary-suffixed copy of q when encoding is
-// not EncodingDecimal, matching legacy PR-7729 arithmetic. When encoding is
-// EncodingDecimal the original Quantity is returned so Kubernetes-canonical
-// byte counts flow through unchanged.
-func quantityForBinaryArith(q *resource.Quantity, encoding string) resource.Quantity {
-	if encoding == apiv2.EncodingDecimal {
-		return *q
-	}
-	return apiv2.TreatDecimalAsBinary(q)
-}
-
-func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList, encoding string) *apiv2.ResourceQuota {
+func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuota {
 	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
 	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
 
@@ -336,28 +272,28 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList, encoding string) *
 			rdAvailable.CPU.Add(*quota.Spec.Quota.CPU)
 		}
 		if quota.Spec.Quota.Memory != nil {
-			rdAvailable.Memory.Add(quantityForBinaryArith(quota.Spec.Quota.Memory, encoding))
+			rdAvailable.Memory.Add(apiv2.TreatDecimalAsBinary(quota.Spec.Quota.Memory))
 		}
 		if quota.Spec.Quota.Storage != nil {
-			rdAvailable.Storage.Add(quantityForBinaryArith(quota.Spec.Quota.Storage, encoding))
+			rdAvailable.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Spec.Quota.Storage))
 		}
 
 		if quota.Status.GlobalUsage.CPU != nil {
 			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
 		}
 		if quota.Status.GlobalUsage.Memory != nil {
-			rdUsed.Memory.Add(quantityForBinaryArith(quota.Status.GlobalUsage.Memory, encoding))
+			rdUsed.Memory.Add(apiv2.TreatDecimalAsBinary(quota.Status.GlobalUsage.Memory))
 		}
 		if quota.Status.GlobalUsage.Storage != nil {
-			rdUsed.Storage.Add(quantityForBinaryArith(quota.Status.GlobalUsage.Storage, encoding))
+			rdUsed.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Status.GlobalUsage.Storage))
 		}
 	}
 
 	return &apiv2.ResourceQuota{
 		Name:  totalQuotaName,
-		Quota: apiv2.ConvertToAPIQuota(*rdAvailable, encoding),
+		Quota: apiv2.ConvertToAPIQuota(*rdAvailable),
 		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: apiv2.ConvertToAPIQuota(*rdUsed, encoding),
+			GlobalUsage: apiv2.ConvertToAPIQuota(*rdUsed),
 		},
 		SubjectHumanReadableName: totalQuotaName,
 	}
@@ -392,9 +328,6 @@ func CalculateResourceQuotaUpdateForProject(
 	}
 
 	// Add the current global usage.
-	// NOTE: the calculation endpoint stays on the legacy PR-7729 contract for
-	// this PR; decimal-encoding support is tracked as a follow-up tied to the
-	// provider-mapper unit-mismatch issue.
 	if globalQuotaUsage.CPU != nil && newResourceCalculation.CPU != nil {
 		newResourceCalculation.CPU.Add(*globalQuotaUsage.CPU)
 	}
@@ -440,8 +373,8 @@ func CalculateResourceQuotaUpdateForProject(
 	}
 
 	return &apiv2.ResourceQuotaUpdateCalculation{
-		ResourceQuota:   *convertToAPIStruct(projectResourceQuota, projectName, ""),
-		CalculatedQuota: apiv2.ConvertToAPIQuota(*newResourceCalculation, ""),
+		ResourceQuota:   *convertToAPIStruct(projectResourceQuota, projectName),
+		CalculatedQuota: apiv2.ConvertToAPIQuota(*newResourceCalculation),
 		Message:         msg,
 	}, nil
 }
@@ -778,7 +711,7 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 
 	// if accumulate is true, accumulate all resource quota's quotas and global usage and return
 	if req.Accumulate {
-		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList, req.Encoding)}, nil
+		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList)}, nil
 	}
 
 	// Fetching projects to get their human-readable names.
@@ -800,7 +733,7 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 				humanReadableName = projectMap[rq.Spec.Subject.Name].Spec.Name
 			}
 		}
-		resp[idx] = convertToAPIStruct(&rq, humanReadableName, req.Encoding)
+		resp[idx] = convertToAPIStruct(&rq, humanReadableName)
 	}
 
 	return resp, nil
@@ -816,7 +749,7 @@ func CreateResourceQuota(ctx context.Context, request interface{}, provider prov
 		return utilerrors.NewBadRequest("%v", err)
 	}
 
-	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body.Quota, req.Encoding)
+	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body.Quota)
 	if err != nil {
 		return utilerrors.NewBadRequest("%v", err)
 	}
@@ -849,7 +782,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	// if a resource quota is updated, it's not a default quota anymore. Remove default label if it exists
 	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
 
-	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body, req.Encoding)
+	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body)
 	if err != nil {
 		return utilerrors.NewBadRequest("%v", err)
 	}
@@ -864,15 +797,15 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	return nil
 }
 
-func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string, encoding string) *apiv2.ResourceQuota {
+func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
 	rq := &apiv2.ResourceQuota{
 		Name:        resourceQuota.Name,
 		SubjectName: resourceQuota.Spec.Subject.Name,
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
-		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota, encoding),
+		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
 		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage, encoding),
-			LocalUsage:  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage, encoding),
+			GlobalUsage: apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
+			LocalUsage:  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}

@@ -65,9 +65,6 @@ type ListResourceQuotasParams struct {
 	// Accumulate.
 	Accumulate *bool
 
-	// Encoding.
-	Encoding *string
-
 	// SubjectKind.
 	SubjectKind *string
 
@@ -138,17 +135,6 @@ func (o *ListResourceQuotasParams) SetAccumulate(accumulate *bool) {
 	o.Accumulate = accumulate
 }
 
-// WithEncoding adds the encoding to the list resource quotas params
-func (o *ListResourceQuotasParams) WithEncoding(encoding *string) *ListResourceQuotasParams {
-	o.SetEncoding(encoding)
-	return o
-}
-
-// SetEncoding adds the encoding to the list resource quotas params
-func (o *ListResourceQuotasParams) SetEncoding(encoding *string) {
-	o.Encoding = encoding
-}
-
 // WithSubjectKind adds the subjectKind to the list resource quotas params
 func (o *ListResourceQuotasParams) WithSubjectKind(subjectKind *string) *ListResourceQuotasParams {
 	o.SetSubjectKind(subjectKind)
@@ -191,23 +177,6 @@ func (o *ListResourceQuotasParams) WriteToRequest(r runtime.ClientRequest, reg s
 		if qAccumulate != "" {
 
 			if err := r.SetQueryParam("accumulate", qAccumulate); err != nil {
-				return err
-			}
-		}
-	}
-
-	if o.Encoding != nil {
-
-		// query param encoding
-		var qrEncoding string
-
-		if o.Encoding != nil {
-			qrEncoding = *o.Encoding
-		}
-		qEncoding := qrEncoding
-		if qEncoding != "" {
-
-			if err := r.SetQueryParam("encoding", qEncoding); err != nil {
 				return err
 			}
 		}
