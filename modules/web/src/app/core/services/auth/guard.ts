@@ -38,15 +38,13 @@ export class AdminGuard implements CanActivate {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private auth: Auth) {}
+  constructor(
+    private readonly _authService: Auth,
+    private readonly _router: Router
+  ) {}
 
-  canActivate(_route: ActivatedRouteSnapshot, _snap: RouterStateSnapshot): boolean {
-    if (this.auth.authenticated()) {
-      return true;
-    }
-
-    window.location.href = this.auth.getOIDCProviderURL();
-    return false;
+  canActivate(_route: ActivatedRouteSnapshot, _snap: RouterStateSnapshot): boolean | UrlTree {
+    return this._authService.authenticated() || this._router.parseUrl('/');
   }
 }
 

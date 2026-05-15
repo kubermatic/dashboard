@@ -19,27 +19,11 @@ import {Observable, of} from 'rxjs';
 export class AuthMockService {
   isAuth = true;
 
-  getOIDCProviderURL(): string {
-    return '';
-  }
-
   authenticated(): boolean {
     return this.isAuth;
   }
 
-  getBearerToken(): string {
-    return 'token';
+  logout(): Observable<{redirect: string}> {
+    return of({redirect: '/'});
   }
-
-  getUsername(): string {
-    return 'testUser';
-  }
-
-  logout(): Observable<boolean> {
-    return of(true);
-  }
-
-  oidcProviderLogout(): void {}
-
-  setNonce(): void {}
 }

@@ -234,6 +234,7 @@ type RoutingParams struct {
 	ApplicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	PrivilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	OIDCIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
+	OIDCIssuerVerifier                             authtypes.OIDCIssuerVerifier
 	Versions                                       kubermatic.Versions
 	CABundle                                       *x509.CertPool
 	Features                                       features.FeatureGate

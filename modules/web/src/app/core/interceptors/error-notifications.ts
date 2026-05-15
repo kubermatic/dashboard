@@ -42,6 +42,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _silenceErrArr = [
     'external cluster functionality',
     'configs.config.gatekeeper.sh "config" not found',
+    'missing refresh_token cookie',
   ];
 
   // Array of endpoints that should be silenced in the UI.
@@ -142,15 +143,19 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   }
 
   private _toError(httpError: HttpErrorResponse): Error {
-    return this._isAPIError(httpError)
-      ? {
-          message: (httpError.error as APIError).error.message,
-          code: (httpError.error as APIError).error.code,
-        }
-      : {
-          message: httpError.message || httpError.statusText,
-          code: httpError.status,
-          shortMessage: httpError.statusText,
-        };
+    if (this._isAPIError(httpError)) {
+      return {
+        message: (httpError.error as APIError).error.message,
+        code: (httpError.error as APIError).error.code,
+      };
+    }
+    // Some auth endpoints return plain-text errors. Use the response body as the message
+    // so that _silenceErrArr patterns match the actual error text, not Angular's generic wrapper.
+    const bodyText = typeof httpError.error === 'string' ? httpError.error.trim() : null;
+    return {
+      message: bodyText || httpError.message || httpError.statusText,
+      code: httpError.status,
+      shortMessage: httpError.statusText,
+    };
   }
 }

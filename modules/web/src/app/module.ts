@@ -30,6 +30,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {kmButtonToggleDefaultOptions, kmTooltipDefaultOptions} from '../app-config';
 import {KubermaticComponent} from './component';
+import {Auth} from '@core/services/auth/service';
 import {BrandingService} from '@core/services/branding';
 import {AppConfigService} from './config.service';
 import {DashboardComponent} from './dashboard/component';
@@ -42,17 +43,20 @@ const appInitializerFn = (): Promise<void> => {
   const userService = inject(UserService);
   const datacenterService = inject(DatacenterService);
   const brandingService = inject(BrandingService);
+  const authService = inject(Auth);
 
   historyService.init();
-  userService.init();
-  datacenterService.init();
-  return appConfigService
-    .loadAppConfig()
-    .then(() => appConfigService.loadUserGroupConfig())
-    .then(() => appConfigService.loadGitVersion())
-    .then(() => {
-      brandingService.init(appConfigService.getConfig().branding);
-    });
+  return authService.init().then(() => {
+    userService.init();
+    datacenterService.init();
+    return appConfigService
+      .loadAppConfig()
+      .then(() => appConfigService.loadUserGroupConfig())
+      .then(() => appConfigService.loadGitVersion())
+      .then(() => {
+        brandingService.init(appConfigService.getConfig().branding);
+      });
+  });
 };
 
 const appearance: MatFormFieldDefaultOptions = {
