@@ -48,8 +48,11 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i [matTooltip]="element.status?.message"
+          <i [matTooltip]="getStatusTooltip(element)"
+             #statusTooltip="matTooltip"
              [ngClass]="getStatusIcon(element.status?.phase)"
+             [class.km-pointer]="canCopyStatusMessage(element)"
+             (click)="copyStatusMessage(element, statusTooltip)"
              class="km-vertical-center"></i>
         </td>
       </ng-container>
