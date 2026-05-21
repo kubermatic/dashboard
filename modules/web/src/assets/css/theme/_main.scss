@@ -30,7 +30,7 @@ $my-typography: mat.m2-define-typography-config(
 
 // Restores overflow:visible on chip cells (removed as a default in Angular Material v21 via
 // angular/components#31679 and now only re-applied through this mixin). 
-@include mat.strong-focus-indicators();
+@include mat.strong-focus-indicators;
 
 @mixin theme($theme, $colors) {
   $palette-background: map.get($theme, background);
