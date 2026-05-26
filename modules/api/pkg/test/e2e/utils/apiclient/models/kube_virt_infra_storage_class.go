@@ -18,6 +18,9 @@ import (
 // swagger:model KubeVirtInfraStorageClass
 type KubeVirtInfraStorageClass struct {
 
+	// AllowVolumeExpansion shows whether the storage class allow volume expand.
+	AllowVolumeExpansion bool `json:"allowVolumeExpansion,omitempty"`
+
 	// Optional: IsDefaultClass. If true, the created StorageClass in the tenant cluster will be annotated with:
 	// storageclass.kubernetes.io/is-default-class : true
 	// If missing or false, annotation will be:
@@ -31,6 +34,10 @@ type KubeVirtInfraStorageClass struct {
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	// ReclaimPolicy controls the reclaimPolicy for dynamically provisioned PersistentVolumes of this storage class.
+	// Defaults to Delete.
+	ReclaimPolicy string `json:"reclaimPolicy,omitempty"`
 
 	// Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters
 	// to span multiple regions
