@@ -55,4 +55,24 @@ describe('EventListComponent', () => {
   it('should return false when there are no events', () => {
     expect(component.hasEvents()).toBeFalsy();
   });
+
+  it('should group duplicate events with undefined count as numeric values', () => {
+    const duplicatedWarningA = {
+      message: 'failed to get tenant',
+      type: 'Warning',
+      involvedObject: {name: 'defClusterID', namespace: 'kubermatic', type: 'Cluster'},
+    } as Event;
+
+    const duplicatedWarningB = {
+      message: 'failed to get tenant',
+      type: 'Warning',
+      involvedObject: {name: 'defClusterID', namespace: 'kubermatic', type: 'Cluster'},
+    } as Event;
+
+    component.events = [duplicatedWarningA, duplicatedWarningB];
+    component.ngOnChanges();
+
+    expect(component.dataSource.data.length).toBe(1);
+    expect(component.dataSource.data[0].count).toBe(component.events.length);
+  });
 });

@@ -1289,6 +1289,27 @@ func GenDefaultExpiry() (apiv1.Time, error) {
 	return apiv1.NewTime(claim.Expiry.Time()), nil
 }
 
+func GenLegacyTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid, involvedObjectName string) *corev1.Event {
+	return &corev1.Event{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      eventName,
+			Namespace: metav1.NamespaceSystem,
+		},
+		InvolvedObject: corev1.ObjectReference{
+			UID:       types.UID(uid),
+			Name:      involvedObjectName,
+			Namespace: metav1.NamespaceSystem,
+			Kind:      kind,
+		},
+		Reason:        eventReason,
+		Message:       eventMessage,
+		Source:        corev1.EventSource{Component: "eventTest"},
+		LastTimestamp: metav1.NewTime(time.Date(2026, time.May, 28, 8, 0, 0, 0, time.UTC)),
+		Count:         1,
+		Type:          eventType,
+	}
+}
+
 func GenTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid, involvedObjectName string) *corev1.Event {
 	return &corev1.Event{
 		ObjectMeta: metav1.ObjectMeta{
@@ -1301,11 +1322,13 @@ func GenTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid, in
 			Namespace: metav1.NamespaceSystem,
 			Kind:      kind,
 		},
-		Reason:  eventReason,
-		Message: eventMessage,
-		Source:  corev1.EventSource{Component: "eventTest"},
-		Count:   1,
-		Type:    eventType,
+		Reason:    eventReason,
+		Message:   eventMessage,
+		Type:      eventType,
+		EventTime: metav1.NewMicroTime(time.Date(2026, time.May, 29, 9, 0, 0, 0, time.UTC)),
+		Series: &corev1.EventSeries{
+			Count: 2,
+		},
 	}
 }
 

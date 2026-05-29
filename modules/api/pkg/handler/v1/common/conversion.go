@@ -22,6 +22,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func ConvertInternalSSHKeysToExternal(internalKeys []*kubermaticv1.UserSSHKey) []*apiv1.SSHKey {
@@ -74,9 +75,39 @@ func ConvertInternalEventToExternal(event corev1.Event) apiv1.Event {
 			Namespace: event.InvolvedObject.Namespace,
 			Type:      event.InvolvedObject.Kind,
 		},
-		LastTimestamp: apiv1.NewTime(event.LastTimestamp.Time),
-		Count:         event.Count,
+		LastTimestamp: apiv1.NewTime(resolveEventLastTimestamp(event).Time),
+		Count:         resolveEventCount(event),
 	}
+}
+
+func resolveEventCount(event corev1.Event) int32 {
+	if event.Count > 0 {
+		return event.Count
+	}
+
+	if event.Series != nil {
+		if event.Series.Count > 0 {
+			return event.Series.Count
+		}
+
+		// If a series exists but count is unset, treat it as at least one occurrence.
+		return 1
+	}
+
+	// Any emitted event should have at least one occurrence.
+	return 1
+}
+
+func resolveEventLastTimestamp(event corev1.Event) metav1.Time {
+	if !event.LastTimestamp.IsZero() {
+		return event.LastTimestamp
+	}
+
+	if !event.EventTime.IsZero() {
+		return metav1.NewTime(event.EventTime.Time)
+	}
+
+	return event.CreationTimestamp
 }
 
 func ConvertInternalProjectToExternal(kubermaticProject *kubermaticv1.Project, projectOwners []apiv1.User, clustersNumber int) *apiv1.Project {
