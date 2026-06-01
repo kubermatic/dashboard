@@ -36,7 +36,6 @@ import {
   KubeVirtAffinityPreset,
   KubeVirtInstanceType,
   KubeVirtInstanceTypeCategory,
-  KubeVirtInstanceTypeKind,
   KubeVirtInstanceTypeList,
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
@@ -395,21 +394,12 @@ export class KubeVirtBasicNodeDataComponent
       const tokens = instanceTypeId.split(this._instanceTypeIDSeparator);
       const category = tokens.shift();
       const name = tokens.join(this._instanceTypeIDSeparator);
-      let kind;
-      switch (category) {
-        case KubeVirtInstanceTypeCategory.Kubermatic:
-          kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
-          break;
-        case KubeVirtInstanceTypeCategory.Custom:
-          kind = KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype;
-          break;
-      }
       this.selectedInstanceType = this._instanceTypes?.instancetypes?.[category]?.find(
         instanceType => instanceType.name === name
       );
       this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
         name,
-        kind,
+        kind: this.selectedInstanceType?.kind,
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
@@ -769,6 +759,20 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
+    // Find the actual category by searching the loaded list — kind alone is ambiguous for
+    // namespaced VirtualMachineInstancetype (kubermatic standard vs user-deployed custom).
+    // When kind is absent (specs saved before kind was added to the API), fall back to
+    // name-only matching so the correct kind is sourced from the API response on next save.
+    if (this._instanceTypes?.instancetypes) {
+      for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
+        const match = instanceType.kind
+          ? items.some(it => it.name === instanceType.name && it.kind === instanceType.kind)
+          : items.some(it => it.name === instanceType.name);
+        if (match) {
+          return `${cat}${this._instanceTypeIDSeparator}${instanceType.name}`;
+        }
+      }
+    }
     const category = KubeVirtNodeInstanceType.getCategory(instanceType);
     return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
   }

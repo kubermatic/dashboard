@@ -1737,6 +1737,10 @@ const (
 // swagger:model VirtualMachineInstancetype
 type VirtualMachineInstancetype struct {
 	Name string `json:"name,omitempty"`
+	// Kind is the KubeVirt resource kind: "VirtualMachineInstancetype" (namespaced) or
+	// "VirtualMachineClusterInstancetype" (cluster-scoped). The dashboard must use this
+	// value verbatim when constructing the machine providerSpec instancetype reference.
+	Kind string `json:"kind,omitempty"`
 	// Spec contains the kvinstancetypealpha1v1.VirtualMachineInstanctype.Spec object marshalled
 	// Required by UI to not embed the whole kubevirt.io API object, but a marshalled spec.
 	Spec string `json:"spec,omitempty"`

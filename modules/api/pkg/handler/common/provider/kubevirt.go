@@ -306,6 +306,7 @@ func newAPIInstancetype(w instancetypeWrapper) (*apiv2.VirtualMachineInstancetyp
 
 	return &apiv2.VirtualMachineInstancetype{
 		Name: w.GetObjectMeta().GetName(),
+		Kind: w.Kind(),
 		Spec: string(spec),
 	}, nil
 }
@@ -566,6 +567,7 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 type instancetypeWrapper interface {
 	Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec
 	Category() apiv2.VirtualMachineInstancetypeCategory
+	Kind() string
 	GetObjectMeta() metav1.Object
 }
 
@@ -575,6 +577,10 @@ type customInstancetypeWrapper struct {
 
 func (it *customInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
 	return apiv2.InstancetypeCustom
+}
+
+func (it *customInstancetypeWrapper) Kind() string {
+	return "VirtualMachineClusterInstancetype"
 }
 
 func (it *customInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
@@ -589,6 +595,10 @@ func (it *standardInstancetypeWrapper) Category() apiv2.VirtualMachineInstancety
 	return apiv2.InstancetypeKubermatic
 }
 
+func (it *standardInstancetypeWrapper) Kind() string {
+	return "VirtualMachineInstancetype"
+}
+
 func (it *standardInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
 	return it.VirtualMachineInstancetype.Spec
 }
@@ -601,6 +611,10 @@ type customNamespacedInstancetypeWrapper struct {
 
 func (it *customNamespacedInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
 	return apiv2.InstancetypeCustom
+}
+
+func (it *customNamespacedInstancetypeWrapper) Kind() string {
+	return "VirtualMachineInstancetype"
 }
 
 func (it *customNamespacedInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
