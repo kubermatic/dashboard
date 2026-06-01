@@ -21,6 +21,7 @@ export class KubeVirtInstanceTypeList {
 export class KubeVirtInstanceType {
   _id?: string; // unique identifier for dropdown options
   name: string;
+  kind: KubeVirtInstanceTypeKind;
   spec: string;
 }
 
