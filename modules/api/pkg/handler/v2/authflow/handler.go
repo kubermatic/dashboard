@@ -30,6 +30,7 @@ import (
 	"golang.org/x/oauth2"
 
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/log"
 )
 
 const (
@@ -259,7 +260,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 		// 8. Redirect to frontend landing page.
 		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
 		if err != nil {
-			fmt.Println("failed to get user info", err)
+			log.Logger.Errorf("failed to get user info: %v", err)
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
@@ -362,6 +363,8 @@ func setNamedCookie(w http.ResponseWriter, name, value, path string, maxAge int,
 
 func (a *authHandler) logoutHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		clearAuthCookies(w, r, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
+
 		tokenValue, err := a.tokenExtractor.Extract(r)
 		if err != nil {
 			http.Error(w, "missing token cookie", http.StatusUnauthorized)
@@ -390,7 +393,7 @@ func (a *authHandler) logoutHandler() http.Handler {
 		redirectPath := "/"
 
 		if err != nil {
-			fmt.Println("failed to get UI configurations", err)
+			log.Logger.Errorf("failed to get UI configurations: %v", err)
 		} else {
 			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, a.getBaseURL(r))
 		}
@@ -399,7 +402,6 @@ func (a *authHandler) logoutHandler() http.Handler {
 			http.Error(w, fmt.Sprintf("failed to invalidate token: %v", err), http.StatusInternalServerError)
 			return
 		}
-		clearAuthCookies(w, r, a.oidcIssuerVerifier.OIDCConfig().CookieSecureMode)
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(map[string]string{
 			"redirect": redirectPath,
@@ -488,7 +490,7 @@ func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfigura
 	if kubermaticConfig.Spec.UI.Config != "" {
 		err := json.Unmarshal([]byte(kubermaticConfig.Spec.UI.Config), &uiConfig)
 		if err != nil {
-			fmt.Println("failed to unmarshal UI configurations", err)
+			log.Logger.Errorf("failed to unmarshal UI configurations: %v", err)
 			return redirectPath
 		}
 	}
@@ -496,12 +498,12 @@ func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfigura
 		if oidcLogoutURLStr, ok := value.(string); ok && oidcLogoutURLStr != "" {
 			oidcLogoutURL, err := url.Parse(oidcLogoutURLStr)
 			if err != nil {
-				fmt.Println("failed to create the OIDC Logout URL from UI configurations", err)
+				log.Logger.Errorf("failed to create the OIDC Logout URL from UI configurations: %v", err)
 				return redirectPath
 			}
 			oidcProvider, ok := uiConfig["oidc_provider"].(string)
 			if !ok {
-				fmt.Println("failed to get the OIDC Logout Provider from UI configurations")
+				log.Logger.Error("failed to get the OIDC Logout Provider from UI configurations")
 				return redirectPath
 			}
 			urlQuery := oidcLogoutURL.Query()
