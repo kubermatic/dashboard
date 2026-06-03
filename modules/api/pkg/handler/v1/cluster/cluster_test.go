@@ -2146,10 +2146,10 @@ func TestGetClusterEventsEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExistingEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
 			},
-			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 		},
 		// scenario 2
 		{
@@ -2164,10 +2164,10 @@ func TestGetClusterEventsEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExistingEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
 			},
-			ExpectedResult: `[{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResult: `[{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 		},
 		// scenario 3
 		{
@@ -2182,10 +2182,10 @@ func TestGetClusterEventsEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExistingEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
 			},
-			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 		},
 		// scenario 4
 		{
@@ -2200,10 +2200,10 @@ func TestGetClusterEventsEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
 			},
-			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResult: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 		},
 		// scenario 5
 		{
@@ -2218,10 +2218,43 @@ func TestGetClusterEventsEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Cluster", "venus-1-machine", test.GenDefaultCluster().Name),
 			},
 			ExpectedResult: `{"error":{"code":403,"message":"forbidden: \"john@acme.com\" doesn't belong to project my-first-project-ID"}}`,
+		},
+		// scenario 6
+		{
+			Name:            "scenario 6: list events with series count and event time",
+			HTTPStatus:      http.StatusOK,
+			ClusterIDToSync: test.GenDefaultCluster().Name,
+			ProjectIDToSync: test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			ExistingEvents: []*corev1.Event{
+				test.GenTestEvent("event-3", corev1.EventTypeWarning, "Failed", "failed to reconcile cluster", "Cluster", test.GenDefaultCluster().Name, test.GenDefaultCluster().Name),
+			},
+			ExpectedResult: `[{"name":"event-3","creationTimestamp":"0001-01-01T00:00:00Z","message":"failed to reconcile cluster","type":"Warning","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-29T09:00:00Z","count":2}]`,
+		},
+		// scenario 7
+		{
+			Name:            "scenario 7: list mixed legacy and series events",
+			HTTPStatus:      http.StatusOK,
+			ClusterIDToSync: test.GenDefaultCluster().Name,
+			ProjectIDToSync: test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			ExistingEvents: []*corev1.Event{
+				test.GenLegacyTestEvent("event-4", corev1.EventTypeNormal, "Started", "legacy event", "Cluster", test.GenDefaultCluster().Name, test.GenDefaultCluster().Name),
+				test.GenTestEvent("event-5", corev1.EventTypeNormal, "Scaling", "series event", "Cluster", test.GenDefaultCluster().Name, test.GenDefaultCluster().Name),
+			},
+			ExpectedResult: `[{"name":"event-4","creationTimestamp":"0001-01-01T00:00:00Z","message":"legacy event","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1},{"name":"event-5","creationTimestamp":"0001-01-01T00:00:00Z","message":"series event","type":"Normal","involvedObject":{"type":"Cluster","namespace":"kube-system","name":"defClusterID"},"lastTimestamp":"2026-05-29T09:00:00Z","count":2}]`,
 		},
 	}
 
