@@ -744,7 +744,7 @@ func TestGetClusterEvents(t *testing.T) {
 		// scenario 1
 		{
 			Name:             "scenario 1: gets all cluster events",
-			ExpectedResponse: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResponse: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
 			ExistingNodes: []*corev1.Node{
@@ -754,15 +754,15 @@ func TestGetClusterEvents(t *testing.T) {
 				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
 		// scenario 2
 		{
 			Name:             "scenario 2: gets only warning events",
-			ExpectedResponse: `[{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResponse: `[{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 			QueryParams:      "?type=warning",
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
@@ -773,15 +773,15 @@ func TestGetClusterEvents(t *testing.T) {
 				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
 		// scenario 3
 		{
 			Name:             "scenario 3: the admin John can get any cluster events",
-			ExpectedResponse: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"0001-01-01T00:00:00Z","count":1}]`,
+			ExpectedResponse: `[{"name":"event-1","creationTimestamp":"0001-01-01T00:00:00Z","message":"message started","type":"Normal","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1},{"name":"event-2","creationTimestamp":"0001-01-01T00:00:00Z","message":"message killed","type":"Warning","involvedObject":{"type":"Node","namespace":"kube-system","name":"testMachine"},"lastTimestamp":"2026-05-28T08:00:00Z","count":1}]`,
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
 			ExistingNodes: []*corev1.Node{
@@ -795,8 +795,8 @@ func TestGetClusterEvents(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 		},
 		// scenario 4
@@ -815,8 +815,8 @@ func TestGetClusterEvents(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenLegacyTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 		},
 	}
