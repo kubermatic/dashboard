@@ -121,12 +121,18 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
 
     events.forEach(event => {
       const hash = this._hash(event);
+      const currentCount = Number.isFinite(event.count) ? event.count : 1;
+
       if (map.has(hash)) {
         const ev = event;
-        ev.count += map.get(hash).count;
+        const existing = map.get(hash);
+        const existingCount = Number.isFinite(existing?.count) ? existing.count : 1;
+        ev.count = currentCount + existingCount;
         map.set(hash, ev);
+        return;
       }
 
+      event.count = currentCount;
       map.set(hash, event);
     });
 
