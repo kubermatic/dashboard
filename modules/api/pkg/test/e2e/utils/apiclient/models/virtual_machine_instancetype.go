@@ -17,6 +17,11 @@ import (
 // swagger:model VirtualMachineInstancetype
 type VirtualMachineInstancetype struct {
 
+	// Kind is the KubeVirt resource kind: "VirtualMachineInstancetype" (namespaced) or
+	// "VirtualMachineClusterInstancetype" (cluster-scoped). The dashboard must use this
+	// value verbatim when constructing the machine providerSpec instancetype reference.
+	Kind string `json:"kind,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 
