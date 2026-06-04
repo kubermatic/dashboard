@@ -759,21 +759,29 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
-    // Find the actual category by searching the loaded list — kind alone is ambiguous for
-    // namespaced VirtualMachineInstancetype (kubermatic standard vs user-deployed custom).
-    // When kind is absent (specs saved before kind was added to the API), fall back to
-    // name-only matching so the correct kind is sourced from the API response on next save.
     if (this._instanceTypes?.instancetypes) {
-      for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
-        const match = instanceType.kind
-          ? items.some(it => it.name === instanceType.name && it.kind === instanceType.kind)
-          : items.some(it => it.name === instanceType.name);
-        if (match) {
-          return `${cat}${this._instanceTypeIDSeparator}${instanceType.name}`;
+      if (instanceType.kind) {
+        // kind present: unambiguous match by name+kind
+        for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
+          if (items.some(it => it.name === instanceType.name && it.kind === instanceType.kind)) {
+            return `${cat}${this._instanceTypeIDSeparator}${instanceType.name}`;
+          }
+        }
+      } else {
+        // kind absent (saved before kind was added to the API): only use name-only match
+        // when exactly one category contains the name — avoids order-dependent results when
+        // the same name exists in multiple categories.
+        const matches = Object.entries(this._instanceTypes.instancetypes).filter(([, items]) =>
+          items.some(it => it.name === instanceType.name)
+        );
+        if (matches.length === 1) {
+          return `${matches[0][0]}${this._instanceTypeIDSeparator}${instanceType.name}`;
         }
       }
     }
-    const category = KubeVirtNodeInstanceType.getCategory(instanceType);
+    // Final fallback: guard against absent kind so getCategory cannot produce an invalid id.
+    const category =
+      KubeVirtNodeInstanceType.getCategory(instanceType) ?? KubeVirtInstanceTypeCategory.Custom;
     return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
   }
 
