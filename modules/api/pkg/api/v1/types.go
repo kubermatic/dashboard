@@ -1079,6 +1079,33 @@ type ClusterSpec struct {
 
 	// Features is a map that controls specific features on cluster level.
 	Features map[string]bool `json:"features,omitempty"`
+
+	// ComponentsOverride allows overriding the configuration of cluster components. Currently only
+	// the per-cluster HTTP(S) proxy of the operating-system-manager is exposed.
+	ComponentsOverride *ComponentSettings `json:"componentsOverride,omitempty"`
+}
+
+// ComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be configured
+// through the dashboard. Currently only the operating-system-manager proxy settings.
+type ComponentSettings struct {
+	// OperatingSystemManager configures the operating-system-manager component.
+	OperatingSystemManager *OSMControllerSettings `json:"operatingSystemManager,omitempty"`
+}
+
+// OSMControllerSettings exposes the configurable subset of the operating-system-manager settings.
+type OSMControllerSettings struct {
+	// Proxy holds the per-cluster HTTP(S) proxy configuration applied to the cluster nodes.
+	Proxy *ProxySettings `json:"proxy,omitempty"`
+}
+
+// ProxySettings holds the per-cluster HTTP(S) proxy configuration. Empty values mean the
+// cluster inherits the datacenter/seed proxy settings.
+type ProxySettings struct {
+	// HTTPProxy is the proxy server endpoint used for both HTTP and HTTPS egress from the nodes,
+	// e.g. "http://proxy.corp.example.com:3128".
+	HTTPProxy string `json:"httpProxy,omitempty"`
+	// NoProxy is a comma-separated list of domains, IPs or CIDRs for which no proxy should be used.
+	NoProxy string `json:"noProxy,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1113,6 +1140,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
 		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration  `json:"encryptionConfiguration,omitempty"`
 		Features                             map[string]bool                        `json:"features,omitempty"`
+		ComponentsOverride                   *ComponentSettings                     `json:"componentsOverride,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1160,6 +1188,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		Kyverno:                              cs.Kyverno,
 		EncryptionConfiguration:              cs.EncryptionConfiguration,
 		Features:                             cs.Features,
+		ComponentsOverride:                   cs.ComponentsOverride,
 	})
 
 	return ret, err

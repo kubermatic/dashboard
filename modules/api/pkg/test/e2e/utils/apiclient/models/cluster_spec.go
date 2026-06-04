@@ -79,6 +79,9 @@ type ClusterSpec struct {
 	// cni plugin
 	CniPlugin *CNIPluginSettings `json:"cniPlugin,omitempty"`
 
+	// components override
+	ComponentsOverride *ComponentSettings `json:"componentsOverride,omitempty"`
+
 	// encryption configuration
 	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
 
@@ -145,6 +148,10 @@ func (m *ClusterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCniPlugin(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateComponentsOverride(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -334,6 +341,25 @@ func (m *ClusterSpec) validateCniPlugin(formats strfmt.Registry) error {
 				return ve.ValidateName("cniPlugin")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cniPlugin")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) validateComponentsOverride(formats strfmt.Registry) error {
+	if swag.IsZero(m.ComponentsOverride) { // not required
+		return nil
+	}
+
+	if m.ComponentsOverride != nil {
+		if err := m.ComponentsOverride.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("componentsOverride")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("componentsOverride")
 			}
 			return err
 		}
@@ -598,6 +624,10 @@ func (m *ClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateComponentsOverride(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateEncryptionConfiguration(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -760,6 +790,22 @@ func (m *ClusterSpec) contextValidateCniPlugin(ctx context.Context, formats strf
 				return ve.ValidateName("cniPlugin")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cniPlugin")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) contextValidateComponentsOverride(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ComponentsOverride != nil {
+		if err := m.ComponentsOverride.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("componentsOverride")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("componentsOverride")
 			}
 			return err
 		}

@@ -30760,6 +30760,9 @@
         "cniPlugin": {
           "$ref": "#/definitions/CNIPluginSettings"
         },
+        "componentsOverride": {
+          "$ref": "#/definitions/ComponentSettings"
+        },
         "containerRuntime": {
           "description": "ContainerRuntime to use, i.e. Docker or containerd. By default containerd will be used.",
           "type": "string",
@@ -31111,6 +31114,16 @@
         }
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+    },
+    "ComponentSettings": {
+      "description": "ComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be configured\nthrough the dashboard. Currently only the operating-system-manager proxy settings.",
+      "type": "object",
+      "properties": {
+        "operatingSystemManager": {
+          "$ref": "#/definitions/OSMControllerSettings"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Condition": {
       "description": "This struct is intended for direct use as an array at the field path .status.conditions.  For example,\n\ntype FooStatus struct{\nRepresents the observations of a foo's current state.\nKnown .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\"\n+patchMergeKey=type\n+patchStrategy=merge\n+listType=map\n+listMapKey=type\nConditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\nother fields\n}",
@@ -38405,6 +38418,16 @@
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
+    "OSMControllerSettings": {
+      "type": "object",
+      "title": "OSMControllerSettings exposes the configurable subset of the operating-system-manager settings.",
+      "properties": {
+        "proxy": {
+          "$ref": "#/definitions/ProxySettings"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "OSVersions": {
       "type": "object",
       "title": "OSVersions defines a map of OS version and the source to download the image.",
@@ -39973,17 +39996,19 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "ProxySettings": {
-      "description": "ProxySettings allow configuring a HTTP proxy for the controlplanes\nand nodes.",
+      "description": "ProxySettings holds the per-cluster HTTP(S) proxy configuration. Empty values mean the\ncluster inherits the datacenter/seed proxy settings.",
       "type": "object",
       "properties": {
         "httpProxy": {
+          "type": "string",
           "$ref": "#/definitions/ProxyValue"
         },
         "noProxy": {
+          "type": "string",
           "$ref": "#/definitions/ProxyValue"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ProxyValue": {
       "type": "string",

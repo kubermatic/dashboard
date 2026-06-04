@@ -117,11 +117,24 @@ export class ClusterSummaryComponent implements OnInit {
   }
 
   get hasNetworkConfiguration(): boolean {
-    return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
+    return (
+      !_.isEmpty(this.cluster.spec?.cniPlugin) ||
+      !_.isEmpty(this.cluster.spec?.clusterNetwork) ||
+      !_.isEmpty(this.cluster.spec?.componentsOverride?.operatingSystemManager?.proxy)
+    );
   }
 
   get nodePortsAllowedIPRanges(): string[] {
     return this.cluster.spec?.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks;
+  }
+
+  get httpProxy(): string {
+    return this.cluster.spec?.componentsOverride?.operatingSystemManager?.proxy?.httpProxy;
+  }
+
+  get noProxyList(): string[] {
+    const noProxy = this.cluster.spec?.componentsOverride?.operatingSystemManager?.proxy?.noProxy;
+    return noProxy ? noProxy.split(',') : [];
   }
 
   get showIPv4(): boolean {
