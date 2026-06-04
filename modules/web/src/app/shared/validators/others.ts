@@ -34,6 +34,16 @@ export const GKE_POOL_NAME_VALIDATOR = Validators.pattern('(?:[a-z](?:[-a-z0-9]{
 export const URL_PATTERN_VALIDATOR = Validators.pattern(
   /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/
 );
+// HTTP(S) proxy URL: scheme (http/https) required, optional user:pass auth, host, optional port and path.
+// Accepts e.g. http://proxy.corp.example.com:3128, https://secure-proxy:8443, http://user:p%40ss@proxy:3128.
+// Rejects bare hosts (proxy.corp.com), unsupported schemes (socks5://...) and scheme without host (http://).
+export const HTTP_PROXY_URL_PATTERN = '^https?:\\/\\/([^\\s/@:]+(:[^\\s/@]*)?@)?[\\w.-]+(:\\d{1,5})?(\\/[^\\s]*)?$';
+export const HTTP_PROXY_URL_PATTERN_VALIDATOR = Validators.pattern(new RegExp(HTTP_PROXY_URL_PATTERN, 'i'));
+
+// A single NO_PROXY entry: hostname, leading-dot domain suffix (.corp.example.com), IPv4/IPv6 address or CIDR.
+// Used per-chip via KmValidators.chipPattern. Accepts localhost, 127.0.0.1, 10.0.0.0/8, .cluster.local, ::1, fd00::/8.
+export const NO_PROXY_PATTERN = '^\\.?[a-zA-Z0-9._:-]+(\\/\\d{1,3})?$';
+
 export const CBSL_SYNC_PERIOD = Validators.pattern('^(0|([0-9]{1,2}m)?[0-9]{1,2}s)$');
 export const Cluster_BACKUP_EXPIRES_IN = Validators.pattern('^(0|[0-9]{1,2}h?[0-9]{1,2}m?[0-9]{1,2}s)$');
 

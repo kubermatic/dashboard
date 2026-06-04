@@ -233,6 +233,20 @@ limitations under the License.
           <div value>{{cluster.spec.containerRuntime}}</div>
         </km-property>
         }
+        @if (httpProxy) {
+        <km-property>
+          <div key>HTTP(S) Proxy</div>
+          <div value>{{httpProxy}}</div>
+        </km-property>
+        }
+        @if (noProxyList.length) {
+        <km-property>
+          <div key>No Proxy</div>
+          <div value>
+            <km-labels [labels]="noProxyList" />
+          </div>
+        </km-property>
+        }
         @if (isUserSshKeyEnabled) {
         <km-property>
           <div key>SSH Keys</div>

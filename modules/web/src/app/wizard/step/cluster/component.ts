@@ -30,10 +30,12 @@ import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {
+  HTTP_PROXY_URL_PATTERN_VALIDATOR,
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
   IPV6_CIDR_PATTERN_VALIDATOR,
   NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
+  NO_PROXY_PATTERN,
 } from '@app/shared/validators/others';
 import {BrandingService} from '@core/services/branding';
 import {ClusterService} from '@core/services/cluster';
@@ -46,6 +48,7 @@ import {
   AuditLoggingWebhookBackend,
   AuditPolicyPreset,
   Cluster,
+  ComponentSettings,
   ClusterAnnotation,
   ClusterNetwork,
   ClusterSpec,
@@ -150,6 +153,8 @@ enum Controls {
   CiliumIngress = 'ciliumIngress',
   EncryptionAtRest = 'encryptionAtRest',
   EncryptionAtRestKey = 'encryptionAtRestKey',
+  HTTPProxy = 'httpProxy',
+  NoProxy = 'noProxy',
 }
 
 @Component({
@@ -208,6 +213,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
   readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
+  readonly noProxyRegex = NO_PROXY_PATTERN;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly IPFamily = IPFamily;
@@ -572,7 +578,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.KubeLBEnableGatewayAPI).valueChanges,
       this.form.get(Controls.DisableCSIDriver).valueChanges,
       this.form.get(Controls.EncryptionAtRest).valueChanges,
-      this.form.get(Controls.EncryptionAtRestKey).valueChanges
+      this.form.get(Controls.EncryptionAtRestKey).valueChanges,
+      this.form.get(Controls.HTTPProxy).valueChanges,
+      this.form.get(Controls.NoProxy).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -817,6 +825,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv6ServicesCIDR]: this._builder.control(
         NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
         [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
+      ),
+      [Controls.HTTPProxy]: this._builder.control(
+        clusterSpec?.componentsOverride?.operatingSystemManager?.proxy?.httpProxy ?? '',
+        [HTTP_PROXY_URL_PATTERN_VALIDATOR]
+      ),
+      [Controls.NoProxy]: this._builder.control(
+        clusterSpec?.componentsOverride?.operatingSystemManager?.proxy?.noProxy
+          ? clusterSpec.componentsOverride.operatingSystemManager.proxy.noProxy.split(',')
+          : []
       ),
     });
 
@@ -1318,7 +1335,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     } else {
       clusterObject.spec.backupConfig = null;
     }
+
+    clusterObject.spec.componentsOverride = this._getProxyComponentsOverride();
+
     return clusterObject;
+  }
+
+  private _getProxyComponentsOverride(): ComponentSettings {
+    const httpProxy = this.controlValue(Controls.HTTPProxy);
+    const noProxyRaw = this.controlValue(Controls.NoProxy);
+    const noProxyValues: string[] = Array.isArray(noProxyRaw) ? noProxyRaw : (noProxyRaw?.tags ?? []);
+    const noProxy = noProxyValues.join(',');
+    if (!httpProxy && !noProxy) {
+      return undefined;
+    }
+    return {
+      operatingSystemManager: {
+        proxy: {
+          httpProxy: httpProxy || undefined,
+          noProxy: noProxy || undefined,
+        },
+      },
+    };
   }
 
   private _handleCNIAnnotations(annotations: any): any {

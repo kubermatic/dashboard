@@ -592,6 +592,35 @@ func PatchEndpoint(
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
 	newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
 
+	// Per-cluster HTTP(S) proxy override (operating-system-manager). Empty values clear the
+	// override so the cluster re-inherits the datacenter/seed proxy settings.
+	if co := patchedCluster.Spec.ComponentsOverride; co != nil && co.OperatingSystemManager != nil && co.OperatingSystemManager.Proxy != nil {
+		proxy := co.OperatingSystemManager.Proxy
+		if err := cluster.ValidateProxySettings(proxy.HTTPProxy, proxy.NoProxy); err != nil {
+			return nil, utilerrors.NewBadRequest("%v", err)
+		}
+		if proxy.HTTPProxy == "" && proxy.NoProxy == "" {
+			if osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil {
+				osm.Proxy = kubermaticv1.ProxySettings{}
+			}
+		} else {
+			if newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager == nil {
+				newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager = &kubermaticv1.OSMControllerSettings{}
+			}
+			osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager
+			if proxy.HTTPProxy != "" {
+				osm.Proxy.HTTPProxy = kubermaticv1.NewProxyValue(proxy.HTTPProxy)
+			} else {
+				osm.Proxy.HTTPProxy = nil
+			}
+			if proxy.NoProxy != "" {
+				osm.Proxy.NoProxy = kubermaticv1.NewProxyValue(proxy.NoProxy)
+			} else {
+				osm.Proxy.NoProxy = nil
+			}
+		}
+	}
+
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
 	// query param attached to the patch request: "skip_kubelet_version_validation=true"
@@ -1210,6 +1239,18 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			Encryption:           buildEncryptionStatus(internalCluster),
 		},
 		Type: apiv1.KubernetesClusterType,
+	}
+
+	// Expose the per-cluster HTTP(S) proxy override (operating-system-manager) if one is set.
+	if osm := internalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil && !osm.Proxy.Empty() {
+		cluster.Spec.ComponentsOverride = &apiv1.ComponentSettings{
+			OperatingSystemManager: &apiv1.OSMControllerSettings{
+				Proxy: &apiv1.ProxySettings{
+					HTTPProxy: osm.Proxy.HTTPProxy.String(),
+					NoProxy:   osm.Proxy.NoProxy.String(),
+				},
+			},
+		}
 	}
 
 	if filterSystemLabels {

@@ -370,6 +370,20 @@ export class ClusterSpec {
   kubelb?: KubeLB;
   disableCsiDriver?: boolean;
   encryptionConfiguration?: EncryptionConfiguration;
+  componentsOverride?: ComponentSettings;
+}
+
+export class ComponentSettings {
+  operatingSystemManager?: OSMControllerSettings;
+}
+
+export class OSMControllerSettings {
+  proxy?: ProxySettings;
+}
+
+export class ProxySettings {
+  httpProxy?: string;
+  noProxy?: string;
 }
 
 export class KubeLB {
@@ -594,6 +608,7 @@ export class ClusterSpecPatch {
   cniPlugin?: CNIPluginConfigPatch;
   apiServerAllowedIPRanges?: NetworkRanges;
   encryptionConfiguration?: EncryptionConfiguration;
+  componentsOverride?: ComponentSettings;
 }
 
 export class CNIPluginConfigPatch {

@@ -13,8 +13,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ProxySettings ProxySettings allow configuring a HTTP proxy for the controlplanes
-// and nodes.
+// ProxySettings ProxySettings holds the per-cluster HTTP(S) proxy configuration. Empty values mean the
+// cluster inherits the datacenter/seed proxy settings.
 //
 // swagger:model ProxySettings
 type ProxySettings struct {

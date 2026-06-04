@@ -820,6 +820,18 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 		Applications: apps,
 	}
 
+	// Expose the per-cluster HTTP(S) proxy override (operating-system-manager) if one is set.
+	if osm := template.Spec.ComponentsOverride.OperatingSystemManager; osm != nil && !osm.Proxy.Empty() {
+		ct.Cluster.Spec.ComponentsOverride = &apiv1.ComponentSettings{
+			OperatingSystemManager: &apiv1.OSMControllerSettings{
+				Proxy: &apiv1.ProxySettings{
+					HTTPProxy: osm.Proxy.HTTPProxy.String(),
+					NoProxy:   osm.Proxy.NoProxy.String(),
+				},
+			},
+		}
+	}
+
 	if len(template.UserSSHKeys) > 0 {
 		for _, sshKey := range template.UserSSHKeys {
 			ct.UserSSHKeys = append(ct.UserSSHKeys, apiv2.ClusterTemplateSSHKey{
