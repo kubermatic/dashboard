@@ -216,6 +216,7 @@ type providers struct {
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
+	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
 	policyTemplateProvider                         provider.PolicyTemplateProvider
 }
 

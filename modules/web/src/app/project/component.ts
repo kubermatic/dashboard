@@ -17,7 +17,6 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Inject,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -27,8 +26,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {Router} from '@angular/router';
-import {COOKIE_DI_TOKEN, Cookie} from '@app/config';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -47,7 +44,6 @@ import {AllowedOperatingSystems, UserSettings} from '@shared/entity/settings';
 import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
@@ -124,13 +120,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
-    private readonly _router: Router,
-    private readonly _cookieService: CookieService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
-    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie,
     private readonly _dialogModeService: DialogModeService,
     readonly branding: BrandingService
   ) {
@@ -215,10 +208,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         this._runSearch(this._activeSearchQuery);
       } else {
         this.dataSource.data = this.projects;
-      }
-
-      if (this._shouldRedirectToProjectLandingPage()) {
-        this._redirectToProjectLandingPage();
       }
       this.verifyQuotas(this.projects);
       this.isInitializing = false;
@@ -640,17 +629,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.displayedColumns = [...this.displayedColumns, 'actions'];
     }
-  }
-
-  private _shouldRedirectToProjectLandingPage(): boolean {
-    const autoredirect: boolean = this._cookieService.get(this._cookie.autoredirect) === 'true';
-    this._cookieService.delete(this._cookie.autoredirect, '/');
-    return this.projects.length === 1 && autoredirect;
-  }
-
-  private _redirectToProjectLandingPage(): void {
-    const projectLandingPage = this._apiSettings.useClustersView ? View.Clusters : View.Overview;
-    this._router.navigateByUrl(`/projects/${this.projects[0].id}/${projectLandingPage}`);
   }
 
   private _isPaginatorVisible(): boolean {

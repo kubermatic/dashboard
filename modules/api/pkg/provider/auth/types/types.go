@@ -50,7 +50,8 @@ type OIDCIssuer interface {
 	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string
 
 	// Exchange converts an authorization code into a token.
-	Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error)
+	// An optional codeVerifier can be passed for PKCE support.
+	Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (OIDCToken, error)
 
 	// RefreshAccessToken uses a refresh token to obtain a new OIDC token.
 	RefreshAccessToken(ctx context.Context, refreshToken string) (OIDCToken, error)
@@ -110,6 +111,7 @@ type TokenClaims struct {
 	Email   string
 	Subject string
 	Groups  []string
+	Nonce   string
 	Expiry  apiv1.Time
 }
 

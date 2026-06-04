@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import {AuthInterceptor} from './auth';
-import {CheckTokenInterceptor} from './check-token';
 import {ErrorNotificationsInterceptor} from './error-notifications';
 import {LoaderInterceptor} from './loader';
 
-export {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor};
+export {AuthInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor};
