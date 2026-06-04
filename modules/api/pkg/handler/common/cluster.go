@@ -594,31 +594,8 @@ func PatchEndpoint(
 
 	// Per-cluster HTTP(S) proxy override (operating-system-manager). Empty values clear the
 	// override so the cluster re-inherits the datacenter/seed proxy settings.
-	if co := patchedCluster.Spec.ComponentsOverride; co != nil && co.OperatingSystemManager != nil && co.OperatingSystemManager.Proxy != nil {
-		proxy := co.OperatingSystemManager.Proxy
-		if err := cluster.ValidateProxySettings(proxy.HTTPProxy, proxy.NoProxy); err != nil {
-			return nil, utilerrors.NewBadRequest("%v", err)
-		}
-		if proxy.HTTPProxy == "" && proxy.NoProxy == "" {
-			if osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil {
-				osm.Proxy = kubermaticv1.ProxySettings{}
-			}
-		} else {
-			if newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager == nil {
-				newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager = &kubermaticv1.OSMControllerSettings{}
-			}
-			osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager
-			if proxy.HTTPProxy != "" {
-				osm.Proxy.HTTPProxy = kubermaticv1.NewProxyValue(proxy.HTTPProxy)
-			} else {
-				osm.Proxy.HTTPProxy = nil
-			}
-			if proxy.NoProxy != "" {
-				osm.Proxy.NoProxy = kubermaticv1.NewProxyValue(proxy.NoProxy)
-			} else {
-				osm.Proxy.NoProxy = nil
-			}
-		}
+	if err := applyProxyOverridePatch(newInternalCluster, patchedCluster); err != nil {
+		return nil, err
 	}
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
@@ -1183,6 +1160,45 @@ func isStatus(err error, status int32) bool {
 	var statusErr *apierrors.StatusError
 
 	return errors.As(err, &statusErr) && status == statusErr.Status().Code
+}
+
+// applyProxyOverridePatch validates and applies the per-cluster HTTP(S) proxy override from a
+// patched cluster onto the internal cluster. Empty values clear the override so the cluster
+// re-inherits the datacenter/seed proxy settings.
+func applyProxyOverridePatch(newInternalCluster *kubermaticv1.Cluster, patchedCluster *apiv1.Cluster) error {
+	co := patchedCluster.Spec.ComponentsOverride
+	if co == nil || co.OperatingSystemManager == nil || co.OperatingSystemManager.Proxy == nil {
+		return nil
+	}
+
+	proxy := co.OperatingSystemManager.Proxy
+	if err := cluster.ValidateProxySettings(proxy.HTTPProxy, proxy.NoProxy); err != nil {
+		return utilerrors.NewBadRequest("%v", err)
+	}
+
+	if proxy.HTTPProxy == "" && proxy.NoProxy == "" {
+		if osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil {
+			osm.Proxy = kubermaticv1.ProxySettings{}
+		}
+		return nil
+	}
+
+	if newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager == nil {
+		newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager = &kubermaticv1.OSMControllerSettings{}
+	}
+	osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager
+	osm.Proxy.HTTPProxy = proxyValueOrNil(proxy.HTTPProxy)
+	osm.Proxy.NoProxy = proxyValueOrNil(proxy.NoProxy)
+
+	return nil
+}
+
+// proxyValueOrNil wraps a non-empty string into a ProxyValue, returning nil for empty input.
+func proxyValueOrNil(value string) *kubermaticv1.ProxyValue {
+	if value == "" {
+		return nil
+	}
+	return kubermaticv1.NewProxyValue(value)
 }
 
 func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, datacenter *kubermaticv1.Datacenter, filterSystemLabels bool, incompatibilities ...*version.ProviderIncompatibility) *apiv1.Cluster {
