@@ -780,8 +780,7 @@ export class KubeVirtBasicNodeDataComponent
       }
     }
     // Final fallback: guard against absent kind so getCategory cannot produce an invalid id.
-    const category =
-      KubeVirtNodeInstanceType.getCategory(instanceType) ?? KubeVirtInstanceTypeCategory.Custom;
+    const category = KubeVirtNodeInstanceType.getCategory(instanceType) ?? KubeVirtInstanceTypeCategory.Custom;
     return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
   }
 
