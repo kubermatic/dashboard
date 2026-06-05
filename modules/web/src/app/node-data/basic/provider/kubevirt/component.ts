@@ -36,6 +36,7 @@ import {
   KubeVirtAffinityPreset,
   KubeVirtInstanceType,
   KubeVirtInstanceTypeCategory,
+  KubeVirtInstanceTypeKind,
   KubeVirtInstanceTypeList,
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
@@ -402,7 +403,7 @@ export class KubeVirtBasicNodeDataComponent
       const existingKind = existingInstancetype?.name === name ? existingInstancetype?.kind : undefined;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
         name,
-        kind: this.selectedInstanceType?.kind ?? existingKind,
+        kind: this.selectedInstanceType?.kind ?? existingKind ?? (kind as KubeVirtInstanceTypeKind || undefined),
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
@@ -761,6 +762,10 @@ export class KubeVirtBasicNodeDataComponent
     }
   }
 
+  // Builds the 3-part selector ID "{category}:{kind}:{name}" used by the form control and
+  // machine-type-selector. Prefers a live lookup in the loaded instancetype list so the ID
+  // always reflects the actual API kind. Falls back to getCategory only when the name is not
+  // present in the list (e.g. before the list loads or after the type is deleted).
   private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
     const sep = this._instanceTypeIDSeparator;
     if (this._instanceTypes?.instancetypes) {
@@ -773,19 +778,25 @@ export class KubeVirtBasicNodeDataComponent
           }
         }
       } else {
-        // kind absent (saved before kind was added to the API): only use name-only match
-        // when exactly one category contains the name — avoids order-dependent results when
-        // the same name exists in multiple categories.
+        // kind absent (saved before kind was added to the API): resolve by name from the
+        // loaded list. When exactly one category contains the name the result is unambiguous.
+        // When multiple categories share the name, prefer custom — ambiguous but consistent
+        // with existing behaviour and anchored to real API data rather than getCategory.
         const matches = Object.entries(this._instanceTypes.instancetypes).filter(([, items]) =>
           items.some(it => it.name === instanceType.name)
         );
         if (matches.length === 1) {
           const found = matches[0][1].find(it => it.name === instanceType.name);
           return `${matches[0][0]}${sep}${found?.kind ?? ''}${sep}${instanceType.name}`;
+        } else if (matches.length > 1) {
+          const preferred =
+            matches.find(([cat]) => cat === KubeVirtInstanceTypeCategory.Custom) ?? matches[0];
+          const found = preferred[1].find(it => it.name === instanceType.name);
+          return `${preferred[0]}${sep}${found?.kind ?? ''}${sep}${instanceType.name}`;
         }
       }
     }
-    // Final fallback: guard against absent kind so getCategory cannot produce an invalid id.
+    // Final fallback: _instanceTypes not loaded or name absent from every category.
     const category = KubeVirtNodeInstanceType.getCategory(instanceType) ?? KubeVirtInstanceTypeCategory.Custom;
     return `${category}${sep}${instanceType.kind ?? ''}${sep}${instanceType.name}`;
   }

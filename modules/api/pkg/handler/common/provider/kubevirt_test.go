@@ -416,6 +416,28 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 	}
 }
 
+func Test_instancetypeWrapperKind(t *testing.T) {
+	namespaced := &kvinstancetypev1alpha1.VirtualMachineInstancetype{}
+	cluster := &kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{}
+
+	tests := []struct {
+		name    string
+		wrapper instancetypeWrapper
+		want    string
+	}{
+		{name: "cluster-scoped custom", wrapper: &customInstancetypeWrapper{cluster}, want: kindVirtualMachineClusterInstancetype},
+		{name: "kubermatic standard", wrapper: &standardInstancetypeWrapper{namespaced}, want: kindVirtualMachineInstancetype},
+		{name: "namespaced custom", wrapper: &customNamespacedInstancetypeWrapper{namespaced}, want: kindVirtualMachineInstancetype},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.wrapper.Kind(); got != tt.want {
+				t.Errorf("Kind() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 // sortedCategoryNames groups instancetype items by category and sorts each
 // name slice, producing a map ready for reflect.DeepEqual against tt.wantNames.
 func sortedCategoryNames(items []instancetypeWrapper) map[apiv2.VirtualMachineInstancetypeCategory][]string {

@@ -44,6 +44,11 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const (
+	kindVirtualMachineInstancetype        = "VirtualMachineInstancetype"
+	kindVirtualMachineClusterInstancetype = "VirtualMachineClusterInstancetype"
+)
+
 var NewKubeVirtClient = kubevirt.NewClient
 
 func getKvKubeConfigFromCredentials(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
@@ -580,7 +585,7 @@ func (it *customInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetype
 }
 
 func (it *customInstancetypeWrapper) Kind() string {
-	return "VirtualMachineClusterInstancetype"
+	return kindVirtualMachineClusterInstancetype
 }
 
 func (it *customInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
@@ -596,7 +601,7 @@ func (it *standardInstancetypeWrapper) Category() apiv2.VirtualMachineInstancety
 }
 
 func (it *standardInstancetypeWrapper) Kind() string {
-	return "VirtualMachineInstancetype"
+	return kindVirtualMachineInstancetype
 }
 
 func (it *standardInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
@@ -614,7 +619,7 @@ func (it *customNamespacedInstancetypeWrapper) Category() apiv2.VirtualMachineIn
 }
 
 func (it *customNamespacedInstancetypeWrapper) Kind() string {
-	return "VirtualMachineInstancetype"
+	return kindVirtualMachineInstancetype
 }
 
 func (it *customNamespacedInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
