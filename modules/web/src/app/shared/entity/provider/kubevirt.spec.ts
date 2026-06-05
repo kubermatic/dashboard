@@ -23,27 +23,27 @@ import {
 
 describe('KubeVirtInstanceType', () => {
   it('should allow kind to be optional', () => {
-    const it = new KubeVirtInstanceType();
-    it.name = 'standard-2';
-    it.spec = '{}';
-    expect(it.kind).toBeUndefined();
+    const instanceType = new KubeVirtInstanceType();
+    instanceType.name = 'standard-2';
+    instanceType.spec = '{}';
+    expect(instanceType.kind).toBeUndefined();
 
-    it.kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
-    expect(it.kind).toBe(KubeVirtInstanceTypeKind.VirtualMachineInstancetype);
+    instanceType.kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
+    expect(instanceType.kind).toBe(KubeVirtInstanceTypeKind.VirtualMachineInstancetype);
   });
 });
 
 describe('KubeVirtNodeInstanceType.getCategory', () => {
   it('should return Kubermatic for VirtualMachineInstancetype', () => {
-    const it = new KubeVirtNodeInstanceType();
-    it.kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
-    expect(KubeVirtNodeInstanceType.getCategory(it)).toBe(KubeVirtInstanceTypeCategory.Kubermatic);
+    const instanceType = new KubeVirtNodeInstanceType();
+    instanceType.kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
+    expect(KubeVirtNodeInstanceType.getCategory(instanceType)).toBe(KubeVirtInstanceTypeCategory.Kubermatic);
   });
 
   it('should return Custom for VirtualMachineClusterInstancetype', () => {
-    const it = new KubeVirtNodeInstanceType();
-    it.kind = KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype;
-    expect(KubeVirtNodeInstanceType.getCategory(it)).toBe(KubeVirtInstanceTypeCategory.Custom);
+    const instanceType = new KubeVirtNodeInstanceType();
+    instanceType.kind = KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype;
+    expect(KubeVirtNodeInstanceType.getCategory(instanceType)).toBe(KubeVirtInstanceTypeCategory.Custom);
   });
 });
 
