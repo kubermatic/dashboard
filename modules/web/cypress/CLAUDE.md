@@ -26,9 +26,6 @@ Cypress + Page Object Model + API mocking. `cypress-fail-fast` for early abort.
 
 **V1 (legacy):** Static PO classes in `pages/*.po.ts`. Do not use for new tests.
 
-## API Mocking
-
-`Intercept.init(provider?)` sets up all mocks. Each intercept class has `onCreate()`/`onDelete()` to swap fixtures for state changes. Typed enums in `types/` define fixture paths, endpoint patterns, and assertion strings.
 
 ## Writing New Tests
 
@@ -38,4 +35,10 @@ Cypress + Page Object Model + API mocking. `cypress-fail-fast` for early abort.
 4. Fixtures → `fixtures/<feature>*.json`
 5. Spec → `e2e/v2/stories/<feature>.spec.ts`
 
-**CRITICAL**: Use page objects — never raw `cy.get()` in specs. Use `Condition` enum for assertions.
+**CRITICAL**: Use page objects — never raw `cy.get()` in specs. Use `Condition` enum for 
+assertions.
+
+
+## API Mocking
+
+`Intercept.init(provider?)` sets up all mocks. Each intercept class has `onCreate()`/`onDelete()` to swap fixtures for state changes. Typed enums in `types/` define fixture paths, endpoint patterns, and assertion strings.
