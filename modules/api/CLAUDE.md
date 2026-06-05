@@ -1,69 +1,23 @@
 # KKP Dashboard — Go REST API
 
-Go REST API server for the KKP Dashboard. Sits between Angular UI and Kubernetes clusters. Uses gorilla/mux routing, Go-Kit endpoint abstraction, and controller-runtime for Kubernetes API access. Authentication via OIDC + Service Account JWT tokens.
+REST API server (Go). Backend for KKP Dashboard. Manage clusters, projects, users, seeds, other resources.
 
-## Build Commands
+**Type**: HTTP REST API Server (Go) | **Port**: 8080 | **Framework**: Gorilla Mux + Go-Kit
+**Auth**: OIDC + Service Account JWT | **Storage**: Kubernetes API (controller-runtime client)
+
+## Commands
 
 ```bash
-make build                          # Build binary (EE default)
+make build                          # Build binary (EE default) → _build/kubermatic-api
 make build KUBERMATIC_EDITION=ce    # Build CE edition
-make kubermatic-api                 # Build API binary only
-make api-test                       # Run API tests
-make update-codegen                 # Regenerate code (deepcopy, swagger, API client)
-make update-kkp                     # Update KKP/SDK dependencies
+make api-test                       # Run API tests (gocache + build-tests)
+make lint                           # golangci-lint (import aliases enforced)
+make verify                         # verify-go + verify-imports + check-dependencies
+make update-codegen                 # Regenerate code (tidy, vendor, fmt, swagger, API client)
+make update-kkp                     # Update KKP/SDK dependencies + run codegen
+make fmt                            # go fmt
+make vet                            # go vet
 ```
-
-## Key Directories
-
-- `cmd/kubermatic-api/` — Entry point, server startup, CE/EE wrapper functions
-- `pkg/handler/` — HTTP handlers, routing, middleware (v1 legacy, v2 current)
-- `pkg/handler/v2/` — Current API endpoint handlers
-- `pkg/provider/` — Business logic interfaces (ProjectProvider, ClusterProvider, etc.)
-- `pkg/provider/kubernetes/` — Provider implementations using Kubernetes API
-- `pkg/api/v1/`, `pkg/api/v2/` — Request/response models
-- `pkg/ee/` — Enterprise Edition features (backups, quotas, groups, kyverno, metering)
-- `pkg/handler/auth/` — Authentication middleware
-- `pkg/validation/` — Input validation
-- `pkg/test/` — Test utilities and mock providers
-
-## Architecture
-
-```
-HTTP Request → Middleware (auth, RBAC, context) → Handler → Provider → Kubernetes API → Response
-```
-
-- **Handlers** (`pkg/handler/`): Parse HTTP, delegate to providers, encode responses. Go-Kit endpoint pattern. v2 is current, v1 is legacy.
-- **Providers** (`pkg/provider/`): Business logic interfaces. Implementations in `pkg/provider/kubernetes/` use impersonation clients for RBAC.
-- **Middleware** (`pkg/handler/middleware/`): Token verification (OIDC/JWT), user context injection, RBAC checks.
-- **Seed-scoped providers**: Many providers are per-seed (cluster, addon, alertmanager). Accessed via getter functions like `ClusterProviderGetter`.
-
-## CE/EE Build Tags
-
-**CRITICAL**: EE-only code must be in `pkg/ee/` with `//go:build ee` tag. CE stubs must be in `cmd/kubermatic-api/wrappers_ce.go` returning `nil`. EE implementations go in `pkg/ee/` with `//go:build ee`. This ensures clean separation and prevents accidental imports.
-
-```go
-//go:build ee    // EE-only code
-//go:build !ee   // CE-only code (stubs)
-```
-
-CE stubs in `cmd/kubermatic-api/wrappers_ce.go` return `nil` for EE providers. EE implementations in `pkg/ee/`.
-
-
-## Patterns
-
-### Adding a New Endpoint
-
-1. Create handler in `pkg/handler/v2/<resource>/`
-2. Define request/response types in `pkg/api/v2/`
-3. Register route in `pkg/handler/routing.go`
-4. Use middleware for auth/RBAC
-
-### Adding EE-Only Feature
-
-1. Create EE handler wrapper in `wrappers_ee.go`
-2. Create CE stub in `wrappers_ce.go` (return `nil`)
-3. Implement in `pkg/ee/`
-4. Use feature gates if needed: `options.featureGates.Enabled(features.FeatureName)`
 
 ## Testing
 
@@ -75,3 +29,55 @@ go test -tags "ce" -v ./pkg/handler/...           # CE tests
 ```
 
 Handler tests use mock providers from `pkg/test/`.
+
+## Key Directories
+
+- `cmd/kubermatic-api/` — Entry point + startup. `main.go`, `options.go`, `metrics.go`, `wrappers_ce.go`/`wrappers_ee.go` (CE/EE factory split), `swagger.json`
+- `pkg/handler/` — Routing + middleware. `routing.go`, `routes_v1.go`, `routes_v1_admin.go`, `routes_v1_optional.go`, `routes_v1_websocket.go`, `handler.go`
+- `pkg/handler/v1/` — Legacy V1 handlers
+- `pkg/handler/v2/` — Current V2 handlers (one dir per resource: `cluster/`, `machine/`, `user/`, etc.), `routes_v2.go`, `routing.go`
+- `pkg/handler/middleware/` — Middleware (auth, context injection, RBAC)
+- `pkg/provider/` — Business logic interfaces (ProjectProvider, ClusterProvider, …); `kubernetes/` = K8s-client implementations
+- `pkg/api/v1/`, `pkg/api/v2/` — Request/response models
+- `pkg/ee/` — EE features (clusterbackup, resource-quota, group-project-binding, kyverno, metering, provider) — own CLAUDE.md
+- `pkg/validation/` — Input validation · `pkg/test/` — mock providers + test utilities
+- `pkg/serviceaccount/`, `pkg/watcher/`, `pkg/resources/`, `pkg/version/` — SA tokens, resource watchers, shared resources, version handling
+
+## Main Entry Point
+
+**File**: `cmd/kubermatic-api/main.go`
+
+Startup: Parse flags → Setup logging → Register K8s schemes → Create controller manager → Create providers (`createInitProviders()`) → Create auth clients (`createAuthClients()`) → Register HTTP routes (`createAPIHandler()`) → Start server.
+
+## Core Architecture
+
+Core patterns: Handler (Go-Kit endpoint), Provider (business logic interfaces), Middleware (auth chain), Impersonation (per-user K8s RBAC).
+
+## API Versions
+
+- **V1** (`/api/v1/*`) — legacy, routes in `pkg/handler/routes_v1*.go`
+- **V2** (`/api/v2/*`) — current, consistent CRUD. Routes in `pkg/handler/v2/routes_v2.go`, one handler dir per resource.
+
+## CE/EE Build Tags
+
+**CRITICAL**: EE-only code in `pkg/ee/` with `//go:build ee` tag. Edition split via paired factory files in `cmd/kubermatic-api/`:
+- `wrappers_ee.go` (`//go:build ee`) — delegates to real implementations in `pkg/ee/`
+- `wrappers_ce.go` (`//go:build !ee`) — returns `nil` for EE-only providers; some functions (e.g. `seedsGetterFactory`) have real CE implementations
+
+EE-only providers (nil in CE): `resourceQuotaProvider`, `groupProjectBinding`, `backupStorageProvider`, `policyTemplateProvider`.
+
+## Key Concepts
+
+Seeds (K8s clusters hosting user clusters), Projects (resource scope), UserInfo (auth context from middleware), Privileged Providers (bypass RBAC for admin ops).
+
+## Key Technologies
+
+Gorilla Mux (routing), Go-Kit (endpoints), Controller-Runtime (K8s client/cache), Prometheus (metrics), Zap (logging), go-oidc (OIDC auth), JWT (service accounts)
+
+## Import Aliases
+
+Strict import aliasing enforced by golangci-lint (`importas` rule). Import ordering by `gimps`. Key aliases: `kubermaticv1`, `apiv1`/`apiv2`, `corev1`, `metav1`, `ctrlruntimeclient`, `utilerrors`, `authtypes`.
+
+## Metrics
+
+Prometheus metrics on internal metrics address. HTTP request metrics: method, path, status code, duration.
