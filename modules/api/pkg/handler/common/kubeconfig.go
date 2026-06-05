@@ -32,6 +32,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -721,6 +722,7 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
+		handlerauth.OIDCCallbackSuccessResponse(w)
 		return nil
 	}
 
