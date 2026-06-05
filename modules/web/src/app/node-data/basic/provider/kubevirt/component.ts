@@ -401,9 +401,12 @@ export class KubeVirtBasicNodeDataComponent
       );
       const existingInstancetype = this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype;
       const existingKind = existingInstancetype?.name === name ? existingInstancetype?.kind : undefined;
+      const kindFromToken = Object.values(KubeVirtInstanceTypeKind).includes(kind as KubeVirtInstanceTypeKind)
+        ? (kind as KubeVirtInstanceTypeKind)
+        : undefined;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
         name,
-        kind: this.selectedInstanceType?.kind ?? existingKind ?? ((kind as KubeVirtInstanceTypeKind) || undefined),
+        kind: this.selectedInstanceType?.kind ?? existingKind ?? kindFromToken,
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
