@@ -403,7 +403,7 @@ export class KubeVirtBasicNodeDataComponent
       const existingKind = existingInstancetype?.name === name ? existingInstancetype?.kind : undefined;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
         name,
-        kind: this.selectedInstanceType?.kind ?? existingKind ?? (kind as KubeVirtInstanceTypeKind || undefined),
+        kind: this.selectedInstanceType?.kind ?? existingKind ?? ((kind as KubeVirtInstanceTypeKind) || undefined),
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
@@ -789,8 +789,7 @@ export class KubeVirtBasicNodeDataComponent
           const found = matches[0][1].find(it => it.name === instanceType.name);
           return `${matches[0][0]}${sep}${found?.kind ?? ''}${sep}${instanceType.name}`;
         } else if (matches.length > 1) {
-          const preferred =
-            matches.find(([cat]) => cat === KubeVirtInstanceTypeCategory.Custom) ?? matches[0];
+          const preferred = matches.find(([cat]) => cat === KubeVirtInstanceTypeCategory.Custom) ?? matches[0];
           const found = preferred[1].find(it => it.name === instanceType.name);
           return `${preferred[0]}${sep}${found?.kind ?? ''}${sep}${instanceType.name}`;
         }
