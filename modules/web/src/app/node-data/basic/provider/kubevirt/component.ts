@@ -770,11 +770,19 @@ export class KubeVirtBasicNodeDataComponent
     const sep = this._instanceTypeIDSeparator;
     if (this._instanceTypes?.instancetypes) {
       if (instanceType.kind) {
-        // kind present: unambiguous match by name+kind
+        // kind present: try exact name+kind match first
         for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
           const found = items.find(it => it.name === instanceType.name && it.kind === instanceType.kind);
           if (found) {
             return `${cat}${sep}${found.kind}${sep}${instanceType.name}`;
+          }
+        }
+        // No exact match — saved kind may be stale (e.g. namespaced custom previously stored
+        // as VirtualMachineClusterInstancetype). Fall back to name-only to recover gracefully.
+        for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
+          const found = items.find(it => it.name === instanceType.name);
+          if (found) {
+            return `${cat}${sep}${found.kind ?? ''}${sep}${instanceType.name}`;
           }
         }
       } else {
