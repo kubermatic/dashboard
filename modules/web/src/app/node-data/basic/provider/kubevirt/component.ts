@@ -393,13 +393,16 @@ export class KubeVirtBasicNodeDataComponent
     } else if (this._instanceTypes) {
       const tokens = instanceTypeId.split(this._instanceTypeIDSeparator);
       const category = tokens.shift();
+      const kind = tokens.shift();
       const name = tokens.join(this._instanceTypeIDSeparator);
       this.selectedInstanceType = this._instanceTypes?.instancetypes?.[category]?.find(
-        instanceType => instanceType.name === name
+        instanceType => instanceType.name === name && (!kind || instanceType.kind === kind)
       );
+      const existingInstancetype = this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype;
+      const existingKind = existingInstancetype?.name === name ? existingInstancetype?.kind : undefined;
       this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
         name,
-        kind: this.selectedInstanceType?.kind,
+        kind: this.selectedInstanceType?.kind ?? existingKind,
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
@@ -759,12 +762,14 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
+    const sep = this._instanceTypeIDSeparator;
     if (this._instanceTypes?.instancetypes) {
       if (instanceType.kind) {
         // kind present: unambiguous match by name+kind
         for (const [cat, items] of Object.entries(this._instanceTypes.instancetypes)) {
-          if (items.some(it => it.name === instanceType.name && it.kind === instanceType.kind)) {
-            return `${cat}${this._instanceTypeIDSeparator}${instanceType.name}`;
+          const found = items.find(it => it.name === instanceType.name && it.kind === instanceType.kind);
+          if (found) {
+            return `${cat}${sep}${found.kind}${sep}${instanceType.name}`;
           }
         }
       } else {
@@ -775,13 +780,14 @@ export class KubeVirtBasicNodeDataComponent
           items.some(it => it.name === instanceType.name)
         );
         if (matches.length === 1) {
-          return `${matches[0][0]}${this._instanceTypeIDSeparator}${instanceType.name}`;
+          const found = matches[0][1].find(it => it.name === instanceType.name);
+          return `${matches[0][0]}${sep}${found?.kind ?? ''}${sep}${instanceType.name}`;
         }
       }
     }
     // Final fallback: guard against absent kind so getCategory cannot produce an invalid id.
     const category = KubeVirtNodeInstanceType.getCategory(instanceType) ?? KubeVirtInstanceTypeCategory.Custom;
-    return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
+    return `${category}${sep}${instanceType.kind ?? ''}${sep}${instanceType.name}`;
   }
 
   private _getSelectedPreferenceId(preference: KubeVirtNodePreference): string {
