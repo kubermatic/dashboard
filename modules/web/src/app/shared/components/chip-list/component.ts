@@ -136,7 +136,11 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
     this.onChange.emit(this.tags);
   }
 
-  writeValue(tags: string[]): void {
+  writeValue(value: string[] | {tags: string[]}): void {
+    // The form control bound via ControlValueAccessor may receive either a raw
+    // string[] or the wrapped {tags: string[]} emitted by registerOnChange.
+
+    const tags = Array.isArray(value) ? value : value?.tags;
     if (!_.isEmpty(tags)) {
       this.form.get(Controls.Tags).setValue(tags, {emitEvent: false});
       this.tags = tags;
