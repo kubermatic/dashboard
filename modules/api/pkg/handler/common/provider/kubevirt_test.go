@@ -18,11 +18,13 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"sort"
 	"testing"
 
+	kubevirtcorev1 "kubevirt.io/api/core/v1"
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -122,6 +124,29 @@ func Test_filterInstancetypes(t *testing.T) {
 				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4295M"). // ok
 				toApiWithoutError(),
 		},
+		{
+			name: "gpu instancetype passes cpu/ram filter",
+			instancetypes: &apiv2.VirtualMachineInstancetypeList{
+				Instancetypes: map[apiv2.VirtualMachineInstancetypeCategory][]apiv2.VirtualMachineInstancetype{
+					apiv2.InstancetypeCustom: {
+						mustMarshalInstancetype("standard-gpu-2", getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard")),
+					},
+				},
+			},
+			quota: kubermaticv1.MachineFlavorFilter{
+				MinCPU: 1,
+				MaxCPU: 4,
+				MinRAM: 4,
+				MaxRAM: 16,
+			},
+			want: &apiv2.VirtualMachineInstancetypeList{
+				Instancetypes: map[apiv2.VirtualMachineInstancetypeCategory][]apiv2.VirtualMachineInstancetype{
+					apiv2.InstancetypeCustom: {
+						mustMarshalInstancetype("standard-gpu-2", mustScaleMemory(getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard"))),
+					},
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -196,6 +221,39 @@ func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.Virtu
 			Guest: resource.MustParse(memory),
 		},
 	}
+}
+
+func getGPUInstancetypeSpec(cpu uint32, memory, gpuName, deviceName string) kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+	return kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec{
+		CPU: kvinstancetypev1alpha1.CPUInstancetype{
+			Guest: cpu,
+		},
+		Memory: kvinstancetypev1alpha1.MemoryInstancetype{
+			Guest: resource.MustParse(memory),
+		},
+		GPUs: []kubevirtcorev1.GPU{
+			{
+				Name:       gpuName,
+				DeviceName: deviceName,
+			},
+		},
+	}
+}
+
+// mustMarshalInstancetype builds an apiv2.VirtualMachineInstancetype with the spec JSON-marshalled.
+func mustMarshalInstancetype(name string, spec kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec) apiv2.VirtualMachineInstancetype {
+	b, err := json.Marshal(spec)
+	if err != nil {
+		panic(err)
+	}
+	return apiv2.VirtualMachineInstancetype{Name: name, Spec: string(b)}
+}
+
+// mustScaleMemory returns a copy of spec with Memory.Guest converted from BinarySI to
+// DecimalSI (Mega), matching what filterInstancetypes does before returning.
+func mustScaleMemory(spec kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec) kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+	spec.Memory.Guest = *resource.NewScaledQuantity(spec.Memory.Guest.ScaledValue(resource.Mega), resource.Mega)
+	return spec
 }
 
 // newFakeClient builds a controller-runtime fake client with the KubeVirt
@@ -399,6 +457,47 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 			objects:   []ctrlruntimeclient.Object{},
 			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{},
 		},
+		{
+			name: "non-namespaced mode: gpu cluster instancetype returned as custom",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				&kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-gpu-2"},
+					Spec:       getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				apiv2.InstancetypeCustom:     {"standard-gpu-2"},
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
+		{
+			name: "namespaced mode: gpu instancetype deployed in infra namespace returned as custom",
+			dc: &kubermaticv1.Datacenter{
+				Spec: kubermaticv1.DatacenterSpec{
+					Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+						NamespacedMode: &kubermaticv1.NamespacedMode{
+							Enabled:   true,
+							Namespace: "infra-ns",
+						},
+					},
+				},
+			},
+			objects: []ctrlruntimeclient.Object{
+				&kvinstancetypev1alpha1.VirtualMachineInstancetype{
+					ObjectMeta: metav1.ObjectMeta{Name: "standard-gpu-2", Namespace: "infra-ns"},
+					Spec:       getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard"),
+				},
+			},
+			wantNames: map[apiv2.VirtualMachineInstancetypeCategory][]string{
+				apiv2.InstancetypeCustom:     {"standard-gpu-2"},
+				apiv2.InstancetypeKubermatic: standardNames,
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -411,6 +510,37 @@ func Test_kubeVirtInstancetypes(t *testing.T) {
 
 			if gotNames := sortedCategoryNames(got.items); !reflect.DeepEqual(gotNames, tt.wantNames) {
 				t.Errorf("kubeVirtInstancetypes() names =\n  %v\nwant:\n  %v", gotNames, tt.wantNames)
+			}
+		})
+	}
+}
+
+func Test_instancetypeWrapperKind(t *testing.T) {
+	spec := getInstancetypeSpec(4, "8Gi")
+
+	namespaced := &kvinstancetypev1alpha1.VirtualMachineInstancetype{Spec: spec}
+	cluster := &kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{Spec: spec}
+
+	tests := []struct {
+		name         string
+		wrapper      instancetypeWrapper
+		wantKind     string
+		wantCategory apiv2.VirtualMachineInstancetypeCategory
+	}{
+		{name: "cluster-scoped custom", wrapper: &customInstancetypeWrapper{cluster}, wantKind: kindVirtualMachineClusterInstancetype, wantCategory: apiv2.InstancetypeCustom},
+		{name: "kubermatic standard", wrapper: &standardInstancetypeWrapper{namespaced}, wantKind: kindVirtualMachineInstancetype, wantCategory: apiv2.InstancetypeKubermatic},
+		{name: "namespaced custom", wrapper: &customNamespacedInstancetypeWrapper{namespaced}, wantKind: kindVirtualMachineInstancetype, wantCategory: apiv2.InstancetypeCustom},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.wrapper.Kind(); got != tt.wantKind {
+				t.Errorf("Kind() = %q, want %q", got, tt.wantKind)
+			}
+			if got := tt.wrapper.Category(); got != tt.wantCategory {
+				t.Errorf("Category() = %q, want %q", got, tt.wantCategory)
+			}
+			if got := tt.wrapper.Spec(); got.CPU.Guest != spec.CPU.Guest || got.Memory.Guest != spec.Memory.Guest {
+				t.Errorf("Spec() = %+v, want CPU=%d memory=%s", got, spec.CPU.Guest, spec.Memory.Guest.String())
 			}
 		})
 	}

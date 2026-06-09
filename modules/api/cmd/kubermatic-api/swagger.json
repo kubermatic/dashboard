@@ -42466,6 +42466,11 @@
       "description": "VirtualMachineInstanctype represents a KubeVirt VirtualMachineInstanctype",
       "type": "object",
       "properties": {
+        "kind": {
+          "description": "Kind is the KubeVirt resource kind: \"VirtualMachineInstancetype\" (namespaced) or\n\"VirtualMachineClusterInstancetype\" (cluster-scoped). The dashboard must use this\nvalue verbatim when constructing the machine providerSpec instancetype reference.",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
