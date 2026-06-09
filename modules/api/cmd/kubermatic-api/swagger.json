@@ -1332,7 +1332,8 @@
       "get": {
         "description": "Starts OIDC flow and generates kubeconfig, the generated config\ncontains OIDC provider authentication info",
         "produces": [
-          "application/json"
+          "application/octet-stream",
+          "text/html"
         ],
         "operationId": "createOIDCKubeconfig",
         "parameters": [
@@ -7234,7 +7235,8 @@
       "get": {
         "description": "Starts OIDC flow and generates kubeconfig, the generated config\ncontains OIDC provider authentication info. The kubeconfig is stored in the secret.",
         "produces": [
-          "application/json"
+          "application/json",
+          "text/html"
         ],
         "operationId": "createOIDCKubeconfigSecret",
         "responses": {
@@ -10934,7 +10936,8 @@
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/kubeconfig": {
       "get": {
         "produces": [
-          "application/octet-stream"
+          "application/octet-stream",
+          "text/html"
         ],
         "tags": [
           "project"

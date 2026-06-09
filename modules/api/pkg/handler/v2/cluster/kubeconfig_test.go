@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -165,7 +166,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("bob", "bob@acme.com"),
-			ExpectedResponseString: `{"error":{"code":403,"message":"forbidden: \"bob@acme.com\" doesn't belong to project foo-ID"}}`,
+			ExpectedResponseString: handlerauth.FormatOIDCCallbackErrorPage(`forbidden: "bob@acme.com" doesn't belong to project foo-ID`),
 		},
 	}
 

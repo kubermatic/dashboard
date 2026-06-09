@@ -44,7 +44,8 @@ func (r Routing) RegisterV1Optional(mux *mux.Router, oidcKubeConfEndpoint bool) 
 //	contains OIDC provider authentication info
 //
 //	Produces:
-//	- application/json
+//	- application/octet-stream
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse

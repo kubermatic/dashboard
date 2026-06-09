@@ -42,8 +42,14 @@ const oidcCallbackHTML = `<!DOCTYPE html>
 </body>
 </html>`
 
+func FormatOIDCCallbackErrorPage(errMsg string) string {
+	return fmt.Sprintf(oidcCallbackHTML, "Authentication failed", "title error", "Authentication failed", html.EscapeString(errMsg))
+}
+
 func writeOIDCCallbackHTML(w http.ResponseWriter, statusCode int, title, titleClass, subtitle string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
 	w.WriteHeader(statusCode)
 	if _, err := fmt.Fprintf(w, oidcCallbackHTML, title, titleClass, title, subtitle); err != nil {
 		log.Logger.Error(err)
@@ -56,10 +62,12 @@ func OIDCCallbackSuccessResponse(w http.ResponseWriter) {
 
 func OIDCCallbackErrorEncoder(_ context.Context, err error, w http.ResponseWriter) {
 	errorCode := http.StatusInternalServerError
+	errMsg := err.Error()
 	var httpErr utilerrors.HTTPError
 	if errors.As(err, &httpErr) {
 		errorCode = httpErr.StatusCode()
+		errMsg = httpErr.Error()
 	}
 
-	writeOIDCCallbackHTML(w, errorCode, "Authentication failed", "title error", html.EscapeString(err.Error()))
+	writeOIDCCallbackHTML(w, errorCode, "Authentication failed", "title error", html.EscapeString(errMsg))
 }

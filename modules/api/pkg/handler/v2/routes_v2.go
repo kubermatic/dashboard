@@ -2166,6 +2166,7 @@ func (r Routing) getClusterHealth() http.Handler {
 //
 //	Produces:
 //	- application/octet-stream
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse
@@ -10281,6 +10282,7 @@ func (r Routing) getDefaultCluster() http.Handler {
 //
 //	Produces:
 //	- application/json
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse
