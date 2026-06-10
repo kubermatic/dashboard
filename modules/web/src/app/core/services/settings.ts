@@ -51,9 +51,9 @@ export class SettingsService {
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettingsWatch$) {
       this._adminSettingsWatch$ = iif(
-        () => this._auth.authenticated(),
-        environment.avoidWebsockets ? this._getAdminSettings() : this._getAdminSettingsWebSocket(),
-        of(DEFAULT_ADMIN_SETTINGS)
+        () => environment.avoidWebsockets,
+        this._getAdminSettings(),
+        this._getAdminSettingsWebSocket()
       );
       this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
