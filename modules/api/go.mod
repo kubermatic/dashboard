@@ -69,10 +69,10 @@ require (
 	google.golang.org/api v0.272.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260513051628-a34f1ca3e200
-	k8c.io/kubermatic/v2 v2.30.1-0.20260513051628-a34f1ca3e200
-	k8c.io/machine-controller/sdk v1.65.1-0.20260507074018-ac7dcb0be66b
-	k8c.io/operating-system-manager v1.10.3
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260603151736-f5a776bfd2c2
+	k8c.io/kubermatic/v2 v2.30.1-0.20260603151736-f5a776bfd2c2
+	k8c.io/machine-controller/sdk v1.65.2
+	k8c.io/operating-system-manager v1.10.6
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.1
 	k8s.io/apiextensions-apiserver v0.35.1
@@ -276,7 +276,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.1 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0 // indirect
@@ -392,7 +392,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.51.0 // indirect
-	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc // indirect
+	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/mod v0.35.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
