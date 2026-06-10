@@ -31,6 +31,7 @@ const (
 	LDAPLoginEnvironmentVariable     = "KUBERMATIC_LDAP_LOGIN"
 	LDAPPasswordEnvironmentVariable  = "KUBERMATIC_LDAP_PASSWORD"
 	DexValuesFileEnvironmentVariable = "KUBERMATIC_DEX_VALUES_FILE"
+	oidcClientID                     = "kubermaticIssuer"
 )
 
 // OIDCCredentials takes the login name and password from environment variables and
@@ -131,7 +132,7 @@ func retrieveToken(ctx context.Context, token *string, login, password string, c
 
 	logger := log.New(true, log.FormatJSON).Sugar()
 
-	client, err := dex.NewClientFromHelmValues(valuesFile, "kubermatic", logger)
+	client, err := dex.NewClientFromHelmValues(valuesFile, oidcClientID, logger)
 	if err != nil {
 		return "", fmt.Errorf("failed to create OIDC client: %w", err)
 	}

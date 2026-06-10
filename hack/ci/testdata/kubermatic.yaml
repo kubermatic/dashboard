@@ -45,5 +45,7 @@ spec:
   # Dex integration
   auth:
     tokenIssuer: "http://dex.dex:5556/dex"
+    clientID: "kubermaticIssuer"
+    issuerClientID: "kubermaticIssuer"
     issuerRedirectURL: "http://localhost:8000"
     serviceAccountKey: "__SERVICE_ACCOUNT_KEY__"

@@ -36129,6 +36129,11 @@
     "KubeVirtInfraStorageClass": {
       "type": "object",
       "properties": {
+        "allowVolumeExpansion": {
+          "description": "AllowVolumeExpansion shows whether the storage class allow volume expand.",
+          "type": "boolean",
+          "x-go-name": "AllowVolumeExpansion"
+        },
         "isDefaultClass": {
           "description": "Optional: IsDefaultClass. If true, the created StorageClass in the tenant cluster will be annotated with:\nstorageclass.kubernetes.io/is-default-class : true\nIf missing or false, annotation will be:\nstorageclass.kubernetes.io/is-default-class : false",
           "type": "boolean",
@@ -36145,6 +36150,11 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "reclaimPolicy": {
+          "description": "ReclaimPolicy controls the reclaimPolicy for dynamically provisioned PersistentVolumes of this storage class.\nDefaults to Delete.",
+          "type": "string",
+          "x-go-name": "ReclaimPolicy"
         },
         "regions": {
           "description": "Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters\nto span multiple regions",

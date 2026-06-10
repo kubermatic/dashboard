@@ -33,12 +33,16 @@ dex:
     issuer: "http://dex.dex:5556/dex"
     enablePasswordDB: true
     staticClients:
-      - id: kubermatic
-        name: Kubermatic
+      - id: kubermaticIssuer
+        name: Kubermatic OIDC Issuer
         secret: BDZleMTgqON5kiJybIBZM4Si
         RedirectURIs:
           - http://localhost:8000
           - http://localhost:8000/projects
+          - http://localhost:8000/api/v1/kubeconfig
+          - http://localhost:8000/api/v2/kubeconfig/secret
+          - http://localhost:8000/api/v2/dashboard/login
+          - http://localhost:8000/api/v2/auth/callback
     staticPasswords:
       - email: "roxy@kubermatic.com"
         hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
