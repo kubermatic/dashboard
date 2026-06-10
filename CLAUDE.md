@@ -4,11 +4,9 @@ Angular web UI + Go REST API for Kubermatic Kubernetes Platform (KKP). Monorepo 
 
 ## Monorepo Layout
 
-```
-hack/           — CI scripts, boilerplate templates, shared shell utilities
-modules/web/    — Angular SPA + Go server (own go.mod, package.json, Makefile)
-modules/api/    — Go REST API server (own go.mod, Makefile)
-```
+- @hack/CLAUDE.md — CI scripts, boilerplate templates, shared shell utilities
+- @modules/web/CLAUDE.md — Angular SPA + Go server (own go.mod, package.json, Makefile)
+- @modules/api/CLAUDE.md — Go REST API server (own go.mod, Makefile)
 
 ## CE/EE Editions
 
