@@ -17,8 +17,8 @@ limitations under the License.
 package utils
 
 import (
+	"os"
 	"path/filepath"
-	"runtime"
 	"testing"
 
 	"go.uber.org/zap"
@@ -27,13 +27,33 @@ import (
 )
 
 func TestOIDCClientIDExistsInDexValues(t *testing.T) {
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("failed to determine test file location")
-	}
-
-	valuesFile := filepath.Join(filepath.Dir(filename), "..", "..", "..", "..", "..", "..", "hack", "ci", "testdata", "dex_values.yaml")
+	valuesFile := dexValuesFile(t)
 	if _, err := dex.NewClientFromHelmValues(valuesFile, oidcClientID, zap.NewNop().Sugar()); err != nil {
 		t.Fatalf("failed to load OIDC client %q from Dex values: %v", oidcClientID, err)
+	}
+}
+
+func dexValuesFile(t *testing.T) string {
+	t.Helper()
+
+	dir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to determine working directory: %v", err)
+	}
+
+	for {
+		valuesFile := filepath.Join(dir, "hack", "ci", "testdata", "dex_values.yaml")
+		if _, err := os.Stat(valuesFile); err == nil {
+			return valuesFile
+		} else if !os.IsNotExist(err) {
+			t.Fatalf("failed to stat Dex values file %q: %v", valuesFile, err)
+		}
+
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			t.Fatalf("failed to find hack/ci/testdata/dex_values.yaml from %q", dir)
+		}
+
+		dir = parent
 	}
 }
