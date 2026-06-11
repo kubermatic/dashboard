@@ -2507,7 +2507,7 @@ func (a *Client) GetClusterKubeconfigV2(params *GetClusterKubeconfigV2Params, au
 		ID:                 "getClusterKubeconfigV2",
 		Method:             "GET",
 		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/kubeconfig",
-		ProducesMediaTypes: []string{"application/octet-stream"},
+		ProducesMediaTypes: []string{"application/octet-stream", "text/html"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,

@@ -23,6 +23,7 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
 
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/cluster"
 )
@@ -43,7 +44,8 @@ func (r Routing) RegisterV1Optional(mux *mux.Router, oidcKubeConfEndpoint bool) 
 //	contains OIDC provider authentication info
 //
 //	Produces:
-//	- application/json
+//	- application/octet-stream
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse
@@ -60,6 +62,6 @@ func (r Routing) createOIDCKubeconfig() http.Handler {
 		)),
 		cluster.DecodeCreateOIDCKubeconfig,
 		cluster.EncodeOIDCKubeconfig,
-		r.defaultServerOptions()...,
+		append(r.defaultServerOptions(), httptransport.ServerErrorEncoder(handlerauth.OIDCCallbackErrorEncoder))...,
 	)
 }

@@ -24,6 +24,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"k8c.io/dashboard/v2/pkg/handler"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/addon"
@@ -1145,7 +1146,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
 		).
-		Options(r.defaultServerOptions()...).
+		Options(append(r.defaultServerOptions(), httptransport.ServerErrorEncoder(handlerauth.OIDCCallbackErrorEncoder))...).
 		Install(mux)
 
 	kubernetesdashboard.
@@ -2165,6 +2166,7 @@ func (r Routing) getClusterHealth() http.Handler {
 //
 //	Produces:
 //	- application/octet-stream
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse
@@ -2181,7 +2183,7 @@ func (r Routing) getClusterKubeconfig() http.Handler {
 		)(cluster.GetAdminKubeconfigEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.settingsProvider)),
 		cluster.DecodeGetClusterReq,
 		cluster.EncodeKubeconfig,
-		r.defaultServerOptions()...,
+		append(r.defaultServerOptions(), httptransport.ServerErrorEncoder(handlerauth.OIDCCallbackErrorEncoder))...,
 	)
 }
 
@@ -10280,6 +10282,7 @@ func (r Routing) getDefaultCluster() http.Handler {
 //
 //	Produces:
 //	- application/json
+//	- text/html
 //
 //	Responses:
 //	  default: errorResponse
@@ -10297,7 +10300,7 @@ func (r Routing) createOIDCKubeconfigSecret() http.Handler {
 		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider)),
 		webterminal.DecodeCreateOIDCKubeconfig,
 		webterminal.EncodeOIDCKubeconfig,
-		r.defaultServerOptions()...,
+		append(r.defaultServerOptions(), httptransport.ServerErrorEncoder(handlerauth.OIDCCallbackErrorEncoder))...,
 	)
 }
 
