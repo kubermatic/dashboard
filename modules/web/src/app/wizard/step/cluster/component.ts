@@ -1201,10 +1201,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
-    return !!(
-      datacenter.spec.kubelb?.enforced ||
-      datacenter.spec.kubelb?.enabled ||
-      seedSettings?.kubelb?.enableForAllDatacenters
-    );
+    if (datacenter.spec.kubelb?.enforced) {
+      return true;
+    }
+    if (datacenter.spec.kubelb?.enabled === false) {
+      return false;
+    }
+    if (datacenter.spec.kubelb?.enabled) {
+      return true;
+    }
+    return !!seedSettings?.kubelb?.enableForAllDatacenters;
   }
 }
