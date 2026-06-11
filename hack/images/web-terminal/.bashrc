@@ -18,3 +18,12 @@ source <(helm completion bash)
 #### krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+### cilium
+source <(cilium completion bash)
+
+### hubble
+source <(hubble completion bash)
+
+### velero
+source <(velero completion bash)
+

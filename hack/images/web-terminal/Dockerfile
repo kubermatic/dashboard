@@ -34,6 +34,15 @@ ENV K9S_VERSION=v0.50.18
 # Source: https://github.com/kubernetes-sigs/krew/releases
 ENV KREW_VERSION=v0.4.5
 
+# Source: https://github.com/cilium/cilium-cli/releases
+ENV CILIUM_CLI_VERSION=v0.19.4
+
+# Source: https://github.com/cilium/hubble/releases
+ENV HUBBLE_VERSION=v1.19.4
+
+# Source: https://github.com/vmware-tanzu/velero/releases
+ENV VELERO_VERSION=v1.18.1
+
 ENV USER=webshell
 ENV GROUP=webshell
 ENV UID=12345
@@ -114,6 +123,21 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
     mv k8sgpt /usr/bin/k8sgpt && \
     chmod +x /usr/bin/k8sgpt && \
     rm k8sgpt_Linux_${APK_ARCH}.tar.gz
+
+# Install Cilium CLI
+RUN curl -L --fail https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${TARGETARCH}.tar.gz | tar -xzO cilium > /usr/local/bin/cilium && \
+  chmod +x /usr/local/bin/cilium && \
+  cilium version --client
+
+# Install Hubble
+RUN curl -L --fail https://github.com/cilium/hubble/releases/download/${HUBBLE_VERSION}/hubble-linux-${TARGETARCH}.tar.gz | tar -xzO hubble > /usr/local/bin/hubble && \
+  chmod +x /usr/local/bin/hubble && \
+  hubble version
+
+# Install Velero CLI
+RUN curl -L --fail https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO velero-${VELERO_VERSION}-linux-${TARGETARCH}/velero > /usr/local/bin/velero && \
+  chmod +x /usr/local/bin/velero && \
+  velero version --client-only
 
 USER ${USER}
 COPY .bashrc /tmp/
