@@ -28,6 +28,10 @@ export namespace DynamicModule {
   export const ClusterBackups = import('./enterprise/cluster-backups/module').then(
     module => module.ClusterBackupsModule
   );
+  export const AddBackupStorageLocationDialogComponent =
+    import('./enterprise/cluster-backups/list/backup-storage-location/add-dialog/component').then(
+      module => module.AddBackupStorageLocationDialogComponent
+    );
   export const KyvernoPolicies = import('./enterprise/kyverno-policies/module').then(
     module => module.KyvernoPoliciesModule
   );
