@@ -1,18 +1,21 @@
 # KKP Dashboard
 
-Angular web UI + Go REST API for the Kubermatic Kubernetes Platform (KKP). Monorepo with two independent modules:
+Angular web UI + Go REST API for Kubermatic Kubernetes Platform (KKP). Monorepo with two independent modules.
 
-- Go backend: @modules/api/CLAUDE.md
-- Angular frontend: @modules/web/CLAUDE.md
+## Monorepo Layout
 
-Each module has its own CLAUDE.md with module-specific commands, patterns, and build details (including how we handle CE/EE editions).
+- @hack/CLAUDE.md — CI scripts, boilerplate templates, shared shell utilities
+- @modules/web/CLAUDE.md — Angular SPA + Go server (own go.mod, package.json, Makefile)
+- @modules/api/CLAUDE.md — Go REST API server (own go.mod, Makefile)
+
+## CE/EE Editions
+
+Both modules support Community Edition (CE) and Enterprise Edition (EE) builds. Default is EE. Set `KUBERMATIC_EDITION=ce` for CE builds. See each module's CLAUDE.md for edition details.
 
 ## Copyright
 
-New files require licenses. Do not write the license manually—always use the boilerplate templates in `hack/boilerplate/` or run the appropriate fixer tool.
-
-Run `npm run fix:license` (web) or check `hack/verify-boilerplate.sh` for verification.
-
+New files need license headers. Use boilerplate templates in `hack/boilerplate/` (separate `ce/` and `ee/` dirs).
 
 ## Documentation
-Official KKP documentation: https://docs.kubermatic.com/kubermatic/
+
+Official KKP docs: https://docs.kubermatic.com/kubermatic/

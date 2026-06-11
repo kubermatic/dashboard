@@ -1,31 +1,43 @@
 # KKP Dashboard — Cypress E2E Tests
 
-E2E test suite using Cypress with Page Object Model pattern and API mocking.
+Cypress + Page Object Model + API mocking. `cypress-fail-fast` for early abort.
 
-**Modes:** mock (no real backend) via `npm run e2e:mock`, real backend via `npm run e2e`
-
-```bash
-npm run cy            # Open Cypress UI interactively
-```
+**Modes:** `npm run e2e:mock` (mocked API), `npm run e2e` (real backend), `npm run cy` (headless)
 
 ## Key Directories
 
-- `e2e/` — test specs (organized by `providers/`, `stories/`, `v2/`)
-- `pages/` — Page Object Models (POs): one `.po.ts` file per UI area
-- `intercept/` — API mock handlers
+- `e2e/v2/stories/` — **Current specs** (v2 PO system)
+- `e2e/stories/` — Legacy specs (v1 PO system)
+- `pages/v2/` — Current Page Objects (instance-based, strategy pattern)
+- `pages/*.po.ts` — Legacy Page Objects (static methods)
+- `intercept/` — API mock handlers. `Intercept` facade
 - `fixtures/` — JSON response fixtures
-- `support/` — shared test utilities and custom commands
+- `types/` — Typed enums (`Fixtures`, `Endpoints`, `Condition`, `View`, `Provider`). Import `@kmtypes`
+- `utils/` — Legacy utilities (`Config`, `Mocks`, `TrafficMonitor`)
+- `support/` — Custom commands + global setup
 
-## Writing Tests
+## Path Aliases
 
-**CRITICAL**: Always use page objects from `cypress/pages/` — never write raw `cy.get()` selectors in spec files.
+`@kmtypes` → `types/`, `@intercept` → `intercept/`, `@pages/*` → `pages/`, `@utils/*` → `utils/`
 
-- **API Mocking**: Add intercepts in `cypress/intercept/`, register them in `beforeEach`
-- **Fixtures**: JSON files in `cypress/fixtures/`, loaded via `cy.fixture()`
+## Page Object Systems
 
-### Adding a New Test
+**V2 (use for new tests):** `Pages` facade in `pages/v2/pages.ts`. Instance-based POs with Strategy pattern (mock vs real). `Intercept.init()` in `beforeEach` sets up all mocks. Available: `Root`, `Dex`, `Projects`, `Members`, `ServiceAccounts`, `Clusters`, `SSHKeys`, `Wizard`, `AdminSettings`, `UserSettings`.
 
-1. Add page object in `cypress/pages/<feature>.po.ts`
-2. Add API intercepts in `cypress/intercept/<feature>.ts`
-3. Add fixture JSON files in `cypress/fixtures/<feature>*.json`
-4. Write spec in `cypress/e2e/<category>/<feature>.spec.ts`
+**V1 (legacy):** Static PO classes in `pages/*.po.ts`. Do not use for new tests.
+
+
+## Writing New Tests
+
+1. Page object → `pages/v2/<feature>/page.ts`
+2. Strategy → `pages/v2/<feature>/strategy/` (mocked + real + factory)
+3. Intercepts → `intercept/<feature>.ts`
+4. Fixtures → `fixtures/<feature>*.json`
+5. Spec → `e2e/v2/stories/<feature>.spec.ts`
+
+**CRITICAL**: Use page objects — never raw `cy.get()` in specs. Use `Condition` enum for assertions.
+
+
+## API Mocking
+
+`Intercept.init(provider?)` sets up all mocks. Each intercept class has `onCreate()`/`onDelete()` to swap fixtures for state changes. Typed enums in `types/` define fixture paths, endpoint patterns, and assertion strings.
