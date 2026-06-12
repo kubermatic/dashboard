@@ -13,17 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// OSMControllerSettings OSMControllerSettings exposes the configurable subset of the operating-system-manager settings.
+// ClusterOSMControllerSettings ClusterOSMControllerSettings exposes the configurable subset of the operating-system-manager settings.
 //
-// swagger:model OSMControllerSettings
-type OSMControllerSettings struct {
+// swagger:model ClusterOSMControllerSettings
+type ClusterOSMControllerSettings struct {
 
 	// proxy
-	Proxy *ProxySettings `json:"proxy,omitempty"`
+	Proxy *ClusterProxySettings `json:"proxy,omitempty"`
 }
 
-// Validate validates this o s m controller settings
-func (m *OSMControllerSettings) Validate(formats strfmt.Registry) error {
+// Validate validates this cluster o s m controller settings
+func (m *ClusterOSMControllerSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateProxy(formats); err != nil {
@@ -36,7 +36,7 @@ func (m *OSMControllerSettings) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *OSMControllerSettings) validateProxy(formats strfmt.Registry) error {
+func (m *ClusterOSMControllerSettings) validateProxy(formats strfmt.Registry) error {
 	if swag.IsZero(m.Proxy) { // not required
 		return nil
 	}
@@ -55,8 +55,8 @@ func (m *OSMControllerSettings) validateProxy(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this o s m controller settings based on the context it is used
-func (m *OSMControllerSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this cluster o s m controller settings based on the context it is used
+func (m *ClusterOSMControllerSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateProxy(ctx, formats); err != nil {
@@ -69,7 +69,7 @@ func (m *OSMControllerSettings) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *OSMControllerSettings) contextValidateProxy(ctx context.Context, formats strfmt.Registry) error {
+func (m *ClusterOSMControllerSettings) contextValidateProxy(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Proxy != nil {
 		if err := m.Proxy.ContextValidate(ctx, formats); err != nil {
@@ -86,7 +86,7 @@ func (m *OSMControllerSettings) contextValidateProxy(ctx context.Context, format
 }
 
 // MarshalBinary interface implementation
-func (m *OSMControllerSettings) MarshalBinary() ([]byte, error) {
+func (m *ClusterOSMControllerSettings) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -94,8 +94,8 @@ func (m *OSMControllerSettings) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *OSMControllerSettings) UnmarshalBinary(b []byte) error {
-	var res OSMControllerSettings
+func (m *ClusterOSMControllerSettings) UnmarshalBinary(b []byte) error {
+	var res ClusterOSMControllerSettings
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

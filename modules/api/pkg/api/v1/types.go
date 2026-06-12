@@ -1082,25 +1082,25 @@ type ClusterSpec struct {
 
 	// ComponentsOverride allows overriding the configuration of cluster components. Currently only
 	// the per-cluster HTTP(S) proxy of the operating-system-manager is exposed.
-	ComponentsOverride *ComponentSettings `json:"componentsOverride,omitempty"`
+	ComponentsOverride *ClusterComponentSettings `json:"componentsOverride,omitempty"`
 }
 
-// ComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be configured
-// through the dashboard. Currently only the operating-system-manager proxy settings.
-type ComponentSettings struct {
+// ClusterComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be
+// configured through the dashboard. Currently only the operating-system-manager proxy settings.
+type ClusterComponentSettings struct {
 	// OperatingSystemManager configures the operating-system-manager component.
-	OperatingSystemManager *OSMControllerSettings `json:"operatingSystemManager,omitempty"`
+	OperatingSystemManager *ClusterOSMControllerSettings `json:"operatingSystemManager,omitempty"`
 }
 
-// OSMControllerSettings exposes the configurable subset of the operating-system-manager settings.
-type OSMControllerSettings struct {
+// ClusterOSMControllerSettings exposes the configurable subset of the operating-system-manager settings.
+type ClusterOSMControllerSettings struct {
 	// Proxy holds the per-cluster HTTP(S) proxy configuration applied to the cluster nodes.
-	Proxy *ProxySettings `json:"proxy,omitempty"`
+	Proxy *ClusterProxySettings `json:"proxy,omitempty"`
 }
 
-// ProxySettings holds the per-cluster HTTP(S) proxy configuration. Empty values mean the
+// ClusterProxySettings holds the per-cluster HTTP(S) proxy configuration. Empty values mean the
 // cluster inherits the datacenter/seed proxy settings.
-type ProxySettings struct {
+type ClusterProxySettings struct {
 	// HTTPProxy is the proxy server endpoint used for both HTTP and HTTPS egress from the nodes,
 	// e.g. "http://proxy.corp.example.com:3128".
 	HTTPProxy string `json:"httpProxy,omitempty"`
@@ -1140,7 +1140,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
 		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration  `json:"encryptionConfiguration,omitempty"`
 		Features                             map[string]bool                        `json:"features,omitempty"`
-		ComponentsOverride                   *ComponentSettings                     `json:"componentsOverride,omitempty"`
+		ComponentsOverride                   *ClusterComponentSettings              `json:"componentsOverride,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
