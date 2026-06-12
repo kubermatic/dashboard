@@ -822,9 +822,9 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 
 	// Expose the per-cluster HTTP(S) proxy override (operating-system-manager) if one is set.
 	if osm := template.Spec.ComponentsOverride.OperatingSystemManager; osm != nil && !osm.Proxy.Empty() {
-		ct.Cluster.Spec.ComponentsOverride = &apiv1.ComponentSettings{
-			OperatingSystemManager: &apiv1.OSMControllerSettings{
-				Proxy: &apiv1.ProxySettings{
+		ct.Cluster.Spec.ComponentsOverride = &apiv1.ClusterComponentSettings{
+			OperatingSystemManager: &apiv1.ClusterOSMControllerSettings{
+				Proxy: &apiv1.ClusterProxySettings{
 					HTTPProxy: osm.Proxy.HTTPProxy.String(),
 					NoProxy:   osm.Proxy.NoProxy.String(),
 				},

@@ -156,7 +156,6 @@ limitations under the License.
       </km-chip-list>
       }
 
-
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.Konnectivity"
                       [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
@@ -418,11 +417,9 @@ limitations under the License.
       }
 
       <!-- Per-cluster HTTP(S) proxy override (operating-system-manager). -->
-      <div>
-        <mat-card-header class="km-no-padding km-proxy-settings">
-          <mat-card-title>Proxy Settings <i class="km-icon-info km-pointer"
-               matTooltip="Route node internet egress (image pulls, package downloads) through an HTTP(S) proxy. Leave empty to inherit the datacenter/seed proxy."></i></mat-card-title>
-        </mat-card-header>
+      <div class="km-proxy-settings">
+        <div class="km-proxy-settings-title">Proxy Settings<i class="km-icon-info km-pointer"
+             matTooltip="Route node internet egress (image pulls, package downloads) through an HTTP(S) proxy. Leave empty to inherit the datacenter/seed proxy."></i></div>
         <mat-form-field [subscriptSizing]="form.get(Controls.HTTPProxy).hasError('pattern') ? 'dynamic' : 'fixed'">
           <mat-label>HTTP(S) Proxy</mat-label>
           <input matInput

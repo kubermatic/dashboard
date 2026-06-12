@@ -72,4 +72,14 @@ mat-button-toggle-group[group='auditLogging'] {
 .km-proxy-settings {
   margin-bottom: 20px;
   margin-top: 10px;
+
+  .km-proxy-settings-title {
+    font-size: variables.$font-size-subhead;
+    font-weight: 500;
+    margin-bottom: 8px;
+
+    i {
+      margin-left: 4px;
+    }
+  }
 }

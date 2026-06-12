@@ -80,7 +80,7 @@ type ClusterSpec struct {
 	CniPlugin *CNIPluginSettings `json:"cniPlugin,omitempty"`
 
 	// components override
-	ComponentsOverride *ComponentSettings `json:"componentsOverride,omitempty"`
+	ComponentsOverride *ClusterComponentSettings `json:"componentsOverride,omitempty"`
 
 	// encryption configuration
 	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`

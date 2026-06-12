@@ -13,18 +13,18 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ComponentSettings ComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be configured
-// through the dashboard. Currently only the operating-system-manager proxy settings.
+// ClusterComponentSettings ClusterComponentSettings exposes the subset of kubermaticv1.ComponentSettings that can be
+// configured through the dashboard. Currently only the operating-system-manager proxy settings.
 //
-// swagger:model ComponentSettings
-type ComponentSettings struct {
+// swagger:model ClusterComponentSettings
+type ClusterComponentSettings struct {
 
 	// operating system manager
-	OperatingSystemManager *OSMControllerSettings `json:"operatingSystemManager,omitempty"`
+	OperatingSystemManager *ClusterOSMControllerSettings `json:"operatingSystemManager,omitempty"`
 }
 
-// Validate validates this component settings
-func (m *ComponentSettings) Validate(formats strfmt.Registry) error {
+// Validate validates this cluster component settings
+func (m *ClusterComponentSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOperatingSystemManager(formats); err != nil {
@@ -37,7 +37,7 @@ func (m *ComponentSettings) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ComponentSettings) validateOperatingSystemManager(formats strfmt.Registry) error {
+func (m *ClusterComponentSettings) validateOperatingSystemManager(formats strfmt.Registry) error {
 	if swag.IsZero(m.OperatingSystemManager) { // not required
 		return nil
 	}
@@ -56,8 +56,8 @@ func (m *ComponentSettings) validateOperatingSystemManager(formats strfmt.Regist
 	return nil
 }
 
-// ContextValidate validate this component settings based on the context it is used
-func (m *ComponentSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this cluster component settings based on the context it is used
+func (m *ClusterComponentSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOperatingSystemManager(ctx, formats); err != nil {
@@ -70,7 +70,7 @@ func (m *ComponentSettings) ContextValidate(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *ComponentSettings) contextValidateOperatingSystemManager(ctx context.Context, formats strfmt.Registry) error {
+func (m *ClusterComponentSettings) contextValidateOperatingSystemManager(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OperatingSystemManager != nil {
 		if err := m.OperatingSystemManager.ContextValidate(ctx, formats); err != nil {
@@ -87,7 +87,7 @@ func (m *ComponentSettings) contextValidateOperatingSystemManager(ctx context.Co
 }
 
 // MarshalBinary interface implementation
-func (m *ComponentSettings) MarshalBinary() ([]byte, error) {
+func (m *ClusterComponentSettings) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -95,8 +95,8 @@ func (m *ComponentSettings) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ComponentSettings) UnmarshalBinary(b []byte) error {
-	var res ComponentSettings
+func (m *ClusterComponentSettings) UnmarshalBinary(b []byte) error {
+	var res ClusterComponentSettings
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
