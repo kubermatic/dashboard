@@ -152,6 +152,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return Object.keys(AdmissionPlugin);
   }
 
+  get httpProxy(): string {
+    return this.cluster?.spec?.componentsOverride?.operatingSystemManager?.proxy?.httpProxy;
+  }
+
+  get noProxyList(): string[] {
+    const noProxy = this.cluster?.spec?.componentsOverride?.operatingSystemManager?.proxy?.noProxy;
+    return noProxy ? noProxy.split(',') : [];
+  }
+
   get isDeletingState(): boolean {
     return this.healthStatus?.message === StatusMassage?.Deleting;
   }

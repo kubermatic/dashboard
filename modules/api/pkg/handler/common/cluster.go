@@ -592,6 +592,12 @@ func PatchEndpoint(
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
 	newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
 
+	// Per-cluster HTTP(S) proxy override (operating-system-manager). Empty values clear the
+	// override so the cluster re-inherits the datacenter/seed proxy settings.
+	if err := applyProxyOverridePatch(newInternalCluster, patchedCluster); err != nil {
+		return nil, err
+	}
+
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
 	// query param attached to the patch request: "skip_kubelet_version_validation=true"
@@ -1156,6 +1162,45 @@ func isStatus(err error, status int32) bool {
 	return errors.As(err, &statusErr) && status == statusErr.Status().Code
 }
 
+// applyProxyOverridePatch validates and applies the per-cluster HTTP(S) proxy override from a
+// patched cluster onto the internal cluster. Empty values clear the override so the cluster
+// re-inherits the datacenter/seed proxy settings.
+func applyProxyOverridePatch(newInternalCluster *kubermaticv1.Cluster, patchedCluster *apiv1.Cluster) error {
+	co := patchedCluster.Spec.ComponentsOverride
+	if co == nil || co.OperatingSystemManager == nil || co.OperatingSystemManager.Proxy == nil {
+		return nil
+	}
+
+	proxy := co.OperatingSystemManager.Proxy
+	if err := cluster.ValidateProxySettings(proxy.HTTPProxy, proxy.NoProxy); err != nil {
+		return utilerrors.NewBadRequest("%v", err)
+	}
+
+	if proxy.HTTPProxy == "" && proxy.NoProxy == "" {
+		if osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil {
+			osm.Proxy = kubermaticv1.ProxySettings{}
+		}
+		return nil
+	}
+
+	if newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager == nil {
+		newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager = &kubermaticv1.OSMControllerSettings{}
+	}
+	osm := newInternalCluster.Spec.ComponentsOverride.OperatingSystemManager
+	osm.Proxy.HTTPProxy = proxyValueOrNil(proxy.HTTPProxy)
+	osm.Proxy.NoProxy = proxyValueOrNil(proxy.NoProxy)
+
+	return nil
+}
+
+// proxyValueOrNil wraps a non-empty string into a ProxyValue, returning nil for empty input.
+func proxyValueOrNil(value string) *kubermaticv1.ProxyValue {
+	if value == "" {
+		return nil
+	}
+	return kubermaticv1.NewProxyValue(value)
+}
+
 func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, datacenter *kubermaticv1.Datacenter, filterSystemLabels bool, incompatibilities ...*version.ProviderIncompatibility) *apiv1.Cluster {
 	cluster := &apiv1.Cluster{
 		ObjectMeta: apiv1.ObjectMeta{
@@ -1210,6 +1255,18 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			Encryption:           buildEncryptionStatus(internalCluster),
 		},
 		Type: apiv1.KubernetesClusterType,
+	}
+
+	// Expose the per-cluster HTTP(S) proxy override (operating-system-manager) if one is set.
+	if osm := internalCluster.Spec.ComponentsOverride.OperatingSystemManager; osm != nil && !osm.Proxy.Empty() {
+		cluster.Spec.ComponentsOverride = &apiv1.ClusterComponentSettings{
+			OperatingSystemManager: &apiv1.ClusterOSMControllerSettings{
+				Proxy: &apiv1.ClusterProxySettings{
+					HTTPProxy: osm.Proxy.HTTPProxy.String(),
+					NoProxy:   osm.Proxy.NoProxy.String(),
+				},
+			},
+		}
 	}
 
 	if filterSystemLabels {

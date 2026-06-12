@@ -21,6 +21,8 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
+	"net/url"
+	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -89,6 +91,23 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		spec.ClusterNetwork = *apiCluster.Spec.ClusterNetwork
 	}
 
+	// Map the per-cluster HTTP(S) proxy override into the operating-system-manager settings.
+	// Empty values are intentionally left unset so the cluster inherits the datacenter/seed proxy.
+	if co := apiCluster.Spec.ComponentsOverride; co != nil && co.OperatingSystemManager != nil && co.OperatingSystemManager.Proxy != nil {
+		proxy := co.OperatingSystemManager.Proxy
+		if err := ValidateProxySettings(proxy.HTTPProxy, proxy.NoProxy); err != nil {
+			return nil, nil, err
+		}
+		osm := &kubermaticv1.OSMControllerSettings{}
+		if proxy.HTTPProxy != "" {
+			osm.Proxy.HTTPProxy = kubermaticv1.NewProxyValue(proxy.HTTPProxy)
+		}
+		if proxy.NoProxy != "" {
+			osm.Proxy.NoProxy = kubermaticv1.NewProxyValue(proxy.NoProxy)
+		}
+		spec.ComponentsOverride.OperatingSystemManager = osm
+	}
+
 	// Default container runtime if it is empty.
 	if spec.ContainerRuntime == "" {
 		spec.ContainerRuntime = "containerd"
@@ -116,4 +135,31 @@ func CloudProviderForCluster(spec *kubermaticv1.ClusterSpec, dc *kubermaticv1.Da
 	}
 
 	return cloud.Provider(dc, secretKeyGetter, caBundle)
+}
+
+// ValidateProxySettings validates the per-cluster HTTP(S) proxy override.
+// httpProxy must be an http:// or https:// URL with a host. noProxy must be a
+// comma-separated list of non-empty entries without scheme or whitespace.
+// Empty values are valid (the cluster then inherits the datacenter/seed proxy).
+func ValidateProxySettings(httpProxy, noProxy string) error {
+	if httpProxy != "" {
+		u, err := url.Parse(httpProxy)
+		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" {
+			return fmt.Errorf("invalid httpProxy %q: must be an http:// or https:// URL", httpProxy)
+		}
+	}
+
+	if noProxy != "" {
+		for token := range strings.SplitSeq(noProxy, ",") {
+			entry := strings.TrimSpace(token)
+			if entry == "" {
+				return errors.New("invalid noProxy: contains an empty entry")
+			}
+			if strings.ContainsAny(entry, " \t") || strings.Contains(entry, "://") {
+				return fmt.Errorf("invalid noProxy entry %q: must be a host, domain, IP or CIDR", entry)
+			}
+		}
+	}
+
+	return nil
 }
