@@ -1347,13 +1347,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const noProxyValues: string[] = Array.isArray(noProxyRaw) ? noProxyRaw : (noProxyRaw?.tags ?? []);
     const noProxy = noProxyValues.join(',');
     if (!httpProxy && !noProxy) {
-      return undefined;
+      return null;
     }
     return {
       operatingSystemManager: {
         proxy: {
-          httpProxy: httpProxy || undefined,
-          noProxy: noProxy || undefined,
+          httpProxy: httpProxy || null,
+          noProxy: noProxy || null,
         },
       },
     };
