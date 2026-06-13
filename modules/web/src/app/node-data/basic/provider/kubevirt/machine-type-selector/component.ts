@@ -201,7 +201,7 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
 
   /** Parses instance type spec JSON and enriches with computed properties. */
   private _parseInstanceTypeSpec(instanceType: KubeVirtInstanceType, category: string): ParsedInstanceType {
-    const id = `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
+    const id = `${category}${this._instanceTypeIDSeparator}${instanceType.kind ?? ''}${this._instanceTypeIDSeparator}${instanceType.name}`;
     let cpuValue: number | undefined;
     let memoryValue: string | undefined;
     let gpuCount = 0;
