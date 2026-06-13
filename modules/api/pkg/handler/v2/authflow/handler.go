@@ -56,11 +56,6 @@ func randomURLSafeString(nBytes int) (string, error) {
 	return base64.RawURLEncoding.EncodeToString(b), nil
 }
 
-// appendPKCEParams adds code_challenge and code_challenge_method to an auth URL.
-func appendPKCEParams(authURL, codeChallenge string) string {
-	return authURL + "&code_challenge=" + url.QueryEscape(codeChallenge) + "&code_challenge_method=S256"
-}
-
 // isLocalHost reports whether the request's host is a loopback address (localhost or 127.0.0.1).
 func isLocalHost(r *http.Request) bool {
 	host := r.Host
@@ -120,7 +115,25 @@ func (a *authHandler) loginHandler() http.Handler {
 
 		codeVerifier := oauth2.GenerateVerifier()
 
-		// Encode state, nonce, and PKCE verifier into a single signed+encrypted cookie.
+		scopes := []string{"openid", "email", "profile", "groups"}
+		if oidcConfig.OfflineAccessAsScope {
+			scopes = append(scopes, "offline_access")
+		}
+
+		redirectURI := a.getCallbackURI(r)
+		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
+		u, err := url.Parse(authURL)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to parse auth URL: %v", err), http.StatusInternalServerError)
+			return
+		}
+		q := u.Query()
+		q.Set("code_challenge", oauth2.S256ChallengeFromVerifier(codeVerifier))
+		q.Set("code_challenge_method", "S256")
+		q.Set("nonce", nonce)
+		u.RawQuery = q.Encode()
+
+		// Encode state, nonce, and PKCE verifier into a single signed cookie.
 		encodedStateCookie, err := oidcConfig.SecureCookie.Encode(oauthStateCookieName, oauthStateCookie{
 			State:        state,
 			Nonce:        nonce,
@@ -141,17 +154,7 @@ func (a *authHandler) loginHandler() http.Handler {
 			Path:     "/",
 		})
 
-		scopes := []string{"openid", "email", "profile", "groups"}
-		if oidcConfig.OfflineAccessAsScope {
-			scopes = append(scopes, "offline_access")
-		}
-
-		redirectURI := a.getCallbackURI(r)
-		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
-		authURL = appendPKCEParams(authURL, oauth2.S256ChallengeFromVerifier(codeVerifier))
-		authURL = authURL + "&nonce=" + url.QueryEscape(nonce)
-
-		http.Redirect(w, r, authURL, http.StatusSeeOther)
+		http.Redirect(w, r, u.String(), http.StatusSeeOther)
 	})
 }
 
@@ -267,7 +270,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 
 		landingPageURI := "/"
 
-		if userInfo.Spec.Settings.SelectedProjectID != "" {
+		if userInfo.Spec.Settings != nil && userInfo.Spec.Settings.SelectedProjectID != "" {
 			projectID := userInfo.Spec.Settings.SelectedProjectID
 			if userInfo.Spec.Settings.UseClustersView {
 				landingPageURI = fmt.Sprintf("/projects/%s/clusters", projectID)
