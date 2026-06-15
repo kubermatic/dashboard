@@ -93,6 +93,22 @@ RUN curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/${KRE
   ./krew-linux_${TARGETARCH} install krew && \
   echo "export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH" >> /root/.bashrc
 
+
+# Install Cilium CLI
+RUN curl -L --fail https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${TARGETARCH}.tar.gz | tar -xzO cilium > /usr/local/bin/cilium && \
+  chmod +x /usr/local/bin/cilium && \
+  cilium version --client
+
+# Install Hubble
+RUN curl -L --fail https://github.com/cilium/hubble/releases/download/${HUBBLE_VERSION}/hubble-linux-${TARGETARCH}.tar.gz | tar -xzO hubble > /usr/local/bin/hubble && \
+  chmod +x /usr/local/bin/hubble && \
+  hubble version
+
+# Install Velero CLI
+RUN curl -L --fail https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO velero-${VELERO_VERSION}-linux-${TARGETARCH}/velero > /usr/local/bin/velero && \
+  chmod +x /usr/local/bin/velero && \
+  velero version --client-only
+
 ENV PATH="/root/.krew/bin:$PATH"
 
 # Krew plugins
@@ -102,8 +118,8 @@ RUN PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
   kubectl krew install ctx && \
   kubectl krew install ns
 
-RUN mkdir -p /home/webshell/.local/state && \
-    chown -R webshell:webshell /home/webshell/.local
+RUN mkdir -p ${USER_HOME}/.local/state && \
+    chown -R ${USER}:${GROUP} ${USER_HOME}/.local
 
 USER ${USER}
 
@@ -123,21 +139,6 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
     mv k8sgpt /usr/bin/k8sgpt && \
     chmod +x /usr/bin/k8sgpt && \
     rm k8sgpt_Linux_${APK_ARCH}.tar.gz
-
-# Install Cilium CLI
-RUN curl -L --fail https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${TARGETARCH}.tar.gz | tar -xzO cilium > /usr/local/bin/cilium && \
-  chmod +x /usr/local/bin/cilium && \
-  cilium version --client
-
-# Install Hubble
-RUN curl -L --fail https://github.com/cilium/hubble/releases/download/${HUBBLE_VERSION}/hubble-linux-${TARGETARCH}.tar.gz | tar -xzO hubble > /usr/local/bin/hubble && \
-  chmod +x /usr/local/bin/hubble && \
-  hubble version
-
-# Install Velero CLI
-RUN curl -L --fail https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO velero-${VELERO_VERSION}-linux-${TARGETARCH}/velero > /usr/local/bin/velero && \
-  chmod +x /usr/local/bin/velero && \
-  velero version --client-only
 
 USER ${USER}
 COPY .bashrc /tmp/
