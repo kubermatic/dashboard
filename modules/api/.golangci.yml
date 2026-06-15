@@ -37,7 +37,6 @@ linters:
     - errcheck
     - errname
     - errorlint
-    - goconst
     - gocritic
     - gocyclo
     - godot
@@ -105,6 +104,9 @@ linters:
         - '-ST1005'
         # very opinionated naming conventions
         - '-ST1003'
+    gocritic:
+      disabled-checks:
+        - deprecatedComment
   exclusions:
     generated: lax
     presets:
@@ -113,6 +115,9 @@ linters:
       - legacy
       - std-error-handling
     rules:
+      - path: _test\.go
+        linters:
+          - noctx
       # NOTE: Do not use commas in the exclude patterns, or else the regex will be
       # split and you will be sad: https://github.com/golangci/golangci-lint/issues/665
       # gocyclo

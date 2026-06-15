@@ -200,7 +200,7 @@ func (h *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) endpo
 
 		// Proxy the request
 		proxy := httputil.NewSingleHostReverseProxy(proxyURL)
-		proxy.Director = newDashboardProxyDirector(proxyURL, token, request).director()
+		proxy.Rewrite = newDashboardProxyDirector(proxyURL, token, request).rewrite()
 		proxy.ServeHTTP(w, request)
 
 		return nil, nil
