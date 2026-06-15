@@ -416,8 +416,8 @@ limitations under the License.
       </mat-form-field>
       }
       <div class="km-proxy-settings">
-        <div class="km-proxy-settings-title">Proxy Settings<i class="km-icon-info km-pointer"
-             matTooltip="Route node internet egress (image pulls, package downloads) through an HTTP(S) proxy. Leave empty to inherit the datacenter/seed proxy."></i></div>
+        <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
+             [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>
         <mat-form-field [subscriptSizing]="form.get(Controls.HTTPProxy).hasError('pattern') ? 'dynamic' : 'fixed'">
           <mat-label>HTTP(S) Proxy</mat-label>
           <input matInput

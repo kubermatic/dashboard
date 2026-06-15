@@ -81,7 +81,9 @@ import {getEditionVersion} from '@shared/utils/common';
 import {
   GENERATE_NAME_TOOLTIP,
   KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE,
+  NODE_EGRESS_PROXY_TOOLTIP,
   OPA_DEPRECATED_MESSAGE,
+  PROXY_MODE_HINT,
 } from '@app/shared/constants/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
@@ -220,6 +222,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly NodeProvider = NodeProvider;
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
   readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
+  readonly NODE_EGRESS_PROXY_TOOLTIP = NODE_EGRESS_PROXY_TOOLTIP;
+  readonly PROXY_MODE_HINT = PROXY_MODE_HINT;
   readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;

@@ -114,7 +114,8 @@ limitations under the License.
         }
         <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
                             collapseLabel="ADVANCED NETWORK CONFIGURATION">
-          <mat-form-field class="km-dropdown-with-suffix">
+          <mat-form-field class="km-dropdown-with-suffix"
+                          subscriptSizing="dynamic">
             <mat-label>Proxy Mode</mat-label>
             <mat-select [formControlName]="Controls.ProxyMode"
                         class="km-select-ellipsis"
@@ -123,6 +124,16 @@ limitations under the License.
               <mat-option [value]="proxyMode"> {{proxyMode}} </mat-option>
               }
             </mat-select>
+            <mat-hint>{{PROXY_MODE_HINT}}
+              @if (!branding.hideDocumentationLinks) {
+              Check the documentation for more information
+              <a target="_blank"
+                 rel="noopener"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center"
+                 href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/cni-cluster-network/#proxy-mode">here <i class="km-icon-external-link"></i></a>.
+              }
+            </mat-hint>
           </mat-form-field>
           <mat-form-field class="km-dropdown-with-suffix"
                           subscriptSizing="dynamic">
@@ -304,8 +315,8 @@ limitations under the License.
             </div>
           </div>
           <div>
-            <div class="km-proxy-settings-title">Proxy Settings<i class="km-icon-info km-pointer"
-                 matTooltip="Route node internet egress (image pulls, package downloads) through an HTTP(S) proxy. Leave empty to inherit the datacenter/seed proxy."></i></div>
+            <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
+                 [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>
             <mat-form-field [subscriptSizing]="form.get(Controls.HTTPProxy).hasError('pattern') ? 'dynamic' : 'fixed'">
               <mat-label>HTTP(S) Proxy</mat-label>
               <input matInput

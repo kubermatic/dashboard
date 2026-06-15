@@ -53,3 +53,10 @@ export const GENERATE_NAME_TOOLTIP = 'Generate name';
 export const DELETE_SELECTED_TOOLTIP = 'Delete selected';
 export const CLOSE_PANEL_TOOLTIP = 'Close panel';
 export const GO_BACK_TO_CLUSTER_LIST_TOOLTIP = 'Go back to the cluster list';
+
+// Per-cluster proxy tooltips
+export const PROXY_MODE_HINT = 'kube-proxy mode for in-cluster service routing.';
+export const NODE_EGRESS_PROXY_TOOLTIP =
+  'Sets the HTTP_PROXY, HTTPS_PROXY and NO_PROXY environment variables on worker nodes. ' +
+  'Used for node egress such as container image pulls and package downloads; does not affect ' +
+  'control-plane traffic to the cloud provider. Leave empty to inherit the datacenter/seed proxy.';
