@@ -145,7 +145,12 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
 
   registerOnChange(fn: any): void {
     // Emit the raw tags array, not the wrapped {tags: string[]} group value.
-    this.form.valueChanges.pipe(map(value => value[Controls.Tags]), takeUntil(this._unsubscribe)).subscribe(fn);
+    this.form.valueChanges
+      .pipe(
+        map(value => value[Controls.Tags]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(fn);
   }
 
   registerOnTouched(_: any): void {}
