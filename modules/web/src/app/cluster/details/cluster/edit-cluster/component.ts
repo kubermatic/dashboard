@@ -581,7 +581,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {
       patch.spec.cloud[this._provider] = {
         nodePortsAllowedIPRanges: {
-          cidrBlocks: this.form.get(Controls.NodePortsAllowedIPRanges).value.tags,
+          cidrBlocks: this.form.get(Controls.NodePortsAllowedIPRanges).value,
         },
       };
     }
@@ -634,7 +634,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (!this.isExposeStrategyLoadBalancer()) {
       return null;
     }
-    const apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    const apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value;
     return !apiServerAllowedIPRange ? {cidrBlocks: []} : {cidrBlocks: apiServerAllowedIPRange};
   }
 
