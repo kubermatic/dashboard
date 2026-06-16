@@ -659,7 +659,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return {
       cidr: this.form.get(Controls.StaticNetworkCIDR).value,
       dns: {
-        servers: this.form.get(Controls.StaticNetworkDNSServers).value?.tags,
+        servers: this.form.get(Controls.StaticNetworkDNSServers).value,
       },
       gateway: this.form.get(Controls.StaticNetworkGateway).value,
     };

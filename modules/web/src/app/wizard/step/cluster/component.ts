@@ -512,7 +512,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     merge(this.control(Controls.IPFamily).valueChanges, this.control(Controls.NodePortsAllowedIPRanges).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        const nodePortsAllowedIPRanges = this.controlValue(Controls.NodePortsAllowedIPRanges)?.tags;
+        const nodePortsAllowedIPRanges = this.controlValue(Controls.NodePortsAllowedIPRanges);
         this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {
           cidrBlocks: nodePortsAllowedIPRanges ? nodePortsAllowedIPRanges : [],
         };
@@ -1204,7 +1204,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (this.controlValue(Controls.ExposeStrategy) !== ExposeStrategy.loadbalancer) {
       return apiServerAllowedIPRange;
     }
-    apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
+    apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges);
     return {
       cidrBlocks: apiServerAllowedIPRange ? apiServerAllowedIPRange : [],
     };

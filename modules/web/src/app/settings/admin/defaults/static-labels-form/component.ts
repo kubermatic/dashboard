@@ -110,7 +110,7 @@ export class StaticLabelsFormComponent implements OnInit, OnChanges, OnDestroy {
 
   private _addLabelIfNeeded(): void {
     const lastLabel = this.staticLabelArray.at(this.staticLabelArray.length - 1)?.value;
-    if (lastLabel?.key && lastLabel?.values?.tags?.length) {
+    if (lastLabel?.key && lastLabel?.values?.length) {
       this._addStaticLabel();
     }
   }
@@ -158,7 +158,7 @@ export class StaticLabelsFormComponent implements OnInit, OnChanges, OnDestroy {
       .map(raw => {
         return {
           key: raw.key,
-          values: raw.values.length ? raw.values : raw.values?.tags,
+          values: raw.values,
           protected: raw.protected,
           default: raw.default,
         };
