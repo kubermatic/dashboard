@@ -19,6 +19,7 @@ package kubernetesdashboard
 import (
 	"fmt"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strings"
 )
@@ -30,15 +31,15 @@ type dashboardProxyDirector struct {
 	originalRequest *http.Request
 }
 
-func (director *dashboardProxyDirector) director() func(*http.Request) {
-	return func(req *http.Request) {
-		req.URL.Scheme = director.proxyURL.Scheme
-		req.URL.Host = director.proxyURL.Host
-		req.Host = director.proxyURL.Host
-		req.URL.Path = director.getBasePath(director.originalRequest.URL.Path)
+func (director *dashboardProxyDirector) rewrite() func(*httputil.ProxyRequest) {
+	return func(preq *httputil.ProxyRequest) {
+		preq.Out.URL.Scheme = director.proxyURL.Scheme
+		preq.Out.URL.Host = director.proxyURL.Host
+		preq.Out.Host = director.proxyURL.Host
+		preq.Out.URL.Path = director.getBasePath(director.originalRequest.URL.Path)
 
-		req.Header.Set("Authorization", director.getAuthorizationHeader())
-		req.Header.Set("X-Forwarded-Host", director.originalRequest.Header.Get("Host"))
+		preq.Out.Header.Set("Authorization", director.getAuthorizationHeader())
+		preq.Out.Header.Set("X-Forwarded-Host", director.originalRequest.Header.Get("Host"))
 	}
 }
 

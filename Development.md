@@ -8,7 +8,7 @@ This approach assumes that you have all required dependencies available on your 
 
 - Node >= v22.0.0
 - NPM >= v10.0.0
-- Go v1.24+ (required only by the production build)
+- Go v1.26+ (required only by the production build)
 
 ## Preparation
 
