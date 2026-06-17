@@ -114,7 +114,8 @@ limitations under the License.
         }
         <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
                             collapseLabel="ADVANCED NETWORK CONFIGURATION">
-          <mat-form-field class="km-dropdown-with-suffix">
+          <mat-form-field class="km-dropdown-with-suffix"
+                          subscriptSizing="dynamic">
             <mat-label>Proxy Mode</mat-label>
             <mat-select [formControlName]="Controls.ProxyMode"
                         class="km-select-ellipsis"
@@ -123,6 +124,16 @@ limitations under the License.
               <mat-option [value]="proxyMode"> {{proxyMode}} </mat-option>
               }
             </mat-select>
+            <mat-hint>{{PROXY_MODE_HINT}}
+              @if (!branding.hideDocumentationLinks) {
+              Check the documentation for more information
+              <a target="_blank"
+                 rel="noopener"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center"
+                 href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/cni-cluster-network/#proxy-mode">here <i class="km-icon-external-link"></i></a>.
+              }
+            </mat-hint>
           </mat-form-field>
           <mat-form-field class="km-dropdown-with-suffix"
                           subscriptSizing="dynamic">
@@ -177,6 +188,7 @@ limitations under the License.
                         [kmPattern]="ipv4AndIPv6CidrRegex"
                         kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR" />
           }
+
           <div fxLayout="row"
                fxLayoutGap="50px"
                fxFlex="100">
@@ -301,6 +313,35 @@ limitations under the License.
               </button>
               }
             </div>
+          </div>
+          <div>
+            <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
+                 [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>
+            <mat-form-field [subscriptSizing]="form.get(Controls.HTTPProxy).hasError('pattern') ? 'dynamic' : 'fixed'">
+              <mat-label>HTTP(S) Proxy</mat-label>
+              <input matInput
+                     [formControlName]="Controls.HTTPProxy"
+                     type="text"
+                     autocomplete="off"
+                     placeholder="http://proxy.corp.example.com:3128" />
+              <mat-hint>Used for both HTTP and HTTPS egress from cluster nodes.</mat-hint>
+              @if (form.get(Controls.HTTPProxy).hasError('pattern')) {
+              <mat-error>
+                Must be a valid http:// or https:// URL.
+              </mat-error>
+              }
+            </mat-form-field>
+            <km-chip-list class="tag-list"
+                          label="No Proxy"
+                          placeholder="Hosts, domains, IPs or CIDRs..."
+                          [formControlName]="Controls.NoProxy"
+                          [kmPattern]="noProxyRegex"
+                          kmPatternError="Each entry must be a host, .domain, IP or CIDR">
+              <ng-container hint>
+                Comma-separated list of destinations that bypass the proxy, e.g. .cluster.local, 10.0.0.0/8, localhost.
+                Use commas, space or enter key as the separators.
+              </ng-container>
+            </km-chip-list>
           </div>
         </km-expansion-panel>
       </div>

@@ -137,6 +137,22 @@ limitations under the License.
             </km-property>
             }
 
+            @if (httpProxy) {
+            <km-property>
+              <div key>HTTP(S) Proxy</div>
+              <div value>{{httpProxy}}</div>
+            </km-property>
+            }
+
+            @if (noProxyList.length) {
+            <km-property>
+              <div key>No Proxy</div>
+              <div value>
+                <km-labels [labels]="noProxyList" />
+              </div>
+            </km-property>
+            }
+
             @if (cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length) {
             <km-property>
               <div key>Allowed IP Ranges for API server</div>

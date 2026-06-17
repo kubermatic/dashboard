@@ -415,6 +415,34 @@ limitations under the License.
         }
       </mat-form-field>
       }
+      <div class="km-proxy-settings">
+        <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
+             [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>
+        <mat-form-field [subscriptSizing]="form.get(Controls.HTTPProxy).hasError('pattern') ? 'dynamic' : 'fixed'">
+          <mat-label>HTTP(S) Proxy</mat-label>
+          <input matInput
+                 [formControlName]="Controls.HTTPProxy"
+                 type="text"
+                 autocomplete="off"
+                 placeholder="http://proxy.corp.example.com:3128" />
+          <mat-hint>Used for both HTTP and HTTPS egress from cluster nodes.</mat-hint>
+          @if (form.get(Controls.HTTPProxy).hasError('pattern')) {
+          <mat-error>
+            Must be a valid http:// or https:// URL.
+          </mat-error>
+          }
+        </mat-form-field>
+        <km-chip-list label="No Proxy"
+                      placeholder="Hosts, domains, IPs or CIDRs..."
+                      [formControlName]="Controls.NoProxy"
+                      [kmPattern]="noProxyRegex"
+                      kmPatternError="Each entry must be a host, .domain, IP or CIDR">
+          <ng-container hint>
+            Comma-separated list of destinations that bypass the proxy, e.g. .cluster.local, 10.0.0.0/8, localhost.
+            Use commas, space or enter key as the separators.
+          </ng-container>
+        </km-chip-list>
+      </div>
 
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"

@@ -68,3 +68,16 @@ mat-button-toggle-group[group='auditLogging'] {
 .bsl-field {
   margin-top: 15px;
 }
+
+.km-proxy-settings {
+  margin-bottom: 20px;
+  margin-top: 10px;
+
+  .km-proxy-settings-title {
+    margin-bottom: 8px;
+
+    i {
+      margin-left: 4px;
+    }
+  }
+}

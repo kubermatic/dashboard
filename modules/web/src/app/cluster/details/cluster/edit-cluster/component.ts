@@ -32,6 +32,7 @@ import {
   Cluster,
   ClusterPatch,
   ClusterSpecPatch,
+  ComponentSettings,
   ContainerRuntime,
   EventRateLimitConfig,
   EventRateLimitConfigItem,
@@ -52,9 +53,13 @@ import {
   generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
-import {KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE, OPA_DEPRECATED_MESSAGE} from '@app/shared/constants/common';
+import {
+  KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE,
+  NODE_EGRESS_PROXY_TOOLTIP,
+  OPA_DEPRECATED_MESSAGE,
+} from '@app/shared/constants/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
-import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
+import {HTTP_PROXY_URL_PATTERN_VALIDATOR, IPV4_IPV6_CIDR_PATTERN, NO_PROXY_PATTERN} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
@@ -91,6 +96,8 @@ enum Controls {
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
   EncryptionAtRest = 'encryptionAtRest',
   EncryptionAtRestKey = 'encryptionAtRestKey',
+  HTTPProxy = 'httpProxy',
+  NoProxy = 'noProxy',
 }
 
 @Component({
@@ -135,9 +142,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
+  readonly noProxyRegex = NO_PROXY_PATTERN;
   readonly NodeProvider = NodeProvider;
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
   readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
+  readonly NODE_EGRESS_PROXY_TOOLTIP = NODE_EGRESS_PROXY_TOOLTIP;
   private readonly _nameMinLen = 3;
   private readonly ENCRYPTION_KEY_ANNOTATION = 'kubermatic.io/encryption-key';
   private _settings: AdminSettings;
@@ -223,6 +232,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
       [Controls.EncryptionAtRest]: new FormControl(!!this.cluster.spec.encryptionConfiguration?.enabled),
       [Controls.EncryptionAtRestKey]: new FormControl('', [KmValidators.encryptionKey()]),
+      [Controls.HTTPProxy]: new FormControl(
+        this.cluster.spec.componentsOverride?.operatingSystemManager?.proxy?.httpProxy ?? '',
+        [HTTP_PROXY_URL_PATTERN_VALIDATOR]
+      ),
+      [Controls.NoProxy]: new FormControl(
+        this.cluster.spec.componentsOverride?.operatingSystemManager?.proxy?.noProxy
+          ? this.cluster.spec.componentsOverride.operatingSystemManager.proxy.noProxy.split(',')
+          : []
+      ),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -651,7 +669,23 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     }
 
+    patch.spec.componentsOverride = this._getProxyComponentsOverride();
+
     return this._clusterService.patch(this.projectID, this.cluster.id, patch, true).pipe(take(1));
+  }
+
+  // Per-cluster HTTP(S) proxy override. Empty values clear the override so the cluster
+  // re-inherits the datacenter/seed proxy settings.
+  private _getProxyComponentsOverride(): ComponentSettings {
+    const noProxyValues: string[] = this.form.get(Controls.NoProxy)?.value ?? [];
+    return {
+      operatingSystemManager: {
+        proxy: {
+          httpProxy: this.form.get(Controls.HTTPProxy).value || '',
+          noProxy: noProxyValues.length ? noProxyValues.join(',') : '',
+        },
+      },
+    };
   }
 
   onNext(cluster: Cluster): void {
