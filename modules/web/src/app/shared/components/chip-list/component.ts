@@ -29,7 +29,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
 import {Validators} from '@angular/forms';
 import {LabelFormValidators} from '@app/shared/validators/label-form.validators';
 
@@ -136,15 +136,21 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
     this.onChange.emit(this.tags);
   }
 
-  writeValue(tags: string[]): void {
-    if (!_.isEmpty(tags)) {
-      this.form.get(Controls.Tags).setValue(tags, {emitEvent: false});
-      this.tags = tags;
+  writeValue(value: string[]): void {
+    if (!_.isEmpty(value)) {
+      this.form.get(Controls.Tags).setValue(value, {emitEvent: false});
+      this.tags = value;
     }
   }
 
   registerOnChange(fn: any): void {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+    // Emit the raw tags array, not the wrapped {tags: string[]} group value.
+    this.form.valueChanges
+      .pipe(
+        map(value => value[Controls.Tags]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(fn);
   }
 
   registerOnTouched(_: any): void {}
