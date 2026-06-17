@@ -677,8 +677,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   // Per-cluster HTTP(S) proxy override. Empty values clear the override so the cluster
   // re-inherits the datacenter/seed proxy settings.
   private _getProxyComponentsOverride(): ComponentSettings {
-    const noProxyRaw = this.form.get(Controls.NoProxy)?.value;
-    const noProxyValues: string[] = Array.isArray(noProxyRaw) ? noProxyRaw : (noProxyRaw?.tags ?? []);
+    const noProxyValues: string[] = this.form.get(Controls.NoProxy)?.value ?? [];
     return {
       operatingSystemManager: {
         proxy: {
