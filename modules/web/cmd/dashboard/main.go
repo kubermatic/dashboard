@@ -32,7 +32,7 @@ import (
 )
 
 // Those values will be overridden during the build.
-const (
+var (
 	Version = "Development"
 	Edition = "N/A"
 )
