@@ -58,6 +58,7 @@ RUN apk add --no-cache -U \
   openssh-client \
   unzip \
   tar \
+  vim \
   wget \
   ncurses
 
