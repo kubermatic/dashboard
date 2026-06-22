@@ -52,6 +52,7 @@ RUN apk add --no-cache -U \
   openssh-client \
   unzip \
   tar \
+  vim \
   wget
 
 RUN curl -Lo /usr/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
