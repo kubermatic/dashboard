@@ -74,6 +74,10 @@ const (
 
 	webTerminalImage                   = resources.WEBTerminalImage
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
+
+	webTerminalCABundleVolume = "ca-bundle"
+	webTerminalCABundleDir    = "/etc/kubermatic/certs"
+	webTerminalCABundlePath   = webTerminalCABundleDir + "/" + resources.CABundleConfigMapKey
 )
 
 type TerminalConnStatus string
@@ -638,6 +642,10 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 			Name:  "PS1",
 			Value: "\\s-\\v \\w \\$ ",
 		},
+		{
+			Name:  "SSL_CERT_FILE",
+			Value: webTerminalCABundlePath,
+		},
 	}
 
 	if options != nil && options.AdditionalEnvironmentVariables != nil {
@@ -773,6 +781,22 @@ func getVolumes(userEmailID, userAppName string) []corev1.Volume {
 				},
 			},
 		},
+		{
+			Name: webTerminalCABundleVolume,
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: resources.CABundleConfigMapName,
+					},
+					Items: []corev1.KeyToPath{
+						{
+							Key:  resources.CABundleConfigMapKey,
+							Path: resources.CABundleConfigMapKey,
+						},
+					},
+				},
+			},
+		},
 	}
 	return vs
 }
@@ -816,6 +840,11 @@ func getVolumeMounts() []corev1.VolumeMount {
 		{
 			Name:      webTerminalConfigVolume,
 			MountPath: "/etc/config",
+		},
+		{
+			Name:      webTerminalCABundleVolume,
+			MountPath: webTerminalCABundleDir,
+			ReadOnly:  true,
 		},
 	}
 }
