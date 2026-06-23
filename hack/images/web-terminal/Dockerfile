@@ -40,7 +40,7 @@ ENV CILIUM_CLI_VERSION=v0.19.4
 # Source: https://github.com/cilium/hubble/releases
 ENV HUBBLE_VERSION=v1.19.4
 
-# Source: https://github.com/vmware-tanzu/velero/releases
+# Source: https://github.com/velero-io/velero/releases
 ENV VELERO_VERSION=v1.18.1
 
 ENV USER=webshell
@@ -105,7 +105,7 @@ RUN curl -L --fail https://github.com/cilium/hubble/releases/download/${HUBBLE_V
   hubble version
 
 # Install Velero CLI
-RUN curl -L --fail https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO velero-${VELERO_VERSION}-linux-${TARGETARCH}/velero > /usr/local/bin/velero && \
+RUN curl -L --fail https://github.com/velero-io/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO velero-${VELERO_VERSION}-linux-${TARGETARCH}/velero > /usr/local/bin/velero && \
   chmod +x /usr/local/bin/velero && \
   velero version --client-only
 
