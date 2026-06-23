@@ -124,7 +124,7 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
       apiToken: this.form.get(Controls.APIToken).value,
       organization: this.form.get(Controls.Organization).value,
       vdc: this.form.get(Controls.Vdc).value,
-      ovdcNetworks: this.form.get(Controls.OvdcNetworks).value?.tags,
+      ovdcNetworks: this.form.get(Controls.OvdcNetworks).value,
     } as VMwareCloudDirectorPresetSpec;
   }
 }
