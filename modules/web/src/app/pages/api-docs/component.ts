@@ -17,7 +17,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
-import 'swagger-ui-dist/swagger-ui.css';
 
 @Component({
   selector: 'km-api-docs',

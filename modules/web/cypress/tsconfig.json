@@ -1,20 +1,18 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "ES2019",
     "strict": true,
-    "baseUrl": "./",
     "sourceMap": false,
     "inlineSourceMap": true,
     "paths": {
-      "@kmtypes": ["types"],
-      "@kmtypes/*": ["types/*"],
-      "@intercept/*": ["intercept/*"],
-      "@intercept": ["intercept"],
-      "@pages/*": ["pages/*"],
-      "@utils/*": ["utils/*"]
+      "@kmtypes": ["./types"],
+      "@kmtypes/*": ["./types/*"],
+      "@intercept/*": ["./intercept/*"],
+      "@intercept": ["./intercept"],
+      "@pages/*": ["./pages/*"],
+      "@utils/*": ["./utils/*"]
     },
-    "types": ["cypress"],
+    "types": ["cypress"]
   },
   "include": [
     "**/*.ts",
