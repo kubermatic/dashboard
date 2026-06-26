@@ -4,16 +4,15 @@
   "compilerOptions": {
     "declaration": true,
     "outDir": "dist/out-tsc/app",
-    "baseUrl": "src",
     "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@shared/*": ["app/shared/*"],
-      "@dynamic/*": ["app/dynamic/*"],
-      "@assets/*": ["assets/*"],
-      "@environments/*": ["environments/*"],
-      "@test/*": ["test/*"],
-      "app/*": ["app/*"]
+      "@app/*": ["./src/app/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@dynamic/*": ["./src/app/dynamic/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@environments/*": ["./src/environments/*"],
+      "@test/*": ["./src/test/*"],
+      "app/*": ["./src/app/*"]
     },
     "moduleResolution": "bundler",
     "module": "ES2022",
