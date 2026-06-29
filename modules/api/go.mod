@@ -1,6 +1,6 @@
 module k8c.io/dashboard/v2
 
-go 1.25.7
+go 1.25.11
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20250325104231-893079a7322c
@@ -20,7 +20,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.0
 	github.com/aws/aws-sdk-go-v2/config v1.32.5
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.5
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.216.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.236.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.64.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.41.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.3
@@ -31,7 +31,7 @@ require (
 	github.com/digitalocean/godo v1.145.0
 	github.com/embik/nutanix-client-go v0.1.0
 	github.com/evanphx/json-patch v5.9.11+incompatible
-	github.com/go-jose/go-jose/v4 v4.1.3
+	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/go-kit/kit v0.13.0
 	github.com/go-kit/log v0.2.1
 	github.com/go-logr/zapr v1.3.0
@@ -70,10 +70,10 @@ require (
 	google.golang.org/api v0.259.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.4-0.20260526164243-947e6297ffb7
-	k8c.io/kubermatic/v2 v2.30.4-0.20260526164243-947e6297ffb7
+	k8c.io/kubermatic/sdk/v2 v2.30.5-0.20260626195636-417cc9e85ab9
+	k8c.io/kubermatic/v2 v2.30.5-0.20260626195636-417cc9e85ab9
 	k8c.io/machine-controller/sdk v1.65.2
-	k8c.io/operating-system-manager v1.10.6
+	k8c.io/operating-system-manager v1.10.7
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.0
 	k8s.io/apiextensions-apiserver v0.35.0
@@ -84,7 +84,7 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.35.0
 	k8s.io/metrics v0.35.0
-	k8s.io/utils v0.0.0-20260108192941-914a6e750570
+	k8s.io/utils v0.0.0-20260319190234-28399d86e0b5
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
 	sigs.k8s.io/controller-runtime v0.23.1
@@ -359,10 +359,10 @@ require (
 	go.mongodb.org/mongo-driver v1.17.3 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
-	go.opentelemetry.io/otel v1.40.0 // indirect
-	go.opentelemetry.io/otel/metric v1.40.0 // indirect
+	go.opentelemetry.io/otel v1.41.0 // indirect
+	go.opentelemetry.io/otel/metric v1.41.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.40.0 // indirect
-	go.opentelemetry.io/otel/trace v1.40.0 // indirect
+	go.opentelemetry.io/otel/trace v1.41.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
@@ -379,7 +379,7 @@ require (
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260122232226-8e98ce8d340d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260122232226-8e98ce8d340d // indirect
-	google.golang.org/grpc v1.78.0 // indirect
+	google.golang.org/grpc v1.79.3 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
