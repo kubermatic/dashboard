@@ -60,7 +60,7 @@
                 "inject": false
               }
             ],
-            "scripts": ["node_modules/jquery/dist/jquery.js"],
+            "scripts": [],
             "extractLicenses": false,
             "optimization": false,
             "namedChunks": true,
