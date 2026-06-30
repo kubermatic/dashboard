@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
@@ -64,6 +64,7 @@ enum Controls {
 })
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _dnsLabelRegex = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i;
   readonly Controls = Controls;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   form: FormGroup;
@@ -108,11 +109,17 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         this._config.bslObject?.spec.backupSyncPeriod ?? '0',
         CBSL_SYNC_PERIOD
       ),
-      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? ''),
-      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? ''),
+      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? '', [
+        this._dnsNameValidator(),
+      ]),
+      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? '', [
+        this._endpointURLValidator(),
+      ]),
       [Controls.ChecksumAlgorithm]: this._builder.control(this._config.bslObject?.spec.config?.checksumAlgorithm ?? ''),
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
+
+    this._updateRegionAndEndpointValidators(this.form.get(Controls.AddCustomConfig).value);
 
     if (this._config.bslObject) {
       this.form.get(Controls.Name).disable();
@@ -132,6 +139,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       .get(Controls.AddCustomConfig)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((value: boolean) => {
+        this._updateRegionAndEndpointValidators(value);
         let config: BackupStorageLocationConfig;
         if (this._config.bslObject?.name) {
           config = this._config.bslObject.spec.config;
@@ -196,7 +204,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
           this.form.get(Controls.BackupSyncPeriod).value === '' ? null : this.form.get(Controls.BackupSyncPeriod).value,
         config: {
           region: this.form.get(Controls.Region).value,
-          s3Url: this.form.get(Controls.Endpoints).value,
+          s3Url: this.form.get(Controls.Endpoints).value?.trim(),
           checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value || '',
         },
         provider: SupportedBSLProviders.AWS,
@@ -216,5 +224,65 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       }
     }
     return bsl;
+  }
+
+  private _dnsNameValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value?.trim();
+      if (!value) {
+        return null;
+      }
+
+      const labels = value.split('.');
+      return labels.every(label => this._dnsLabelRegex.test(label)) ? null : {invalidDnsName: true};
+    };
+  }
+
+  private _endpointURLValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value?.trim();
+      if (!value) {
+        return null;
+      }
+
+      if (!/^https?:\/\//i.test(value)) {
+        return {invalidEndpointUrl: true};
+      }
+
+      try {
+        const url = new URL(value);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          return {invalidEndpointUrl: true};
+        }
+
+        if (!url.hostname) {
+          return {invalidEndpointUrl: true};
+        }
+
+        const labels = url.hostname.split('.');
+        return labels.every(label => this._dnsLabelRegex.test(label)) ? null : {invalidEndpointUrl: true};
+      } catch {
+        return {invalidEndpointUrl: true};
+      }
+    };
+  }
+
+  private _updateRegionAndEndpointValidators(addCustomConfig: boolean): void {
+    const regionControl = this.form.get(Controls.Region);
+    const endpointControl = this.form.get(Controls.Endpoints);
+
+    const regionValidators = [this._dnsNameValidator()];
+    const endpointValidators = [this._endpointURLValidator()];
+
+    if (!addCustomConfig) {
+      regionValidators.unshift(Validators.required);
+      endpointValidators.unshift(Validators.required);
+    }
+
+    regionControl.setValidators(regionValidators);
+    endpointControl.setValidators(endpointValidators);
+
+    regionControl.updateValueAndValidity({emitEvent: false});
+    endpointControl.updateValueAndValidity({emitEvent: false});
   }
 }
