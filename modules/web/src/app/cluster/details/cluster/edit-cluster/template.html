@@ -199,7 +199,7 @@ limitations under the License.
         }
       </div>
 
-      @if (!!form.get(Controls.AuditLogging).value) {
+      @if (!!form.get(Controls.AuditLogging).value && !isAuditWebhookBackendHidden) {
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
         <i class="km-icon-info km-pointer"
