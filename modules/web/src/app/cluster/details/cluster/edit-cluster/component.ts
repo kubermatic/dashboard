@@ -132,6 +132,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isKubeLBEnabled = false;
   isCSIDriverDisabled = false;
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
+  isAuditWebhookBackendHidden = false;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   isAllowedIPRangeSupported: boolean;
@@ -281,6 +282,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
+      this._handleAuditWebhookBackendVisibility();
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -316,6 +318,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         }
         this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
         this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
+        this._handleAuditWebhookBackendVisibility();
       });
 
     this._clusterService
@@ -748,6 +751,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         [Controls.AuditWebhookBackendInitialBackoff]: config?.auditWebhookInitialBackoff,
       });
     }
+  }
+
+  private _handleAuditWebhookBackendVisibility(): void {
+    const datacenterName = this.datacenter?.metadata?.name;
+    this.isAuditWebhookBackendHidden =
+      !!datacenterName && !!this._settings?.disabledAuditWebhookBackendDCs?.includes(datacenterName);
   }
 
   private _enforceAuditWebhookBackendSettings(auditWebhookBackend?: AuditLoggingWebhookBackend): void {

@@ -23,6 +23,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
+	"slices"
 	"sync"
 	"time"
 
@@ -162,6 +164,27 @@ func CreateEndpoint(
 	return ConvertInternalClusterToExternal(newCluster, dc, true, supportManager.GetIncompatibilities()...), nil
 }
 
+func validateAuditWebhookBackendAllowed(disabledDCs []string, datacenterName string, oldAuditLogging, newAuditLogging *kubermaticv1.AuditLoggingSettings) error {
+	var oldWebhookBackend, newWebhookBackend *kubermaticv1.AuditWebhookBackendSettings
+	if oldAuditLogging != nil {
+		oldWebhookBackend = oldAuditLogging.WebhookBackend
+	}
+	if newAuditLogging != nil {
+		newWebhookBackend = newAuditLogging.WebhookBackend
+	}
+
+	if newWebhookBackend == nil {
+		return nil
+	}
+	if oldWebhookBackend != nil && reflect.DeepEqual(oldWebhookBackend, newWebhookBackend) {
+		return nil
+	}
+	if slices.Contains(disabledDCs, datacenterName) {
+		return utilerrors.NewBadRequest("audit webhook backend is disabled for datacenter %q", datacenterName)
+	}
+	return nil
+}
+
 func GenerateCluster(
 	ctx context.Context,
 	projectID string,
@@ -180,7 +203,19 @@ func GenerateCluster(
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	seed, dc, err := provider.DatacenterFromSeedMap(adminUserInfo, seedsGetter, body.Cluster.Spec.Cloud.DatacenterName)
+
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	dcName := body.Cluster.Spec.Cloud.DatacenterName
+	// On creation there is no previous state, so any configured webhook backend counts as "added".
+	if err := validateAuditWebhookBackendAllowed(globalSettings.Spec.DisabledAuditWebhookBackendDCs, dcName, nil, body.Cluster.Spec.AuditLogging); err != nil {
+		return nil, err
+	}
+
+	seed, dc, err := provider.DatacenterFromSeedMap(adminUserInfo, seedsGetter, dcName)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -275,7 +310,7 @@ func GenerateCluster(
 			// controller in KKP will apply the currently assigned keys automatically when processing
 			// this annotation.
 			partialCluster.Spec = *spec
-			md, err := machine.Deployment(ctx, partialCluster, body.NodeDeployment, dc, nil, settingsProvider)
+			md, err := machine.Deployment(partialCluster, body.NodeDeployment, dc, nil, globalSettings.Spec.MachineDeploymentOptions)
 			if err != nil {
 				return nil, fmt.Errorf("cannot create machine deployment data: %w", err)
 			}
@@ -501,6 +536,7 @@ func PatchEndpoint(
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
 	skipKubeletVersionValidation bool,
+	settingsProvider provider.SettingsProvider,
 ) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
@@ -573,6 +609,15 @@ func PatchEndpoint(
 	newInternalCluster.Spec.UseEventRateLimitAdmissionPlugin = patchedCluster.Spec.UseEventRateLimitAdmissionPlugin
 	newInternalCluster.Spec.AdmissionPlugins = patchedCluster.Spec.AdmissionPlugins
 	newInternalCluster.Spec.AuditLogging = patchedCluster.Spec.AuditLogging
+
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	if err := validateAuditWebhookBackendAllowed(globalSettings.Spec.DisabledAuditWebhookBackendDCs, oldInternalCluster.Spec.Cloud.DatacenterName, oldInternalCluster.Spec.AuditLogging, newInternalCluster.Spec.AuditLogging); err != nil {
+		return nil, err
+	}
 	newInternalCluster.Spec.UpdateWindow = patchedCluster.Spec.UpdateWindow
 	newInternalCluster.Spec.OPAIntegration = patchedCluster.Spec.OPAIntegration
 	newInternalCluster.Spec.PodNodeSelectorAdmissionPluginConfig = patchedCluster.Spec.PodNodeSelectorAdmissionPluginConfig
