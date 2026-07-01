@@ -207,6 +207,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   provider: NodeProvider;
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
+  isAuditWebhookBackendHidden = false;
   isUserSshKeyEnabled = false;
   wizardMode: WizardMode;
   admissionPluginsConfiguration: GlobalAdmissionPluginsConfiguration;
@@ -329,6 +330,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._enforcedAdmissionPlugins(AdmissionPlugin.PodSecurityPolicy, datacenter.spec.enforcePodSecurityPolicy);
           this._enforceDisableCSIDriver(datacenter.spec.disableCsiDriver);
           this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
+          this._handleAuditWebhookBackendVisibility(datacenter.metadata.name);
         })
       )
       .pipe(
@@ -1087,6 +1089,23 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this._enforce(Controls.AuditWebhookBackendSecretName, !!auditWebhookBackend);
       this._enforce(Controls.AuditWebhookBackendSecretNamespace, !!auditWebhookBackend);
       this._enforce(Controls.AuditWebhookBackendInitialBackoff, !!auditWebhookBackend);
+    }
+  }
+
+  // _handleAuditWebhookBackendVisibility hides the Audit Webhook Backend option when the selected
+  // datacenter is in the admin setting disabledAuditWebhookBackendDCs. When hidden and the option is
+  // not enforced by the datacenter, the control is reset so no webhook backend is configured
+  // (scenario 1). Enforced settings (scenario 2) are left untouched since the backend still applies
+  // them from the datacenter spec and _getAuditWebhookBackendConfig() never sends them from the UI.
+  private _handleAuditWebhookBackendVisibility(datacenterName: string): void {
+    this.isAuditWebhookBackendHidden = !!this._settings?.disabledAuditWebhookBackendDCs?.includes(datacenterName);
+
+    if (
+      this.isAuditWebhookBackendHidden &&
+      !this.enforcedAuditWebhookSettings &&
+      this.controlValue(Controls.AuditWebhookBackend)
+    ) {
+      this.control(Controls.AuditWebhookBackend).setValue(false);
     }
   }
 

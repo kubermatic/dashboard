@@ -483,7 +483,7 @@ limitations under the License.
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
               }
             </div>
-            @if (!!controlValue(Controls.AuditLogging)) {
+            @if (!!controlValue(Controls.AuditLogging) && !isAuditWebhookBackendHidden) {
             <div fxLayoutAlign=" center">
               <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
               <i class="km-icon-info km-pointer"

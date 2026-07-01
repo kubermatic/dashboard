@@ -38,6 +38,9 @@ export interface AdminSettings {
   enableShareCluster: boolean;
   enableOIDCKubeconfig: boolean;
   disableAdminKubeconfig: boolean;
+  // disabledAuditWebhookBackendDCs is the list of datacenters for which the Audit Webhook Backend
+  // option is hidden in the cluster wizard and edit-cluster dialog.
+  disabledAuditWebhookBackendDCs?: string[];
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
   restrictProjectDeletion: boolean;
@@ -235,6 +238,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableWebTerminal: false,
   enableShareCluster: false,
   disableAdminKubeconfig: false,
+  disabledAuditWebhookBackendDCs: [],
   enableOIDCKubeconfig: false,
   enableClusterBackups: false,
   enableEtcdBackup: false,
