@@ -35,6 +35,10 @@ type GlobalSettings struct {
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
 
+	// DisabledAuditWebhookBackendDCs is the list of datacenters for which the Audit Webhook Backend
+	// option is disabled in the dashboard.
+	DisabledAuditWebhookBackendDCs []string `json:"disabledAuditWebhookBackendDCs"`
+
 	// DisplayAPIDocs controls whether a link to the KKP API documentation is shown in the footer.
 	DisplayAPIDocs bool `json:"displayAPIDocs,omitempty"`
 

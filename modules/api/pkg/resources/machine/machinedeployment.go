@@ -17,7 +17,6 @@ limitations under the License.
 package machine
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -27,8 +26,6 @@ import (
 	semverlib "github.com/Masterminds/semver/v3"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
@@ -50,8 +47,8 @@ const (
 )
 
 // Deployment returns a Machine Deployment object for the given Node Deployment spec.
-func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey, settingsProvider provider.SettingsProvider) (*clusterv1alpha1.MachineDeployment, error) {
-	validationErr := validateAutoUpdateMDEnforcement(ctx, nd, settingsProvider)
+func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey, mdOptions kubermaticv1.MachineDeploymentOptions) (*clusterv1alpha1.MachineDeployment, error) {
+	validationErr := validateAutoUpdateMDEnforcement(nd, mdOptions)
 	if validationErr != nil {
 		return nil, validationErr
 	}
@@ -470,15 +467,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 
 // validateAutoUpdateMDEnforcement validates if auto-update settings of node deployment are aligned with the
 // admin settings of machine deployment auto updates.
-func validateAutoUpdateMDEnforcement(ctx context.Context, nd *apiv1.NodeDeployment, settingsProvider provider.SettingsProvider) error {
-	settings, err := settingsProvider.GetGlobalSettings(ctx)
-
-	if err != nil {
-		return common.KubernetesErrorToHTTPError(err)
-	}
-
-	mdOptions := settings.Spec.MachineDeploymentOptions
-
+func validateAutoUpdateMDEnforcement(nd *apiv1.NodeDeployment, mdOptions kubermaticv1.MachineDeploymentOptions) error {
 	if mdOptions.AutoUpdatesEnabled && mdOptions.AutoUpdatesEnforced {
 		errorMessage := errors.New("auto update cannot be disabled because it has been enforced by the admin")
 		osSpec := nd.Spec.Template.OperatingSystem

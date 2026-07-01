@@ -109,7 +109,12 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, utilerrors.NewBadRequest("node deployment validation failed: %s", err)
 	}
 
-	md, err := machine.Deployment(ctx, cluster, nd, dc, keys, settingsProvider)
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	md, err := machine.Deployment(cluster, nd, dc, keys, globalSettings.Spec.MachineDeploymentOptions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -567,7 +572,12 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	patchedMachineDeployment, err := machine.Deployment(ctx, cluster, patchedNodeDeployment, dc, keys, settingsProvider)
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	patchedMachineDeployment, err := machine.Deployment(cluster, patchedNodeDeployment, dc, keys, globalSettings.Spec.MachineDeploymentOptions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
