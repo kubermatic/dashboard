@@ -69,10 +69,10 @@ require (
 	google.golang.org/api v0.280.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260609162731-7680620f30b2
-	k8c.io/kubermatic/v2 v2.30.1-0.20260609162731-7680620f30b2
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260630093238-2f7747b8ebdd
+	k8c.io/kubermatic/v2 v2.30.1-0.20260630093238-2f7747b8ebdd
 	k8c.io/machine-controller/sdk v1.65.2
-	k8c.io/operating-system-manager v1.10.6
+	k8c.io/operating-system-manager v1.10.7
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.1
 	k8s.io/apiextensions-apiserver v0.35.1
@@ -83,7 +83,7 @@ require (
 	k8s.io/klog/v2 v2.140.0
 	k8s.io/kubectl v0.35.1
 	k8s.io/metrics v0.35.1
-	k8s.io/utils v0.0.0-20260108192941-914a6e750570
+	k8s.io/utils v0.0.0-20260319190234-28399d86e0b5
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
 	sigs.k8s.io/controller-runtime v0.23.1
