@@ -294,7 +294,7 @@ var openstackOSDistroAliases = map[providerconfig.OperatingSystem][]string{
 	providerconfig.OperatingSystemRHEL:         {"rhel", "redhat"},
 	providerconfig.OperatingSystemRockyLinux:   {"rocky", "rockylinux"},
 	providerconfig.OperatingSystemFlatcar:      {"flatcar"},
-	providerconfig.OperatingSystemAmazonLinux2: {"amzn", "amazonlinux", "amazon"},
+	providerconfig.OperatingSystemAmazonLinux2: {"amzn", "amazon"},
 }
 
 func filterOpenstackImagesByOS(images []apiv1.OpenstackImage, os providerconfig.OperatingSystem) []apiv1.OpenstackImage {
