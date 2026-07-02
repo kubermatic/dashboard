@@ -219,12 +219,24 @@ func GetImages(authURL, region string, credentials *resources.OpenstackCredentia
 	result := make([]apiv1.OpenstackImage, 0, len(allImages))
 	for _, img := range allImages {
 		result = append(result, apiv1.OpenstackImage{
-			ID:   img.ID,
-			Name: img.Name,
+			ID:       img.ID,
+			Name:     img.Name,
+			OSDistro: imagePropertyString(img.Properties, "os_distro"),
 		})
 	}
 
 	return result, nil
+}
+
+// imagePropertyString safely reads a string-valued Glance image property.
+func imagePropertyString(properties map[string]interface{}, key string) string {
+	if properties == nil {
+		return ""
+	}
+	if v, ok := properties[key].(string); ok {
+		return v
+	}
+	return ""
 }
 
 // GetSubnetPools lists all available subnet pools.

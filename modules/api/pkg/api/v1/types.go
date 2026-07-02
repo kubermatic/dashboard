@@ -826,6 +826,9 @@ type OpenstackImage struct {
 	ID string `json:"id"`
 	// Name is the human-readable name of the image
 	Name string `json:"name"`
+	// OSDistro is the operating system distribution reported by the image's
+	// os_distro Glance metadata property (may be empty if the image is untagged).
+	OSDistro string `json:"osDistro,omitempty"`
 }
 
 // VSphereNetwork is the object representing a vsphere network.

@@ -329,7 +329,7 @@ export class Openstack extends Provider {
     });
   }
 
-  images(onLoadingCb: () => void = null): Observable<OpenstackImage[]> {
+  images(os?: string, onLoadingCb: () => void = null): Observable<OpenstackImage[]> {
     const projectHeader = this._headers.get(Openstack.Header.Project)
       ? Openstack.Header.Project
       : Openstack.Header.ProjectID;
@@ -353,7 +353,8 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackImage[]>(this.imagesUrl, {
+    const url = os ? `${this.imagesUrl}?os=${os}` : this.imagesUrl;
+    return this._http.get<OpenstackImage[]>(url, {
       headers: this._headers,
     });
   }

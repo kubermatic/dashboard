@@ -18,7 +18,7 @@ import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackImage, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {OpenStackService} from '@core/services/provider/openstack';
@@ -151,11 +151,18 @@ export class NodeDataOpenstackProvider {
     }
   }
 
-  images(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackImage[]> {
+  images(os?: string, onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackImage[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+        // Emit the current cluster immediately (clusterChanges is an EventEmitter
+        // with no replay) so re-fetching on OS change does not wait for the next
+        // credential change, then keep reacting to later credential changes.
+        return merge(of(this._clusterSpecService.cluster), this._clusterSpecService.clusterChanges)
+          .pipe(
+            filter(
+              cluster => !!cluster?.spec?.cloud?.openstack && this._clusterSpecService.provider === NodeProvider.OPENSTACK
+            )
+          )
           .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(_ =>
@@ -172,7 +179,7 @@ export class NodeDataOpenstackProvider {
                 .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
                 .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
                 .credential(this._presetService.preset)
-                .images(onLoadingCb)
+                .images(os, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {
@@ -190,7 +197,9 @@ export class NodeDataOpenstackProvider {
           .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._openStackService.getImages(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(
+            switchMap(_ => this._openStackService.getImages(selectedProject, this._clusterSpecService.cluster.id, os))
+          )
           .pipe(
             catchError(_ => {
               if (onError) {

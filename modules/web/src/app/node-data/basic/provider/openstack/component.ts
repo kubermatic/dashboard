@@ -27,8 +27,8 @@ import {GlobalModule} from '@core/services/global/module';
 import {DynamicModule} from '@dynamic/module-registry';
 import {duration} from 'moment';
 import _ from 'lodash';
-import {merge, Observable, of} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, merge, Observable, of} from 'rxjs';
+import {distinctUntilChanged, filter, map, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -98,6 +98,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _defaultImage = '';
   private _defaultOS: OperatingSystem;
   private _images: DatacenterOperatingSystemOptions;
+  private _imageDiscoveryEnabled = false;
   private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
@@ -149,9 +150,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(map((serverGroups: OpenstackServerGroup[]) => serverGroups.sort((a, b) => (a.name < b.name ? -1 : 1))));
   }
 
-  private get _imagesObservable(): Observable<OpenstackImage[]> {
+  private _imagesObservable(os: string): Observable<OpenstackImage[]> {
     return this._nodeDataService.openstack
-      .images(this._clearImage.bind(this), this._onImageLoading.bind(this))
+      .images(os, this._clearImage.bind(this), this._onImageLoading.bind(this))
       .pipe(map((images: OpenstackImage[]) => images.sort((a, b) => (a.name < b.name ? -1 : 1))));
   }
 
@@ -241,7 +242,32 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._availabilityZonesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setAvailabilityZone.bind(this));
-    this._imagesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setImages.bind(this));
+    // Image discovery is gated by the admin setting
+    // providerConfiguration.openStack.enableImageDiscovery (default false).
+    const imageDiscoveryEnabled$ = this._settingsService.adminSettings.pipe(
+      map(settings => !!settings.providerConfiguration?.openStack?.enableImageDiscovery),
+      distinctUntilChanged()
+    );
+    const operatingSystem$ = this._nodeDataService.operatingSystemChanges.pipe(
+      startWith(this._nodeDataService.operatingSystem),
+      filter(os => !!os)
+    );
+
+    // When enabled, list project-scoped images filtered by the selected OS
+    // (os_distro, backend-side); re-fetch on OS change. Backend falls back to the
+    // datacenter preset when no image matches the os_distro.
+    combineLatest([imageDiscoveryEnabled$, operatingSystem$])
+      .pipe(filter(([enabled]) => enabled))
+      .pipe(switchMap(([, os]) => this._imagesObservable(os)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setImages.bind(this));
+
+    // Track the gate; when disabled show only the datacenter preset (single-value,
+    // non-editable dropdown) via _setDefaultImage.
+    imageDiscoveryEnabled$.pipe(takeUntil(this._unsubscribe)).subscribe(enabled => {
+      this._imageDiscoveryEnabled = enabled;
+      this._setDefaultImage(this._nodeDataService.operatingSystem);
+    });
 
     this.form
       .get(Controls.Flavor)
@@ -294,6 +320,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   onImageChange(image: string): void {
+    // km-combobox emits the selected option's string value; keep it as the
+    // source of truth (the outer form control wraps it in a {select: ...} object).
+    this.selectedImage = image;
     this._nodeDataService.nodeData.spec.cloud.openstack.image = image;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
@@ -415,16 +444,34 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     const imageToSelect = os === this._defaultOS ? this._defaultImage : dcDefaultImage;
 
-    if (!_.isEmpty(this.images)) {
-      const found = this.images.find(img => img.name === imageToSelect);
-      if (!found && !_.isEmpty(imageToSelect)) {
-        this.images = [...this.images, {id: '', name: imageToSelect}];
-      }
-    }
-
     this.selectedImage = imageToSelect;
     this.form.get(Controls.Image).setValue(imageToSelect);
+
+    if (this._imageDiscoveryEnabled) {
+      // Discovery on: keep the fetched list, just ensure the default is selectable.
+      if (!_.isEmpty(this.images)) {
+        const found = this.images.find(img => img.name === imageToSelect);
+        if (!found && !_.isEmpty(imageToSelect)) {
+          this.images = [...this.images, {id: '', name: imageToSelect}];
+        }
+      }
+    } else {
+      // Discovery off: single-value, non-editable dropdown with the preset image.
+      this.images = _.isEmpty(imageToSelect) ? [] : [{id: '', name: imageToSelect}];
+      this.imageLabel = _.isEmpty(this.images) ? ImageState.Empty : ImageState.Ready;
+      this._setImageControlEnabled(false);
+    }
+
     this._cdr.detectChanges();
+  }
+
+  private _setImageControlEnabled(enabled: boolean): void {
+    const control = this.form.get(Controls.Image);
+    if (enabled && control.disabled) {
+      control.enable({emitEvent: false});
+    } else if (!enabled && control.enabled) {
+      control.disable({emitEvent: false});
+    }
   }
 
   private _clearImage(): void {
@@ -432,16 +479,20 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this.selectedImage = '';
     this.imageLabel = ImageState.Empty;
     this._imageCombobox?.reset();
+    this.form.get(Controls.Image).enable({emitEvent: false});
     this._cdr.detectChanges();
   }
 
   private _onImageLoading(): void {
+    // Disable the dropdown while images are being fetched so a stale list cannot
+    // be selected before the response for the new OS arrives.
     this.imageLabel = ImageState.Loading;
+    this.form.get(Controls.Image).disable({emitEvent: false});
     this._cdr.detectChanges();
   }
 
   private _setImages(images: OpenstackImage[]): void {
-    const currentImage = this.form.get(Controls.Image).value || this._defaultImage;
+    const currentImage = this.selectedImage || this._defaultImage;
 
     if (!_.isEmpty(currentImage) && !images.find(img => img.name === currentImage)) {
       this.images = [...images, {id: '', name: currentImage}];
@@ -451,6 +502,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this.selectedImage = currentImage;
     this.imageLabel = !_.isEmpty(this.images) ? ImageState.Ready : ImageState.Empty;
+    // Only allow interaction when there is more than one option to choose from.
+    this._setImageControlEnabled(this.images.length > 1);
     this._cdr.detectChanges();
   }
 
@@ -479,7 +532,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       spec: {
         cloud: {
           openstack: {
-            image: this.form.get(Controls.Image).value,
+            image: this.selectedImage,
             useFloatingIP: this.form.get(Controls.UseFloatingIP).value,
             diskSize: this.form.get(Controls.UseCustomDisk).value ? this.form.get(Controls.CustomDiskSize).value : null,
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,

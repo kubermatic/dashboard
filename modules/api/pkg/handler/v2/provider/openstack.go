@@ -37,6 +37,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/machine-controller/sdk/providerconfig"
 
 	"k8s.io/utils/ptr"
 )
@@ -351,7 +352,7 @@ func OpenstackImageWithClusterCredentialsEndpoint(projectProvider provider.Proje
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(openstackNoCredentialsReq)
 		return providercommon.OpenstackImageWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider,
-			privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, caBundle)
+			privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, providerconfig.OperatingSystem(req.OS), caBundle)
 	}
 }
 
@@ -374,7 +375,7 @@ func OpenstackImageEndpoint(seedsGetter provider.SeedsGetter, presetProvider pro
 			return nil, fmt.Errorf("error getting dc: %w", err)
 		}
 
-		return providercommon.GetOpenstackImages(datacenter, cred, caBundle)
+		return providercommon.GetOpenstackImages(datacenter, cred, providerconfig.OperatingSystem(req.OS), caBundle)
 	}
 }
 
@@ -456,6 +457,9 @@ func OpenstackMemberSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProv
 // swagger:parameters listOpenstackSizesNoCredentialsV2 listOpenstackTenantsNoCredentialsV2 listOpenstackNetworksNoCredentialsV2 listOpenstackSecurityGroupsNoCredentialsV2 listOpenstackAvailabilityZonesNoCredentialsV2 listOpenstackServerGroupsNoCredentials
 type openstackNoCredentialsReq struct {
 	cluster.GetClusterReq
+	// in: query
+	// OS filters images to the given operating system via the os_distro metadata.
+	OS string `json:"os,omitempty"`
 }
 
 // GetSeedCluster returns the SeedCluster object.
@@ -479,6 +483,7 @@ func DecodeOpenstackNoCredentialsReq(c context.Context, r *http.Request) (interf
 		return nil, err
 	}
 	req.ProjectReq = pr.(common.ProjectReq)
+	req.OS = r.URL.Query().Get("os")
 	return req, nil
 }
 
@@ -606,6 +611,9 @@ func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
 type OpenstackProjectReq struct {
 	OpenstackReq
 	common.ProjectReq
+	// in: query
+	// OS filters images to the given operating system via the os_distro metadata.
+	OS string `json:"os,omitempty"`
 }
 
 // OpenstackProjectSubnetPoolReq represent a request for openstack subnet pools within the context of a KKP project.
@@ -703,6 +711,7 @@ func DecodeOpenstackProjectReq(c context.Context, r *http.Request) (interface{},
 	return OpenstackProjectReq{
 		ProjectReq:   projectReq.(common.ProjectReq),
 		OpenstackReq: openstackReq.(OpenstackReq),
+		OS:           r.URL.Query().Get("os"),
 	}, nil
 }
 

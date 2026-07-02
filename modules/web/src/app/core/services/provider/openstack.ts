@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
@@ -39,8 +39,9 @@ export class OpenStackService {
     return this._httpClient.get<OpenstackAvailabilityZone[]>(url);
   }
 
-  getImages(projectID: string, clusterID: string): Observable<OpenstackImage[]> {
+  getImages(projectID: string, clusterID: string, os?: string): Observable<OpenstackImage[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/openstack/images`;
-    return this._httpClient.get<OpenstackImage[]>(url);
+    const params = os ? new HttpParams().set('os', os) : undefined;
+    return this._httpClient.get<OpenstackImage[]>(url, {params});
   }
 }

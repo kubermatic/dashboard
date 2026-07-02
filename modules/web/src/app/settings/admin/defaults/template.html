@@ -598,6 +598,25 @@ limitations under the License.
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, apiSettings.providerConfiguration.openStack.enforceCustomDisk)" />
           </div>
         </div>
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>OpenStack - Image Discovery</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="When enabled, the image dropdown lists project-scoped OpenStack images filtered by their os_distro metadata. When disabled, only the datacenter preset image is offered."></div>
+          </div>
+          <div fxFlexAlign=" center"
+               fxLayout="row">
+            <mat-checkbox [(ngModel)]="settings.providerConfiguration.openStack.enableImageDiscovery"
+                          (change)="onSettingsChange()"
+                          id="km-openstack-enable-image-discovery"
+                          fxFlexAlign=" center">Enable
+            </mat-checkbox>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enableImageDiscovery, apiSettings.providerConfiguration.openStack.enableImageDiscovery)" />
+          </div>
+        </div>
       </div>
       <div fxLayout="row"
            fxLayoutAlign=" center">

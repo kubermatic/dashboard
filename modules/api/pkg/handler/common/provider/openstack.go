@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -34,6 +35,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/machine-controller/sdk/providerconfig"
 )
 
 func OpenstackSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
@@ -229,7 +231,7 @@ func GetOpenstackAvailabilityZones(ctx context.Context, datacenter *kubermaticv1
 
 func OpenstackImageWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
 	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool) (interface{}, error) {
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, os providerconfig.OperatingSystem, caBundle *x509.CertPool) (interface{}, error) {
 	cluster, err := getClusterForOpenstack(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
 	if err != nil {
 		return nil, err
@@ -252,11 +254,69 @@ func OpenstackImageWithClusterCredentialsEndpoint(ctx context.Context, userInfoG
 		return nil, err
 	}
 
-	return GetOpenstackImages(datacenter, creds, caBundle)
+	return GetOpenstackImages(datacenter, creds, os, caBundle)
 }
 
-func GetOpenstackImages(datacenter *kubermaticv1.Datacenter, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]apiv1.OpenstackImage, error) {
-	return openstack.GetImages(datacenter.Spec.Openstack.AuthURL, datacenter.Spec.Openstack.Region, credentials, caBundle)
+// GetOpenstackImages lists the active images of an OpenStack project. When an
+// operating system is provided, the result is filtered in-memory to images
+// whose os_distro metadata matches that OS (OpenStack has no reliable
+// server-side os_distro filter). When no image matches the os_distro - e.g. on
+// setups where images are not tagged - it falls back to the single datacenter
+// preset image configured for that OS. With no OS provided, all active images
+// are returned (backward-compatible behavior).
+func GetOpenstackImages(datacenter *kubermaticv1.Datacenter, credentials *resources.OpenstackCredentials, os providerconfig.OperatingSystem, caBundle *x509.CertPool) ([]apiv1.OpenstackImage, error) {
+	images, err := openstack.GetImages(datacenter.Spec.Openstack.AuthURL, datacenter.Spec.Openstack.Region, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	if os == "" {
+		return images, nil
+	}
+
+	filtered := filterOpenstackImagesByOS(images, os)
+	if len(filtered) == 0 {
+		if preset := datacenter.Spec.Openstack.Images[os]; preset != "" {
+			return []apiv1.OpenstackImage{{Name: preset}}, nil
+		}
+		return []apiv1.OpenstackImage{}, nil
+	}
+
+	return filtered, nil
+}
+
+// openstackOSDistroAliases maps a KKP operating system to the os_distro values
+// that may identify a matching Glance image. Matching is case-insensitive and
+// also accepts an os_distro that has the alias as a prefix (e.g. "rhel" matches
+// "rhel-9"), since os_distro values vary between OpenStack deployments.
+var openstackOSDistroAliases = map[providerconfig.OperatingSystem][]string{
+	providerconfig.OperatingSystemUbuntu:       {"ubuntu"},
+	providerconfig.OperatingSystemRHEL:         {"rhel", "redhat"},
+	providerconfig.OperatingSystemRockyLinux:   {"rocky", "rockylinux"},
+	providerconfig.OperatingSystemFlatcar:      {"flatcar"},
+	providerconfig.OperatingSystemAmazonLinux2: {"amzn", "amazonlinux", "amazon"},
+}
+
+func filterOpenstackImagesByOS(images []apiv1.OpenstackImage, os providerconfig.OperatingSystem) []apiv1.OpenstackImage {
+	aliases, ok := openstackOSDistroAliases[os]
+	if !ok {
+		aliases = []string{strings.ToLower(string(os))}
+	}
+
+	filtered := make([]apiv1.OpenstackImage, 0, len(images))
+	for _, img := range images {
+		distro := strings.ToLower(strings.TrimSpace(img.OSDistro))
+		if distro == "" {
+			continue
+		}
+		for _, alias := range aliases {
+			if strings.HasPrefix(distro, alias) {
+				filtered = append(filtered, img)
+				break
+			}
+		}
+	}
+	return filtered
 }
 
 func GetOpenstackSubnets(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, networkID, datacenterName string, caBundle *x509.CertPool) ([]apiv1.OpenstackSubnet, error) {
