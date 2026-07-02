@@ -926,6 +926,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectOpenstackServerGroups())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/images").
+		Handler(r.listProjectOpenstackImages())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/openstack/membersubnets").
 		Handler(r.listProjectOpenstackMemberSubnets())
 
@@ -1026,6 +1030,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones").
 		Handler(r.listOpenstackAvailabilityZonesNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/openstack/images").
+		Handler(r.listOpenstackImagesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/providers/openstack/subnetpools").
@@ -4547,6 +4555,31 @@ func (r Routing) listOpenstackAvailabilityZonesNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/images openstack listOpenstackImagesNoCredentials
+//
+// Lists images from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackImage
+func (r Routing) listOpenstackImagesNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.OpenstackImageWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter,
+			r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/providers/openstack/subnetpools openstack listOpenstackSubnetPools
 //
 // Lists subnet pools from openstack
@@ -7438,6 +7471,28 @@ func (r Routing) listProjectOpenstackServerGroups() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/images openstack listProjectOpenstackImages
+//
+// Lists images from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackImage
+func (r Routing) listProjectOpenstackImages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackImageEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
 		provider.DecodeOpenstackProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

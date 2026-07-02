@@ -64,6 +64,11 @@ export class OpenstackAvailabilityZone {
   name: string;
 }
 
+export class OpenstackImage {
+  id: string;
+  name: string;
+}
+
 export class OpenstackSubnetPool {
   id: string;
   name: string;

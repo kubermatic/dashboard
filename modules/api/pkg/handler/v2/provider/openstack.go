@@ -345,6 +345,39 @@ func OpenstackAvailabilityZoneWithClusterCredentialsEndpoint(projectProvider pro
 	}
 }
 
+func OpenstackImageWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(openstackNoCredentialsReq)
+		return providercommon.OpenstackImageWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider,
+			privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, caBundle)
+	}
+}
+
+func OpenstackImageEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		datacenterName := req.DatacenterName
+		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+		if err != nil {
+			return nil, fmt.Errorf("error getting dc: %w", err)
+		}
+
+		return providercommon.GetOpenstackImages(datacenter, cred, caBundle)
+	}
+}
+
 func OpenstackSubnetPoolEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
 	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {

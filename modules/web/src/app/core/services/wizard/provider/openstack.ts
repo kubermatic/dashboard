@@ -17,6 +17,7 @@ import {Injectable} from '@angular/core';
 import {
   OpenstackAvailabilityZone,
   OpenstackFlavor,
+  OpenstackImage,
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackServerGroup,
@@ -36,6 +37,7 @@ export class Openstack extends Provider {
   readonly availabilityZonesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/availabilityzones`;
   readonly serverGroupsURL = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/servergroups`;
   readonly floatingNetworksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/floatingnetworks`;
+  readonly imagesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/images`;
   private _usingApplicationCredentials = false;
 
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
@@ -323,6 +325,35 @@ export class Openstack extends Provider {
     }
 
     return this._http.get<OpenstackAvailabilityZone[]>(this.availabilityZonesUrl, {
+      headers: this._headers,
+    });
+  }
+
+  images(onLoadingCb: () => void = null): Observable<OpenstackImage[]> {
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
+
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<OpenstackImage[]>(this.imagesUrl, {
       headers: this._headers,
     });
   }

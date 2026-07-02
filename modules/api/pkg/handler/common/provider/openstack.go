@@ -227,6 +227,38 @@ func GetOpenstackAvailabilityZones(ctx context.Context, datacenter *kubermaticv1
 	return apiAvailabilityZones, nil
 }
 
+func OpenstackImageWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool) (interface{}, error) {
+	cluster, err := getClusterForOpenstack(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	datacenterName := cluster.Spec.Cloud.DatacenterName
+
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	creds, err := getCredentials(ctx, cluster.Spec.Cloud)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetOpenstackImages(datacenter, creds, caBundle)
+}
+
+func GetOpenstackImages(datacenter *kubermaticv1.Datacenter, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]apiv1.OpenstackImage, error) {
+	return openstack.GetImages(datacenter.Spec.Openstack.AuthURL, datacenter.Spec.Openstack.Region, credentials, caBundle)
+}
+
 func GetOpenstackSubnets(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, networkID, datacenterName string, caBundle *x509.CertPool) ([]apiv1.OpenstackSubnet, error) {
 	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
 	if err != nil {

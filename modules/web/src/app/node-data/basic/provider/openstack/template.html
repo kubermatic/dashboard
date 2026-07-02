@@ -62,15 +62,18 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>Image</mat-label>
-    <input [formControlName]="Controls.Image"
-           matInput
-           type="text"
-           autocomplete="off"
-           required
-           kmValueChangedIndicator>
-  </mat-form-field>
+  <km-combobox #imageCombobox
+               [required]="true"
+               [grouped]="false"
+               [selected]="selectedImage"
+               [options]="images"
+               [formControlName]="Controls.Image"
+               (changed)="onImageChange($event)"
+               [label]="imageLabel"
+               inputLabel="Select or type image name..."
+               filterBy="name">
+    <div *option="let image">{{image.name}}</div>
+  </km-combobox>
 
   <km-combobox #serverGroupCombobox
                fxFlex

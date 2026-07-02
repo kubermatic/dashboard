@@ -35,7 +35,7 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {Datacenter, DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
-import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
+import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackImage, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -69,6 +69,12 @@ enum ServerGroupState {
   Empty = 'No Server Groups Available',
 }
 
+enum ImageState {
+  Ready = 'Image',
+  Loading = 'Loading...',
+  Empty = 'No Images Available',
+}
+
 @Component({
   selector: 'km-openstack-basic-node-data',
   styleUrls: ['./style.scss'],
@@ -100,6 +106,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   @ViewChild('serverGroupCombobox') private readonly _serverGroupCombobox: FilteredComboboxComponent;
 
+  @ViewChild('imageCombobox') private readonly _imageCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
@@ -111,6 +119,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   selectedServerGroup = '';
   selectedServerGroupID = '';
   serverGroupLabel = ServerGroupState.Empty;
+  images: OpenstackImage[] = [];
+  selectedImage = '';
+  imageLabel = ImageState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   isInWizardMode: boolean;
 
@@ -136,6 +147,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     return this._nodeDataService.openstack
       .serverGroups(this._clearServerGroup.bind(this), this._onServerGroupsLoading.bind(this))
       .pipe(map((serverGroups: OpenstackServerGroup[]) => serverGroups.sort((a, b) => (a.name < b.name ? -1 : 1))));
+  }
+
+  private get _imagesObservable(): Observable<OpenstackImage[]> {
+    return this._nodeDataService.openstack
+      .images(this._clearImage.bind(this), this._onImageLoading.bind(this))
+      .pipe(map((images: OpenstackImage[]) => images.sort((a, b) => (a.name < b.name ? -1 : 1))));
   }
 
   constructor(
@@ -224,6 +241,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._availabilityZonesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setAvailabilityZone.bind(this));
+    this._imagesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setImages.bind(this));
 
     this.form
       .get(Controls.Flavor)
@@ -275,6 +293,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
+  onImageChange(image: string): void {
+    this._nodeDataService.nodeData.spec.cloud.openstack.image = image;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.openstack) {
       const instanceReadyCheckPeriod = duration(
@@ -287,6 +310,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       const diskSize = this._nodeDataService.nodeData.spec.cloud.openstack.diskSize;
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
+      this.selectedImage = this._nodeDataService.nodeData.spec.cloud.openstack.image || '';
       this.form.get(Controls.CustomDiskSize).setValue(diskSize);
       this.form.get(Controls.UseCustomDisk).setValue(!!diskSize);
       this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
@@ -383,17 +407,50 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _setDefaultImage(os: OperatingSystem): void {
-    let defaultImage = getDefaultForOS(os, this._images);
+    const dcDefaultImage = getDefaultForOS(os, this._images);
 
     if (_.isEmpty(this._defaultImage)) {
-      this._defaultImage = defaultImage;
+      this._defaultImage = dcDefaultImage;
     }
 
-    if (os === this._defaultOS) {
-      defaultImage = this._defaultImage;
+    const imageToSelect = os === this._defaultOS ? this._defaultImage : dcDefaultImage;
+
+    if (!_.isEmpty(this.images)) {
+      const found = this.images.find(img => img.name === imageToSelect);
+      if (!found && !_.isEmpty(imageToSelect)) {
+        this.images = [...this.images, {id: '', name: imageToSelect}];
+      }
     }
 
-    this.form.get(Controls.Image).setValue(defaultImage);
+    this.selectedImage = imageToSelect;
+    this.form.get(Controls.Image).setValue(imageToSelect);
+    this._cdr.detectChanges();
+  }
+
+  private _clearImage(): void {
+    this.images = [];
+    this.selectedImage = '';
+    this.imageLabel = ImageState.Empty;
+    this._imageCombobox?.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onImageLoading(): void {
+    this.imageLabel = ImageState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setImages(images: OpenstackImage[]): void {
+    const currentImage = this.form.get(Controls.Image).value || this._defaultImage;
+
+    if (!_.isEmpty(currentImage) && !images.find(img => img.name === currentImage)) {
+      this.images = [...images, {id: '', name: currentImage}];
+    } else {
+      this.images = images;
+    }
+
+    this.selectedImage = currentImage;
+    this.imageLabel = !_.isEmpty(this.images) ? ImageState.Ready : ImageState.Empty;
     this._cdr.detectChanges();
   }
 

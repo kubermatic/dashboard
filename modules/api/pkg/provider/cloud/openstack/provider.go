@@ -30,6 +30,7 @@ import (
 	ossservergroups "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/servergroups"
 	osflavors "github.com/gophercloud/gophercloud/openstack/compute/v2/flavors"
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
+	osimages "github.com/gophercloud/gophercloud/openstack/imageservice/v2/images"
 	osloadbalancer "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/loadbalancers"
 	oslbpools "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/pools"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
@@ -38,6 +39,7 @@ import (
 	osnetworks "github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
 	ossubnets "github.com/gophercloud/gophercloud/openstack/networking/v2/subnets"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
@@ -183,6 +185,46 @@ func GetAvailabilityZones(ctx context.Context, authURL, region string, credentia
 	}
 
 	return availabilityZones, nil
+}
+
+// GetImages lists available images from the OpenStack image service (Glance).
+func GetImages(authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]apiv1.OpenstackImage, error) {
+	authClient, err := getAuthClient(authURL, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get auth client: %w", err)
+	}
+
+	imageClient, err := goopenstack.NewImageServiceV2(authClient, gophercloud.EndpointOpts{Region: region})
+	if err != nil {
+		if isEndpointNotFoundErr(err) {
+			imageClient, err = goopenstack.NewImageServiceV2(authClient, gophercloud.EndpointOpts{})
+			if err != nil {
+				return nil, fmt.Errorf("couldn't get image client: %w", err)
+			}
+		} else {
+			return nil, fmt.Errorf("couldn't get image client: %w", err)
+		}
+	}
+
+	allPages, err := osimages.List(imageClient, osimages.ListOpts{Status: osimages.ImageStatusActive}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list images: %w", err)
+	}
+
+	allImages, err := osimages.ExtractImages(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract images: %w", err)
+	}
+
+	result := make([]apiv1.OpenstackImage, 0, len(allImages))
+	for _, img := range allImages {
+		result = append(result, apiv1.OpenstackImage{
+			ID:   img.ID,
+			Name: img.Name,
+		})
+	}
+
+	return result, nil
 }
 
 // GetSubnetPools lists all available subnet pools.
