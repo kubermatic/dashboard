@@ -2,15 +2,12 @@
 # To change team associations, update the GitHub teams via https://github.com/kubermatic/access.
 
 aliases:
-  sig-api:
+  dev-kkp:
+    - adoi
     - ahmadhamzh
-    - ahmedwaleedmalik
     - buraksekili
     - khizerrehan
-    - simontheleg
-    - waseem826
-  sig-ui:
-    - ahmadhamzh
-    - ahmedwaleedmalik
-    - khizerrehan
-    - waseem826
+    - kron4eg
+    - moadqassem
+    - mohamed-rafraf
+    - rajasahil
