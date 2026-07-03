@@ -64,6 +64,9 @@ type ListOpenstackAvailabilityZonesNoCredentialsV2Params struct {
 	// ClusterID.
 	ClusterID string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -131,6 +134,17 @@ func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Params) SetClusterID(clust
 	o.ClusterID = clusterID
 }
 
+// WithOS adds the os to the list openstack availability zones no credentials v2 params
+func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Params) WithOS(os *string) *ListOpenstackAvailabilityZonesNoCredentialsV2Params {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list openstack availability zones no credentials v2 params
+func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Params) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list openstack availability zones no credentials v2 params
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Params) WithProjectID(projectID string) *ListOpenstackAvailabilityZonesNoCredentialsV2Params {
 	o.SetProjectID(projectID)
@@ -153,6 +167,23 @@ func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Params) WriteToRequest(r r
 	// path param cluster_id
 	if err := r.SetPathParam("cluster_id", o.ClusterID); err != nil {
 		return err
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
+		}
 	}
 
 	// path param project_id

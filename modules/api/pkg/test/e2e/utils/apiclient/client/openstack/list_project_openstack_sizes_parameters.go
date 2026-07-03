@@ -98,6 +98,9 @@ type ListProjectOpenstackSizesParams struct {
 	// Username.
 	Username *string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -286,6 +289,17 @@ func (o *ListProjectOpenstackSizesParams) SetUsername(username *string) {
 	o.Username = username
 }
 
+// WithOS adds the os to the list project openstack sizes params
+func (o *ListProjectOpenstackSizesParams) WithOS(os *string) *ListProjectOpenstackSizesParams {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list project openstack sizes params
+func (o *ListProjectOpenstackSizesParams) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list project openstack sizes params
 func (o *ListProjectOpenstackSizesParams) WithProjectID(projectID string) *ListProjectOpenstackSizesParams {
 	o.SetProjectID(projectID)
@@ -398,6 +412,23 @@ func (o *ListProjectOpenstackSizesParams) WriteToRequest(r runtime.ClientRequest
 		// header param Username
 		if err := r.SetHeaderParam("Username", *o.Username); err != nil {
 			return err
+		}
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
 		}
 	}
 

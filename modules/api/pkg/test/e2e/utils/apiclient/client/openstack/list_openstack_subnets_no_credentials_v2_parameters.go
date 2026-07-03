@@ -67,6 +67,9 @@ type ListOpenstackSubnetsNoCredentialsV2Params struct {
 	// NetworkID.
 	NetworkID *string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -145,6 +148,17 @@ func (o *ListOpenstackSubnetsNoCredentialsV2Params) SetNetworkID(networkID *stri
 	o.NetworkID = networkID
 }
 
+// WithOS adds the os to the list openstack subnets no credentials v2 params
+func (o *ListOpenstackSubnetsNoCredentialsV2Params) WithOS(os *string) *ListOpenstackSubnetsNoCredentialsV2Params {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list openstack subnets no credentials v2 params
+func (o *ListOpenstackSubnetsNoCredentialsV2Params) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list openstack subnets no credentials v2 params
 func (o *ListOpenstackSubnetsNoCredentialsV2Params) WithProjectID(projectID string) *ListOpenstackSubnetsNoCredentialsV2Params {
 	o.SetProjectID(projectID)
@@ -181,6 +195,23 @@ func (o *ListOpenstackSubnetsNoCredentialsV2Params) WriteToRequest(r runtime.Cli
 		if qNetworkID != "" {
 
 			if err := r.SetQueryParam("network_id", qNetworkID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
 				return err
 			}
 		}

@@ -454,7 +454,7 @@ func OpenstackMemberSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProv
 }
 
 // openstackNoCredentialsReq represent a request for openstack
-// swagger:parameters listOpenstackSizesNoCredentialsV2 listOpenstackTenantsNoCredentialsV2 listOpenstackNetworksNoCredentialsV2 listOpenstackSecurityGroupsNoCredentialsV2 listOpenstackAvailabilityZonesNoCredentialsV2 listOpenstackServerGroupsNoCredentials
+// swagger:parameters listOpenstackSizesNoCredentialsV2 listOpenstackTenantsNoCredentialsV2 listOpenstackNetworksNoCredentialsV2 listOpenstackSecurityGroupsNoCredentialsV2 listOpenstackAvailabilityZonesNoCredentialsV2 listOpenstackServerGroupsNoCredentials listOpenstackImagesNoCredentials
 type openstackNoCredentialsReq struct {
 	cluster.GetClusterReq
 	// in: query
@@ -607,7 +607,7 @@ func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
 }
 
 // OpenstackProjectReq represent a request for Openstack data within the context of a KKP project.
-// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listProjectOpenstackServerGroups
+// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listProjectOpenstackServerGroups listProjectOpenstackImages
 type OpenstackProjectReq struct {
 	OpenstackReq
 	common.ProjectReq
