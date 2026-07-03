@@ -16,7 +16,12 @@ import {NodeDataMode} from '@app/node-data/config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
-import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackImage, OpenstackServerGroup} from '@shared/entity/provider/openstack';
+import {
+  OpenstackAvailabilityZone,
+  OpenstackFlavor,
+  OpenstackImage,
+  OpenstackServerGroup,
+} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
@@ -160,7 +165,8 @@ export class NodeDataOpenstackProvider {
         return merge(of(this._clusterSpecService.cluster), this._clusterSpecService.clusterChanges)
           .pipe(
             filter(
-              cluster => !!cluster?.spec?.cloud?.openstack && this._clusterSpecService.provider === NodeProvider.OPENSTACK
+              cluster =>
+                !!cluster?.spec?.cloud?.openstack && this._clusterSpecService.provider === NodeProvider.OPENSTACK
             )
           )
           .pipe(debounceTime(this._debounceTime))

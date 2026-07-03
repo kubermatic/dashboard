@@ -35,7 +35,12 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {Datacenter, DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
-import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackImage, OpenstackServerGroup} from '@shared/entity/provider/openstack';
+import {
+  OpenstackAvailabilityZone,
+  OpenstackFlavor,
+  OpenstackImage,
+  OpenstackServerGroup,
+} from '@shared/entity/provider/openstack';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -258,6 +263,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     // datacenter preset when no image matches the os_distro.
     combineLatest([imageDiscoveryEnabled$, operatingSystem$])
       .pipe(filter(([enabled]) => enabled))
+      .pipe(tap(() => this._onImageLoading()))
       .pipe(switchMap(([, os]) => this._imagesObservable(os)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setImages.bind(this));
@@ -484,8 +490,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _onImageLoading(): void {
-    // Disable the dropdown while images are being fetched so a stale list cannot
-    // be selected before the response for the new OS arrives.
+    this.images = [];
     this.imageLabel = ImageState.Loading;
     this.form.get(Controls.Image).disable({emitEvent: false});
     this._cdr.detectChanges();
