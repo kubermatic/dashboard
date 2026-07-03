@@ -339,3 +339,104 @@ func adminUserInfoGetter(_ context.Context, _ string) (*provider.UserInfo, error
 		Groups:  []string{"admins"},
 	}, nil
 }
+
+func TestValidateAuditWebhookBackendAllowed(t *testing.T) {
+	const dc = "disabled-dc"
+
+	webhookBackend := func(name, namespace, backoff string) *kubermaticv1.AuditWebhookBackendSettings {
+		return &kubermaticv1.AuditWebhookBackendSettings{
+			AuditWebhookConfig:         &corev1.SecretReference{Name: name, Namespace: namespace},
+			AuditWebhookInitialBackoff: backoff,
+		}
+	}
+	auditLogging := func(wb *kubermaticv1.AuditWebhookBackendSettings) *kubermaticv1.AuditLoggingSettings {
+		return &kubermaticv1.AuditLoggingSettings{Enabled: true, WebhookBackend: wb}
+	}
+
+	testCases := []struct {
+		name        string
+		disabledDCs []string
+		dcName      string
+		oldAudit    *kubermaticv1.AuditLoggingSettings
+		newAudit    *kubermaticv1.AuditLoggingSettings
+		wantErr     bool
+	}{
+		{
+			name:        "create: no audit logging at all is allowed",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			newAudit:    nil,
+		},
+		{
+			name:        "create: audit logging without webhook backend is allowed",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			newAudit:    auditLogging(nil),
+		},
+		{
+			name:        "create: webhook backend in a non-disabled datacenter is allowed",
+			disabledDCs: []string{dc},
+			dcName:      "some-other-dc",
+			newAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+		},
+		{
+			name:        "create: webhook backend in a disabled datacenter is rejected",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			newAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			wantErr:     true,
+		},
+		{
+			name:        "create: empty disabled list allows a webhook backend",
+			disabledDCs: nil,
+			dcName:      dc,
+			newAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+		},
+		{
+			name:        "patch: unchanged webhook backend on a disabled datacenter is allowed (grandfathered)",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			oldAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			newAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+		},
+		{
+			name:        "patch: changed webhook backend on a disabled datacenter is rejected",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			oldAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			newAudit:    auditLogging(webhookBackend("other-secret", "ns", "10s")),
+			wantErr:     true,
+		},
+		{
+			name:        "patch: adding a webhook backend on a disabled datacenter is rejected",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			oldAudit:    auditLogging(nil),
+			newAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			wantErr:     true,
+		},
+		{
+			name:        "patch: removing a webhook backend on a disabled datacenter is allowed",
+			disabledDCs: []string{dc},
+			dcName:      dc,
+			oldAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			newAudit:    auditLogging(nil),
+		},
+		{
+			name:        "patch: changed webhook backend on a non-disabled datacenter is allowed",
+			disabledDCs: []string{dc},
+			dcName:      "some-other-dc",
+			oldAudit:    auditLogging(webhookBackend("secret", "ns", "10s")),
+			newAudit:    auditLogging(webhookBackend("other-secret", "ns", "20s")),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateAuditWebhookBackendAllowed(tc.disabledDCs, tc.dcName, tc.oldAudit, tc.newAudit)
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("validateAuditWebhookBackendAllowed() error = %v, wantErr = %v", err, tc.wantErr)
+			}
+		})
+	}
+}
