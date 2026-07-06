@@ -432,6 +432,69 @@ func (r *TestClient) ListCredentials(providerName, datacenter string) ([]string,
 	return names, nil
 }
 
+// CreateAWSCluster creates cluster for AWS provider. Credentials are injected
+// via the named preset, so the cloud spec is left empty.
+func (r *TestClient) CreateAWSCluster(projectID, dc, name, credential, version, location string, replicas int32) (*apiv1.Cluster, error) {
+	_, err := semverlib.NewVersion(version)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse version %s: %w", version, err)
+	}
+
+	clusterSpec := &models.CreateClusterSpec{}
+	clusterSpec.Cluster = &models.Cluster{
+		Type:       "kubernetes",
+		Name:       name,
+		Credential: credential,
+		Spec: &models.ClusterSpec{
+			Cloud: &models.CloudSpec{
+				DatacenterName: location,
+				Aws:            &models.AWSCloudSpec{},
+			},
+			Version: models.Semver(version),
+		},
+	}
+
+	if replicas > 0 {
+		instanceType := "t3.small"
+		volumeSize := int32(25)
+		volumeType := "gp2"
+
+		clusterSpec.NodeDeployment = &models.NodeDeployment{
+			Spec: &models.NodeDeploymentSpec{
+				Replicas: &replicas,
+				Template: &models.NodeSpec{
+					Cloud: &models.NodeCloudSpec{
+						Aws: &models.AWSNodeSpec{
+							InstanceType: &instanceType,
+							VolumeSize:   &volumeSize,
+							VolumeType:   &volumeType,
+						},
+					},
+					OperatingSystem: &models.OperatingSystemSpec{
+						Ubuntu: &models.UbuntuSpec{
+							DistUpgradeOnBoot: false,
+						},
+					},
+				},
+			},
+		}
+	}
+
+	r.test.Logf("Creating AWS cluster %q (%s, %d nodes)...", name, version, replicas)
+
+	params := &project.CreateClusterParams{ProjectID: projectID, DC: dc, Body: clusterSpec}
+	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
+
+	clusterResponse, err := r.client.Project.CreateCluster(params, r.bearerToken)
+	if err != nil {
+		return nil, err
+	}
+
+	r.test.Log("Cluster created successfully.")
+
+	return convertCluster(clusterResponse.Payload)
+}
+
 // CreateKubevirtCluster creates cluster for Kubevirt provider.
 func (r *TestClient) CreateKubevirtCluster(projectID, dc, name, credential, version, location string, replicas int32) (*apiv1.Cluster, error) {
 	_, err := semverlib.NewVersion(version)
@@ -549,69 +612,6 @@ func (r *TestClient) CreateHetznerCluster(projectID, dc, name, credential, versi
 	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
 
 	r.test.Logf("Creating Hetzner cluster %q (%s, %d nodes)...", name, version, replicas)
-
-	clusterResponse, err := r.client.Project.CreateCluster(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	r.test.Log("Cluster created successfully.")
-
-	return convertCluster(clusterResponse.Payload)
-}
-
-// CreateAWSCluster creates cluster for AWS provider. Credentials are injected
-// via the named preset, so the cloud spec is left empty.
-func (r *TestClient) CreateAWSCluster(projectID, dc, name, credential, version, location string, replicas int32) (*apiv1.Cluster, error) {
-	_, err := semverlib.NewVersion(version)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse version %s: %w", version, err)
-	}
-
-	clusterSpec := &models.CreateClusterSpec{}
-	clusterSpec.Cluster = &models.Cluster{
-		Type:       "kubernetes",
-		Name:       name,
-		Credential: credential,
-		Spec: &models.ClusterSpec{
-			Cloud: &models.CloudSpec{
-				DatacenterName: location,
-				Aws:            &models.AWSCloudSpec{},
-			},
-			Version: models.Semver(version),
-		},
-	}
-
-	if replicas > 0 {
-		instanceType := "t3.small"
-		volumeSize := int32(25)
-		volumeType := "gp2"
-
-		clusterSpec.NodeDeployment = &models.NodeDeployment{
-			Spec: &models.NodeDeploymentSpec{
-				Replicas: &replicas,
-				Template: &models.NodeSpec{
-					Cloud: &models.NodeCloudSpec{
-						Aws: &models.AWSNodeSpec{
-							InstanceType: &instanceType,
-							VolumeSize:   &volumeSize,
-							VolumeType:   &volumeType,
-						},
-					},
-					OperatingSystem: &models.OperatingSystemSpec{
-						Ubuntu: &models.UbuntuSpec{
-							DistUpgradeOnBoot: false,
-						},
-					},
-				},
-			},
-		}
-	}
-
-	params := &project.CreateClusterParams{ProjectID: projectID, DC: dc, Body: clusterSpec}
-	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
-
-	r.test.Logf("Creating AWS cluster %q (%s, %d nodes)...", name, version, replicas)
 
 	clusterResponse, err := r.client.Project.CreateCluster(params, r.bearerToken)
 	if err != nil {
