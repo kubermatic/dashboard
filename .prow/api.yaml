@@ -22,6 +22,7 @@ presubmits:
       preset-hetzner: "true"
       preset-openstack: "true"
       preset-azure: "true"
+      preset-aws-e2e-kkp: "true"
       preset-kubeconfig-ci: "true"
       preset-docker-mirror: "true"
       preset-docker-pull: "true"
