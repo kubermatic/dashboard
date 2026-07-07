@@ -310,6 +310,16 @@ limitations under the License.
             <km-property-boolean label="Encryption at Rest"
                                  [value]="cluster.spec.encryptionConfiguration?.enabled" />
             }
+
+            @if (kubeLBAssignPublicIPWarning) {
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px"
+                 class="kubelb-public-ip-warning">
+              <i class="km-icon-warning"></i>
+              <span>Please ensure "Assign Public IP" is selected in the node settings for {{provider | uppercase}} when KubeLB is enabled.</span>
+            </div>
+            }
           </div>
           <div fxLayout="row wrap">
             @if (cluster.spec.auditLogging?.webhookBackend; as webhookBackend) {

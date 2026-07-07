@@ -288,7 +288,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         if (this.isKubeLBEnforced) {
           this.form.get(Controls.KubeLB).setValue(true);
         }
-
         this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
         this._provider = datacenter.spec.provider;
         this.isAllowedIPRangeSupported = (NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS as string[]).includes(this._provider);
@@ -512,11 +511,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
-    return !!(
-      datacenter.spec.kubelb?.enforced ||
-      datacenter.spec.kubelb?.enabled ||
-      seedSettings?.kubelb?.enableForAllDatacenters
-    );
+    // If enabled is explicitly false at datacenter level, hide regardless of enforced
+    if (datacenter.spec.kubelb?.enabled === false) {
+      return false;
+    }
+    // If enforced or enabled at datacenter level, show
+    if (datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled) {
+      return true;
+    }
+    // Fall back to seed-level setting
+    return !!seedSettings?.kubelb?.enableForAllDatacenters;
   }
 
   private _getCBSL(projectID: string): void {
@@ -566,8 +570,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         disableCsiDriver: this.form.get(Controls.DisableCSIDriver).value,
         kubelb: {
           enabled: this.form.get(Controls.KubeLB).value,
-          useLoadBalancerClass: this.form.get(Controls.KubeLBUseLoadBalancerClass).value,
-          enableGatewayAPI: this.form.get(Controls.KubeLBEnableGatewayAPI).value,
+          useLoadBalancerClass: this.form.get(Controls.KubeLB).value
+            ? this.form.get(Controls.KubeLBUseLoadBalancerClass).value
+            : false,
+          enableGatewayAPI: this.form.get(Controls.KubeLB).value
+            ? this.form.get(Controls.KubeLBEnableGatewayAPI).value
+            : false,
         },
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,

@@ -128,3 +128,13 @@ $steps: 6;
   max-width: 500px;
   padding: 24px 0;
 }
+
+.kubelb-public-ip-warning {
+  font-size: variables.$font-size-body;
+  margin-top: 8px;
+  padding: 8px 12px;
+
+  .km-icon-warning {
+    flex-shrink: 0;
+  }
+}
