@@ -346,7 +346,7 @@ func OpenstackAvailabilityZoneWithClusterCredentialsEndpoint(projectProvider pro
 	}
 }
 
-func OpenstackImageWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider,
+func OpenstackImagesNoCredentialsEndpoint(projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter,
 	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {

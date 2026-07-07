@@ -163,12 +163,7 @@ export class NodeDataOpenstackProvider {
         // with no replay) so re-fetching on OS change does not wait for the next
         // credential change, then keep reacting to later credential changes.
         return merge(of(this._clusterSpecService.cluster), this._clusterSpecService.clusterChanges)
-          .pipe(
-            filter(
-              cluster =>
-                !!cluster?.spec?.cloud?.openstack && this._clusterSpecService.provider === NodeProvider.OPENSTACK
-            )
-          )
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
           .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(_ =>

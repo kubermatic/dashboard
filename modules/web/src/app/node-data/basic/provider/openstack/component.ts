@@ -128,6 +128,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   images: OpenstackImage[] = [];
   selectedImage = '';
   imageLabel = ImageState.Empty;
+  isImageDisabled = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   isInWizardMode: boolean;
 
@@ -465,19 +466,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       // Discovery off: single-value, non-editable dropdown with the preset image.
       this.images = _.isEmpty(imageToSelect) ? [] : [{id: '', name: imageToSelect}];
       this.imageLabel = _.isEmpty(this.images) ? ImageState.Empty : ImageState.Ready;
-      this._setImageControlEnabled(false);
+      this.isImageDisabled = true;
     }
 
     this._cdr.detectChanges();
-  }
-
-  private _setImageControlEnabled(enabled: boolean): void {
-    const control = this.form.get(Controls.Image);
-    if (enabled && control.disabled) {
-      control.enable({emitEvent: false});
-    } else if (!enabled && control.enabled) {
-      control.disable({emitEvent: false});
-    }
   }
 
   private _clearImage(): void {
@@ -485,14 +477,14 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this.selectedImage = '';
     this.imageLabel = ImageState.Empty;
     this._imageCombobox?.reset();
-    this.form.get(Controls.Image).enable({emitEvent: false});
+    this.isImageDisabled = false;
     this._cdr.detectChanges();
   }
 
   private _onImageLoading(): void {
     this.images = [];
     this.imageLabel = ImageState.Loading;
-    this.form.get(Controls.Image).disable({emitEvent: false});
+    this.isImageDisabled = true;
     this._cdr.detectChanges();
   }
 
@@ -508,7 +500,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this.selectedImage = currentImage;
     this.imageLabel = !_.isEmpty(this.images) ? ImageState.Ready : ImageState.Empty;
     // Only allow interaction when there is more than one option to choose from.
-    this._setImageControlEnabled(this.images.length > 1);
+    this.isImageDisabled = this.images.length <= 1;
     this._cdr.detectChanges();
   }
 

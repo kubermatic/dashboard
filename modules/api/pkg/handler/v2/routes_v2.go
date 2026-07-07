@@ -4572,7 +4572,7 @@ func (r Routing) listOpenstackImagesNoCredentials() http.Handler {
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.OpenstackImageWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter,
+		)(provider.OpenstackImagesNoCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter,
 			r.userInfoGetter, r.caBundle)),
 		provider.DecodeOpenstackNoCredentialsReq,
 		handler.EncodeJSON,
