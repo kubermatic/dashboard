@@ -66,5 +66,12 @@ exceptions:
   - github.com/letsencrypt/boulder/goodkey # LetsEncrypt Boulder packages (MPL-2.0)
   - github.com/r3labs/diff # MPL-2.0
   - github.com/rcrowley/go-metrics # BSD-2-Clause-Views licensed packages
+  - github.com/segmentio/asm/base64 # MIT-0 (https://github.com/segmentio/asm/blob/main/LICENSE)
+  - github.com/segmentio/asm/cpu # MIT-0
+  - github.com/segmentio/asm/cpu/arm # MIT-0
+  - github.com/segmentio/asm/cpu/arm64 # MIT-0
+  - github.com/segmentio/asm/cpu/cpuid # MIT-0
+  - github.com/segmentio/asm/cpu/x86 # MIT-0
+  - github.com/segmentio/asm/internal/unsafebytes # MIT-0
   - github.com/alibabacloud-go/cr-20160607/client # Alibaba Cloud CR client (Apache-2.0)
   - github.com/letsencrypt/boulder/core/proto # MPL-2.0 (https://github.com/letsencrypt/boulder/blob/main/LICENSE.txt)
