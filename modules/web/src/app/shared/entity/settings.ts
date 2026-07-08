@@ -146,6 +146,7 @@ export interface VMwareCloudDirector {
 
 export interface OpenStack {
   enforceCustomDisk: boolean;
+  enableImageDiscovery?: boolean;
 }
 
 export interface DefaultProjectQuota {
@@ -272,6 +273,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   providerConfiguration: {
     openStack: {
       enforceCustomDisk: false,
+      enableImageDiscovery: false,
     },
     vmwareCloudDirector: {
       ipAllocationModes: ['DHCP', 'POOL'],

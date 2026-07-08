@@ -64,6 +64,9 @@ type ListOpenstackServerGroupsNoCredentialsParams struct {
 	// ClusterID.
 	ClusterID string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -131,6 +134,17 @@ func (o *ListOpenstackServerGroupsNoCredentialsParams) SetClusterID(clusterID st
 	o.ClusterID = clusterID
 }
 
+// WithOS adds the os to the list openstack server groups no credentials params
+func (o *ListOpenstackServerGroupsNoCredentialsParams) WithOS(os *string) *ListOpenstackServerGroupsNoCredentialsParams {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list openstack server groups no credentials params
+func (o *ListOpenstackServerGroupsNoCredentialsParams) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list openstack server groups no credentials params
 func (o *ListOpenstackServerGroupsNoCredentialsParams) WithProjectID(projectID string) *ListOpenstackServerGroupsNoCredentialsParams {
 	o.SetProjectID(projectID)
@@ -153,6 +167,23 @@ func (o *ListOpenstackServerGroupsNoCredentialsParams) WriteToRequest(r runtime.
 	// path param cluster_id
 	if err := r.SetPathParam("cluster_id", o.ClusterID); err != nil {
 		return err
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
+		}
 	}
 
 	// path param project_id

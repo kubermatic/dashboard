@@ -98,6 +98,9 @@ type ListProjectOpenstackAvailabilityZonesParams struct {
 	// Username.
 	Username *string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -286,6 +289,17 @@ func (o *ListProjectOpenstackAvailabilityZonesParams) SetUsername(username *stri
 	o.Username = username
 }
 
+// WithOS adds the os to the list project openstack availability zones params
+func (o *ListProjectOpenstackAvailabilityZonesParams) WithOS(os *string) *ListProjectOpenstackAvailabilityZonesParams {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list project openstack availability zones params
+func (o *ListProjectOpenstackAvailabilityZonesParams) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list project openstack availability zones params
 func (o *ListProjectOpenstackAvailabilityZonesParams) WithProjectID(projectID string) *ListProjectOpenstackAvailabilityZonesParams {
 	o.SetProjectID(projectID)
@@ -398,6 +412,23 @@ func (o *ListProjectOpenstackAvailabilityZonesParams) WriteToRequest(r runtime.C
 		// header param Username
 		if err := r.SetHeaderParam("Username", *o.Username); err != nil {
 			return err
+		}
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
 		}
 	}
 

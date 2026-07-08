@@ -98,6 +98,9 @@ type ListProjectOpenstackServerGroupsParams struct {
 	// Username.
 	Username *string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -286,6 +289,17 @@ func (o *ListProjectOpenstackServerGroupsParams) SetUsername(username *string) {
 	o.Username = username
 }
 
+// WithOS adds the os to the list project openstack server groups params
+func (o *ListProjectOpenstackServerGroupsParams) WithOS(os *string) *ListProjectOpenstackServerGroupsParams {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list project openstack server groups params
+func (o *ListProjectOpenstackServerGroupsParams) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list project openstack server groups params
 func (o *ListProjectOpenstackServerGroupsParams) WithProjectID(projectID string) *ListProjectOpenstackServerGroupsParams {
 	o.SetProjectID(projectID)
@@ -398,6 +412,23 @@ func (o *ListProjectOpenstackServerGroupsParams) WriteToRequest(r runtime.Client
 		// header param Username
 		if err := r.SetHeaderParam("Username", *o.Username); err != nil {
 			return err
+		}
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
 		}
 	}
 

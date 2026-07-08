@@ -13566,6 +13566,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13575,6 +13581,57 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackAvailabilityZone"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/images": {
+      "get": {
+        "description": "Lists images from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listOpenstackImagesNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackImage",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackImage"
               }
             }
           },
@@ -13611,6 +13668,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13656,6 +13719,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13701,6 +13770,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13746,6 +13821,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13791,6 +13872,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           },
           {
             "type": "string",
@@ -13842,6 +13929,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21444,6 +21537,12 @@
             "name": "project_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21453,6 +21552,110 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackAvailabilityZone"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/images": {
+      "get": {
+        "description": "Lists images from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackImages",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackImage",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackImage"
               }
             }
           },
@@ -21646,6 +21849,12 @@
             "name": "project_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21744,6 +21953,12 @@
             "name": "project_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21842,6 +22057,12 @@
             "name": "project_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21940,6 +22161,12 @@
             "name": "project_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "OS",
+            "name": "os",
+            "in": "query"
           }
         ],
         "responses": {
@@ -38683,6 +38910,11 @@
     "OpenStack": {
       "type": "object",
       "properties": {
+        "enableImageDiscovery": {
+          "description": "EnableImageDiscovery enables listing the OpenStack project's images (matched by their\nos_distro metadata) in the dashboard's image dropdown.",
+          "type": "boolean",
+          "x-go-name": "EnableImageDiscovery"
+        },
         "enforceCustomDisk": {
           "description": "EnforceCustomDisk will enforce the custom disk option for machines for the dashboard.",
           "type": "boolean",
@@ -38970,6 +39202,28 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "OpenstackImage": {
+      "type": "object",
+      "title": "OpenstackImage is the object representing an openstack image.",
+      "properties": {
+        "id": {
+          "description": "ID uniquely identifies the image",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "description": "Name is the human-readable name of the image",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "osDistro": {
+          "description": "OSDistro is the operating system distribution reported by the image's\nos_distro Glance metadata property (may be empty if the image is untagged).",
+          "type": "string",
+          "x-go-name": "OSDistro"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "OpenstackNetwork": {
       "type": "object",

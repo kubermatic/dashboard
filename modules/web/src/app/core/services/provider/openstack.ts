@@ -12,11 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
-import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
+import {
+  OpenstackAvailabilityZone,
+  OpenstackFlavor,
+  OpenstackImage,
+  OpenstackServerGroup,
+} from '@shared/entity/provider/openstack';
 
 @Injectable()
 export class OpenStackService {
@@ -37,5 +42,11 @@ export class OpenStackService {
   getAvailabilityZones(projectID: string, clusterID: string): Observable<OpenstackAvailabilityZone[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/openstack/availabilityzones`;
     return this._httpClient.get<OpenstackAvailabilityZone[]>(url);
+  }
+
+  getImages(projectID: string, clusterID: string, os?: string): Observable<OpenstackImage[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/openstack/images`;
+    const params = os ? new HttpParams().set('os', os) : undefined;
+    return this._httpClient.get<OpenstackImage[]>(url, {params});
   }
 }

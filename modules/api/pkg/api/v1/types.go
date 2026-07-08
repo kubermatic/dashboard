@@ -819,6 +819,18 @@ type OpenstackAvailabilityZone struct {
 	Name string `json:"name"`
 }
 
+// OpenstackImage is the object representing an openstack image.
+// swagger:model OpenstackImage
+type OpenstackImage struct {
+	// ID uniquely identifies the image
+	ID string `json:"id"`
+	// Name is the human-readable name of the image
+	Name string `json:"name"`
+	// OSDistro is the operating system distribution reported by the image's
+	// os_distro Glance metadata property (may be empty if the image is untagged).
+	OSDistro string `json:"osDistro,omitempty"`
+}
+
 // VSphereNetwork is the object representing a vsphere network.
 // swagger:model VSphereNetwork
 type VSphereNetwork struct {

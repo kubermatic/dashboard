@@ -17,6 +17,10 @@ import (
 // swagger:model OpenStack
 type OpenStack struct {
 
+	// EnableImageDiscovery enables listing the OpenStack project's images (matched by their
+	// os_distro metadata) in the dashboard's image dropdown.
+	EnableImageDiscovery bool `json:"enableImageDiscovery,omitempty"`
+
 	// EnforceCustomDisk will enforce the custom disk option for machines for the dashboard.
 	EnforceCustomDisk bool `json:"enforceCustomDisk,omitempty"`
 }

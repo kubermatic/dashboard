@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	ListOpenstackAvailabilityZonesNoCredentialsV2(params *ListOpenstackAvailabilityZonesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackAvailabilityZonesNoCredentialsV2OK, error)
 
+	ListOpenstackImagesNoCredentials(params *ListOpenstackImagesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackImagesNoCredentialsOK, error)
+
 	ListOpenstackNetworksNoCredentialsV2(params *ListOpenstackNetworksNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackNetworksNoCredentialsV2OK, error)
 
 	ListOpenstackSecurityGroupsNoCredentialsV2(params *ListOpenstackSecurityGroupsNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackSecurityGroupsNoCredentialsV2OK, error)
@@ -47,6 +49,8 @@ type ClientService interface {
 	ListOpenstackTenantsNoCredentialsV2(params *ListOpenstackTenantsNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackTenantsNoCredentialsV2OK, error)
 
 	ListProjectOpenstackAvailabilityZones(params *ListProjectOpenstackAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackAvailabilityZonesOK, error)
+
+	ListProjectOpenstackImages(params *ListProjectOpenstackImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackImagesOK, error)
 
 	ListProjectOpenstackMemberSubnets(params *ListProjectOpenstackMemberSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackMemberSubnetsOK, error)
 
@@ -102,6 +106,44 @@ func (a *Client) ListOpenstackAvailabilityZonesNoCredentialsV2(params *ListOpens
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListOpenstackAvailabilityZonesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListOpenstackImagesNoCredentials Lists images from openstack
+*/
+func (a *Client) ListOpenstackImagesNoCredentials(params *ListOpenstackImagesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOpenstackImagesNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListOpenstackImagesNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listOpenstackImagesNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListOpenstackImagesNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListOpenstackImagesNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListOpenstackImagesNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -444,6 +486,44 @@ func (a *Client) ListProjectOpenstackAvailabilityZones(params *ListProjectOpenst
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectOpenstackAvailabilityZonesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectOpenstackImages Lists images from openstack
+*/
+func (a *Client) ListProjectOpenstackImages(params *ListProjectOpenstackImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackImagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectOpenstackImagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectOpenstackImages",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/openstack/images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectOpenstackImagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectOpenstackImagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectOpenstackImagesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

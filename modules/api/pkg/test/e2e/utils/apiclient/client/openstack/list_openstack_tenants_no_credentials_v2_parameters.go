@@ -64,6 +64,9 @@ type ListOpenstackTenantsNoCredentialsV2Params struct {
 	// ClusterID.
 	ClusterID string
 
+	// Os.
+	OS *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -131,6 +134,17 @@ func (o *ListOpenstackTenantsNoCredentialsV2Params) SetClusterID(clusterID strin
 	o.ClusterID = clusterID
 }
 
+// WithOS adds the os to the list openstack tenants no credentials v2 params
+func (o *ListOpenstackTenantsNoCredentialsV2Params) WithOS(os *string) *ListOpenstackTenantsNoCredentialsV2Params {
+	o.SetOS(os)
+	return o
+}
+
+// SetOS adds the os to the list openstack tenants no credentials v2 params
+func (o *ListOpenstackTenantsNoCredentialsV2Params) SetOS(os *string) {
+	o.OS = os
+}
+
 // WithProjectID adds the projectID to the list openstack tenants no credentials v2 params
 func (o *ListOpenstackTenantsNoCredentialsV2Params) WithProjectID(projectID string) *ListOpenstackTenantsNoCredentialsV2Params {
 	o.SetProjectID(projectID)
@@ -153,6 +167,23 @@ func (o *ListOpenstackTenantsNoCredentialsV2Params) WriteToRequest(r runtime.Cli
 	// path param cluster_id
 	if err := r.SetPathParam("cluster_id", o.ClusterID); err != nil {
 		return err
+	}
+
+	if o.OS != nil {
+
+		// query param os
+		var qrOs string
+
+		if o.OS != nil {
+			qrOs = *o.OS
+		}
+		qOs := qrOs
+		if qOs != "" {
+
+			if err := r.SetQueryParam("os", qOs); err != nil {
+				return err
+			}
+		}
 	}
 
 	// path param project_id
