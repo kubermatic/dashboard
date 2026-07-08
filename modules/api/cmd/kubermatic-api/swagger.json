@@ -34897,6 +34897,14 @@
           "type": "boolean",
           "x-go-name": "DisableChangelogPopup"
         },
+        "disabledAuditWebhookBackendDCs": {
+          "description": "DisabledAuditWebhookBackendDCs is the list of datacenters for which the Audit Webhook Backend\noption is disabled in the dashboard.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "DisabledAuditWebhookBackendDCs"
+        },
         "displayAPIDocs": {
           "description": "DisplayAPIDocs controls whether a link to the KKP API documentation is shown in the footer.",
           "type": "boolean",

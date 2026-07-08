@@ -25,10 +25,12 @@ import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/v
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {BrandingService} from '@core/services/branding';
 import {EMPTY_EVENT_RATE_LIMIT_CONFIG} from '@app/shared/utils/admission-plugin';
+import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {VeleroChecksumAlgorithm} from '@shared/entity/backup';
+import {Datacenter} from '@shared/entity/datacenter';
 import {Member} from '@shared/entity/member';
 import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
 import {getEditionVersion, objectDiff} from '@shared/utils/common';
@@ -58,6 +60,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   isOIDCKubeCfgEndpointEnabled = true;
   isOpenIDAuthPluginEnabled = true;
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
+  datacenters: Datacenter[] = [];
   editionVersion: string = getEditionVersion();
   eventRateLimitConfig: GlobalEventRateLimitPluginConfiguration;
   eventRateLimitConfigSubject = new Subject<GlobalEventRateLimitPluginConfiguration>();
@@ -80,6 +83,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
     private readonly _featureGatesService: FeatureGateService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _branding: BrandingService,
     private readonly _userClusterConfigService: UserClusterConfigService
@@ -95,6 +99,9 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
+    this._datacenterService.datacenters
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datacenters => (this.datacenters = datacenters));
     this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
       this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint;
       this.isOpenIDAuthPluginEnabled = !!featureGates?.openIDAuthPlugin;
@@ -253,6 +260,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     this.onSettingsChange();
   }
 
+  onDisabledAuditWebhookBackendDCsSelect(val: string[]): void {
+    this.settings.disabledAuditWebhookBackendDCs = val;
+    this.onSettingsChange();
+  }
+
   onOperatingSystemChange(val: string[]): void {
     const allOperatingSystem = Object.values(OperatingSystem);
     if (!val.length) {
@@ -349,6 +361,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
     if (patch.annotations) {
       patch.annotations = this.settings.annotations;
+    }
+
+    // objectDiff recurses into arrays and can produce a partial/sparse array, so send the full list.
+    if (patch.disabledAuditWebhookBackendDCs) {
+      patch.disabledAuditWebhookBackendDCs = this.settings.disabledAuditWebhookBackendDCs;
     }
 
     return patch;
