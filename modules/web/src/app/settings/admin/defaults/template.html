@@ -284,7 +284,6 @@ limitations under the License.
             <mat-label>Datacenters</mat-label>
             <mat-select [value]="settings.disabledAuditWebhookBackendDCs || []"
                         (selectionChange)="onDisabledAuditWebhookBackendDCsSelect($event.value)"
-                        (openedChange)="onDisabledAuditWebhookBackendDCsPanelToggle($event)"
                         multiple
                         disableOptionCentering
                         panelClass="km-multiple-values-dropdown"

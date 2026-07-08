@@ -77,7 +77,6 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   private readonly _debounceTime = DEFAULT_DEBOUNCE_TIME_MS;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
-  private _disabledAuditWebhookBackendDCsDirty = false;
 
   constructor(
     private readonly _userService: UserService,
@@ -262,17 +261,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   onDisabledAuditWebhookBackendDCsSelect(val: string[]): void {
-    // Update the local list on every toggle (so the unsaved indicator reflects the pending change),
-    // but defer the patch until the dropdown closes so we send the final selection only once.
     this.settings.disabledAuditWebhookBackendDCs = val;
-    this._disabledAuditWebhookBackendDCsDirty = true;
-  }
-
-  onDisabledAuditWebhookBackendDCsPanelToggle(isOpen: boolean): void {
-    if (!isOpen && this._disabledAuditWebhookBackendDCsDirty) {
-      this._disabledAuditWebhookBackendDCsDirty = false;
-      this.onSettingsChange();
-    }
+    this.onSettingsChange();
   }
 
   onOperatingSystemChange(val: string[]): void {
