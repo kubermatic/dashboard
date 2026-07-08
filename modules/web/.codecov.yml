@@ -22,7 +22,7 @@ coverage:
   range: "70...90"
 
   status:
-    project: yes
+    project:
       default:
         target: auto
         threshold: 1%

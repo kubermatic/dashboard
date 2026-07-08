@@ -111,13 +111,11 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   private _getBindings(): void {
     const mapBinding = (binding: (NamespaceBinding | ClusterBinding)[]) =>
       binding
-        .map(
-          ({namespace, roleRefName, subjects = []}): NamespaceBinding => ({
-            namespace,
-            roleRefName,
-            subjects: subjects.filter(({kind}) => kind === Kind.ServiceAccount),
-          })
-        )
+        .map(({namespace, roleRefName, subjects = []}): NamespaceBinding => ({
+          namespace,
+          roleRefName,
+          subjects: subjects.filter(({kind}) => kind === Kind.ServiceAccount),
+        }))
         .filter(({subjects}) => subjects.length);
 
     const clusterBindings$ = this._rbacService
