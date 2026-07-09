@@ -20,11 +20,29 @@ cd $(dirname $0)/../../..
 source hack/lib.sh
 
 REPOSITORY=quay.io/kubermatic/web-terminal
-VERSION=0.13.0
+# read the tag from metadata.yaml so it has a single source of truth;
+# the path is relative to the repo root because of the cd above
+METADATA_FILE=hack/images/web-terminal/metadata.yaml
+# take the value after the first "tag:" and strip whitespace and quotes
+VERSION="$(grep -E '^tag:' "$METADATA_FILE" | head -n1 | cut -d: -f2- | tr -d ' \t"')"
+
+if [ -z "$VERSION" ]; then
+  echodate "No tag found in $METADATA_FILE"
+  exit 1
+fi
+
 SUFFIX=""
 ARCHITECTURES="${ARCHITECTURES:-linux/amd64,linux/arm64/v8}"
 IMAGE="$REPOSITORY:$VERSION$SUFFIX"
 MANIFEST="${MANIFEST:-$IMAGE}"
+
+# skip if the tag already exists in the registry; makes the postsubmit
+# idempotent so re-runs or re-merges of the same tag do not rebuild
+# retry so a transient registry error is not read as "tag missing"
+if retry 3 docker manifest inspect "$IMAGE" >/dev/null 2>&1; then
+  echodate "Image $IMAGE already exists in the registry, skipping build."
+  exit 0
+fi
 
 # build multi-arch images
 #  start_docker_daemon_ci
@@ -36,4 +54,4 @@ docker buildx build ./hack/images/web-terminal \
   --push \
   --tag "$IMAGE"
 
-echodate "Successfully build and pushed image for all architectures."
+echodate "Successfully built and pushed image for all architectures."
