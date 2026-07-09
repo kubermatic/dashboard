@@ -39,7 +39,7 @@ MANIFEST="${MANIFEST:-$IMAGE}"
 # skip if the tag already exists in the registry; makes the postsubmit
 # idempotent so re-runs or re-merges of the same tag do not rebuild
 # retry so a transient registry error is not read as "tag missing"
-if retry 3 docker manifest inspect "$IMAGE" >/dev/null 2>&1; then
+if retry 3 docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
   echodate "Image $IMAGE already exists in the registry, skipping build."
   exit 0
 fi

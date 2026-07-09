@@ -34,8 +34,8 @@ fi
 
 # quay's public API needs no credentials for public repositories
 COUNT="$(retry 3 curl --fail --silent \
-  "https://quay.io/api/v1/repository/kubermatic/web-terminal/tag/?specificTag=${TAG}&onlyActiveTags=true" \
-  | jq '.tags | length')"
+  "https://quay.io/api/v1/repository/kubermatic/web-terminal/tag/?specificTag=${TAG}&onlyActiveTags=true" |
+  jq '.tags | length')"
 
 if [ "$COUNT" != "0" ]; then
   echodate "Tag ${TAG} is already published at quay.io/kubermatic/web-terminal."
