@@ -156,7 +156,7 @@ export class KubeVirtBasicNodeDataComponent
   selectedConfigurationMode = ConfigurationMode.CustomResources;
   private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
-  private readonly _defaultMemory = 2000;
+  private readonly _defaultMemory = 4000;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
   private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
@@ -209,7 +209,7 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PrimaryDiskSize]: this._builder.control('10G', Validators.required),
+      [Controls.PrimaryDiskSize]: this._builder.control('25G', Validators.required),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
