@@ -116,7 +116,7 @@
     "browserlist": "1.0.2",
     "btoa": "1.2.1",
     "concurrently": "10.0.3",
-    "cypress": "15.17.0",
+    "cypress": "15.18.1",
     "cypress-fail-fast": "7.1.1",
     "del": "8.0.1",
     "eslint": "8.57.1",
