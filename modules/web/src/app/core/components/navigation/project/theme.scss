@@ -14,15 +14,12 @@
 
 @use 'sass:map';
 @use 'km-var' as *;
+@use 'variables';
 
 @mixin theme-project-selector-component($colors) {
-  .projects-container {
-    i {
-      background-color: km-var($colors, text);
-    }
-
-    &:hover {
-      background-color: km-var($colors, project-selector-hover);
-    }
+  .project-selector-control:hover {
+    background-color: km-var($colors, project-selector-hover);
+    border-radius: variables.$border-radius;
+    cursor: pointer;
   }
 }

@@ -13,45 +13,37 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-list-item class="project-selector"
-               (click)="openDropdown(select)">
-  <div class="projects-container"
-       fxFlex
-       fxLayout="row"
-       fxLayoutAlign=" center">
-    <mat-select #select
-                placeholder="None"
-                panelClass="project-selector-dropdown"
-                (selectionChange)="onSelectionChange($event)"
-                [(value)]="selectedProject"
-                [compareWith]="areProjectsEqual"
-                disableOptionCentering>
-      @if (myProjects) {
-      <mat-optgroup label="My Projects">
-        @for (project of myProjects; track trackByProject($index, project)) {
-        <mat-option [value]="project"
-                    [disabled]="project.status !== 'Active'"
-                    [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
-          {{project.name}}
-        </mat-option>
-        }
-      </mat-optgroup>
-      }
-      @if (externalProjects.length) {
-      <mat-divider class="km-option-divider" />
-      }
-      @if (externalProjects.length > 0) {
-      <mat-optgroup label="External Projects">
-        @for (project of externalProjects; track trackByProject($index, project)) {
-        <mat-option [value]="project"
-                    [disabled]="project.status !== 'Active'"
-                    [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
-          {{project.name}}
-        </mat-option>
-        }
-      </mat-optgroup>
-      }
-    </mat-select>
-    <i class="km-projects-icon km-icon-arrow-down"></i>
-  </div>
-</mat-list-item>
+
+<mat-select class="project-selector-control"
+            placeholder="None"
+            panelClass="project-selector-dropdown"
+            (selectionChange)="onSelectionChange($event)"
+            [(value)]="selectedProject"
+            [compareWith]="areProjectsEqual"
+            disableOptionCentering>
+  @if (myProjects) {
+  <mat-optgroup label="My Projects">
+    @for (project of myProjects; track trackByProject($index, project)) {
+    <mat-option [value]="project"
+                [disabled]="project.status !== 'Active'"
+                [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
+      {{project.name}}
+    </mat-option>
+    }
+  </mat-optgroup>
+  }
+  @if (externalProjects.length) {
+  <mat-divider class="km-option-divider" />
+  }
+  @if (externalProjects.length > 0) {
+  <mat-optgroup label="External Projects">
+    @for (project of externalProjects; track trackByProject($index, project)) {
+    <mat-option [value]="project"
+                [disabled]="project.status !== 'Active'"
+                [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
+      {{project.name}}
+    </mat-option>
+    }
+  </mat-optgroup>
+  }
+</mat-select>
