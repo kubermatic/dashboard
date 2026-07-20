@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';
@@ -25,6 +25,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
   selector: 'km-project-selector',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
   standalone: false,
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
@@ -64,10 +65,6 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
         this._selectProject(project);
       }
     });
-  }
-
-  openDropdown(matSelect: MatSelect): void {
-    matSelect.open();
   }
 
   areProjectsEqual(a: Project, b: Project): boolean {

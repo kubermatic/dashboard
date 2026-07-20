@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+@use 'mixins';
 
-.project-selector {
-  height: variables.$toolbar-height - 2px;
-}
+.project-selector-control {
+  max-width: 220px;
 
-.projects-container {
-  border-radius: variables.$border-radius;
-  margin: 0 20px;
-  padding: 10px 15px;
+  .mat-mdc-select-trigger {
+    padding: 10px 15px;
+  }
 
-  .km-projects-icon {
+  .mat-mdc-select-arrow {
+    @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
+
     margin-left: 14px;
-    pointer-events: none;
   }
 }

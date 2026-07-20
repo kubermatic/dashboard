@@ -50,12 +50,10 @@ header {
     font-weight: normal;
     margin-left: 20px;
   }
-}
 
-.km-icon-arrow-up {
-  @include mixins.size(14px);
-
-  margin: 0 8px 0 24px;
+  .project-selector-component {
+    margin-left: 20px;
+  }
 }
 
 @include mixins.breakpoint('small') {
