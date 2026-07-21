@@ -168,6 +168,7 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
     this.customGpuOptions = [];
     this.hasKubermaticGpuTypes = false;
     this.hasCustomGpuTypes = false;
+    this._updateVisibleTabs();
     this._updateDisplayedColumns();
     this._applySearchFilter();
   }
@@ -256,13 +257,19 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
   }
 
   private _updateVisibleTabs(): void {
-    this.visibleTabs = [TabIndex.KubermaticCPU];
+    this.visibleTabs = [];
+
+    if (this.kubermaticCpuOptions.length > 0) {
+      this.visibleTabs.push(TabIndex.KubermaticCPU);
+    }
 
     if (this.hasKubermaticGpuTypes && this.showGpuFilter) {
       this.visibleTabs.push(TabIndex.KubermaticGPU);
     }
 
-    this.visibleTabs.push(TabIndex.CustomCPU);
+    if (this.customCpuOptions.length > 0) {
+      this.visibleTabs.push(TabIndex.CustomCPU);
+    }
 
     if (this.hasCustomGpuTypes && this.showGpuFilter) {
       this.visibleTabs.push(TabIndex.CustomGPU);
@@ -273,7 +280,7 @@ export class KubeVirtMachineTypeSelectorComponent implements OnInit, OnChanges, 
 
   private _syncTabIndices(): void {
     if (!this.visibleTabs.includes(this.selectedTabIndex)) {
-      this.selectedTabIndex = TabIndex.KubermaticCPU;
+      this.selectedTabIndex = this.visibleTabs[0];
       this.activeTabIndex = 0;
     } else {
       this.activeTabIndex = this.visibleTabs.indexOf(this.selectedTabIndex);

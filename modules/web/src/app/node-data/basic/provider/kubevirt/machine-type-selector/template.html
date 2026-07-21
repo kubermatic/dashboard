@@ -41,12 +41,26 @@ limitations under the License.
       </mat-form-field>
     </div>
 
+    @if (isLoading) {
+    <div class="km-row"
+         fxLayoutAlign="center center">
+      <mat-spinner color="accent"
+                   class="km-spinner"
+                   [diameter]="25" />
+    </div>
+    } @else if (visibleTabs.length === 0) {
+    <div class="km-row km-empty-list-msg"
+         fxLayoutAlign="center center">
+      No instance types found
+    </div>
+    } @else {
     <mat-tab-group class="km-machine-type-selector-tabs"
                    mat-stretch-tabs="false"
                    animationDuration="0ms"
                    [selectedIndex]="activeTabIndex"
                    (selectedIndexChange)="onTabChange($event)">
       <!-- Kubermatic CPU Tab -->
+      @if (kubermaticCpuOptions.length > 0) {
       <mat-tab>
         <ng-template mat-tab-label>
           <span>Kubermatic CPU</span>
@@ -54,6 +68,7 @@ limitations under the License.
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
+      }
 
       <!-- Kubermatic GPU Tab -->
       @if (showGpuFilter && hasKubermaticGpu) {
@@ -67,6 +82,7 @@ limitations under the License.
       }
 
       <!-- Custom CPU Tab -->
+      @if (customCpuOptions.length > 0) {
       <mat-tab>
         <ng-template mat-tab-label>
           <span>Custom CPU</span>
@@ -74,6 +90,7 @@ limitations under the License.
         </ng-template>
         <ng-container *ngTemplateOutlet="machineTypeTable" />
       </mat-tab>
+      }
 
       <!-- Custom GPU Tab -->
       @if (showGpuFilter && hasCustomGpu) {
@@ -86,19 +103,13 @@ limitations under the License.
       </mat-tab>
       }
     </mat-tab-group>
+    }
   </div>
 </div>
 
 <ng-template #machineTypeTable>
   <div class="km-machine-type-selector-table-container">
-    @if (isLoading) {
-    <div class="km-row"
-         fxLayoutAlign="center center">
-      <mat-spinner color="accent"
-                   class="km-spinner"
-                   [diameter]="25" />
-    </div>
-    } @else if (filteredOptions.length === 0) {
+    @if (filteredOptions.length === 0) {
     <div class="km-row km-empty-list-msg"
          fxLayoutAlign="center center">
       No instance types found
