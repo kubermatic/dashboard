@@ -129,7 +129,7 @@
     "jest-canvas-mock": "^2.5.8",
     "jest-environment-jsdom": "^30.4.1",
     "jest-preset-angular": "16.2.0",
-    "js-beautify": "1.15.4",
+    "js-beautify": "2.0.3",
     "json-server": "0.17.4",
     "license-check-and-add": "4.0.5",
     "license-compliance": "3.0.1",
