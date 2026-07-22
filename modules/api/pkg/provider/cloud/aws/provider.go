@@ -23,10 +23,6 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 )
 
-const (
-	authFailure = "AuthFailure"
-)
-
 type AmazonEC2 struct {
 	dc                *kubermaticv1.DatacenterSpecAWS
 	secretKeySelector provider.SecretKeySelectorValueFunc

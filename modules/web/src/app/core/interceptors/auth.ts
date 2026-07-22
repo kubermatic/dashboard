@@ -60,18 +60,18 @@ export class AuthInterceptor implements HttpInterceptor {
     this._refreshDone$.next(false);
 
     return this._http.post(this._refreshUrl, null).pipe(
-      switchMap(() => {
-        this._isRefreshing = false;
-        this._refreshDone$.next(true);
-        // Retry the original request — browser will send the new cookie.
-        return next.handle(req);
-      }),
       catchError(refreshError => {
         this._isRefreshing = false;
         this._refreshDone$.next(true);
         // Refresh failed — redirect to login page.
         window.location.href = '/';
         return throwError(() => refreshError);
+      }),
+      switchMap(() => {
+        this._isRefreshing = false;
+        this._refreshDone$.next(true);
+        // Retry the original request — browser will send the new cookie.
+        return next.handle(req);
       })
     );
   }
