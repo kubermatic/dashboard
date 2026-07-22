@@ -17,7 +17,7 @@ limitations under the License.
 package kubevirt
 
 import (
-	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
+	kvinstancetypev1beta1 "kubevirt.io/api/instancetype/v1beta1"
 
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 
@@ -25,11 +25,11 @@ import (
 )
 
 // GetKubermaticStandardPreferences returns the Kubermatic standard VirtualMachinePreferences.
-func GetKubermaticStandardPreferences(client ctrlruntimeclient.Client, getter kvmanifests.ManifestFSGetter) []kvinstancetypev1alpha1.VirtualMachinePreference {
+func GetKubermaticStandardPreferences(client ctrlruntimeclient.Client, getter kvmanifests.ManifestFSGetter) []kvinstancetypev1beta1.VirtualMachinePreference {
 	objs := kvmanifests.RuntimeFromYaml(client, getter)
-	preferences := make([]kvinstancetypev1alpha1.VirtualMachinePreference, 0, len(objs))
+	preferences := make([]kvinstancetypev1beta1.VirtualMachinePreference, 0, len(objs))
 	for _, obj := range objs {
-		preferences = append(preferences, *obj.(*kvinstancetypev1alpha1.VirtualMachinePreference))
+		preferences = append(preferences, *obj.(*kvinstancetypev1beta1.VirtualMachinePreference))
 	}
 	return preferences
 }

@@ -18,6 +18,6 @@
 package: reconciling
 boilerplate: ../../hack/boilerplate/ce/boilerplate.go.txt
 resourceTypes:
-  # instancetype/v1alpha1
-  - { package: kubevirt.io/api/instancetype/v1alpha1, resourceName: VirtualMachineInstancetype }
-  - { package: kubevirt.io/api/instancetype/v1alpha1, resourceName: VirtualMachinePreference }
+  # instancetype/v1beta1
+  - { package: kubevirt.io/api/instancetype/v1beta1, resourceName: VirtualMachineInstancetype }
+  - { package: kubevirt.io/api/instancetype/v1beta1, resourceName: VirtualMachinePreference }

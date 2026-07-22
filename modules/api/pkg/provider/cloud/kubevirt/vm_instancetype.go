@@ -17,7 +17,7 @@ limitations under the License.
 package kubevirt
 
 import (
-	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
+	kvinstancetypev1beta1 "kubevirt.io/api/instancetype/v1beta1"
 
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 
@@ -25,11 +25,11 @@ import (
 )
 
 // GetKubermaticStandardInstancetypes returns the Kubermatic standard VirtualMachineInstancetypes.
-func GetKubermaticStandardInstancetypes(client ctrlruntimeclient.Client, getter kvmanifests.ManifestFSGetter) []kvinstancetypev1alpha1.VirtualMachineInstancetype {
+func GetKubermaticStandardInstancetypes(client ctrlruntimeclient.Client, getter kvmanifests.ManifestFSGetter) []kvinstancetypev1beta1.VirtualMachineInstancetype {
 	objs := kvmanifests.RuntimeFromYaml(client, getter)
-	instancetypes := make([]kvinstancetypev1alpha1.VirtualMachineInstancetype, 0, len(objs))
+	instancetypes := make([]kvinstancetypev1beta1.VirtualMachineInstancetype, 0, len(objs))
 	for _, obj := range objs {
-		instancetypes = append(instancetypes, *obj.(*kvinstancetypev1alpha1.VirtualMachineInstancetype))
+		instancetypes = append(instancetypes, *obj.(*kvinstancetypev1beta1.VirtualMachineInstancetype))
 	}
 	return instancetypes
 }

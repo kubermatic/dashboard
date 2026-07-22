@@ -24,6 +24,7 @@ import (
 	"net/http"
 
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
+	kvinstancetypev1beta1 "kubevirt.io/api/instancetype/v1beta1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -38,6 +39,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -237,16 +239,128 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 	return KubeVirtVPCSubnets(ctx, kvKubeconfig, cluster.Spec.Cloud.Kubevirt.VPCName)
 }
 
-// kubeVirtInstancetypes returns the kvinstancetypev1alpha1.VirtualMachineInstanceType:
+// listClusterInstancetypes lists cluster-wide VirtualMachineClusterInstancetypes, trying
+// v1beta1 first and falling back to v1alpha1 only when the cluster does not serve v1beta1.
+// KubeVirt 1.6.0+ no longer serves v1alpha1, so listing it first would log a discovery
+// NoMatchError on every read; v1beta1 is served on every supported KubeVirt (>= v1.0.0).
+// A NoMatchError from the v1alpha1 fallback is swallowed (returns empty) so a cluster that
+// serves neither version produces no logged noise. Fallback items are round-tripped into
+// v1beta1 via JSON (the specs share field tags, v1beta1 is a superset) so the rest of the
+// pipeline stays version-agnostic.
+func listClusterInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, opts ...ctrlruntimeclient.ListOption) ([]kvinstancetypev1beta1.VirtualMachineClusterInstancetype, error) {
+	betaList := &kvinstancetypev1beta1.VirtualMachineClusterInstancetypeList{}
+	err := client.List(ctx, betaList, opts...)
+	if err == nil {
+		return betaList.Items, nil
+	} else if !meta.IsNoMatchError(err) {
+		return nil, err
+	}
+
+	alphaList := &kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeList{}
+	if err := client.List(ctx, alphaList, opts...); err != nil {
+		if meta.IsNoMatchError(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	items := make([]kvinstancetypev1beta1.VirtualMachineClusterInstancetype, 0, len(alphaList.Items))
+	for i := range alphaList.Items {
+		converted := &kvinstancetypev1beta1.VirtualMachineClusterInstancetype{}
+		if err := convertViaJSON(&alphaList.Items[i], converted); err != nil {
+			return nil, err
+		}
+		items = append(items, *converted)
+	}
+	return items, nil
+}
+
+// listNamespacedInstancetypes mirrors listClusterInstancetypes for namespaced
+// VirtualMachineInstancetypes.
+func listNamespacedInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, opts ...ctrlruntimeclient.ListOption) ([]kvinstancetypev1beta1.VirtualMachineInstancetype, error) {
+	betaList := &kvinstancetypev1beta1.VirtualMachineInstancetypeList{}
+	if err := client.List(ctx, betaList, opts...); err == nil {
+		return betaList.Items, nil
+	} else if !meta.IsNoMatchError(err) {
+		return nil, err
+	}
+
+	alphaList := &kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
+	if err := client.List(ctx, alphaList, opts...); err != nil {
+		if meta.IsNoMatchError(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	items := make([]kvinstancetypev1beta1.VirtualMachineInstancetype, 0, len(alphaList.Items))
+	for i := range alphaList.Items {
+		converted := &kvinstancetypev1beta1.VirtualMachineInstancetype{}
+		if err := convertViaJSON(&alphaList.Items[i], converted); err != nil {
+			return nil, err
+		}
+
+		items = append(items, *converted)
+	}
+
+	return items, nil
+}
+
+// listClusterPreferences mirrors listClusterInstancetypes for cluster-wide
+// VirtualMachineClusterPreferences.
+func listClusterPreferences(ctx context.Context, client ctrlruntimeclient.Client, opts ...ctrlruntimeclient.ListOption) ([]kvinstancetypev1beta1.VirtualMachineClusterPreference, error) {
+	betaList := &kvinstancetypev1beta1.VirtualMachineClusterPreferenceList{}
+	if err := client.List(ctx, betaList, opts...); err == nil {
+		return betaList.Items, nil
+	} else if !meta.IsNoMatchError(err) {
+		return nil, err
+	}
+
+	alphaList := &kvinstancetypev1alpha1.VirtualMachineClusterPreferenceList{}
+	if err := client.List(ctx, alphaList, opts...); err != nil {
+		if meta.IsNoMatchError(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	items := make([]kvinstancetypev1beta1.VirtualMachineClusterPreference, 0, len(alphaList.Items))
+	for i := range alphaList.Items {
+		converted := &kvinstancetypev1beta1.VirtualMachineClusterPreference{}
+		if err := convertViaJSON(&alphaList.Items[i], converted); err != nil {
+			return nil, err
+		}
+
+		items = append(items, *converted)
+	}
+
+	return items, nil
+}
+
+// convertViaJSON copies src into dst by marshaling to JSON and back. Used to lift v1alpha1
+// instancetype/preference objects into their v1beta1 counterparts: the specs share JSON
+// field tags and v1beta1 is a superset, so the round-trip is lossless.
+func convertViaJSON(src, dst any) error {
+	data, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(data, dst)
+}
+
+// kubeVirtInstancetypes returns the kvinstancetypev1beta1.VirtualMachineInstanceType:
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
 func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, datacenter *kubermaticv1.Datacenter) (instancetypeListWrapper, error) {
 	instancetypes := instancetypeListWrapper{}
-	clusterInstancetypes := kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeList{}
-	standardInstancetypes := kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
-	namespaceInstancetypes := kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
+	standardInstancetypes := kvinstancetypev1beta1.VirtualMachineInstancetypeList{}
+	namespaceInstancetypes := kvinstancetypev1beta1.VirtualMachineInstancetypeList{}
 	// "custom" (cluster-wide)
-	if err := client.List(ctx, &clusterInstancetypes); err != nil {
+	clusterInstancetypeItems, err := listClusterInstancetypes(ctx, client)
+	if err != nil {
 		return instancetypes, err
 	}
 	// Always fetch the full set of kubermatic standard instancetypes once.
@@ -273,16 +387,19 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 		if namespace == "" {
 			return instancetypes, fmt.Errorf("namespaced mode enabled but no namespace configured")
 		}
-		if err := client.List(ctx, &namespaceInstancetypes, ctrlruntimeclient.InNamespace(namespace)); err != nil {
+		nsItems, err := listNamespacedInstancetypes(ctx, client, ctrlruntimeclient.InNamespace(namespace))
+		if err != nil {
 			return instancetypes, err
 		}
+
+		namespaceInstancetypes.Items = nsItems
 	}
 	// Wrap
-	if len(clusterInstancetypes.Items) > 0 || len(standardInstancetypes.Items) > 0 || len(namespaceInstancetypes.Items) > 0 {
+	if len(clusterInstancetypeItems) > 0 || len(standardInstancetypes.Items) > 0 || len(namespaceInstancetypes.Items) > 0 {
 		instancetypes.items = make([]instancetypeWrapper, 0)
 	}
-	for i := range clusterInstancetypes.Items {
-		w := customInstancetypeWrapper{&clusterInstancetypes.Items[i]}
+	for i := range clusterInstancetypeItems {
+		w := customInstancetypeWrapper{&clusterInstancetypeItems[i]}
 		instancetypes.items = append(instancetypes.items, &w)
 	}
 
@@ -394,15 +511,15 @@ func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacente
 	return filterInstancetypes(res, filter), nil
 }
 
-// kubeVirtPreferences returns the kvinstancetypev1alpha1.VirtualMachinePreference:
+// kubeVirtPreferences returns the kvinstancetypev1beta1.VirtualMachinePreference:
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
 func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, datacenter *kubermaticv1.Datacenter) (preferenceListWrapper, error) {
 	preferences := preferenceListWrapper{}
-	customPreferences := kvinstancetypev1alpha1.VirtualMachineClusterPreferenceList{}
-	standardPreferences := kvinstancetypev1alpha1.VirtualMachinePreferenceList{}
+	standardPreferences := kvinstancetypev1beta1.VirtualMachinePreferenceList{}
 	// "custom" (cluster-wide)
-	if err := client.List(ctx, &customPreferences); err != nil {
+	customPreferenceItems, err := listClusterPreferences(ctx, client)
+	if err != nil {
 		return preferences, err
 	}
 	// "standard" (namespaced)
@@ -411,11 +528,11 @@ func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, d
 	}
 
 	// Wrap
-	if len(customPreferences.Items) > 0 || len(standardPreferences.Items) > 0 {
+	if len(customPreferenceItems) > 0 || len(standardPreferences.Items) > 0 {
 		preferences.items = make([]preferenceWrapper, 0)
 	}
-	for i := range customPreferences.Items {
-		w := customPreferenceWrapper{&customPreferences.Items[i]}
+	for i := range customPreferenceItems {
+		w := customPreferenceWrapper{&customPreferenceItems[i]}
 		preferences.items = append(preferences.items, &w)
 	}
 	for i := range standardPreferences.Items {
@@ -513,7 +630,7 @@ func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) 
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {
 	return func() (string, reconciling.VirtualMachineInstancetypeReconciler) {
-		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1alpha1.VirtualMachineInstancetype) (*kvinstancetypev1alpha1.VirtualMachineInstancetype, error) {
+		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1beta1.VirtualMachineInstancetype) (*kvinstancetypev1beta1.VirtualMachineInstancetype, error) {
 			it.Labels = w.GetObjectMeta().GetLabels()
 			it.Spec = w.Spec()
 			return it, nil
@@ -523,7 +640,7 @@ func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachi
 
 func preferenceReconciler(w preferenceWrapper) reconciling.NamedVirtualMachinePreferenceReconcilerFactory {
 	return func() (string, reconciling.VirtualMachinePreferenceReconciler) {
-		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1alpha1.VirtualMachinePreference) (*kvinstancetypev1alpha1.VirtualMachinePreference, error) {
+		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1beta1.VirtualMachinePreference) (*kvinstancetypev1beta1.VirtualMachinePreference, error) {
 			it.Labels = w.GetObjectMeta().GetLabels()
 			it.Spec = w.Spec()
 			return it, nil
@@ -538,7 +655,7 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 	// If the record passes all the filters, add it to the final slice.
 	for category, types := range instancetypes.Instancetypes {
 		for _, instancetype := range types {
-			spec := kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec{}
+			spec := kvinstancetypev1beta1.VirtualMachineInstancetypeSpec{}
 			if err := json.Unmarshal([]byte(instancetype.Spec), &spec); err != nil {
 				log.Logger.Errorf("skipping VirtualMachineInstancetype:%s, parsing instancetype.Spec failed:%v", instancetype.Name, err)
 				continue
@@ -568,16 +685,16 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 }
 
 // instancetypeWrapper to wrap functions needed to convert to API type:
-//   - kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec, kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeSpec
+//   - kvinstancetypev1beta1.VirtualMachineInstancetypeSpec, kvinstancetypev1beta1.VirtualMachineClusterInstancetypeSpec
 type instancetypeWrapper interface {
-	Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec
+	Spec() kvinstancetypev1beta1.VirtualMachineInstancetypeSpec
 	Category() apiv2.VirtualMachineInstancetypeCategory
 	Kind() string
 	GetObjectMeta() metav1.Object
 }
 
 type customInstancetypeWrapper struct {
-	*kvinstancetypev1alpha1.VirtualMachineClusterInstancetype
+	*kvinstancetypev1beta1.VirtualMachineClusterInstancetype
 }
 
 func (it *customInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
@@ -588,12 +705,12 @@ func (it *customInstancetypeWrapper) Kind() string {
 	return kindVirtualMachineClusterInstancetype
 }
 
-func (it *customInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+func (it *customInstancetypeWrapper) Spec() kvinstancetypev1beta1.VirtualMachineInstancetypeSpec {
 	return it.VirtualMachineClusterInstancetype.Spec
 }
 
 type standardInstancetypeWrapper struct {
-	*kvinstancetypev1alpha1.VirtualMachineInstancetype
+	*kvinstancetypev1beta1.VirtualMachineInstancetype
 }
 
 func (it *standardInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
@@ -604,14 +721,14 @@ func (it *standardInstancetypeWrapper) Kind() string {
 	return kindVirtualMachineInstancetype
 }
 
-func (it *standardInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+func (it *standardInstancetypeWrapper) Spec() kvinstancetypev1beta1.VirtualMachineInstancetypeSpec {
 	return it.VirtualMachineInstancetype.Spec
 }
 
 // customNamespacedInstancetypeWrapper wraps a namespaced VirtualMachineInstancetype
 // that was created by the user (not by the kubermatic reconciler).
 type customNamespacedInstancetypeWrapper struct {
-	*kvinstancetypev1alpha1.VirtualMachineInstancetype
+	*kvinstancetypev1beta1.VirtualMachineInstancetype
 }
 
 func (it *customNamespacedInstancetypeWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
@@ -622,7 +739,7 @@ func (it *customNamespacedInstancetypeWrapper) Kind() string {
 	return kindVirtualMachineInstancetype
 }
 
-func (it *customNamespacedInstancetypeWrapper) Spec() kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
+func (it *customNamespacedInstancetypeWrapper) Spec() kvinstancetypev1beta1.VirtualMachineInstancetypeSpec {
 	return it.VirtualMachineInstancetype.Spec
 }
 
@@ -647,34 +764,34 @@ func (l *instancetypeListWrapper) toApi() (*apiv2.VirtualMachineInstancetypeList
 }
 
 // preferenceWrapper to wrap functions needed to convert to API type:
-//   - kvinstancetypev1alpha1.VirtualMachinePreferenceSpec, kvinstancetypev1alpha1.VirtualMachineClusterPreferenceSpec
+//   - kvinstancetypev1beta1.VirtualMachinePreferenceSpec, kvinstancetypev1beta1.VirtualMachineClusterPreferenceSpec
 type preferenceWrapper interface {
-	Spec() kvinstancetypev1alpha1.VirtualMachinePreferenceSpec
+	Spec() kvinstancetypev1beta1.VirtualMachinePreferenceSpec
 	Category() apiv2.VirtualMachineInstancetypeCategory
 	GetObjectMeta() metav1.Object
 }
 
 type customPreferenceWrapper struct {
-	*kvinstancetypev1alpha1.VirtualMachineClusterPreference
+	*kvinstancetypev1beta1.VirtualMachineClusterPreference
 }
 
 func (p *customPreferenceWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
 	return apiv2.InstancetypeCustom
 }
 
-func (p *customPreferenceWrapper) Spec() kvinstancetypev1alpha1.VirtualMachinePreferenceSpec {
+func (p *customPreferenceWrapper) Spec() kvinstancetypev1beta1.VirtualMachinePreferenceSpec {
 	return p.VirtualMachineClusterPreference.Spec
 }
 
 type standardPreferenceWrapper struct {
-	*kvinstancetypev1alpha1.VirtualMachinePreference
+	*kvinstancetypev1beta1.VirtualMachinePreference
 }
 
 func (p *standardPreferenceWrapper) Category() apiv2.VirtualMachineInstancetypeCategory {
 	return apiv2.InstancetypeKubermatic
 }
 
-func (p *standardPreferenceWrapper) Spec() kvinstancetypev1alpha1.VirtualMachinePreferenceSpec {
+func (p *standardPreferenceWrapper) Spec() kvinstancetypev1beta1.VirtualMachinePreferenceSpec {
 	return p.VirtualMachinePreference.Spec
 }
 
