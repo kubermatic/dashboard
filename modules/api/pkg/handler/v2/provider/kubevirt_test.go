@@ -25,7 +25,7 @@ import (
 	"time"
 
 	kvapiv1 "kubevirt.io/api/core/v1"
-	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
+	kvinstancetypev1beta1 "kubevirt.io/api/instancetype/v1beta1"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
@@ -41,6 +41,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -52,7 +53,7 @@ var testScheme = fake.NewScheme()
 
 func init() {
 	utilruntime.Must(kvapiv1.AddToScheme(testScheme))
-	utilruntime.Must(kvinstancetypev1alpha1.AddToScheme(testScheme))
+	utilruntime.Must(kvinstancetypev1beta1.AddToScheme(testScheme))
 }
 
 var (
@@ -121,8 +122,8 @@ var (
 		"{\"name\":\"standard-8\",\"kind\":\"VirtualMachineInstancetype\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":8},\\\"memory\\\":{\\\"guest\\\":\\\"34360M\\\"}}\"}]}}"
 )
 
-func newClusterInstancetype(cpu uint32, memory string) *kvinstancetypev1alpha1.VirtualMachineClusterInstancetype {
-	return &kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{
+func newClusterInstancetype(cpu uint32, memory string) *kvinstancetypev1beta1.VirtualMachineClusterInstancetype {
+	return &kvinstancetypev1beta1.VirtualMachineClusterInstancetype{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: instancetypeName(cpu, memory),
 		},
@@ -139,12 +140,12 @@ func getQuantity(q string) *resource.Quantity {
 	return &res
 }
 
-func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
-	return kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec{
-		CPU: kvinstancetypev1alpha1.CPUInstancetype{
+func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1beta1.VirtualMachineInstancetypeSpec {
+	return kvinstancetypev1beta1.VirtualMachineInstancetypeSpec{
+		CPU: kvinstancetypev1beta1.CPUInstancetype{
 			Guest: cpu,
 		},
-		Memory: kvinstancetypev1alpha1.MemoryInstancetype{
+		Memory: kvinstancetypev1beta1.MemoryInstancetype{
 			Guest: *getQuantity(memory),
 		},
 	}
@@ -320,8 +321,8 @@ func TestListInstancetypeNoCredentialsEndpoint(t *testing.T) {
 }
 
 var (
-	preferenceCores        = newClusterPreference(kvinstancetypev1alpha1.PreferCores)
-	preferenceSockets      = newClusterPreference(kvinstancetypev1alpha1.PreferSockets)
+	preferenceCores        = newClusterPreference(kvinstancetypev1beta1.DeprecatedPreferCores)
+	preferenceSockets      = newClusterPreference(kvinstancetypev1beta1.DeprecatedPreferSockets)
 	preferenceListResponse = "{\"preferences\":" +
 		"{\"custom\":[" +
 		"{\"name\":\"preferCores\",\"spec\":\"{\\\"cpu\\\":{\\\"preferredCPUTopology\\\":\\\"preferCores\\\"}}\"}," +
@@ -330,14 +331,14 @@ var (
 		"{\"name\":\"sockets-advantage\",\"spec\":\"{\\\"cpu\\\":{\\\"preferredCPUTopology\\\":\\\"preferSockets\\\"}}\"}]}}"
 )
 
-func newClusterPreference(topology kvinstancetypev1alpha1.PreferredCPUTopology) *kvinstancetypev1alpha1.VirtualMachineClusterPreference {
-	return &kvinstancetypev1alpha1.VirtualMachineClusterPreference{
+func newClusterPreference(topology kvinstancetypev1beta1.PreferredCPUTopology) *kvinstancetypev1beta1.VirtualMachineClusterPreference {
+	return &kvinstancetypev1beta1.VirtualMachineClusterPreference{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: string(topology),
 		},
-		Spec: kvinstancetypev1alpha1.VirtualMachinePreferenceSpec{
-			CPU: &kvinstancetypev1alpha1.CPUPreferences{
-				PreferredCPUTopology: topology,
+		Spec: kvinstancetypev1beta1.VirtualMachinePreferenceSpec{
+			CPU: &kvinstancetypev1beta1.CPUPreferences{
+				PreferredCPUTopology: ptr.To(topology),
 			},
 		},
 	}
