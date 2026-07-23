@@ -80,6 +80,20 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-hetzner.yaml
 
+echodate "Creating AWS preset..."
+cat << EOF > preset-aws.yaml
+apiVersion: kubermatic.k8c.io/v1
+kind: Preset
+metadata:
+  name: e2e-aws
+  namespace: kubermatic
+spec:
+  aws:
+    accessKeyID: ${AWS_E2E_TESTS_KEY_ID}
+    secretAccessKey: ${AWS_E2E_TESTS_SECRET}
+EOF
+retry 2 kubectl apply -f preset-aws.yaml
+
 echodate "Creating DigitalOcean preset..."
 cat << EOF > preset-digitalocean.yaml
 apiVersion: kubermatic.k8c.io/v1

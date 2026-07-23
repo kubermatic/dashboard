@@ -1,7 +1,7 @@
-//go:build hetzner_e2e
+//go:build create
 
 /*
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2026 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,14 +28,14 @@ import (
 	"k8s.io/apimachinery/pkg/util/rand"
 )
 
-func TestCreateUpdateHetznerCluster(t *testing.T) {
+func TestCreateUpdateAWSCluster(t *testing.T) {
 	tests := []createCluster{
 		{
-			name:       "create cluster on Hetzner",
+			name:       "create cluster on AWS",
 			dc:         "kubermatic",
-			location:   "hetzner-hel1",
+			location:   "aws-eu-central-1a",
 			version:    utils.KubernetesVersion(),
-			credential: "e2e-hetzner",
+			credential: "e2e-aws",
 			replicas:   1,
 			patch: utils.PatchCluster{
 				Name:   "newName",
@@ -66,14 +66,14 @@ func TestCreateUpdateHetznerCluster(t *testing.T) {
 			}
 
 			testClient := utils.NewTestClient(masterToken, t)
-			project, cluster := createProjectWithCluster(t, testClient, tc.dc, tc.credential, tc.version, tc.location, tc.replicas)
+			project, cluster := createProjectWithAWSCluster(t, testClient, tc.dc, tc.credential, tc.version, tc.location, tc.replicas)
 			defer cleanupProject(t, project.ID)
 			testCluster(ctx, masterToken, project, cluster, testClient, tc, t)
 		})
 	}
 }
 
-func TestDeleteClusterBeforeIsUp(t *testing.T) {
+func TestDeleteAWSClusterBeforeIsUp(t *testing.T) {
 	tests := []struct {
 		name       string
 		dc         string
@@ -85,9 +85,9 @@ func TestDeleteClusterBeforeIsUp(t *testing.T) {
 		{
 			name:       "delete cluster before is up",
 			dc:         "kubermatic",
-			location:   "hetzner-hel1",
+			location:   "aws-eu-central-1a",
 			version:    utils.KubernetesVersion(),
-			credential: "e2e-hetzner",
+			credential: "e2e-aws",
 			replicas:   0,
 		},
 	}
@@ -108,7 +108,7 @@ func TestDeleteClusterBeforeIsUp(t *testing.T) {
 			}
 			defer cleanupProject(t, project.ID)
 
-			cluster, err := testClient.CreateHetznerCluster(project.ID, tc.dc, rand.String(10), tc.credential, tc.version, tc.location, tc.replicas)
+			cluster, err := testClient.CreateAWSCluster(project.ID, tc.dc, rand.String(10), tc.credential, tc.version, tc.location, tc.replicas)
 			if err != nil {
 				t.Fatalf("failed to create cluster: %v", err)
 			}
@@ -126,13 +126,13 @@ func TestDeleteClusterBeforeIsUp(t *testing.T) {
 	}
 }
 
-func createProjectWithCluster(t *testing.T, testClient *utils.TestClient, dc, credential, version, location string, replicas int32) (*apiv1.Project, *apiv1.Cluster) {
+func createProjectWithAWSCluster(t *testing.T, testClient *utils.TestClient, dc, credential, version, location string, replicas int32) (*apiv1.Project, *apiv1.Cluster) {
 	project, err := testClient.CreateProject(rand.String(10))
 	if err != nil {
 		t.Fatalf("failed to create project %v", err)
 	}
 
-	cluster, err := testClient.CreateHetznerCluster(project.ID, dc, rand.String(10), credential, version, location, replicas)
+	cluster, err := testClient.CreateAWSCluster(project.ID, dc, rand.String(10), credential, version, location, replicas)
 	if err != nil {
 		t.Fatalf("failed to create cluster: %v", err)
 	}

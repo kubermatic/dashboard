@@ -432,8 +432,9 @@ func (r *TestClient) ListCredentials(providerName, datacenter string) ([]string,
 	return names, nil
 }
 
-// CreateAWSCluster creates cluster for AWS provider.
-func (r *TestClient) CreateAWSCluster(projectID, dc, name, secretAccessKey, accessKeyID, version, location, availabilityZone, proxyMode string, replicas int32, konnectivityEnabled bool, cniSettings *models.CNIPluginSettings) (*apiv1.Cluster, error) {
+// CreateAWSCluster creates cluster for AWS provider. Credentials are injected
+// via the named preset, so the cloud spec is left empty.
+func (r *TestClient) CreateAWSCluster(projectID, dc, name, credential, version, location string, replicas int32) (*apiv1.Cluster, error) {
 	_, err := semverlib.NewVersion(version)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse version %s: %w", version, err)
@@ -441,34 +442,22 @@ func (r *TestClient) CreateAWSCluster(projectID, dc, name, secretAccessKey, acce
 
 	clusterSpec := &models.CreateClusterSpec{}
 	clusterSpec.Cluster = &models.Cluster{
-		Type: "kubernetes",
-		Name: name,
+		Type:       "kubernetes",
+		Name:       name,
+		Credential: credential,
 		Spec: &models.ClusterSpec{
 			Cloud: &models.CloudSpec{
 				DatacenterName: location,
-				Aws: &models.AWSCloudSpec{
-					SecretAccessKey: secretAccessKey,
-					AccessKeyID:     accessKeyID,
-				},
+				Aws:            &models.AWSCloudSpec{},
 			},
-			Version:   models.Semver(version),
-			CniPlugin: cniSettings,
-			ClusterNetwork: &models.ClusterNetworkingConfig{
-				ProxyMode: proxyMode,
-			},
+			Version: models.Semver(version),
 		},
-	}
-
-	if konnectivityEnabled {
-		clusterSpec.Cluster.Spec.ClusterNetwork = &models.ClusterNetworkingConfig{
-			KonnectivityEnabled: true,
-		}
 	}
 
 	if replicas > 0 {
 		instanceType := "t3.small"
 		volumeSize := int32(25)
-		volumeType := "standard"
+		volumeType := "gp2"
 
 		clusterSpec.NodeDeployment = &models.NodeDeployment{
 			Spec: &models.NodeDeploymentSpec{
@@ -476,10 +465,9 @@ func (r *TestClient) CreateAWSCluster(projectID, dc, name, secretAccessKey, acce
 				Template: &models.NodeSpec{
 					Cloud: &models.NodeCloudSpec{
 						Aws: &models.AWSNodeSpec{
-							AvailabilityZone: availabilityZone,
-							InstanceType:     &instanceType,
-							VolumeSize:       &volumeSize,
-							VolumeType:       &volumeType,
+							InstanceType: &instanceType,
+							VolumeSize:   &volumeSize,
+							VolumeType:   &volumeType,
 						},
 					},
 					OperatingSystem: &models.OperatingSystemSpec{
