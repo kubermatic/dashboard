@@ -79,7 +79,8 @@ export class AdminsComponent implements OnInit, OnChanges {
   }
 
   isDeleteEnabled(admin: Admin): boolean {
-    return !!this.user && admin.email !== this.user.email;
+    // Group-granted admins cannot be removed here; remove the group from admin settings instead.
+    return !!this.user && admin.email !== this.user.email && !admin.grantedByGroup;
   }
 
   delete(admin: Admin): void {

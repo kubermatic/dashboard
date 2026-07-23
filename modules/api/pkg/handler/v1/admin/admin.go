@@ -26,6 +26,7 @@ import (
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
@@ -44,7 +45,12 @@ func GetAdminEndpoint(userInfoGetter provider.UserInfoGetter, adminProvider prov
 
 		var resultList []apiv1.Admin
 		for _, admin := range admins {
-			resultList = append(resultList, apiv1.Admin{Email: admin.Spec.Email, IsAdmin: &admin.Spec.IsAdmin, Name: admin.Spec.Name})
+			resultList = append(resultList, apiv1.Admin{
+				Email:          admin.Spec.Email,
+				IsAdmin:        &admin.Spec.IsAdmin,
+				Name:           admin.Spec.Name,
+				GrantedByGroup: admin.Annotations[kubermaticv1.AdminGrantedByGroupAnnotation],
+			})
 		}
 
 		return resultList, nil

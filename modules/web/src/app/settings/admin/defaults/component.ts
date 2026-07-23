@@ -97,6 +97,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return this.settings.annotations?.protectedAnnotations;
   }
 
+  get adminGroups(): string[] {
+    return this.settings?.adminGroups;
+  }
+
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
     this._datacenterService.datacenters
@@ -211,6 +215,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   onProtectedAnnotationsChange(val: string[]): void {
     this.settings.annotations = {...(this.settings.annotations || {}), protectedAnnotations: val};
+    this.onSettingsChange();
+  }
+
+  onAdminGroupsChange(val: string[]): void {
+    this.settings.adminGroups = val;
     this.onSettingsChange();
   }
 
@@ -366,6 +375,13 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     // objectDiff recurses into arrays and can produce a partial/sparse array, so send the full list.
     if (patch.disabledAuditWebhookBackendDCs) {
       patch.disabledAuditWebhookBackendDCs = this.settings.disabledAuditWebhookBackendDCs;
+    }
+
+    // adminGroups is a plain string list: send the whole array, otherwise a
+    // partial diff would be merge-patched into the existing one and removals
+    // would not stick.
+    if (patch.adminGroups) {
+      patch.adminGroups = this.settings.adminGroups;
     }
 
     return patch;

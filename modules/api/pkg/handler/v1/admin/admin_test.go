@@ -62,6 +62,14 @@ func TestGetAdmins(t *testing.T) {
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
 			existingAPIUser:        test.GenDefaultAPIUser(),
 		},
+		// scenario 3
+		{
+			name:                   "scenario 3: group-granted admin surfaces grantedByGroup",
+			expectedResponse:       `[{"email":"bob@acme.com","name":"Bob","isAdmin":true,"grantedByGroup":"kkp-admins"}]`,
+			httpStatus:             http.StatusOK,
+			existingKubermaticObjs: []ctrlruntimeclient.Object{genAdminGrantedByGroup("Bob", "bob@acme.com", "kkp-admins")},
+			existingAPIUser:        test.GenDefaultAPIUser(),
+		},
 	}
 
 	for _, tc := range testcases {
@@ -161,4 +169,12 @@ func TestSetAdmin(t *testing.T) {
 			test.CompareWithResult(t, res, tc.expectedResponse)
 		})
 	}
+}
+
+// genAdminGrantedByGroup returns an admin User carrying the provenance annotation
+// that the admin-group controller stamps when it grants admin via an OIDC group.
+func genAdminGrantedByGroup(name, email, group string) *kubermaticv1.User {
+	user := genUser(name, email, true)
+	user.Annotations = map[string]string{kubermaticv1.AdminGrantedByGroupAnnotation: group}
+	return user
 }

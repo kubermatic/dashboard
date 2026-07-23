@@ -675,6 +675,9 @@ type Admin struct {
 	IsAdmin *bool `json:"isAdmin,omitempty"`
 	// IsGlobalViewer indicates GlobalViewer role
 	IsGlobalViewer *bool `json:"isGlobalViewer,omitempty"`
+	// GrantedByGroup is the OIDC group that granted this user admin via the
+	// admin-group controller. Empty for manually-managed admins. Read-only.
+	GrantedByGroup string `json:"grantedByGroup,omitempty"`
 }
 
 // ProjectGroup is a helper data structure that
