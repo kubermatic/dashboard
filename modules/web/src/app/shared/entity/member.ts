@@ -44,4 +44,6 @@ export class Admin {
   email?: string;
   isAdmin?: boolean;
   isGlobalViewer?: boolean;
+  // Read-only; set when admin was granted via an OIDC group.
+  grantedByGroup?: string;
 }
