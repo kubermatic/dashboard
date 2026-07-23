@@ -23,6 +23,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ProjectService} from '@app/core/services/project';
 import {BackupStorageLocation, BackupType} from '@app/shared/entity/backup';
 import {Project} from '@app/shared/entity/project';
@@ -46,6 +47,7 @@ import {DISABLED_TOOLTIP_MESSAGE} from '@app/shared/constants/common';
 })
 export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _copiedStatusMessageByBSL = new Map<string, boolean>();
   private _selectedProject: Project;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -107,6 +109,25 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
 
   getStatusIcon(phase: string): StatusIcon {
     return getClusterBackupHealthStatus(phase).icon;
+  }
+
+  getStatusTooltip(bsl: BackupStorageLocation): string {
+    return this._copiedStatusMessageByBSL.get(bsl.name) ? 'Error message copied' : bsl.status?.message;
+  }
+
+  canCopyStatusMessage(bsl: BackupStorageLocation): boolean {
+    return !this._isBSLAvailable(bsl) && !!bsl.status?.message;
+  }
+
+  copyStatusMessage(bsl: BackupStorageLocation, tooltip: MatTooltip): void {
+    if (!this.canCopyStatusMessage(bsl)) {
+      return;
+    }
+
+    navigator.clipboard.writeText(bsl.status.message);
+    this._copiedStatusMessageByBSL.set(bsl.name, true);
+    tooltip.message = 'Error message copied';
+    tooltip.show(0);
   }
 
   addBackupStorageLocation(): void {
@@ -172,5 +193,10 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
         this.backupStorageLocations = data;
         this.dataSource.data = this.backupStorageLocations;
       });
+  }
+
+  private _isBSLAvailable(bsl: BackupStorageLocation): boolean {
+    const phase = bsl.status?.phase || '';
+    return phase.toLowerCase() === 'available';
   }
 }
