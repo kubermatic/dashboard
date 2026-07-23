@@ -23,12 +23,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/aws/smithy-go"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 // The functions in this file are used throughout KKP, mostly in our REST API.
@@ -52,16 +50,6 @@ func GetSubnets(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN
 	return out.Subnets, nil
 }
 
-func isAuthFailure(err error) (bool, string) {
-	var awsErr smithy.APIError
-
-	if errors.As(err, &awsErr) && awsErr.ErrorCode() == authFailure {
-		return true, awsErr.ErrorMessage()
-	}
-
-	return false, ""
-}
-
 // GetVPCS returns the list of AWS VPCs.
 func GetVPCS(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region string) ([]ec2types.Vpc, error) {
 	client, err := GetClientSet(ctx, accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region)
@@ -72,10 +60,6 @@ func GetVPCS(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN, a
 	vpcOut, err := client.EC2.DescribeVpcs(ctx, &ec2.DescribeVpcsInput{})
 
 	if err != nil {
-		if ok, msg := isAuthFailure(err); ok {
-			return nil, utilerrors.New(401, fmt.Sprintf("failed to list VPCs: %s", msg))
-		}
-
 		return nil, fmt.Errorf("failed to list VPCs: %w", err)
 	}
 
@@ -91,10 +75,6 @@ func GetSecurityGroupsByVPC(ctx context.Context, accessKeyID, secretAccessKey, a
 	sgOut, err := client.EC2.DescribeSecurityGroups(ctx, &ec2.DescribeSecurityGroupsInput{Filters: []ec2types.Filter{ec2VPCFilter(vpcID)}})
 
 	if err != nil {
-		if ok, msg := isAuthFailure(err); ok {
-			return nil, utilerrors.New(401, fmt.Sprintf("failed to list security groups: %s", msg))
-		}
-
 		return nil, fmt.Errorf("failed to list security groups: %w", err)
 	}
 
@@ -130,10 +110,6 @@ func getSecurityGroupsWithClient(ctx context.Context, client *ec2.Client) ([]ec2
 	sgOut, err := client.DescribeSecurityGroups(ctx, &ec2.DescribeSecurityGroupsInput{})
 
 	if err != nil {
-		if ok, msg := isAuthFailure(err); ok {
-			return nil, utilerrors.New(401, fmt.Sprintf("failed to list security groups: %s", msg))
-		}
-
 		return nil, fmt.Errorf("failed to list security groups: %w", err)
 	}
 
