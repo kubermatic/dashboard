@@ -101,6 +101,10 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250910181357-589584f
 
 replace k8s.io/client-go => k8s.io/client-go v0.35.0
 
+// NOTE: k8c.io/kubermatic/sdk/v2 must be bumped to include the SettingSpec.AdminGroups
+// changes from the kubermatic/kubermatic branch feat/14761-admin-group-binding.
+// Once that branch is merged/tagged upstream, pull the latest SDK via `make update-kkp`.
+
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.12.3
 

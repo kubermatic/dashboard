@@ -45,10 +45,10 @@ limitations under the License.
             *matCellDef="let element">
           {{element.name}}
           @if (element.grantedByGroup) {
-            <span class="km-admin-via-group"
-                  title="Admin granted via OIDC group '{{element.grantedByGroup}}'. Remove the group from Admin Groups settings to revoke.">
-              via {{element.grantedByGroup}}
-            </span>
+          <span class="km-admin-via-group"
+                title="Admin granted via OIDC group '{{element.grantedByGroup}}'. Remove the group from Admin Groups settings to revoke.">
+            via {{element.grantedByGroup}}
+          </span>
           }
         </td>
       </ng-container>
