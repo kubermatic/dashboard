@@ -503,8 +503,8 @@ github.com/go-playground/universal-translator v0.18.1 h1:Bcnm0ZwsGyWbCzImXv+pAJn
 github.com/go-playground/universal-translator v0.18.1/go.mod h1:xekY+UJKNuX9WP91TpwSH2VMlDf28Uj24BCp08ZFTUY=
 github.com/go-playground/validator/v10 v10.26.0 h1:SP05Nqhjcvz81uJaRfEV0YBSSSGMc/iMaVtFbr3Sw2k=
 github.com/go-playground/validator/v10 v10.26.0/go.mod h1:I5QpIEbmr8On7W0TktmJAumgzX4CA1XNl4ZmDuVHKKo=
-github.com/go-quicktest/qt v1.101.0 h1:O1K29Txy5P2OK0dGo59b7b0LR6wKfIhttaAhHUyn7eI=
-github.com/go-quicktest/qt v1.101.0/go.mod h1:14Bz/f7NwaXPtdYEgzsx46kqSxVwTbzVZsDC26tQJow=
+github.com/go-quicktest/qt v1.101.1-0.20240301121107-c6c8733fa1e6 h1:teYtXy9B7y5lHTp8V9KPxpYRAVA7dozigQcMiBust1s=
+github.com/go-quicktest/qt v1.101.1-0.20240301121107-c6c8733fa1e6/go.mod h1:p4lGIVX+8Wa6ZPNDvqcxq36XpUDLh42FLetFU7odllI=
 github.com/go-rod/rod v0.116.2 h1:A5t2Ky2A+5eD/ZJQr1EfsQSe5rms5Xof/qj296e+ZqA=
 github.com/go-rod/rod v0.116.2/go.mod h1:H+CMO9SCNc2TJ2WfrG+pKhITz57uGNYU43qYHh438Mg=
 github.com/go-sql-driver/mysql v1.9.2 h1:4cNKDYQ1I84SXslGddlsrMhc8k4LeDVj6Ad6WRjiHuU=
@@ -1582,10 +1582,10 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 k8c.io/kubeone v1.12.3 h1:b+dmLJDsofUiDHzyUmR512wXnF5LDDI1KpHsS/BTbrY=
 k8c.io/kubeone v1.12.3/go.mod h1:saB47KgCNP2028b/ZHZlNal1p7xHqmVfc3LSj+WOW/A=
-k8c.io/kubermatic/sdk/v2 v2.30.5-0.20260626195636-417cc9e85ab9 h1:GWiXl1kbMZ6ahA5ZKHgENoxQ7GK+GwXXerUiR6W6q2M=
-k8c.io/kubermatic/sdk/v2 v2.30.5-0.20260626195636-417cc9e85ab9/go.mod h1:AxJeOScZgfV41I0dXVO+RmKXpVeBx4F2AYpLOoeACCw=
-k8c.io/kubermatic/v2 v2.30.5-0.20260626195636-417cc9e85ab9 h1:J7k67GeL3nNqiu+gHq6z75l2D4AjwimGYHcymwlwBM8=
-k8c.io/kubermatic/v2 v2.30.5-0.20260626195636-417cc9e85ab9/go.mod h1:waynN3nLn13cTlLLFs2YqC3jKVEt608UplBMd+b4jPE=
+k8c.io/kubermatic/sdk/v2 v2.30.6-0.20260724110239-26929756136d h1:iqnfea3FiRvYosEnoq3VfymIavbjB6cdrHApdfIryvU=
+k8c.io/kubermatic/sdk/v2 v2.30.6-0.20260724110239-26929756136d/go.mod h1:AxJeOScZgfV41I0dXVO+RmKXpVeBx4F2AYpLOoeACCw=
+k8c.io/kubermatic/v2 v2.30.6-0.20260724110239-26929756136d h1:ZtFoQPgzv6Vj0ed3DCdC7RU//+BtePFWhsKX+OraptI=
+k8c.io/kubermatic/v2 v2.30.6-0.20260724110239-26929756136d/go.mod h1:dbrbf0nx3LfEwOmu4gw4Da2XN1rSHBiuS8rCEzorCV4=
 k8c.io/machine-controller/sdk v1.65.2 h1:t9L5R7CmBomLfwYO6mdnKgQHG3tTY4beGKSpZ4S+sGU=
 k8c.io/machine-controller/sdk v1.65.2/go.mod h1:/5eWTMcfa7mTQUQoqziaalViiHSVzqzy3fXjejT1qLg=
 k8c.io/operating-system-manager v1.10.7 h1:XS8uQVnMZ2jgrKcFkFE8lgKcTTVZf6JVuRduntkqi6s=
