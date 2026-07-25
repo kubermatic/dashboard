@@ -244,7 +244,7 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/btree v1.1.3 // indirect
-	github.com/google/cel-go v0.27.0 // indirect
+	github.com/google/cel-go v0.29.0 // indirect
 	github.com/google/certificate-transparency-go v1.3.3 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-containerregistry v0.21.6 // indirect
