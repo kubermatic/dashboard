@@ -69,9 +69,9 @@ require (
 	google.golang.org/api v0.280.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260702152541-62ea24844739
-	k8c.io/kubermatic/v2 v2.30.1-0.20260702152541-62ea24844739
-	k8c.io/machine-controller/sdk v1.65.2
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260724092037-f366e3d8086e
+	k8c.io/kubermatic/v2 v2.30.1-0.20260724092037-f366e3d8086e
+	k8c.io/machine-controller/sdk v1.66.0
 	k8c.io/operating-system-manager v1.10.7
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.4
@@ -401,7 +401,7 @@ require (
 	golang.org/x/tools v0.45.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260523011958-0a33c5d7ca68 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/grpc v1.82.1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
