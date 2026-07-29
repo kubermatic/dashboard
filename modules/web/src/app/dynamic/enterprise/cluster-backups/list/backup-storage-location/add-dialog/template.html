@@ -110,7 +110,7 @@ END OF TERMS AND CONDITIONS
         <strong>Required</strong>
       </mat-error>
       }
-      @if (form.get(Controls.Region).hasError('invalidDnsName')) {
+      @if (form.get(Controls.Region).hasError('pattern')) {
       <mat-error>
         Region must be a valid DNS name.
       </mat-error>
