@@ -405,6 +405,13 @@ limitations under the License.
         }
       </mat-form-field>
       }
+      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
+      <mat-checkbox [formControlName]="Controls.RouterReconciliation"
+                    kmValueChangedIndicator>
+        Skip Router Reconciliation
+      </mat-checkbox>
+      }
+
       <div class="km-proxy-settings">
         <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
              [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>
@@ -433,12 +440,6 @@ limitations under the License.
           </ng-container>
         </km-chip-list>
       </div>
-
-      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
-      <mat-checkbox [formControlName]="Controls.RouterReconciliation">
-        Skip Router Reconciliation
-      </mat-checkbox>
-      }
 
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"
