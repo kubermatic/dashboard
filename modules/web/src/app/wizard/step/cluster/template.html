@@ -525,23 +525,33 @@ limitations under the License.
             }
             }
             @if (isclusterBackupEnabled) {
-            <mat-checkbox [formControlName]="Controls.ClusterBackup">
-              Cluster Backup
-              <i class="km-icon-info km-pointer"
-                 [matTooltip]="Tooltips.clusterBackup"></i>
-            </mat-checkbox>
+            <div fxLayoutAlign="space-between center">
+              <mat-checkbox [formControlName]="Controls.ClusterBackup">
+                Cluster Backup
+                <i class="km-icon-info km-pointer"
+                   [matTooltip]="Tooltips.clusterBackup"></i>
+              </mat-checkbox>
+              @if (!!controlValue(Controls.ClusterBackup)) {
+              <button (click)="addBackupStorageLocationDialog()"
+                      type="button"
+                      mat-flat-button
+                      color="quaternary">
+                <i class="km-icon-mask km-icon-add"
+                   matButtonIcon></i>
+                <span>Add Backup Storage Location</span>
+              </button>
+              }
+            </div>
             }
             @if (!!controlValue(Controls.ClusterBackup) && isclusterBackupEnabled) {
             <mat-form-field>
               <mat-label>{{backupStorageLocationLabel}}</mat-label>
               <mat-select [formControlName]="Controls.BackupStorageLocation"
-                          (selectionChange)="onBackupStorageLocationSelectionChange($event)"
                           disableOptionCentering>
                 @for (bsl of backupStorageLocationsList; track bsl) {
                 <mat-option [value]="bsl.name">{{bsl.displayName}}
                 </mat-option>
                 }
-                <mat-option [value]="createBackupStorageLocationOptionValue">+ Create Backup Storage Location</mat-option>
               </mat-select>
               @if (form.get(Controls.BackupStorageLocation).hasError('required')) {
               <mat-error>

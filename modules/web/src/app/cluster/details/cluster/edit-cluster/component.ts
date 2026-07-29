@@ -14,8 +14,7 @@
 
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatSelectChange} from '@angular/material/select';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
 import {DynamicModule} from '@app/dynamic/module-registry';
@@ -47,6 +46,7 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings, StaticLabel} from '@shared/entity/settings';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
+import {isBackupStorageLocationAvailable} from '@shared/utils/backup';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
@@ -67,7 +67,7 @@ import {HTTP_PROXY_URL_PATTERN_VALIDATOR, IPV4_IPV6_CIDR_PATTERN, NO_PROXY_PATTE
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
@@ -139,7 +139,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isAuditWebhookBackendHidden = false;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
-  readonly createBackupStorageLocationOptionValue = '__create_backup_storage_location__';
   isAllowedIPRangeSupported: boolean;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
@@ -176,7 +175,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _builder: FormBuilder,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _matDialog: MatDialog,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
@@ -560,7 +558,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList.filter(bsl => this._isBackupStorageLocationAvailable(bsl));
+        this.backupStorageLocationsList = cbslList.filter(bsl => isBackupStorageLocationAvailable(bsl));
         this.backupStorageLocationLabel = this.backupStorageLocationsList.length
           ? BSLListState.Ready
           : BSLListState.Empty;
@@ -573,33 +571,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           backupStorageLocationControl.reset();
         }
       });
-  }
-
-  async onBackupStorageLocationSelectionChange(event: MatSelectChange<string>): Promise<void> {
-    if (event.value !== this.createBackupStorageLocationOptionValue) {
-      return;
-    }
-
-    const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
-    const previousValue = this.cluster.spec?.backupConfig?.backupStorageLocation?.name ?? '';
-    backupStorageLocationControl.setValue(previousValue, {emitEvent: false});
-
-    const AddBackupStorageLocationDialogComponent = await DynamicModule.AddBackupStorageLocationDialogComponent;
-    if (!AddBackupStorageLocationDialogComponent) {
-      return;
-    }
-    this._matDialog
-      .open(AddBackupStorageLocationDialogComponent, {
-        data: {projectID: this.projectID},
-      })
-      .afterClosed()
-      .pipe(take(1), filter(Boolean))
-      .subscribe(() => this._getCBSL(this.projectID));
-  }
-
-  private _isBackupStorageLocationAvailable(bsl: BackupStorageLocation): boolean {
-    const status = bsl.status?.phase || bsl.spec?.status || '';
-    return status.toLowerCase() === 'available';
   }
 
   getObservable(): Observable<Cluster> {

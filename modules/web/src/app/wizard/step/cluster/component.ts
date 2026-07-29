@@ -23,7 +23,6 @@ import {
   Validators,
 } from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSelectChange} from '@angular/material/select';
 import {ApplicationService} from '@app/core/services/application';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {FeatureGateService} from '@app/core/services/feature-gate';
@@ -78,6 +77,7 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   generateEncryptionKey,
 } from '@shared/utils/cluster';
+import {isBackupStorageLocationAvailable} from '@shared/utils/backup';
 import {getEditionVersion, tooltipWithAdminNote} from '@shared/utils/common';
 import {
   ADMIN_ENFORCED_IN_DATACENTER_NOTE,
@@ -93,7 +93,7 @@ import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {combineLatest, merge, Subscription} from 'rxjs';
+import {combineLatest, from, merge, Subscription} from 'rxjs';
 import {debounceTime, filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {WizardMode} from '../../types/wizard-mode';
@@ -182,7 +182,6 @@ enum Controls {
   standalone: false,
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
-  readonly createBackupStorageLocationOptionValue = '__create_backup_storage_location__';
   containerRuntime = ContainerRuntime;
   admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
@@ -1267,7 +1266,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList.filter(bsl => this._isBackupStorageLocationAvailable(bsl));
+        this.backupStorageLocationsList = cbslList.filter(bsl => isBackupStorageLocationAvailable(bsl));
         this.backupStorageLocationLabel = this.backupStorageLocationsList.length
           ? BSLListState.Ready
           : BSLListState.Empty;
@@ -1282,32 +1281,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
   }
 
-  async onBackupStorageLocationSelectionChange(event: MatSelectChange): Promise<void> {
-    if (event.value !== this.createBackupStorageLocationOptionValue) {
-      return;
-    }
-
-    const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
-    const previousValue = this._clusterSpecService.cluster?.spec?.backupConfig?.backupStorageLocation?.name ?? '';
-    backupStorageLocationControl.setValue(previousValue, {emitEvent: false});
-
-    const AddBackupStorageLocationDialogComponent = await DynamicModule.AddBackupStorageLocationDialogComponent;
-    if (!AddBackupStorageLocationDialogComponent) {
-      return;
-    }
-    this._matDialog
-      .open(AddBackupStorageLocationDialogComponent, {
-        data: {projectID: this._selectedProjectID},
-      })
-      .afterClosed()
-      .pipe(take(1))
-      .pipe(filter(Boolean))
+  addBackupStorageLocationDialog(): void {
+    from(DynamicModule.AddBackupStorageLocationDialogComponent)
+      .pipe(
+        filter(Boolean),
+        switchMap(component =>
+          this._matDialog
+            .open(component, {
+              data: {projectID: this._selectedProjectID},
+            })
+            .afterClosed()
+        ),
+        take(1),
+        filter(Boolean)
+      )
       .subscribe(() => this._getCBSL(this._selectedProjectID));
-  }
-
-  private _isBackupStorageLocationAvailable(bsl: BackupStorageLocation): boolean {
-    const status = bsl.status?.phase || bsl.spec?.status || '';
-    return status.toLowerCase() === 'available';
   }
 
   private _handleClusterBackupChange(): void {
