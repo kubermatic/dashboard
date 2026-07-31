@@ -456,7 +456,11 @@ limitations under the License.
                fxFlex="100"
                fxLayoutGap="10px">
             <div fxLayoutAlign=" center">
-              <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+              <mat-checkbox [formControlName]="Controls.AuditLogging">
+                Audit Logging
+                <i class="km-icon-info km-pointer"
+                   [matTooltip]="isEnforced(Controls.AuditLogging) ? 'Audit Logging is enforced by your admin in the chosen datacenter.' : 'Enable audit logging to record requests received by the Kubernetes API of this cluster.'"></i>
+              </mat-checkbox>
               @if (!!controlValue(Controls.AuditLogging)) {
               <mat-button-toggle-group [formControlName]="Controls.AuditPolicyPreset"
                                        group="auditLogging">
@@ -477,10 +481,6 @@ limitations under the License.
                   recommended
                 </mat-button-toggle>
               </mat-button-toggle-group>
-              }
-              @if (isEnforced(Controls.AuditLogging)) {
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
               }
             </div>
             @if (!!controlValue(Controls.AuditLogging) && !isAuditWebhookBackendHidden) {
@@ -661,17 +661,13 @@ limitations under the License.
             @if (isMLAEnabled()) {
             <mat-checkbox [formControlName]="Controls.MLALogging">
               User Cluster Logging
-              @if (isEnforced(Controls.MLALogging)) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Logging is enforced by your admin."></i>
-              }
+                 [matTooltip]="isEnforced(Controls.MLALogging) ? 'User Cluster Logging is enforced by your admin.' : 'Enable log collection for this user cluster.'"></i>
             </mat-checkbox>
             <mat-checkbox [formControlName]="Controls.MLAMonitoring">
               User Cluster Monitoring
-              @if (isEnforced(Controls.MLAMonitoring)) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Monitoring is enforced by your admin."></i>
-              }
+                 [matTooltip]="isEnforced(Controls.MLAMonitoring) ? 'User Cluster Monitoring is enforced by your admin.' : 'Enable metrics collection for this user cluster.'"></i>
             </mat-checkbox>
             }
             @if (isUserSshKeyEnabled) {

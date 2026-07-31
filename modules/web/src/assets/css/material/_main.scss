@@ -594,6 +594,13 @@ button {
   }
 }
 
+// Material puts `.mdc-checkbox--disabled { pointer-events: none; }` on the checkbox host, so a
+// disabled checkbox also swallows hover on its projected label content. Info icons there usually
+// explain *why* the option is disabled, so their tooltips must stay reachable.
+.mat-mdc-checkbox.mat-mdc-checkbox-disabled .mdc-label .km-icon-info {
+  pointer-events: auto;
+}
+
 .mat-button-toggle-group {
   &.mat-button-toggle-group-appearance-standard {
     border: none;

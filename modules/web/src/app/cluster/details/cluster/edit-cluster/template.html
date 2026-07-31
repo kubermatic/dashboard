@@ -170,7 +170,11 @@ limitations under the License.
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
-                      kmValueChangedIndicator>Audit Logging</mat-checkbox>
+                      kmValueChangedIndicator>
+          Audit Logging
+          <i class="km-icon-info km-pointer"
+             [matTooltip]="!!datacenter.spec.enforceAuditLogging ? 'Audit Logging is enforced by your admin in the chosen datacenter.' : 'Enable audit logging to record requests received by the Kubernetes API of this cluster.'"></i>
+        </mat-checkbox>
         @if (!!form.get(Controls.AuditLogging).value) {
         <mat-button-toggle-group [formControlName]="Controls.AuditPolicyPreset"
                                  group="auditLogging"
@@ -192,10 +196,6 @@ limitations under the License.
             recommended
           </mat-button-toggle>
         </mat-button-toggle-group>
-        }
-        @if (!!datacenter.spec.enforceAuditLogging) {
-        <i class="km-icon-info km-pointer"
-           matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
         }
       </div>
 
@@ -268,10 +268,8 @@ limitations under the License.
       <mat-checkbox [formControlName]="Controls.MLALogging"
                     kmValueChangedIndicator>
         User Cluster Logging
-        @if (isEnforced(Controls.MLALogging)) {
         <i class="km-icon-info km-pointer"
-           matTooltip="User Cluster Logging is enforced by your admin."></i>
-        }
+           [matTooltip]="isEnforced(Controls.MLALogging) ? 'User Cluster Logging is enforced by your admin.' : 'Enable log collection for this user cluster.'"></i>
       </mat-checkbox>
       }
 
@@ -279,10 +277,8 @@ limitations under the License.
       <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                     kmValueChangedIndicator>
         User Cluster Monitoring
-        @if (isEnforced(Controls.MLAMonitoring)) {
         <i class="km-icon-info km-pointer"
-           matTooltip="User Cluster Monitoring is enforced by your admin."></i>
-        }
+           [matTooltip]="isEnforced(Controls.MLAMonitoring) ? 'User Cluster Monitoring is enforced by your admin.' : 'Enable metrics collection for this user cluster.'"></i>
       </mat-checkbox>
       }
 
