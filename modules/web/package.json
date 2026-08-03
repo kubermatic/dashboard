@@ -60,7 +60,7 @@
     "@angular/animations": "21.2.18",
     "@angular/cdk": "21.2.14",
     "@angular/common": "21.2.18",
-    "@angular/compiler": "21.2.18",
+    "@angular/compiler": "21.2.19",
     "@angular/core": "21.2.18",
     "@angular/flex-layout": "15.0.0-beta.42",
     "@angular/forms": "21.2.18",
