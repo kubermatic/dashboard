@@ -82,6 +82,9 @@ type DatacenterSpecKubevirt struct {
 	// namespaced mode
 	NamespacedMode *NamespacedMode `json:"namespacedMode,omitempty"`
 
+	// node defaults
+	NodeDefaults *KubeVirtNodeDefaults `json:"nodeDefaults,omitempty"`
+
 	// provider network
 	ProviderNetwork *ProviderNetwork `json:"providerNetwork,omitempty"`
 
@@ -118,6 +121,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateNamespacedMode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNodeDefaults(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -289,6 +296,25 @@ func (m *DatacenterSpecKubevirt) validateNamespacedMode(formats strfmt.Registry)
 	return nil
 }
 
+func (m *DatacenterSpecKubevirt) validateNodeDefaults(formats strfmt.Registry) error {
+	if swag.IsZero(m.NodeDefaults) { // not required
+		return nil
+	}
+
+	if m.NodeDefaults != nil {
+		if err := m.NodeDefaults.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodeDefaults")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodeDefaults")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DatacenterSpecKubevirt) validateProviderNetwork(formats strfmt.Registry) error {
 	if swag.IsZero(m.ProviderNetwork) { // not required
 		return nil
@@ -354,6 +380,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateNamespacedMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNodeDefaults(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -487,6 +517,22 @@ func (m *DatacenterSpecKubevirt) contextValidateNamespacedMode(ctx context.Conte
 				return ve.ValidateName("namespacedMode")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("namespacedMode")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateNodeDefaults(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NodeDefaults != nil {
+		if err := m.NodeDefaults.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodeDefaults")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodeDefaults")
 			}
 			return err
 		}
