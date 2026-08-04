@@ -32259,6 +32259,9 @@
         "namespacedMode": {
           "$ref": "#/definitions/NamespacedMode"
         },
+        "nodeDefaults": {
+          "$ref": "#/definitions/KubeVirtNodeDefaults"
+        },
         "providerNetwork": {
           "$ref": "#/definitions/ProviderNetwork"
         },
@@ -36476,6 +36479,28 @@
           "description": "Optional: IsDefaultClass. If true, the created VolumeSnapshotClass in the tenant cluster will be annotated with:\nsnapshot.storage.kubernetes.io/is-default-class: true\nIf missing or false, annotation will be:\nsnapshot.storage.kubernetes.io/is-default-class: false",
           "type": "boolean",
           "x-go-name": "IsDefaultClass"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "KubeVirtNodeDefaults": {
+      "type": "object",
+      "title": "KubeVirtNodeDefaults describes the default CPU, memory and primary disk size for KubeVirt worker nodes.",
+      "properties": {
+        "cpus": {
+          "description": "Optional: CPUs sets the default number of CPU cores for the virtual machine.",
+          "type": "string",
+          "x-go-name": "CPUs"
+        },
+        "memory": {
+          "description": "Optional: Memory sets the default amount of memory for the virtual machine.",
+          "type": "string",
+          "x-go-name": "Memory"
+        },
+        "primaryDiskSize": {
+          "description": "Optional: PrimaryDiskSize sets the default size of the primary disk of the virtual machine.",
+          "type": "string",
+          "x-go-name": "PrimaryDiskSize"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"

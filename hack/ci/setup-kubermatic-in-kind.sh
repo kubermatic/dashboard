@@ -126,6 +126,29 @@ minio:
     accessKey: test
     secretKey: testtest
 
+# kind has no LoadBalancer implementation, so the envoy-gateway-controller's
+# default envoyProxy.service.type (LoadBalancer) would never get an address
+# and the Gateway would never become Programmed. Expose it via NodePort instead,
+# mirroring kubermatic/kubermatic's own kind-based Gateway API e2e setup.
+envoyProxy:
+  service:
+    type: NodePort
+    externalTrafficPolicy: Cluster
+    patch:
+      type: JSONMerge
+      value:
+        spec:
+          type: NodePort
+          ports:
+            - name: http
+              port: 80
+              nodePort: 30080
+              targetPort: 10080
+            - name: https
+              port: 443
+              nodePort: 30443
+              targetPort: 10443
+
 nginx:
   controller:
     replicaCount: 1

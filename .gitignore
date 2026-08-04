@@ -20,3 +20,4 @@
 .nvmrc
 .DS_Store
 applypatch-msg
+.history

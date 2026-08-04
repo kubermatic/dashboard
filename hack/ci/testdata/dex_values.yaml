@@ -18,6 +18,9 @@
 # NB: Our Go code does not load the default values.yaml, so especially for the ingress
 # config you cannot rely on defaults.
 
+httpRoute:
+  domain: dex.dex
+
 dex:
   replicaCount: 1
   ingress:
