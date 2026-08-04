@@ -29,8 +29,17 @@ $my-typography: mat.m2-define-typography-config(
 @include mat.app-background;
 
 // Restores overflow:visible on chip cells (removed as a default in Angular Material v21 via
-// angular/components#31679 and now only re-applied through this mixin). 
-@include mat.strong-focus-indicators;
+// angular/components#31679). Inlined instead of including mat.strong-focus-indicators: that mixin
+// also emits --mat-focus-indicator-border-color: var(--mat-sys-secondary, black), and this app
+// still uses the M2 theming API, so --mat-sys-* is never defined and every focused control gets a
+// black outline.
+.mat-mdc-standard-chip {
+  .mdc-evolution-chip__cell--primary,
+  .mdc-evolution-chip__action--primary,
+  .mat-mdc-chip-action-label {
+    overflow: visible;
+  }
+}
 
 @mixin theme($theme, $colors) {
   $palette-background: map.get($theme, background);
