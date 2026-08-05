@@ -123,8 +123,6 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
 
-    this._updateRegionAndEndpointValidators(this.form.get(Controls.AddCustomConfig).value);
-
     if (this._config.bslObject) {
       this.form.get(Controls.Name).disable();
     } else {
@@ -143,17 +141,9 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       .get(Controls.AddCustomConfig)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((value: boolean) => {
-        this._updateRegionAndEndpointValidators(value);
-        let config: BackupStorageLocationConfig;
-        if (this._config.bslObject?.name) {
-          config = this._config.bslObject.spec.config;
-        } else {
-          config = {
-            region: this.form.get(Controls.Region).value,
-            s3Url: this.form.get(Controls.Endpoints).value?.trim(),
-            checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value,
-          };
-        }
+        const config: BackupStorageLocationConfig = this._config.bslObject?.name
+          ? this._config.bslObject.spec.config
+          : this._getConfig();
         try {
           this.valuesConfig = y.dump({config: config});
         } catch (error) {
@@ -206,11 +196,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         },
         backupSyncPeriod:
           this.form.get(Controls.BackupSyncPeriod).value === '' ? null : this.form.get(Controls.BackupSyncPeriod).value,
-        config: {
-          region: this.form.get(Controls.Region).value,
-          s3Url: this.form.get(Controls.Endpoints).value?.trim(),
-          checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value || '',
-        },
+        config: this._getConfig(),
         provider: SupportedBSLProviders.AWS,
       } as BackupStorageLocationSpec,
       credentials: {
@@ -230,22 +216,22 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
     return bsl;
   }
 
-  private _updateRegionAndEndpointValidators(addCustomConfig: boolean): void {
-    const regionControl = this.form.get(Controls.Region);
-    const endpointControl = this.form.get(Controls.Endpoints);
+  // https://github.com/velero-io/velero-plugin-for-aws/blob/main/backupstoragelocation.md
+  private _getConfig(): BackupStorageLocationConfig {
+    const config: BackupStorageLocationConfig = {};
+    const region = this.form.get(Controls.Region).value?.trim();
+    const s3Url = this.form.get(Controls.Endpoints).value?.trim();
+    const checksumAlgorithm = this.form.get(Controls.ChecksumAlgorithm).value;
 
-    const regionValidators = [DNS_NAME_PATTERN_VALIDATOR];
-    const endpointValidators = [endpointUrlValidator()];
-
-    if (!addCustomConfig) {
-      regionValidators.unshift(Validators.required);
-      endpointValidators.unshift(Validators.required);
+    if (region) {
+      config.region = region;
     }
-
-    regionControl.setValidators(regionValidators);
-    endpointControl.setValidators(endpointValidators);
-
-    regionControl.updateValueAndValidity({emitEvent: false});
-    endpointControl.updateValueAndValidity({emitEvent: false});
+    if (s3Url) {
+      config.s3Url = s3Url;
+    }
+    if (checksumAlgorithm) {
+      config.checksumAlgorithm = checksumAlgorithm;
+    }
+    return config;
   }
 }
