@@ -54,6 +54,65 @@ export const DELETE_SELECTED_TOOLTIP = 'Delete selected';
 export const CLOSE_PANEL_TOOLTIP = 'Close panel';
 export const GO_BACK_TO_CLUSTER_LIST_TOOLTIP = 'Go back to the cluster list';
 
+// Cluster option tooltips
+// Shared by the cluster wizard and the edit cluster dialog so both describe an option the same way.
+// Each entry says what the option actually does; when an admin locks the option, one of the notes
+// below is prefixed so the reason the control is disabled is the first thing the user reads.
+export const ADMIN_ENFORCED_NOTE = 'Enforced by your admin and cannot be changed.';
+export const ADMIN_ENFORCED_IN_DATACENTER_NOTE =
+  'Enforced by your admin in the chosen datacenter and cannot be changed.';
+export const ADMIN_DISABLED_IN_DATACENTER_NOTE =
+  'Disabled by your admin in the chosen datacenter and cannot be changed.';
+
+export const CLUSTER_OPTION_TOOLTIPS = {
+  containerRuntime: 'Containerd is the only supported container runtime',
+  dualStack:
+    'Dual Stack is a technology preview feature, some limitations may apply depending on the chosen provider. Please see the KKP documentation for more details.',
+  podSecurityPolicy: 'Pod Security Policies allow detailed authorization of pod creation and updates.',
+  konnectivity: 'OpenVPN support is deprecated, hence Konnectivity can no longer be disabled.',
+  ciliumIngress: 'Enable Cilium kubernetes ingress support',
+
+  auditLogging:
+    'Records requests received by the Kubernetes API of this cluster. Logs are collected by a fluent-bit sidecar in the control plane.',
+  auditPolicyCustom:
+    'Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.',
+  auditPolicyMetadata: 'Logs metadata for all requests received by the Kubernetes API.',
+  auditPolicyMinimal:
+    'Logs extended information about key security concerns like workload modifications and access to sensitive information.',
+  auditPolicyRecommended:
+    'Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.',
+  auditWebhookBackend: 'Ships audit logs to an external webhook backend, configured from a secret in this cluster.',
+
+  opaEnforced: 'OPA Integration is enforced by your admin.',
+  opaDisabled: 'OPA Integration is disabled by your admin.',
+  kyverno:
+    'Deploys Kyverno for policy management. Its controllers run in the cluster control plane and register admission webhooks that validate and mutate resources in this user cluster.',
+
+  mlaLogging: 'Collects logs from all pods in this user cluster and ships them to the central Grafana Loki store.',
+  mlaMonitoring:
+    'Scrapes metrics from this user cluster and writes them to the central metrics store for viewing in Grafana.',
+
+  kubeLB:
+    'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.',
+  kubeLBEnforced: 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.',
+  kubeLBLoadBalancerClass:
+    'Enable to limit KubeLB to only process services with Kubernetes LoadBalancer Class named `kubelb`. When disabled, KubeLB will manage all services of type `LoadBalancer`',
+  gatewayAPI: 'Enable to use Gateway APIs. KKP will install the Gateway API CRDs in this cluster.',
+
+  disableCSIDriver:
+    "Skips installation of the provider's default CSI driver, leaving the cluster without dynamic volume provisioning or snapshots. It cannot be turned on while existing volumes still use the driver.",
+  csiDriverDisabledByAdmin: 'The CSI driver is disabled by your admin in the chosen datacenter and cannot be enabled.',
+
+  encryptionAtRest:
+    'Encrypts Kubernetes secrets at rest in etcd with a secretbox key. Enabling it or changing the key runs a job that re-encrypts all affected resources.',
+  generateEncryptionKey: 'Generate encryption key',
+
+  clusterBackup:
+    'Installs Velero in this cluster so cluster resources and volume data can be backed up to the selected backup storage location.',
+  userSSHKeyAgent:
+    'Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created.',
+} as const;
+
 // Per-cluster proxy tooltips
 export const PROXY_MODE_HINT = 'kube-proxy mode for in-cluster service routing.';
 export const NODE_EGRESS_PROXY_TOOLTIP =

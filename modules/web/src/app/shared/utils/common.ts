@@ -100,6 +100,12 @@ export function getPercentage(total: number, used: number, maxUsage = maxUsageDe
   return Math.round(((used / total) * maxUsage + Number.EPSILON) * maxUsage) / maxUsage;
 }
 
+// Prefixes an option's description with the reason it is locked, so that a checkbox disabled by an
+// admin explains both why it cannot be changed and what it does.
+export function tooltipWithAdminNote(description: string, note: string, locked: boolean): string {
+  return locked ? `${note} ${description}` : description;
+}
+
 export function getEditionVersion(): string {
   return `v${version.semver?.major}.${version.semver?.minor}`;
 }

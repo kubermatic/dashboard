@@ -52,8 +52,11 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   generateEncryptionKey,
 } from '@shared/utils/cluster';
-import {getEditionVersion} from '@shared/utils/common';
+import {getEditionVersion, tooltipWithAdminNote} from '@shared/utils/common';
 import {
+  ADMIN_ENFORCED_IN_DATACENTER_NOTE,
+  ADMIN_ENFORCED_NOTE,
+  CLUSTER_OPTION_TOOLTIPS,
   KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE,
   NODE_EGRESS_PROXY_TOOLTIP,
   OPA_DEPRECATED_MESSAGE,
@@ -148,6 +151,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   readonly KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE = KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE;
   readonly OPA_DEPRECATED_MESSAGE = OPA_DEPRECATED_MESSAGE;
   readonly NODE_EGRESS_PROXY_TOOLTIP = NODE_EGRESS_PROXY_TOOLTIP;
+  readonly Tooltips = CLUSTER_OPTION_TOOLTIPS;
+  readonly AdminEnforcedNote = ADMIN_ENFORCED_NOTE;
+  readonly AdminEnforcedInDatacenterNote = ADMIN_ENFORCED_IN_DATACENTER_NOTE;
+  readonly tooltipWithAdminNote = tooltipWithAdminNote;
   private readonly _nameMinLen = 3;
   private readonly ENCRYPTION_KEY_ANNOTATION = 'kubermatic.io/encryption-key';
   private _settings: AdminSettings;

@@ -77,8 +77,11 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   generateEncryptionKey,
 } from '@shared/utils/cluster';
-import {getEditionVersion} from '@shared/utils/common';
+import {getEditionVersion, tooltipWithAdminNote} from '@shared/utils/common';
 import {
+  ADMIN_ENFORCED_IN_DATACENTER_NOTE,
+  ADMIN_ENFORCED_NOTE,
+  CLUSTER_OPTION_TOOLTIPS,
   GENERATE_NAME_TOOLTIP,
   KUBERNETES_DASHBOARD_DEPRECATED_MESSAGE,
   NODE_EGRESS_PROXY_TOOLTIP,
@@ -226,6 +229,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly NODE_EGRESS_PROXY_TOOLTIP = NODE_EGRESS_PROXY_TOOLTIP;
   readonly PROXY_MODE_HINT = PROXY_MODE_HINT;
   readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
+  readonly Tooltips = CLUSTER_OPTION_TOOLTIPS;
+  readonly AdminEnforcedNote = ADMIN_ENFORCED_NOTE;
+  readonly AdminEnforcedInDatacenterNote = ADMIN_ENFORCED_IN_DATACENTER_NOTE;
+  readonly tooltipWithAdminNote = tooltipWithAdminNote;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
