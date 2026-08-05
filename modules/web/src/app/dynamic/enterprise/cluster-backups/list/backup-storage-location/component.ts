@@ -38,6 +38,7 @@ import {GroupConfig} from '@app/shared/model/Config';
 import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
 import {StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {isBackupStorageLocationAvailable} from '@app/shared/utils/backup';
 import {DISABLED_TOOLTIP_MESSAGE} from '@app/shared/constants/common';
 
 @Component({
@@ -116,7 +117,7 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   }
 
   canCopyStatusMessage(bsl: BackupStorageLocation): boolean {
-    return !this._isBSLAvailable(bsl) && !!bsl.status?.message;
+    return !isBackupStorageLocationAvailable(bsl) && !!bsl.status?.message;
   }
 
   copyStatusMessage(bsl: BackupStorageLocation, tooltip: MatTooltip): void {
@@ -193,10 +194,5 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
         this.backupStorageLocations = data;
         this.dataSource.data = this.backupStorageLocations;
       });
-  }
-
-  private _isBSLAvailable(bsl: BackupStorageLocation): boolean {
-    const phase = bsl.status?.phase || '';
-    return phase.toLowerCase() === 'available';
   }
 }
