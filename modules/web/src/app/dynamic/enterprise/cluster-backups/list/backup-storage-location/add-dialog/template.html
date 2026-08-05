@@ -104,12 +104,7 @@ END OF TERMS AND CONDITIONS
       <mat-label>Region</mat-label>
       <input [formControlName]="Controls.Region"
              matInput>
-      <mat-hint>The AWS region where the bucket is located.</mat-hint>
-      @if (form.get(Controls.Region).hasError('required')) {
-      <mat-error>
-        <strong>Required</strong>
-      </mat-error>
-      }
+      <mat-hint>Optional. The AWS region where the bucket is located.</mat-hint>
       @if (form.get(Controls.Region).hasError('pattern')) {
       <mat-error>
         Region must be a valid DNS name.
@@ -120,12 +115,7 @@ END OF TERMS AND CONDITIONS
       <mat-label>Endpoint URL</mat-label>
       <input [formControlName]="Controls.Endpoints"
              matInput>
-      <mat-hint>Specify the AWS S3 URL here.</mat-hint>
-      @if (form.get(Controls.Endpoints).hasError('required')) {
-      <mat-error>
-        <strong>Required</strong>
-      </mat-error>
-      }
+      <mat-hint>Optional. Specify the AWS S3 URL here.</mat-hint>
       @if (form.get(Controls.Endpoints).hasError('invalidEndpointUrl')) {
       <mat-error>
         Endpoint URL must start with http:// or https:// and contain a valid DNS host.
