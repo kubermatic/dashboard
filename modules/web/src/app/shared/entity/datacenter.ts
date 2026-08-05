@@ -118,7 +118,15 @@ export class HetznerDatacenterSpec {
   network: string;
 }
 
-export class KubeVirtDatacenterSpec {}
+export class KubeVirtDatacenterSpec {
+  nodeDefaults?: KubeVirtNodeDefaults;
+}
+
+export class KubeVirtNodeDefaults {
+  cpus?: string;
+  memory?: string;
+  primaryDiskSize?: string;
+}
 
 export class NutanixDatacenterSpec {
   endpoint: string;

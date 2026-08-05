@@ -403,9 +403,7 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         memory: 2048,
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
-      return {
-        primaryDiskSize: '25',
-      } as KubeVirtNodeSpec;
+      return {} as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
       return {
         imageName: '',

@@ -27,10 +27,12 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
+import {DatacenterService} from '@core/services/datacenter';
 import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {KubeVirtNodeDefaults} from '@shared/entity/datacenter';
 import {KubeVirtNodeAffinityPreset, KubeVirtNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {
   KubeVirtAffinityPreset,
@@ -56,8 +58,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
-import {merge, Observable} from 'rxjs';
-import {filter, map, take, takeUntil} from 'rxjs/operators';
+import {merge, Observable, of} from 'rxjs';
+import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instancetype',
@@ -155,9 +157,9 @@ export class KubeVirtBasicNodeDataComponent
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   selectedConfigurationMode = ConfigurationMode.CustomResources;
   private readonly _instanceTypeIDSeparator = ':';
-  private readonly _defaultCPUs = 2;
-  private readonly _defaultMemory = 4000;
+  private readonly _staticNodeDefaults: KubeVirtNodeDefaults = {cpus: '2', memory: '4000', primaryDiskSize: '25'};
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
+  private _nodeDefaults: KubeVirtNodeDefaults = this._staticNodeDefaults;
   private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
   private _instanceTypes: KubeVirtInstanceTypeList;
@@ -192,7 +194,8 @@ export class KubeVirtBasicNodeDataComponent
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _matDialog: MatDialog,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _datacenterService: DatacenterService
   ) {
     super();
 
@@ -205,11 +208,11 @@ export class KubeVirtBasicNodeDataComponent
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control(''),
       [Controls.Preference]: this._builder.control(''),
-      [Controls.CPUs]: this._builder.control(this._defaultCPUs, Validators.required),
-      [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
+      [Controls.CPUs]: this._builder.control(this._nodeDefaults.cpus, Validators.required),
+      [Controls.Memory]: this._builder.control(this._nodeDefaults.memory, Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PrimaryDiskSize]: this._builder.control('25G', Validators.required),
+      [Controls.PrimaryDiskSize]: this._builder.control(`${this._nodeDefaults.primaryDiskSize}G`, Validators.required),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
@@ -273,6 +276,15 @@ export class KubeVirtBasicNodeDataComponent
       });
 
     this._subnetsObservable().pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
+
+    merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
+      .pipe(filter(dc => !!dc))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(dc => {
+        this._nodeDefaults = dc?.spec?.kubevirt?.nodeDefaults ?? this._staticNodeDefaults;
+        this._applyNodeDefaults();
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -348,11 +360,11 @@ export class KubeVirtBasicNodeDataComponent
     const cpuControl = this.form.get(Controls.CPUs);
     const memoryControl = this.form.get(Controls.Memory);
 
-    cpuControl.setValue(isCustomMode ? this._defaultCPUs : null);
+    cpuControl.setValue(isCustomMode ? this._nodeDefaults.cpus : null);
     cpuControl.setValidators(isCustomMode ? Validators.required : []);
     isCustomMode ? cpuControl.enable() : cpuControl.disable();
 
-    memoryControl.setValue(isCustomMode ? this._defaultMemory : null);
+    memoryControl.setValue(isCustomMode ? this._nodeDefaults.memory : null);
     memoryControl.setValidators(isCustomMode ? Validators.required : []);
     isCustomMode ? memoryControl.enable() : memoryControl.disable();
 
@@ -712,8 +724,27 @@ export class KubeVirtBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
+  private _applyNodeDefaults(): void {
+    this.form
+      .get(Controls.PrimaryDiskSize)
+      .setValue(this._initialData?.primaryDiskSize ?? this._nodeDefaults.primaryDiskSize);
+
+    if (this.selectedConfigurationMode !== ConfigurationMode.CustomResources) {
+      return;
+    }
+
+    this.form
+      .get(Controls.CPUs)
+      .setValue(
+        this._initialData?.vcpus?.cores
+          ? this._initialData.vcpus.cores
+          : (this._initialData?.cpus ?? this._nodeDefaults.cpus)
+      );
+    this.form.get(Controls.Memory).setValue(this._initialData?.memory ?? this._nodeDefaults.memory);
+  }
+
   private _init(): void {
-    if (this._initialData) {
+    if (!_.isEmpty(this._initialData)) {
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
@@ -746,8 +777,8 @@ export class KubeVirtBasicNodeDataComponent
 
         const cpuValue = this._initialData.vcpus?.cores
           ? this._initialData.vcpus.cores
-          : parseInt(this._initialData.cpus) || this._defaultCPUs;
-        const memoryValue = parseInt(this._initialData.memory) || this._defaultMemory;
+          : parseInt(this._initialData.cpus) || parseInt(this._nodeDefaults.cpus);
+        const memoryValue = parseInt(this._initialData.memory) || parseInt(this._nodeDefaults.memory);
 
         // Instance type is not required in custom mode
         this.form.get(Controls.InstanceType).setValidators([]);
@@ -850,7 +881,7 @@ export class KubeVirtBasicNodeDataComponent
     const memory = instanceTypeId ? this.selectedInstanceTypeMemory : this.form.get(Controls.Memory).value;
     const diskSize = this.form.get(Controls.PrimaryDiskSize).value;
 
-    if (!cpus || !memory) {
+    if (!cpus || !memory || !diskSize) {
       return null;
     }
 
