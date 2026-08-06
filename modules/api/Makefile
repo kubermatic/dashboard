@@ -1,10 +1,7 @@
 SHELL = /bin/bash -eu -o pipefail
 export KUBERMATIC_EDITION ?= ee
 KUBERMATIC_VERSION?=v2.30.0
-# Revision used by `make update-kkp`. Accepts a branch, tag or commit SHA,
-# e.g. `make update-kkp KKP_REF=a52d397b275f`.
-KKP_REF ?= main
-KKP_SDK_REF ?= $(KKP_REF)
+KKP_REVISION ?= main
 DOCKER_REPO ?= quay.io/kubermatic
 REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
@@ -120,9 +117,9 @@ verify:
 	./hack/verify.sh
 
 .PHONY: update-kkp
-update-kkp: ## Update KKP + SDK deps. Override the revision with KKP_REF=<branch|tag|commit-sha>.
-	go get -v k8c.io/kubermatic/v2@$(KKP_REF)
-	go get -v k8c.io/kubermatic/sdk/v2@$(KKP_SDK_REF)
+update-kkp: ## Override the revision with KKP_REVISION=<branch|tag|commit-sha>.
+	go get -v k8c.io/kubermatic/v2@$(KKP_REVISION)
+	go get -v k8c.io/kubermatic/sdk/v2@$(KKP_REVISION)
 	$(MAKE) update-codegen
 
 .PHONY: fmt
