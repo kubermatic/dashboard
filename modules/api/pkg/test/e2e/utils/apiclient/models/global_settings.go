@@ -20,6 +20,10 @@ import (
 // swagger:model GlobalSettings
 type GlobalSettings struct {
 
+	// AdminGroups is the list of OIDC group names whose members are automatically
+	// granted KKP administrator privileges.
+	AdminGroups []string `json:"adminGroups"`
+
 	// AllowedOperatingSystems shows the available operating systems to use in the machine deployment.
 	AllowedOperatingSystems map[string]bool `json:"allowedOperatingSystems,omitempty"`
 

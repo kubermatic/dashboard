@@ -20,6 +20,10 @@ type Admin struct {
 	// Email address of the admin user
 	Email string `json:"email,omitempty"`
 
+	// GrantedByGroup is the OIDC group that granted this user admin via the
+	// admin-group controller. Empty for manually-managed admins. Read-only.
+	GrantedByGroup string `json:"grantedByGroup,omitempty"`
+
 	// IsAdmin indicates admin role
 	IsAdmin bool `json:"isAdmin,omitempty"`
 

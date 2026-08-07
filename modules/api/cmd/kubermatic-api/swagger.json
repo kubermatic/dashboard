@@ -28169,6 +28169,11 @@
           "type": "string",
           "x-go-name": "Email"
         },
+        "grantedByGroup": {
+          "description": "GrantedByGroup is the OIDC group that granted this user admin via the\nadmin-group controller. Empty for manually-managed admins. Read-only.",
+          "type": "string",
+          "x-go-name": "GrantedByGroup"
+        },
         "isAdmin": {
           "description": "IsAdmin indicates admin role",
           "type": "boolean",
@@ -35080,6 +35085,14 @@
       "description": "GlobalSettings defines global settings",
       "type": "object",
       "properties": {
+        "adminGroups": {
+          "description": "AdminGroups is the list of OIDC group names whose members are automatically\ngranted KKP administrator privileges.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "AdminGroups"
+        },
         "allowedOperatingSystems": {
           "description": "AllowedOperatingSystems shows the available operating systems to use in the machine deployment.",
           "type": "object",
