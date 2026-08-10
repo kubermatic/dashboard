@@ -113,6 +113,11 @@ export const CLUSTER_OPTION_TOOLTIPS = {
     'Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created.',
 } as const;
 
+// Backup storage location validation messages
+export const REGION_ERROR_MESSAGE = 'Region must be a valid DNS name.';
+export const ENDPOINT_URL_ERROR_MESSAGE =
+  'Endpoint URL must start with http:// or https:// and contain a valid DNS host.';
+
 // Per-cluster proxy tooltips
 export const PROXY_MODE_HINT = 'kube-proxy mode for in-cluster service routing.';
 export const NODE_EGRESS_PROXY_TOOLTIP =

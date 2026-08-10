@@ -38,6 +38,7 @@ import {
   endpointUrlValidator,
   KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
+import {ENDPOINT_URL_ERROR_MESSAGE, REGION_ERROR_MESSAGE} from '@app/shared/constants/common';
 import {SettingsService} from '@core/services/settings';
 import * as y from 'js-yaml';
 import {Observable, Subject, takeUntil} from 'rxjs';
@@ -61,9 +62,6 @@ enum Controls {
   AddCustomConfig = 'addCustomConfig',
 }
 
-const REGION_ERROR_MESSAGE = 'Region must be a valid DNS name.';
-const ENDPOINT_URL_ERROR_MESSAGE = 'Endpoint URL must start with http:// or https:// and contain a valid DNS host.';
-
 @Component({
   selector: 'km-add-backup-storage-location-dialog',
   templateUrl: './template.html',
@@ -74,8 +72,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
-  readonly regionErrorMessage = REGION_ERROR_MESSAGE;
-  readonly endpointUrlErrorMessage = ENDPOINT_URL_ERROR_MESSAGE;
+  readonly REGION_ERROR_MESSAGE = REGION_ERROR_MESSAGE;
+  readonly ENDPOINT_URL_ERROR_MESSAGE = ENDPOINT_URL_ERROR_MESSAGE;
   form: FormGroup;
   valuesConfig = '';
   isYamlEditorValid = true;

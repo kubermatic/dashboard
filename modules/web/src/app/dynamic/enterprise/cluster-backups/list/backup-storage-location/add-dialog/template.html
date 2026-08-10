@@ -107,7 +107,7 @@ END OF TERMS AND CONDITIONS
              matInput>
       <mat-hint>The AWS region where the bucket is located.</mat-hint>
       @if (form.get(Controls.Region).hasError('pattern')) {
-      <mat-error>{{regionErrorMessage}}</mat-error>
+      <mat-error>{{REGION_ERROR_MESSAGE}}</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
@@ -116,7 +116,7 @@ END OF TERMS AND CONDITIONS
              matInput>
       <mat-hint>Specify the AWS S3 URL here.</mat-hint>
       @if (form.get(Controls.Endpoints).hasError('invalidEndpointUrl')) {
-      <mat-error>{{endpointUrlErrorMessage}}</mat-error>
+      <mat-error>{{ENDPOINT_URL_ERROR_MESSAGE}}</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
