@@ -107,7 +107,7 @@ limitations under the License.
                  fxLayoutAlign=" center">
               <span>IPv4 and IPv6 (Dual Stack)</span>
               <i class="km-icon-info km-pointer"
-                 matTooltip="Dual Stack is a technology preview feature, some limitations may apply depending on the chosen provider. Please see the KKP documentation for more details."></i>
+                 [matTooltip]="Tooltips.dualStack"></i>
             </div>
           </mat-radio-button>
         </mat-radio-group>
@@ -295,12 +295,12 @@ limitations under the License.
               </mat-checkbox>
               @if (!!control(Controls.Konnectivity).value && control(Controls.Konnectivity).disabled) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
+                 [matTooltip]="Tooltips.konnectivity"></i>
               }
             </div>
             @if (isCiliumSelected()) {
             <mat-checkbox [formControlName]="Controls.CiliumIngress">Ingress <i class="km-icon-info km-pointer"
-                 matTooltip="Enable Cilium kubernetes ingress support"></i></mat-checkbox>
+                 [matTooltip]="Tooltips.ciliumIngress"></i></mat-checkbox>
             }
             <div fxLayoutAlign="flex-start">
               @if (canEditCNIValues) {
@@ -379,7 +379,7 @@ limitations under the License.
                         class="km-select-ellipsis"
                         disableOptionCentering
                         disabled
-                        matTooltip="Containerd is the only supported container runtime"
+                        [matTooltip]="Tooltips.containerRuntime"
                         required>
               <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
             </mat-select>
@@ -401,7 +401,7 @@ limitations under the License.
                   {{getPluginName(admissionPlugin)}}
                   @if (admissionPlugin === admissionPlugin.PodSecurityPolicy) {
                   <i class="km-icon-info km-pointer"
-                     matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+                     [matTooltip]="Tooltips.podSecurityPolicy"></i>
                   }
                 </mat-option>
                 }
@@ -456,38 +456,38 @@ limitations under the License.
                fxFlex="100"
                fxLayoutGap="10px">
             <div fxLayoutAlign=" center">
-              <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+              <mat-checkbox [formControlName]="Controls.AuditLogging">
+                Audit Logging
+                <i class="km-icon-info km-pointer"
+                   [matTooltip]="tooltipWithAdminNote(Tooltips.auditLogging, AdminEnforcedInDatacenterNote, isEnforced(Controls.AuditLogging))"></i>
+              </mat-checkbox>
               @if (!!controlValue(Controls.AuditLogging)) {
               <mat-button-toggle-group [formControlName]="Controls.AuditPolicyPreset"
                                        group="auditLogging">
                 <mat-button-toggle [value]="AuditPolicyPreset.Custom"
-                                   matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+                                   [matTooltip]="Tooltips.auditPolicyCustom">
                   custom
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
-                                   matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+                                   [matTooltip]="Tooltips.auditPolicyMetadata">
                   metadata
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
-                                   matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+                                   [matTooltip]="Tooltips.auditPolicyMinimal">
                   minimal
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
-                                   matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
+                                   [matTooltip]="Tooltips.auditPolicyRecommended">
                   recommended
                 </mat-button-toggle>
               </mat-button-toggle-group>
-              }
-              @if (isEnforced(Controls.AuditLogging)) {
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
               }
             </div>
             @if (!!controlValue(Controls.AuditLogging) && !isAuditWebhookBackendHidden) {
             <div fxLayoutAlign=" center">
               <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
               <i class="km-icon-info km-pointer"
-                 [matTooltip]="enforcedAuditWebhookSettings ? 'Audit Webhook Backend settings are enforced by your admin in the chosen datacenter.' : 'Configure webhook backend for audit logging functionality.'"></i>
+                 [matTooltip]="tooltipWithAdminNote(Tooltips.auditWebhookBackend, AdminEnforcedInDatacenterNote, !!enforcedAuditWebhookSettings)"></i>
             </div>
             @if (!!controlValue(Controls.AuditWebhookBackend)) {
             <mat-form-field>
@@ -528,7 +528,7 @@ limitations under the License.
             <mat-checkbox [formControlName]="Controls.ClusterBackup">
               Cluster Backup
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable create backups from this cluster"></i>
+                 [matTooltip]="Tooltips.clusterBackup"></i>
             </mat-checkbox>
             }
             @if (!!controlValue(Controls.ClusterBackup) && isclusterBackupEnabled) {
@@ -552,7 +552,7 @@ limitations under the License.
                           [disabled]="isCSIDriverDisabled">
               Disable CSI Driver
               <i class="km-icon-info km-pointer"
-                 [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
+                 [matTooltip]="tooltipWithAdminNote(Tooltips.disableCSIDriver, Tooltips.csiDriverDisabledByAdmin, isCSIDriverDisabled)"></i>
             </mat-checkbox>
             @if (isEncryptionAtRestVisible()) {
             <mat-checkbox [formControlName]="Controls.EncryptionAtRest">
@@ -561,7 +561,7 @@ limitations under the License.
                    fxLayoutGap="8px">
                 <span>Encryption at Rest</span>
                 <i class="km-icon-info km-pointer"
-                   matTooltip="Enable encryption at rest for cluster secrets for this user cluster."></i>
+                   [matTooltip]="Tooltips.encryptionAtRest"></i>
               </div>
             </mat-checkbox>
             }
@@ -577,7 +577,7 @@ limitations under the License.
                       type="button"
                       matSuffix
                       class="km-randomize-btn"
-                      matTooltip="Generate encryption key"
+                      [matTooltip]="Tooltips.generateEncryptionKey"
                       (click)="generateEncryptionKey()">
                 <i class="km-icon-randomize"></i>
               </button>
@@ -598,7 +598,7 @@ limitations under the License.
             @if (isKubeLBEnabled) {
             <div fxLayout="row"
                  fxLayoutAlign=" center"
-                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''"
+                 [matTooltip]="isKubeLBEnforced ? Tooltips.kubeLBEnforced : ''"
                  [matTooltipDisabled]="!isKubeLBEnforced">
               <mat-checkbox [formControlName]="Controls.KubeLB"
                             [disabled]="isKubeLBEnforced">
@@ -606,7 +606,7 @@ limitations under the License.
               </mat-checkbox>
               @if (!isKubeLBEnforced) {
               <i class="km-icon-info km-pointer"
-                 [matTooltip]="'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
+                 [matTooltip]="Tooltips.kubeLB"></i>
               }
             </div>
             }
@@ -615,14 +615,14 @@ limitations under the License.
               <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
                 Use LoadBalancer Class
                 <i class="km-icon-info km-pointer"
-                   matTooltip="Enable to limit KubeLB to only process services with Kubernetes LoadBalancer Class named `kubelb`. When disabled, KubeLB will manage all services of type `LoadBalancer`"></i>
+                   [matTooltip]="Tooltips.kubeLBLoadBalancerClass"></i>
               </mat-checkbox>
             </div>
             <div class="km-suboption">
               <mat-checkbox [formControlName]="Controls.KubeLBEnableGatewayAPI">
                 Enable Gateway API
                 <i class="km-icon-info km-pointer"
-                   matTooltip="Enable to use Gateway APIs. KKP will install the Gateway API CRDs in this cluster."></i>
+                   [matTooltip]="Tooltips.gatewayAPI"></i>
               </mat-checkbox>
             </div>
             }
@@ -645,7 +645,7 @@ limitations under the License.
                 <span>OPA Integration</span>
                 @if (isEnforced(Controls.OPAIntegration)) {
                 <i class="km-icon-info km-pointer"
-                   matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+                   [matTooltip]="form.get(Controls.OPAIntegration).value ? Tooltips.opaEnforced : Tooltips.opaDisabled"></i>
                 }
                 <i class="km-icon-warning km-pointer"
                    [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
@@ -655,30 +655,26 @@ limitations under the License.
             <mat-checkbox [formControlName]="Controls.KyvernoIntegration">
               Kyverno Policy Management
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
+                 [matTooltip]="Tooltips.kyverno"></i>
             </mat-checkbox>
             }
             @if (isMLAEnabled()) {
             <mat-checkbox [formControlName]="Controls.MLALogging">
               User Cluster Logging
-              @if (isEnforced(Controls.MLALogging)) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Logging is enforced by your admin."></i>
-              }
+                 [matTooltip]="tooltipWithAdminNote(Tooltips.mlaLogging, AdminEnforcedNote, isEnforced(Controls.MLALogging))"></i>
             </mat-checkbox>
             <mat-checkbox [formControlName]="Controls.MLAMonitoring">
               User Cluster Monitoring
-              @if (isEnforced(Controls.MLAMonitoring)) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Monitoring is enforced by your admin."></i>
-              }
+                 [matTooltip]="tooltipWithAdminNote(Tooltips.mlaMonitoring, AdminEnforcedNote, isEnforced(Controls.MLAMonitoring))"></i>
             </mat-checkbox>
             }
             @if (isUserSshKeyEnabled) {
             <mat-checkbox [formControlName]="Controls.UserSSHKeyAgent">
               User SSH Key Agent
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>
+                 [matTooltip]="Tooltips.userSSHKeyAgent"></i>
             </mat-checkbox>
             }
             @if (form.get(Controls.RouterReconciliation)) {

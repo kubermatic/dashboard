@@ -50,7 +50,7 @@ limitations under the License.
                     class="km-select-ellipsis"
                     disableOptionCentering
                     disabled
-                    matTooltip="Containerd is the only supported container runtime"
+                    [matTooltip]="Tooltips.containerRuntime"
                     required
                     kmValueChangedIndicator>
           <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
@@ -72,7 +72,7 @@ limitations under the License.
               {{getPluginName(admissionPlugin)}}
               @if (admissionPlugin === admissionPlugin.PodSecurityPolicy) {
               <i class="km-icon-info km-pointer"
-                 matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+                 [matTooltip]="Tooltips.podSecurityPolicy"></i>
               }
             </mat-option>
             }
@@ -164,38 +164,38 @@ limitations under the License.
         </mat-checkbox>
         @if (!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled) {
         <i class="km-icon-info km-pointer"
-           matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
+           [matTooltip]="Tooltips.konnectivity"></i>
         }
       </div>
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
-                      kmValueChangedIndicator>Audit Logging</mat-checkbox>
+                      kmValueChangedIndicator>
+          Audit Logging
+          <i class="km-icon-info km-pointer"
+             [matTooltip]="tooltipWithAdminNote(Tooltips.auditLogging, AdminEnforcedInDatacenterNote, !!datacenter.spec.enforceAuditLogging)"></i>
+        </mat-checkbox>
         @if (!!form.get(Controls.AuditLogging).value) {
         <mat-button-toggle-group [formControlName]="Controls.AuditPolicyPreset"
                                  group="auditLogging"
                                  kmValueChangedIndicator>
           <mat-button-toggle [value]="AuditPolicyPreset.Custom"
-                             matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+                             [matTooltip]="Tooltips.auditPolicyCustom">
             custom
           </mat-button-toggle>
           <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
-                             matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+                             [matTooltip]="Tooltips.auditPolicyMetadata">
             metadata
           </mat-button-toggle>
           <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
-                             matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+                             [matTooltip]="Tooltips.auditPolicyMinimal">
             minimal
           </mat-button-toggle>
           <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
-                             matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
+                             [matTooltip]="Tooltips.auditPolicyRecommended">
             recommended
           </mat-button-toggle>
         </mat-button-toggle-group>
-        }
-        @if (!!datacenter.spec.enforceAuditLogging) {
-        <i class="km-icon-info km-pointer"
-           matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
         }
       </div>
 
@@ -203,7 +203,7 @@ limitations under the License.
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
         <i class="km-icon-info km-pointer"
-           matTooltip="Configure webhook backend for audit logging functionality."></i>
+           [matTooltip]="Tooltips.auditWebhookBackend"></i>
       </div>
       @if (!!form.get(Controls.AuditWebhookBackend).value) {
       <mat-form-field>
@@ -248,7 +248,7 @@ limitations under the License.
           <span>OPA Integration</span>
           @if (isEnforced(Controls.OPAIntegration)) {
           <i class="km-icon-info km-pointer"
-             matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+             [matTooltip]="form.get(Controls.OPAIntegration).value ? Tooltips.opaEnforced : Tooltips.opaDisabled"></i>
           }
           <i class="km-icon-warning km-pointer"
              [matTooltip]="OPA_DEPRECATED_MESSAGE"></i>
@@ -260,7 +260,7 @@ limitations under the License.
                     kmValueChangedIndicator>
         Kyverno Policy Management
         <i class="km-icon-info km-pointer"
-           matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
+           [matTooltip]="Tooltips.kyverno"></i>
       </mat-checkbox>
       }
 
@@ -268,10 +268,8 @@ limitations under the License.
       <mat-checkbox [formControlName]="Controls.MLALogging"
                     kmValueChangedIndicator>
         User Cluster Logging
-        @if (isEnforced(Controls.MLALogging)) {
         <i class="km-icon-info km-pointer"
-           matTooltip="User Cluster Logging is enforced by your admin."></i>
-        }
+           [matTooltip]="tooltipWithAdminNote(Tooltips.mlaLogging, AdminEnforcedNote, isEnforced(Controls.MLALogging))"></i>
       </mat-checkbox>
       }
 
@@ -279,10 +277,8 @@ limitations under the License.
       <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                     kmValueChangedIndicator>
         User Cluster Monitoring
-        @if (isEnforced(Controls.MLAMonitoring)) {
         <i class="km-icon-info km-pointer"
-           matTooltip="User Cluster Monitoring is enforced by your admin."></i>
-        }
+           [matTooltip]="tooltipWithAdminNote(Tooltips.mlaMonitoring, AdminEnforcedNote, isEnforced(Controls.MLAMonitoring))"></i>
       </mat-checkbox>
       }
 
@@ -303,7 +299,7 @@ limitations under the License.
       @if (isKubeLBEnabled || isKubeLBEnabledForCluster()) {
       <div fxLayout="row"
            fxLayoutAlign=" center"
-           [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter and cannot be disabled.' : ''"
+           [matTooltip]="isKubeLBEnforced ? Tooltips.kubeLBEnforced : ''"
            [matTooltipDisabled]="!isKubeLBEnforced">
         <mat-checkbox [formControlName]="Controls.KubeLB"
                       [disabled]="isKubeLBEnforced"
@@ -312,7 +308,7 @@ limitations under the License.
         </mat-checkbox>
         @if (!isKubeLBEnforced) {
         <i class="km-icon-info km-pointer"
-           [matTooltip]="'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
+           [matTooltip]="Tooltips.kubeLB"></i>
         }
       </div>
       }
@@ -321,14 +317,14 @@ limitations under the License.
         <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
           Use LoadBalancer Class
           <i class="km-icon-info km-pointer"
-             matTooltip="Enable to limit KubeLB to only process services with Kubernetes LoadBalancer Class named `kubelb`. When disabled, KubeLB will manage all services of type `LoadBalancer`"></i>
+             [matTooltip]="Tooltips.kubeLBLoadBalancerClass"></i>
         </mat-checkbox>
       </div>
       <div class="km-suboption">
         <mat-checkbox [formControlName]="Controls.KubeLBEnableGatewayAPI">
           Enable Gateway API
           <i class="km-icon-info km-pointer"
-             matTooltip="Enable to use Gateway APIs. KKP will install the Gateway API CRDs in this cluster."></i>
+             [matTooltip]="Tooltips.gatewayAPI"></i>
         </mat-checkbox>
       </div>
       }
@@ -339,7 +335,7 @@ limitations under the License.
                     kmValueChangedIndicator>
         Disable CSI Driver
         <i class="km-icon-info km-pointer"
-           [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
+           [matTooltip]="tooltipWithAdminNote(Tooltips.disableCSIDriver, Tooltips.csiDriverDisabledByAdmin, isCSIDriverDisabled)"></i>
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.EncryptionAtRest"
@@ -349,7 +345,7 @@ limitations under the License.
              fxLayoutGap="8px">
           <span>Encryption at Rest</span>
           <i class="km-icon-info km-pointer"
-             [matTooltip]="isEncryptionActive() ? 'Enable or disable encryption at rest for cluster secrets.' : 'Enable encryption at rest for cluster secrets for this user cluster.'"></i>
+             [matTooltip]="Tooltips.encryptionAtRest"></i>
         </div>
       </mat-checkbox>
 
@@ -365,7 +361,7 @@ limitations under the License.
                 type="button"
                 matSuffix
                 class="km-randomize-btn"
-                matTooltip="Generate encryption key"
+                [matTooltip]="Tooltips.generateEncryptionKey"
                 (click)="generateEncryptionKey()">
           <i class="km-icon-randomize"></i>
         </button>
@@ -387,7 +383,7 @@ limitations under the License.
                     kmValueChangedIndicator>
         Cluster Backup
         <i class="km-icon-info km-pointer"
-           matTooltip="Enable create backups from this cluster"></i>
+           [matTooltip]="Tooltips.clusterBackup"></i>
       </mat-checkbox>
       }
 
