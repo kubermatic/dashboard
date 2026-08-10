@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
@@ -61,6 +61,9 @@ enum Controls {
   AddCustomConfig = 'addCustomConfig',
 }
 
+const REGION_ERROR_MESSAGE = 'Region must be a valid DNS name.';
+const ENDPOINT_URL_ERROR_MESSAGE = 'Endpoint URL must start with http:// or https:// and contain a valid DNS host.';
+
 @Component({
   selector: 'km-add-backup-storage-location-dialog',
   templateUrl: './template.html',
@@ -71,9 +74,12 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
+  readonly regionErrorMessage = REGION_ERROR_MESSAGE;
+  readonly endpointUrlErrorMessage = ENDPOINT_URL_ERROR_MESSAGE;
   form: FormGroup;
   valuesConfig = '';
   isYamlEditorValid = true;
+  customConfigError = '';
 
   get label(): string {
     return this._config.bslObject ? 'Save Changes' : 'Create';
@@ -149,8 +155,13 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         } catch (error) {
           this.isYamlEditorValid = false;
         }
+
+        // Validate either the YAML editor or the config fields, never both.
+        this._toggleConfigControls(!value);
+
         if (!value) {
           this.isYamlEditorValid = true;
+          this.customConfigError = '';
         }
       });
   }
@@ -182,7 +193,39 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   }
 
   isValidYaml(valid: boolean): void {
-    this.isYamlEditorValid = valid;
+    this.customConfigError = '';
+    this.isYamlEditorValid = valid && this._isCustomConfigValid();
+  }
+
+  private _toggleConfigControls(enable: boolean): void {
+    [Controls.Region, Controls.Endpoints, Controls.ChecksumAlgorithm].forEach(control => {
+      if (enable) {
+        this.form.get(control).enable({emitEvent: false});
+      } else {
+        this.form.get(control).disable({emitEvent: false});
+      }
+    });
+  }
+
+  private _isCustomConfigValid(): boolean {
+    let config: BackupStorageLocationConfig;
+    try {
+      config = (y.load(this.valuesConfig) as {config: BackupStorageLocationConfig})?.config;
+    } catch (error) {
+      return false;
+    }
+
+    if (config?.region && DNS_NAME_PATTERN_VALIDATOR(new FormControl(config.region))) {
+      this.customConfigError = REGION_ERROR_MESSAGE;
+      return false;
+    }
+
+    if (config?.s3Url && endpointUrlValidator()(new FormControl(config.s3Url))) {
+      this.customConfigError = ENDPOINT_URL_ERROR_MESSAGE;
+      return false;
+    }
+
+    return true;
   }
 
   private _getBackupStorageLocation(): CreateBackupStorageLocation {
