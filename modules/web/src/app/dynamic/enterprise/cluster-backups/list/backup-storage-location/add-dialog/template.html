@@ -69,14 +69,12 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.AccessKeyId"
              matInput
              kmInputPassword>
-      <mat-hint>Optional. Leave empty for anonymous S3 access.</mat-hint>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Secret Access Key</mat-label>
       <input [formControlName]="Controls.SecretAccessKey"
              matInput
              kmInputPassword>
-      <mat-hint>Optional. Leave empty for anonymous S3 access.</mat-hint>
     </mat-form-field>
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>Backup Sync Period</mat-label>
@@ -98,28 +96,27 @@ END OF TERMS AND CONDITIONS
     <km-validate-json-or-yaml [data]="valuesConfig"
                               [isOnlyYAML]="true"
                               (dataValid)="isValidYaml($event)" />
+    @if (customConfigError) {
+    <mat-error>{{customConfigError}}</mat-error>
+    }
     }
     @if (!form.get(Controls.AddCustomConfig).value) {
     <mat-form-field class="region-field">
       <mat-label>Region</mat-label>
       <input [formControlName]="Controls.Region"
              matInput>
-      <mat-hint>Optional. The AWS region where the bucket is located.</mat-hint>
+      <mat-hint>The AWS region where the bucket is located.</mat-hint>
       @if (form.get(Controls.Region).hasError('pattern')) {
-      <mat-error>
-        Region must be a valid DNS name.
-      </mat-error>
+      <mat-error>{{regionErrorMessage}}</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Endpoint URL</mat-label>
       <input [formControlName]="Controls.Endpoints"
              matInput>
-      <mat-hint>Optional. Specify the AWS S3 URL here.</mat-hint>
+      <mat-hint>Specify the AWS S3 URL here.</mat-hint>
       @if (form.get(Controls.Endpoints).hasError('invalidEndpointUrl')) {
-      <mat-error>
-        Endpoint URL must start with http:// or https:// and contain a valid DNS host.
-      </mat-error>
+      <mat-error>{{endpointUrlErrorMessage}}</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
