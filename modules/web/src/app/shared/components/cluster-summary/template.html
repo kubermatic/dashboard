@@ -72,7 +72,7 @@ limitations under the License.
               <div value>{{cluster.spec.containerRuntime}}</div>
             </km-property>
 
-            @if (cluster.spec.backupConfig?.backupStorageLocation?.name) {
+            @if (isEnterpriseEdition && cluster.spec.backupConfig?.backupStorageLocation?.name) {
             <km-property>
               <div key>Cluster Backup</div>
               <div value>{{cluster.spec.backupConfig.backupStorageLocation.name}}</div>
@@ -317,7 +317,7 @@ limitations under the License.
             <km-property-boolean label="CSI Storage Driver"
                                  [value]="!cluster.spec.disableCsiDriver" />
             }
-            @if (cluster.spec.backupConfig) {
+            @if (isEnterpriseEdition && cluster.spec.backupConfig) {
             <km-property-boolean label="Cluster Backup"
                                  [value]="!!cluster.spec.backupConfig" />
             }

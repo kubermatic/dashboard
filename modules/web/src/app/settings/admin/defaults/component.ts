@@ -16,6 +16,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {
   EventRateLimitConfig,
   EventRateLimitConfigItem,
@@ -69,6 +70,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   isEventRateLimitUpdating = false;
   eventRateConfigActions = EventRateConfigActions;
 
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly OperatingSystem = OperatingSystem;
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);

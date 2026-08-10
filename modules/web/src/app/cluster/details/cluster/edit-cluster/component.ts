@@ -160,7 +160,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   get isclusterBackupEnabled(): boolean {
-    return this._settings.enableClusterBackups;
+    return this.isEnterpriseEdition && !!this._settings?.enableClusterBackups;
   }
 
   constructor(
@@ -226,7 +226,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Annotations]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
-      [Controls.ClusterBackup]: new FormControl(!!this.cluster.spec.backupConfig),
+      [Controls.ClusterBackup]: new FormControl(this.isEnterpriseEdition && !!this.cluster.spec.backupConfig),
       [Controls.RouterReconciliation]: new FormControl(
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
@@ -254,18 +254,20 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this._initAuditWebhookBackendControls(this.cluster.spec?.auditLogging?.webhookBackend);
     }
 
-    this._getCBSL(this.projectID);
+    if (this.isEnterpriseEdition) {
+      this._getCBSL(this.projectID);
 
-    this.form
-      .get(Controls.ClusterBackup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe((value: boolean) => {
-        if (value) {
-          this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
-        } else {
-          this.form.removeControl(Controls.BackupStorageLocation);
-        }
-      });
+      this.form
+        .get(Controls.ClusterBackup)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe((value: boolean) => {
+          if (value) {
+            this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
+          } else {
+            this.form.removeControl(Controls.BackupStorageLocation);
+          }
+        });
+    }
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
@@ -643,14 +645,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
     }
 
-    if (this.form.get(Controls.ClusterBackup).value) {
-      patch.spec.backupConfig = {
-        backupStorageLocation: {
-          name: this.form.get(Controls.BackupStorageLocation).value,
-        },
-      };
-    } else {
-      patch.spec.backupConfig = null;
+    if (this.isEnterpriseEdition) {
+      if (this.form.get(Controls.ClusterBackup).value) {
+        patch.spec.backupConfig = {
+          backupStorageLocation: {
+            name: this.form.get(Controls.BackupStorageLocation).value,
+          },
+        };
+      } else {
+        patch.spec.backupConfig = null;
+      }
     }
 
     this._handleEncryptionConfigurationChanges(patch);
