@@ -206,6 +206,9 @@ export class HetznerPresetSpec extends PresetProviderSpec {
 export class KubevirtPresetSpec extends PresetProviderSpec {
   kubeconfig: string;
   vpcName?: string;
+  /** @deprecated Use subnets instead. */
+  subnetName?: string;
+  subnets?: string[];
 }
 
 export class NutanixPresetSpec extends PresetProviderSpec {

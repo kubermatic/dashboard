@@ -23,6 +23,7 @@ import {takeUntil} from 'rxjs/operators';
 export enum Controls {
   Kubeconfig = 'kubeconfig',
   VPC = 'vpc',
+  Subnets = 'subnets',
 }
 
 @Component({
@@ -56,9 +57,14 @@ export class KubevirtSettingsComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.Kubeconfig]: this._builder.control('', Validators.required),
       [Controls.VPC]: this._builder.control(''),
+      [Controls.Subnets]: this._builder.control([]),
     });
 
-    merge(this.form.get(Controls.Kubeconfig).valueChanges, this.form.get(Controls.VPC).valueChanges)
+    merge(
+      this.form.get(Controls.Kubeconfig).valueChanges,
+      this.form.get(Controls.VPC).valueChanges,
+      this.form.get(Controls.Subnets).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
 
@@ -77,6 +83,7 @@ export class KubevirtSettingsComponent extends BaseFormValidator implements OnIn
     this._presetDialogService.preset.spec.kubevirt = {
       kubeconfig: this.form.get(Controls.Kubeconfig).value,
       vpcName: this.form.get(Controls.VPC).value ? this.form.get(Controls.VPC).value : undefined,
+      subnets: this.form.get(Controls.Subnets).value?.length ? this.form.get(Controls.Subnets).value : undefined,
     } as KubevirtPresetSpec;
   }
 }
