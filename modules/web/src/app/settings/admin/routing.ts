@@ -16,6 +16,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {AuthGuard} from '@core/services/auth/guard';
+import {EnterpriseEditionGuard} from '@core/services/enterprise-edition/guard';
 import {AdminSettingsComponent} from './component';
 
 const routes: Routes = [
@@ -72,6 +73,7 @@ const routes: Routes = [
       {
         path: 'kyvernopolicies',
         loadChildren: () => DynamicModule.KyvernoPolicies,
+        canMatch: [EnterpriseEditionGuard],
       },
       {
         path: 'backupdestinations',
@@ -88,6 +90,7 @@ const routes: Routes = [
       {
         path: 'metering',
         loadChildren: () => DynamicModule.Metering,
+        canMatch: [EnterpriseEditionGuard],
         data: {preload: true},
       },
       {
@@ -97,6 +100,7 @@ const routes: Routes = [
       {
         path: 'quotas',
         loadChildren: () => DynamicModule.Quotas,
+        canMatch: [EnterpriseEditionGuard],
       },
     ],
   },
