@@ -19,6 +19,7 @@ package kubernetes
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -34,7 +35,6 @@ import (
 	"k8s.io/apimachinery/pkg/selection"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubectl/pkg/util/slice"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -296,7 +296,7 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 	}
 
 	for _, gpb := range groupProjectBindings.Items {
-		if slice.ContainsString(user.Spec.Groups, gpb.Spec.Group, nil) && gpb.Spec.ProjectID == projectID {
+		if slices.Contains(user.Spec.Groups, gpb.Spec.Group) && gpb.Spec.ProjectID == projectID {
 			roles.Insert(gpb.Spec.Role)
 		}
 	}
