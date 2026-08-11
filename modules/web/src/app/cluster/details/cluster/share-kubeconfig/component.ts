@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {BrandingService} from '@core/services/branding';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
@@ -37,6 +37,7 @@ enum InstallCommands {
   selector: 'km-share-kubeconfig',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ShareKubeconfigComponent implements OnInit {

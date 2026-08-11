@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, SecurityContext, ViewChild} from '@angular/core';
+import {Component, Input, SecurityContext, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -44,6 +44,7 @@ enum StepRegistry {
   selector: 'km-select-addon-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class InstallAddonDialogComponent {

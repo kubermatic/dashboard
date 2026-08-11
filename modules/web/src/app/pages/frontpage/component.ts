@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
@@ -23,6 +23,7 @@ import {environment} from '@environments/environment';
   selector: 'km-frontpage',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FrontpageComponent implements OnInit {

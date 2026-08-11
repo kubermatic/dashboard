@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {CredentialsType} from '@app/settings/admin/presets/dialog/steps/settings/provider/vmware-cloud-director/component';
 import {clearFormField} from '@app/shared/utils/form';
@@ -48,6 +48,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class VMwareCloudDirectorProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {

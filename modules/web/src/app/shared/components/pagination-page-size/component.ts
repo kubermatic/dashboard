@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
@@ -29,6 +29,7 @@ export const ITEMS_PER_PAGE_OPTIONS = [5, 10, 15, 20, 25];
   selector: 'km-pagination-page-size',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PaginationPageSizeComponent implements OnInit, OnDestroy {

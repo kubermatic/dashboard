@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
@@ -42,6 +42,7 @@ export class AddClusterFromTemplateDialogData {
   selector: 'km-add-cluster-from-template-dialog',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy {

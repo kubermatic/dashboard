@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectionStrategy} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -26,6 +26,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {

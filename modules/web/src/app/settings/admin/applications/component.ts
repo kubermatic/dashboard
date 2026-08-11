@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {MatSort} from '@angular/material/sort';
@@ -30,6 +30,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-applications',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ApplicationsComponent implements OnInit, OnChanges {

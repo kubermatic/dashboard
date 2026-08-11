@@ -145,6 +145,9 @@ function createRouting(): Routes {
   imports: [
     RouterModule.forRoot(createRouting(), {
       preloadingStrategy: SelectedPreloadingStrategy,
+      // Angular 22 changes the default to 'always'. ParamsService reads only the deepest activated
+      // route, so inheriting parent params would change what get() returns across the whole app.
+      paramsInheritanceStrategy: 'emptyOnly',
     }),
   ],
   providers: [SelectedPreloadingStrategy],

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ComboboxControls} from '@shared/components/combobox/component';
@@ -34,6 +34,7 @@ enum Control {
 @Component({
   selector: 'km-select-cluster-template',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SelectClusterTemplateComponent implements OnInit, OnDestroy {

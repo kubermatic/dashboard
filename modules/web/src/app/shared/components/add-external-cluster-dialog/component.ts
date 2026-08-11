@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {MatStepper} from '@angular/material/stepper';
@@ -33,6 +33,7 @@ export enum Step {
 @Component({
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {

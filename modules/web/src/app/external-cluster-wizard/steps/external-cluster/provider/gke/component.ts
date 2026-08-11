@@ -21,6 +21,7 @@ import {
   OnInit,
   ViewChild,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -132,6 +133,7 @@ export enum Zones {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GKEClusterSettingsComponent

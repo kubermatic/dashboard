@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
@@ -34,6 +34,7 @@ enum Controls {
   selector: 'km-default-project-quota',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DefaultProjectQuotaComponent implements OnInit, OnDestroy {

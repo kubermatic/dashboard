@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -26,6 +26,7 @@ export enum Controls {
 @Component({
   selector: 'km-custom-credentials',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CustomCredentialsComponent implements OnInit, OnDestroy {

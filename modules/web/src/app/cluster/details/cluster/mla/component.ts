@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Addon} from '@shared/entity/addon';
 import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
@@ -22,6 +22,7 @@ import _ from 'lodash';
 @Component({
   selector: 'km-mla',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MLAComponent {

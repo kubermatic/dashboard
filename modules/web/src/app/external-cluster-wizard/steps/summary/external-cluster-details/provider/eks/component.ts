@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, ViewEncapsulation, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, ViewEncapsulation, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {EKSClusterSpec, EKSCloudSpec} from '@shared/entity/provider/eks';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
@@ -21,6 +21,7 @@ import {ExternalClusterModel} from '@shared/entity/external-cluster';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EKSClusterSummaryComponent implements OnChanges {

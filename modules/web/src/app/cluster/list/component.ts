@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
 import {map, takeUntil} from 'rxjs/operators';
@@ -22,6 +22,7 @@ import {View} from '@app/shared/entity/common';
 @Component({
   selector: 'km-clusters',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClustersComponent implements OnInit, OnDestroy {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -36,6 +36,7 @@ import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 @Component({
   selector: 'km-restore-list',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RestoreListComponent implements OnInit, OnDestroy {

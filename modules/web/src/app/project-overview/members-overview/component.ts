@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Project} from '@shared/entity/project';
 import {Member} from '@shared/entity/member';
@@ -23,6 +23,7 @@ import {DynamicModule} from '@dynamic/module-registry';
   selector: 'km-members-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MembersOverviewComponent {

@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
@@ -49,6 +59,7 @@ import {InternalClusterSpecAnnotations} from '@app/shared/entity/cluster';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnnotationFormComponent implements OnInit, ControlValueAccessor, AsyncValidator, DoCheck, OnDestroy {

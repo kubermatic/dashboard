@@ -25,6 +25,7 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -68,6 +69,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator {

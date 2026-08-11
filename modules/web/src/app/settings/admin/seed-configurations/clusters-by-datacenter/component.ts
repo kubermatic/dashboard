@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterDetail} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
@@ -25,6 +25,7 @@ enum Column {
   selector: 'km-provider-datacenter-details',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProviderDatacenterDetailsComponent implements OnChanges {

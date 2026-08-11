@@ -23,6 +23,7 @@ import {
   Output,
   ViewChild,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {slideOut} from '@shared/animations/slide';
@@ -54,6 +55,7 @@ import {DISABLED_TOOLTIP_MESSAGE} from '@shared/constants/common';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {

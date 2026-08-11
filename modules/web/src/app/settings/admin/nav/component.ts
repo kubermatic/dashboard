@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -29,6 +29,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AdminSidenavComponent implements OnInit, OnDestroy {

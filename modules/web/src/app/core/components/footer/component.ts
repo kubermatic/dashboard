@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, SecurityContext} from '@angular/core';
+import {Component, Input, SecurityContext, ChangeDetectionStrategy} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {BrandingService} from '@core/services/branding';
 import {AdminSettings, CustomLink} from '@shared/entity/settings';
@@ -22,6 +22,7 @@ import {VersionInfo} from '@shared/entity/version-info';
   selector: 'km-footer',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FooterComponent {

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Clipboard} from '@angular/cdk/clipboard';
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {StepRegistry} from '@app/kubeone-wizard/config';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
@@ -48,6 +48,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneClusterStepComponent extends StepBase implements OnInit {

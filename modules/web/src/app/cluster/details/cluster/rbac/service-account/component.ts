@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {RBACService} from '@core/services/rbac';
@@ -37,6 +37,7 @@ enum Column {
 @Component({
   selector: 'km-rbac-service-account',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RBACServiceAccountComponent implements OnInit, OnDestroy {

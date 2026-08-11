@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserService} from '@core/services/user';
@@ -64,6 +64,7 @@ enum NamespacesState {
   selector: 'km-add-cluster-backups-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {

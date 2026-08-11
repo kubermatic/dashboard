@@ -27,6 +27,7 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
@@ -79,6 +80,7 @@ enum MessageTypes {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {

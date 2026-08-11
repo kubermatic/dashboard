@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '@app/core/services/user';
@@ -25,6 +25,7 @@ const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api',
   selector: 'km-announcement-banner',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnnouncementBannerComponent implements OnInit, OnChanges {

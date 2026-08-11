@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
@@ -40,6 +40,7 @@ export enum AutocompleteControls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AutocompleteComponent extends BaseFormValidator implements OnInit {

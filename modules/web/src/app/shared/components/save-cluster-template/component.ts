@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Application} from '@shared/entity/application';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -48,6 +48,7 @@ enum Control {
 @Component({
   selector: 'km-cluster-from-template-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SaveClusterTemplateDialogComponent implements OnInit {
