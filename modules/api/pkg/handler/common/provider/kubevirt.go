@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -170,7 +171,7 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGet
 }
 
 func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	seedsGetter provider.SeedsGetter, projectID, clusterID, storageClassName string) (interface{}, error) {
+	seedsGetter provider.SeedsGetter, presetsProvider provider.PresetProvider, projectID, clusterID, storageClassName string) (interface{}, error) {
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -179,6 +180,19 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
 	if err != nil {
 		return "", err
+	}
+
+	if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName != "" {
+		preset, err := presetsProvider.GetPreset(ctx, userInfo, ptr.To(projectID), presetName)
+		if err != nil {
+			log.Logger.Errorf("failed to get preset %s for user %s, falling back to seed/credentials subnet resolution: %v", presetName, userInfo.Email, err)
+		} else if credentials := preset.Spec.Kubevirt; credentials != nil && len(credentials.Subnets) > 0 {
+			kvSubnets := apiv2.KubeVirtSubnetList{}
+			for _, subnet := range credentials.Subnets {
+				kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
+			}
+			return kvSubnets, nil
+		}
 	}
 
 	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)

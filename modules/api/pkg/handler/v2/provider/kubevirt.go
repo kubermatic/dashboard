@@ -108,22 +108,24 @@ func getKubeconfig(ctx context.Context, kubeconfig, credential, projectID string
 	return kubeconfig, nil
 }
 
-func getKubeconfigAndVPCName(ctx context.Context, kubeconfig, vpcName, credential, projectID string, presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) (string, string, error) {
+func getKubeconfigAndVPCName(ctx context.Context, kubeconfig, vpcName, credential, projectID string, presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) (string, string, []string, error) {
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
-		return "", "", common.KubernetesErrorToHTTPError(err)
+		return "", "", nil, common.KubernetesErrorToHTTPError(err)
 	}
+	var presetSubnets []string
 	if len(credential) > 0 {
 		preset, err := presetsProvider.GetPreset(ctx, userInfo, ptr.To(projectID), credential)
 		if err != nil {
-			return "", "", utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", credential, userInfo.Email))
+			return "", "", nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", credential, userInfo.Email))
 		}
 		if credentials := preset.Spec.Kubevirt; credentials != nil {
 			kubeconfig = credentials.Kubeconfig
 			vpcName = credentials.VPCName
+			presetSubnets = credentials.Subnets
 		}
 	}
-	return kubeconfig, vpcName, nil
+	return kubeconfig, vpcName, presetSubnets, nil
 }
 
 // KubeVirtInstancetypesEndpoint handles the request to list available KubeVirtInstancetypes (provided credentials).
@@ -324,9 +326,17 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 		}
 
 		// If preset was used, vpcName will be empty and returned by the function instead.
-		kubeconfig, vpcName, err := getKubeconfigAndVPCName(ctx, req.Kubeconfig, vpcName, req.Credential, projectID, presetsProvider, userInfoGetter)
+		kubeconfig, vpcName, presetSubnets, err := getKubeconfigAndVPCName(ctx, req.Kubeconfig, vpcName, req.Credential, projectID, presetsProvider, userInfoGetter)
 		if err != nil {
 			return nil, err
+		}
+
+		if len(presetSubnets) > 0 {
+			kvSubnets := apiv2.KubeVirtSubnetList{}
+			for _, subnet := range presetSubnets {
+				kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
+			}
+			return kvSubnets, nil
 		}
 
 		if datacenter.Spec.Kubevirt != nil &&
@@ -397,13 +407,13 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(projectProvider provider.Project
 }
 
 // KubeVirtSubnetsWithClusterCredentialsEndpoint handles the request to list Subnets for a VPC (cluster credentials).
-func KubeVirtSubnetsWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func KubeVirtSubnetsWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(KubeVirtSubnetsNoCredentialReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, req.StorageClassName)
+		return providercommon.KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, presetsProvider, req.ProjectID, req.ClusterID, req.StorageClassName)
 	}
 }
 
