@@ -2249,6 +2249,10 @@ type GlobalSettings struct {
 	// option is disabled in the dashboard.
 	DisabledAuditWebhookBackendDCs []string `json:"disabledAuditWebhookBackendDCs,omitempty"`
 
+	// AdminGroups is the list of OIDC group names whose members are automatically
+	// granted KKP administrator privileges.
+	AdminGroups []string `json:"adminGroups,omitempty"`
+
 	// UserProjectsLimit is the maximum number of projects a user can create.
 	UserProjectsLimit           int64 `json:"userProjectsLimit"`
 	RestrictProjectCreation     bool  `json:"restrictProjectCreation"`

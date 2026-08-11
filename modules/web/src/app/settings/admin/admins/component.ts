@@ -24,7 +24,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Admin, Member} from '@shared/entity/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, take, takeUntil} from 'rxjs/operators';
+import {filter, finalize, take, takeUntil} from 'rxjs/operators';
 import {AddAdminDialogComponent} from './add-admin-dialog/component';
 
 @Component({
@@ -79,7 +79,8 @@ export class AdminsComponent implements OnInit, OnChanges {
   }
 
   isDeleteEnabled(admin: Admin): boolean {
-    return !!this.user && admin.email !== this.user.email;
+    // Group-granted admins cannot be removed here; remove the group from admin settings instead.
+    return !!this.user && admin.email !== this.user.email && !admin.grantedByGroup;
   }
 
   delete(admin: Admin): void {
@@ -105,10 +106,12 @@ export class AdminsComponent implements OnInit, OnChanges {
   private _updateAdmin(admin: Admin): void {
     this._settingsService
       .setAdmin(admin)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => this._settingsService.refreshAdmins())
+      )
       .subscribe(() => {
         this._notificationService.success(`Removed the ${admin.name} user from the admin group`);
-        this._settingsService.refreshAdmins();
       });
   }
 

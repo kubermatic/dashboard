@@ -23,6 +23,7 @@ export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
 };
 
 export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
+  adminGroups: [],
   cleanupOptions: {
     enforced: false,
     enabled: false,
