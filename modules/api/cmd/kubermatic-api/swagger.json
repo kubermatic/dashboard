@@ -35534,7 +35534,7 @@
       "type": "object",
       "properties": {
         "cidr": {
-          "description": "cidr is a string representing the IPBlock\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"",
+          "description": "cidr is a string representing the IPBlock\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"\n+required\n+k8s:alpha(since: \"1.36\")=+k8s:required",
           "type": "string",
           "x-go-name": "CIDR"
         },
@@ -36613,9 +36613,17 @@
           "x-go-name": "Kubeconfig"
         },
         "subnetName": {
-          "description": "SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
+          "description": "SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).\n\nDeprecated: use Subnets instead.",
           "type": "string",
           "x-go-name": "SubnetName"
+        },
+        "subnets": {
+          "description": "Subnets is a list of subnet names, smaller segmented portions of a larger network, like a Virtual Private Cloud (VPC).",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Subnets"
         },
         "vpcName": {
           "description": "VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt",
@@ -37661,7 +37669,7 @@
           "x-go-name": "Ports"
         },
         "to": {
-          "description": "to is a list of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional\n+listType=atomic",
+          "description": "to is a list of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional\n+listType=atomic\n+k8s:alpha(since: \"1.36\")=+k8s:optional",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPeer"
@@ -37676,7 +37684,7 @@
       "type": "object",
       "properties": {
         "from": {
-          "description": "from is a list of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional\n+listType=atomic",
+          "description": "from is a list of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional\n+listType=atomic\n+k8s:alpha(since: \"1.36\")=+k8s:optional",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPeer"
@@ -37739,7 +37747,7 @@
       "type": "object",
       "properties": {
         "egress": {
-          "description": "egress is a list of egress rules to be applied to the selected pods. Outgoing traffic\nis allowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional\n+listType=atomic",
+          "description": "egress is a list of egress rules to be applied to the selected pods. Outgoing traffic\nis allowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional\n+listType=atomic\n+k8s:alpha(since: \"1.36\")=+k8s:optional",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyEgressRule"
@@ -37747,7 +37755,7 @@
           "x-go-name": "Egress"
         },
         "ingress": {
-          "description": "ingress is a list of ingress rules to be applied to the selected pods.\nTraffic is allowed to a pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional\n+listType=atomic",
+          "description": "ingress is a list of ingress rules to be applied to the selected pods.\nTraffic is allowed to a pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional\n+listType=atomic\n+k8s:alpha(since: \"1.36\")=+k8s:optional",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyIngressRule"
@@ -39762,7 +39770,7 @@
           "x-go-name": "Resources"
         },
         "verbs": {
-          "description": "Verbs is a list of Verbs that apply to ALL the ResourceKinds contained in this rule. '*' represents all verbs.\n+listType=atomic",
+          "description": "Verbs is a list of Verbs that apply to ALL the ResourceKinds contained in this rule. '*' represents all verbs.\n+listType=atomic\n+required\n+k8s:alpha(since: \"1.36\")=+k8s:required",
           "type": "array",
           "items": {
             "type": "string"
@@ -41601,12 +41609,12 @@
           "x-go-name": "APIGroup"
         },
         "kind": {
-          "description": "Kind of object being referenced. Values defined by this API group are \"User\", \"Group\", and \"ServiceAccount\".\nIf the Authorizer does not recognized the kind value, the Authorizer should report an error.",
+          "description": "Kind of object being referenced. Values defined by this API group are \"User\", \"Group\", and \"ServiceAccount\".\nIf the Authorizer does not recognized the kind value, the Authorizer should report an error.\n+required",
           "type": "string",
           "x-go-name": "Kind"
         },
         "name": {
-          "description": "Name of the object being referenced.\n+required\n+k8s:required",
+          "description": "Name of the object being referenced.\n+required\n+k8s:alpha(since: \"1.36\")=+k8s:required",
           "type": "string",
           "x-go-name": "Name"
         },
