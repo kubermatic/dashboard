@@ -37,6 +37,7 @@ type NetworkPolicyEgressRule struct {
 	// allows traffic only if the traffic matches at least one item in the to list.
 	// +optional
 	// +listType=atomic
+	// +k8s:alpha(since: "1.36")=+k8s:optional
 	To []*NetworkPolicyPeer `json:"to"`
 }
 

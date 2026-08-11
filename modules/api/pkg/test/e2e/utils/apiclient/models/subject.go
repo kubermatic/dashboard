@@ -28,11 +28,12 @@ type Subject struct {
 
 	// Kind of object being referenced. Values defined by this API group are "User", "Group", and "ServiceAccount".
 	// If the Authorizer does not recognized the kind value, the Authorizer should report an error.
+	// +required
 	Kind string `json:"kind,omitempty"`
 
 	// Name of the object being referenced.
 	// +required
-	// +k8s:required
+	// +k8s:alpha(since: "1.36")=+k8s:required
 	Name string `json:"name,omitempty"`
 
 	// Namespace of the referenced object.  If the object kind is non-namespace, such as "User" or "Group", and this value is not empty

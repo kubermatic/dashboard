@@ -33,7 +33,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-kind-0.32-1
+        - image: quay.io/kubermatic/build:go-1.26-node-22-kind-0.32-8
           command:
             - "./hack/ci/run-api-e2e.sh"
           env:
@@ -61,7 +61,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-1
+        - image: quay.io/kubermatic/build:go-1.26-node-22-8
           command:
             - make
           args:
@@ -82,7 +82,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-1
+        - image: quay.io/kubermatic/build:go-1.26-node-22-8
           command:
             - make
             - api-lint
@@ -102,7 +102,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-1
+        - image: quay.io/kubermatic/build:go-1.26-node-22-8
           command:
             - make
             - api-verify
@@ -122,7 +122,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-1
+        - image: quay.io/kubermatic/build:go-1.26-node-22-8
           command:
             - make
             - api-build

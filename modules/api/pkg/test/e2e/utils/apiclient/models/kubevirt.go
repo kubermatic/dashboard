@@ -32,7 +32,12 @@ type Kubevirt struct {
 	Kubeconfig string `json:"kubeconfig,omitempty"`
 
 	// SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).
+	//
+	// Deprecated: use Subnets instead.
 	SubnetName string `json:"subnetName,omitempty"`
+
+	// Subnets is a list of subnet names, smaller segmented portions of a larger network, like a Virtual Private Cloud (VPC).
+	Subnets []string `json:"subnets"`
 
 	// VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt
 	VPCName string `json:"vpcName,omitempty"`

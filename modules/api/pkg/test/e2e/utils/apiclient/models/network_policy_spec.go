@@ -28,6 +28,7 @@ type NetworkPolicySpec struct {
 	// This field is beta-level in 1.8
 	// +optional
 	// +listType=atomic
+	// +k8s:alpha(since: "1.36")=+k8s:optional
 	Egress []*NetworkPolicyEgressRule `json:"egress"`
 
 	// ingress is a list of ingress rules to be applied to the selected pods.
@@ -39,6 +40,7 @@ type NetworkPolicySpec struct {
 	// solely to ensure that the pods it selects are isolated by default)
 	// +optional
 	// +listType=atomic
+	// +k8s:alpha(since: "1.36")=+k8s:optional
 	Ingress []*NetworkPolicyIngressRule `json:"ingress"`
 
 	// policyTypes is a list of rule types that the NetworkPolicy relates to.
