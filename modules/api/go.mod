@@ -108,7 +108,7 @@ replace k8c.io/application-catalog-manager => github.com/kubermatic/application-
 
 replace github.com/theupdateframework/go-tuf/v2 => github.com/theupdateframework/go-tuf/v2 v2.4.1
 
-require k8s.io/streaming v0.36.2
+require k8s.io/streaming v0.36.2 // indirect
 
 require (
 	cel.dev/expr v0.25.2 // indirect
