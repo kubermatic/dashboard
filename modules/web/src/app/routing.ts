@@ -20,6 +20,7 @@ import {DashboardComponent} from './dashboard/component';
 import {DynamicModule} from './dynamic/module-registry';
 import {View} from './shared/entity/common';
 import {SSHKeyGuard} from './core/services/ssh-key/guard';
+import {EnterpriseEditionGuard} from './core/services/enterprise-edition/guard';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
   preload(route: Route, load: () => Observable<any>): Observable<any> {
@@ -101,22 +102,27 @@ function createRouting(): Routes {
         {
           path: `projects/:projectID/${View.ClusterBackup}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.ClusterSchedule}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.ClusterRestore}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.BackupStorageLocation}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.KyvernoPolicies}`,
           loadChildren: () => DynamicModule.KyvernoPolicies,
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: 'account',
