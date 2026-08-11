@@ -32,8 +32,6 @@
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
-    // Angular 22 turns strictTemplates on by default. The base config still runs with
-    // strict: false and noImplicitAny: false, so enabling it is a separate effort.
     "strictTemplates": false
   }
 }
