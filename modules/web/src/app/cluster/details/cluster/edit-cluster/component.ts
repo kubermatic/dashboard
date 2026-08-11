@@ -195,7 +195,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Annotations]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
-      [Controls.ClusterBackup]: new FormControl(this.isEnterpriseEdition && !!this.cluster.spec.backupConfig),
+      [Controls.ClusterBackup]: new FormControl(this._isClusterBackupInitiallyEnabled()),
       [Controls.RouterReconciliation]: new FormControl(
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
@@ -331,6 +331,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this._handleClusterDefaultNodeSelector(this.podNodeSelectorAdmissionPluginConfig);
     }
     this._cdr.detectChanges();
+  }
+
+  private _isClusterBackupInitiallyEnabled(): boolean {
+    return this.isEnterpriseEdition && !!this.cluster.spec.backupConfig;
   }
 
   private _getAuditPolicyPresetInitialState(): AuditPolicyPreset | '' {
