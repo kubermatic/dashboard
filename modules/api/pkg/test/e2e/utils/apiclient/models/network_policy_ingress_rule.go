@@ -27,6 +27,7 @@ type NetworkPolicyIngressRule struct {
 	// allows traffic only if the traffic matches at least one item in the from list.
 	// +optional
 	// +listType=atomic
+	// +k8s:alpha(since: "1.36")=+k8s:optional
 	From []*NetworkPolicyPeer `json:"from"`
 
 	// ports is a list of ports which should be made accessible on the pods selected for
