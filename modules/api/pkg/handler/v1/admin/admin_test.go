@@ -144,6 +144,33 @@ func TestSetAdmin(t *testing.T) {
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), genUser("John", "john@acme.com", false)},
 			existingAPIUser:        test.GenDefaultAPIUser(),
 		},
+		// scenario 5
+		{
+			name:                   "scenario 5: authorized user can not remove admin rights granted by a group",
+			body:                   `{"email":"john@acme.com","isAdmin":false}`,
+			expectedResponse:       `{"error":{"code":400,"message":"admin rights for john@acme.com are granted by group \"kkp-admins\", remove the group from the admin groups setting to revoke them"}}`,
+			httpStatus:             http.StatusBadRequest,
+			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), genAdminGrantedByGroup("John", "john@acme.com", "kkp-admins")},
+			existingAPIUser:        test.GenDefaultAPIUser(),
+		},
+		// scenario 6
+		{
+			name:                   "scenario 6: authorized user can still remove manually granted admin rights",
+			body:                   `{"email":"john@acme.com","isAdmin":false}`,
+			expectedResponse:       `{"email":"john@acme.com","name":"John","isAdmin":false}`,
+			httpStatus:             http.StatusOK,
+			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), genUser("John", "john@acme.com", true)},
+			existingAPIUser:        test.GenDefaultAPIUser(),
+		},
+		// scenario 7
+		{
+			name:                   "scenario 7: adding admin rights to a group-granted admin is not blocked and keeps grantedByGroup",
+			body:                   `{"email":"john@acme.com","isAdmin":true}`,
+			expectedResponse:       `{"email":"john@acme.com","name":"John","isAdmin":true,"grantedByGroup":"kkp-admins"}`,
+			httpStatus:             http.StatusOK,
+			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), genAdminGrantedByGroup("John", "john@acme.com", "kkp-admins")},
+			existingAPIUser:        test.GenDefaultAPIUser(),
+		},
 	}
 
 	for _, tc := range testcases {

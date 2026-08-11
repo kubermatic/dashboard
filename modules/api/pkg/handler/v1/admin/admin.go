@@ -78,18 +78,22 @@ func SetAdminEndpoint(userInfoGetter provider.UserInfoGetter, adminProvider prov
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		grantedByGroup := admin.Annotations[kubermaticv1.AdminGrantedByGroupAnnotation]
+
 		if req.Body.IsGlobalViewer != nil {
 			return apiv1.Admin{
 				Email:          admin.Spec.Email,
 				Name:           admin.Spec.Name,
 				IsGlobalViewer: &admin.Spec.IsGlobalViewer,
+				GrantedByGroup: grantedByGroup,
 			}, nil
 		}
 
 		return apiv1.Admin{
-			Email:   admin.Spec.Email,
-			Name:    admin.Spec.Name,
-			IsAdmin: &admin.Spec.IsAdmin,
+			Email:          admin.Spec.Email,
+			Name:           admin.Spec.Name,
+			IsAdmin:        &admin.Spec.IsAdmin,
+			GrantedByGroup: grantedByGroup,
 		}, nil
 	}
 }

@@ -78,6 +78,12 @@ func (a *AdminProvider) SetAdmin(ctx context.Context, userInfo *provider.UserInf
 	}
 	for _, user := range userList.Items {
 		if strings.EqualFold(user.Spec.Email, adminBody.Email) {
+			if adminBody.IsAdmin != nil && !*adminBody.IsAdmin {
+				if group := user.Annotations[kubermaticv1.AdminGrantedByGroupAnnotation]; group != "" {
+					return nil, apierrors.NewBadRequest(fmt.Sprintf("admin rights for %s are granted by group %q, remove the group from the admin groups setting to revoke them", adminBody.Email, group))
+				}
+			}
+
 			userCopy := user.DeepCopy()
 			if adminBody.IsAdmin != nil {
 				userCopy.Spec.IsAdmin = *adminBody.IsAdmin
