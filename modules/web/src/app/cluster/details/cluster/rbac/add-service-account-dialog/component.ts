@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
@@ -39,6 +39,7 @@ export enum Controls {
 @Component({
   selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddServiceAccountDialogComponent implements OnInit, OnDestroy {

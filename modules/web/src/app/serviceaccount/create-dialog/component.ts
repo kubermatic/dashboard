@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
@@ -26,6 +26,7 @@ import {Observable} from 'rxjs';
 @Component({
   selector: 'km-create-service-account-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CreateServiceAccountDialogComponent implements OnInit {

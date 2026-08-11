@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -26,6 +26,7 @@ import {take, takeUntil} from 'rxjs/operators';
   selector: 'km-accounts',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AccountsComponent implements OnInit, OnChanges {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
@@ -38,6 +38,7 @@ export enum RegionState {
 @Component({
   selector: 'km-eks-credentials',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EKSCredentialsComponent implements OnInit, OnDestroy {

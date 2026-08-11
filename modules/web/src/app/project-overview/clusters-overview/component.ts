@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Cluster} from '@shared/entity/cluster';
@@ -28,6 +28,7 @@ import _ from 'lodash';
   selector: 'km-clusters-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {

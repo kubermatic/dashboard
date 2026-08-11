@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
@@ -47,6 +47,7 @@ export enum Controls {
 @Component({
   selector: 'km-allowed-registry-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AllowedRegistryDialog implements OnInit, OnDestroy {

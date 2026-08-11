@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
@@ -31,6 +31,7 @@ import {take, takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class HelpPanelComponent implements OnInit, OnDestroy {

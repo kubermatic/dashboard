@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, TemplateRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
@@ -32,6 +32,7 @@ enum Control {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterFromTemplateComponent implements OnInit, OnDestroy {

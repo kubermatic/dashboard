@@ -18,7 +18,15 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -40,6 +48,7 @@ import {AllowedRegistriesService} from './service';
   selector: 'km-allowed-registries-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AllowedRegistriesComponent extends DynamicTab implements OnInit, OnChanges, OnDestroy {

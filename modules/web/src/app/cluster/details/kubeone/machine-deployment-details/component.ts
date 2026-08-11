@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -41,6 +41,7 @@ import {CLICK_TO_COPY_TOOLTIP, MACHINE_AVAILABILITY_TOOLTIP} from '@app/shared/c
   selector: 'km-kubeone-machine-deployment-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestroy {

@@ -20,6 +20,7 @@ import {
   OnInit,
   ViewChild,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -125,6 +126,7 @@ export enum NodePoolVersionState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AKSClusterSettingsComponent

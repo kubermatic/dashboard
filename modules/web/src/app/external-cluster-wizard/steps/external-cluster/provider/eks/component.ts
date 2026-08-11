@@ -21,6 +21,7 @@ import {
   OnInit,
   ViewChild,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -134,6 +135,7 @@ enum InstanceTypeState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EKSClusterSettingsComponent

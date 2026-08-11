@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -58,6 +66,7 @@ enum ClusterState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NutanixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -29,6 +29,7 @@ export interface EditPresetDialogData {
   selector: 'km-edit-preset-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EditPresetDialogComponent {

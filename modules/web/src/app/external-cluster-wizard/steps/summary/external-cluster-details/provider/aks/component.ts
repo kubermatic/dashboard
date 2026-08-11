@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {AKSClusterSpec, AKSCloudSpec} from '@shared/entity/provider/aks';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-aks-cluster-summary',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AKSClusterSummaryComponent implements OnChanges {

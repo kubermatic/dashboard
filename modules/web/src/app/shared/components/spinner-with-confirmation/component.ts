@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {fadeInOut} from '../../animations/fade';
 
 @Component({
@@ -20,6 +20,7 @@ import {fadeInOut} from '../../animations/fade';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [fadeInOut],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SpinnerWithConfirmationComponent implements OnChanges {

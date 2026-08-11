@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
@@ -29,6 +29,7 @@ export interface DeleteSnapshotDialogConfig {
   selector: 'km-delete-snapshot-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DeleteSnapshotDialogComponent {

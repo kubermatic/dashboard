@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {KubeVirtVPC} from '@app/shared/entity/provider/kubevirt';
@@ -52,6 +60,7 @@ enum VPCState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeVirtProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {

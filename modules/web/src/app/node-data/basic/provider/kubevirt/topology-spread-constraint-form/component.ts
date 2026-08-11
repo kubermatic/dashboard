@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -51,6 +60,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TopologySpreadConstraintFormComponent extends BaseFormValidator implements OnInit, OnDestroy {

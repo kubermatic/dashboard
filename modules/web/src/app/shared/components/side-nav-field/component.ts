@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {AdminPanelSections, AdminPanelView, ProjectSidenavSection, View} from '@app/shared/entity/common';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
@@ -22,6 +22,7 @@ import {shrinkGrow} from '@shared/animations/grow';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {

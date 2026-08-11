@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -54,6 +54,7 @@ enum NamespaceState {
   selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddBindingDialogComponent implements OnInit, OnDestroy {

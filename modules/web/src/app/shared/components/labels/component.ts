@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'km-labels',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LabelsComponent implements OnInit, OnChanges {

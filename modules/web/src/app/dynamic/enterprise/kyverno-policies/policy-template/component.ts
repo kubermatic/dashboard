@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {KyvernoService} from '@app/core/services/kyverno';
@@ -52,6 +52,7 @@ enum PolicyTemplateStatus {
   selector: 'km-kyverno-policiy-template-list',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {

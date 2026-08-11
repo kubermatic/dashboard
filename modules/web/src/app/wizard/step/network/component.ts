@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -39,6 +39,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MachineNetworkStepComponent

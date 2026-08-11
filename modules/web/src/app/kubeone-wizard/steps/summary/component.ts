@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {StepRegistry} from '@app/kubeone-wizard/config';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
 import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
@@ -24,6 +24,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
   selector: 'km-kubeone-wizard-summary-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneSummaryStepComponent {

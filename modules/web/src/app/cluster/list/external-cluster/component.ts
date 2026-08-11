@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -55,6 +55,7 @@ enum Column {
 @Component({
   selector: 'km-external-cluster-list',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {

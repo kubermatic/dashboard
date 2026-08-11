@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -31,6 +40,7 @@ export enum EditorHeaderClass {
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EditorComponent implements OnInit, OnDestroy {

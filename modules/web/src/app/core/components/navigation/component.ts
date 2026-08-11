@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {BrandingService} from '@core/services/branding';
@@ -40,6 +40,7 @@ const enum RoutePath {
   selector: 'km-navigation',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NavigationComponent implements OnInit, OnDestroy {

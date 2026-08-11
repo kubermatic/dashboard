@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -31,6 +31,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-external-node-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {

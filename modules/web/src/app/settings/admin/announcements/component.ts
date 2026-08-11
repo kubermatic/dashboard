@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
@@ -41,6 +41,7 @@ interface AdminAnnouncementStatus {
   selector: 'km-admin-announcements',
   templateUrl: 'template.html',
   styleUrl: 'style.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AdminAnnouncementsComponent implements OnInit, OnDestroy {

@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {NavigationStart, Router} from '@angular/router';
 import {NotificationType} from '@core/components/notification/component';
@@ -28,6 +36,7 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NotificationPanelComponent implements OnInit, OnDestroy {

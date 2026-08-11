@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
@@ -27,6 +27,7 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UserPanelComponent implements OnInit, OnDestroy {

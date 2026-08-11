@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -30,6 +30,7 @@ import {AddGlobalViewerDialogComponenet} from './add-global-viewer-dialog/compon
   selector: 'km-global-viewer',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GlobalViewerComponent implements OnInit, OnDestroy {

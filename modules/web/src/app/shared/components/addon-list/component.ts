@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
@@ -31,6 +41,7 @@ import {DialogModeService} from '@app/core/services/dialog-mode';
   selector: 'km-addon-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {

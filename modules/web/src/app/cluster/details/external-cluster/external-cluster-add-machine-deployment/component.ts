@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Inject} from '@angular/core';
+import {Component, forwardRef, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {BaseFormValidator} from '@app/shared/validators/base-form.validator';
 import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -39,6 +39,7 @@ interface ExternalAddMachineDeploymentDialogConfig {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalAddMachineDeploymentDialogComponent extends BaseFormValidator {

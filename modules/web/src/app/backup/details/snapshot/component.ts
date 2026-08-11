@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -38,6 +38,7 @@ import {Cluster} from '@app/shared/entity/cluster';
   selector: 'km-snapshot-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SnapshotDetailsComponent implements OnInit, OnDestroy {

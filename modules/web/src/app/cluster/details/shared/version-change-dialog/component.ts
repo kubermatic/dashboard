@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
@@ -29,6 +29,7 @@ import {map, take, takeUntil} from 'rxjs/operators';
   selector: 'km-version-change-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class VersionChangeDialogComponent implements OnInit, OnDestroy {

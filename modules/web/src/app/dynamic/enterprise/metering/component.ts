@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
 import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
@@ -29,6 +29,7 @@ import {Report} from '@app/shared/entity/metering';
 @Component({
   selector: 'km-metering',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MeteringComponent implements OnInit, OnDestroy {

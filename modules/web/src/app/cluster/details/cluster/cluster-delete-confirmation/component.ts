@@ -13,7 +13,16 @@
 // limitations under the License.
 
 import {Clipboard} from '@angular/cdk/clipboard';
-import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -30,6 +39,7 @@ import {take, takeUntil} from 'rxjs/operators';
   selector: 'km-cluster-delete-confirmation',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {

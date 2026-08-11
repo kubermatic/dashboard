@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-IMAGE_NAME="node:20"
+IMAGE_NAME="node:22"
 REL_ROOT_DIR="$(dirname "$0")/../"
 ABS_ROOT_DIR="$(
   cd "${REL_ROOT_DIR}"

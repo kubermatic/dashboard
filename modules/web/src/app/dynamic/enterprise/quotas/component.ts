@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -70,6 +70,7 @@ interface progressBarData {
   selector: 'km-quotas',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class QuotasComponent implements OnInit {

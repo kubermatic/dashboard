@@ -21,6 +21,7 @@ import {
   forwardRef,
   HostBinding,
   Input,
+  numberAttribute,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
@@ -71,8 +72,10 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   private _valid = false;
   @Input() label: string;
   @Input() hint: string;
-  @Input() min: number;
-  @Input() max: number;
+  // Angular 22 no longer accepts string values for the min/max validators. Most call sites pass
+  // static attributes (min="0"), so coerce them to numbers before they reach MinValidator/MaxValidator.
+  @Input({transform: numberAttribute}) min: number;
+  @Input({transform: numberAttribute}) max: number;
   @Input() required = false;
   @Input() disabled = false;
   @Input() step = 1;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -50,6 +50,7 @@ enum ProjectState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit {

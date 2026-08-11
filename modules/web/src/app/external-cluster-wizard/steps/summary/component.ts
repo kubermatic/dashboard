@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ViewEncapsulation, OnInit} from '@angular/core';
+import {Component, ViewEncapsulation, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {StepRegistry} from '../../config';
@@ -22,6 +22,7 @@ import {StepRegistry} from '../../config';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalClusterSummaryStepComponent implements OnInit {

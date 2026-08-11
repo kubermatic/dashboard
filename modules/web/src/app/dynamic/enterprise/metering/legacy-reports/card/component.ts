@@ -18,13 +18,14 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Report} from '@shared/entity/metering';
 
 @Component({
   selector: 'km-metering-legacy-reports-card',
   styleUrls: ['./style.scss'],
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MeteringLegacyReportCardComponent {
