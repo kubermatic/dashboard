@@ -14,6 +14,7 @@
 
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {NotificationService} from '@core/services/notification';
@@ -43,6 +44,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
   editionVersion: string = getEditionVersion();
 
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly OperatingSystem = OperatingSystem;
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
