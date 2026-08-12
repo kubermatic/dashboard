@@ -16,6 +16,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '@app/core/services/settings';
 import {AdminSettings} from '@app/shared/entity/settings';
 import {getVisibleAnnotations} from '@app/shared/utils/annotations';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ApplicationsListView} from '@shared/components/application-list/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Application} from '@shared/entity/application';
@@ -39,6 +40,7 @@ import {take} from 'rxjs/operators';
 })
 export class ClusterSummaryComponent implements OnInit {
   readonly ApplicationsListView = ApplicationsListView;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   @Input() cluster: Cluster;
   @Input() machineDeployment: MachineDeployment;

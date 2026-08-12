@@ -249,7 +249,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   get isclusterBackupEnabled(): boolean {
-    return this._settings.enableClusterBackups;
+    return this.isEnterpriseEdition && !!this._settings?.enableClusterBackups;
   }
 
   constructor(
@@ -308,9 +308,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => this._getCBSL(project.id));
+    if (this.isEnterpriseEdition) {
+      this._projectService.selectedProject
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(project => this._getCBSL(project.id));
+    }
 
     this._fetchCNIPlugins();
 
@@ -479,16 +481,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
-    this.control(Controls.ClusterBackup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe((value: boolean) => {
-        if (value) {
-          this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
-          this._handleClusterBackupChange();
-        } else {
-          this.form.removeControl(Controls.BackupStorageLocation);
-        }
-      });
+    if (this.isEnterpriseEdition) {
+      this.control(Controls.ClusterBackup)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe((value: boolean) => {
+          if (value) {
+            this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
+            this._handleClusterBackupChange();
+          } else {
+            this.form.removeControl(Controls.BackupStorageLocation);
+          }
+        });
+    }
 
     this.control(Controls.AuditLogging)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -779,7 +783,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.UserSSHKeyAgent]: this._builder.control(
         this.isUserSshKeyEnabled ? (clusterSpec?.enableUserSSHKeyAgent ?? true) : false
       ),
-      [Controls.ClusterBackup]: this._builder.control(clusterSpec?.backupConfig || false),
+      [Controls.ClusterBackup]: this._builder.control(
+        this.isEnterpriseEdition ? clusterSpec?.backupConfig || false : false
+      ),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
       [Controls.KyvernoIntegration]: this._builder.control(clusterSpec?.kyverno?.enabled ?? false),
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
@@ -852,7 +858,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.Konnectivity).disable();
 
-    if (this.control(Controls.ClusterBackup).value) {
+    if (this.isEnterpriseEdition && this.control(Controls.ClusterBackup).value) {
       this.form.addControl(
         Controls.BackupStorageLocation,
         this._builder.control(clusterSpec?.backupConfig?.backupStorageLocation?.name, Validators.required)
@@ -894,7 +900,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             this.isUserSshKeyEnabled && clusterSpec?.enableUserSSHKeyAgent
               ? true
               : this.controlValue(Controls.UserSSHKeyAgent),
-          [Controls.ClusterBackup]: clusterSpec.backupConfig || false,
+          [Controls.ClusterBackup]: this.isEnterpriseEdition ? clusterSpec.backupConfig || false : false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
           [Controls.KyvernoIntegration]:
             clusterSpec?.kyverno?.enabled ?? this.controlValue(Controls.KyvernoIntegration),
@@ -1356,14 +1362,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       } as ClusterSpec,
     } as Cluster;
 
-    if (this.controlValue(Controls.ClusterBackup)) {
-      clusterObject.spec.backupConfig = {
-        backupStorageLocation: {
-          name: this.controlValue(Controls.BackupStorageLocation),
-        },
-      };
-    } else {
-      clusterObject.spec.backupConfig = null;
+    if (this.isEnterpriseEdition) {
+      if (this.controlValue(Controls.ClusterBackup)) {
+        clusterObject.spec.backupConfig = {
+          backupStorageLocation: {
+            name: this.controlValue(Controls.BackupStorageLocation),
+          },
+        };
+      } else {
+        clusterObject.spec.backupConfig = null;
+      }
     }
 
     clusterObject.spec.componentsOverride = this._getProxyComponentsOverride();
