@@ -387,12 +387,6 @@ limitations under the License.
       </mat-checkbox>
       }
 
-      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
-      <mat-checkbox [formControlName]="Controls.RouterReconciliation">
-        Skip Router Reconciliation
-      </mat-checkbox>
-      }
-
       @if (!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled) {
       <mat-form-field class="bsl-field">
         <mat-label>{{backupStorageLocationLabel}}</mat-label>
@@ -411,6 +405,13 @@ limitations under the License.
         }
       </mat-form-field>
       }
+      @if (datacenter?.spec?.provider === NodeProvider.OPENSTACK) {
+      <mat-checkbox [formControlName]="Controls.RouterReconciliation"
+                    kmValueChangedIndicator>
+        Skip Router Reconciliation
+      </mat-checkbox>
+      }
+
       <div class="km-proxy-settings">
         <div class="km-proxy-settings-title">Node Egress Proxy<i class="km-icon-info km-pointer"
              [matTooltip]="NODE_EGRESS_PROXY_TOOLTIP"></i></div>

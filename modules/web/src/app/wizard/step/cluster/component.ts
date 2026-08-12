@@ -77,6 +77,7 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   generateEncryptionKey,
 } from '@shared/utils/cluster';
+import {isBackupStorageLocationAvailable} from '@shared/utils/backup';
 import {getEditionVersion, tooltipWithAdminNote} from '@shared/utils/common';
 import {
   ADMIN_ENFORCED_IN_DATACENTER_NOTE,
@@ -92,7 +93,7 @@ import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {combineLatest, merge, Subscription} from 'rxjs';
+import {combineLatest, from, merge, Subscription} from 'rxjs';
 import {debounceTime, filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {WizardMode} from '../../types/wizard-mode';
@@ -236,6 +237,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
+  private _selectedProjectID: string;
   private _auditWebhookBackendChangesSubscription: Subscription;
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
@@ -308,9 +310,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => this._getCBSL(project.id));
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
+      this._selectedProjectID = project.id;
+      this._getCBSL(project.id);
+    });
 
     this._fetchCNIPlugins();
 
@@ -1263,9 +1266,36 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList;
-        this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
+        this.backupStorageLocationsList = cbslList.filter(bsl => isBackupStorageLocationAvailable(bsl));
+        this.backupStorageLocationLabel = this.backupStorageLocationsList.length
+          ? BSLListState.Ready
+          : BSLListState.Empty;
+
+        const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
+        if (
+          backupStorageLocationControl &&
+          !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)
+        ) {
+          backupStorageLocationControl.reset();
+        }
       });
+  }
+
+  addBackupStorageLocationDialog(): void {
+    from(DynamicModule.AddBackupStorageLocationDialogComponent)
+      .pipe(
+        filter(Boolean),
+        switchMap(component =>
+          this._matDialog
+            .open(component, {
+              data: {projectID: this._selectedProjectID},
+            })
+            .afterClosed()
+        ),
+        take(1),
+        filter(Boolean)
+      )
+      .subscribe(() => this._getCBSL(this._selectedProjectID));
   }
 
   private _handleClusterBackupChange(): void {
