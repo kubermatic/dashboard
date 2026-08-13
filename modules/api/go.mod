@@ -69,10 +69,10 @@ require (
 	google.golang.org/api v0.283.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260811094922-4cefe2a9c6a7
-	k8c.io/kubermatic/v2 v2.30.1-0.20260811094922-4cefe2a9c6a7
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260813130414-df3c7f67b82f
+	k8c.io/kubermatic/v2 v2.31.0-alpha.1.0.20260813130414-df3c7f67b82f
 	k8c.io/machine-controller/sdk v1.66.1
-	k8c.io/operating-system-manager v1.11.0
+	k8c.io/operating-system-manager v1.11.1
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.36.2
 	k8s.io/apiextensions-apiserver v0.36.2
@@ -292,7 +292,7 @@ require (
 	github.com/lestrrat-go/jwx/v3 v3.0.13 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
 	github.com/letsencrypt/boulder v0.20260309.0 // indirect
-	github.com/mailru/easyjson v0.9.0 // indirect
+	github.com/mailru/easyjson v0.9.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/miekg/pkcs11 v1.1.2 // indirect
@@ -421,7 +421,7 @@ require (
 	k8s.io/kubelet v0.33.4 // indirect
 	k8s.io/pod-security-admission v0.34.1 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
-	sigs.k8s.io/gateway-api v1.4.1 // indirect
+	sigs.k8s.io/gateway-api v1.5.1 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/release-utils v0.12.4 // indirect
