@@ -30,6 +30,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -43,6 +44,7 @@ import (
 	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -199,7 +201,7 @@ func DecodePutResourceQuotaReq(r *http.Request) (interface{}, error) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, err
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	return req, nil
@@ -266,6 +268,8 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuota {
 	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
 	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+	availableAccelerators := map[string]corev1.ResourceList{}
+	usedAccelerators := map[string]corev1.ResourceList{}
 
 	for _, quota := range rqList.Items {
 		if quota.Spec.Quota.CPU != nil {
@@ -277,6 +281,7 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuo
 		if quota.Spec.Quota.Storage != nil {
 			rdAvailable.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Spec.Quota.Storage))
 		}
+		addAcceleratorQuantities(availableAccelerators, quota.Spec.Quota.Accelerators)
 
 		if quota.Status.GlobalUsage.CPU != nil {
 			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
@@ -287,7 +292,10 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuo
 		if quota.Status.GlobalUsage.Storage != nil {
 			rdUsed.Storage.Add(apiv2.TreatDecimalAsBinary(quota.Status.GlobalUsage.Storage))
 		}
+		addAcceleratorQuantities(usedAccelerators, quota.Status.GlobalUsage.Accelerators)
 	}
+	rdAvailable.Accelerators = acceleratorQuotasFromTotals(availableAccelerators)
+	rdUsed.Accelerators = acceleratorQuotasFromTotals(usedAccelerators)
 
 	return &apiv2.ResourceQuota{
 		Name:  totalQuotaName,
@@ -297,6 +305,47 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuo
 		},
 		SubjectHumanReadableName: totalQuotaName,
 	}
+}
+
+func addAcceleratorQuantities(totals map[string]corev1.ResourceList, accelerators []kubermaticv1.AcceleratorQuota) {
+	for _, accelerator := range accelerators {
+		resources := totals[accelerator.Provider]
+		if resources == nil {
+			resources = corev1.ResourceList{}
+			totals[accelerator.Provider] = resources
+		}
+
+		for resourceName, quantity := range accelerator.Resources {
+			quantity = quantity.DeepCopy()
+			if current, exists := resources[resourceName]; exists {
+				current = current.DeepCopy()
+				current.Add(quantity)
+				quantity = current
+			}
+			resources[resourceName] = quantity
+		}
+	}
+}
+
+func acceleratorQuotasFromTotals(totals map[string]corev1.ResourceList) []kubermaticv1.AcceleratorQuota {
+	if len(totals) == 0 {
+		return nil
+	}
+
+	providers := make([]string, 0, len(totals))
+	for provider := range totals {
+		providers = append(providers, provider)
+	}
+	sort.Strings(providers)
+
+	accelerators := make([]kubermaticv1.AcceleratorQuota, 0, len(providers))
+	for _, provider := range providers {
+		accelerators = append(accelerators, kubermaticv1.AcceleratorQuota{
+			Provider:  provider,
+			Resources: totals[provider],
+		})
+	}
+	return accelerators
 }
 
 func CalculateResourceQuotaUpdateForProject(
@@ -759,7 +808,7 @@ func CreateResourceQuota(ctx context.Context, request interface{}, provider prov
 			name := buildNameFromSubject(kubermaticv1.Subject{Name: req.Body.SubjectName, Kind: req.Body.SubjectKind})
 			return utilerrors.NewAlreadyExists("ResourceQuota", name)
 		}
-		return err
+		return common.KubernetesErrorToHTTPError(err)
 	}
 	return nil
 }
@@ -786,13 +835,18 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	if err != nil {
 		return utilerrors.NewBadRequest("%v", err)
 	}
+	// Older clients do not send the accelerator field. Preserve existing limits
+	// unless the request explicitly includes accelerators (including an empty list).
+	if req.Body.Accelerators == nil {
+		crdQuota.Accelerators = originalResourceQuota.Spec.Quota.DeepCopy().Accelerators
+	}
 	newResourceQuota.Spec.Quota = crdQuota
 
 	if err := provider.PatchUnsecured(ctx, originalResourceQuota, newResourceQuota); err != nil {
 		if apierrors.IsNotFound(err) {
 			return utilerrors.NewNotFound("ResourceQuota", req.Name)
 		}
-		return err
+		return common.KubernetesErrorToHTTPError(err)
 	}
 	return nil
 }
@@ -804,8 +858,9 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
 		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
 		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
-			LocalUsage:  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),
+			GlobalUsage:                 apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
+			LocalUsage:                  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),
+			GlobalAcceleratorAccounting: apiv2.ConvertToAPIGlobalAcceleratorAccountingStatus(resourceQuota.Status.GlobalAcceleratorAccounting),
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}

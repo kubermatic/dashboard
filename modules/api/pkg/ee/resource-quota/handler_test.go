@@ -26,12 +26,14 @@ package resourcequota_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -41,6 +43,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
@@ -397,6 +400,353 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				t.Fatal(err)
 			}
 		})
+	}
+}
+
+func TestPutResourceQuotaAcceleratorCompatibility(t *testing.T) {
+	t.Parallel()
+
+	acceleratorLimits := []kubermaticv1.AcceleratorQuota{{
+		Provider: string(kubermaticv1.KubevirtCloudProvider),
+		Resources: corev1.ResourceList{
+			corev1.ResourceName("nvidia.com/gpu"): resource.MustParse("4"),
+		},
+	}}
+
+	testCases := []struct {
+		name             string
+		body             string
+		expectedStatus   int
+		preserveExisting bool
+	}{
+		{
+			name: "omitted accelerators preserve existing limits",
+			body: `{
+				"cpu": 10,
+				"memory": 64,
+				"storage": 256.5
+			}`,
+			preserveExisting: true,
+		},
+		{
+			name: "explicit empty accelerators remove all limits",
+			body: `{
+				"cpu": 10,
+				"memory": 64,
+				"storage": 256.5,
+				"accelerators": []
+			}`,
+		},
+		{
+			name: "invalid accelerator quantity type returns a bad request",
+			body: `{
+				"accelerators": [{
+					"provider": "kubevirt",
+					"resources": {"nvidia.com/gpu": 1}
+				}]
+			}`,
+			expectedStatus: http.StatusBadRequest,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			resourceQuota := genDefaultResourceQuota()
+			resourceQuota.Spec.Quota.Accelerators = acceleratorLimits
+			admin := test.GenAdminUser("John", "john@acme.com", true)
+
+			router, clients, err := test.CreateTestEndpointAndGetClients(
+				*test.GenAPIUser("John", "john@acme.com"),
+				nil,
+				nil,
+				nil,
+				test.GenDefaultKubermaticObjects(resourceQuota, admin),
+				nil,
+				hack.NewTestRouting,
+			)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			req := httptest.NewRequest(http.MethodPut, "/api/v2/quotas/"+resourceQuota.Name, strings.NewReader(tc.body))
+			resp := httptest.NewRecorder()
+			router.ServeHTTP(resp, req)
+			expectedStatus := tc.expectedStatus
+			if expectedStatus == 0 {
+				expectedStatus = http.StatusOK
+			}
+			if resp.Code != expectedStatus {
+				t.Fatalf("expected HTTP status %d, got %d: %s", expectedStatus, resp.Code, resp.Body.String())
+			}
+			if expectedStatus != http.StatusOK {
+				return
+			}
+
+			updated := &kubermaticv1.ResourceQuota{}
+			if err := clients.FakeMasterClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: resourceQuota.Name}, updated); err != nil {
+				t.Fatalf("failed to get updated ResourceQuota: %v", err)
+			}
+			if tc.preserveExisting && !diff.DeepEqual(acceleratorLimits, updated.Spec.Quota.Accelerators) {
+				t.Fatalf("accelerator limits differ:\n%s", diff.ObjectDiff(acceleratorLimits, updated.Spec.Quota.Accelerators))
+			}
+			if !tc.preserveExisting && len(updated.Spec.Quota.Accelerators) != 0 {
+				t.Fatalf("expected all accelerator limits to be removed, got %#v", updated.Spec.Quota.Accelerators)
+			}
+			if updated.Spec.Quota.CPU == nil || updated.Spec.Quota.CPU.Cmp(resource.MustParse("10")) != 0 {
+				t.Fatalf("expected CPU quota to be updated to 10, got %v", updated.Spec.Quota.CPU)
+			}
+		})
+	}
+}
+
+func TestGetResourceQuotaAcceleratorDetails(t *testing.T) {
+	t.Parallel()
+
+	resourceQuota := genDefaultResourceQuota()
+	resourceQuota.Spec.Quota.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: string(kubermaticv1.KubevirtCloudProvider),
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu": resource.MustParse("0"),
+			},
+		},
+	}
+	resourceQuota.Status.GlobalUsage.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: string(kubermaticv1.KubevirtCloudProvider),
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu": resource.MustParse("3"),
+			},
+		},
+	}
+	observedAt := metav1.NewTime(time.Date(2026, time.August, 15, 12, 30, 0, 0, time.UTC))
+	resourceQuota.Status.GlobalAcceleratorAccounting = &kubermaticv1.ResourceQuotaGlobalAcceleratorAccountingStatus{
+		ActivationPhase:                kubermaticv1.AcceleratorAccountingPhaseBlocked,
+		ObservedAccountingRevision:     "revision-3",
+		ObservedQuotaDigest:            "sha256:digest",
+		ObservedAt:                     observedAt,
+		LegacyMachinesWithoutFootprint: 1,
+		MachinesWithInvalidFootprint:   2,
+		Blockers: []kubermaticv1.AcceleratorAccountingBlocker{
+			{
+				Type:        kubermaticv1.AcceleratorAccountingBlockerTypeInvalidFootprints,
+				Message:     "invalid machine footprints",
+				SeedName:    "seed-a",
+				ClusterName: "cluster-a",
+				Count:       2,
+			},
+		},
+	}
+
+	admin := test.GenAdminUser("John", "john@acme.com", true)
+	router, err := test.CreateTestEndpoint(
+		*test.GenAPIUser("John", "john@acme.com"),
+		nil,
+		test.GenDefaultKubermaticObjects(resourceQuota, admin),
+		nil,
+		hack.NewTestRouting,
+	)
+	if err != nil {
+		t.Fatalf("failed to create test endpoint: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v2/quotas/"+resourceQuota.Name, nil)
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected HTTP status %d, got %d: %s", http.StatusOK, resp.Code, resp.Body.String())
+	}
+
+	got := &apiv2.ResourceQuota{}
+	if err := json.Unmarshal(resp.Body.Bytes(), got); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	expectedQuotaAccelerators := []apiv2.AcceleratorQuota{
+		{
+			Provider: string(kubermaticv1.KubevirtCloudProvider),
+			Resources: map[string]string{
+				"nvidia.com/gpu": "0",
+			},
+		},
+	}
+	if !diff.DeepEqual(&expectedQuotaAccelerators, got.Quota.Accelerators) {
+		t.Fatalf("accelerator quota differs:\n%s", diff.ObjectDiff(&expectedQuotaAccelerators, got.Quota.Accelerators))
+	}
+
+	expectedUsageAccelerators := []apiv2.AcceleratorQuota{
+		{
+			Provider: string(kubermaticv1.KubevirtCloudProvider),
+			Resources: map[string]string{
+				"nvidia.com/gpu": "3",
+			},
+		},
+	}
+	if !diff.DeepEqual(&expectedUsageAccelerators, got.Status.GlobalUsage.Accelerators) {
+		t.Fatalf("global accelerator usage differs:\n%s", diff.ObjectDiff(&expectedUsageAccelerators, got.Status.GlobalUsage.Accelerators))
+	}
+
+	apiObservedAt := apiv1.NewTime(observedAt.Time)
+	expectedAccounting := &apiv2.ResourceQuotaGlobalAcceleratorAccountingStatus{
+		ActivationPhase:                "Blocked",
+		ObservedAccountingRevision:     "revision-3",
+		ObservedQuotaDigest:            "sha256:digest",
+		ObservedAt:                     &apiObservedAt,
+		LegacyMachinesWithoutFootprint: 1,
+		MachinesWithInvalidFootprint:   2,
+		Ready:                          false,
+		Blockers: []apiv2.AcceleratorAccountingBlocker{
+			{
+				Type:        "InvalidFootprints",
+				Message:     "invalid machine footprints",
+				SeedName:    "seed-a",
+				ClusterName: "cluster-a",
+				Count:       2,
+			},
+		},
+	}
+	if got.Status.GlobalAcceleratorAccounting == nil || !got.Status.GlobalAcceleratorAccounting.ObservedAt.Equal(expectedAccounting.ObservedAt) {
+		t.Fatalf("global accelerator accounting observation time differs: got %v, want %v", got.Status.GlobalAcceleratorAccounting, expectedAccounting.ObservedAt)
+	}
+	got.Status.GlobalAcceleratorAccounting.ObservedAt = nil
+	expectedAccounting.ObservedAt = nil
+	if !diff.DeepEqual(expectedAccounting, got.Status.GlobalAcceleratorAccounting) {
+		t.Fatalf("global accelerator accounting differs:\n%s", diff.ObjectDiff(expectedAccounting, got.Status.GlobalAcceleratorAccounting))
+	}
+}
+
+func TestAccumulateResourceQuotaAccelerators(t *testing.T) {
+	t.Parallel()
+
+	first := genDefaultResourceQuota()
+	first.Name = "project-accelerator-a"
+	first.Spec.Subject.Name = "accelerator-a"
+	first.Spec.Quota.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "kubevirt",
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu":  resource.MustParse("2"),
+				"nvidia.com/zero": resource.MustParse("0"),
+			},
+		},
+	}
+	first.Status.GlobalUsage.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "kubevirt",
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu":  resource.MustParse("1"),
+				"nvidia.com/zero": resource.MustParse("0"),
+			},
+		},
+	}
+
+	second := genDefaultResourceQuota()
+	second.Name = "project-accelerator-b"
+	second.Spec.Subject.Name = "accelerator-b"
+	second.Spec.Quota.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "kubevirt",
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu":  resource.MustParse("3"),
+				"nvidia.com/zero": resource.MustParse("0"),
+			},
+		},
+	}
+	second.Status.GlobalUsage.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "kubevirt",
+			Resources: corev1.ResourceList{
+				"nvidia.com/gpu":  resource.MustParse("2"),
+				"nvidia.com/zero": resource.MustParse("0"),
+			},
+		},
+	}
+
+	third := genDefaultResourceQuota()
+	third.Name = "project-accelerator-c"
+	third.Spec.Subject.Name = "accelerator-c"
+	third.Spec.Quota.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "future-provider",
+			Resources: corev1.ResourceList{
+				"example.com/device": resource.MustParse("4"),
+			},
+		},
+	}
+	third.Status.GlobalUsage.Accelerators = []kubermaticv1.AcceleratorQuota{
+		{
+			Provider: "future-provider",
+			Resources: corev1.ResourceList{
+				"example.com/device": resource.MustParse("1"),
+			},
+		},
+	}
+
+	admin := test.GenAdminUser("John", "john@acme.com", true)
+	router, err := test.CreateTestEndpoint(
+		*test.GenAPIUser("John", "john@acme.com"),
+		nil,
+		test.GenDefaultKubermaticObjects(first, second, third, admin),
+		nil,
+		hack.NewTestRouting,
+	)
+	if err != nil {
+		t.Fatalf("failed to create test endpoint: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v2/quotas?accumulate=true", nil)
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+	if resp.Code != http.StatusOK {
+		t.Fatalf("expected HTTP status %d, got %d: %s", http.StatusOK, resp.Code, resp.Body.String())
+	}
+
+	got := []apiv2.ResourceQuota{}
+	if err := json.Unmarshal(resp.Body.Bytes(), &got); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+	if len(got) != 1 {
+		t.Fatalf("expected one accumulated quota, got %d", len(got))
+	}
+
+	expectedQuota := []apiv2.AcceleratorQuota{
+		{
+			Provider: "future-provider",
+			Resources: map[string]string{
+				"example.com/device": "4",
+			},
+		},
+		{
+			Provider: "kubevirt",
+			Resources: map[string]string{
+				"nvidia.com/gpu":  "5",
+				"nvidia.com/zero": "0",
+			},
+		},
+	}
+	if !diff.DeepEqual(&expectedQuota, got[0].Quota.Accelerators) {
+		t.Fatalf("accumulated accelerator quota differs:\n%s", diff.ObjectDiff(&expectedQuota, got[0].Quota.Accelerators))
+	}
+
+	expectedUsage := []apiv2.AcceleratorQuota{
+		{
+			Provider: "future-provider",
+			Resources: map[string]string{
+				"example.com/device": "1",
+			},
+		},
+		{
+			Provider: "kubevirt",
+			Resources: map[string]string{
+				"nvidia.com/gpu":  "3",
+				"nvidia.com/zero": "0",
+			},
+		},
+	}
+	if !diff.DeepEqual(&expectedUsage, got[0].Status.GlobalUsage.Accelerators) {
+		t.Fatalf("accumulated accelerator usage differs:\n%s", diff.ObjectDiff(&expectedUsage, got[0].Status.GlobalUsage.Accelerators))
 	}
 }
 

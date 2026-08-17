@@ -20,8 +20,10 @@ import (
 	"fmt"
 	"math"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
@@ -50,7 +52,61 @@ func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 		storage = math.Round(storage*100) / 100
 		quota.Storage = &storage
 	}
+
+	if resourceDetails.Accelerators != nil {
+		accelerators := make([]AcceleratorQuota, len(resourceDetails.Accelerators))
+		for i, accelerator := range resourceDetails.Accelerators {
+			resources := make(map[string]string, len(accelerator.Resources))
+			for resourceName, quantity := range accelerator.Resources {
+				resources[string(resourceName)] = quantity.String()
+			}
+
+			accelerators[i] = AcceleratorQuota{
+				Provider:  accelerator.Provider,
+				Resources: resources,
+			}
+		}
+		quota.Accelerators = &accelerators
+	}
+
 	return quota
+}
+
+func ConvertToAPIGlobalAcceleratorAccountingStatus(status *kubermaticv1.ResourceQuotaGlobalAcceleratorAccountingStatus) *ResourceQuotaGlobalAcceleratorAccountingStatus {
+	if status == nil {
+		return nil
+	}
+
+	var observedAt *apiv1.Time
+	if !status.ObservedAt.IsZero() {
+		converted := apiv1.NewTime(status.ObservedAt.Time)
+		observedAt = &converted
+	}
+
+	var blockers []AcceleratorAccountingBlocker
+	if status.Blockers != nil {
+		blockers = make([]AcceleratorAccountingBlocker, len(status.Blockers))
+		for i, blocker := range status.Blockers {
+			blockers[i] = AcceleratorAccountingBlocker{
+				Type:        string(blocker.Type),
+				Message:     blocker.Message,
+				SeedName:    blocker.SeedName,
+				ClusterName: blocker.ClusterName,
+				Count:       blocker.Count,
+			}
+		}
+	}
+
+	return &ResourceQuotaGlobalAcceleratorAccountingStatus{
+		ActivationPhase:                string(status.ActivationPhase),
+		ObservedAccountingRevision:     string(status.ObservedAccountingRevision),
+		ObservedQuotaDigest:            string(status.ObservedQuotaDigest),
+		ObservedAt:                     observedAt,
+		LegacyMachinesWithoutFootprint: status.LegacyMachinesWithoutFootprint,
+		MachinesWithInvalidFootprint:   status.MachinesWithInvalidFootprint,
+		Ready:                          status.Ready,
+		Blockers:                       blockers,
+	}
 }
 
 func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
@@ -80,6 +136,25 @@ func ConvertToCRDQuota(quota Quota) (kubermaticv1.ResourceDetails, error) {
 			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Storage %w", err)
 		}
 		resourceDetails.Storage = &storage
+	}
+
+	if quota.Accelerators != nil {
+		resourceDetails.Accelerators = make([]kubermaticv1.AcceleratorQuota, len(*quota.Accelerators))
+		for i, accelerator := range *quota.Accelerators {
+			resources := make(corev1.ResourceList, len(accelerator.Resources))
+			for resourceName, value := range accelerator.Resources {
+				quantity, err := resource.ParseQuantity(value)
+				if err != nil {
+					return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing accelerator quota %q resource %q: %w", accelerator.Provider, resourceName, err)
+				}
+				resources[corev1.ResourceName(resourceName)] = quantity
+			}
+
+			resourceDetails.Accelerators[i] = kubermaticv1.AcceleratorQuota{
+				Provider:  accelerator.Provider,
+				Resources: resources,
+			}
+		}
 	}
 
 	return resourceDetails, nil

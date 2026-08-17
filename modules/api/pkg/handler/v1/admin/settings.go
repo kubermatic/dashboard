@@ -19,6 +19,7 @@ package admin
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"slices"
@@ -174,6 +175,11 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 	addDefaultAnnotations(&s.Annotations)
 
 	if settings.DefaultProjectResourceQuota != nil {
+		accelerators := settings.DefaultProjectResourceQuota.Quota.Accelerators
+		if accelerators != nil && len(*accelerators) > 0 {
+			return kubermaticv1.SettingSpec{}, fmt.Errorf("default project ResourceQuota does not support accelerator limits")
+		}
+
 		crdQuota, err := apiv2.ConvertToCRDQuota(settings.DefaultProjectResourceQuota.Quota)
 		if err != nil {
 			return kubermaticv1.SettingSpec{}, err
