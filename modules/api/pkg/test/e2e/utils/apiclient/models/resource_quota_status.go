@@ -18,6 +18,9 @@ import (
 // swagger:model ResourceQuotaStatus
 type ResourceQuotaStatus struct {
 
+	// global accelerator accounting
+	GlobalAcceleratorAccounting *ResourceQuotaGlobalAcceleratorAccountingStatus `json:"globalAcceleratorAccounting,omitempty"`
+
 	// global usage
 	GlobalUsage *Quota `json:"globalUsage,omitempty"`
 
@@ -28,6 +31,10 @@ type ResourceQuotaStatus struct {
 // Validate validates this resource quota status
 func (m *ResourceQuotaStatus) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateGlobalAcceleratorAccounting(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateGlobalUsage(formats); err != nil {
 		res = append(res, err)
@@ -40,6 +47,25 @@ func (m *ResourceQuotaStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ResourceQuotaStatus) validateGlobalAcceleratorAccounting(formats strfmt.Registry) error {
+	if swag.IsZero(m.GlobalAcceleratorAccounting) { // not required
+		return nil
+	}
+
+	if m.GlobalAcceleratorAccounting != nil {
+		if err := m.GlobalAcceleratorAccounting.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("globalAcceleratorAccounting")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("globalAcceleratorAccounting")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -85,6 +111,10 @@ func (m *ResourceQuotaStatus) validateLocalUsage(formats strfmt.Registry) error 
 func (m *ResourceQuotaStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateGlobalAcceleratorAccounting(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateGlobalUsage(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -96,6 +126,22 @@ func (m *ResourceQuotaStatus) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ResourceQuotaStatus) contextValidateGlobalAcceleratorAccounting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GlobalAcceleratorAccounting != nil {
+		if err := m.GlobalAcceleratorAccounting.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("globalAcceleratorAccounting")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("globalAcceleratorAccounting")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

@@ -148,6 +148,70 @@ func TestUpdateGlobalSettings(t *testing.T) {
 	}
 }
 
+func TestUpdateGlobalSettingsDefaultQuotaAcceleratorBoundary(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name           string
+		body           string
+		expectedStatus int
+		expectedError  string
+	}{
+		{
+			name:           "omitted accelerator defaults remain compatible",
+			body:           `{"defaultNodeCount":100}`,
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name:           "explicit empty accelerator defaults are accepted",
+			body:           `{"defaultQuota":{"quota":{"accelerators":[]}}}`,
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name: "non-empty accelerator defaults are rejected",
+			body: `{"defaultQuota":{"quota":{"accelerators":[{
+				"provider":"kubevirt",
+				"resources":{"nvidia.com/gpu":"1"}
+			}]}}}`,
+			expectedStatus: http.StatusBadRequest,
+			expectedError:  "default project ResourceQuota does not support accelerator limits",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			router, _, err := test.CreateTestEndpointAndGetClients(
+				*test.GenDefaultAPIUser(),
+				nil,
+				nil,
+				nil,
+				[]ctrlruntimeclient.Object{
+					genUser("Bob", "bob@acme.com", true),
+					test.GenDefaultGlobalSettings(),
+				},
+				nil,
+				hack.NewTestRouting,
+			)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			req := httptest.NewRequest(http.MethodPatch, "/api/v1/admin/settings", strings.NewReader(tc.body))
+			resp := httptest.NewRecorder()
+			router.ServeHTTP(resp, req)
+
+			if resp.Code != tc.expectedStatus {
+				t.Fatalf("expected HTTP status %d, got %d: %s", tc.expectedStatus, resp.Code, resp.Body.String())
+			}
+			if tc.expectedError != "" && !strings.Contains(resp.Body.String(), tc.expectedError) {
+				t.Fatalf("expected error containing %q, got %s", tc.expectedError, resp.Body.String())
+			}
+		})
+	}
+}
+
 func genUser(name, email string, isAdmin bool) *kubermaticv1.User {
 	user := test.GenUser("", name, email)
 	user.Spec.IsAdmin = isAdmin

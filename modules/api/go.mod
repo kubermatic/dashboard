@@ -69,14 +69,14 @@ require (
 	google.golang.org/api v0.283.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260813130414-df3c7f67b82f
-	k8c.io/kubermatic/v2 v2.31.0-alpha.1.0.20260813130414-df3c7f67b82f
+	k8c.io/kubermatic/sdk/v2 v2.30.1-0.20260815083615-02fe8b8eaedc
+	k8c.io/kubermatic/v2 v2.31.0-rc.1
 	k8c.io/machine-controller/sdk v1.66.1
 	k8c.io/operating-system-manager v1.11.1
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.36.2
+	k8s.io/api v0.36.3
 	k8s.io/apiextensions-apiserver v0.36.2
-	k8s.io/apimachinery v0.36.2
+	k8s.io/apimachinery v0.36.3
 	k8s.io/apiserver v0.36.2
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/code-generator v0.36.2
@@ -108,7 +108,7 @@ replace k8c.io/application-catalog-manager => github.com/kubermatic/application-
 
 replace github.com/theupdateframework/go-tuf/v2 => github.com/theupdateframework/go-tuf/v2 v2.4.1
 
-require k8s.io/streaming v0.36.2 // indirect
+require k8s.io/streaming v0.36.3 // indirect
 
 require (
 	cel.dev/expr v0.25.2 // indirect

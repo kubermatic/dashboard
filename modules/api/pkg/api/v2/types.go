@@ -1914,6 +1914,43 @@ type ResourceQuotaStatus struct {
 	GlobalUsage Quota `json:"globalUsage,omitempty"`
 	// LocalUsage is holds the current usage of resources for the local seed.
 	LocalUsage Quota `json:"localUsage,omitempty"`
+	// GlobalAcceleratorAccounting contains the project-wide accelerator accounting state.
+	GlobalAcceleratorAccounting *ResourceQuotaGlobalAcceleratorAccountingStatus `json:"globalAcceleratorAccounting,omitempty"`
+}
+
+// swagger:model ResourceQuotaGlobalAcceleratorAccountingStatus
+type ResourceQuotaGlobalAcceleratorAccountingStatus struct {
+	// ActivationPhase describes the current project-wide accelerator accounting state.
+	ActivationPhase string `json:"activationPhase"`
+	// ObservedAccountingRevision is the authoritative accounting revision.
+	ObservedAccountingRevision string `json:"observedAccountingRevision"`
+	// ObservedQuotaDigest is the authoritative digest of the current accelerator quota.
+	ObservedQuotaDigest string `json:"observedQuotaDigest"`
+	// ObservedAt is the oldest heartbeat among the seed attestations included in this state.
+	// swagger:strfmt date-time
+	ObservedAt *apiv1.Time `json:"observedAt,omitempty"`
+	// LegacyMachinesWithoutFootprint is the project-wide number of machines without a trusted footprint.
+	LegacyMachinesWithoutFootprint int32 `json:"legacyMachinesWithoutFootprint"`
+	// MachinesWithInvalidFootprint is the project-wide number of machines whose footprint cannot be accounted.
+	MachinesWithInvalidFootprint int32 `json:"machinesWithInvalidFootprint"`
+	// Ready indicates that all required seed attestations are compatible and fresh.
+	Ready bool `json:"ready"`
+	// Blockers contains actionable reasons why project-wide accounting is not ready.
+	Blockers []AcceleratorAccountingBlocker `json:"blockers,omitempty"`
+}
+
+// swagger:model AcceleratorAccountingBlocker
+type AcceleratorAccountingBlocker struct {
+	// Type identifies the class of blocker.
+	Type string `json:"type"`
+	// Message contains human-readable details about the blocker.
+	Message string `json:"message,omitempty"`
+	// SeedName identifies the affected seed when the blocker is seed-specific.
+	SeedName string `json:"seedName,omitempty"`
+	// ClusterName identifies the affected user cluster when the blocker is cluster-specific.
+	ClusterName string `json:"clusterName,omitempty"`
+	// Count is the number of affected objects when the blocker represents an aggregate.
+	Count int32 `json:"count,omitempty"`
 }
 
 // swagger:model ProjectResourceQuota
@@ -1929,6 +1966,17 @@ type Quota struct {
 	Memory *float64 `json:"memory,omitempty"`
 	// Storage represents the disk size. Denoted in GB, rounded to 2 decimal places.
 	Storage *float64 `json:"storage,omitempty"`
+	// Accelerators contains provider-specific accelerator resource limits.
+	// A nil value means the field was omitted; an empty slice explicitly clears all limits.
+	Accelerators *[]AcceleratorQuota `json:"accelerators,omitempty"`
+}
+
+// swagger:model AcceleratorQuota
+type AcceleratorQuota struct {
+	// Provider is the KKP infrastructure provider identifier.
+	Provider string `json:"provider"`
+	// Resources maps provider-native accelerator resource names to Kubernetes quantities.
+	Resources map[string]string `json:"resources"`
 }
 
 // swagger:model ResourceQuotaUpdateCalculation

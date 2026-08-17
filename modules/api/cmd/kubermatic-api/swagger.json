@@ -27966,6 +27966,57 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "AcceleratorAccountingBlocker": {
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "description": "ClusterName identifies the affected user cluster when the blocker is cluster-specific.",
+          "type": "string",
+          "x-go-name": "ClusterName"
+        },
+        "count": {
+          "description": "Count is the number of affected objects when the blocker represents an aggregate.",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "Count"
+        },
+        "message": {
+          "description": "Message contains human-readable details about the blocker.",
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "seedName": {
+          "description": "SeedName identifies the affected seed when the blocker is seed-specific.",
+          "type": "string",
+          "x-go-name": "SeedName"
+        },
+        "type": {
+          "description": "Type identifies the class of blocker.",
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "AcceleratorQuota": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "description": "Provider is the KKP infrastructure provider identifier.",
+          "type": "string",
+          "x-go-name": "Provider"
+        },
+        "resources": {
+          "description": "Resources maps provider-native accelerator resource names to Kubernetes quantities.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Resources"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "AccessibleAddons": {
       "type": "array",
       "title": "AccessibleAddons represents an array of addons that can be configured in the user clusters.",
@@ -40625,6 +40676,14 @@
     "Quota": {
       "type": "object",
       "properties": {
+        "accelerators": {
+          "description": "Accelerators contains provider-specific accelerator resource limits.\nA nil value means the field was omitted; an empty slice explicitly clears all limits.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcceleratorQuota"
+          },
+          "x-go-name": "Accelerators"
+        },
         "cpu": {
           "description": "CPU holds the quantity of CPU.",
           "type": "integer",
@@ -40827,9 +40886,64 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ResourceQuotaGlobalAcceleratorAccountingStatus": {
+      "type": "object",
+      "properties": {
+        "activationPhase": {
+          "description": "ActivationPhase describes the current project-wide accelerator accounting state.",
+          "type": "string",
+          "x-go-name": "ActivationPhase"
+        },
+        "blockers": {
+          "description": "Blockers contains actionable reasons why project-wide accounting is not ready.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcceleratorAccountingBlocker"
+          },
+          "x-go-name": "Blockers"
+        },
+        "legacyMachinesWithoutFootprint": {
+          "description": "LegacyMachinesWithoutFootprint is the project-wide number of machines without a trusted footprint.",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "LegacyMachinesWithoutFootprint"
+        },
+        "machinesWithInvalidFootprint": {
+          "description": "MachinesWithInvalidFootprint is the project-wide number of machines whose footprint cannot be accounted.",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "MachinesWithInvalidFootprint"
+        },
+        "observedAccountingRevision": {
+          "description": "ObservedAccountingRevision is the authoritative accounting revision.",
+          "type": "string",
+          "x-go-name": "ObservedAccountingRevision"
+        },
+        "observedAt": {
+          "description": "ObservedAt is the oldest heartbeat among the seed attestations included in this state.",
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "ObservedAt"
+        },
+        "observedQuotaDigest": {
+          "description": "ObservedQuotaDigest is the authoritative digest of the current accelerator quota.",
+          "type": "string",
+          "x-go-name": "ObservedQuotaDigest"
+        },
+        "ready": {
+          "description": "Ready indicates that all required seed attestations are compatible and fresh.",
+          "type": "boolean",
+          "x-go-name": "Ready"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ResourceQuotaStatus": {
       "type": "object",
       "properties": {
+        "globalAcceleratorAccounting": {
+          "$ref": "#/definitions/ResourceQuotaGlobalAcceleratorAccountingStatus"
+        },
         "globalUsage": {
           "$ref": "#/definitions/Quota"
         },
