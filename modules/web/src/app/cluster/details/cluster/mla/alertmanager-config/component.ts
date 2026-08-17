@@ -21,11 +21,7 @@ import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
-import {
-  Application,
-  KUBE_STATE_METRICS_APP_DEF_NAME,
-  NODE_EXPORTER_APP_DEF_NAME,
-} from '@shared/entity/application';
+import {Application, KUBE_STATE_METRICS_APP_DEF_NAME, NODE_EXPORTER_APP_DEF_NAME} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
@@ -107,7 +103,6 @@ export class AlertmanagerConfigComponent implements OnInit, OnChanges, OnDestroy
   }
 
   shouldDisplayLink(type: string): boolean {
-    console.log('shouldDisplayLink', type, this._settings, this._seedSettings);
     switch (type) {
       case Type.Alertmanager:
         return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
