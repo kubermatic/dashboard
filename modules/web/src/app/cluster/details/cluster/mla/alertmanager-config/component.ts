@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
@@ -21,6 +21,7 @@ import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
+import {Application, KUBE_STATE_METRICS_APP_DEF_NAME, NODE_EXPORTER_APP_DEF_NAME} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
@@ -29,7 +30,6 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
-import {AddonService} from '@core/services/addon';
 import {ProjectService} from '@app/core/services/project';
 import {ProjectAnnotation} from '@app/shared/entity/project';
 
@@ -38,10 +38,11 @@ export enum Type {
   Grafana = 'Grafana',
 }
 
-export enum AddonType {
-  NodeExporter = 'node-exporter',
-  KubeStateMetrics = 'kube-state-metrics',
-}
+// node-exporter and kube-state-metrics are deployed as Applications by KKP when user cluster monitoring is enabled.
+const MONITORING_COMPONENTS = [
+  {name: NODE_EXPORTER_APP_DEF_NAME, metrics: 'node-related metrics'},
+  {name: KUBE_STATE_METRICS_APP_DEF_NAME, metrics: 'Kubernetes workload metrics'},
+];
 
 @Component({
   selector: 'km-alertmanager-config',
@@ -49,15 +50,16 @@ export enum AddonType {
   styleUrls: ['./style.scss'],
   standalone: false,
 })
-export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
+export class AlertmanagerConfigComponent implements OnInit, OnChanges, OnDestroy {
   readonly Type = Type;
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() alertmanagerConfig: AlertmanagerConfig;
   @Input() addons: Addon[] = [];
+  @Input() applications: Application[] = [];
 
-  accessibleAddons: string[] = [];
+  grafanaWarningText = '';
   private _grafanaOrgId: string;
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -70,7 +72,6 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _addonService: AddonService,
     private readonly _projectService: ProjectService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
@@ -90,10 +91,10 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._seed)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
+  }
 
-    this._addonService.accessibleAddons
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(accessibleAddons => (this.accessibleAddons = accessibleAddons));
+  ngOnChanges(): void {
+    this.grafanaWarningText = this._getGrafanaWarningText();
   }
 
   ngOnDestroy(): void {
@@ -128,55 +129,27 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
 
   displayGrafanaWarning(): boolean {
     return (
-      this.shouldDisplayLink(Type.Grafana) &&
-      (!this._isAddonEnabled(AddonType.NodeExporter) || !this._isAddonEnabled(AddonType.KubeStateMetrics))
+      this.shouldDisplayLink(Type.Grafana) && !!this.cluster?.spec.mla?.monitoringEnabled && !!this.grafanaWarningText
     );
   }
 
-  private _isAddonEnabled(addon: AddonType): boolean {
-    return !!this.addons.find(a => a.id === addon);
+  private _isDeployed(name: string): boolean {
+    return (
+      !!this.applications?.some(application => application.spec?.applicationRef?.name === name) ||
+      !!this.addons?.some(addon => addon.id === name)
+    );
   }
 
-  private _isAddonAvailable(addon: AddonType): boolean {
-    return !!this.accessibleAddons.find(a => a === addon);
-  }
-
-  getAddonsEnabledWarningText(): string {
-    const nodeExporterEnabled = this._isAddonEnabled(AddonType.NodeExporter);
-    const kubeStateMetricsEnabled = this._isAddonEnabled(AddonType.KubeStateMetrics);
-
-    if (!nodeExporterEnabled && !kubeStateMetricsEnabled) {
-      return 'Please enable the node-exporter addon to see node-related stats and the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
+  private _getGrafanaWarningText(): string {
+    const missing = MONITORING_COMPONENTS.filter(component => !this._isDeployed(component.name));
+    if (!missing.length) {
+      return '';
     }
 
-    if (!nodeExporterEnabled) {
-      return 'Please enable the node-exporter addon to see node-related stats in Grafana dashboards';
-    }
-
-    if (!kubeStateMetricsEnabled) {
-      return 'Please enable the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
-    }
-
-    return '';
-  }
-
-  getAddonsAvailableWarningText(): string {
-    const nodeExporterAvailable = this._isAddonAvailable(AddonType.NodeExporter);
-    const kubeStateMetricsAvailable = this._isAddonAvailable(AddonType.KubeStateMetrics);
-
-    if (!nodeExporterAvailable && !kubeStateMetricsAvailable) {
-      return 'NOTE: The node-exporter and the kube-state-metrics addon are not available for installation in this cluster yet. Please contact your administrator for setting it up.';
-    }
-
-    if (!nodeExporterAvailable) {
-      return 'NOTE: The node-exporter addon is not available for installation in this cluster yet. Please contact your administrator for setting it up.';
-    }
-
-    if (!kubeStateMetricsAvailable) {
-      return 'NOTE: The kube-state-metrics addon is not available for installation in this cluster yet. Please contact your administrator for setting it up.';
-    }
-
-    return '';
+    const names = missing.map(component => component.name).join(' and ');
+    const metrics = missing.map(component => component.metrics).join(' and ');
+    const application = missing.length > 1 ? 'applications are' : 'application is';
+    return `To see ${metrics} in Grafana dashboards, make sure the ${names} ${application} deployed in this cluster.`;
   }
 
   edit(): void {

@@ -26,6 +26,7 @@ import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {Application, KUBE_STATE_METRICS_APP_DEF_NAME, NODE_EXPORTER_APP_DEF_NAME} from '@shared/entity/application';
 import {SharedModule} from '@shared/module';
 import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
@@ -110,4 +111,41 @@ describe('AlertmanagerConfigComponent', () => {
     fixture.destroy();
     flush();
   }));
+
+  describe('Grafana monitoring components warning', () => {
+    const fakeApplication = (name: string): Application =>
+      ({name, spec: {applicationRef: {name, version: '1.0.0'}}}) as Application;
+
+    beforeEach(() => {
+      component.cluster.spec.mla = {monitoringEnabled: true};
+      jest.spyOn(component, 'shouldDisplayLink').mockReturnValue(true);
+    });
+
+    it('should not warn when both monitoring applications are deployed', () => {
+      component.applications = [
+        fakeApplication(NODE_EXPORTER_APP_DEF_NAME),
+        fakeApplication(KUBE_STATE_METRICS_APP_DEF_NAME),
+      ];
+      component.ngOnChanges();
+
+      expect(component.displayGrafanaWarning()).toBeFalsy();
+    });
+
+    it('should warn only about the application that is not deployed', () => {
+      component.applications = [fakeApplication(NODE_EXPORTER_APP_DEF_NAME)];
+      component.ngOnChanges();
+
+      expect(component.displayGrafanaWarning()).toBeTruthy();
+      expect(component.grafanaWarningText).toContain('kube-state-metrics application is deployed');
+      expect(component.grafanaWarningText).not.toContain('node-exporter');
+    });
+
+    it('should not warn when only MLA logging is enabled', () => {
+      component.cluster.spec.mla = {loggingEnabled: true, monitoringEnabled: false};
+      component.applications = [];
+      component.ngOnChanges();
+
+      expect(component.displayGrafanaWarning()).toBeFalsy();
+    });
+  });
 });
