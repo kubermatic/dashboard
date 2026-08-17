@@ -379,7 +379,6 @@ export class DefaultsComponent implements OnInit, OnDestroy {
       patch.disabledAuditWebhookBackendDCs = this.settings.disabledAuditWebhookBackendDCs;
     }
 
-    // Admin groups are reconciled by an enterprise-only controller, never patch them in community edition.
     if (!this.isEnterpriseEdition) {
       delete patch.adminGroups;
     } else if (patch.adminGroups) {
