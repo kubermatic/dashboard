@@ -379,8 +379,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
       patch.disabledAuditWebhookBackendDCs = this.settings.disabledAuditWebhookBackendDCs;
     }
 
-    // Send full adminGroups array to avoid merge-patch issues with removals.
-    if (patch.adminGroups) {
+    if (!this.isEnterpriseEdition) {
+      delete patch.adminGroups;
+    } else if (patch.adminGroups) {
+      // Send full adminGroups array to avoid merge-patch issues with removals.
       patch.adminGroups = this.settings.adminGroups;
     }
 

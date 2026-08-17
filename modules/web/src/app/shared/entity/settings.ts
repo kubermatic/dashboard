@@ -41,7 +41,7 @@ export interface AdminSettings {
   // disabledAuditWebhookBackendDCs is the list of datacenters for which the Audit Webhook Backend
   // option is hidden in the cluster wizard and edit-cluster dialog.
   disabledAuditWebhookBackendDCs?: string[];
-  adminGroups: string[];
+  adminGroups?: string[];
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
   restrictProjectDeletion: boolean;
