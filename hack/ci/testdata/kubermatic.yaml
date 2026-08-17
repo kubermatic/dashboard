@@ -47,5 +47,7 @@ spec:
     tokenIssuer: "http://dex.dex:5556/dex"
     clientID: "kubermaticIssuer"
     issuerClientID: "kubermaticIssuer"
+    issuerClientSecret: "BDZleMTgqON5kiJybIBZM4Si"
+    issuerCookieKey: "kubermatic-static-cookie-key-1234"
     issuerRedirectURL: "http://localhost:8000"
     serviceAccountKey: "__SERVICE_ACCOUNT_KEY__"
