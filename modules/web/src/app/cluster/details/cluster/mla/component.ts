@@ -14,6 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {Addon} from '@shared/entity/addon';
+import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import _ from 'lodash';
@@ -30,4 +31,5 @@ export class MLAComponent {
   @Input() alertmanagerConfig: AlertmanagerConfig;
   @Input() ruleGroups: RuleGroup[];
   @Input() addons: Addon[];
+  @Input() applications: Application[];
 }

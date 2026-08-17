@@ -18,6 +18,8 @@ import * as y from 'js-yaml';
 import semver from 'semver';
 
 export const CLUSTER_AUTOSCALING_APP_DEF_NAME = 'cluster-autoscaler';
+export const NODE_EXPORTER_APP_DEF_NAME = 'node-exporter';
+export const KUBE_STATE_METRICS_APP_DEF_NAME = 'kube-state-metrics';
 
 export class Application {
   creationTimestamp?: Date;
