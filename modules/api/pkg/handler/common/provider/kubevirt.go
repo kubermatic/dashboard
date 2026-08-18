@@ -182,22 +182,18 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 		return "", err
 	}
 
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
 	if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName != "" {
 		preset, err := presetsProvider.GetPreset(ctx, userInfo, ptr.To(projectID), presetName)
 		if err != nil {
 			log.Logger.Errorf("failed to get preset %s for user %s, falling back to seed/credentials subnet resolution: %v", presetName, userInfo.Email, err)
 		} else if credentials := preset.Spec.Kubevirt; credentials != nil && len(credentials.Subnets) > 0 {
-			kvSubnets := apiv2.KubeVirtSubnetList{}
-			for _, subnet := range credentials.Subnets {
-				kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
-			}
-			return kvSubnets, nil
+			return FilterKubeVirtPresetSubnets(datacenter.Spec.Kubevirt, credentials.Subnets, cluster.Spec.Cloud.Kubevirt.VPCName, storageClassName), nil
 		}
-	}
-
-	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)
-	if err != nil {
-		return nil, fmt.Errorf("error getting dc: %w", err)
 	}
 
 	if datacenter.Spec.Kubevirt != nil &&
@@ -640,6 +636,46 @@ func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) 
 	}
 
 	return kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
+}
+
+func FilterKubeVirtPresetSubnets(datacenter *kubermaticv1.DatacenterSpecKubevirt, presetSubnets []string, vpcName, storageClassName string) apiv2.KubeVirtSubnetList {
+	kvSubnets := apiv2.KubeVirtSubnetList{}
+
+	if datacenter == nil || datacenter.ProviderNetwork == nil ||
+		datacenter.MatchSubnetAndStorageLocation == nil || !*datacenter.MatchSubnetAndStorageLocation {
+		for _, subnet := range presetSubnets {
+			kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
+		}
+		return kvSubnets
+	}
+
+	allowedSubnetNames := sets.New(presetSubnets...)
+
+	for _, vpc := range datacenter.ProviderNetwork.VPCs {
+		if vpc.Name != vpcName {
+			continue
+		}
+		for _, subnet := range vpc.Subnets {
+			if !allowedSubnetNames.Has(subnet.Name) {
+				continue
+			}
+			for _, sc := range datacenter.InfraStorageClasses {
+				if storageClassName == "" && sc.IsDefaultClass != nil && *sc.IsDefaultClass {
+					storageClassName = sc.Name
+				}
+				if sc.Name != storageClassName {
+					continue
+				}
+				scRegions := sets.New[string]().Insert(sc.Regions...)
+				scZones := sets.New[string]().Insert(sc.Zones...)
+				if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
+					kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet.Name, CIDR: subnet.CIDR})
+				}
+			}
+		}
+	}
+
+	return kvSubnets
 }
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {

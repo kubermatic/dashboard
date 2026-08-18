@@ -332,11 +332,7 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 		}
 
 		if len(presetSubnets) > 0 {
-			kvSubnets := apiv2.KubeVirtSubnetList{}
-			for _, subnet := range presetSubnets {
-				kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
-			}
-			return kvSubnets, nil
+			return providercommon.FilterKubeVirtPresetSubnets(datacenter.Spec.Kubevirt, presetSubnets, vpcName, storageClassName), nil
 		}
 
 		if datacenter.Spec.Kubevirt != nil &&
