@@ -199,8 +199,7 @@ func (h *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) endpo
 		w.Header().Set("Content-Security-Policy", csp)
 
 		// Proxy the request
-		proxy := httputil.NewSingleHostReverseProxy(proxyURL)
-		proxy.Rewrite = newDashboardProxyDirector(proxyURL, token, request).rewrite()
+		proxy := &httputil.ReverseProxy{Rewrite: newDashboardProxyDirector(proxyURL, token, request).rewrite()}
 		proxy.ServeHTTP(w, request)
 
 		return nil, nil
