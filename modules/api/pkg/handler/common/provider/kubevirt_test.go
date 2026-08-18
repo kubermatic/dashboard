@@ -38,6 +38,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
@@ -793,5 +794,118 @@ func Test_listClusterPreferences_fallback(t *testing.T) {
 	}
 	if items[0].Spec.CPU == nil {
 		t.Errorf("converted preference CPU spec is nil; conversion did not copy the spec")
+	}
+}
+
+func Test_FilterKubeVirtPresetSubnets(t *testing.T) {
+	dcWithoutMatching := &kubermaticv1.DatacenterSpecKubevirt{
+		ProviderNetwork: &kubermaticv1.ProviderNetwork{
+			VPCs: []kubermaticv1.VPC{
+				{
+					Name: "dev",
+					Subnets: []kubermaticv1.Subnet{
+						{Name: "subnet-a", CIDR: "10.0.0.0/24", Regions: []string{"region-a"}, Zones: []string{"zone-a"}},
+						{Name: "subnet-b", CIDR: "10.0.1.0/24", Regions: []string{"region-b"}, Zones: []string{"zone-b"}},
+					},
+				},
+			},
+		},
+	}
+
+	dcWithMatching := &kubermaticv1.DatacenterSpecKubevirt{
+		MatchSubnetAndStorageLocation: ptr.To(true),
+		InfraStorageClasses: []kubermaticv1.KubeVirtInfraStorageClass{
+			{Name: "storage-a", IsDefaultClass: ptr.To(true), Regions: []string{"region-a"}, Zones: []string{"zone-a"}},
+		},
+		ProviderNetwork: dcWithoutMatching.ProviderNetwork,
+	}
+
+	testcases := []struct {
+		name             string
+		datacenter       *kubermaticv1.DatacenterSpecKubevirt
+		presetSubnets    []string
+		vpcName          string
+		storageClassName string
+		want             apiv2.KubeVirtSubnetList
+	}{
+		{
+			name:          "matching disabled: preset subnets pass through unfiltered, no CIDR",
+			datacenter:    dcWithoutMatching,
+			presetSubnets: []string{"subnet-a", "subnet-b"},
+			vpcName:       "dev",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-a"},
+				{Name: "subnet-b"},
+			},
+		},
+		{
+			name:          "matching disabled: preset subnet unknown to the seed still passes through",
+			datacenter:    dcWithoutMatching,
+			presetSubnets: []string{"subnet-unknown"},
+			vpcName:       "dev",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-unknown"},
+			},
+		},
+		{
+			name:          "no declared subnet definitions to check against: preset subnets pass through unfiltered",
+			datacenter:    &kubermaticv1.DatacenterSpecKubevirt{MatchSubnetAndStorageLocation: ptr.To(true)},
+			presetSubnets: []string{"subnet-a"},
+			vpcName:       "dev",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-a"},
+			},
+		},
+		{
+			name:          "matching enabled: only the subnet compatible with the default storage class is kept",
+			datacenter:    dcWithMatching,
+			presetSubnets: []string{"subnet-a", "subnet-b"},
+			vpcName:       "dev",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-a", CIDR: "10.0.0.0/24"},
+			},
+		},
+		{
+			name:             "matching enabled: explicit storage class name is honored",
+			datacenter:       dcWithMatching,
+			presetSubnets:    []string{"subnet-a", "subnet-b"},
+			vpcName:          "dev",
+			storageClassName: "storage-a",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-a", CIDR: "10.0.0.0/24"},
+			},
+		},
+		{
+			name:          "matching enabled: preset subnet unknown to the seed cannot be verified and is dropped",
+			datacenter:    dcWithMatching,
+			presetSubnets: []string{"subnet-unknown"},
+			vpcName:       "dev",
+			want:          apiv2.KubeVirtSubnetList{},
+		},
+		{
+			name:          "matching enabled: no VPC matches the requested name",
+			datacenter:    dcWithMatching,
+			presetSubnets: []string{"subnet-a"},
+			vpcName:       "other-vpc",
+			want:          apiv2.KubeVirtSubnetList{},
+		},
+		{
+			name:          "nil datacenter: preset subnets pass through unfiltered",
+			datacenter:    nil,
+			presetSubnets: []string{"subnet-a"},
+			vpcName:       "dev",
+			want: apiv2.KubeVirtSubnetList{
+				{Name: "subnet-a"},
+			},
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := FilterKubeVirtPresetSubnets(tc.datacenter, tc.presetSubnets, tc.vpcName, tc.storageClassName)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Fatalf("got %+v, want %+v", got, tc.want)
+			}
+		})
 	}
 }

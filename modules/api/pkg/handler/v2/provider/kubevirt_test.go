@@ -98,6 +98,51 @@ func GenKubeVirtKubermaticPreset() *kubermaticv1.Preset {
 	}
 }
 
+func GenKubeVirtKubermaticPresetWithSubnets(vpcName string, subnets []string) *kubermaticv1.Preset {
+	return &kubermaticv1.Preset{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "kubermatic-preset-subnets",
+		},
+		Spec: kubermaticv1.PresetSpec{
+			Kubevirt: &kubermaticv1.Kubevirt{
+				Kubeconfig: fakeKvConfig,
+				VPCName:    vpcName,
+				Subnets:    subnets,
+			},
+			Fake: &kubermaticv1.Fake{Token: "dummy_pluton_token"},
+		},
+	}
+}
+
+// genKubevirtSeedWithProviderNetwork returns the default test seed with a "dev" VPC
+// declaring two subnets on the KubevirtDC datacenter, so preset subnets can be resolved
+// against real region/zone metadata. When matchSubnetAndStorageLocation is true, the DC
+// also requires subnet/storage-class region and zone compatibility, with only "subnet-a"
+// matching the declared default storage class.
+func genKubevirtSeedWithProviderNetwork(matchSubnetAndStorageLocation bool) *kubermaticv1.Seed {
+	return test.GenTestSeed(func(seed *kubermaticv1.Seed) {
+		dc := seed.Spec.Datacenters[kubevirtDatacenterName]
+		dc.Spec.Kubevirt.ProviderNetwork = &kubermaticv1.ProviderNetwork{
+			VPCs: []kubermaticv1.VPC{
+				{
+					Name: "dev",
+					Subnets: []kubermaticv1.Subnet{
+						{Name: "subnet-a", CIDR: "10.0.0.0/24", Regions: []string{"region-a"}, Zones: []string{"zone-a"}},
+						{Name: "subnet-b", CIDR: "10.0.1.0/24", Regions: []string{"region-b"}, Zones: []string{"zone-b"}},
+					},
+				},
+			},
+		}
+		if matchSubnetAndStorageLocation {
+			dc.Spec.Kubevirt.MatchSubnetAndStorageLocation = ptr.To(true)
+			dc.Spec.Kubevirt.InfraStorageClasses = []kubermaticv1.KubeVirtInfraStorageClass{
+				{Name: "storage-a", IsDefaultClass: ptr.To(true), Regions: []string{"region-a"}, Zones: []string{"zone-a"}},
+			}
+		}
+		seed.Spec.Datacenters[kubevirtDatacenterName] = dc
+	})
+}
+
 func setFakeNewKubeVirtClient(objects []ctrlruntimeclient.Object) {
 	providercommon.NewKubeVirtClient = func(kubeconfig string, options kubevirt.ClientOptions) (*kubevirt.Client, error) {
 		return &kubevirt.Client{
@@ -692,6 +737,138 @@ func TestListStorageClassNoCredentialsEndpoint(t *testing.T) {
 			ep.ServeHTTP(res, req)
 
 			// validate
+			if res.Code != tc.HTTPStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.ExpectedResponse)
+		})
+	}
+}
+
+func TestListSubnetsEndpoint(t *testing.T) {
+	testcases := []struct {
+		Name                      string
+		HTTPRequestHeaders        []KeyValue
+		ExpectedResponse          string
+		HTTPStatus                int
+		ExistingKubermaticObjects []ctrlruntimeclient.Object
+	}{
+		{
+			Name: "scenario 1: preset-defined subnets take precedence over the seed's ProviderNetwork",
+			HTTPRequestHeaders: []KeyValue{
+				{Key: "Credential", Value: "kubermatic-preset-subnets"},
+				{Key: "DatacenterName", Value: kubevirtDatacenterName},
+			},
+			HTTPStatus: http.StatusOK,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				GenKubeVirtKubermaticPresetWithSubnets("dev", []string{"subnet-a", "subnet-b"}),
+				genKubevirtSeedWithProviderNetwork(false),
+			),
+			ExpectedResponse: `[{"name":"subnet-a","cidr":""},{"name":"subnet-b","cidr":""}]`,
+		},
+		{
+			Name: "scenario 2: preset subnets are filtered by storage-class region/zone match when the DC requires it",
+			HTTPRequestHeaders: []KeyValue{
+				{Key: "Credential", Value: "kubermatic-preset-subnets"},
+				{Key: "DatacenterName", Value: kubevirtDatacenterName},
+			},
+			HTTPStatus: http.StatusOK,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				GenKubeVirtKubermaticPresetWithSubnets("dev", []string{"subnet-a", "subnet-b"}),
+				genKubevirtSeedWithProviderNetwork(true),
+			),
+			ExpectedResponse: `[{"name":"subnet-a","cidr":"10.0.0.0/24"}]`,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			setFakeNewKubeVirtClient(nil)
+
+			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v2/projects/%s/providers/kubevirt/subnets", test.GenDefaultProject().Name), strings.NewReader(""))
+			for _, h := range tc.HTTPRequestHeaders {
+				req.Header.Add(h.Key, h.Value)
+			}
+			res := httptest.NewRecorder()
+			ep, err := test.CreateTestEndpoint(*test.GenDefaultAPIUser(), nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.HTTPStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.ExpectedResponse)
+		})
+	}
+}
+
+func TestListSubnetsNoCredentialsEndpoint(t *testing.T) {
+	testcases := []struct {
+		Name                      string
+		ExpectedResponse          string
+		HTTPStatus                int
+		ExistingKubermaticObjects []ctrlruntimeclient.Object
+	}{
+		{
+			Name:       "scenario 1: preset-defined subnets take precedence, resolved from the cluster's preset annotation",
+			HTTPStatus: http.StatusOK,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				GenKubeVirtKubermaticPresetWithSubnets("dev", []string{"subnet-a", "subnet-b"}),
+				genKubevirtSeedWithProviderNetwork(false),
+				func() *kubermaticv1.Cluster {
+					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
+					cluster.Annotations = map[string]string{kubermaticv1.PresetNameAnnotation: "kubermatic-preset-subnets"}
+					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
+						DatacenterName: kubevirtDatacenterName,
+						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
+							Kubeconfig: fakeKvConfig,
+							VPCName:    "dev",
+						},
+					}
+					return cluster
+				}(),
+			),
+			ExpectedResponse: `[{"name":"subnet-a","cidr":""},{"name":"subnet-b","cidr":""}]`,
+		},
+		{
+			Name:       "scenario 2: preset subnets are filtered by storage-class region/zone match when the DC requires it",
+			HTTPStatus: http.StatusOK,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				GenKubeVirtKubermaticPresetWithSubnets("dev", []string{"subnet-a", "subnet-b"}),
+				genKubevirtSeedWithProviderNetwork(true),
+				func() *kubermaticv1.Cluster {
+					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
+					cluster.Annotations = map[string]string{kubermaticv1.PresetNameAnnotation: "kubermatic-preset-subnets"}
+					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
+						DatacenterName: kubevirtDatacenterName,
+						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
+							Kubeconfig: fakeKvConfig,
+							VPCName:    "dev",
+						},
+					}
+					return cluster
+				}(),
+			),
+			ExpectedResponse: `[{"name":"subnet-a","cidr":"10.0.0.0/24"}]`,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			setFakeNewKubeVirtClient(nil)
+
+			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/providers/kubevirt/subnets", test.GenDefaultProject().Name, clusterId), strings.NewReader(""))
+			res := httptest.NewRecorder()
+			ep, err := test.CreateTestEndpoint(*test.GenDefaultAPIUser(), nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
 			if res.Code != tc.HTTPStatus {
 				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
 			}

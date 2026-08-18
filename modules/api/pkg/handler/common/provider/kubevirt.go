@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -170,7 +171,7 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGet
 }
 
 func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	seedsGetter provider.SeedsGetter, projectID, clusterID, storageClassName string) (interface{}, error) {
+	seedsGetter provider.SeedsGetter, presetsProvider provider.PresetProvider, projectID, clusterID, storageClassName string) (interface{}, error) {
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -184,6 +185,15 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)
 	if err != nil {
 		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName != "" {
+		preset, err := presetsProvider.GetPreset(ctx, userInfo, ptr.To(projectID), presetName)
+		if err != nil {
+			log.Logger.Errorf("failed to get preset %s for user %s, falling back to seed/credentials subnet resolution: %v", presetName, userInfo.Email, err)
+		} else if credentials := preset.Spec.Kubevirt; credentials != nil && len(credentials.Subnets) > 0 {
+			return FilterKubeVirtPresetSubnets(datacenter.Spec.Kubevirt, credentials.Subnets, cluster.Spec.Cloud.Kubevirt.VPCName, storageClassName), nil
+		}
 	}
 
 	if datacenter.Spec.Kubevirt != nil &&
@@ -626,6 +636,46 @@ func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) 
 	}
 
 	return kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
+}
+
+func FilterKubeVirtPresetSubnets(datacenter *kubermaticv1.DatacenterSpecKubevirt, presetSubnets []string, vpcName, storageClassName string) apiv2.KubeVirtSubnetList {
+	kvSubnets := apiv2.KubeVirtSubnetList{}
+
+	if datacenter == nil || datacenter.ProviderNetwork == nil ||
+		datacenter.MatchSubnetAndStorageLocation == nil || !*datacenter.MatchSubnetAndStorageLocation {
+		for _, subnet := range presetSubnets {
+			kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet})
+		}
+		return kvSubnets
+	}
+
+	allowedSubnetNames := sets.New(presetSubnets...)
+
+	for _, vpc := range datacenter.ProviderNetwork.VPCs {
+		if vpc.Name != vpcName {
+			continue
+		}
+		for _, subnet := range vpc.Subnets {
+			if !allowedSubnetNames.Has(subnet.Name) {
+				continue
+			}
+			for _, sc := range datacenter.InfraStorageClasses {
+				if storageClassName == "" && sc.IsDefaultClass != nil && *sc.IsDefaultClass {
+					storageClassName = sc.Name
+				}
+				if sc.Name != storageClassName {
+					continue
+				}
+				scRegions := sets.New[string]().Insert(sc.Regions...)
+				scZones := sets.New[string]().Insert(sc.Zones...)
+				if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
+					kvSubnets = append(kvSubnets, apiv2.KubeVirtSubnet{Name: subnet.Name, CIDR: subnet.CIDR})
+				}
+			}
+		}
+	}
+
+	return kvSubnets
 }
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {
