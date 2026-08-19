@@ -25,10 +25,12 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
-import {QuotaDetails} from '@shared/entity/quota';
+import {AcceleratorAccountingPhase, QuotaDetails} from '@shared/entity/quota';
+import {getAcceleratorAccountingHealthStatus, HealthStatus} from '@shared/utils/health-status';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -41,8 +43,16 @@ enum Column {
   CPU = 'CPU',
   Memory = 'Memory',
   Storage = 'Storage',
+  Accelerator = 'Accelerator',
   Actions = 'Actions',
 }
+
+// Lower sorts first - surfaces quotas whose accelerator accounting needs attention.
+const ACCELERATOR_PHASE_SORT_ORDER: Record<string, number> = {
+  [AcceleratorAccountingPhase.Blocked]: 0,
+  [AcceleratorAccountingPhase.Activating]: 1,
+  [AcceleratorAccountingPhase.Ready]: 2,
+};
 
 enum ResourceType {
   CPU = 'cpu',
@@ -70,6 +80,7 @@ export class QuotasComponent implements OnInit {
   displayedColumns: Column[] = [Column.ProjectId, Column.CPU, Column.Memory, Column.Storage, Column.Actions];
 
   isLoading: boolean;
+  hasAcceleratorQuotaFeature = false;
   readonly Column = Column;
   readonly resourceType = ResourceType;
 
@@ -81,11 +92,23 @@ export class QuotasComponent implements OnInit {
     private readonly _quotaService: QuotaService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _dialogModeService: DialogModeService,
+    private readonly _featureGateService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
     this._setSortConfig();
+
+    this._featureGateService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
+      this.hasAcceleratorQuotaFeature = !!featureGates.kubeVirtAcceleratorQuota;
+
+      const hasAcceleratorColumn = this.displayedColumns.includes(Column.Accelerator);
+      if (this.hasAcceleratorQuotaFeature && !hasAcceleratorColumn) {
+        this.displayedColumns = [...this.displayedColumns.slice(0, -1), Column.Accelerator, Column.Actions];
+      } else if (!this.hasAcceleratorQuotaFeature && hasAcceleratorColumn) {
+        this.displayedColumns = this.displayedColumns.filter(column => column !== Column.Accelerator);
+      }
+    });
 
     this.isLoading = true;
     this._quotaService.quotas
@@ -182,6 +205,14 @@ export class QuotasComponent implements OnInit {
     return progressBar;
   }
 
+  getAcceleratorStatus(quota: QuotaDetails): HealthStatus {
+    if (!quota?.status.globalAcceleratorAccounting) {
+      return null;
+    }
+
+    return getAcceleratorAccountingHealthStatus(quota.status.globalAcceleratorAccounting.activationPhase);
+  }
+
   deleteQuota(quota: QuotaDetails): void {
     const {subjectHumanReadableName, name} = quota ?? {};
 
@@ -220,6 +251,10 @@ export class QuotasComponent implements OnInit {
           return item.quota?.cpu;
         case Column.Storage:
           return item.quota?.storage;
+        case Column.Accelerator: {
+          const phase = item.status?.globalAcceleratorAccounting?.activationPhase;
+          return item.quota?.accelerators?.length ? (ACCELERATOR_PHASE_SORT_ORDER[phase] ?? 1) : Infinity;
+        }
         default:
           return item[property];
       }

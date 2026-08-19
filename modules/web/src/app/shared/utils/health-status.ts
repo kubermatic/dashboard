@@ -17,6 +17,7 @@ import {Health, HealthState} from '@shared/entity/health';
 import {Node} from '@shared/entity/node';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {EtcdBackupConfig, EtcdBackupConfigCondition} from '@shared/entity/backup';
+import {AcceleratorAccountingPhase} from '@shared/entity/quota';
 
 export enum StatusIcon {
   Running = 'km-icon-running',
@@ -134,6 +135,17 @@ export function getClusterBackupHealthStatus(phase: string): HealthStatus {
     return new HealthStatus(phase, StatusIcon.Warning);
   }
   return new HealthStatus('Unknown', StatusIcon.Unknown);
+}
+
+export function getAcceleratorAccountingHealthStatus(phase: AcceleratorAccountingPhase): HealthStatus {
+  if (phase === AcceleratorAccountingPhase.Blocked) {
+    return new HealthStatus(AcceleratorAccountingPhase.Blocked, StatusIcon.Error);
+  } else if (phase === AcceleratorAccountingPhase.Activating) {
+    return new HealthStatus(AcceleratorAccountingPhase.Activating, StatusIcon.Pending);
+  } else if (phase === AcceleratorAccountingPhase.Ready) {
+    return new HealthStatus(AcceleratorAccountingPhase.Ready, StatusIcon.Running);
+  }
+  return new HealthStatus(StatusMassage.Unknown, StatusIcon.Unknown);
 }
 
 export function getEncryptionAtRestHealthStatus(phase: string): HealthStatus {

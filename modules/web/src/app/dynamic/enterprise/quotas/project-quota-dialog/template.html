@@ -31,8 +31,34 @@ END OF TERMS AND CONDITIONS
     </p>
     }
 
+    @if (!editQuota) {
+    <div fxLayout="column"
+         fxLayoutAlign=" stretch">
+      <km-combobox label="Project"
+                   inputLabel="Project"
+                   filterBy="name"
+                   selectBy="id"
+                   [required]="true"
+                   [isDisabled]="!projects.length"
+                   [options]="projects"
+                   [formControl]="projectControl"
+                   [valueFormatter]="projectDisplayFn.bind(this)">
+        <div *option="let project"
+             fxLayout="row"
+             fxLayoutGap="10px"
+             fxLayoutAlign=" center">
+          <span>{{project.name}}</span>
+          @if (projectNameCountMap[project.name] > 1) {
+          <mat-card-subtitle class="km-no-margin km-no-padding">
+            <strong>ID</strong> {{project.id}}
+          </mat-card-subtitle>
+          }
+        </div>
+      </km-combobox>
+    </div>
+    }
+
     <form [formGroup]="quotaGroup"
-          class="quota-form"
           fxLayout="column"
           fxLayoutAlign="space-between stretch"
           fxLayoutGap="5px">
@@ -67,30 +93,58 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </form>
 
-    @if (!editQuota) {
+    @if (hasAcceleratorQuotaFeature) {
     <div fxLayout="column"
-         fxLayoutAlign=" stretch">
-      <km-combobox label="Project"
-                   inputLabel="Project"
-                   filterBy="name"
-                   selectBy="id"
-                   [required]="true"
-                   [isDisabled]="!projects.length"
-                   [options]="projects"
-                   [formControl]="projectControl"
-                   [valueFormatter]="projectDisplayFn.bind(this)">
-        <div *option="let project"
-             fxLayout="row"
-             fxLayoutGap="10px"
-             fxLayoutAlign=" center">
-          <span>{{project.name}}</span>
-          @if (projectNameCountMap[project.name] > 1) {
-          <mat-card-subtitle class="km-no-margin km-no-padding">
-            <strong>ID</strong> {{project.id}}
-          </mat-card-subtitle>
+         fxLayoutGap="10px">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>
+          Accelerators
+          <i class="km-icon-info km-pointer"
+             matTooltip="Accelerator must match the exact resource name reported by the provider (e.g. nvidia.com/GA100_A30). A limit of 0 explicitly denies that resource; a resource with no row is unconstrained."></i>
+        </mat-card-title>
+      </mat-card-header>
+
+      @for (row of gpuResources.controls; track row; let i = $index) {
+      <div [formGroup]="row"
+           fxLayout="row"
+           fxLayoutGap="10px"
+           fxLayoutAlign="space-between start">
+        <mat-form-field fxFlex="20">
+          <mat-label>Provider</mat-label>
+          <input matInput
+                 formControlName="provider" />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="60"
+                        subscriptSizing="dynamic">
+          <mat-label>Accelerator</mat-label>
+          <input matInput
+                 formControlName="key" />
+          @if (row.controls.key.errors?.acceleratorNameFormat) {
+          <mat-error>Must be <strong>vendor.com/deviceName</strong></mat-error>
           }
-        </div>
-      </km-combobox>
+          @if (row.controls.key.errors?.duplicateAcceleratorName) {
+          <mat-error>Accelerator name must be <strong>unique</strong></mat-error>
+          }
+        </mat-form-field>
+
+        <km-number-stepper id="km-gpu-limit-input-{{i}}"
+                           label="Limit"
+                           fxFlex="30"
+                           min="0"
+                           [formControl]="row.controls.value" />
+
+        <button mat-icon-button
+                type="button"
+                fxFlex="2"
+                class="delete-button"
+                [disabled]="!isGpuResourceRemovable(i)"
+                (click)="deleteGpuResource(i)">
+          <i class="km-icon-mask km-icon-delete"
+             aria-hidden="true"></i>
+        </button>
+      </div>
+      }
     </div>
     }
   </form>
@@ -99,6 +153,6 @@ END OF TERMS AND CONDITIONS
   <km-button id="km-add-quota-dialog-save-btn"
              [icon]="selectedQuota ? 'km-icon-save' : 'km-icon-add'"
              label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
-             [disabled]="!isQuotaUpdated || form.invalid"
+             [disabled]="!isQuotaUpdated || form.invalid || gpuResources.invalid"
              [observable]="getObservable()" />
 </mat-dialog-actions>

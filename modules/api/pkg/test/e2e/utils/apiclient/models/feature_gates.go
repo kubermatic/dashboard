@@ -20,6 +20,9 @@ type FeatureGates struct {
 	// disable user SSH key
 	DisableUserSSHKey bool `json:"disableUserSSHKey,omitempty"`
 
+	// kube virt accelerator quota
+	KubeVirtAcceleratorQuota bool `json:"kubeVirtAcceleratorQuota,omitempty"`
+
 	// o ID c kube cfg endpoint
 	OIDCKubeCfgEndpoint bool `json:"oidcKubeCfgEndpoint,omitempty"`
 

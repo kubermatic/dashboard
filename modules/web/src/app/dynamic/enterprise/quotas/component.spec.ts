@@ -24,8 +24,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {SharedModule} from '@shared/module';
 import {QuotasComponent} from './component';
 
@@ -40,6 +42,7 @@ describe('QuotasComponent', () => {
       providers: [
         {provide: QuotaService, useClass: QuotaMockService},
         {provide: UserService, useClass: UserMockService},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
       ],
     }).compileComponents();
   });

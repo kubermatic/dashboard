@@ -23,15 +23,47 @@ import {Type} from '@shared/entity/provider/hetzner';
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {KubeVirtNodeSize} from '@shared/entity/provider/kubevirt';
 
+export class AcceleratorQuota {
+  provider: string;
+  resources: Record<string, string>;
+}
+
 export class QuotaVariables {
   cpu?: number;
   memory?: number;
   storage?: number;
+  accelerators?: AcceleratorQuota[];
+}
+
+export enum AcceleratorAccountingPhase {
+  Activating = 'Activating',
+  Ready = 'Ready',
+  Blocked = 'Blocked',
+}
+
+export class AcceleratorAccountingBlocker {
+  type: string;
+  message?: string;
+  seedName?: string;
+  clusterName?: string;
+  count?: number;
+}
+
+export class ResourceQuotaGlobalAcceleratorAccountingStatus {
+  activationPhase: AcceleratorAccountingPhase;
+  observedAccountingRevision: string;
+  observedQuotaDigest: string;
+  observedAt?: string;
+  legacyMachinesWithoutFootprint: number;
+  machinesWithInvalidFootprint: number;
+  ready: boolean;
+  blockers?: AcceleratorAccountingBlocker[];
 }
 
 export class QuotaStatus {
   globalUsage: QuotaVariables | Record<string, never>;
   localUsage: QuotaVariables | Record<string, never>;
+  globalAcceleratorAccounting?: ResourceQuotaGlobalAcceleratorAccountingStatus;
 }
 
 export class Quota {

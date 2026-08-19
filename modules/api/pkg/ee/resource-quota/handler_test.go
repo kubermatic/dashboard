@@ -750,6 +750,90 @@ func TestAccumulateResourceQuotaAccelerators(t *testing.T) {
 	}
 }
 
+func TestMapProviderNodeTmplToResourceDetailsAccelerators(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name         string
+		accelerators map[string]string
+		replicas     int
+		// expected is nil when no AcceleratorQuota entry should be produced at all.
+		expected map[string]string
+	}{
+		{
+			name:         "counts a single accelerator once per replica",
+			accelerators: map[string]string{"nvidia.com/gpu": "2"},
+			replicas:     3,
+			expected:     map[string]string{"nvidia.com/gpu": "6"},
+		},
+		{
+			name:         "counts every distinct accelerator of the instance type",
+			accelerators: map[string]string{"nvidia.com/gpu": "2", "example.com/fpga": "1"},
+			replicas:     2,
+			expected:     map[string]string{"nvidia.com/gpu": "4", "example.com/fpga": "2"},
+		},
+		{
+			name:         "keeps a zero request at zero for any replica count",
+			accelerators: map[string]string{"nvidia.com/gpu": "0"},
+			replicas:     5,
+			expected:     map[string]string{"nvidia.com/gpu": "0"},
+		},
+		{
+			// Must stay nil rather than an empty slice: the ResourceQuota CRD rejects an
+			// AcceleratorQuota whose resource list is empty.
+			name:         "reports no accelerators when the instance type has none",
+			accelerators: nil,
+			replicas:     3,
+			expected:     nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			nodeTemplate := resourcequota.ProviderNodeTemplate{
+				KubevirtNodeSize: &apiv1.KubevirtNodeSize{
+					CPUs:            "2",
+					Memory:          "3072",
+					PrimaryDiskSize: "10",
+					Accelerators:    tc.accelerators,
+				},
+			}
+
+			got, err := resourcequota.MapProviderNodeTmplToResourceDetails(nodeTemplate, tc.replicas)
+			if err != nil {
+				t.Fatalf("failed to map node template: %v", err)
+			}
+
+			if tc.expected == nil {
+				if got.Accelerators != nil {
+					t.Fatalf("expected no accelerators, got %#v", got.Accelerators)
+				}
+				return
+			}
+
+			if len(got.Accelerators) != 1 {
+				t.Fatalf("expected exactly one accelerator quota entry, got %#v", got.Accelerators)
+			}
+			if provider := got.Accelerators[0].Provider; provider != string(kubermaticv1.KubevirtCloudProvider) {
+				t.Fatalf("expected provider %q, got %q", kubermaticv1.KubevirtCloudProvider, provider)
+			}
+
+			// Quantities are compared through String(): arithmetic clears the cached string form
+			// that MustParse populates, so equal values are not reflect.DeepEqual.
+			gotResources := map[string]string{}
+			for name, quantity := range got.Accelerators[0].Resources {
+				gotResources[string(name)] = quantity.String()
+			}
+
+			if !diff.DeepEqual(tc.expected, gotResources) {
+				t.Fatalf("accelerators differ:\n%s", diff.ObjectDiff(tc.expected, gotResources))
+			}
+		})
+	}
+}
+
 func TestCalculateResourceQuotaUpdate(t *testing.T) {
 	t.Parallel()
 	testCases := []struct {
@@ -1111,6 +1195,140 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withCalculatedQuota(genAPIQuota(10, 13, 25)).
 				build(),
 		},
+		{
+			// 2 accelerators per node * 2 replicas = 4, plus 1 already in global usage = 5.
+			Name:      "should count kubevirt accelerators for every replica",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "10"}).
+					withAcceleratorGlobalUsage("kubevirt", map[string]string{"nvidia.com/gpu": "1"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3072", "7", "3").
+				withAccelerators(map[string]string{"nvidia.com/gpu": "2"}).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(12, 10, 30), "kubevirt", map[string]string{"nvidia.com/gpu": "10"})).
+				withGlobalUsage(withAPIAccelerators(genAPIQuota(2, 3, 5), "kubevirt", map[string]string{"nvidia.com/gpu": "1"})).
+				withCalculatedQuota(withAPIAccelerators(genAPIQuota(6, 9, 25), "kubevirt", map[string]string{"nvidia.com/gpu": "5"})).
+				build(),
+		},
+		{
+			// Only the accelerator exceeds; cpu/memory/storage stay inside their limits so the
+			// message asserted here covers acceleratorExceedsQuotaMessage alone.
+			Name:      "should notify when accelerator quota is exceeded",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "3"}).
+					withAcceleratorGlobalUsage("kubevirt", map[string]string{"nvidia.com/gpu": "1"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3072", "7", "3").
+				withAccelerators(map[string]string{"nvidia.com/gpu": "2"}).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(12, 10, 30), "kubevirt", map[string]string{"nvidia.com/gpu": "3"})).
+				withGlobalUsage(withAPIAccelerators(genAPIQuota(2, 3, 5), "kubevirt", map[string]string{"nvidia.com/gpu": "1"})).
+				withCalculatedQuota(withAPIAccelerators(genAPIQuota(6, 9, 25), "kubevirt", map[string]string{"nvidia.com/gpu": "5"})).
+				withMessage("Calculated accelerator \"nvidia.com/gpu\" (5) exceeds resource quota (3)\n").
+				build(),
+		},
+		{
+			// Scaling an existing GPU machine deployment from 1 to 2 replicas:
+			// 2 per node * 2 new replicas = 4, plus 4 already used, minus the 2 being replaced = 6.
+			Name:      "should subtract accelerators of replaced resources",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("20", "20G", "50G").
+					withGlobalUsage("4", "8G", "20G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "10"}).
+					withAcceleratorGlobalUsage("kubevirt", map[string]string{"nvidia.com/gpu": "4"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3072", "7", "3").
+				withAccelerators(map[string]string{"nvidia.com/gpu": "2"}).
+				withReplacedResources(
+					newCalcReq().
+						withReplicas(1).
+						withKubevirt("2", "3072", "7", "3").
+						withAccelerators(map[string]string{"nvidia.com/gpu": "2"}),
+				).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(20, 20, 50), "kubevirt", map[string]string{"nvidia.com/gpu": "10"})).
+				withGlobalUsage(withAPIAccelerators(genAPIQuota(4, 8, 20), "kubevirt", map[string]string{"nvidia.com/gpu": "4"})).
+				withCalculatedQuota(withAPIAccelerators(genAPIQuota(6, 11, 30), "kubevirt", map[string]string{"nvidia.com/gpu": "6"})).
+				build(),
+		},
+		{
+			// Regression guard: when accelerator accounting has not reported yet the global usage
+			// carries no accelerators, so the replaced ones have nothing to be subtracted from.
+			// The result must clamp to zero instead of going negative or inventing a provider entry.
+			Name:      "should not report negative accelerators when global usage has none",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("20", "20G", "50G").
+					withGlobalUsage("4", "8G", "20G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "10"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(1).
+				withKubevirt("2", "3072", "7", "3").
+				withReplacedResources(
+					newCalcReq().
+						withReplicas(1).
+						withKubevirt("2", "3072", "7", "3").
+						withAccelerators(map[string]string{"nvidia.com/gpu": "2"}),
+				).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(20, 20, 50), "kubevirt", map[string]string{"nvidia.com/gpu": "10"})).
+				withGlobalUsage(genAPIQuota(4, 8, 20)).
+				withCalculatedQuota(genAPIQuota(4, 8, 20)).
+				build(),
+		},
+		{
+			// Non-kubevirt providers cannot carry accelerators; none must leak into the response.
+			Name:      "should not report accelerators for a non-kubevirt provider",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "10"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDiskSize(10).
+				withAWS(2, 3).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(12, 10, 30), "kubevirt", map[string]string{"nvidia.com/gpu": "10"})).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -1252,6 +1470,12 @@ func (c *calcReq) withKubevirt(cpu, memory, primaryStorage, secondaryStorage str
 	return c
 }
 
+// withAccelerators chains onto withKubevirt to attach per-node accelerator counts.
+func (c *calcReq) withAccelerators(accelerators map[string]string) *calcReq {
+	c.KubevirtNodeSize.Accelerators = accelerators
+	return c
+}
+
 func (c *calcReq) withNutanix(cpu, memory, storage int64, withDisk bool) *calcReq {
 	c.NutanixNodeSpec = &apiv1.NutanixNodeSpec{
 		CPUs:     cpu,
@@ -1343,6 +1567,31 @@ func (r *rqBuilder) withQuota(cpu, mem, storage string) *rqBuilder {
 func (r *rqBuilder) withGlobalUsage(cpu, mem, storage string) *rqBuilder {
 	r.resourceQuota.Status.GlobalUsage = genQuota(resource.MustParse(cpu), resource.MustParse(mem), resource.MustParse(storage))
 	return r
+}
+
+func genCRDAccelerators(provider string, resources map[string]string) []kubermaticv1.AcceleratorQuota {
+	list := corev1.ResourceList{}
+	for name, quantity := range resources {
+		list[corev1.ResourceName(name)] = resource.MustParse(quantity)
+	}
+
+	return []kubermaticv1.AcceleratorQuota{{Provider: provider, Resources: list}}
+}
+
+func (r *rqBuilder) withAcceleratorQuota(provider string, resources map[string]string) *rqBuilder {
+	r.resourceQuota.Spec.Quota.Accelerators = genCRDAccelerators(provider, resources)
+	return r
+}
+
+func (r *rqBuilder) withAcceleratorGlobalUsage(provider string, resources map[string]string) *rqBuilder {
+	r.resourceQuota.Status.GlobalUsage.Accelerators = genCRDAccelerators(provider, resources)
+	return r
+}
+
+// withAPIAccelerators decorates a quota built by genAPIQuota with accelerator limits/usage.
+func withAPIAccelerators(quota apiv2.Quota, provider string, resources map[string]string) apiv2.Quota {
+	quota.Accelerators = &[]apiv2.AcceleratorQuota{{Provider: provider, Resources: resources}}
+	return quota
 }
 
 func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {

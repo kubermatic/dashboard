@@ -52,6 +52,7 @@ END OF TERMS AND CONDITIONS
     </div>
   </mat-card-header>
   <mat-card-content>
+    @if (!hasAcceleratorQuotaFeature) {
     <div fxLayout="row"
          fxLayoutAlign=" center"
          fxLayoutGap="8px"
@@ -59,6 +60,15 @@ END OF TERMS AND CONDITIONS
       <i class="km-icon-warning"></i>
       <span>GPU resources are not included in quota calculations.</span>
     </div>
+    } @else {
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         fxLayoutGap="8px"
+         class="warning-container">
+      <i class="km-icon-info"></i>
+      <span>Accelerator quotas are only supported for the KubeVirt provider.</span>
+    </div>
+    }
     <table id="quotas-table"
            class="km-table"
            mat-table
@@ -147,6 +157,21 @@ END OF TERMS AND CONDITIONS
                               [value]="getProgressBarData(element.subjectName, resourceType.Storage).value" />
             <span>{{getProgressBarData(element.subjectName, resourceType.Storage).usageQuota}}</span>
           </div>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Accelerator">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>Accelerator</th>
+        <td mat-cell
+            *matCellDef="let element">
+          @if (getAcceleratorStatus(element); as status) {
+          <i [matTooltip]="status.message"
+             [ngClass]="status.icon"
+             class="km-vertical-center accelerator-status"></i>
           }
         </td>
       </ng-container>

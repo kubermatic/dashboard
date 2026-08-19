@@ -30,8 +30,10 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {ProjectQuotaDialogComponent} from './component';
 import {GlobalModule} from '@core/services/global/module';
+import {FeatureGateService} from '@core/services/feature-gate';
 
 describe('AddProjectQuotaDialogComponent', () => {
   let fixture: ComponentFixture<ProjectQuotaDialogComponent>;
@@ -47,6 +49,7 @@ describe('AddProjectQuotaDialogComponent', () => {
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
       ],
     }).compileComponents();
   });

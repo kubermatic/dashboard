@@ -18,16 +18,18 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import {FormArray, FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {Component, OnInit, OnDestroy, Inject, ChangeDetectorRef} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {takeUntil, filter, tap, distinctUntilChanged, map} from 'rxjs/operators';
 import {Observable, Subject, of} from 'rxjs';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {QuotaService} from '../service';
-import {QuotaVariables, QuotaDetails, Quota} from '@shared/entity/quota';
+import {AcceleratorQuota, QuotaVariables, QuotaDetails, Quota} from '@shared/entity/quota';
 import {KmValidators} from '@shared/validators/validators';
+import {AcceleratorFormValidators} from '@shared/validators/accelerator-form.validators';
 import {ControlsOf} from '@shared/model/shared';
 import {Project} from '@shared/entity/project';
 import _ from 'lodash';
@@ -38,6 +40,24 @@ enum Error {
   AtLeastOneRequired = 'atLeastOneRequired',
   IncorrectProject = 'incorrectProject',
 }
+
+const ACCELERATOR_PROVIDER = 'kubevirt';
+
+type GpuResourceControls = {
+  provider: FormControl<string>;
+  key: FormControl<string>;
+  value: FormControl<number>;
+};
+
+// ControlsOf<T> maps array-typed fields into a (nonsensical here) nested FormGroup/FormArray
+// shape in this project's non-strict TS config, so accelerators is typed explicitly instead of
+// being derived from QuotaVariables via ControlsOf.
+type QuotaGroupControls = ControlsOf<Omit<QuotaVariables, 'accelerators'>> & {
+  accelerators: FormControl<AcceleratorQuota[]>;
+};
+type QuotaFormControls = Omit<ControlsOf<Quota>, 'quota'> & {
+  quota: FormGroup<QuotaGroupControls>;
+};
 
 @Component({
   selector: 'km-quota-dialog',
@@ -51,7 +71,9 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
   readonly Error = Error;
 
-  form: FormGroup<ControlsOf<Quota>>;
+  form: FormGroup<QuotaFormControls>;
+  gpuResources: FormArray<FormGroup<GpuResourceControls>>;
+  hasAcceleratorQuotaFeature = false;
 
   projects: Project[] = [];
   selectedProject: Project;
@@ -65,28 +87,42 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _projectService: ProjectService,
     private readonly _quotaService: QuotaService,
+    private readonly _featureGateService: FeatureGateService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public readonly editQuota: QuotaDetails
   ) {}
 
-  get quotaGroup(): FormGroup<ControlsOf<QuotaVariables>> {
+  get quotaGroup(): FormGroup<QuotaGroupControls> {
     return this.form?.controls.quota;
   }
 
   get isQuotaUpdated(): boolean {
     if (!this.editQuota) {
-      return this.form.controls.quota.dirty;
+      return this.form.controls.quota.dirty || this.gpuResources.dirty;
     }
 
     return !_.isEqual(this.editQuota.quota, this.quotaGroup.value);
   }
 
+  isGpuResourceRemovable(index: number): boolean {
+    return index < this.gpuResources.length - 1;
+  }
+
+  deleteGpuResource(index: number): void {
+    this.gpuResources.removeAt(index);
+  }
+
   ngOnInit(): void {
     this._setSelectedQuota();
     this._initForm();
+    this._initGpuResourcesForm();
     this._getQuotas();
     this._getProjects();
+
+    this._featureGateService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
+      this.hasAcceleratorQuotaFeature = !!featureGates.kubeVirtAcceleratorQuota;
+    });
   }
 
   ngOnDestroy(): void {
@@ -99,13 +135,17 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
   }
 
   getObservable(): Observable<Record<string, never>> {
-    if (this.form.invalid || !this.isQuotaUpdated) {
+    if (this.form.invalid || this.gpuResources.invalid || !this.isQuotaUpdated) {
       return of(null);
     }
 
     const formValue = this.form.value as Quota;
 
     const quota: QuotaVariables = Object.fromEntries(Object.entries(formValue.quota).filter(([_, v]) => !!v));
+
+    if (this.editQuota && !quota.accelerators) {
+      quota.accelerators = [];
+    }
 
     const update$ = this._quotaService.updateQuota(this.selectedQuota?.name, quota);
 
@@ -167,12 +207,13 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
     const {cpu, memory, storage} = quota ?? {};
 
-    this.form = this._builder.group<ControlsOf<Quota>>({
-      quota: this._builder.group<ControlsOf<QuotaVariables>>(
+    this.form = this._builder.group<QuotaFormControls>({
+      quota: this._builder.group<QuotaGroupControls>(
         {
           cpu: this._builder.control(cpu),
           memory: this._builder.control(memory),
           storage: this._builder.control(storage),
+          accelerators: this._builder.control<AcceleratorQuota[]>(undefined),
         },
         {validators: KmValidators.atLeastOneValidator}
       ),
@@ -212,13 +253,73 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
     this.quotaGroup.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._cdr.detectChanges());
 
-    Object.values(this.quotaGroup.controls).forEach(control => {
-      control.valueChanges
-        .pipe(
-          filter(value => value === 0),
-          takeUntil(this._unsubscribe)
-        )
-        .subscribe(_ => control.setValue(null, {emitEvent: false}));
+    // Accelerators is excluded here: unlike CPU/Memory/Storage, 0 is a meaningful explicit
+    // "deny this resource" value, not a stand-in for "unset".
+    [this.quotaGroup.controls.cpu, this.quotaGroup.controls.memory, this.quotaGroup.controls.storage].forEach(
+      control => {
+        control.valueChanges
+          .pipe(
+            filter(value => value === 0),
+            takeUntil(this._unsubscribe)
+          )
+          .subscribe(_ => control.setValue(null, {emitEvent: false}));
+      }
+    );
+  }
+
+  private _initGpuResourcesForm(): void {
+    this.gpuResources = this._builder.array<FormGroup<GpuResourceControls>>([]);
+
+    const resources = this.editQuota?.quota?.accelerators?.[0]?.resources ?? {};
+    Object.entries(resources).forEach(([key, value]) => this._addGpuResource(key, Number(value)));
+    this._addGpuResource();
+
+    this.gpuResources.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._addGpuResourceIfNeeded();
+      this._revalidateAcceleratorKeys();
+      this._updateAccelerators();
     });
+
+    this._updateAccelerators();
+  }
+
+  private _revalidateAcceleratorKeys(): void {
+    this.gpuResources.controls.forEach(row =>
+      row.controls.key.updateValueAndValidity({onlySelf: true, emitEvent: false})
+    );
+  }
+
+  private _addGpuResourceIfNeeded(): void {
+    const last = this.gpuResources.at(this.gpuResources.length - 1).getRawValue();
+    if (last.key || last.value !== null) {
+      this._addGpuResource();
+    }
+  }
+
+  private _addGpuResource(key = '', value: number = null): void {
+    this.gpuResources.push(
+      this._builder.group<GpuResourceControls>({
+        provider: this._builder.control({value: ACCELERATOR_PROVIDER, disabled: true}, {nonNullable: true}),
+        key: this._builder.control(key, {
+          validators: Validators.compose([AcceleratorFormValidators.nameFormat, AcceleratorFormValidators.uniqueName]),
+          nonNullable: true,
+        }),
+        value: this._builder.control(value),
+      })
+    );
+  }
+
+  private _updateAccelerators(): void {
+    const rows = this.gpuResources.getRawValue().filter(row => !!row.key && row.value !== null);
+    const accelerators: AcceleratorQuota[] = rows.length
+      ? [
+          {
+            provider: ACCELERATOR_PROVIDER,
+            resources: Object.fromEntries(rows.map(row => [row.key, String(row.value)])),
+          },
+        ]
+      : undefined;
+
+    this.quotaGroup.controls.accelerators.setValue(accelerators, {emitEvent: false});
   }
 }

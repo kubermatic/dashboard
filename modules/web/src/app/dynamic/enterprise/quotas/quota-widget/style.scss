@@ -51,7 +51,8 @@
   }
 
   .km-quota-widget {
-    height: 46px;
+    height: auto;
+    min-height: 46px;
     white-space: nowrap;
 
     &.widget-border {
@@ -105,25 +106,33 @@
       margin-bottom: 10px;
     }
 
-    .km-detail-row {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
+    .km-quota-detail-grid {
+      display: grid;
       font-size: variables.$font-size-subhead;
-      place-content: center space-between;
+      gap: 10px 8px;
+      grid-template-columns: minmax(0, 1fr) auto;
 
-      &:not(:last-child) {
-        margin-bottom: 10px;
+      .km-detail-row-heading {
+        grid-column: 1 / -1;
+      }
+
+      .km-detail-row-value {
+        align-items: center;
+        display: flex;
+        gap: 5px;
+        justify-content: flex-end;
+        white-space: nowrap;
       }
     }
 
     &.quota-detail-project-cards-view {
       left: 30px;
-      width: calc(100% - 30px);
+      width: max-content;
     }
   }
 
   .km-extended-widget {
+    height: auto;
     width: 100%;
 
     .km-quota-heading {

@@ -26,6 +26,12 @@ export const IPV4_IPV6_PATTERN =
 
 export const KUBERNETES_RESOURCE_NAME_PATTERN =
   '^(?=.{1,63}$)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*';
+
+// Accelerator resource names are Kubernetes extended-resource names. Mirrors the server-side rule
+// in KKP's ValidateAcceleratorQuota: exactly one '/', a DNS-1123 subdomain prefix (max 253 chars),
+// and a name part of max 63 chars. The lookaheads only enforce those two length caps.
+export const ACCELERATOR_RESOURCE_NAME_PATTERN =
+  /^(?=[^/]{1,253}\/)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/(?=[^/]{1,63}$)[A-Za-z0-9]([-A-Za-z0-9_.]*[A-Za-z0-9])?$/;
 export const EMAIL_DOMAIN_VALIDOTOR =
   '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.(?:[A-Za-z]{2,6}|[A-Za-z]{2,})$|^\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b';
 export const KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR = Validators.pattern(KUBERNETES_RESOURCE_NAME_PATTERN);

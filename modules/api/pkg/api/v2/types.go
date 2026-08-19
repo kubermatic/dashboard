@@ -1150,10 +1150,11 @@ type AKSNodePoolModes []string
 // FeatureGates represents an object holding feature gate settings
 // swagger:model FeatureGates
 type FeatureGates struct {
-	OIDCKubeCfgEndpoint    *bool `json:"oidcKubeCfgEndpoint,omitempty"`
-	OperatingSystemManager *bool `json:"operatingSystemManager,omitempty"`
-	OpenIDAuthPlugin       *bool `json:"openIDAuthPlugin,omitempty"`
-	DisableUserSSHKey      *bool `json:"disableUserSSHKey,omitempty"`
+	OIDCKubeCfgEndpoint      *bool `json:"oidcKubeCfgEndpoint,omitempty"`
+	OperatingSystemManager   *bool `json:"operatingSystemManager,omitempty"`
+	OpenIDAuthPlugin         *bool `json:"openIDAuthPlugin,omitempty"`
+	DisableUserSSHKey        *bool `json:"disableUserSSHKey,omitempty"`
+	KubeVirtAcceleratorQuota *bool `json:"kubeVirtAcceleratorQuota,omitempty"`
 }
 
 // UserClusterConfiguration represents an object that holds user cluster configuration from the Kubermatic configuration.

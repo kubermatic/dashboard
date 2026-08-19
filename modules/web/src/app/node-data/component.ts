@@ -197,6 +197,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     if (ref && this.isEnterpriseEdition && !this.quotaWidgetComponentRef) {
       this.quotaWidgetComponentRef = ref.createComponent(QuotaWidgetComponent).instance;
       this.quotaWidgetComponentRef.projectId = this.projectId;
+      this.quotaWidgetComponentRef.provider = this.provider;
       this.quotaWidgetComponentRef.showQuotaWidgetDetails = true;
       this.quotaWidgetComponentRef.showIcon = true;
       this.quotaWidgetComponentRef.estimatedQuotaExceeded
@@ -210,6 +211,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((calculatedQuota: ResourceQuotaCalculation) => {
           this.quotaWidgetComponentRef.updateEstimatedQuota(calculatedQuota);
+        });
+
+      this._quotaCalculationService.relevantAcceleratorNames$
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((names: string[]) => {
+          this.quotaWidgetComponentRef.relevantAcceleratorNames = names;
         });
     }
   }
@@ -312,6 +319,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .subscribe(_ => {
         delete this._nodeDataService.nodeData.spec.cloud[this.provider];
         this.provider = this._clusterSpecService.provider;
+        if (this.quotaWidgetComponentRef) {
+          this.quotaWidgetComponentRef.provider = this.provider;
+        }
 
         const mapKey = `${this.projectId}-${this.provider}`;
         this._quotaCalculationService.reset(mapKey);

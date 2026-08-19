@@ -34085,6 +34085,10 @@
           "type": "boolean",
           "x-go-name": "DisableUserSSHKey"
         },
+        "kubeVirtAcceleratorQuota": {
+          "type": "boolean",
+          "x-go-name": "KubeVirtAcceleratorQuota"
+        },
         "oidcKubeCfgEndpoint": {
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"
@@ -36761,6 +36765,14 @@
         "primaryDiskSize"
       ],
       "properties": {
+        "accelerators": {
+          "description": "Accelerators maps accelerator resource names (exact KubeVirt deviceName values, combining\nspec.gpus and spec.hostDevices) to how many of that device one node will consume.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Accelerators"
+        },
         "cpus": {
           "description": "CPUs states how many cpus the kubevirt node will have.",
           "type": "string",

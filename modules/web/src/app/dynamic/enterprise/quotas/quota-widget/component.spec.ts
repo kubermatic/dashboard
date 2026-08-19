@@ -24,11 +24,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {QuotaCalculationService} from '../services/quota-calculation';
 import {QuotaCalculationMockService} from '@test/services/quota-calculation-mock';
 import {QuotaMockService} from '@test/services/quota-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {SharedModule} from '@shared/module';
 import {QuotaService} from '../service';
 import {QuotaWidgetComponent} from './component';
 import {UserService} from '@core/services/user';
 import {UserMockService} from '@test/services/user-mock';
+import {FeatureGateService} from '@core/services/feature-gate';
 
 describe('AddProjectQuotaDialogComponent', () => {
   let fixture: ComponentFixture<QuotaWidgetComponent>;
@@ -42,6 +44,7 @@ describe('AddProjectQuotaDialogComponent', () => {
         {provide: QuotaService, useClass: QuotaMockService},
         {provide: QuotaCalculationService, useClass: QuotaCalculationMockService},
         {provide: UserService, useClass: UserMockService},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
       ],
     }).compileComponents();
   });
