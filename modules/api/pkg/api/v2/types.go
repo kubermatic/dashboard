@@ -1903,10 +1903,13 @@ type ResourceQuota struct {
 	SubjectName string `json:"subjectName"`
 	SubjectKind string `json:"subjectKind"`
 	// SubjectHumanReadableName contains the human-readable name for the subject(if applicable). Just filled as information in get/list.
-	SubjectHumanReadableName string              `json:"subjectHumanReadableName,omitempty"`
-	IsDefault                bool                `json:"isDefault"`
-	Quota                    Quota               `json:"quota"`
-	Status                   ResourceQuotaStatus `json:"status"`
+	SubjectHumanReadableName string `json:"subjectHumanReadableName,omitempty"`
+	IsDefault                bool   `json:"isDefault"`
+	// AcceleratorAccountingEnabled reports whether accelerator accounting has been activated for
+	// this quota. Activation is irreversible and is a precondition for setting accelerator limits.
+	AcceleratorAccountingEnabled bool                `json:"acceleratorAccountingEnabled"`
+	Quota                        Quota               `json:"quota"`
+	Status                       ResourceQuotaStatus `json:"status"`
 }
 
 // swagger:model ResourceQuotaStatus
@@ -1970,6 +1973,12 @@ type Quota struct {
 	// Accelerators contains provider-specific accelerator resource limits.
 	// A nil value means the field was omitted; an empty slice explicitly clears all limits.
 	Accelerators *[]AcceleratorQuota `json:"accelerators,omitempty"`
+	// EnableAcceleratorAccounting requests that accelerator accounting be activated for the quota.
+	// It is only honoured on update requests and is never set on responses; read the current state
+	// from ResourceQuota.AcceleratorAccountingEnabled instead. A nil value leaves the current state
+	// untouched and true activates accounting, which is irreversible; false is rejected once
+	// accounting is enabled.
+	EnableAcceleratorAccounting *bool `json:"enableAcceleratorAccounting,omitempty"`
 }
 
 // swagger:model AcceleratorQuota

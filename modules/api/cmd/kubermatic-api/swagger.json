@@ -40702,6 +40702,11 @@
           "format": "int64",
           "x-go-name": "CPU"
         },
+        "enableAcceleratorAccounting": {
+          "description": "EnableAcceleratorAccounting requests that accelerator accounting be activated for the quota.\nIt is only honoured on update requests and is never set on responses; read the current state\nfrom ResourceQuota.AcceleratorAccountingEnabled instead. A nil value leaves the current state\nuntouched and true activates accounting, which is irreversible; false is rejected once\naccounting is enabled.",
+          "type": "boolean",
+          "x-go-name": "EnableAcceleratorAccounting"
+        },
         "memory": {
           "description": "Memory represents the RAM amount. Denoted in GB, rounded to 2 decimal places.",
           "type": "number",
@@ -40868,6 +40873,11 @@
     "ResourceQuota": {
       "type": "object",
       "properties": {
+        "acceleratorAccountingEnabled": {
+          "description": "AcceleratorAccountingEnabled reports whether accelerator accounting has been activated for\nthis quota. Activation is irreversible and is a precondition for setting accelerator limits.",
+          "type": "boolean",
+          "x-go-name": "AcceleratorAccountingEnabled"
+        },
         "isDefault": {
           "type": "boolean",
           "x-go-name": "IsDefault"

@@ -33,6 +33,10 @@ export class QuotaVariables {
   memory?: number;
   storage?: number;
   accelerators?: AcceleratorQuota[];
+  // Request-only: set to true on update to activate accelerator accounting. Activation is
+  // irreversible and requires the accelerator limits to be empty, so it is never sent together
+  // with accelerators. Read the current state from QuotaDetails.acceleratorAccountingEnabled.
+  enableAcceleratorAccounting?: boolean;
 }
 
 export enum AcceleratorAccountingPhase {
@@ -76,6 +80,9 @@ export class QuotaDetails extends Quota {
   name: string;
   subjectHumanReadableName?: string;
   status: QuotaStatus;
+  // Whether accelerator accounting has been activated. Activation is irreversible and is a
+  // precondition for setting any accelerator limits.
+  acceleratorAccountingEnabled?: boolean;
 }
 
 export class ResourceQuotaCalculation {

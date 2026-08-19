@@ -205,6 +205,13 @@ export class QuotasComponent implements OnInit {
     return progressBar;
   }
 
+  getDeleteQuotaTooltip(quota: QuotaDetails): string {
+    if (quota?.acceleratorAccountingEnabled) {
+      return 'Quotas with accelerator quota enabled cannot be deleted.';
+    }
+    return '';
+  }
+
   getAcceleratorStatus(quota: QuotaDetails): HealthStatus {
     if (!quota?.status.globalAcceleratorAccounting) {
       return null;
@@ -252,8 +259,8 @@ export class QuotasComponent implements OnInit {
         case Column.Storage:
           return item.quota?.storage;
         case Column.Accelerator: {
-          const phase = item.status?.globalAcceleratorAccounting?.activationPhase;
-          return item.quota?.accelerators?.length ? (ACCELERATOR_PHASE_SORT_ORDER[phase] ?? 1) : Infinity;
+          const accounting = item.status?.globalAcceleratorAccounting;
+          return accounting ? (ACCELERATOR_PHASE_SORT_ORDER[accounting.activationPhase] ?? 1) : Infinity;
         }
         default:
           return item[property];

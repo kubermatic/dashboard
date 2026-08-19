@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {FormArray, FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import {AbstractControl, FormArray, FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {Component, OnInit, OnDestroy, Inject, ChangeDetectorRef} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {takeUntil, filter, tap, distinctUntilChanged, map} from 'rxjs/operators';
@@ -27,7 +27,7 @@ import {FeatureGateService} from '@core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {QuotaService} from '../service';
-import {AcceleratorQuota, QuotaVariables, QuotaDetails, Quota} from '@shared/entity/quota';
+import {AcceleratorAccountingPhase, AcceleratorQuota, Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
 import {KmValidators} from '@shared/validators/validators';
 import {AcceleratorFormValidators} from '@shared/validators/accelerator-form.validators';
 import {ControlsOf} from '@shared/model/shared';
@@ -73,6 +73,7 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
   form: FormGroup<QuotaFormControls>;
   gpuResources: FormArray<FormGroup<GpuResourceControls>>;
+  acceleratorAccountingControl: FormControl<boolean>;
   hasAcceleratorQuotaFeature = false;
 
   projects: Project[] = [];
@@ -102,11 +103,52 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
       return this.form.controls.quota.dirty || this.gpuResources.dirty;
     }
 
-    return !_.isEqual(this.editQuota.quota, this.quotaGroup.value);
+    return (
+      this._isEnablingAcceleratorAccounting ||
+      !_.isEqual(this._comparableQuota(this.editQuota.quota), this._comparableQuota(this.quotaGroup.value))
+    );
+  }
+
+  // The form always carries a control per limit, while the API omits limits that are unset and may
+  // send an empty accelerator list. Drop unset entries from both sides so an untouched dialog never
+  // compares as modified. An explicit "clear all limits" still differs, because the other side
+  // holds a populated list.
+  private _comparableQuota(quota: QuotaVariables): Record<string, unknown> {
+    return Object.fromEntries(
+      Object.entries(quota ?? {}).filter(
+        ([, value]) => value !== null && value !== undefined && !(Array.isArray(value) && !value.length)
+      )
+    );
+  }
+
+  private get _isEnablingAcceleratorAccounting(): boolean {
+    return this.canEnableAcceleratorAccounting && !!this.acceleratorAccountingControl?.value;
+  }
+
+  get isAcceleratorAccountingEnabled(): boolean {
+    return !!this.editQuota?.acceleratorAccountingEnabled;
+  }
+
+  // Activation is irreversible, so the checkbox is only actionable while accounting is still off.
+  get canEnableAcceleratorAccounting(): boolean {
+    return this.hasAcceleratorQuotaFeature && !!this.editQuota && !this.isAcceleratorAccountingEnabled;
+  }
+
+  get isAcceleratorAccountingReady(): boolean {
+    return this.editQuota?.status?.globalAcceleratorAccounting?.activationPhase === AcceleratorAccountingPhase.Ready;
+  }
+
+  // Limits may only be edited once accounting reports Ready.
+  get canEditAccelerators(): boolean {
+    return this.isAcceleratorAccountingEnabled && this.isAcceleratorAccountingReady;
+  }
+
+  get canRemoveAccelerators(): boolean {
+    return this.isAcceleratorAccountingEnabled;
   }
 
   isGpuResourceRemovable(index: number): boolean {
-    return index < this.gpuResources.length - 1;
+    return this.canRemoveAccelerators && index < this.gpuResources.length - 1;
   }
 
   deleteGpuResource(index: number): void {
@@ -122,6 +164,7 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
     this._featureGateService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
       this.hasAcceleratorQuotaFeature = !!featureGates.kubeVirtAcceleratorQuota;
+      this._applyAcceleratorAccountingState();
     });
   }
 
@@ -145,6 +188,11 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
 
     if (this.editQuota && !quota.accelerators) {
       quota.accelerators = [];
+    }
+
+    // Sent only while activating, so an ordinary edit never carries an activation request.
+    if (this._isEnablingAcceleratorAccounting) {
+      quota.enableAcceleratorAccounting = true;
     }
 
     const update$ = this._quotaService.updateQuota(this.selectedQuota?.name, quota);
@@ -281,6 +329,30 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     });
 
     this._updateAccelerators();
+
+    this.acceleratorAccountingControl = this._builder.control(this.isAcceleratorAccountingEnabled, {
+      nonNullable: true,
+    });
+
+    this._applyAcceleratorAccountingState();
+  }
+
+  // Keeps the accelerator controls in step with the current activation state. The checkbox is
+  // disabled unless activation is actually available, and the limit rows stay disabled until
+  // accounting reports Ready so the form cannot produce a change KKP would reject.
+  private _applyAcceleratorAccountingState(): void {
+    if (!this.acceleratorAccountingControl) {
+      return;
+    }
+
+    const toggle = (control: AbstractControl, enabled: boolean): void =>
+      enabled ? control.enable({emitEvent: false}) : control.disable({emitEvent: false});
+
+    toggle(this.acceleratorAccountingControl, this.canEnableAcceleratorAccounting);
+    this.gpuResources.controls.forEach(row => {
+      toggle(row.controls.key, this.canEditAccelerators);
+      toggle(row.controls.value, this.canEditAccelerators);
+    });
   }
 
   private _revalidateAcceleratorKeys(): void {

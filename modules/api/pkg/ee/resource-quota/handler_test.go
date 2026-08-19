@@ -41,6 +41,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 
 	corev1 "k8s.io/api/core/v1"
@@ -501,10 +502,164 @@ func TestPutResourceQuotaAcceleratorCompatibility(t *testing.T) {
 	}
 }
 
+func TestPutResourceQuotaAcceleratorAccounting(t *testing.T) {
+	t.Parallel()
+
+	acceleratorLimits := []kubermaticv1.AcceleratorQuota{{
+		Provider: string(kubermaticv1.KubevirtCloudProvider),
+		Resources: corev1.ResourceList{
+			corev1.ResourceName("nvidia.com/gpu"): resource.MustParse("4"),
+		},
+	}}
+
+	testCases := []struct {
+		name string
+		// alreadyEnabled seeds the quota with the accounting annotation already present.
+		alreadyEnabled bool
+		// withLimits seeds the quota with existing accelerator limits.
+		withLimits     bool
+		body           string
+		expectedStatus int
+		// expectEnabled is the annotation state expected after a successful request.
+		expectEnabled bool
+	}{
+		{
+			name:          "enabling accounting sets the annotation",
+			body:          `{"cpu": 10, "enableAcceleratorAccounting": true}`,
+			expectEnabled: true,
+		},
+		{
+			name:          "omitting the field leaves accounting untouched",
+			body:          `{"cpu": 10}`,
+			expectEnabled: false,
+		},
+		{
+			name:           "omitting the field leaves enabled accounting untouched",
+			alreadyEnabled: true,
+			body:           `{"cpu": 10}`,
+			expectEnabled:  true,
+		},
+		{
+			name:          "false is a no-op while accounting is off",
+			body:          `{"cpu": 10, "enableAcceleratorAccounting": false}`,
+			expectEnabled: false,
+		},
+		{
+			name:           "enabling again is a no-op",
+			alreadyEnabled: true,
+			body:           `{"cpu": 10, "enableAcceleratorAccounting": true}`,
+			expectEnabled:  true,
+		},
+		{
+			name:           "accounting cannot be disabled once enabled",
+			alreadyEnabled: true,
+			body:           `{"cpu": 10, "enableAcceleratorAccounting": false}`,
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			// The webhook requires limits to be empty on activation; this is caught up front.
+			name:           "enabling together with new accelerator limits is rejected",
+			body:           `{"cpu": 10, "enableAcceleratorAccounting": true, "accelerators": [{"provider": "kubevirt", "resources": {"nvidia.com/gpu": "2"}}]}`,
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			// Limits carried over from the existing quota count too, since they end up on the
+			// object the webhook sees.
+			name:           "enabling while existing limits are preserved is rejected",
+			withLimits:     true,
+			body:           `{"cpu": 10, "enableAcceleratorAccounting": true}`,
+			expectedStatus: http.StatusBadRequest,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			resourceQuota := genDefaultResourceQuota()
+			if tc.withLimits {
+				resourceQuota.Spec.Quota.Accelerators = acceleratorLimits
+			}
+			if tc.alreadyEnabled {
+				resourceQuota.Annotations = map[string]string{
+					resources.AcceleratorAccountingEnabledAnnotation: resources.AcceleratorAccountingEnabledAnnotationValue,
+				}
+			}
+			admin := test.GenAdminUser("John", "john@acme.com", true)
+
+			router, clients, err := test.CreateTestEndpointAndGetClients(
+				*test.GenAPIUser("John", "john@acme.com"),
+				nil,
+				nil,
+				nil,
+				test.GenDefaultKubermaticObjects(resourceQuota, admin),
+				nil,
+				hack.NewTestRouting,
+			)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			req := httptest.NewRequest(http.MethodPut, "/api/v2/quotas/"+resourceQuota.Name, strings.NewReader(tc.body))
+			resp := httptest.NewRecorder()
+			router.ServeHTTP(resp, req)
+
+			expectedStatus := tc.expectedStatus
+			if expectedStatus == 0 {
+				expectedStatus = http.StatusOK
+			}
+			if resp.Code != expectedStatus {
+				t.Fatalf("expected HTTP status %d, got %d: %s", expectedStatus, resp.Code, resp.Body.String())
+			}
+			if expectedStatus != http.StatusOK {
+				return
+			}
+
+			updated := &kubermaticv1.ResourceQuota{}
+			if err := clients.FakeMasterClient.Get(context.Background(), ctrlruntimeclient.ObjectKey{Name: resourceQuota.Name}, updated); err != nil {
+				t.Fatalf("failed to get updated ResourceQuota: %v", err)
+			}
+
+			gotEnabled := updated.Annotations[resources.AcceleratorAccountingEnabledAnnotation] == resources.AcceleratorAccountingEnabledAnnotationValue
+			if gotEnabled != tc.expectEnabled {
+				t.Fatalf("expected accelerator accounting enabled=%t, got %t (annotations: %v)", tc.expectEnabled, gotEnabled, updated.Annotations)
+			}
+		})
+	}
+}
+
+func TestCreateResourceQuotaRejectsAcceleratorAccounting(t *testing.T) {
+	t.Parallel()
+
+	admin := test.GenAdminUser("John", "john@acme.com", true)
+	router, err := test.CreateTestEndpoint(
+		*test.GenAPIUser("John", "john@acme.com"),
+		nil,
+		test.GenDefaultKubermaticObjects(admin),
+		nil,
+		hack.NewTestRouting,
+	)
+	if err != nil {
+		t.Fatalf("failed to create test endpoint: %v", err)
+	}
+
+	body := `{"subjectName": "some-project", "subjectKind": "project", "quota": {"cpu": 10, "enableAcceleratorAccounting": true}}`
+	req := httptest.NewRequest(http.MethodPost, "/api/v2/quotas", strings.NewReader(body))
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusBadRequest {
+		t.Fatalf("expected HTTP status %d, got %d: %s", http.StatusBadRequest, resp.Code, resp.Body.String())
+	}
+}
+
 func TestGetResourceQuotaAcceleratorDetails(t *testing.T) {
 	t.Parallel()
 
 	resourceQuota := genDefaultResourceQuota()
+	resourceQuota.Annotations = map[string]string{
+		resources.AcceleratorAccountingEnabledAnnotation: resources.AcceleratorAccountingEnabledAnnotationValue,
+	}
 	resourceQuota.Spec.Quota.Accelerators = []kubermaticv1.AcceleratorQuota{
 		{
 			Provider: string(kubermaticv1.KubevirtCloudProvider),
@@ -562,6 +717,10 @@ func TestGetResourceQuotaAcceleratorDetails(t *testing.T) {
 	got := &apiv2.ResourceQuota{}
 	if err := json.Unmarshal(resp.Body.Bytes(), got); err != nil {
 		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if !got.AcceleratorAccountingEnabled {
+		t.Fatal("expected acceleratorAccountingEnabled to be reported as true")
 	}
 
 	expectedQuotaAccelerators := []apiv2.AcceleratorQuota{
@@ -882,7 +1041,36 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withQuota(genAPIQuota(12, 10, 30)).
 				withGlobalUsage(genAPIQuota(2, 3, 5)).
 				withCalculatedQuota(genAPIQuota(6, 9, 65)).
-				withMessage("Calculated disk size (65Gi) exceeds resource quota (30G)").
+				withMessage("Calculated disk size (65Gi) exceeds resource quota (30G)\n").
+				build(),
+		},
+		{
+			// Guards the separator between the disk and accelerator messages: without a trailing
+			// newline on the disk line the two run together on one line.
+			Name:      "should separate the disk and accelerator messages when both are exceeded",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					withAcceleratorQuota("kubevirt", map[string]string{"nvidia.com/gpu": "1"}).
+					withAcceleratorGlobalUsage("kubevirt", map[string]string{"nvidia.com/gpu": "1"}).
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3072", "40", "0").
+				withAccelerators(map[string]string{"nvidia.com/gpu": "2"}).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(withAPIAccelerators(genAPIQuota(12, 10, 30), "kubevirt", map[string]string{"nvidia.com/gpu": "1"})).
+				withGlobalUsage(withAPIAccelerators(genAPIQuota(2, 3, 5), "kubevirt", map[string]string{"nvidia.com/gpu": "1"})).
+				withCalculatedQuota(withAPIAccelerators(genAPIQuota(6, 9, 85), "kubevirt", map[string]string{"nvidia.com/gpu": "5"})).
+				withMessage(
+					"Calculated disk size (85Gi) exceeds resource quota (30G)\n" +
+						"Calculated accelerator \"nvidia.com/gpu\" (5) exceeds resource quota (1)\n",
+				).
 				build(),
 		},
 		{

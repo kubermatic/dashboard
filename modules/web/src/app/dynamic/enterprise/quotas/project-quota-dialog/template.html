@@ -104,6 +104,28 @@ END OF TERMS AND CONDITIONS
         </mat-card-title>
       </mat-card-header>
 
+      @if (editQuota) {
+      <mat-checkbox [formControl]="acceleratorAccountingControl"
+                    [matTooltip]="isAcceleratorAccountingEnabled ? 'Accelerator quota is enabled and cannot be turned off again.' : ''">
+        Enable Accelerator Quota
+      </mat-checkbox>
+      }
+
+      @if (!editQuota) {
+      <mat-hint class="km-quota-accelerator-hint">
+        Accelerator quota can be enabled after the project quota has been created.
+      </mat-hint>
+      } @else if (!isAcceleratorAccountingEnabled) {
+      <mat-hint class="km-quota-accelerator-hint">
+        Enable accelerator quota to start accounting. This cannot be undone, and the project quota can no longer be
+        deleted afterwards.
+      </mat-hint>
+      } @else if (!isAcceleratorAccountingReady) {
+      <mat-hint class="km-quota-accelerator-hint">
+        Accelerator limits can be set once accelerator accounting is active. Existing limits can still be removed.
+      </mat-hint>
+      }
+
       @for (row of gpuResources.controls; track row; let i = $index) {
       <div [formGroup]="row"
            fxLayout="row"

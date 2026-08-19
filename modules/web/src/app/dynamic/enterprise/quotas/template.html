@@ -190,12 +190,14 @@ END OF TERMS AND CONDITIONS
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
 
-            <button mat-icon-button
-                    [disabled]="element.isDefault"
-                    (click)="deleteQuota(element)"
-                    [attr.id]="'km-quota-delete-btn-' + element.name">
-              <i class="km-icon-mask km-icon-delete"></i>
-            </button>
+            <span [matTooltip]="getDeleteQuotaTooltip(element)">
+              <button mat-icon-button
+                      [disabled]="element.isDefault || element.acceleratorAccountingEnabled"
+                      (click)="deleteQuota(element)"
+                      [attr.id]="'km-quota-delete-btn-' + element.name">
+                <i class="km-icon-mask km-icon-delete"></i>
+              </button>
+            </span>
           </div>
         </td>
       </ng-container>

@@ -42,6 +42,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -145,6 +146,13 @@ func (m createResourceQuota) Validate() error {
 
 	if m.Body.SubjectKind == "" {
 		return utilerrors.NewBadRequest("subject's kind cannot be empty")
+	}
+
+	// KKP's admission webhook refuses the accounting annotation on creation because activation
+	// requires owner references and subject labels that its controllers only add afterwards.
+	// Reject it here so the request fails with the required order rather than silently doing nothing.
+	if m.Body.Quota.EnableAcceleratorAccounting != nil && *m.Body.Quota.EnableAcceleratorAccounting {
+		return utilerrors.NewBadRequest("accelerator accounting cannot be enabled during creation; create the quota first, then enable accelerator accounting")
 	}
 
 	return nil
@@ -477,7 +485,7 @@ func CalculateResourceQuotaUpdateForProject(
 	}
 	if projectQuotaLimits.Storage != nil && newResourceCalculation.Storage != nil &&
 		newResourceCalculation.Storage.Cmp(*projectQuotaLimits.Storage) > 0 {
-		msg += fmt.Sprintf("Calculated disk size (%s) exceeds resource quota (%s)", newResourceCalculation.Storage, projectQuotaLimits.Storage)
+		msg += fmt.Sprintf("Calculated disk size (%s) exceeds resource quota (%s)\n", newResourceCalculation.Storage, projectQuotaLimits.Storage)
 	}
 	msg += acceleratorExceedsQuotaMessage(projectQuotaLimits.Accelerators, newResourceCalculation.Accelerators)
 
@@ -927,6 +935,10 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	}
 	newResourceQuota.Spec.Quota = crdQuota
 
+	if err := applyAcceleratorAccounting(req.Body, originalResourceQuota, newResourceQuota); err != nil {
+		return err
+	}
+
 	if err := provider.PatchUnsecured(ctx, originalResourceQuota, newResourceQuota); err != nil {
 		if apierrors.IsNotFound(err) {
 			return utilerrors.NewNotFound("ResourceQuota", req.Name)
@@ -936,12 +948,52 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	return nil
 }
 
+// applyAcceleratorAccounting resolves the tri-state EnableAcceleratorAccounting field of an update
+// request onto the quota that is about to be patched: a nil value leaves the current state alone,
+// true activates accounting, and false is only tolerated while accounting is still off.
+func applyAcceleratorAccounting(body apiv2.Quota, originalResourceQuota, newResourceQuota *kubermaticv1.ResourceQuota) error {
+	if body.EnableAcceleratorAccounting == nil {
+		return nil
+	}
+
+	alreadyEnabled := isAcceleratorAccountingEnabled(originalResourceQuota)
+
+	if !*body.EnableAcceleratorAccounting {
+		if alreadyEnabled {
+			return utilerrors.NewBadRequest("accelerator accounting cannot be disabled once it has been enabled")
+		}
+		return nil
+	}
+
+	if alreadyEnabled {
+		return nil
+	}
+
+	if len(newResourceQuota.Spec.Quota.Accelerators) > 0 {
+		return utilerrors.NewBadRequest("accelerator limits must be empty when enabling accelerator accounting; enable accounting first, then configure accelerator limits")
+	}
+
+	if newResourceQuota.Annotations == nil {
+		newResourceQuota.Annotations = map[string]string{}
+	}
+	newResourceQuota.Annotations[resources.AcceleratorAccountingEnabledAnnotation] = resources.AcceleratorAccountingEnabledAnnotationValue
+
+	return nil
+}
+
+// isAcceleratorAccountingEnabled reports whether accelerator accounting has been activated for the
+// quota. KKP only treats the exact canonical value as enabled, so any other value counts as off.
+func isAcceleratorAccountingEnabled(resourceQuota *kubermaticv1.ResourceQuota) bool {
+	return resourceQuota.Annotations[resources.AcceleratorAccountingEnabledAnnotation] == resources.AcceleratorAccountingEnabledAnnotationValue
+}
+
 func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
 	rq := &apiv2.ResourceQuota{
-		Name:        resourceQuota.Name,
-		SubjectName: resourceQuota.Spec.Subject.Name,
-		SubjectKind: resourceQuota.Spec.Subject.Kind,
-		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
+		Name:                         resourceQuota.Name,
+		SubjectName:                  resourceQuota.Spec.Subject.Name,
+		SubjectKind:                  resourceQuota.Spec.Subject.Kind,
+		AcceleratorAccountingEnabled: isAcceleratorAccountingEnabled(resourceQuota),
+		Quota:                        apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
 		Status: apiv2.ResourceQuotaStatus{
 			GlobalUsage:                 apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
 			LocalUsage:                  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),
