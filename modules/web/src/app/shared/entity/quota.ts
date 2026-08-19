@@ -23,15 +23,51 @@ import {Type} from '@shared/entity/provider/hetzner';
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {KubeVirtNodeSize} from '@shared/entity/provider/kubevirt';
 
+export class AcceleratorQuota {
+  provider: string;
+  resources: Record<string, string>;
+}
+
 export class QuotaVariables {
   cpu?: number;
   memory?: number;
   storage?: number;
+  accelerators?: AcceleratorQuota[];
+  // Request-only: set to true on update to activate accelerator accounting. Activation is
+  // irreversible and requires the accelerator limits to be empty, so it is never sent together
+  // with accelerators. Read the current state from QuotaDetails.acceleratorAccountingEnabled.
+  enableAcceleratorAccounting?: boolean;
+}
+
+export enum AcceleratorAccountingPhase {
+  Activating = 'Activating',
+  Ready = 'Ready',
+  Blocked = 'Blocked',
+}
+
+export class AcceleratorAccountingBlocker {
+  type: string;
+  message?: string;
+  seedName?: string;
+  clusterName?: string;
+  count?: number;
+}
+
+export class ResourceQuotaGlobalAcceleratorAccountingStatus {
+  activationPhase: AcceleratorAccountingPhase;
+  observedAccountingRevision: string;
+  observedQuotaDigest: string;
+  observedAt?: string;
+  legacyMachinesWithoutFootprint: number;
+  machinesWithInvalidFootprint: number;
+  ready: boolean;
+  blockers?: AcceleratorAccountingBlocker[];
 }
 
 export class QuotaStatus {
   globalUsage: QuotaVariables | Record<string, never>;
   localUsage: QuotaVariables | Record<string, never>;
+  globalAcceleratorAccounting?: ResourceQuotaGlobalAcceleratorAccountingStatus;
 }
 
 export class Quota {
@@ -44,6 +80,9 @@ export class QuotaDetails extends Quota {
   name: string;
   subjectHumanReadableName?: string;
   status: QuotaStatus;
+  // Whether accelerator accounting has been activated. Activation is irreversible and is a
+  // precondition for setting any accelerator limits.
+  acceleratorAccountingEnabled?: boolean;
 }
 
 export class ResourceQuotaCalculation {

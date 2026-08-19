@@ -42,6 +42,9 @@ func (fg featureGatesProvider) GetFeatureGates() (apiv2.FeatureGates, error) {
 	if v, ok := fg[features.DisableUserSSHKey]; ok {
 		f.DisableUserSSHKey = &v
 	}
+	if v, ok := fg[features.KubeVirtAcceleratorQuota]; ok {
+		f.KubeVirtAcceleratorQuota = &v
+	}
 
 	return f, nil
 }

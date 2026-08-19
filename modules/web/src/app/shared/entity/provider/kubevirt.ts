@@ -82,6 +82,7 @@ export class KubeVirtNodeSize {
   cpus: string;
   memory: string;
   primaryDiskSize: string;
+  accelerators?: Record<string, string>;
 }
 
 export class KubeVirtStorageClass {

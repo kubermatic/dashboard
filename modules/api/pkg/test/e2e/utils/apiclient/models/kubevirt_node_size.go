@@ -20,6 +20,10 @@ import (
 // swagger:model KubevirtNodeSize
 type KubevirtNodeSize struct {
 
+	// Accelerators maps accelerator resource names (exact KubeVirt deviceName values, combining
+	// spec.gpus and spec.hostDevices) to how many of that device one node will consume.
+	Accelerators map[string]string `json:"accelerators,omitempty"`
+
 	// CPUs states how many cpus the kubevirt node will have.
 	// Required: true
 	CPUs *string `json:"cpus"`

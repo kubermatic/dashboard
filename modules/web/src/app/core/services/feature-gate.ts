@@ -23,6 +23,7 @@ export interface FeatureGates {
   oidcKubeCfgEndpoint?: boolean;
   openIDAuthPlugin?: boolean;
   disableUserSSHKey?: boolean;
+  kubeVirtAcceleratorQuota?: boolean;
 }
 
 @Injectable({

@@ -184,6 +184,8 @@ export class KubeVirtBasicNodeDataComponent
   nodeAffinityPresetValues: string[] = [];
   selectedInstanceTypeCpus: string;
   selectedInstanceTypeMemory: string;
+  // Accelerator resource name -> device count for the currently selected instance type.
+  selectedInstanceTypeAccelerators: Record<string, number> = {};
   nodeAffinityPresetValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
   nodeAffinityPresetValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
@@ -396,6 +398,7 @@ export class KubeVirtBasicNodeDataComponent
 
       this.selectedInstanceTypeCpus = null;
       this.selectedInstanceTypeMemory = null;
+      this._setSelectedInstanceTypeAccelerators({});
 
       // Disable preference when no instance type selected
       const preferenceControl = this.form.get(Controls.Preference);
@@ -423,14 +426,18 @@ export class KubeVirtBasicNodeDataComponent
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
       const selectedInstanceTypeSpec = this.selectedInstanceType?.spec;
+      let accelerators: Record<string, number> = {};
       try {
         const parsedSpec = JSON.parse(selectedInstanceTypeSpec);
         if (parsedSpec) {
           this.selectedInstanceTypeCpus = parsedSpec.cpu?.guest;
           this.selectedInstanceTypeMemory = parsedSpec.memory?.guest;
+          accelerators = this._parseAcceleratorDeviceCounts(parsedSpec);
         }
         // eslint-disable-next-line no-empty
       } catch (_) {}
+
+      this._setSelectedInstanceTypeAccelerators(accelerators);
 
       // Enable preference when instance type is selected
       const preferenceControl = this.form.get(Controls.Preference);
@@ -891,12 +898,17 @@ export class KubeVirtBasicNodeDataComponent
       memoryValue = memory.slice(0, -1);
     }
 
+    const accelerators = Object.fromEntries(
+      Object.entries(this.selectedInstanceTypeAccelerators).map(([deviceName, count]) => [deviceName, `${count}`])
+    );
+
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
         cpus: `${cpus}`,
         memory: `${memoryValue}`,
         primaryDiskSize: `${diskSize}`,
+        ...(Object.keys(accelerators).length ? {accelerators} : {}),
       } as KubeVirtNodeSize,
     };
 
@@ -918,5 +930,28 @@ export class KubeVirtBasicNodeDataComponent
     }
 
     return payload;
+  }
+
+  private _parseAcceleratorDeviceCounts(parsedSpec: {
+    gpus?: {deviceName?: string}[];
+    hostDevices?: {deviceName?: string}[];
+  }): Record<string, number> {
+    const counts: Record<string, number> = {};
+    const devices = [...(parsedSpec?.gpus ?? []), ...(parsedSpec?.hostDevices ?? [])];
+    devices.forEach(device => {
+      if (device?.deviceName) {
+        counts[device.deviceName] = (counts[device.deviceName] ?? 0) + 1;
+      }
+    });
+    return counts;
+  }
+
+  // The enterprise edition check is the null guard for _quotaCalculationService, which is only
+  // resolved from the injector in EE builds.
+  private _setSelectedInstanceTypeAccelerators(accelerators: Record<string, number>): void {
+    this.selectedInstanceTypeAccelerators = accelerators;
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService.relevantAcceleratorNames = Object.keys(accelerators);
+    }
   }
 }

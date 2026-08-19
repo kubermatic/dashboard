@@ -2277,6 +2277,9 @@ type KubevirtNodeSize struct {
 	PrimaryDiskSize string `json:"primaryDiskSize"`
 	// SecondaryDisks contains list of secondary-disks
 	SecondaryDisks []SecondaryDisks `json:"secondaryDisks"`
+	// Accelerators maps accelerator resource names (exact KubeVirt deviceName values, combining
+	// spec.gpus and spec.hostDevices) to how many of that device one node will consume.
+	Accelerators map[string]string `json:"accelerators,omitempty"`
 }
 
 type SecondaryDisks struct {

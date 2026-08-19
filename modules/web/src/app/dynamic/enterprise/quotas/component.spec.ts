@@ -24,10 +24,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {SharedModule} from '@shared/module';
 import {QuotasComponent} from './component';
+import {AcceleratorAccountingPhase, QuotaDetails} from '@shared/entity/quota';
+import {GetQuotasMock} from '@test/data/quota';
 
 describe('QuotasComponent', () => {
   let fixture: ComponentFixture<QuotasComponent>;
@@ -40,6 +44,7 @@ describe('QuotasComponent', () => {
       providers: [
         {provide: QuotaService, useClass: QuotaMockService},
         {provide: UserService, useClass: UserMockService},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
       ],
     }).compileComponents();
   });
@@ -73,5 +78,53 @@ describe('QuotasComponent', () => {
     const element = fixture.nativeElement.querySelector('#quotas-not-found');
 
     expect(element.textContent.trim()).toEqual('No quotas found');
+  });
+
+  describe('accelerator column sorting', () => {
+    function quota(phase?: AcceleratorAccountingPhase, withLimits = false): QuotaDetails {
+      const details = GetQuotasMock()[0];
+      if (withLimits) {
+        details.quota.accelerators = [{provider: 'kubevirt', resources: {'nvidia.com/GA100_A30': '4'}}];
+      }
+      if (phase) {
+        details.status.globalAcceleratorAccounting = {
+          activationPhase: phase,
+          observedAccountingRevision: 'revision-1',
+          observedQuotaDigest: 'sha256:digest',
+          legacyMachinesWithoutFootprint: 0,
+          machinesWithInvalidFootprint: 0,
+          ready: phase === AcceleratorAccountingPhase.Ready,
+        };
+      }
+      return details;
+    }
+
+    function sortKey(details: QuotaDetails): number {
+      return component.dataSource.sortingDataAccessor(details, component.Column.Accelerator) as number;
+    }
+
+    // Activation always precedes adding limits, so this is the state every quota passes through.
+    it('should rank a blocked quota that has no limits yet ahead of one without accounting', () => {
+      expect(sortKey(quota(AcceleratorAccountingPhase.Blocked))).toBeLessThan(sortKey(quota()));
+    });
+
+    it('should rank by phase regardless of whether limits exist', () => {
+      expect(sortKey(quota(AcceleratorAccountingPhase.Blocked))).toBe(
+        sortKey(quota(AcceleratorAccountingPhase.Blocked, true))
+      );
+    });
+
+    it('should order blocked before activating before ready', () => {
+      expect(sortKey(quota(AcceleratorAccountingPhase.Blocked))).toBeLessThan(
+        sortKey(quota(AcceleratorAccountingPhase.Activating))
+      );
+      expect(sortKey(quota(AcceleratorAccountingPhase.Activating))).toBeLessThan(
+        sortKey(quota(AcceleratorAccountingPhase.Ready))
+      );
+    });
+
+    it('should sort quotas without accounting last', () => {
+      expect(sortKey(quota())).toBe(Infinity);
+    });
   });
 });

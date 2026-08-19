@@ -52,6 +52,7 @@ END OF TERMS AND CONDITIONS
     </div>
   </mat-card-header>
   <mat-card-content>
+    @if (!hasAcceleratorQuotaFeature) {
     <div fxLayout="row"
          fxLayoutAlign=" center"
          fxLayoutGap="8px"
@@ -59,6 +60,15 @@ END OF TERMS AND CONDITIONS
       <i class="km-icon-warning"></i>
       <span>GPU resources are not included in quota calculations.</span>
     </div>
+    } @else {
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         fxLayoutGap="8px"
+         class="warning-container">
+      <i class="km-icon-info"></i>
+      <span>Accelerator quotas are only supported for the KubeVirt provider.</span>
+    </div>
+    }
     <table id="quotas-table"
            class="km-table"
            mat-table
@@ -151,6 +161,21 @@ END OF TERMS AND CONDITIONS
         </td>
       </ng-container>
 
+      <ng-container [matColumnDef]="Column.Accelerator">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>Accelerator</th>
+        <td mat-cell
+            *matCellDef="let element">
+          @if (getAcceleratorStatus(element); as status) {
+          <i [matTooltip]="status.message"
+             [ngClass]="status.icon"
+             class="km-vertical-center accelerator-status"></i>
+          }
+        </td>
+      </ng-container>
+
       <ng-container [matColumnDef]="Column.Actions">
         <th mat-header-cell
             *matHeaderCellDef
@@ -165,12 +190,14 @@ END OF TERMS AND CONDITIONS
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
 
-            <button mat-icon-button
-                    [disabled]="element.isDefault"
-                    (click)="deleteQuota(element)"
-                    [attr.id]="'km-quota-delete-btn-' + element.name">
-              <i class="km-icon-mask km-icon-delete"></i>
-            </button>
+            <span [matTooltip]="getDeleteQuotaTooltip(element)">
+              <button mat-icon-button
+                      [disabled]="element.isDefault || element.acceleratorAccountingEnabled"
+                      (click)="deleteQuota(element)"
+                      [attr.id]="'km-quota-delete-btn-' + element.name">
+                <i class="km-icon-mask km-icon-delete"></i>
+              </button>
+            </span>
           </div>
         </td>
       </ng-container>

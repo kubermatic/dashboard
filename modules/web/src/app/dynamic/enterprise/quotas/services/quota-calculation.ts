@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import _ from 'lodash';
-import {merge, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
 import {debounceTime, filter, shareReplay, startWith, switchMap, tap} from 'rxjs/operators';
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
@@ -18,8 +18,19 @@ export class QuotaCalculationService {
   private _requestMap = new Map<string, Observable<ResourceQuotaCalculation>>();
   private _quotaPayload: ResourceQuotaCalculationPayload;
   private _calculationInProgress = new Subject<boolean>();
+  // Accelerator resource names affected by the currently selected instance type/size, so the
+  // quota widget can show bars only for those instead of every accelerator on the quota.
+  private _relevantAcceleratorNames$ = new BehaviorSubject<string[]>(undefined);
 
   constructor(private readonly _http: HttpClient) {}
+
+  get relevantAcceleratorNames$(): Observable<string[]> {
+    return this._relevantAcceleratorNames$.asObservable();
+  }
+
+  set relevantAcceleratorNames(names: string[]) {
+    this._relevantAcceleratorNames$.next(names);
+  }
 
   get quotaPayload(): ResourceQuotaCalculationPayload {
     return this._quotaPayload;
@@ -50,6 +61,7 @@ export class QuotaCalculationService {
 
   reset(key: string): void {
     this.quotaPayload = null;
+    this.relevantAcceleratorNames = undefined;
     if (this._requestMap.has(key)) {
       this._requestMap.delete(key);
     }

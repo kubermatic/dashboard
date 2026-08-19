@@ -58,22 +58,30 @@ END OF TERMS AND CONDITIONS
       }
 
       <ng-template #quotaProgressBars>
-        <ng-container>
-          @if (hasCpuQuota) {
-          <ng-container [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}" />
-          }
+        <div fxLayout="column"
+             fxLayoutGap="4px">
+          <div fxLayout="row"
+               fxLayoutAlign=" center">
+            @if (hasCpuQuota) {
+            <ng-container [ngTemplateOutlet]="progressBar"
+                          [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}" />
+            }
 
-          @if (hasMemoryQuota) {
-          <ng-container [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}" />
-          }
+            @if (hasMemoryQuota) {
+            <ng-container [ngTemplateOutlet]="progressBar"
+                          [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}" />
+            }
 
-          @if (hasStorageQuota) {
-          <ng-container [ngTemplateOutlet]="progressBar"
-                        [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}" />
-          }
-        </ng-container>
+            @if (hasStorageQuota) {
+            <ng-container [ngTemplateOutlet]="progressBar"
+                          [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}" />
+            }
+            @for (name of displayedAcceleratorNames; track name) {
+            <ng-container [ngTemplateOutlet]="progressBar"
+                          [ngTemplateOutletContext]="{label: name, percentage: getAcceleratorPercentage(name)}" />
+            }
+          </div>
+        </div>
       </ng-template>
 
       <ng-template #notApplicableText>
@@ -87,8 +95,8 @@ END OF TERMS AND CONDITIONS
               [ngClass]="{'collapsed': isCollapsed}">
 
       @if (!isCollapsed && quotaDetails) {
-      <mat-card-content fxLayout="column">
-        <div class="km-detail-row">Project Quota</div>
+      <mat-card-content class="km-quota-detail-grid">
+        <div class="km-detail-row-heading">Project Quota</div>
 
         @if (hasCpuQuota) {
         <ng-container *ngTemplateOutlet="detailRow; context: {
@@ -118,34 +126,27 @@ END OF TERMS AND CONDITIONS
                }" />
         }
 
+        @for (name of acceleratorResourceNames; track name) {
+        <ng-container *ngTemplateOutlet="detailRow; context: {
+               label: name,
+               usage: getAcceleratorUsage(name),
+               quota: getAcceleratorQuota(name),
+               percentage: getAcceleratorPercentage(name)}" />
+        }
+
         <ng-template #detailRow
                      let-label="label"
                      let-usage="usage"
                      let-quota="quota"
                      let-unit="unit"
                      let-percentage="percentage">
-          <div class="km-detail-row"
-               fxLayout="row"
-               fxLayoutAlign="space-between center">
-            <span fxFlex>{{ label }}</span>
-
-            <div fxFlex="70%"
-                 fxLayout="row wrap"
-                 fxLayoutGap="5px"
-                 fxLayoutAlign="flex-end center">
-              @if (showWarning && percentage > quotaLimit) {
-              <i class="km-icon-circle"></i>
-              }
-
-              <span fxLayoutAlign="flex-end">
-                {{ usage ?? 0 }}/{{ quota ?? 0 }}
-              </span>
-              <span fxFlex="15%"
-                    fxLayoutAlign="flex-end">
-                {{ unit }}
-              </span>
-            </div>
-          </div>
+          <span>{{ label }}</span>
+          <span class="km-detail-row-value">
+            @if (showWarning && percentage > quotaLimit) {
+            <i class="km-icon-circle"></i>
+            }
+            {{ usage ?? 0 }}/{{ quota ?? 0 }} {{ unit }}
+          </span>
         </ng-template>
       </mat-card-content>
       }
@@ -179,6 +180,16 @@ END OF TERMS AND CONDITIONS
                             percentage: quotaPercentage.storage,
                             resourceData: quotaDetails.quota.storage,
                             globalResourceData: quotaDetails.status.globalUsage.storage ?? 0
+                            }" />
+        }
+
+        @for (name of acceleratorResourceNames; track name) {
+        <ng-container [ngTemplateOutlet]="progressBarCollapsed"
+                      [ngTemplateOutletContext]=" {
+                            label: name,
+                            percentage: getAcceleratorPercentage(name),
+                            resourceData: getAcceleratorQuota(name),
+                            globalResourceData: getAcceleratorUsage(name)
                             }" />
         }
       </mat-card-content>
@@ -250,46 +261,69 @@ END OF TERMS AND CONDITIONS
     </div>
     }
 
-    <div class="km-quota-percentages"
-         fxLayout="row"
-         fxLayoutGap="20px"
-         fxLayoutAlign="space-between">
-      @if (hasCpuQuota) {
-      <ng-container [ngTemplateOutlet]="extendedProgress"
-                    [ngTemplateOutletContext]="{
-        label: 'CPU',
-        total: quotaDetails.quota.cpu,
-        used: quotaDetails.status.globalUsage.cpu,
-        percentage: quotaPercentage.cpu,
-        buffer: estimatedQuotaPercentage?.cpu,
-        estimated: estimatedQuota?.calculatedQuota?.cpu
-        }" />
-      }
+    <div fxLayout="column"
+         fxLayoutGap="10px"
+         fxFlex>
+      <div class="km-quota-percentages"
+           fxLayout="row"
+           fxLayoutGap="20px"
+           fxLayoutAlign="space-between">
+        @if (hasCpuQuota) {
+        <ng-container [ngTemplateOutlet]="extendedProgress"
+                      [ngTemplateOutletContext]="{
+          label: 'CPU',
+          total: quotaDetails.quota.cpu,
+          used: quotaDetails.status.globalUsage.cpu,
+          percentage: quotaPercentage.cpu,
+          buffer: estimatedQuotaPercentage?.cpu,
+          estimated: estimatedQuota?.calculatedQuota?.cpu
+          }" />
+        }
 
-      @if (hasMemoryQuota) {
-      <ng-container [ngTemplateOutlet]="extendedProgress"
-                    [ngTemplateOutletContext]="{
-        label: 'Memory',
-        unit: 'GB',
-        total: quotaDetails.quota.memory,
-        used: quotaDetails.status.globalUsage.memory,
-        percentage: quotaPercentage.memory,
-        buffer: estimatedQuotaPercentage?.memory,
-        estimated: estimatedQuota?.calculatedQuota?.memory
-        }" />
-      }
+        @if (hasMemoryQuota) {
+        <ng-container [ngTemplateOutlet]="extendedProgress"
+                      [ngTemplateOutletContext]="{
+          label: 'Memory',
+          unit: 'GB',
+          total: quotaDetails.quota.memory,
+          used: quotaDetails.status.globalUsage.memory,
+          percentage: quotaPercentage.memory,
+          buffer: estimatedQuotaPercentage?.memory,
+          estimated: estimatedQuota?.calculatedQuota?.memory
+          }" />
+        }
 
-      @if (hasStorageQuota) {
-      <ng-container [ngTemplateOutlet]="extendedProgress"
-                    [ngTemplateOutletContext]="{
-        label: 'Disk',
-        unit: 'GB',
-        total: quotaDetails.quota.storage,
-        used: quotaDetails.status.globalUsage.storage,
-        percentage: quotaPercentage.storage,
-        buffer: estimatedQuotaPercentage?.storage,
-        estimated: estimatedQuota?.calculatedQuota?.storage
-        }" />
+        @if (hasStorageQuota) {
+        <ng-container [ngTemplateOutlet]="extendedProgress"
+                      [ngTemplateOutletContext]="{
+          label: 'Disk',
+          unit: 'GB',
+          total: quotaDetails.quota.storage,
+          used: quotaDetails.status.globalUsage.storage,
+          percentage: quotaPercentage.storage,
+          buffer: estimatedQuotaPercentage?.storage,
+          estimated: estimatedQuota?.calculatedQuota?.storage
+          }" />
+        }
+      </div>
+
+      @if (displayedAcceleratorNames.length) {
+      <div class="km-quota-percentages km-quota-accelerators"
+           fxLayout="row"
+           fxLayoutGap="20px"
+           fxLayoutAlign="space-between">
+        @for (name of displayedAcceleratorNames; track name) {
+        <ng-container [ngTemplateOutlet]="extendedProgress"
+                      [ngTemplateOutletContext]="{
+          label: name,
+          total: getAcceleratorQuota(name),
+          used: getAcceleratorUsage(name),
+          percentage: getAcceleratorPercentage(name),
+          buffer: getEstimatedAcceleratorPercentage(name),
+          estimated: getEstimatedAcceleratorUsage(name)
+          }" />
+        }
+      </div>
       }
     </div>
   </div>

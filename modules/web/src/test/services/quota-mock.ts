@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Observable, of} from 'rxjs';
-import {QuotaDetails} from '@shared/entity/quota';
+import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
 import {GetQuotasMock} from '../data/quota';
 
 export class QuotaMockService {
@@ -22,4 +22,18 @@ export class QuotaMockService {
   get quotas(): Observable<QuotaDetails[]> {
     return of(this._quotas);
   }
+
+  createQuota(_payload: Quota): Observable<Record<string, never>> {
+    return of({});
+  }
+
+  updateQuota(_quotaName: string, _payload: QuotaVariables): Observable<Record<string, never>> {
+    return of({});
+  }
+
+  deleteQuota(_quotaName: string): Observable<Record<string, never>> {
+    return of({});
+  }
+
+  refreshQuotas(): void {}
 }

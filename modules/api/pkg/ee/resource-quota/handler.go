@@ -42,6 +42,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -145,6 +146,13 @@ func (m createResourceQuota) Validate() error {
 
 	if m.Body.SubjectKind == "" {
 		return utilerrors.NewBadRequest("subject's kind cannot be empty")
+	}
+
+	// KKP's admission webhook refuses the accounting annotation on creation because activation
+	// requires owner references and subject labels that its controllers only add afterwards.
+	// Reject it here so the request fails with the required order rather than silently doing nothing.
+	if m.Body.Quota.EnableAcceleratorAccounting != nil && *m.Body.Quota.EnableAcceleratorAccounting {
+		return utilerrors.NewBadRequest("accelerator accounting cannot be enabled during creation; create the quota first, then enable accelerator accounting")
 	}
 
 	return nil
@@ -327,6 +335,60 @@ func addAcceleratorQuantities(totals map[string]corev1.ResourceList, accelerator
 	}
 }
 
+func subtractAcceleratorQuantities(totals map[string]corev1.ResourceList, accelerators []kubermaticv1.AcceleratorQuota) {
+	for _, accelerator := range accelerators {
+		resources := totals[accelerator.Provider]
+		if resources == nil {
+			continue
+		}
+
+		for resourceName, quantity := range accelerator.Resources {
+			current, exists := resources[resourceName]
+			if !exists {
+				continue
+			}
+
+			current = current.DeepCopy()
+			current.Sub(quantity)
+			if current.Sign() < 0 {
+				current.Set(0)
+			}
+			resources[resourceName] = current
+		}
+	}
+}
+
+// acceleratorExceedsQuotaMessage reports, for every provider/resource pair with a configured
+// limit, whether the calculated total exceeds it. Resource names not present in the quota's
+// limits are unconstrained and intentionally never checked.
+func acceleratorExceedsQuotaMessage(limits, calculated []kubermaticv1.AcceleratorQuota) string {
+	calculatedByProvider := map[string]corev1.ResourceList{}
+	for _, accelerator := range calculated {
+		calculatedByProvider[accelerator.Provider] = accelerator.Resources
+	}
+
+	var msg string
+	for _, limit := range limits {
+		calculatedResources := calculatedByProvider[limit.Provider]
+
+		resourceNames := make([]string, 0, len(limit.Resources))
+		for resourceName := range limit.Resources {
+			resourceNames = append(resourceNames, string(resourceName))
+		}
+		sort.Strings(resourceNames)
+
+		for _, name := range resourceNames {
+			resourceName := corev1.ResourceName(name)
+			limitQuantity := limit.Resources[resourceName]
+			calculatedQuantity := calculatedResources[resourceName]
+			if calculatedQuantity.Cmp(limitQuantity) > 0 {
+				msg += fmt.Sprintf("Calculated accelerator %q (%s) exceeds resource quota (%s)\n", name, calculatedQuantity.String(), limitQuantity.String())
+			}
+		}
+	}
+	return msg
+}
+
 func acceleratorQuotasFromTotals(totals map[string]corev1.ResourceList) []kubermaticv1.AcceleratorQuota {
 	if len(totals) == 0 {
 		return nil
@@ -386,6 +448,9 @@ func CalculateResourceQuotaUpdateForProject(
 	if globalQuotaUsage.Storage != nil && newResourceCalculation.Storage != nil {
 		newResourceCalculation.Storage.Add(apiv2.TreatDecimalAsBinary(globalQuotaUsage.Storage))
 	}
+	acceleratorTotals := map[string]corev1.ResourceList{}
+	addAcceleratorQuantities(acceleratorTotals, newResourceCalculation.Accelerators)
+	addAcceleratorQuantities(acceleratorTotals, globalQuotaUsage.Accelerators)
 
 	// Subtract resources that are about to be replaced.
 	replacedResources := req.Body.ReplacedResources
@@ -404,7 +469,9 @@ func CalculateResourceQuotaUpdateForProject(
 		if replacedResourceCalculation.Storage != nil && newResourceCalculation.Storage != nil {
 			newResourceCalculation.Storage.Sub(apiv2.TreatDecimalAsBinary(replacedResourceCalculation.Storage))
 		}
+		subtractAcceleratorQuantities(acceleratorTotals, replacedResourceCalculation.Accelerators)
 	}
+	newResourceCalculation.Accelerators = acceleratorQuotasFromTotals(acceleratorTotals)
 
 	// Check if quota has been exceeded.
 	var msg string
@@ -418,8 +485,9 @@ func CalculateResourceQuotaUpdateForProject(
 	}
 	if projectQuotaLimits.Storage != nil && newResourceCalculation.Storage != nil &&
 		newResourceCalculation.Storage.Cmp(*projectQuotaLimits.Storage) > 0 {
-		msg += fmt.Sprintf("Calculated disk size (%s) exceeds resource quota (%s)", newResourceCalculation.Storage, projectQuotaLimits.Storage)
+		msg += fmt.Sprintf("Calculated disk size (%s) exceeds resource quota (%s)\n", newResourceCalculation.Storage, projectQuotaLimits.Storage)
 	}
+	msg += acceleratorExceedsQuotaMessage(projectQuotaLimits.Accelerators, newResourceCalculation.Accelerators)
 
 	return &apiv2.ResourceQuotaUpdateCalculation{
 		ResourceQuota:   *convertToAPIStruct(projectResourceQuota, projectName),
@@ -433,6 +501,7 @@ func MapProviderNodeTmplToResourceDetails(provider ProviderNodeTemplate, replica
 	nc.CPUCores = &resource.Quantity{}
 	nc.Memory = &resource.Quantity{}
 	nc.Storage = &resource.Quantity{}
+	accelerators := corev1.ResourceList{}
 
 	var err error
 
@@ -466,7 +535,7 @@ func MapProviderNodeTmplToResourceDetails(provider ProviderNodeTemplate, replica
 			return nil, err
 		}
 	case provider.KubevirtNodeSize != nil:
-		if err = getKubevirtResourceDetails(provider, nc); err != nil {
+		if err = getKubevirtResourceDetails(provider, nc, accelerators); err != nil {
 			return nil, err
 		}
 	case provider.NutanixNodeSpec != nil:
@@ -491,13 +560,29 @@ func MapProviderNodeTmplToResourceDetails(provider ProviderNodeTemplate, replica
 
 	// Multiply by replicas count
 	var cpu, mem, sto resource.Quantity
+	acceleratorTotals := corev1.ResourceList{}
 	for i := 0; i < replicas; i++ {
 		cpu.Add(*nc.CPUCores)
 		mem.Add(*nc.Memory)
 		sto.Add(*nc.Storage)
+		for resourceName, quantity := range accelerators {
+			quantity = quantity.DeepCopy()
+			if current, exists := acceleratorTotals[resourceName]; exists {
+				current = current.DeepCopy()
+				current.Add(quantity)
+				quantity = current
+			}
+			acceleratorTotals[resourceName] = quantity
+		}
 	}
 
 	rd := kubermaticv1.NewResourceDetails(cpu, mem, sto)
+	if len(acceleratorTotals) > 0 {
+		rd.Accelerators = []kubermaticv1.AcceleratorQuota{{
+			Provider:  string(kubermaticv1.KubevirtCloudProvider),
+			Resources: acceleratorTotals,
+		}}
+	}
 
 	return rd, nil
 }
@@ -600,7 +685,7 @@ func getHetznerResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprov
 	return nil
 }
 
-func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
+func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity, accelerators corev1.ResourceList) error {
 	cpus, err := strconv.Atoi(provider.KubevirtNodeSize.CPUs)
 	if err != nil {
 		return fmt.Errorf("error converting kubevirt node size cpus %q to int: %w", provider.KubevirtNodeSize.CPUs, err)
@@ -635,6 +720,14 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 		storage.Add(secondaryStorage)
 	}
 	nc.Storage = &storage
+
+	for deviceName, value := range provider.KubevirtNodeSize.Accelerators {
+		quantity, err := resource.ParseQuantity(value)
+		if err != nil {
+			return fmt.Errorf("error parsing kubevirt node accelerator %q quantity %q: %w", deviceName, value, err)
+		}
+		accelerators[corev1.ResourceName(deviceName)] = quantity
+	}
 
 	return nil
 }
@@ -842,6 +935,10 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	}
 	newResourceQuota.Spec.Quota = crdQuota
 
+	if err := applyAcceleratorAccounting(req.Body, originalResourceQuota, newResourceQuota); err != nil {
+		return err
+	}
+
 	if err := provider.PatchUnsecured(ctx, originalResourceQuota, newResourceQuota); err != nil {
 		if apierrors.IsNotFound(err) {
 			return utilerrors.NewNotFound("ResourceQuota", req.Name)
@@ -851,12 +948,52 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	return nil
 }
 
+// applyAcceleratorAccounting resolves the tri-state EnableAcceleratorAccounting field of an update
+// request onto the quota that is about to be patched: a nil value leaves the current state alone,
+// true activates accounting, and false is only tolerated while accounting is still off.
+func applyAcceleratorAccounting(body apiv2.Quota, originalResourceQuota, newResourceQuota *kubermaticv1.ResourceQuota) error {
+	if body.EnableAcceleratorAccounting == nil {
+		return nil
+	}
+
+	alreadyEnabled := isAcceleratorAccountingEnabled(originalResourceQuota)
+
+	if !*body.EnableAcceleratorAccounting {
+		if alreadyEnabled {
+			return utilerrors.NewBadRequest("accelerator accounting cannot be disabled once it has been enabled")
+		}
+		return nil
+	}
+
+	if alreadyEnabled {
+		return nil
+	}
+
+	if len(newResourceQuota.Spec.Quota.Accelerators) > 0 {
+		return utilerrors.NewBadRequest("accelerator limits must be empty when enabling accelerator accounting; enable accounting first, then configure accelerator limits")
+	}
+
+	if newResourceQuota.Annotations == nil {
+		newResourceQuota.Annotations = map[string]string{}
+	}
+	newResourceQuota.Annotations[resources.AcceleratorAccountingEnabledAnnotation] = resources.AcceleratorAccountingEnabledAnnotationValue
+
+	return nil
+}
+
+// isAcceleratorAccountingEnabled reports whether accelerator accounting has been activated for the
+// quota. KKP only treats the exact canonical value as enabled, so any other value counts as off.
+func isAcceleratorAccountingEnabled(resourceQuota *kubermaticv1.ResourceQuota) bool {
+	return resourceQuota.Annotations[resources.AcceleratorAccountingEnabledAnnotation] == resources.AcceleratorAccountingEnabledAnnotationValue
+}
+
 func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
 	rq := &apiv2.ResourceQuota{
-		Name:        resourceQuota.Name,
-		SubjectName: resourceQuota.Spec.Subject.Name,
-		SubjectKind: resourceQuota.Spec.Subject.Kind,
-		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
+		Name:                         resourceQuota.Name,
+		SubjectName:                  resourceQuota.Spec.Subject.Name,
+		SubjectKind:                  resourceQuota.Spec.Subject.Kind,
+		AcceleratorAccountingEnabled: isAcceleratorAccountingEnabled(resourceQuota),
+		Quota:                        apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
 		Status: apiv2.ResourceQuotaStatus{
 			GlobalUsage:                 apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
 			LocalUsage:                  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),

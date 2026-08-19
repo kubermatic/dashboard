@@ -18,6 +18,10 @@ import (
 // swagger:model ResourceQuota
 type ResourceQuota struct {
 
+	// AcceleratorAccountingEnabled reports whether accelerator accounting has been activated for
+	// this quota. Activation is irreversible and is a precondition for setting accelerator limits.
+	AcceleratorAccountingEnabled bool `json:"acceleratorAccountingEnabled,omitempty"`
+
 	// is default
 	IsDefault bool `json:"isDefault,omitempty"`
 

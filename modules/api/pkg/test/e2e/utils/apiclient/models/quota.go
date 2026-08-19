@@ -26,6 +26,13 @@ type Quota struct {
 	// CPU holds the quantity of CPU.
 	CPU int64 `json:"cpu,omitempty"`
 
+	// EnableAcceleratorAccounting requests that accelerator accounting be activated for the quota.
+	// It is only honoured on update requests and is never set on responses; read the current state
+	// from ResourceQuota.AcceleratorAccountingEnabled instead. A nil value leaves the current state
+	// untouched and true activates accounting, which is irreversible; false is rejected once
+	// accounting is enabled.
+	EnableAcceleratorAccounting bool `json:"enableAcceleratorAccounting,omitempty"`
+
 	// Memory represents the RAM amount. Denoted in GB, rounded to 2 decimal places.
 	Memory float64 `json:"memory,omitempty"`
 
