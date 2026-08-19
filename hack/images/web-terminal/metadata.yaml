@@ -17,4 +17,4 @@
 # tag does not yet exist in the registry.
 # After the release is published, bump WEBTerminalImage in
 # kubermatic/pkg/resources/resources.go so user clusters pick up the new image.
-tag: "0.13.0"
+tag: "0.13.1"
