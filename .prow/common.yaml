@@ -31,3 +31,17 @@ presubmits:
           env:
             - name: KUBERMATIC_EDITION
               value: ee
+
+  - name: pre-dashboard-web-terminal-tag
+    run_if_changed: "^hack/images/web-terminal/"
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.26-node-22-kind-0.32-1
+          command:
+            - ./hack/verify-web-terminal-tag.sh
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
