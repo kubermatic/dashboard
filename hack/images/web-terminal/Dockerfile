@@ -38,7 +38,7 @@ ENV KREW_VERSION=v0.5.0
 ENV CILIUM_CLI_VERSION=v0.19.6
 
 # Source: https://github.com/cilium/hubble/releases
-ENV HUBBLE_VERSION=v1.19.6
+ENV HUBBLE_VERSION=v1.19.4
 
 # Source: https://github.com/velero-io/velero/releases
 ENV VELERO_VERSION=v1.18.2
