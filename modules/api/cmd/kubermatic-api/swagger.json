@@ -38936,13 +38936,16 @@
           "x-go-name": "Bucket"
         },
         "caCert": {
-          "description": "CACert defines a CA bundle to use when verifying TLS connections to the provider.\n+optional",
+          "description": "CACert defines a CA bundle to use when verifying TLS connections to the provider.\nDeprecated: Use CACertRef instead.\n+optional",
           "type": "array",
           "items": {
             "type": "integer",
             "format": "uint8"
           },
           "x-go-name": "CACert"
+        },
+        "caCertRef": {
+          "$ref": "#/definitions/SecretKeySelector"
         },
         "prefix": {
           "description": "Prefix is the path inside a bucket to use for Velero storage. Optional.\n+optional",
