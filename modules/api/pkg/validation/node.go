@@ -18,6 +18,7 @@ package validation
 
 import (
 	"errors"
+	"fmt"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -28,6 +29,32 @@ func ValidateCreateNodeSpec(c *kubermaticv1.Cluster, spec *apiv1.NodeSpec, dc *k
 		if (dc.Spec.Openstack.EnforceFloatingIP || spec.Cloud.Openstack.UseFloatingIP) && len(c.Spec.Cloud.Openstack.FloatingIPPool) == 0 {
 			return errors.New("no floating ip pool specified")
 		}
+	}
+
+	if c.Spec.Cloud.Azure != nil && spec.Cloud.Azure != nil {
+		if err := validateAzureSecurityProfile(spec.Cloud.Azure.SecurityProfile); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func validateAzureSecurityProfile(profile *apiv1.AzureSecurityProfile) error {
+	if profile == nil {
+		return nil
+	}
+
+	switch profile.SecurityType {
+	case "TrustedLaunch":
+	case "Standard":
+		if profile.SecureBootEnabled != nil || profile.VTpmEnabled != nil {
+			return errors.New(`securityProfile.securityType "Standard" cannot be combined with secureBootEnabled or vTpmEnabled`)
+		}
+	case "":
+		return errors.New("securityProfile.securityType must be set when securityProfile is specified")
+	default:
+		return fmt.Errorf("unsupported securityProfile.securityType %q; supported values (case-sensitive): TrustedLaunch, Standard", profile.SecurityType)
 	}
 
 	return nil
