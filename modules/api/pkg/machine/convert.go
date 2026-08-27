@@ -182,6 +182,13 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			OSDiskSize:                  config.OSDiskSize,
 			EnableAcceleratedNetworking: config.EnableAcceleratedNetworking,
 		}
+		if config.SecurityProfile != nil {
+			cloudSpec.Azure.SecurityProfile = &apiv1.AzureSecurityProfile{
+				SecurityType:      config.SecurityProfile.SecurityType,
+				SecureBootEnabled: config.SecurityProfile.SecureBootEnabled,
+				VTpmEnabled:       config.SecurityProfile.VTpmEnabled,
+			}
+		}
 	case providerconfig.CloudProviderDigitalocean:
 		config := &digitalocean.RawConfig{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
