@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -21,21 +22,78 @@ type ObjectStorageLocation struct {
 	Bucket string `json:"bucket,omitempty"`
 
 	// CACert defines a CA bundle to use when verifying TLS connections to the provider.
+	// Deprecated: Use CACertRef instead.
 	// +optional
 	CACert []uint8 `json:"caCert"`
 
 	// Prefix is the path inside a bucket to use for Velero storage. Optional.
 	// +optional
 	Prefix string `json:"prefix,omitempty"`
+
+	// ca cert ref
+	CaCertRef *SecretKeySelector `json:"caCertRef,omitempty"`
 }
 
 // Validate validates this object storage location
 func (m *ObjectStorageLocation) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCaCertRef(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this object storage location based on context it is used
+func (m *ObjectStorageLocation) validateCaCertRef(formats strfmt.Registry) error {
+	if swag.IsZero(m.CaCertRef) { // not required
+		return nil
+	}
+
+	if m.CaCertRef != nil {
+		if err := m.CaCertRef.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("caCertRef")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("caCertRef")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this object storage location based on the context it is used
 func (m *ObjectStorageLocation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCaCertRef(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ObjectStorageLocation) contextValidateCaCertRef(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CaCertRef != nil {
+		if err := m.CaCertRef.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("caCertRef")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("caCertRef")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
