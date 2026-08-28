@@ -34,6 +34,10 @@ presubmits:
 
   - name: pre-dashboard-web-terminal-tag
     run_if_changed: "^hack/images/web-terminal/"
+    # The image is released from main only; cherry-picks to release branches
+    # reuse the already-published tag, so this gate does not apply there.
+    branches:
+      - ^main$
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
