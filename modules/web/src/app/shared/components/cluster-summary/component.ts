@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {SettingsService} from '@app/core/services/settings';
 import {AdminSettings} from '@app/shared/entity/settings';
 import {getVisibleAnnotations} from '@app/shared/utils/annotations';
@@ -36,6 +36,7 @@ import {take} from 'rxjs/operators';
   selector: 'km-cluster-summary',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterSummaryComponent implements OnInit {

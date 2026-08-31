@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {Project} from '@shared/entity/project';
@@ -20,6 +20,7 @@ import {Project} from '@shared/entity/project';
 @Component({
   selector: 'km-delete-project',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DeleteProjectConfirmationComponent {

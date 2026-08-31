@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy} from '@angular/core';
 import {GKEClusterSpec, GKECloudSpec} from '@shared/entity/provider/gke';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-gke-cluster-summary',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GKEClusterSummaryComponent implements OnChanges {

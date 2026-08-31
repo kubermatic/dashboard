@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
@@ -32,6 +32,7 @@ import _ from 'lodash';
   selector: 'km-rbac',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RBACComponent implements OnDestroy {

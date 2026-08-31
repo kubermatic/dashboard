@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@app/core/services/user';
@@ -29,6 +29,7 @@ enum Column {
   selector: 'km-announcements-dialog',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnnouncementsDialogComponent implements OnInit {

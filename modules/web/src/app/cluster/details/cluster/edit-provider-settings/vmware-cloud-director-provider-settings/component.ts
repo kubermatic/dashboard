@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CredentialsType} from '@app/settings/admin/presets/dialog/steps/settings/provider/vmware-cloud-director/component';
 import {clearFormField} from '@app/shared/utils/form';
@@ -33,6 +33,7 @@ export enum Controls {
   selector: 'km-vmware-cloud-director-provider-settings',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class VMwareCloudDirectorProviderSettingsComponent implements OnInit, OnDestroy {

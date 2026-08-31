@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {SettingsService} from '@app/core/services/settings';
 import {View} from '@app/shared/entity/common';
@@ -22,6 +22,7 @@ import {Subject, takeUntil} from 'rxjs';
 @Component({
   selector: 'km-backups',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class BackupsComponent implements OnInit, OnDestroy {

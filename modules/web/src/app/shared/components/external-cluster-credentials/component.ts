@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@core/services/external-cluster';
@@ -27,6 +27,7 @@ enum Controls {
   selector: 'km-external-cluster-credentials-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CredentialsStepComponent implements OnInit, OnDestroy {

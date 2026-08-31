@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Cluster, getProviderDisplayName, Provider} from '@shared/entity/cluster';
 import _ from 'lodash';
 import {
@@ -35,6 +35,7 @@ class ChartColorData {
   selector: 'km-providers-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProvidersOverviewComponent implements OnInit, OnChanges {

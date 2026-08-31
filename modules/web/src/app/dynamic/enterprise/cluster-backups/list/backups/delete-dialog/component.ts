@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
@@ -32,6 +32,7 @@ export interface DeleteBackupDialogConfig {
 @Component({
   selector: 'km-delete-backup-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DeleteBackupDialogComponent {

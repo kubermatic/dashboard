@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
@@ -27,6 +27,7 @@ enum Controls {
   selector: 'km-external-cluster-provider-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {

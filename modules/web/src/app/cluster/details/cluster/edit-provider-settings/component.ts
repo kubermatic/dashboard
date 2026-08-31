@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -23,6 +23,7 @@ import {takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-edit-provider-settings',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EditProviderSettingsComponent implements OnInit, OnDestroy {

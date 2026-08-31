@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # A list of allowed licenses for our production dependencies
-ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-2.0;Zlib;0BSD;OFL-1.1"
+ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-2.0;Zlib;0BSD;OFL-1.1;BlueOak-1.0.0"
 
 # A list of dependencies excluded from license check. Should be validated manually before excluding
 # them from the check.

@@ -30,5 +30,8 @@
     "skipLibCheck": true,
     "lib": ["ES2022", "dom"],
     "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }

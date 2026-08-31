@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CLICK_TO_COPY_TOOLTIP} from '@app/shared/constants/common';
 import {ClusterRestore} from '@app/shared/entity/backup';
@@ -30,6 +30,7 @@ export interface DeleteRestoreDialogConfig {
 @Component({
   selector: 'km-delete-restore-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DeleteRestoreDialogComponent {

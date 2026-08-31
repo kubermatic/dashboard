@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
@@ -44,6 +53,7 @@ import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CIDRFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator {

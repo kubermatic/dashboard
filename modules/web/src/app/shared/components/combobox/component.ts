@@ -25,6 +25,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatSelect} from '@angular/material/select';
@@ -52,6 +53,7 @@ export enum ComboboxControls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FilteredComboboxComponent extends BaseFormValidator implements OnInit, OnDestroy, OnChanges {

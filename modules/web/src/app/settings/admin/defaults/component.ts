@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {UserClusterConfigService} from '@app/core/services/user-cluster-config';
@@ -51,6 +51,7 @@ enum EventRateConfigActions {
   selector: 'km-defaults',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DefaultsComponent implements OnInit, OnDestroy {

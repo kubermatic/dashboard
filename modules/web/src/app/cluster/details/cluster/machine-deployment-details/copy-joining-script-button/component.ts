@@ -13,13 +13,14 @@
 // limitations under the License.
 
 import {Clipboard} from '@angular/cdk/clipboard';
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {finalize, take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-copy-joining-script-button',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CopyJoiningScriptButtonComponent {

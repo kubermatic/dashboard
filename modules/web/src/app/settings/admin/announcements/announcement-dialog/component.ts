@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -39,6 +39,7 @@ export enum Controls {
   templateUrl: 'template.html',
   styleUrls: ['./style.scss'],
   providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {

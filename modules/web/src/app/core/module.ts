@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {CommonModule} from '@angular/common';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
@@ -169,7 +169,7 @@ const interceptors = [
   declarations: [...components],
   exports: [...components],
   imports: [CommonModule, RouterModule, SharedModule, GlobalModule, NoopAnimationsModule],
-  providers: [...services, ...interceptors, provideHttpClient(withInterceptorsFromDi())],
+  providers: [...services, ...interceptors, provideHttpClient(withXhr(), withInterceptorsFromDi())],
 })
 export class CoreModule {
   static injector: Injector;

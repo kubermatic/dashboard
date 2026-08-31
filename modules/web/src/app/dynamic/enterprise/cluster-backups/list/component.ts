@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {SettingsService} from '@app/core/services/settings';
 import {View} from '@app/shared/entity/common';
@@ -28,6 +28,7 @@ import {Subject, takeUntil} from 'rxjs';
 @Component({
   selector: 'km-cluster-backups',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterBackupsComponent implements OnInit, OnDestroy {
