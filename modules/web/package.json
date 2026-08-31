@@ -115,7 +115,7 @@
     "@typescript-eslint/parser": "8.65.0",
     "browserlist": "1.0.2",
     "btoa": "1.2.1",
-    "concurrently": "10.0.3",
+    "concurrently": "10.0.5",
     "cypress": "15.19.0",
     "cypress-fail-fast": "7.1.1",
     "del": "8.0.1",
