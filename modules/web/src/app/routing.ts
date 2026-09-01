@@ -66,6 +66,7 @@ function createRouting(): Routes {
         {
           path: 'projects/:projectID/groups',
           loadChildren: () => import('./member/module').then(m => m.MemberModule),
+          canMatch: [EnterpriseEditionGuard],
         },
         {
           path: 'projects/:projectID/serviceaccounts',
