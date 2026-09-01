@@ -77,6 +77,7 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterBackupService} from './services/cluster-backup';
+import {EnterpriseEditionGuard} from './services/enterprise-edition/guard';
 import {SSHKeyGuard} from './services/ssh-key/guard';
 import {KyvernoService} from './services/kyverno';
 
@@ -100,6 +101,7 @@ const services = [
   AuthzGuard,
   AdminGuard,
   SSHKeyGuard,
+  EnterpriseEditionGuard,
   DatacenterService,
   NameGeneratorService,
   ClusterService,
