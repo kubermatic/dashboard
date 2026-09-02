@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Validators} from '@angular/forms';
+import {AbstractControl, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 export const IPV4_CIDR_PATTERN_VALIDATOR = Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/);
 export const IPV6_CIDR_PATTERN_VALIDATOR = Validators.pattern(
@@ -59,3 +59,25 @@ export const KUBERNETES_ANNOTATION_VALUE_PATTERN_VALIDATOR = Validators.pattern(
 
 export const NON_SPECIAL_CHARACTERS_PATTERN = /^[^|"<>[\]{}`\\';&]+$/;
 export const NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR = Validators.pattern(NON_SPECIAL_CHARACTERS_PATTERN);
+
+export const DNS_NAME_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+export const DNS_NAME_PATTERN_VALIDATOR = Validators.pattern(DNS_NAME_PATTERN);
+
+export function endpointUrlValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value?.trim();
+    if (!value) {
+      return null;
+    }
+
+    try {
+      const url = new URL(value);
+      if (!['http:', 'https:'].includes(url.protocol) || !url.hostname) {
+        return {invalidEndpointUrl: true};
+      }
+      return DNS_NAME_PATTERN.test(url.hostname) ? null : {invalidEndpointUrl: true};
+    } catch {
+      return {invalidEndpointUrl: true};
+    }
+  };
+}

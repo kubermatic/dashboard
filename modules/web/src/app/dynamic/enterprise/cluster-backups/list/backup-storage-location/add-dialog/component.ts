@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
@@ -32,7 +32,13 @@ import {
   SupportedBSLProviders,
   VeleroChecksumAlgorithm,
 } from '@app/shared/entity/backup';
-import {CBSL_SYNC_PERIOD, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {
+  CBSL_SYNC_PERIOD,
+  DNS_NAME_PATTERN_VALIDATOR,
+  endpointUrlValidator,
+  KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+} from '@app/shared/validators/others';
+import {ENDPOINT_URL_ERROR_MESSAGE, REGION_ERROR_MESSAGE} from '@app/shared/constants/common';
 import {SettingsService} from '@core/services/settings';
 import * as y from 'js-yaml';
 import {Observable, Subject, takeUntil} from 'rxjs';
@@ -66,9 +72,12 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
+  readonly REGION_ERROR_MESSAGE = REGION_ERROR_MESSAGE;
+  readonly ENDPOINT_URL_ERROR_MESSAGE = ENDPOINT_URL_ERROR_MESSAGE;
   form: FormGroup;
   valuesConfig = '';
   isYamlEditorValid = true;
+  customConfigError = '';
 
   get label(): string {
     return this._config.bslObject ? 'Save Changes' : 'Create';
@@ -108,8 +117,12 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         this._config.bslObject?.spec.backupSyncPeriod ?? '0',
         CBSL_SYNC_PERIOD
       ),
-      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? ''),
-      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? ''),
+      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? '', [
+        DNS_NAME_PATTERN_VALIDATOR,
+      ]),
+      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? '', [
+        endpointUrlValidator(),
+      ]),
       [Controls.ChecksumAlgorithm]: this._builder.control(this._config.bslObject?.spec.config?.checksumAlgorithm ?? ''),
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
@@ -132,23 +145,21 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       .get(Controls.AddCustomConfig)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((value: boolean) => {
-        let config: BackupStorageLocationConfig;
-        if (this._config.bslObject?.name) {
-          config = this._config.bslObject.spec.config;
-        } else {
-          config = {
-            region: this.form.get(Controls.Region).value,
-            s3Url: this.form.get(Controls.Endpoints).value?.trim(),
-            checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value,
-          };
-        }
+        const config: BackupStorageLocationConfig = this._config.bslObject?.name
+          ? this._config.bslObject.spec.config
+          : this._getConfig();
         try {
           this.valuesConfig = y.dump({config: config});
         } catch (error) {
           this.isYamlEditorValid = false;
         }
+
+        // Validate either the YAML editor or the config fields, never both.
+        this._toggleConfigControls(!value);
+
         if (!value) {
           this.isYamlEditorValid = true;
+          this.customConfigError = '';
         }
       });
   }
@@ -180,7 +191,39 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   }
 
   isValidYaml(valid: boolean): void {
-    this.isYamlEditorValid = valid;
+    this.customConfigError = '';
+    this.isYamlEditorValid = valid && this._isCustomConfigValid();
+  }
+
+  private _toggleConfigControls(enable: boolean): void {
+    [Controls.Region, Controls.Endpoints, Controls.ChecksumAlgorithm].forEach(control => {
+      if (enable) {
+        this.form.get(control).enable({emitEvent: false});
+      } else {
+        this.form.get(control).disable({emitEvent: false});
+      }
+    });
+  }
+
+  private _isCustomConfigValid(): boolean {
+    let config: BackupStorageLocationConfig;
+    try {
+      config = (y.load(this.valuesConfig) as {config: BackupStorageLocationConfig})?.config;
+    } catch (error) {
+      return false;
+    }
+
+    if (config?.region && DNS_NAME_PATTERN_VALIDATOR(new FormControl(config.region))) {
+      this.customConfigError = REGION_ERROR_MESSAGE;
+      return false;
+    }
+
+    if (config?.s3Url && endpointUrlValidator()(new FormControl(config.s3Url))) {
+      this.customConfigError = ENDPOINT_URL_ERROR_MESSAGE;
+      return false;
+    }
+
+    return true;
   }
 
   private _getBackupStorageLocation(): CreateBackupStorageLocation {
@@ -194,11 +237,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         },
         backupSyncPeriod:
           this.form.get(Controls.BackupSyncPeriod).value === '' ? null : this.form.get(Controls.BackupSyncPeriod).value,
-        config: {
-          region: this.form.get(Controls.Region).value,
-          s3Url: this.form.get(Controls.Endpoints).value,
-          checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value || '',
-        },
+        config: this._getConfig(),
         provider: SupportedBSLProviders.AWS,
       } as BackupStorageLocationSpec,
       credentials: {
@@ -216,5 +255,24 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       }
     }
     return bsl;
+  }
+
+  // https://github.com/velero-io/velero-plugin-for-aws/blob/main/backupstoragelocation.md
+  private _getConfig(): BackupStorageLocationConfig {
+    const config: BackupStorageLocationConfig = {};
+    const region = this.form.get(Controls.Region).value?.trim();
+    const s3Url = this.form.get(Controls.Endpoints).value?.trim();
+    const checksumAlgorithm = this.form.get(Controls.ChecksumAlgorithm).value;
+
+    if (region) {
+      config.region = region;
+    }
+    if (s3Url) {
+      config.s3Url = s3Url;
+    }
+    if (checksumAlgorithm) {
+      config.checksumAlgorithm = checksumAlgorithm;
+    }
+    return config;
   }
 }

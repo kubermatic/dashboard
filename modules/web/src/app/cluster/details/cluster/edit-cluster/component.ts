@@ -46,6 +46,7 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings, StaticLabel} from '@shared/entity/settings';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
+import {isBackupStorageLocationAvailable} from '@shared/utils/backup';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
@@ -563,8 +564,18 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList;
-        this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
+        this.backupStorageLocationsList = cbslList.filter(bsl => isBackupStorageLocationAvailable(bsl));
+        this.backupStorageLocationLabel = this.backupStorageLocationsList.length
+          ? BSLListState.Ready
+          : BSLListState.Empty;
+
+        const backupStorageLocationControl = this.form.get(Controls.BackupStorageLocation);
+        if (
+          backupStorageLocationControl &&
+          !this.backupStorageLocationsList.some(bsl => bsl.name === backupStorageLocationControl.value)
+        ) {
+          backupStorageLocationControl.reset();
+        }
       });
   }
 

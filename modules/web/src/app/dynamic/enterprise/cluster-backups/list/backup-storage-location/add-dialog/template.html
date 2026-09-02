@@ -46,7 +46,7 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The bucket in which to store backups.</mat-hint>
-      @if (form.get(Controls.Name).hasError('required')) {
+      @if (form.get(Controls.Bucket).hasError('required')) {
       <mat-error>
         <strong>Required</strong>
       </mat-error>
@@ -96,6 +96,9 @@ END OF TERMS AND CONDITIONS
     <km-validate-json-or-yaml [data]="valuesConfig"
                               [isOnlyYAML]="true"
                               (dataValid)="isValidYaml($event)" />
+    @if (customConfigError) {
+    <mat-error>{{customConfigError}}</mat-error>
+    }
     }
     @if (!form.get(Controls.AddCustomConfig).value) {
     <mat-form-field class="region-field">
@@ -103,12 +106,18 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.Region"
              matInput>
       <mat-hint>The AWS region where the bucket is located.</mat-hint>
+      @if (form.get(Controls.Region).hasError('pattern')) {
+      <mat-error>{{REGION_ERROR_MESSAGE}}</mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Endpoints</mat-label>
+      <mat-label>Endpoint URL</mat-label>
       <input [formControlName]="Controls.Endpoints"
              matInput>
       <mat-hint>Specify the AWS S3 URL here.</mat-hint>
+      @if (form.get(Controls.Endpoints).hasError('invalidEndpointUrl')) {
+      <mat-error>{{ENDPOINT_URL_ERROR_MESSAGE}}</mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Default Checksum Algorithm</mat-label>

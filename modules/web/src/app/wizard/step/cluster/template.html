@@ -525,11 +525,23 @@ limitations under the License.
             }
             }
             @if (isclusterBackupEnabled) {
-            <mat-checkbox [formControlName]="Controls.ClusterBackup">
-              Cluster Backup
-              <i class="km-icon-info km-pointer"
-                 [matTooltip]="Tooltips.clusterBackup"></i>
-            </mat-checkbox>
+            <div fxLayoutAlign="space-between center">
+              <mat-checkbox [formControlName]="Controls.ClusterBackup">
+                Cluster Backup
+                <i class="km-icon-info km-pointer"
+                   [matTooltip]="Tooltips.clusterBackup"></i>
+              </mat-checkbox>
+              @if (!!controlValue(Controls.ClusterBackup)) {
+              <button (click)="addBackupStorageLocationDialog()"
+                      type="button"
+                      mat-flat-button
+                      color="quaternary">
+                <i class="km-icon-mask km-icon-add"
+                   matButtonIcon></i>
+                <span>Add Backup Storage Location</span>
+              </button>
+              }
+            </div>
             }
             @if (!!controlValue(Controls.ClusterBackup) && isclusterBackupEnabled) {
             <mat-form-field>

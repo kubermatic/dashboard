@@ -14,7 +14,7 @@
 
 import {EventEmitter} from '@angular/core';
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
@@ -42,7 +42,7 @@ import {ProjectMockService} from '@test/services/project-mock';
 import {RouterStub} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
-import {Subject} from 'rxjs';
+import {of, Subject} from 'rxjs';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../edit-provider-settings/azure-provider-settings/component';
@@ -89,6 +89,7 @@ describe('EditClusterComponent', () => {
       ],
       providers: [
         {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: MatDialog, useValue: {open: jest.fn().mockReturnValue({afterClosed: () => of(undefined)})}},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ClusterService, useValue: clusterServiceMock},
         {provide: AppConfigService, useClass: AppConfigMockService},
