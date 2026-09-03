@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2026 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,18 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
-
-cd $(dirname $0)/../../..
-source hack/lib.sh
-
-API=modules/api
-
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.26-node-24-14 containerize ./$API/hack/verify-licenses.sh
-
-cd $API
-go mod vendor
-
-echodate "Checking licenses..."
-wwhrd check -q
-echodate "Check successful."
+# Source of truth for the chrome-headless image release. Bump the tag to cut a
+# new release; a postsubmit job rebuilds and pushes when this file changes and
+# the tag does not yet exist in the registry.
+# After the release is published, bump the image references in a follow-up PR:
+# .prow/frontend.yaml in this repo and the coverage job in
+# kubermatic/infra prow/jobs/dashboard/dashboard-postsubmits-main.yaml.
+tag: "v1.10.0"
