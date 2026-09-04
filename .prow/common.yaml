@@ -21,7 +21,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-kind-0.32-13
+        - image: quay.io/kubermatic/build:go-1.26-node-24-kind-0.32-14
           command:
             - ./hack/ci/verify.sh
           resources:
@@ -42,9 +42,27 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.26-node-22-kind-0.32-13
+        - image: quay.io/kubermatic/build:go-1.26-node-24-kind-0.32-14
           command:
             - ./hack/verify-web-terminal-tag.sh
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+
+  - name: pre-dashboard-chrome-headless-tag
+    run_if_changed: "^modules/web/containers/chrome-headless/"
+    # The image is released from main only; cherry-picks to release branches
+    # reuse the already-published tag, so this gate does not apply there.
+    branches:
+      - ^main$
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.26-node-24-kind-0.32-14
+          command:
+            - ./hack/verify-chrome-headless-tag.sh
           resources:
             requests:
               memory: 256Mi
