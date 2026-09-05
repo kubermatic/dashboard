@@ -1781,6 +1781,23 @@ type AzureNodeSpec struct {
 	AssignAvailabilitySet bool `json:"assignAvailabilitySet"`
 	// EnableAcceleratedNetworking is used to check if an accelerating networking should be used for azure vms.
 	EnableAcceleratedNetworking *bool `json:"enableAcceleratedNetworking,omitempty"`
+	// SecurityProfile specifies the security settings, e.g. TrustedLaunch, for the VM.
+	// required: false
+	SecurityProfile *AzureSecurityProfile `json:"securityProfile,omitempty"`
+}
+
+// AzureSecurityProfile specifies security settings like TrustedLaunch for an Azure VM.
+// swagger:model AzureSecurityProfile
+type AzureSecurityProfile struct {
+	// SecurityType is the security type of the VM. Supported values (case-sensitive): TrustedLaunch, Standard.
+	// required: false
+	SecurityType string `json:"securityType,omitempty"`
+	// SecureBootEnabled specifies whether secure boot should be enabled. Only valid when SecurityType is TrustedLaunch.
+	// required: false
+	SecureBootEnabled *bool `json:"secureBootEnabled,omitempty"`
+	// VTpmEnabled specifies whether vTPM should be enabled. Only valid when SecurityType is TrustedLaunch.
+	// required: false
+	VTpmEnabled *bool `json:"vTpmEnabled,omitempty"`
 }
 
 func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
@@ -1795,15 +1812,16 @@ func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		Size                        string            `json:"size"`
-		AssignPublicIP              bool              `json:"assignPublicIP"`
-		Tags                        map[string]string `json:"tags,omitempty"`
-		OSDiskSize                  int32             `json:"osDiskSize"`
-		DataDiskSize                int32             `json:"dataDiskSize"`
-		Zones                       []string          `json:"zones"`
-		ImageID                     string            `json:"imageID"`
-		AssignAvailabilitySet       bool              `json:"assignAvailabilitySet"`
-		EnableAcceleratedNetworking *bool             `json:"enableAcceleratedNetworking"`
+		Size                        string                `json:"size"`
+		AssignPublicIP              bool                  `json:"assignPublicIP"`
+		Tags                        map[string]string     `json:"tags,omitempty"`
+		OSDiskSize                  int32                 `json:"osDiskSize"`
+		DataDiskSize                int32                 `json:"dataDiskSize"`
+		Zones                       []string              `json:"zones"`
+		ImageID                     string                `json:"imageID"`
+		AssignAvailabilitySet       bool                  `json:"assignAvailabilitySet"`
+		EnableAcceleratedNetworking *bool                 `json:"enableAcceleratedNetworking"`
+		SecurityProfile             *AzureSecurityProfile `json:"securityProfile,omitempty"`
 	}{
 		Size:                        spec.Size,
 		AssignPublicIP:              spec.AssignPublicIP,
@@ -1814,6 +1832,7 @@ func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
 		ImageID:                     spec.ImageID,
 		AssignAvailabilitySet:       spec.AssignAvailabilitySet,
 		EnableAcceleratedNetworking: spec.EnableAcceleratedNetworking,
+		SecurityProfile:             spec.SecurityProfile,
 	}
 
 	return json.Marshal(&res)

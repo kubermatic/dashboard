@@ -29856,6 +29856,9 @@
           "format": "int32",
           "x-go-name": "OSDiskSize"
         },
+        "securityProfile": {
+          "$ref": "#/definitions/AzureSecurityProfile"
+        },
         "size": {
           "description": "VM size",
           "type": "string",
@@ -29938,6 +29941,28 @@
             "type": "string"
           },
           "x-go-name": "SecurityGroups"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "AzureSecurityProfile": {
+      "type": "object",
+      "title": "AzureSecurityProfile specifies security settings like TrustedLaunch for an Azure VM.",
+      "properties": {
+        "secureBootEnabled": {
+          "description": "SecureBootEnabled specifies whether secure boot should be enabled. Only valid when SecurityType is TrustedLaunch.",
+          "type": "boolean",
+          "x-go-name": "SecureBootEnabled"
+        },
+        "securityType": {
+          "description": "SecurityType is the security type of the VM. Supported values (case-sensitive): TrustedLaunch, Standard.",
+          "type": "string",
+          "x-go-name": "SecurityType"
+        },
+        "vTpmEnabled": {
+          "description": "VTpmEnabled specifies whether vTPM should be enabled. Only valid when SecurityType is TrustedLaunch.",
+          "type": "boolean",
+          "x-go-name": "VTpmEnabled"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
