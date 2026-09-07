@@ -105,10 +105,12 @@ describe('ProjectQuotaDialogComponent accelerator accounting', () => {
   function quotaWith(
     accountingEnabled: boolean,
     phase?: AcceleratorAccountingPhase,
-    accelerators?: AcceleratorQuota[]
+    accelerators?: AcceleratorQuota[],
+    isDefault = false
   ): QuotaDetails {
     const quota = GetQuotasMock()[0];
     quota.acceleratorAccountingEnabled = accountingEnabled;
+    quota.isDefault = isDefault;
     if (accelerators) {
       quota.quota.accelerators = accelerators;
     }
@@ -131,15 +133,46 @@ describe('ProjectQuotaDialogComponent accelerator accounting', () => {
     expect(component.canEnableAcceleratorAccounting).toBe(false);
     expect(component.canEditAccelerators).toBe(false);
     expect(component.acceleratorAccountingControl.disabled).toBe(true);
+    // The add dialog renders the same disabled checkbox, so the icon has to say why.
+    expect(component.acceleratorAccountingTooltip).toContain('after the project quota has been created');
   });
 
   it('should offer activation on an existing quota that has none', async () => {
     await setup(quotaWith(false));
 
+    // No reason to explain while activation is available, so no info icon is rendered.
+    expect(component.acceleratorAccountingTooltip).toBe('');
     expect(component.canEnableAcceleratorAccounting).toBe(true);
     expect(component.acceleratorAccountingControl.enabled).toBe(true);
     expect(component.canEditAccelerators).toBe(false);
     expect(component.gpuResources.controls[0].controls.key.disabled).toBe(true);
+  });
+
+  // A default quota is derived from the default project quota setting and the API refuses to pin it
+  // with an irreversible activation, so the dialog must not offer the checkbox either.
+  it('should not offer activation on a default project quota', async () => {
+    await setup(quotaWith(false, undefined, undefined, true));
+
+    expect(component.isDefaultQuota).toBe(true);
+    expect(component.canEnableAcceleratorAccounting).toBe(false);
+    expect(component.acceleratorAccountingControl.disabled).toBe(true);
+    // Non-empty is what renders the info icon that carries the reason.
+    expect(component.acceleratorAccountingTooltip).toContain('cannot be enabled on a default project quota');
+  });
+
+  it('should never send the activation flag for a default project quota', async () => {
+    await setup(quotaWith(false, undefined, undefined, true));
+    const service = TestBed.inject(QuotaService);
+
+    // Bypasses the disabled control the way a stale template binding would.
+    component.acceleratorAccountingControl.setValue(true);
+    component.quotaGroup.controls.cpu.setValue(updatedCpuLimit);
+
+    const updateSpy = jest.spyOn(service, 'updateQuota');
+    component.getObservable().subscribe();
+
+    const payload = updateSpy.mock.calls[updateSpy.mock.calls.length - 1][1];
+    expect('enableAcceleratorAccounting' in payload).toBe(false);
   });
 
   it('should freeze the limits while accounting is not ready', async () => {

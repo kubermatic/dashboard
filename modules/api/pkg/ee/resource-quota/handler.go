@@ -969,6 +969,10 @@ func applyAcceleratorAccounting(body apiv2.Quota, originalResourceQuota, newReso
 		return nil
 	}
 
+	if isDefaultProjectResourceQuota(originalResourceQuota) {
+		return utilerrors.NewBadRequest("accelerator quota cannot be enabled on a default project quota")
+	}
+
 	if len(newResourceQuota.Spec.Quota.Accelerators) > 0 {
 		return utilerrors.NewBadRequest("accelerator limits must be empty when enabling accelerator accounting; enable accounting first, then configure accelerator limits")
 	}
@@ -979,6 +983,10 @@ func applyAcceleratorAccounting(body apiv2.Quota, originalResourceQuota, newReso
 	newResourceQuota.Annotations[resources.AcceleratorAccountingEnabledAnnotation] = resources.AcceleratorAccountingEnabledAnnotationValue
 
 	return nil
+}
+
+func isDefaultProjectResourceQuota(resourceQuota *kubermaticv1.ResourceQuota) bool {
+	return resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true"
 }
 
 // isAcceleratorAccountingEnabled reports whether accelerator accounting has been activated for the
@@ -1002,9 +1010,7 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}
 
-	if resourceQuota.Labels != nil && resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true" {
-		rq.IsDefault = true
-	}
+	rq.IsDefault = isDefaultProjectResourceQuota(resourceQuota)
 
 	return rq
 }

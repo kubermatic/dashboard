@@ -129,9 +129,31 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     return !!this.editQuota?.acceleratorAccountingEnabled;
   }
 
+  get isDefaultQuota(): boolean {
+    return !!this.editQuota?.isDefault;
+  }
+
   // Activation is irreversible, so the checkbox is only actionable while accounting is still off.
   get canEnableAcceleratorAccounting(): boolean {
-    return this.hasAcceleratorQuotaFeature && !!this.editQuota && !this.isAcceleratorAccountingEnabled;
+    return (
+      this.hasAcceleratorQuotaFeature &&
+      !!this.editQuota &&
+      !this.isAcceleratorAccountingEnabled &&
+      !this.isDefaultQuota
+    );
+  }
+
+  get acceleratorAccountingTooltip(): string {
+    if (!this.editQuota) {
+      return 'Accelerator quota can be enabled after the project quota has been created.';
+    }
+    if (this.isAcceleratorAccountingEnabled) {
+      return 'Accelerator quota is enabled and cannot be turned off again.';
+    }
+    if (this.isDefaultQuota) {
+      return 'Accelerator quota cannot be enabled on a default project quota, Update the quota values for this project first to make it project-specific.';
+    }
+    return '';
   }
 
   get isAcceleratorAccountingReady(): boolean {
