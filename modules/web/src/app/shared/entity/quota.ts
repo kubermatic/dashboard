@@ -79,6 +79,7 @@ export class Quota {
 export class QuotaDetails extends Quota {
   name: string;
   subjectHumanReadableName?: string;
+  isDefault?: boolean;
   status: QuotaStatus;
   // Whether accelerator accounting has been activated. Activation is irreversible and is a
   // precondition for setting any accelerator limits.

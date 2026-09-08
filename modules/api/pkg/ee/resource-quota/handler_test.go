@@ -517,7 +517,9 @@ func TestPutResourceQuotaAcceleratorAccounting(t *testing.T) {
 		// alreadyEnabled seeds the quota with the accounting annotation already present.
 		alreadyEnabled bool
 		// withLimits seeds the quota with existing accelerator limits.
-		withLimits     bool
+		withLimits bool
+		// isDefault seeds the quota with the default project quota label.
+		isDefault      bool
 		body           string
 		expectedStatus int
 		// expectEnabled is the annotation state expected after a successful request.
@@ -570,6 +572,19 @@ func TestPutResourceQuotaAcceleratorAccounting(t *testing.T) {
 			body:           `{"cpu": 10, "enableAcceleratorAccounting": true}`,
 			expectedStatus: http.StatusBadRequest,
 		},
+		{
+			// Activation is irreversible, so a quota still derived from the default project quota
+			// setting has to be turned into a project-specific one first.
+			name:           "enabling on a default project quota is rejected",
+			isDefault:      true,
+			body:           `{"cpu": 10, "enableAcceleratorAccounting": true}`,
+			expectedStatus: http.StatusBadRequest,
+		},
+		{
+			name:      "editing a default project quota without activation is allowed",
+			isDefault: true,
+			body:      `{"cpu": 10}`,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -579,6 +594,9 @@ func TestPutResourceQuotaAcceleratorAccounting(t *testing.T) {
 			resourceQuota := genDefaultResourceQuota()
 			if tc.withLimits {
 				resourceQuota.Spec.Quota.Accelerators = acceleratorLimits
+			}
+			if tc.isDefault {
+				resourceQuota.Labels[resourcequota.DefaultProjectResourceQuotaLabel] = "true"
 			}
 			if tc.alreadyEnabled {
 				resourceQuota.Annotations = map[string]string{

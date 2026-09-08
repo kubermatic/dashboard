@@ -97,31 +97,28 @@ END OF TERMS AND CONDITIONS
     <div fxLayout="column"
          fxLayoutGap="10px">
       <mat-card-header class="km-no-padding">
-        <mat-card-title>
-          Accelerators
-          <i class="km-icon-info km-pointer"
-             matTooltip="Accelerator must match the exact resource name reported by the provider (e.g. nvidia.com/GA100_A30). A limit of 0 explicitly denies that resource; a resource with no row is unconstrained."></i>
-        </mat-card-title>
+        <mat-card-title>Accelerators</mat-card-title>
       </mat-card-header>
 
-      @if (editQuota) {
-      <mat-checkbox [formControl]="acceleratorAccountingControl"
-                    [matTooltip]="isAcceleratorAccountingEnabled ? 'Accelerator quota is enabled and cannot be turned off again.' : ''">
-        Enable Accelerator Quota
-      </mat-checkbox>
-      }
+      <div fxLayout="row"
+           fxLayoutGap="8px"
+           fxLayoutAlign=" center">
+        <mat-checkbox [formControl]="acceleratorAccountingControl">
+          Enable Accelerator Quota
+        </mat-checkbox>
+        @if (acceleratorAccountingTooltip) {
+        <i class="km-icon-info km-pointer"
+           [matTooltip]="acceleratorAccountingTooltip"></i>
+        }
+      </div>
 
-      @if (!editQuota) {
-      <mat-hint class="km-quota-accelerator-hint">
-        Accelerator quota can be enabled after the project quota has been created.
-      </mat-hint>
-      } @else if (!isAcceleratorAccountingEnabled) {
-      <mat-hint class="km-quota-accelerator-hint">
+      @if (canEnableAcceleratorAccounting) {
+      <mat-hint>
         Enable accelerator quota to start accounting. This cannot be undone, and the project quota can no longer be
         deleted afterwards.
       </mat-hint>
-      } @else if (!isAcceleratorAccountingReady) {
-      <mat-hint class="km-quota-accelerator-hint">
+      } @else if (isAcceleratorAccountingEnabled && !isAcceleratorAccountingReady) {
+      <mat-hint>
         Accelerator limits can be set once accelerator accounting is active. Existing limits can still be removed.
       </mat-hint>
       }
@@ -166,6 +163,12 @@ END OF TERMS AND CONDITIONS
              aria-hidden="true"></i>
         </button>
       </div>
+      }
+
+      @if (canEditAccelerators) {
+      <mat-hint class="km-quota-accelerator-name-hint">
+        Accelerator must match the exact resource name reported by the provider (e.g. nvidia.com/GA100_A30).
+      </mat-hint>
       }
     </div>
     }
