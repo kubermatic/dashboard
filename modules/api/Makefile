@@ -1,6 +1,6 @@
 SHELL = /bin/bash -eu -o pipefail
 export KUBERMATIC_EDITION ?= ee
-KUBERMATIC_VERSION?=vv2.31.0
+KUBERMATIC_VERSION?=v2.31.1
 KKP_REVISION ?= main
 DOCKER_REPO ?= quay.io/kubermatic
 REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})

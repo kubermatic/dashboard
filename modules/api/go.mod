@@ -69,10 +69,10 @@ require (
 	google.golang.org/api v0.283.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.31.1-0.20260821121129-b4d5be17f5d7
-	k8c.io/kubermatic/v2 v2.31.1-0.20260821121129-b4d5be17f5d7
-	k8c.io/machine-controller/sdk v1.66.2
-	k8c.io/operating-system-manager v1.11.3
+	k8c.io/kubermatic/sdk/v2 v2.31.1-0.20260909120732-695f087fe8c1
+	k8c.io/kubermatic/v2 v2.31.1-0.20260909120732-695f087fe8c1
+	k8c.io/machine-controller/sdk v1.66.3
+	k8c.io/operating-system-manager v1.11.4
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.36.3
 	k8s.io/apiextensions-apiserver v0.36.2
@@ -83,7 +83,7 @@ require (
 	k8s.io/klog/v2 v2.140.0
 	k8s.io/kubectl v0.36.2
 	k8s.io/metrics v0.36.2
-	k8s.io/utils v0.0.0-20260507154919-ff6756f316d2
+	k8s.io/utils v0.0.0-20260707023825-cf1189d6abe3
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
 	sigs.k8s.io/controller-runtime v0.24.1
@@ -403,7 +403,7 @@ require (
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
-	google.golang.org/grpc v1.83.0 // indirect
+	google.golang.org/grpc v1.83.1 // indirect
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
