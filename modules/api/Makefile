@@ -121,6 +121,7 @@ update-kkp: ## Override the revision with KKP_REVISION=<branch|tag|commit-sha>.
 	go get -v k8c.io/kubermatic/v2@$(KKP_REVISION)
 	go get -v k8c.io/kubermatic/sdk/v2@$(KKP_REVISION)
 	$(MAKE) update-codegen
+	go mod tidy
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
