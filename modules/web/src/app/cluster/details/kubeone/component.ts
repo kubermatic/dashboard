@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {View} from '@app/shared/entity/common';
@@ -37,6 +37,7 @@ import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
   selector: 'km-kubeone-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {

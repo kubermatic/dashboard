@@ -21,6 +21,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewEncapsulation,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -76,6 +77,7 @@ const DEFAULT_EVENT_RATE_LIMIT_CONFIG: EventRateLimitConfigItem = {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnChanges, OnDestroy {

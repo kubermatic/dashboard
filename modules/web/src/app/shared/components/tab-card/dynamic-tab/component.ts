@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
+import {Component, Input, TemplateRef, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
   selector: 'km-dynamic-tab',
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DynamicTabComponent {

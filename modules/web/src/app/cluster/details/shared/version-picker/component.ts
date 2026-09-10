@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
@@ -26,6 +26,7 @@ import {VersionChangeDialogComponent} from '../version-change-dialog/component';
   selector: 'km-version-picker',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class VersionPickerComponent implements OnInit, OnChanges {

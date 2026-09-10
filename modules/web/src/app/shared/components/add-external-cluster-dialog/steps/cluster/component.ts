@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, TemplateRef, ChangeDetectionStrategy} from '@angular/core';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@core/services/external-cluster';
@@ -23,6 +23,7 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
   selector: 'km-external-cluster-cluster-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterStepComponent implements OnInit, OnDestroy {

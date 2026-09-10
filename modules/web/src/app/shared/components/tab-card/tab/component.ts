@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, TemplateRef, ViewChild, ContentChild} from '@angular/core';
+import {Component, Input, TemplateRef, ViewChild, ContentChild, ChangeDetectionStrategy} from '@angular/core';
 import {TabLabelDirective} from './label.directive';
 
 @Component({
   selector: 'km-tab',
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TabComponent {

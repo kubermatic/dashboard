@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {BrandingService} from '@core/services/branding';
 import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
@@ -32,6 +32,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   selector: 'km-user-settings',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {

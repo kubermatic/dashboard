@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, TemplateRef, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
@@ -31,6 +31,7 @@ export class ClusterFromTemplateDialogData {
 @Component({
   selector: 'km-cluster-from-template-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {

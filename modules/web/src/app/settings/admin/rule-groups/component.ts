@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -35,6 +35,7 @@ import {AdminRuleGroupDialog} from './rule-group-dialog/component';
   selector: 'km-admin-settings-rule-groups',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDestroy {

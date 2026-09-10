@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Project, ProjectStatus} from '@shared/entity/project';
@@ -58,6 +58,7 @@ import {FeatureGateService} from '@app/core/services/feature-gate';
   selector: 'km-project-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {

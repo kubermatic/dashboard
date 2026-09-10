@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {StepRegistry} from '@app/kubeone-wizard/config';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
@@ -40,6 +40,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneCredentialsBasicComponent extends BaseFormValidator implements OnInit {

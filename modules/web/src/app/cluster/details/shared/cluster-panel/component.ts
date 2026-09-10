@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -23,6 +23,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
   selector: 'km-cluster-panel',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterPanelComponent {

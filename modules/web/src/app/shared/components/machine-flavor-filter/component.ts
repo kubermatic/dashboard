@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl, Validators} from '@angular/forms';
 import {MachineFlavorFilter} from '@shared/entity/datacenter';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -43,6 +52,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MachineFlavorFilterComponent extends BaseFormValidator implements OnInit, OnDestroy {

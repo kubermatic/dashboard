@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ColorSchemeService} from '@app/dynamic/enterprise/theming/services/color-scheme';
 import {ThemeManagerService} from '@app/dynamic/enterprise/theming/services/manager';
 import {ThemeService} from '@app/dynamic/enterprise/theming/services/theme';
@@ -33,6 +33,7 @@ import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 @Component({
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StylePickerComponent implements OnInit {

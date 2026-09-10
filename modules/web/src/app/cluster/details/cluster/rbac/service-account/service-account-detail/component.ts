@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {SimpleClusterBinding} from '@shared/entity/rbac';
 import {Subject} from 'rxjs';
@@ -28,6 +37,7 @@ enum Column {
   selector: 'km-rbac-service-account-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RBACServiceAccountDetailsComponent implements OnChanges, OnDestroy {

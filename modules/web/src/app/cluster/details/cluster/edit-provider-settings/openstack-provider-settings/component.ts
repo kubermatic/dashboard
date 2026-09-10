@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CredentialsType} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterService} from '@core/services/cluster';
@@ -36,6 +36,7 @@ enum Control {
   selector: 'km-openstack-provider-settings',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {

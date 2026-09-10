@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
@@ -48,6 +48,7 @@ export enum KubeletVersionState {
   selector: 'km-kubeone-machine-deployment-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class KubeOneMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {

@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'km-search-field',
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SearchFieldComponent implements OnInit, OnDestroy {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {StepRegistry} from '@app/wizard/config';
@@ -44,6 +44,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ApplicationsStepComponent extends StepBase implements OnInit, OnDestroy {

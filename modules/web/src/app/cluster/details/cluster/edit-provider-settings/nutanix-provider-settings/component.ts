@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
@@ -30,6 +30,7 @@ export enum Controls {
 @Component({
   selector: 'km-nutanix-provider-settings',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NutanixProviderSettingsComponent implements OnInit, OnDestroy {

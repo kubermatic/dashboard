@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
@@ -38,6 +38,7 @@ enum Controls {
 @Component({
   selector: 'km-add-snapshot-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddSnapshotDialogComponent implements OnInit, OnDestroy {

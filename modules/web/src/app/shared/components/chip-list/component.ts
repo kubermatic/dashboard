@@ -13,7 +13,17 @@
 // limitations under the License.
 
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
-import {Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -53,6 +63,7 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validator {

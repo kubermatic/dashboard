@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {DOCUMENT} from '@angular/common';
-import {Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -42,6 +42,7 @@ enum Column {
 @Component({
   selector: 'km-metering-legacy-reports-list',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MeteringLegacyReportListComponent implements OnInit, OnDestroy {

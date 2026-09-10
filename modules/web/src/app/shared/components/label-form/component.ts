@@ -23,6 +23,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -62,6 +63,7 @@ import {StaticLabel} from '@app/shared/entity/settings';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {

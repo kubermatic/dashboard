@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
@@ -94,6 +102,7 @@ import {
   selector: 'km-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {

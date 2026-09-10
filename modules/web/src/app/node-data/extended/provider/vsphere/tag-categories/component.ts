@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -66,6 +76,7 @@ enum TagState {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class VSphereTagsComponent extends BaseFormValidator implements OnInit, OnDestroy {

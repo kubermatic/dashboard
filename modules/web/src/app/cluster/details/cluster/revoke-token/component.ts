@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {MatDialogRef} from '@angular/material/dialog';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {Cluster, Token} from '@shared/entity/cluster';
@@ -29,6 +29,7 @@ import {forkJoin, Observable} from 'rxjs';
   selector: 'km-revoke-token',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RevokeTokenComponent implements OnInit {

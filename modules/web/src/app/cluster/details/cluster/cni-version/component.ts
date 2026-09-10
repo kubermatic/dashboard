@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Cluster} from '@shared/entity/cluster';
 import {CNIVersionDialog} from './cni-version-dialog/component';
@@ -22,6 +22,7 @@ import {coerce, lt} from 'semver';
   selector: 'km-cni-version',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CNIVersionComponent implements OnInit {

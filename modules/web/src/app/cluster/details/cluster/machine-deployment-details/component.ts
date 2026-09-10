@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {SettingsService} from '@app/core/services/settings';
@@ -47,6 +47,7 @@ import {
   selector: 'km-machine-deployment-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {

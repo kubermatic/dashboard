@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {AdminSettings} from '@shared/entity/settings';
@@ -26,6 +26,7 @@ import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
   selector: 'km-limits',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LimitsComponent implements OnInit, OnDestroy {

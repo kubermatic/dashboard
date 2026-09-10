@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {PolicyTemplate} from '@app/shared/entity/kyverno';
 import * as y from 'js-yaml';
@@ -30,6 +30,7 @@ export interface ViewTemplateDialogConfig {
 @Component({
   selector: 'km-view-template-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ViewTemplateDialogComponent implements OnInit {

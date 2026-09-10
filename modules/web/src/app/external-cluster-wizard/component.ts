@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
@@ -31,6 +31,7 @@ import {View} from '@app/shared/entity/common';
   selector: 'km-external-cluster-wizard',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {

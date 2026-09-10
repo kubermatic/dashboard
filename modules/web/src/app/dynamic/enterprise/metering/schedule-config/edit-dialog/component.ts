@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
@@ -47,6 +47,7 @@ enum Controls {
 @Component({
   selector: 'km-schedule-config-edit-dialog',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MeteringScheduleEditDialog implements OnInit, OnDestroy {

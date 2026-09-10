@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {DOCUMENT} from '@angular/common';
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
@@ -21,6 +21,7 @@ import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
 @Component({
   selector: 'km-api-docs',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ApiDocsComponent implements OnInit {
