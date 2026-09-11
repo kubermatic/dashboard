@@ -188,10 +188,10 @@ require (
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/cockroachdb/apd/v3 v3.2.1 // indirect
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
-	github.com/containerd/containerd/v2 v2.3.3 // indirect
+	github.com/containerd/containerd/v2 v2.3.5 // indirect
 	github.com/containerd/errdefs v1.0.0 // indirect
 	github.com/containerd/log v0.1.0 // indirect
-	github.com/containerd/platforms v1.0.0-rc.4 // indirect
+	github.com/containerd/platforms v1.0.0-rc.5 // indirect
 	github.com/containerd/ttrpc v1.2.8 // indirect
 	github.com/containerd/typeurl/v2 v2.2.3 // indirect
 	github.com/coreos/go-oidc/v3 v3.18.0 // indirect
@@ -414,7 +414,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8c.io/application-catalog-manager v0.2.0-rc.8.0.20260609180029-65b0942a0405 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.7.0 // indirect
-	k8s.io/component-base v0.36.2 // indirect
+	k8s.io/component-base v0.36.3 // indirect
 	k8s.io/gengo/v2 v2.0.0-20260408192533-25e2208e0dc3 // indirect
 	k8s.io/kube-aggregator v0.36.2 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
