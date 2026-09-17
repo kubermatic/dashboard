@@ -298,6 +298,13 @@ export class KubeVirtBasicNodeDataComponent
     return Object.keys(this._preferences?.preferences || {});
   }
 
+  get selectedInstanceTypeMemoryDisplay(): string {
+    if (!this.selectedInstanceTypeMemory) {
+      return '';
+    }
+    return KubeVirtInstanceType.getFormattedMemory(this.selectedInstanceTypeMemory);
+  }
+
   get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
     return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
   }
@@ -854,17 +861,12 @@ export class KubeVirtBasicNodeDataComponent
       return null;
     }
 
-    // Extract numeric values from memory (remove M suffix if present)
-    let memoryValue = memory;
-    if (typeof memory === 'string' && memory.endsWith('M')) {
-      memoryValue = memory.slice(0, -1);
-    }
-
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
         cpus: `${cpus}`,
-        memory: `${memoryValue}`,
+        // Instance types carry their own unit, custom resources are a bare number of mebibytes.
+        memory: `${memory}`,
         primaryDiskSize: `${diskSize}`,
       } as KubeVirtNodeSize,
     };

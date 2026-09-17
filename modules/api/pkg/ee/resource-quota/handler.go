@@ -558,7 +558,12 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	}
 	nc.WithCPUCount(cpus)
 
-	memory, err := resource.ParseQuantity(provider.KubevirtNodeSize.Memory + UnitMebi)
+	// Instance types carry their own unit, while custom resources are submitted as a bare number of mebibytes.
+	nodeMemory := provider.KubevirtNodeSize.Memory
+	if _, err := strconv.Atoi(nodeMemory); err == nil {
+		nodeMemory += UnitMebi
+	}
+	memory, err := resource.ParseQuantity(nodeMemory)
 	if err != nil {
 		return fmt.Errorf("error parsing kubevirt node memory %q to resource quantity: %w", provider.KubevirtNodeSize.Memory, err)
 	}
