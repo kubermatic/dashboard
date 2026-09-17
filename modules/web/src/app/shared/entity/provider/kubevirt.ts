@@ -14,6 +14,10 @@
 
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 
+const MEMORY_MULTIPLIERS: Record<string, number> = {Ki: 1024, Mi: 1048576, Gi: 1073741824, Ti: 1099511627776};
+const MAX_FRACTION_DIGITS = 2;
+const MEMORY_PATTERN = /^(\d+(?:\.\d+)?)(Ki|Mi|Gi|Ti)?$/;
+
 export class KubeVirtInstanceTypeList {
   instancetypes: Record<KubeVirtInstanceTypeCategory, KubeVirtInstanceType[]>;
 }
@@ -23,6 +27,23 @@ export class KubeVirtInstanceType {
   name: string;
   kind?: KubeVirtInstanceTypeKind;
   spec: string;
+
+  /**
+   * Formats a memory quantity as gigabytes, e.g. `8Gi` becomes `8 GB`.
+   * Returns the value unchanged when it carries no unit that can be converted.
+   */
+  static getFormattedMemory(memory: string): string {
+    const match = MEMORY_PATTERN.exec(`${memory}`.trim());
+    if (!match) {
+      return memory;
+    }
+
+    const [, amount, suffix] = match;
+    const bytes = parseFloat(amount) * (suffix ? MEMORY_MULTIPLIERS[suffix] : 1);
+
+    // Drop the trailing zeros a fixed precision would add, so `8Gi` reads as `8 GB`, not `8.00 GB`.
+    return `${parseFloat((bytes / MEMORY_MULTIPLIERS.Gi).toFixed(MAX_FRACTION_DIGITS))} GB`;
+  }
 }
 
 export class KubeVirtPreferenceList {

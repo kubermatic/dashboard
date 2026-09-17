@@ -40,7 +40,6 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/utils/ptr"
@@ -716,15 +715,6 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 				}
 				if filtered.Instancetypes[category] == nil {
 					filtered.Instancetypes[category] = make([]apiv2.VirtualMachineInstancetype, 0)
-				}
-
-				// Convert memory from BinarySI to DecimalSI.
-				spec.Memory.Guest = *resource.NewScaledQuantity(spec.Memory.Guest.ScaledValue(resource.Mega), resource.Mega)
-				specWithScaledMem, err := json.Marshal(spec)
-				if err != nil {
-					log.Logger.Errorf("skipping spec conversion, parsing failed:%v", spec)
-				} else {
-					instancetype.Spec = string(specWithScaledMem)
 				}
 
 				filtered.Instancetypes[category] = append(filtered.Instancetypes[category], instancetype)

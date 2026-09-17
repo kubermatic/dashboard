@@ -33,6 +33,28 @@ describe('KubeVirtInstanceType', () => {
   });
 });
 
+describe('KubeVirtInstanceType.getFormattedMemory', () => {
+  it('should format the units the API returns', () => {
+    expect(KubeVirtInstanceType.getFormattedMemory('8Gi')).toBe('8 GB');
+    expect(KubeVirtInstanceType.getFormattedMemory('16Gi')).toBe('16 GB');
+    expect(KubeVirtInstanceType.getFormattedMemory('32Gi')).toBe('32 GB');
+    expect(KubeVirtInstanceType.getFormattedMemory('4194304Ki')).toBe('4 GB');
+  });
+
+  it('should not round sub-gigabyte instance types', () => {
+    expect(KubeVirtInstanceType.getFormattedMemory('512Mi')).toBe('0.5 GB');
+    expect(KubeVirtInstanceType.getFormattedMemory('1536Mi')).toBe('1.5 GB');
+  });
+
+  it('should fall back to the raw value when it cannot be parsed', () => {
+    // The API used to rescale instance type memory to decimal SI; nothing should be shown as a
+    // gigabyte count unless it carries a unit this can actually convert.
+    expect(KubeVirtInstanceType.getFormattedMemory('8590M')).toBe('8590M');
+    expect(KubeVirtInstanceType.getFormattedMemory('unknown')).toBe('unknown');
+    expect(KubeVirtInstanceType.getFormattedMemory('')).toBe('');
+  });
+});
+
 describe('KubeVirtNodeInstanceType.getCategory', () => {
   it('should return Kubermatic for VirtualMachineInstancetype', () => {
     const instanceType = new KubeVirtNodeInstanceType();
