@@ -183,6 +183,15 @@ func GetAzureProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 		// https://github.com/kubermatic/kubermatic/issues/5013#issuecomment-580357280
 		AssignPublicIP: providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Azure.AssignPublicIP)},
 	}
+
+	if nodeSpec.Cloud.Azure.SecurityProfile != nil {
+		config.SecurityProfile = &azure.SecurityProfile{
+			SecurityType:      nodeSpec.Cloud.Azure.SecurityProfile.SecurityType,
+			SecureBootEnabled: nodeSpec.Cloud.Azure.SecurityProfile.SecureBootEnabled,
+			VTpmEnabled:       nodeSpec.Cloud.Azure.SecurityProfile.VTpmEnabled,
+		}
+	}
+
 	config.Tags = map[string]string{}
 	for key, value := range nodeSpec.Cloud.Azure.Tags {
 		config.Tags[key] = value
