@@ -993,6 +993,84 @@ func TestMapProviderNodeTmplToResourceDetailsAccelerators(t *testing.T) {
 	}
 }
 
+// Instance types reach the quota calculation carrying their own unit, while the custom resources
+// form submits a bare number of mebibytes. Both have to be counted as the byte amount the user
+// actually asked for, so that a quota check cannot reject a machine deployment that fits.
+func TestMapProviderNodeTmplToResourceDetailsKubevirtMemoryUnits(t *testing.T) {
+	t.Parallel()
+
+	const mebibyte int64 = 1024 * 1024
+	const gibibyte int64 = 1024 * mebibyte
+
+	testCases := []struct {
+		name          string
+		memory        string
+		replicas      int
+		expectedBytes int64
+		expectError   bool
+	}{
+		{
+			name:          "reads a bare number as mebibytes",
+			memory:        "3072",
+			replicas:      1,
+			expectedBytes: 3072 * mebibyte,
+		},
+		{
+			name:          "keeps the unit of an instance type",
+			memory:        "8Gi",
+			replicas:      1,
+			expectedBytes: 8 * gibibyte,
+		},
+		{
+			name:          "does not round a sub-gigabyte instance type",
+			memory:        "512Mi",
+			replicas:      1,
+			expectedBytes: 512 * mebibyte,
+		},
+		{
+			name:          "counts every replica",
+			memory:        "8Gi",
+			replicas:      3,
+			expectedBytes: 24 * gibibyte,
+		},
+		{
+			name:        "rejects a value that is neither a number nor a quantity",
+			memory:      "not-a-quantity",
+			replicas:    1,
+			expectError: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			nodeTemplate := resourcequota.ProviderNodeTemplate{
+				KubevirtNodeSize: &apiv1.KubevirtNodeSize{
+					CPUs:            "2",
+					Memory:          tc.memory,
+					PrimaryDiskSize: "10",
+				},
+			}
+
+			got, err := resourcequota.MapProviderNodeTmplToResourceDetails(nodeTemplate, tc.replicas)
+			if tc.expectError {
+				if err == nil {
+					t.Fatalf("expected memory %q to be rejected, got no error", tc.memory)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("failed to map node template: %v", err)
+			}
+
+			if got.Memory.Value() != tc.expectedBytes {
+				t.Errorf("memory %q was counted as %d bytes, expected %d", tc.memory, got.Memory.Value(), tc.expectedBytes)
+			}
+		})
+	}
+}
+
 func TestCalculateResourceQuotaUpdate(t *testing.T) {
 	t.Parallel()
 	testCases := []struct {
