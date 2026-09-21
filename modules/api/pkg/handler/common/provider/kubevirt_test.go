@@ -68,10 +68,10 @@ func Test_filterInstancetypes(t *testing.T) {
 				MaxRAM: 5,
 			},
 			want: newInstancetypeList().
-				addInstanceType(apiv2.InstancetypeCustom, 2, "4295M").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4295M"). // ok
-				addInstanceType(apiv2.InstancetypeCustom, 4, "4295M").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4295M"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 2, "4Gi").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4Gi"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 4, "4Gi").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4Gi"). // ok
 				toApiWithoutError(),
 		},
 		{
@@ -121,10 +121,10 @@ func Test_filterInstancetypes(t *testing.T) {
 				MaxRAM: 5,
 			},
 			want: newInstancetypeList().
-				addInstanceType(apiv2.InstancetypeCustom, 2, "4295M").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4295M"). // ok
-				addInstanceType(apiv2.InstancetypeCustom, 4, "4295M").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4295M"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 2, "4Gi").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4Gi"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 4, "4Gi").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4Gi"). // ok
 				toApiWithoutError(),
 		},
 		{
@@ -145,7 +145,7 @@ func Test_filterInstancetypes(t *testing.T) {
 			want: &apiv2.VirtualMachineInstancetypeList{
 				Instancetypes: map[apiv2.VirtualMachineInstancetypeCategory][]apiv2.VirtualMachineInstancetype{
 					apiv2.InstancetypeCustom: {
-						mustMarshalInstancetype("standard-gpu-2", mustScaleMemory(getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard"))),
+						mustMarshalInstancetype("standard-gpu-2", getGPUInstancetypeSpec(2, "8Gi", "A100", "nv-a100-standard")),
 					},
 				},
 			},
@@ -250,13 +250,6 @@ func mustMarshalInstancetype(name string, spec kvinstancetypev1beta1.VirtualMach
 		panic(err)
 	}
 	return apiv2.VirtualMachineInstancetype{Name: name, Spec: string(b)}
-}
-
-// mustScaleMemory returns a copy of spec with Memory.Guest converted from BinarySI to
-// DecimalSI (Mega), matching what filterInstancetypes does before returning.
-func mustScaleMemory(spec kvinstancetypev1beta1.VirtualMachineInstancetypeSpec) kvinstancetypev1beta1.VirtualMachineInstancetypeSpec {
-	spec.Memory.Guest = *resource.NewScaledQuantity(spec.Memory.Guest.ScaledValue(resource.Mega), resource.Mega)
-	return spec
 }
 
 // newFakeClient builds a controller-runtime fake client with the KubeVirt
