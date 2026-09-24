@@ -26,6 +26,10 @@ const LABELS: StaticLabel[] = [
   {key: 'team', values: ['web'], default: true, protected: true},
 ];
 
+const INITIAL_LABELS_COUNT = 2;
+const EMPTY_ROW_COUNT = 1;
+const FILLED_ROW_COUNT = 1;
+
 describe('StaticLabelsFormComponent', () => {
   let fixture: ComponentFixture<StaticLabelsFormComponent>;
   let component: StaticLabelsFormComponent;
@@ -63,7 +67,7 @@ describe('StaticLabelsFormComponent', () => {
   it('should render the initial labels followed by exactly one empty row', () => {
     seed(LABELS);
 
-    expect(component.staticLabelArray.length).toBe(3);
+    expect(component.staticLabelArray.length).toBe(INITIAL_LABELS_COUNT + EMPTY_ROW_COUNT);
     expect(rowKeys()).toEqual(['env', 'team', '']);
   });
 
@@ -76,7 +80,7 @@ describe('StaticLabelsFormComponent', () => {
     expect(rowKeys()).toEqual(['env']);
 
     lastRow.get('values').setValue(['prod']);
-    expect(component.staticLabelArray.length).toBe(2);
+    expect(component.staticLabelArray.length).toBe(FILLED_ROW_COUNT + EMPTY_ROW_COUNT);
     expect(rowKeys()).toEqual(['env', '']);
   });
 
@@ -95,7 +99,7 @@ describe('StaticLabelsFormComponent', () => {
     component.staticLabels = [...LABELS];
     component.ngOnChanges({staticLabels: new SimpleChange(LABELS, component.staticLabels, false)});
 
-    expect(component.staticLabelArray.length).toBe(3);
+    expect(component.staticLabelArray.length).toBe(INITIAL_LABELS_COUNT + EMPTY_ROW_COUNT);
     expect(rowKeys()).toEqual(['env', 'team', '']);
   });
 });
