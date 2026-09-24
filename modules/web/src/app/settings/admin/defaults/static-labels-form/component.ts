@@ -138,7 +138,8 @@ export class StaticLabelsFormComponent implements OnInit, OnChanges, OnDestroy {
       [Controls.Default]: [{value: label?.protected || label?.default || false, disabled: label?.protected}],
     });
 
-    this.staticLabelArray.push(staticLabel);
+    // Push without emitting, otherwise the valueChanges subscriber appends an empty row after every seeded label.
+    this.staticLabelArray.push(staticLabel, {emitEvent: false});
   }
 
   private _updateLabelsObject(): void {
