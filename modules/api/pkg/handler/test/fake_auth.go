@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sync"
 
 	"github.com/gorilla/securecookie"
 	"golang.org/x/oauth2"
@@ -48,6 +49,9 @@ const (
 	IssuerClientSecret = "secret"
 	issuerRedirectURL  = "/api/v1/kubeconfig"
 )
+
+// fakeSecureCookie signs the OIDC cookies; the hash key must be non-empty, otherwise encoding fails.
+var fakeSecureCookie = securecookie.New([]byte("fake-secure-cookie-hash-key"), nil)
 
 var _ authtypes.OIDCIssuerVerifier = &IssuerVerifier{}
 var _ authtypes.TokenExtractorVerifier = &IssuerVerifier{}
@@ -86,6 +90,11 @@ type IssuerVerifier struct {
 	clientSecret string
 	redirectURI  string
 	provider     *OicdProvider
+
+	// codeChallenge holds the PKCE challenge of the last AuthCodeURL call,
+	// so that Exchange can verify the code_verifier like a real provider.
+	lock          sync.Mutex
+	codeChallenge string
 }
 
 // Extractor knows how to extract the ID token from the request.
@@ -102,13 +111,21 @@ func (o *IssuerVerifier) GetRedirectURI(path string) (string, error) {
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page.
-func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string {
+func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string {
 	oauth2Config := o.oauth2Config(overwriteRedirectURI, scopes...)
-	options := oauth2.AccessTypeOnline
+	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if !offlineAsScope {
-		options = oauth2.AccessTypeOffline
+		opts = []oauth2.AuthCodeOption{oauth2.AccessTypeOffline}
 	}
-	return oauth2Config.AuthCodeURL(state, options)
+
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.codeChallenge = ""
+	if codeVerifier != "" {
+		o.codeChallenge = oauth2.S256ChallengeFromVerifier(codeVerifier)
+		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
+	}
+	return oauth2Config.AuthCodeURL(state, opts...)
 }
 
 // oauth2Config return a oauth2Config.
@@ -131,6 +148,18 @@ func (o *IssuerVerifier) oauth2Config(overwriteRedirectURI string, scopes ...str
 func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (authtypes.OIDCToken, error) {
 	if code != AuthorizationCode {
 		return authtypes.OIDCToken{}, errors.New("incorrect code")
+	}
+
+	// Enforce PKCE like an OIDC provider configured with "PKCE Code Challenge Method: S256".
+	var verifier string
+	if len(codeVerifier) > 0 {
+		verifier = codeVerifier[0]
+	}
+	o.lock.Lock()
+	challenge := o.codeChallenge
+	o.lock.Unlock()
+	if verifier == "" || oauth2.S256ChallengeFromVerifier(verifier) != challenge {
+		return authtypes.OIDCToken{}, errors.New("invalid PKCE code_verifier")
 	}
 
 	return authtypes.OIDCToken{
@@ -176,6 +205,6 @@ func (o *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 		URL:          o.issuer,
 		ClientID:     o.clientID,
 		ClientSecret: o.clientSecret,
-		SecureCookie: securecookie.New([]byte(""), nil),
+		SecureCookie: fakeSecureCookie,
 	}
 }

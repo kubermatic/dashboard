@@ -47,7 +47,11 @@ type OIDCIssuer interface {
 	// always provide a non-zero string and validate that it matches the
 	// the state query parameter on your redirect callback.
 	// See http://tools.ietf.org/html/rfc6749#section-10.12 for more info.
-	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string
+	//
+	// codeVerifier is the PKCE verifier; when non-empty, its S256 challenge is
+	// added to the URL and the same verifier must be passed to Exchange.
+	// See https://tools.ietf.org/html/rfc7636 for more info.
+	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string
 
 	// Exchange converts an authorization code into a token.
 	// An optional codeVerifier can be passed for PKCE support.

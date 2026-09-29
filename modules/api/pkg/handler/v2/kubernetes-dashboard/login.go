@@ -28,6 +28,7 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
+	"golang.org/x/oauth2"
 
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -79,7 +80,7 @@ func (l *loginHandler) encodeInitialResponse(_ context.Context, w http.ResponseW
 	loginResponse := response.(*LoginResponse)
 
 	encodedNonceCookie, err := l.getEncodedNonceCookie(
-		loginResponse.nonce,
+		commonv2.OIDCCookie{Nonce: loginResponse.nonce, CodeVerifier: loginResponse.codeVerifier},
 		loginResponse.cookieSecureMode,
 		nonceCookieMaxAge,
 		loginResponse.secureCookie)
@@ -144,17 +145,20 @@ func (l *loginHandler) redirect(ctx context.Context, request interface{}) (respo
 		return nil, err
 	}
 
+	codeVerifier := oauth2.GenerateVerifier()
+
 	return &LoginResponse{
 		Request:          loginRequest.Request,
-		authURL:          oidcIssuerVerifier.AuthCodeURL(state, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...),
+		authURL:          oidcIssuerVerifier.AuthCodeURL(state, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, codeVerifier, scopes...),
 		nonce:            nonce,
+		codeVerifier:     codeVerifier,
 		cookieSecureMode: oidcIssuerVerifier.OIDCConfig().CookieSecureMode,
 		secureCookie:     oidcIssuerVerifier.OIDCConfig().SecureCookie,
 	}, nil
 }
 
-func (l *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) (*http.Cookie, error) {
-	encoded, err := secCookie.Encode(nonceCookieName, nonce)
+func (l *loginHandler) getEncodedNonceCookie(value commonv2.OIDCCookie, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) (*http.Cookie, error) {
+	encoded, err := secCookie.Encode(nonceCookieName, value)
 	if err != nil {
 		return nil, fmt.Errorf("the encode cookie failed: %w", err)
 	}
@@ -176,7 +180,7 @@ func (l *loginHandler) decodeOIDCCallbackRequest(_ context.Context, r *http.Requ
 func (l *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	callbackResponse := response.(*OIDCCallbackResponse)
 
-	cookie, err := l.getEncodedNonceCookie("", callbackResponse.cookieSecureMode, -1, callbackResponse.secureCookie)
+	cookie, err := l.getEncodedNonceCookie(commonv2.OIDCCookie{}, callbackResponse.cookieSecureMode, -1, callbackResponse.secureCookie)
 	if err != nil {
 		return err
 	}
@@ -222,12 +226,12 @@ func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (r
 
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
-	nonce, err := l.getDecodedNonce(oidcCallbackRequest.Request, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+	storedCookie, err := l.getDecodedNonceCookie(oidcCallbackRequest.Request, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 	if err != nil {
 		return nil, err
 	}
 
-	if state.Nonce != nonce {
+	if state.Nonce != storedCookie.Nonce {
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", state.Nonce)
 	}
 
@@ -237,7 +241,7 @@ func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (r
 		return nil, err
 	}
 
-	token, err := l.exchange(ctx, oidcCallbackRequest.Code, redirectURI)
+	token, err := l.exchange(ctx, oidcCallbackRequest.Code, redirectURI, storedCookie.CodeVerifier)
 	if err != nil {
 		return nil, err
 	}
@@ -252,10 +256,10 @@ func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (r
 	}, nil
 }
 
-func (l *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI string) (string, error) {
+func (l *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI, codeVerifier string) (string, error) {
 	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
-	oidcTokens, err := oidcProvider.Exchange(ctx, code, overwriteRedirectURI)
+	oidcTokens, err := oidcProvider.Exchange(ctx, code, overwriteRedirectURI, codeVerifier)
 
 	if err != nil {
 		return "", utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
@@ -278,14 +282,17 @@ func (l *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI 
 	return oidcTokens.IDToken, nil
 }
 
-func (l *loginHandler) getDecodedNonce(r *http.Request, secCookie *securecookie.SecureCookie) (nonce string, err error) {
+func (l *loginHandler) getDecodedNonceCookie(r *http.Request, secCookie *securecookie.SecureCookie) (commonv2.OIDCCookie, error) {
 	cookie, err := r.Cookie(nonceCookieName)
 	if err != nil {
-		return
+		return commonv2.OIDCCookie{}, utilerrors.NewBadRequest("cookie %q not set: %v", nonceCookieName, err)
 	}
 
-	err = secCookie.Decode(nonceCookieName, cookie.Value, &nonce)
-	return
+	var value commonv2.OIDCCookie
+	if err := secCookie.Decode(nonceCookieName, cookie.Value, &value); err != nil {
+		return commonv2.OIDCCookie{}, utilerrors.NewBadRequest("incorrect value of %q cookie: %v", nonceCookieName, err)
+	}
+	return value, nil
 }
 
 func (l *loginHandler) getProxyURI(projectID string, clusterID string, token string) string {

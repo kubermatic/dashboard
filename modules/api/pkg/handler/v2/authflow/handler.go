@@ -121,15 +121,13 @@ func (a *authHandler) loginHandler() http.Handler {
 		}
 
 		redirectURI := a.getCallbackURI(r)
-		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
+		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, codeVerifier, scopes...)
 		u, err := url.Parse(authURL)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to parse auth URL: %v", err), http.StatusInternalServerError)
 			return
 		}
 		q := u.Query()
-		q.Set("code_challenge", oauth2.S256ChallengeFromVerifier(codeVerifier))
-		q.Set("code_challenge_method", "S256")
 		q.Set("nonce", nonce)
 		u.RawQuery = q.Encode()
 

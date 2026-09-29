@@ -28,6 +28,7 @@ type LoginResponse struct {
 
 	authURL          string
 	nonce            string
+	codeVerifier     string
 	cookieSecureMode bool
 	secureCookie     *securecookie.SecureCookie
 }
