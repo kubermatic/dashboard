@@ -31,3 +31,21 @@ presubmits:
           env:
             - name: KUBERMATIC_EDITION
               value: ee
+
+  - name: pre-dashboard-chrome-headless-tag
+    run_if_changed: "^modules/web/containers/chrome-headless/"
+    # Released from main and release branches; changes need an unpublished tag.
+    branches:
+      - ^main$
+      - ^release/v2\..*$
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.25-node-22-kind-0.30-11
+          command:
+            - ./hack/verify-chrome-headless-tag.sh
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
