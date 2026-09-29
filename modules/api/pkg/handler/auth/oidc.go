@@ -152,13 +152,16 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 // always provide a non-zero string and validate that it matches the
 // the state query parameter on your redirect callback.
 // See http://tools.ietf.org/html/rfc6749#section-10.12 for more info.
-func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string {
+func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string {
 	oauth2Config := o.oauth2Config(overwriteRedirectURI, scopes...)
-	options := oauth2.AccessTypeOnline
+	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if !offlineAsScope {
-		options = oauth2.AccessTypeOffline
+		opts = []oauth2.AuthCodeOption{oauth2.AccessTypeOffline}
 	}
-	return oauth2Config.AuthCodeURL(state, options)
+	if codeVerifier != "" {
+		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
+	}
+	return oauth2Config.AuthCodeURL(state, opts...)
 }
 
 // Exchange converts an authorization code into a token.
@@ -169,7 +172,7 @@ func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI 
 
 	var opts []oauth2.AuthCodeOption
 	if len(codeVerifier) > 0 && codeVerifier[0] != "" {
-		opts = append(opts, oauth2.SetAuthURLParam("code_verifier", codeVerifier[0]))
+		opts = append(opts, oauth2.VerifierOption(codeVerifier[0]))
 	}
 
 	tokens, err := oauth2Config.Exchange(clientCtx, code, opts...)

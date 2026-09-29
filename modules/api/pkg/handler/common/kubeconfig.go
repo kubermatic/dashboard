@@ -29,6 +29,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/securecookie"
+	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -302,14 +303,14 @@ func CreateOIDCKubeconfigEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		storedCookie, err := getOIDCCookie(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 		if err != nil {
 			return nil, err
 		}
-		if req.decodedState.Nonce != cookieNonceValue {
+		if req.decodedState.Nonce != storedCookie.Nonce {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
-		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "")
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "", storedCookie.CodeVerifier)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -421,6 +422,7 @@ func CreateOIDCKubeconfigEndpoint(
 	// pass nonce
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
+	rsp.codeVerifier = oauth2.GenerateVerifier()
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
@@ -437,7 +439,7 @@ func CreateOIDCKubeconfigEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", rsp.codeVerifier, scopes...)
 
 	return rsp, nil
 }
@@ -466,14 +468,14 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		storedCookie, err := getOIDCCookie(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 		if err != nil {
 			return nil, err
 		}
-		if req.decodedState.Nonce != cookieNonceValue {
+		if req.decodedState.Nonce != storedCookie.Nonce {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
-		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI)
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI, storedCookie.CodeVerifier)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -573,6 +575,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	// pass nonce
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
+	rsp.codeVerifier = oauth2.GenerateVerifier()
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
@@ -588,7 +591,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, rsp.codeVerifier, scopes...)
 
 	return rsp, nil
 }
@@ -669,6 +672,15 @@ type OIDCState struct {
 	OIDCKubeLoginEnabled bool   `json:"oidc_kubelogin_enabled"`
 }
 
+// OIDCCookie holds data kept in a signed, HttpOnly cookie between the redirect to the
+// OIDC provider and its callback.
+type OIDCCookie struct {
+	// Nonce must match OIDCState.Nonce to prevent Cross-site Request Forgery attack.
+	Nonce string
+	// CodeVerifier is the PKCE verifier whose S256 challenge was sent to the OIDC provider.
+	CodeVerifier string
+}
+
 type createOIDCKubeconfigRsp struct {
 	// authCodeURL holds a URL to OpenID provider's consent page that asks for permissions for the required scopes explicitly.
 	authCodeURL string
@@ -678,6 +690,8 @@ type createOIDCKubeconfigRsp struct {
 	oidcKubeConfig *clientcmdapi.Config
 	// nonce holds an arbitrary number storied in cookie to prevent Cross-site Request Forgery attack.
 	nonce string
+	// codeVerifier holds the PKCE verifier stored in cookie alongside the nonce.
+	codeVerifier string
 	// cookie received only with HTTPS, never with HTTP.
 	secureCookieMode bool
 	// secure cookie
@@ -691,7 +705,7 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
 		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
+		err = setCookie(w, OIDCCookie{}, rsp.secureCookieMode, -1, rsp.secureCookie)
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
@@ -700,8 +714,8 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
-	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
+	// and set cookie with nonce and PKCE verifier
+	err = setCookie(w, OIDCCookie{Nonce: rsp.nonce, CodeVerifier: rsp.codeVerifier}, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -718,7 +732,7 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
 		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
+		err = setCookie(w, OIDCCookie{}, rsp.secureCookieMode, -1, rsp.secureCookie)
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
@@ -728,8 +742,8 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
-	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
+	// and set cookie with nonce and PKCE verifier
+	err = setCookie(w, OIDCCookie{Nonce: rsp.nonce, CodeVerifier: rsp.codeVerifier}, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -794,10 +808,10 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 	return req, nil
 }
 
-func getCookieNonce(cookie *http.Cookie, secCookie *securecookie.SecureCookie) (string, error) {
-	var value string
+func getOIDCCookie(cookie *http.Cookie, secCookie *securecookie.SecureCookie) (OIDCCookie, error) {
+	var value OIDCCookie
 	if err := secCookie.Decode(csrfCookieName, cookie.Value, &value); err != nil {
-		return "", utilerrors.NewBadRequest("incorrect value of %q cookie: %v", csrfCookieName, err)
+		return OIDCCookie{}, utilerrors.NewBadRequest("incorrect value of %q cookie: %v", csrfCookieName, err)
 	}
 	return value, nil
 }
@@ -819,9 +833,9 @@ func (r CreateOIDCKubeconfigReq) GetProjectID() string {
 	return r.ProjectID
 }
 
-// setCookie add cookie with random string value.
-func setCookie(w http.ResponseWriter, nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) error {
-	encoded, err := secCookie.Encode(csrfCookieName, nonce)
+// setCookie adds a signed cookie holding the nonce and PKCE verifier.
+func setCookie(w http.ResponseWriter, value OIDCCookie, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) error {
+	encoded, err := secCookie.Encode(csrfCookieName, value)
 	if err != nil {
 		return fmt.Errorf("the encode cookie failed: %w", err)
 	}

@@ -76,13 +76,17 @@ func (f *fakeVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 	}
 }
 
-func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI string, scopes ...string) string {
+func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifier string, scopes ...string) string {
 	v := url.Values{}
 	v.Set("client_id", "kubermaticIssuer")
 	v.Set("redirect_uri", redirectURI)
 	v.Set("response_type", "code")
 	v.Set("state", state)
 	v.Set("scope", strings.Join(scopes, " "))
+	if codeVerifier != "" {
+		v.Set("code_challenge", oauth2.S256ChallengeFromVerifier(codeVerifier))
+		v.Set("code_challenge_method", "S256")
+	}
 	return "https://dex.example.com/auth?" + v.Encode()
 }
 
