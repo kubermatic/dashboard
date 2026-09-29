@@ -14,16 +14,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v1.10.0
-
 set -euo pipefail
 
-cd $(dirname $0)
+cd $(dirname $0)/../../../..
+source hack/lib.sh
 
-# Ensure that you build for linux in apple silicon.
-if [[ $(uname -m) == 'arm64' ]]; then
-  export DOCKER_DEFAULT_PLATFORM=linux/amd64
+REPOSITORY=quay.io/kubermatic/chrome-headless
+# read the tag from metadata.yaml so it has a single source of truth;
+# the path is relative to the repo root because of the cd above
+METADATA_FILE=modules/web/containers/chrome-headless/metadata.yaml
+# take the value after the first "tag:" and strip whitespace and quotes
+VERSION="$(grep -E '^tag:' "$METADATA_FILE" | head -n1 | cut -d: -f2- | tr -d ' \t"')"
+
+if [ -z "$VERSION" ]; then
+  echodate "No tag found in $METADATA_FILE"
+  exit 1
 fi
 
-docker build --no-cache --pull -t quay.io/kubermatic/chrome-headless:${TAG} .
-docker push quay.io/kubermatic/chrome-headless:${TAG}
+SUFFIX=""
+ARCHITECTURES="${ARCHITECTURES:-linux/amd64}"
+IMAGE="$REPOSITORY:$VERSION$SUFFIX"
+MANIFEST="${MANIFEST:-$IMAGE}"
+
+# skip if the tag already exists in the registry; makes the postsubmit
+# idempotent so re-runs or re-merges of the same tag do not rebuild
+# retry so a transient registry error is not read as "tag missing"
+if retry 3 docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
+  echodate "Image $IMAGE already exists in the registry, skipping build."
+  exit 0
+fi
+
+docker buildx create --use
+
+echodate "Building $IMAGE for $ARCHITECTURES…"
+docker buildx build ./modules/web/containers/chrome-headless \
+  --platform "$ARCHITECTURES" \
+  --push \
+  --tag "$IMAGE"
+
+echodate "Successfully built and pushed image."
