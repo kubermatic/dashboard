@@ -51,7 +51,7 @@ export const HTTP_PROXY_URL_PATTERN_VALIDATOR = Validators.pattern(new RegExp(HT
 export const NO_PROXY_PATTERN = '^\\.?[a-zA-Z0-9._:-]+(\\/\\d{1,3})?$';
 
 export const CBSL_SYNC_PERIOD = Validators.pattern('^(0|([0-9]{1,2}m)?[0-9]{1,2}s)$');
-export const Cluster_BACKUP_EXPIRES_IN = Validators.pattern('^(0|[0-9]{1,2}h?[0-9]{1,2}m?[0-9]{1,2}s)$');
+export const Cluster_BACKUP_EXPIRES_IN = Validators.pattern('^(0|([0-9]+h)?([0-9]+m)?([0-9]+s)?)$');
 
 // String shouldn't start with ( or [ or } or ) or |
 export const KUBERNETES_ANNOTATION_VALUE_PATTERN = '^[^(})|\\[]*';
