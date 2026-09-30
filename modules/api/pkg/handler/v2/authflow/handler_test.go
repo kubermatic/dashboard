@@ -32,6 +32,7 @@ import (
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -76,7 +77,7 @@ func (f *fakeVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 	}
 }
 
-func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifier string, scopes ...string) string {
+func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifier, nonce string, scopes ...string) string {
 	v := url.Values{}
 	v.Set("client_id", "kubermaticIssuer")
 	v.Set("redirect_uri", redirectURI)
@@ -86,6 +87,9 @@ func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifi
 	if codeVerifier != "" {
 		v.Set("code_challenge", oauth2.S256ChallengeFromVerifier(codeVerifier))
 		v.Set("code_challenge_method", "S256")
+	}
+	if nonce != "" {
+		v.Set("nonce", nonce)
 	}
 	return "https://dex.example.com/auth?" + v.Encode()
 }
@@ -253,7 +257,7 @@ func TestLoginHandler(t *testing.T) {
 	}
 
 	// 3. The cookie payload must contain a state, nonce, and PKCE verifier.
-	var stored oauthStateCookie
+	var stored handlerauth.OAuthState
 	if err := sc.Decode(oauthStateCookieName, stateCookie.Value, &stored); err != nil {
 		t.Fatalf("failed to decode state cookie: %v", err)
 	}
@@ -606,7 +610,7 @@ func TestRefreshHandler(t *testing.T) {
 
 // encodeStateCookie produces a signed _oauth_state cookie using the same
 // SecureCookie the handler will use to decode it.
-func encodeStateCookie(t *testing.T, sc *securecookie.SecureCookie, state oauthStateCookie) *http.Cookie {
+func encodeStateCookie(t *testing.T, sc *securecookie.SecureCookie, state handlerauth.OAuthState) *http.Cookie {
 	t.Helper()
 	encoded, err := sc.Encode(oauthStateCookieName, state)
 	if err != nil {
@@ -645,7 +649,7 @@ func TestCallbackHandler(t *testing.T) {
 		}
 		h := newTestHandler(verifier, userProvider, nil)
 
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc", CodeVerifier: "verifier-xyz"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc", CodeVerifier: "verifier-xyz"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 
 		if rec.Code != http.StatusSeeOther {
@@ -693,10 +697,13 @@ func TestCallbackHandler(t *testing.T) {
 	t.Run("state mismatch returns 400", func(t *testing.T) {
 		sc := newTestSecureCookie()
 		h := newTestHandler(&fakeVerifier{secureCookie: sc}, nil, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "stored-state", Nonce: "n"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "stored-state", Nonce: "n"})
 		rec := runCallback(h, cookie, "state=different-state&code=fakeCode")
 		if rec.Code != http.StatusBadRequest {
 			t.Fatalf("expected 400, got %d", rec.Code)
+		}
+		if !strings.Contains(rec.Body.String(), "state mismatch") {
+			t.Fatalf("expected state mismatch error, got %q", rec.Body.String())
 		}
 	})
 
@@ -708,7 +715,7 @@ func TestCallbackHandler(t *testing.T) {
 			verifyClaims:  authtypes.TokenClaims{Email: "john@acme.com", Nonce: "wrong-nonce", Expiry: futureExpiry},
 		}
 		h := newTestHandler(verifier, nil, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 		if rec.Code != http.StatusBadRequest {
 			t.Fatalf("expected 400, got %d (body: %q)", rec.Code, rec.Body.String())
@@ -719,7 +726,7 @@ func TestCallbackHandler(t *testing.T) {
 		sc := newTestSecureCookie()
 		verifier := &fakeVerifier{secureCookie: sc, exchangeErr: errors.New("exchange failed")}
 		h := newTestHandler(verifier, nil, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 		if rec.Code != http.StatusInternalServerError {
 			t.Fatalf("expected 500, got %d", rec.Code)
@@ -734,7 +741,7 @@ func TestCallbackHandler(t *testing.T) {
 			verifyClaims:  authtypes.TokenClaims{Nonce: "nonce-abc", Expiry: futureExpiry}, // no email
 		}
 		h := newTestHandler(verifier, nil, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 		if rec.Code != http.StatusBadRequest {
 			t.Fatalf("expected 400, got %d", rec.Code)
@@ -749,7 +756,7 @@ func TestCallbackHandler(t *testing.T) {
 			verifyClaims:  authtypes.TokenClaims{Email: "john@acme.com", Nonce: "nonce-abc", Expiry: pastExpiry},
 		}
 		h := newTestHandler(verifier, nil, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 		if rec.Code != http.StatusInternalServerError {
 			t.Fatalf("expected 500, got %d", rec.Code)
@@ -770,7 +777,7 @@ func TestCallbackHandler(t *testing.T) {
 			},
 		}
 		h := newTestHandler(verifier, userProvider, nil)
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 
 		if rec.Code != http.StatusSeeOther {
@@ -806,7 +813,7 @@ func TestCallbackHandler(t *testing.T) {
 		}
 		h := newTestHandler(verifier, userProvider, nil)
 
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 
 		if rec.Code != http.StatusSeeOther {
@@ -829,7 +836,7 @@ func TestCallbackHandler(t *testing.T) {
 		userProvider := &fakeUserProvider{userByEmailErr: errors.New("lookup failed")}
 		h := newTestHandler(verifier, userProvider, nil)
 
-		cookie := encodeStateCookie(t, sc, oauthStateCookie{State: "state-123", Nonce: "nonce-abc"})
+		cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{State: "state-123", Nonce: "nonce-abc"})
 		rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
 
 		if rec.Code != http.StatusSeeOther {

@@ -51,7 +51,11 @@ type OIDCIssuer interface {
 	// codeVerifier is the PKCE verifier; when non-empty, its S256 challenge is
 	// added to the URL and the same verifier must be passed to Exchange.
 	// See https://tools.ietf.org/html/rfc7636 for more info.
-	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string
+	//
+	// nonce, when non-empty, is sent to the provider which embeds it in the ID token;
+	// callers must check that the nonce claim matches it.
+	// See https://openid.net/specs/openid-connect-core-1_0.html#IDToken for more info.
+	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier, nonce string, scopes ...string) string
 
 	// Exchange converts an authorization code into a token.
 	// An optional codeVerifier can be passed for PKCE support.

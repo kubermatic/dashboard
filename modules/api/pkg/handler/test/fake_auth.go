@@ -91,10 +91,21 @@ type IssuerVerifier struct {
 	redirectURI  string
 	provider     *OicdProvider
 
-	// codeChallenge holds the PKCE challenge of the last AuthCodeURL call,
-	// so that Exchange can verify the code_verifier like a real provider.
+	// codeChallenge and nonce hold the values of the last AuthCodeURL call, so that
+	// Exchange can verify the code_verifier and Verify can return the nonce claim like a real provider.
 	lock          sync.Mutex
 	codeChallenge string
+	nonce         string
+	// nonceClaimOverride, when set, is returned as nonce claim instead of the requested nonce.
+	nonceClaimOverride string
+}
+
+// SetNonceClaim makes Verify return the given nonce claim, simulating an ID token
+// that was issued for a different authentication request.
+func (o *IssuerVerifier) SetNonceClaim(nonce string) {
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.nonceClaimOverride = nonce
 }
 
 // Extractor knows how to extract the ID token from the request.
@@ -111,7 +122,7 @@ func (o *IssuerVerifier) GetRedirectURI(path string) (string, error) {
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page.
-func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string {
+func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier, nonce string, scopes ...string) string {
 	oauth2Config := o.oauth2Config(overwriteRedirectURI, scopes...)
 	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if !offlineAsScope {
@@ -124,6 +135,10 @@ func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwrit
 	if codeVerifier != "" {
 		o.codeChallenge = oauth2.S256ChallengeFromVerifier(codeVerifier)
 		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
+	}
+	o.nonce = nonce
+	if nonce != "" {
+		opts = append(opts, oauth2.SetAuthURLParam("nonce", nonce))
 	}
 	return oauth2Config.AuthCodeURL(state, opts...)
 }
@@ -192,11 +207,18 @@ func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.To
 	if token != IDToken {
 		return authtypes.TokenClaims{}, errors.New("incorrect code")
 	}
+	o.lock.Lock()
+	nonce := o.nonce
+	if o.nonceClaimOverride != "" {
+		nonce = o.nonceClaimOverride
+	}
+	o.lock.Unlock()
 	return authtypes.TokenClaims{
 		Email:   o.user.Email,
 		Subject: o.user.Email,
 		Name:    o.user.Name,
 		Groups:  []string{},
+		Nonce:   nonce,
 	}, nil
 }
 
