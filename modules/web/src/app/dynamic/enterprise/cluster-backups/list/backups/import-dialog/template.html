@@ -45,10 +45,10 @@ END OF TERMS AND CONDITIONS
         <mat-label>Backup Sync Period</mat-label>
         <input [formControlName]="Controls.BackupSyncPeriod"
                matInput>
-        <mat-hint>Defines how frequently to sync backup API objects from object storage. Enter time in the format MMmSSs (e.g., 2m10s) and a value of 0 disables sync.</mat-hint>
+        <mat-hint>Defines how frequently to sync backup API objects from object storage. Duration in hours, minutes and seconds (e.g., 1h or 2m10s) and a value of 0 disables sync.</mat-hint>
         @if (form.get(Controls.BackupSyncPeriod).hasError('pattern')) {
         <mat-error>
-          Time must be in the format MMmSSs (e.g., 2m10s).
+          Duration must use hours, minutes and/or seconds in that order, with minutes and seconds below 60 when a larger unit is given (e.g., 1h or 2m10s).
         </mat-error>
         }
       </mat-form-field>

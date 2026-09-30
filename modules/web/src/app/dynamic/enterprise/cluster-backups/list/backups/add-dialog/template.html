@@ -105,11 +105,11 @@ END OF TERMS AND CONDITIONS
         <mat-label>Expires In</mat-label>
         <input [formControlName]="Controls.ExpiresIn"
                matInput>
-        <mat-hint>Enter the time in the format HHhMMmSSs (e.g., 24h10m10s). The amount of time before this backup is eligible for garbage collection. If not specified,
+        <mat-hint>Duration in hours, minutes and seconds (e.g., 168h or 24h10m10s). The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
         @if (form.get(Controls.ExpiresIn).hasError('pattern')) {
         <mat-error>
-          Time must be in the format HHhMMmSSs (e.g., 24h10m10s).
+          Duration must use hours, minutes and/or seconds in that order, with minutes and seconds below 60 when a larger unit is given (e.g., 168h or 24h10m10s).
         </mat-error>
         }
       </mat-form-field>
