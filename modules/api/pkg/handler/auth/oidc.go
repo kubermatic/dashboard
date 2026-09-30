@@ -152,7 +152,7 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 // always provide a non-zero string and validate that it matches the
 // the state query parameter on your redirect callback.
 // See http://tools.ietf.org/html/rfc6749#section-10.12 for more info.
-func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier string, scopes ...string) string {
+func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier, nonce string, scopes ...string) string {
 	oauth2Config := o.oauth2Config(overwriteRedirectURI, scopes...)
 	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if !offlineAsScope {
@@ -160,6 +160,9 @@ func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteR
 	}
 	if codeVerifier != "" {
 		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
+	}
+	if nonce != "" {
+		opts = append(opts, oidc.Nonce(nonce))
 	}
 	return oauth2Config.AuthCodeURL(state, opts...)
 }

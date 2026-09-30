@@ -20,6 +20,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/securecookie"
+
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 )
 
 type LoginResponse struct {
@@ -27,8 +29,7 @@ type LoginResponse struct {
 	*http.Request
 
 	authURL          string
-	nonce            string
-	codeVerifier     string
+	oauthState       handlerauth.OAuthState
 	cookieSecureMode bool
 	secureCookie     *securecookie.SecureCookie
 }
@@ -41,7 +42,6 @@ type OIDCCallbackResponse struct {
 	clusterID        string
 	token            string
 	cookieSecureMode bool
-	secureCookie     *securecookie.SecureCookie
 }
 
 type ProxyResponse struct {
