@@ -88,7 +88,7 @@
     "js-yaml": "4.3.2",
     "lodash": "4.18.1",
     "modern-normalize": "3.0.1",
-    "moment": "2.30.1",
+    "moment": "2.31.0",
     "monaco-editor": "0.56.0",
     "ngx-cookie-service": "22.0.0",
     "ngx-monaco-editor-v2": "22.0.5",
