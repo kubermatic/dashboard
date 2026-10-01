@@ -26,10 +26,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gorilla/securecookie"
 	"github.com/stretchr/testify/assert"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
@@ -110,7 +110,8 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 		ProjectID                 string
 		UserID                    string
 		Datacenter                string
-		Nonce                     string
+		State                     string
+		NonceClaim                string
 		HTTPStatusInitPhase       int
 		ExistingKubermaticObjects []ctrlruntimeclient.Object
 		ExistingObjects           []ctrlruntimeclient.Object
@@ -135,18 +136,18 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			HTTPStatusInitPhase: http.StatusNotFound,
 		},
 		{
-			Name:                      "scenario 3, exchange phase error: incorrect state parameter: invalid nonce",
+			Name:                      "scenario 3, exchange phase error: incorrect state parameter",
 			ClusterID:                 test.ClusterID,
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    test.GenDefaultUser().Name,
 			Datacenter:                test.TestSeedDatacenter,
-			Nonce:                     "abc", // incorrect length
-			HTTPStatusInitPhase:       http.StatusInternalServerError,
+			State:                     "abc", // does not match the cookie
+			HTTPStatusInitPhase:       http.StatusSeeOther,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExpectedRedirectURI:       testExpectedRedirectURI,
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
 			ExpectedExchangeCodePhase: ExpectedKubeconfigResp{
-				BodyResponse: fmt.Sprintf(`{"error":{"code":400,"message":"incorrect value of state parameter: abc"}}%c`, '\n'),
+				BodyResponse: handlerauth.FormatOIDCCallbackErrorPage("incorrect value of state parameter: abc"),
 				HTTPStatus:   http.StatusBadRequest,
 			},
 		},
@@ -156,7 +157,7 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    test.GenDefaultUser().Name,
 			Datacenter:                test.TestSeedDatacenter,
-			HTTPStatusInitPhase:       http.StatusInternalServerError,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExistingObjects: []ctrlruntimeclient.Object{
 				&corev1.Secret{
@@ -182,7 +183,7 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    genUser("john", "john@acme.com", true).Name,
 			Datacenter:                test.TestSeedDatacenter,
-			HTTPStatusInitPhase:       http.StatusInternalServerError,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExistingObjects: []ctrlruntimeclient.Object{
 				&corev1.Secret{
@@ -202,6 +203,33 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				HTTPStatus:   http.StatusOK,
 			},
 		},
+		{
+			Name:                      "scenario 6, exchange phase error: ID token issued for a different nonce",
+			ClusterID:                 test.ClusterID,
+			ProjectID:                 test.GenDefaultProject().Name,
+			UserID:                    test.GenDefaultUser().Name,
+			Datacenter:                test.TestSeedDatacenter,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
+			ExistingObjects: []ctrlruntimeclient.Object{
+				&corev1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: kubernetes.NamespaceName(test.ClusterID),
+						Name:      "admin-kubeconfig",
+					},
+					Data: map[string][]byte{
+						"kubeconfig": []byte(test.GenerateTestKubeconfig(test.ClusterID, test.IDToken)),
+					},
+				},
+			},
+			ExpectedRedirectURI: testExpectedRedirectURI,
+			NonceClaim:          "nonce-of-another-login",
+			ExistingAPIUser:     test.GenDefaultAPIUser(),
+			ExpectedExchangeCodePhase: ExpectedKubeconfigResp{
+				BodyResponse: handlerauth.FormatOIDCCallbackErrorPage("incorrect value of nonce claim in the ID token"),
+				HTTPStatus:   http.StatusBadRequest,
+			},
+		},
 	}
 
 	for _, tc := range testcases {
@@ -209,10 +237,11 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			reqURL := fmt.Sprintf("/api/v1/kubeconfig?cluster_id=%s&project_id=%s&user_id=%s&datacenter=%s", tc.ClusterID, tc.ProjectID, tc.UserID, tc.Datacenter)
 			req := httptest.NewRequest(http.MethodGet, reqURL, strings.NewReader(""))
 			res := httptest.NewRecorder()
-			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, tc.ExistingObjects, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			ep, clients, err := test.CreateTestEndpointAndGetClients(*tc.ExistingAPIUser, nil, tc.ExistingObjects, nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
 			if err != nil {
 				t.Fatalf("failed to create test endpoint: %v", err)
 			}
+			clients.FakeOIDCClient.SetNonceClaim(tc.NonceClaim)
 
 			// act
 			ep.ServeHTTP(res, req)
@@ -232,6 +261,8 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				// validate
 				redirectURI := location.Query().Get("redirect_uri")
 				assert.Equal(t, tc.ExpectedRedirectURI, redirectURI)
+				assert.Equal(t, "S256", location.Query().Get("code_challenge_method"))
+				assert.NotEmpty(t, location.Query().Get("nonce"))
 
 				encodedState, err := url.QueryUnescape(location.Query().Get("state"))
 				if err != nil {
@@ -252,13 +283,10 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				assert.Equal(t, tc.ProjectID, state.ProjectID)
 				assert.Equal(t, tc.UserID, state.UserID)
 
-				// copy generated nonce to cookie
-				cookieValue := state.Nonce
-
-				// override the Nonce if test scenario set the value
+				// override the State if test scenario set the value
 				// if not use generated by server
-				if tc.Nonce != "" {
-					state.Nonce = tc.Nonce
+				if tc.State != "" {
+					state.State = tc.State
 				}
 
 				encodedState, err = marshalEncodeState(state)
@@ -272,13 +300,11 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				req = httptest.NewRequest(http.MethodGet, urlExchangeCodePhase, strings.NewReader(""))
 				res = httptest.NewRecorder()
 
-				// create secure cookie
-				if encoded, err := getSecureCookie().Encode(csrfCookieName, cookieValue); err == nil {
-					// Drop a cookie on the recorder.
-					http.SetCookie(res, &http.Cookie{Name: "csrf_token", Value: encoded})
-
-					// Copy the Cookie over to a new Request
-					req.Header.Add("Cookie", res.Header().Get("Set-Cookie"))
+				// forward the cookie (nonce and PKCE verifier) set by the server in the initial phase
+				for _, cookie := range result.Cookies() {
+					if cookie.Name == csrfCookieName {
+						req.AddCookie(cookie)
+					}
 				}
 
 				// act
@@ -484,10 +510,6 @@ func unmarshalState(rawState []byte) (handlercommon.OIDCState, error) {
 		return handlercommon.OIDCState{}, err
 	}
 	return oidcState, nil
-}
-
-func getSecureCookie() *securecookie.SecureCookie {
-	return securecookie.New([]byte(""), nil)
 }
 
 func genToken(clusterID, tokenID string) string {

@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sync"
 
 	"github.com/gorilla/securecookie"
 	"golang.org/x/oauth2"
@@ -48,6 +49,9 @@ const (
 	IssuerClientSecret = "secret"
 	issuerRedirectURL  = "/api/v1/kubeconfig"
 )
+
+// fakeSecureCookie signs the OIDC cookies; the hash key must be non-empty, otherwise encoding fails.
+var fakeSecureCookie = securecookie.New([]byte("fake-secure-cookie-hash-key"), nil)
 
 var _ authtypes.OIDCIssuerVerifier = &IssuerVerifier{}
 var _ authtypes.TokenExtractorVerifier = &IssuerVerifier{}
@@ -86,6 +90,22 @@ type IssuerVerifier struct {
 	clientSecret string
 	redirectURI  string
 	provider     *OicdProvider
+
+	// codeChallenge and nonce hold the values of the last AuthCodeURL call, so that
+	// Exchange can verify the code_verifier and Verify can return the nonce claim like a real provider.
+	lock          sync.Mutex
+	codeChallenge string
+	nonce         string
+	// nonceClaimOverride, when set, is returned as nonce claim instead of the requested nonce.
+	nonceClaimOverride string
+}
+
+// SetNonceClaim makes Verify return the given nonce claim, simulating an ID token
+// that was issued for a different authentication request.
+func (o *IssuerVerifier) SetNonceClaim(nonce string) {
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.nonceClaimOverride = nonce
 }
 
 // Extractor knows how to extract the ID token from the request.
@@ -102,13 +122,25 @@ func (o *IssuerVerifier) GetRedirectURI(path string) (string, error) {
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page.
-func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string {
+func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI, codeVerifier, nonce string, scopes ...string) string {
 	oauth2Config := o.oauth2Config(overwriteRedirectURI, scopes...)
-	options := oauth2.AccessTypeOnline
+	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if !offlineAsScope {
-		options = oauth2.AccessTypeOffline
+		opts = []oauth2.AuthCodeOption{oauth2.AccessTypeOffline}
 	}
-	return oauth2Config.AuthCodeURL(state, options)
+
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.codeChallenge = ""
+	if codeVerifier != "" {
+		o.codeChallenge = oauth2.S256ChallengeFromVerifier(codeVerifier)
+		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
+	}
+	o.nonce = nonce
+	if nonce != "" {
+		opts = append(opts, oauth2.SetAuthURLParam("nonce", nonce))
+	}
+	return oauth2Config.AuthCodeURL(state, opts...)
 }
 
 // oauth2Config return a oauth2Config.
@@ -131,6 +163,18 @@ func (o *IssuerVerifier) oauth2Config(overwriteRedirectURI string, scopes ...str
 func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string, codeVerifier ...string) (authtypes.OIDCToken, error) {
 	if code != AuthorizationCode {
 		return authtypes.OIDCToken{}, errors.New("incorrect code")
+	}
+
+	// Enforce PKCE like an OIDC provider configured with "PKCE Code Challenge Method: S256".
+	var verifier string
+	if len(codeVerifier) > 0 {
+		verifier = codeVerifier[0]
+	}
+	o.lock.Lock()
+	challenge := o.codeChallenge
+	o.lock.Unlock()
+	if verifier == "" || oauth2.S256ChallengeFromVerifier(verifier) != challenge {
+		return authtypes.OIDCToken{}, errors.New("invalid PKCE code_verifier")
 	}
 
 	return authtypes.OIDCToken{
@@ -163,11 +207,18 @@ func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.To
 	if token != IDToken {
 		return authtypes.TokenClaims{}, errors.New("incorrect code")
 	}
+	o.lock.Lock()
+	nonce := o.nonce
+	if o.nonceClaimOverride != "" {
+		nonce = o.nonceClaimOverride
+	}
+	o.lock.Unlock()
 	return authtypes.TokenClaims{
 		Email:   o.user.Email,
 		Subject: o.user.Email,
 		Name:    o.user.Name,
 		Groups:  []string{},
+		Nonce:   nonce,
 	}, nil
 }
 
@@ -176,6 +227,6 @@ func (o *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 		URL:          o.issuer,
 		ClientID:     o.clientID,
 		ClientSecret: o.clientSecret,
-		SecureCookie: securecookie.New([]byte(""), nil),
+		SecureCookie: fakeSecureCookie,
 	}
 }
