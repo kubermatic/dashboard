@@ -155,6 +155,10 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	var uiScheduleBackupList []clusterScheduleBackupUI
 
 	for _, item := range scheduleList.Items {
+		ttl := ""
+		if item.Spec.Template.TTL.Duration != 0 {
+			ttl = item.Spec.Template.TTL.Duration.String()
+		}
 		uiScheduleBackup := clusterScheduleBackupUI{
 			Name: item.Name,
 			ID:   string(item.GetUID()),
@@ -163,7 +167,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				IncludedNamespaces: item.Spec.Template.IncludedNamespaces,
 				StorageLocation:    item.Spec.Template.StorageLocation,
 				ClusterID:          req.ClusterID,
-				TTL:                item.Spec.Template.TTL.OpenAPISchemaFormat(),
+				TTL:                ttl,
 				Labels:             item.Spec.Template.LabelSelector,
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
