@@ -38,7 +38,12 @@ import {
   endpointUrlValidator,
   KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
-import {ENDPOINT_URL_ERROR_MESSAGE, REGION_ERROR_MESSAGE} from '@app/shared/constants/common';
+import {
+  BACKUP_DURATION_ERROR_MESSAGE,
+  BACKUP_SYNC_PERIOD_HINT,
+  ENDPOINT_URL_ERROR_MESSAGE,
+  REGION_ERROR_MESSAGE,
+} from '@app/shared/constants/common';
 import {SettingsService} from '@core/services/settings';
 import * as y from 'js-yaml';
 import {Observable, Subject, takeUntil} from 'rxjs';
@@ -72,6 +77,8 @@ enum Controls {
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
+  readonly BACKUP_DURATION_ERROR_MESSAGE = BACKUP_DURATION_ERROR_MESSAGE;
+  readonly BACKUP_SYNC_PERIOD_HINT = BACKUP_SYNC_PERIOD_HINT;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   readonly REGION_ERROR_MESSAGE = REGION_ERROR_MESSAGE;
   readonly ENDPOINT_URL_ERROR_MESSAGE = ENDPOINT_URL_ERROR_MESSAGE;

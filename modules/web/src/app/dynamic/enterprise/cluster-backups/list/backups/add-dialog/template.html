@@ -105,12 +105,9 @@ END OF TERMS AND CONDITIONS
         <mat-label>Expires In</mat-label>
         <input [formControlName]="Controls.ExpiresIn"
                matInput>
-        <mat-hint>Duration in days, hours, minutes and seconds (e.g., 7d, 168h or 24h10m10s). Days are stored as hours. The amount of time before this backup is eligible for garbage collection. If not specified,
-          a default value of 30 days will be used.</mat-hint>
+        <mat-hint>{{BACKUP_EXPIRES_IN_HINT}}</mat-hint>
         @if (form.get(Controls.ExpiresIn).hasError('pattern')) {
-        <mat-error>
-          Duration must use days, hours, minutes and/or seconds in that order, with hours below 24 after days and minutes and seconds below 60 after a larger unit (e.g., 7d, 168h or 24h10m10s).
-        </mat-error>
+        <mat-error>{{BACKUP_DURATION_ERROR_MESSAGE}}</mat-error>
         }
       </mat-form-field>
 

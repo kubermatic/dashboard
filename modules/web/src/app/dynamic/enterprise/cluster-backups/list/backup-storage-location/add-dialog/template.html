@@ -80,11 +80,9 @@ END OF TERMS AND CONDITIONS
       <mat-label>Backup Sync Period</mat-label>
       <input [formControlName]="Controls.BackupSyncPeriod"
              matInput>
-      <mat-hint>Duration in days, hours, minutes and seconds (e.g., 1d, 1h or 2m10s). Days are stored as hours. BackupSyncPeriod defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.</mat-hint>
+      <mat-hint>{{BACKUP_SYNC_PERIOD_HINT}}</mat-hint>
       @if (form.get(Controls.BackupSyncPeriod).hasError('pattern')) {
-      <mat-error>
-        Duration must use days, hours, minutes and/or seconds in that order, with hours below 24 after days and minutes and seconds below 60 after a larger unit (e.g., 1d, 1h or 2m10s).
-      </mat-error>
+      <mat-error>{{BACKUP_DURATION_ERROR_MESSAGE}}</mat-error>
       }
     </mat-form-field>
     <mat-checkbox [formControlName]="Controls.AddCustomConfig">Add custom config
