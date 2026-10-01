@@ -1,0 +1,109 @@
+//go:build ee
+
+/*
+                  Kubermatic Enterprise Read-Only License
+                         Version 1.0 ("KERO-1.0”)
+                     Copyright © 2026 Kubermatic GmbH
+
+   1.	You may only view, read and display for studying purposes the source
+      code of the software licensed under this license, and, to the extent
+      explicitly provided under this license, the binary code.
+   2.	Any use of the software which exceeds the foregoing right, including,
+      without limitation, its execution, compilation, copying, modification
+      and distribution, is expressly prohibited.
+   3.	THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+      EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+      MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+      IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+      CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+      TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+      SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+   END OF TERMS AND CONDITIONS
+*/
+
+package clusterbackup
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"regexp"
+	"strconv"
+	"time"
+
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+)
+
+const hoursPerDay = 24
+
+var durationDaysPattern = regexp.MustCompile(`^([0-9]+)d(?:([0-9]+)h)?(.*)$`)
+
+func NormalizeDurationDays(duration string) (string, error) {
+	match := durationDaysPattern.FindStringSubmatch(duration)
+	if match == nil {
+		return duration, nil
+	}
+
+	days, err := strconv.Atoi(match[1])
+	if err != nil {
+		return "", fmt.Errorf("invalid duration %q: %w", duration, err)
+	}
+
+	hours := 0
+	if match[2] != "" {
+		hours, err = strconv.Atoi(match[2])
+		if err != nil {
+			return "", fmt.Errorf("invalid duration %q: %w", duration, err)
+		}
+		if hours >= hoursPerDay {
+			return "", fmt.Errorf("invalid duration %q: hours must be below %d when days are given", duration, hoursPerDay)
+		}
+	}
+
+	normalized := fmt.Sprintf("%dh%s", days*hoursPerDay+hours, match[3])
+	if _, err := time.ParseDuration(normalized); err != nil {
+		return "", fmt.Errorf("invalid duration %q: %w", duration, err)
+	}
+
+	return normalized, nil
+}
+
+func NormalizeBodyDuration(body []byte, path ...string) ([]byte, error) {
+	if len(path) == 0 {
+		return body, nil
+	}
+
+	var doc map[string]any
+	decoder := json.NewDecoder(bytes.NewReader(body))
+	decoder.UseNumber()
+	if err := decoder.Decode(&doc); err != nil {
+		return nil, err
+	}
+
+	node := doc
+	for _, key := range path[:len(path)-1] {
+		next, ok := node[key].(map[string]any)
+		if !ok {
+			return body, nil
+		}
+		node = next
+	}
+
+	last := path[len(path)-1]
+	duration, ok := node[last].(string)
+	if !ok {
+		return body, nil
+	}
+
+	normalized, err := NormalizeDurationDays(duration)
+	if err != nil {
+		return nil, utilerrors.NewBadRequest("%v", err)
+	}
+	if normalized == duration {
+		return body, nil
+	}
+
+	node[last] = normalized
+	return json.Marshal(doc)
+}
