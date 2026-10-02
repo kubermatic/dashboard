@@ -45,6 +45,7 @@ import (
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -169,14 +170,29 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, err
 	}
 
-	clusterBackupList := &velerov1.BackupList{}
-	if err := client.List(ctx, clusterBackupList, ctrlruntimeclient.InNamespace(UserClusterBackupNamespace)); err != nil {
+	items, err := ListUnstructured(ctx, client, "BackupList")
+	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	var uiClusterBackupList []clusterBackupUI
 
-	for _, item := range clusterBackupList.Items {
+	for _, raw := range items {
+		item := &velerov1.Backup{}
+		if err := FromUnstructured(raw, item); err != nil {
+			ttl, _, _ := unstructured.NestedString(raw.Object, "spec", "ttl")
+			uiClusterBackupList = append(uiClusterBackupList, clusterBackupUI{
+				Name: raw.GetName(),
+				ID:   string(raw.GetUID()),
+				Spec: clusterBackupUISpec{
+					ClusterID: req.ClusterID,
+					TTL:       ttl,
+					Status:    string(velerov1.BackupPhaseFailedValidation),
+					CreatedAt: apiv1.Time(raw.GetCreationTimestamp()),
+				},
+			})
+			continue
+		}
 		uiClusterBackup := clusterBackupUI{
 			Name: item.Name,
 			ID:   string(item.GetUID()),
