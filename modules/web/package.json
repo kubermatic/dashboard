@@ -152,10 +152,10 @@
       "tmp": ">=0.2.4"
     },
     "monaco-editor": {
-      "dompurify": "3.4.11"
+      "dompurify": "3.4.16"
     },
     "license-compliance": {
-      "joi": "17.13.4"
+      "joi": "17.13.7"
     },
     "@aws-sdk/xml-builder": {
       "fast-xml-parser": ">=5.3.6"
