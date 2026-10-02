@@ -81,7 +81,6 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
     'cluster',
     'destination',
     'schedule',
-    'ttl',
     'namespaces',
     'created',
     'actions',
