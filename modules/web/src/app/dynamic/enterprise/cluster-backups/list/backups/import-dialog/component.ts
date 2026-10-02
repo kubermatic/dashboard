@@ -27,6 +27,7 @@ import {NotificationService} from '@core/services/notification';
 import {BackupStorageLocation} from '@shared/entity/backup';
 import {Cluster, CreateClusterBackupStorageLocation} from '@shared/entity/cluster';
 import {CBSL_SYNC_PERIOD} from '@shared/validators/others';
+import {BACKUP_DURATION_ERROR_MESSAGE, BACKUP_SYNC_PERIOD_HINT} from '@shared/constants/common';
 import {Observable, Subject} from 'rxjs';
 import {finalize, take, takeUntil} from 'rxjs/operators';
 
@@ -62,6 +63,8 @@ enum Controls {
 export class ImportBackupDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
+  readonly BACKUP_DURATION_ERROR_MESSAGE = BACKUP_DURATION_ERROR_MESSAGE;
+  readonly BACKUP_SYNC_PERIOD_HINT = BACKUP_SYNC_PERIOD_HINT;
   projectID = this._config.projectID;
   cluster = this._config.cluster;
   form: FormGroup;
