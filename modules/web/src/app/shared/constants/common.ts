@@ -113,6 +113,17 @@ export const CLUSTER_OPTION_TOOLTIPS = {
     'Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created.',
 } as const;
 
+export const BACKUP_DURATION_ERROR_MESSAGE =
+  'Duration must use hours, minutes and/or seconds in that order, with minutes and seconds below 60 ' +
+  'after a larger unit (e.g., 168h, 24h10m10s or 2m10s).';
+export const BACKUP_EXPIRES_IN_HINT =
+  'Duration in hours, minutes and seconds (e.g., 168h or 24h10m10s). ' +
+  'The amount of time before this backup is eligible for garbage collection. If not specified, ' +
+  'a default value of 30 days will be used.';
+export const BACKUP_SYNC_PERIOD_HINT =
+  'Duration in hours, minutes and seconds (e.g., 1h or 2m10s). ' +
+  'Defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.';
+
 // Per-cluster proxy tooltips
 export const PROXY_MODE_HINT = 'kube-proxy mode for in-cluster service routing.';
 export const NODE_EGRESS_PROXY_TOOLTIP =
