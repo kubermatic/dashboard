@@ -33,6 +33,7 @@ import {
   VeleroChecksumAlgorithm,
 } from '@app/shared/entity/backup';
 import {CBSL_SYNC_PERIOD, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {BACKUP_DURATION_ERROR_MESSAGE, BACKUP_SYNC_PERIOD_HINT} from '@app/shared/constants/common';
 import {SettingsService} from '@core/services/settings';
 import * as y from 'js-yaml';
 import {Observable, Subject, takeUntil} from 'rxjs';
@@ -65,6 +66,8 @@ enum Controls {
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
+  readonly BACKUP_DURATION_ERROR_MESSAGE = BACKUP_DURATION_ERROR_MESSAGE;
+  readonly BACKUP_SYNC_PERIOD_HINT = BACKUP_SYNC_PERIOD_HINT;
   readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   form: FormGroup;
   valuesConfig = '';

@@ -34,7 +34,8 @@ import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {KmValidators} from '@app/shared/validators/validators';
 import {Cluster} from '@app/shared/entity/cluster';
-import {Cluster_BACKUP_EXPIRES_IN, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {CLUSTER_BACKUP_EXPIRES_IN, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {BACKUP_DURATION_ERROR_MESSAGE, BACKUP_EXPIRES_IN_HINT} from '@app/shared/constants/common';
 
 export interface AddClustersBackupsDialogConfig {
   projectID: string;
@@ -79,6 +80,8 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   namespacesLabel = NamespacesState.Ready;
 
   readonly Controls = Controls;
+  readonly BACKUP_DURATION_ERROR_MESSAGE = BACKUP_DURATION_ERROR_MESSAGE;
+  readonly BACKUP_EXPIRES_IN_HINT = BACKUP_EXPIRES_IN_HINT;
   form: FormGroup;
 
   get btnLabel(): string {
@@ -105,7 +108,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       [Controls.Namespaces]: this._builder.control([]),
       [Controls.DefaultVolumesToFsBackup]: this._builder.control(true),
       [Controls.CronJob]: this._builder.control(''),
-      [Controls.ExpiresIn]: this._builder.control('', Cluster_BACKUP_EXPIRES_IN),
+      [Controls.ExpiresIn]: this._builder.control('', CLUSTER_BACKUP_EXPIRES_IN),
       [Controls.Labels]: this._builder.control(''),
     });
 
