@@ -39,12 +39,19 @@ import (
 
 const hoursPerDay = 24
 
-var durationDaysPattern = regexp.MustCompile(`^([0-9]+)d(?:([0-9]+)h)?(.*)$`)
+var (
+	durationDaysPrefix  = regexp.MustCompile(`^[0-9]+d`)
+	durationDaysPattern = regexp.MustCompile(`^([0-9]+)d(?:([01]?[0-9]|2[0-3])h)?((?:[0-5]?[0-9]m)?(?:[0-5]?[0-9]s)?)$`)
+)
 
 func NormalizeDurationDays(duration string) (string, error) {
+	if !durationDaysPrefix.MatchString(duration) {
+		return duration, nil
+	}
+
 	match := durationDaysPattern.FindStringSubmatch(duration)
 	if match == nil {
-		return duration, nil
+		return "", fmt.Errorf("invalid duration %q: after days, hours must be below %d and minutes and seconds below 60, in that order", duration, hoursPerDay)
 	}
 
 	days, err := strconv.Atoi(match[1])
@@ -57,9 +64,6 @@ func NormalizeDurationDays(duration string) (string, error) {
 		hours, err = strconv.Atoi(match[2])
 		if err != nil {
 			return "", fmt.Errorf("invalid duration %q: %w", duration, err)
-		}
-		if hours >= hoursPerDay {
-			return "", fmt.Errorf("invalid duration %q: hours must be below %d when days are given", duration, hoursPerDay)
 		}
 	}
 

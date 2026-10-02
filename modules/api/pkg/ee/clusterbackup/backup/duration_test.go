@@ -49,6 +49,13 @@ func TestNormalizeDurationDays(t *testing.T) {
 		{name: "empty untouched", ttl: "", expected: ""},
 		{name: "hours overflow after days", ttl: "1d24h", wantErr: true},
 		{name: "garbage after days", ttl: "1dfoo", wantErr: true},
+		{name: "minutes overflow after days", ttl: "7d5555m", wantErr: true},
+		{name: "minutes equal to a day after days", ttl: "1d1440m", wantErr: true},
+		{name: "seconds overflow after days", ttl: "1d99s", wantErr: true},
+		{name: "minutes overflow after days and hours", ttl: "1d2h60m", wantErr: true},
+		{name: "wrong order after days", ttl: "1d30m2h", wantErr: true},
+		{name: "fraction after days", ttl: "1d1.5h", wantErr: true},
+		{name: "go duration without days untouched", ttl: "1h120m", expected: "1h120m"},
 	}
 
 	for _, tc := range testCases {
@@ -169,7 +176,7 @@ func TestDecodeBody(t *testing.T) {
 	}{
 		{name: "days are converted before decoding", payload: `{"name":"b","spec":{"ttl":"7d"}}`, expectedTTL: "168h"},
 		{name: "plain duration is decoded unchanged", payload: `{"name":"b","spec":{"ttl":"24h"}}`, expectedTTL: "24h"},
-		{name: "invalid day duration is rejected", payload: `{"name":"b","spec":{"ttl":"1d24h"}}`, wantErr: true},
+		{name: "invalid day duration is rejected", payload: `{"name":"b","spec":{"ttl":"7d5555m"}}`, wantErr: true},
 		{name: "invalid json is rejected", payload: `{"name":`, wantErr: true},
 	}
 
