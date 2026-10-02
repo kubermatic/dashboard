@@ -27,9 +27,7 @@ package backupstoragelocation
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 	"text/template"
@@ -100,15 +98,7 @@ func DecodeCreateBSLReq(c context.Context, r *http.Request) (interface{}, error)
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	body, err = clusterbackup.NormalizeBodyDuration(body, "bslSpec", "backupSyncPeriod")
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(body, &req.Body); err != nil {
+	if err = clusterbackup.DecodeBody(r, &req.Body, "bslSpec", "backupSyncPeriod"); err != nil {
 		return nil, err
 	}
 	return req, nil

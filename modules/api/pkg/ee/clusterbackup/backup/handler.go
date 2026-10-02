@@ -26,9 +26,7 @@ package clusterbackup
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 
@@ -152,15 +150,7 @@ func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	body, err = NormalizeBodyDuration(body, "spec", "ttl")
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(body, &req.Body); err != nil {
+	if err = DecodeBody(r, &req.Body, "spec", "ttl"); err != nil {
 		return nil, err
 	}
 	return req, nil

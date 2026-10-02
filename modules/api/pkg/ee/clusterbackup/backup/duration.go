@@ -28,6 +28,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"regexp"
 	"strconv"
 	"time"
@@ -106,4 +108,16 @@ func NormalizeBodyDuration(body []byte, path ...string) ([]byte, error) {
 
 	node[last] = normalized
 	return json.Marshal(doc)
+}
+
+func DecodeBody(r *http.Request, target any, path ...string) error {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	body, err = NormalizeBodyDuration(body, path...)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(body, target)
 }

@@ -25,6 +25,9 @@
 package clusterbackup
 
 import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -145,6 +148,48 @@ func TestNormalizeBodyDuration(t *testing.T) {
 			}
 			if string(got) != tc.expected {
 				t.Errorf("NormalizeBodyDuration() = %s, expected %s", got, tc.expected)
+			}
+		})
+	}
+}
+
+func TestDecodeBody(t *testing.T) {
+	type body struct {
+		Name string `json:"name"`
+		Spec struct {
+			TTL string `json:"ttl"`
+		} `json:"spec"`
+	}
+
+	testCases := []struct {
+		name        string
+		payload     string
+		expectedTTL string
+		wantErr     bool
+	}{
+		{name: "days are converted before decoding", payload: `{"name":"b","spec":{"ttl":"7d"}}`, expectedTTL: "168h"},
+		{name: "plain duration is decoded unchanged", payload: `{"name":"b","spec":{"ttl":"24h"}}`, expectedTTL: "24h"},
+		{name: "invalid day duration is rejected", payload: `{"name":"b","spec":{"ttl":"1d24h"}}`, wantErr: true},
+		{name: "invalid json is rejected", payload: `{"name":`, wantErr: true},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(tc.payload))
+
+			var got body
+			err := DecodeBody(req, &got, "spec", "ttl")
+			if tc.wantErr {
+				if err == nil {
+					t.Fatalf("expected error, got %+v", got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got.Name != "b" || got.Spec.TTL != tc.expectedTTL {
+				t.Errorf("decoded %+v, expected ttl %q", got, tc.expectedTTL)
 			}
 		})
 	}

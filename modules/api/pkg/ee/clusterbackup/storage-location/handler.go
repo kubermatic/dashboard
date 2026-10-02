@@ -26,9 +26,7 @@ package storagelocation
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -414,7 +412,7 @@ func DecodeCreateCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	if err = decodeCbslBody(r, &req.Body); err != nil {
+	if err = clusterbackup.DecodeBody(r, &req.Body, "cbslSpec", "backupSyncPeriod"); err != nil {
 		return nil, err
 	}
 
@@ -451,23 +449,11 @@ func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, erro
 	if req.ClusterBackupStorageLocationName == "" {
 		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
 	}
-	if err = decodeCbslBody(r, &req.Body); err != nil {
+	if err = clusterbackup.DecodeBody(r, &req.Body, "cbslSpec", "backupSyncPeriod"); err != nil {
 		return nil, err
 	}
 
 	return req, nil
-}
-
-func decodeCbslBody(r *http.Request, target *CbslBody) error {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return err
-	}
-	body, err = clusterbackup.NormalizeBodyDuration(body, "cbslSpec", "backupSyncPeriod")
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(body, target)
 }
 
 func getCSBLLabels(displayName, projectID string) map[string]string {

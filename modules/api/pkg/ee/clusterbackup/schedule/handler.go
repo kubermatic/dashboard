@@ -26,9 +26,7 @@ package clusterbackupschedule
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -130,15 +128,7 @@ func DecodeCreateClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
-	}
-	body, err = clusterbackup.NormalizeBodyDuration(body, "spec", "template", "ttl")
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(body, &req.Body); err != nil {
+	if err = clusterbackup.DecodeBody(r, &req.Body, "spec", "template", "ttl"); err != nil {
 		return nil, err
 	}
 	return req, nil
