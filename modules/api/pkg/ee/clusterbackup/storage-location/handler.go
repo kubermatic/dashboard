@@ -26,6 +26,7 @@ package storagelocation
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -33,7 +34,6 @@ import (
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	clusterbackup "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backup"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -412,7 +412,7 @@ func DecodeCreateCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	if err = clusterbackup.DecodeBody(r, &req.Body, "cbslSpec", "backupSyncPeriod"); err != nil {
+	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
 
@@ -449,7 +449,7 @@ func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, erro
 	if req.ClusterBackupStorageLocationName == "" {
 		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
 	}
-	if err = clusterbackup.DecodeBody(r, &req.Body, "cbslSpec", "backupSyncPeriod"); err != nil {
+	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
 
