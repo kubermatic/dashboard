@@ -50,9 +50,10 @@ export const HTTP_PROXY_URL_PATTERN_VALIDATOR = Validators.pattern(new RegExp(HT
 // Used per-chip via KmValidators.chipPattern. Accepts localhost, 127.0.0.1, 10.0.0.0/8, .cluster.local, ::1, fd00::/8.
 export const NO_PROXY_PATTERN = '^\\.?[a-zA-Z0-9._:-]+(\\/\\d{1,3})?$';
 
-export const GO_DURATION_HMS_PATTERN = '^(0|[0-9]+h([0-5]?[0-9]m)?([0-5]?[0-9]s)?|[0-9]+m([0-5]?[0-9]s)?|[0-9]+s)$';
-export const CBSL_SYNC_PERIOD = Validators.pattern(GO_DURATION_HMS_PATTERN);
-export const CLUSTER_BACKUP_EXPIRES_IN = Validators.pattern(GO_DURATION_HMS_PATTERN);
+export const BACKUP_DURATION_PATTERN =
+  '^(0|[0-9]+d(([01]?[0-9]|2[0-3])h)?([0-5]?[0-9]m)?([0-5]?[0-9]s)?|[0-9]+h([0-5]?[0-9]m)?([0-5]?[0-9]s)?|[0-9]+m([0-5]?[0-9]s)?|[0-9]+s)$';
+export const CBSL_SYNC_PERIOD = Validators.pattern(BACKUP_DURATION_PATTERN);
+export const CLUSTER_BACKUP_EXPIRES_IN = Validators.pattern(BACKUP_DURATION_PATTERN);
 
 // String shouldn't start with ( or [ or } or ) or |
 export const KUBERNETES_ANNOTATION_VALUE_PATTERN = '^[^(})|\\[]*';
