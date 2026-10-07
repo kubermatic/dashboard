@@ -39,6 +39,12 @@ type Application struct {
 	// Name represents human readable name for the resource
 	Name string `json:"name,omitempty"`
 
+	// Namespace is the namespace in the user cluster in which the ApplicationInstallation
+	// resource itself is created. This is not the namespace the application's resources are
+	// deployed into; that is controlled by Spec.Namespace.
+	// If empty, the initial-application-installation-controller falls back to Spec.Namespace.Name.
+	Namespace string `json:"namespace,omitempty"`
+
 	// spec
 	Spec *ApplicationSpec `json:"spec,omitempty"`
 }
