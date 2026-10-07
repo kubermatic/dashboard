@@ -905,7 +905,8 @@ func (req importClusterTemplateReq) getApplicationsFromRequest() []apiv1.Applica
 	var applications []apiv1.Application
 	for _, app := range req.Body.Applications {
 		newApp := apiv1.Application{
-			Spec: app.Spec,
+			Namespace: app.Namespace,
+			Spec:      app.Spec,
 		}
 
 		applications = append(applications, newApp)
