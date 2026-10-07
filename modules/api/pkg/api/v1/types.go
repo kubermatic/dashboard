@@ -2844,6 +2844,12 @@ type NodeMetric struct {
 type Application struct {
 	ObjectMeta `json:",inline"`
 
+	// Namespace is the namespace in the user cluster in which the ApplicationInstallation
+	// resource itself is created. This is not the namespace the application's resources are
+	// deployed into; that is controlled by Spec.Namespace.
+	// If empty, the initial-application-installation-controller falls back to Spec.Namespace.Name.
+	Namespace string `json:"namespace,omitempty"`
+
 	Spec ApplicationSpec `json:"spec"`
 }
 
