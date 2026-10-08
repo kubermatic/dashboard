@@ -60,7 +60,7 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.1
 	github.com/vmware-tanzu/velero v1.17.1
 	github.com/vmware/go-vcloud-director/v2 v2.26.1
 	github.com/vmware/govmomi v0.50.0
@@ -70,10 +70,10 @@ require (
 	google.golang.org/api v0.264.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.30.7-0.20260909120732-1d8c650ee8c5
-	k8c.io/kubermatic/v2 v2.30.7-0.20260909120732-1d8c650ee8c5
-	k8c.io/machine-controller/sdk v1.65.7
-	k8c.io/operating-system-manager v1.10.9
+	k8c.io/kubermatic/sdk/v2 v2.30.8-0.20261008143505-5c4da89979af
+	k8c.io/kubermatic/v2 v2.30.8-0.20261008143505-5c4da89979af
+	k8c.io/machine-controller/sdk v1.65.8
+	k8c.io/operating-system-manager v1.10.10
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.35.0
 	k8s.io/apiextensions-apiserver v0.35.0
@@ -332,7 +332,7 @@ require (
 	github.com/sigstore/sigstore v1.10.4 // indirect
 	github.com/sigstore/sigstore-go v0.7.3 // indirect
 	github.com/sigstore/timestamp-authority v1.2.6 // indirect
-	github.com/sirupsen/logrus v1.9.4 // indirect
+	github.com/sirupsen/logrus v1.10.2 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
@@ -365,7 +365,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	go.yaml.in/yaml/v3 v3.0.4 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/mod v0.37.0 // indirect
