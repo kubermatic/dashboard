@@ -19,6 +19,11 @@ import (
 // swagger:model KubeLB
 type KubeLB struct {
 
+	// DisableGatewayAPIProtection disables the policy that reserves the Gateway API CRDs for the kubeLB CCM,
+	// and stops KKP from removing the upstream Gateway API safe-upgrades policy. Protection is also off when
+	// the KubermaticConfiguration or the datacenter disables it.
+	DisableGatewayAPIProtection bool `json:"disableGatewayAPIProtection,omitempty"`
+
 	// EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KubeLB installs the Gateway API CRDs in the user cluster.
 	EnableGatewayAPI bool `json:"enableGatewayAPI,omitempty"`
 

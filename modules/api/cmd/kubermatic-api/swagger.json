@@ -36040,6 +36040,11 @@
       "type": "object",
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
+        "disableGatewayAPIProtection": {
+          "description": "DisableGatewayAPIProtection disables the policy that reserves the Gateway API CRDs for the kubeLB CCM,\nand stops KKP from removing the upstream Gateway API safe-upgrades policy. Protection is also off when\nthe KubermaticConfiguration or the datacenter disables it.",
+          "type": "boolean",
+          "x-go-name": "DisableGatewayAPIProtection"
+        },
         "enableGatewayAPI": {
           "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KubeLB installs the Gateway API CRDs in the user cluster.",
           "type": "boolean",
@@ -36069,6 +36074,11 @@
     "KubeLBDatacenterSettings": {
       "type": "object",
       "properties": {
+        "disableGatewayAPIProtection": {
+          "description": "DisableGatewayAPIProtection disables, for the user clusters of this datacenter, the policy that reserves\nthe Gateway API CRDs for the kubeLB CCM, and stops KKP from removing the upstream Gateway API\nsafe-upgrades policy. Clusters cannot re-enable it.",
+          "type": "boolean",
+          "x-go-name": "DisableGatewayAPIProtection"
+        },
         "disableIngressClass": {
           "description": "DisableIngressClass is used to disable the ingress class `kubelb` filter for kubeLB.",
           "type": "boolean",
