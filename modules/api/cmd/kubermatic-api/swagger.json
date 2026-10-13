@@ -28932,6 +28932,11 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "description": "Namespace is the namespace in the user cluster in which the ApplicationInstallation\nresource itself is created. This is not the namespace the application's resources are\ndeployed into; that is controlled by Spec.Namespace.\nIf empty, the initial-application-installation-controller falls back to Spec.Namespace.Name.",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "spec": {
           "$ref": "#/definitions/ApplicationSpec"
         }
