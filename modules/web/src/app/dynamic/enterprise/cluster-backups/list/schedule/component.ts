@@ -239,7 +239,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
         if (scheduleBackups.length > 1) {
           this._notificationService.success('Deleting the selected schedule backups');
         } else {
-          this._notificationService.success(`Deleting the ${scheduleBackups[0].name} schedule backup)}`);
+          this._notificationService.success(`Deleting the ${scheduleBackups[0].name} schedule backup`);
         }
       });
   }

@@ -14,7 +14,7 @@ package models
 // Internal package:
 //
 // type MyAPIObject struct {
-// runtime.TypeMeta `json:",inline"`
+// runtime.TypeMeta `json:""`
 // MyPlugin runtime.Object `json:"myPlugin"`
 // }
 //
@@ -25,7 +25,7 @@ package models
 // External package:
 //
 // type MyAPIObject struct {
-// runtime.TypeMeta `json:",inline"`
+// runtime.TypeMeta `json:""`
 // MyPlugin runtime.RawExtension `json:"myPlugin"`
 // }
 //

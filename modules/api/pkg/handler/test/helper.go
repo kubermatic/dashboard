@@ -665,6 +665,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		FakeKubernetesCoreClient: kubernetesClient,
 		TokenAuthenticator:       tokenAuth,
 		TokenGenerator:           tokenGenerator,
+		FakeOIDCClient:           fakeOIDCClient,
 	}, nil
 }
 
@@ -835,6 +836,9 @@ type ClientsSets struct {
 
 	TokenAuthenticator serviceaccount.TokenAuthenticator
 	TokenGenerator     serviceaccount.TokenGenerator
+
+	// FakeOIDCClient is the OIDC issuer used by the OIDC authorization code flows
+	FakeOIDCClient *IssuerVerifier
 }
 
 // GenerateTestKubeconfig returns test kubeconfig yaml structure.

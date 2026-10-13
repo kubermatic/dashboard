@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// ConditionStatus condition status
+// ConditionStatus +k8s:alpha(since: "1.37")=+k8s:enum
 //
 // swagger:model ConditionStatus
 type ConditionStatus string

@@ -19,7 +19,8 @@ import (
 // swagger:model ConfigMapKeySelector
 type ConfigMapKeySelector struct {
 
-	// The key to select.
+	// The key to select from the ConfigMap's Data field.
+	// Keys in the BinaryData field are not currently propagated to container env vars.
 	Key string `json:"key,omitempty"`
 
 	// Name of the referent.

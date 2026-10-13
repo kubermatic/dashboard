@@ -24,6 +24,9 @@ import (
 // +patchStrategy=merge
 // +listType=map
 // +listMapKey=type
+// +k8s:alpha(since: "1.37")=+k8s:optional
+// +k8s:alpha(since: "1.37")=+k8s:listType=map
+// +k8s:alpha(since: "1.37")=+k8s:listMapKey=type
 // Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 //
 // other fields
@@ -38,6 +41,7 @@ type Condition struct {
 	// +kubebuilder:validation:Required
 	// +kubebuilder:validation:Type=string
 	// +kubebuilder:validation:Format=date-time
+	// +k8s:alpha(since: "1.37")=+k8s:customValidation
 	LastTransitionTime string `json:"lastTransitionTime,omitempty"`
 
 	// message is a human readable message indicating details about the transition.
@@ -52,6 +56,8 @@ type Condition struct {
 	// with respect to the current state of the instance.
 	// +optional
 	// +kubebuilder:validation:Minimum=0
+	// +k8s:alpha(since: "1.37")=+k8s:optional
+	// +k8s:alpha(since: "1.37")=+k8s:minimum=0
 	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 
 	// reason contains a programmatic identifier indicating the reason for the condition's last transition.
@@ -64,6 +70,8 @@ type Condition struct {
 	// +kubebuilder:validation:MaxLength=1024
 	// +kubebuilder:validation:MinLength=1
 	// +kubebuilder:validation:Pattern=`^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$`
+	// +k8s:alpha(since: "1.37")=+k8s:required
+	// +k8s:alpha(since: "1.37")=+k8s:maxBytes=1024
 	Reason string `json:"reason,omitempty"`
 
 	// type of condition in CamelCase or in foo.example.com/CamelCase.
@@ -75,6 +83,7 @@ type Condition struct {
 	// +kubebuilder:validation:Required
 	// +kubebuilder:validation:Pattern=`^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$`
 	// +kubebuilder:validation:MaxLength=316
+	// +k8s:alpha(since: "1.37")=+k8s:required
 	Type string `json:"type,omitempty"`
 
 	// status

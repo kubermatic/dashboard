@@ -17,8 +17,6 @@ limitations under the License.
 package authflow
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -27,8 +25,7 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/oauth2"
-
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 )
@@ -40,21 +37,6 @@ const (
 	oauthStateCookieMaxAge = 300 // 5 minutes
 	callbackPath           = "/api/v2/auth/callback"
 )
-
-// oauthStateCookie is the payload stored in the encrypted _oauth_state cookie.
-type oauthStateCookie struct {
-	State        string
-	Nonce        string
-	CodeVerifier string
-}
-
-func randomURLSafeString(nBytes int) (string, error) {
-	b := make([]byte, nBytes)
-	if _, err := rand.Read(b); err != nil {
-		return "", err
-	}
-	return base64.RawURLEncoding.EncodeToString(b), nil
-}
 
 // isLocalHost reports whether the request's host is a loopback address (localhost or 127.0.0.1).
 func isLocalHost(r *http.Request) bool {
@@ -102,18 +84,7 @@ func (a *authHandler) loginHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		oidcConfig := a.oidcIssuerVerifier.OIDCConfig()
 
-		nonce, err := randomURLSafeString(32)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to generate nonce: %v", err), http.StatusInternalServerError)
-			return
-		}
-		state, err := randomURLSafeString(32)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to generate state: %v", err), http.StatusInternalServerError)
-			return
-		}
-
-		codeVerifier := oauth2.GenerateVerifier()
+		oauthState := handlerauth.NewOAuthState()
 
 		scopes := []string{"openid", "email", "profile", "groups"}
 		if oidcConfig.OfflineAccessAsScope {
@@ -121,40 +92,15 @@ func (a *authHandler) loginHandler() http.Handler {
 		}
 
 		redirectURI := a.getCallbackURI(r)
-		authURL := a.oidcIssuerVerifier.AuthCodeURL(state, oidcConfig.OfflineAccessAsScope, redirectURI, scopes...)
-		u, err := url.Parse(authURL)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to parse auth URL: %v", err), http.StatusInternalServerError)
-			return
-		}
-		q := u.Query()
-		q.Set("code_challenge", oauth2.S256ChallengeFromVerifier(codeVerifier))
-		q.Set("code_challenge_method", "S256")
-		q.Set("nonce", nonce)
-		u.RawQuery = q.Encode()
+		authURL := a.oidcIssuerVerifier.AuthCodeURL(oauthState.State, oidcConfig.OfflineAccessAsScope, redirectURI, oauthState.CodeVerifier, oauthState.Nonce, scopes...)
 
-		// Encode state, nonce, and PKCE verifier into a single signed cookie.
-		encodedStateCookie, err := oidcConfig.SecureCookie.Encode(oauthStateCookieName, oauthStateCookie{
-			State:        state,
-			Nonce:        nonce,
-			CodeVerifier: codeVerifier,
-		})
-		if err != nil {
+		// Store state, nonce, and PKCE verifier in a single signed cookie.
+		if err := handlerauth.SetOAuthStateCookie(w, oauthStateCookieName, "/", oauthState, oauthStateCookieMaxAge, oidcConfig.CookieSecureMode, oidcConfig.SecureCookie); err != nil {
 			http.Error(w, fmt.Sprintf("failed to encode state cookie: %v", err), http.StatusInternalServerError)
 			return
 		}
 
-		http.SetCookie(w, &http.Cookie{
-			Name:     oauthStateCookieName,
-			Value:    encodedStateCookie,
-			MaxAge:   oauthStateCookieMaxAge,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-			Path:     "/",
-		})
-
-		http.Redirect(w, r, u.String(), http.StatusSeeOther)
+		http.Redirect(w, r, authURL, http.StatusSeeOther)
 	})
 }
 
@@ -179,15 +125,9 @@ func (a *authHandler) callbackHandler() http.Handler {
 		}
 
 		// 2. Read and decode the _oauth_state cookie.
-		stateCookie, err := r.Cookie(oauthStateCookieName)
+		storedState, err := handlerauth.GetOAuthStateCookie(r, oauthStateCookieName, oidcConfig.SecureCookie)
 		if err != nil {
-			http.Error(w, "missing state cookie", http.StatusBadRequest)
-			return
-		}
-
-		var storedState oauthStateCookie
-		if err := oidcConfig.SecureCookie.Decode(oauthStateCookieName, stateCookie.Value, &storedState); err != nil {
-			http.Error(w, fmt.Sprintf("failed to decode state cookie: %v", err), http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -198,15 +138,7 @@ func (a *authHandler) callbackHandler() http.Handler {
 		}
 
 		// Clear the state cookie — it is one-time use.
-		http.SetCookie(w, &http.Cookie{
-			Name:     oauthStateCookieName,
-			Value:    "",
-			MaxAge:   -1,
-			HttpOnly: true,
-			Secure:   oidcConfig.CookieSecureMode,
-			SameSite: http.SameSiteLaxMode,
-			Path:     "/",
-		})
+		handlerauth.ClearOAuthStateCookie(w, oauthStateCookieName, "/", oidcConfig.CookieSecureMode)
 
 		// 4. Exchange authorization code for tokens with PKCE code_verifier from the cookie.
 		redirectURI := a.getCallbackURI(r)

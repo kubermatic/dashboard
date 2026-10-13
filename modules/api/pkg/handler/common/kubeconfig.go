@@ -45,7 +45,6 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/rand"
 	apiserverserviceaccount "k8s.io/apiserver/pkg/authentication/serviceaccount"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -302,14 +301,14 @@ func CreateOIDCKubeconfigEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		storedCookie, err := handlerauth.GetOAuthStateCookie(req.request, csrfCookieName, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 		if err != nil {
 			return nil, err
 		}
-		if req.decodedState.Nonce != cookieNonceValue {
-			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
+		if req.decodedState.State != storedCookie.State {
+			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.State)
 		}
-		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "")
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "", storedCookie.CodeVerifier)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -320,6 +319,10 @@ func CreateOIDCKubeconfigEndpoint(
 		claims, err := oidcIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusUnauthorized, err.Error())
+		}
+		// the nonce claim binds the ID token to this authentication request
+		if claims.Nonce != storedCookie.Nonce {
+			return nil, utilerrors.NewBadRequest("incorrect value of nonce claim in the ID token")
 		}
 		if len(claims.Email) == 0 {
 			return nil, utilerrors.NewBadRequest("the token doesn't contain the mandatory \"email\" claim")
@@ -418,14 +421,13 @@ func CreateOIDCKubeconfigEndpoint(
 		scopes = append(scopes, "offline_access")
 	}
 
-	// pass nonce
-	nonce := rand.String(rand.IntnRange(10, 15))
-	rsp.nonce = nonce
+	// pass state, nonce and PKCE verifier
+	rsp.oauthState = handlerauth.NewOAuthState()
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
 	oidcState := OIDCState{
-		Nonce:                nonce,
+		State:                rsp.oauthState.State,
 		ClusterID:            req.ClusterID,
 		ProjectID:            req.ProjectID,
 		UserID:               req.UserID,
@@ -437,7 +439,7 @@ func CreateOIDCKubeconfigEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", rsp.oauthState.CodeVerifier, rsp.oauthState.Nonce, scopes...)
 
 	return rsp, nil
 }
@@ -466,14 +468,14 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		storedCookie, err := handlerauth.GetOAuthStateCookie(req.request, csrfCookieName, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 		if err != nil {
 			return nil, err
 		}
-		if req.decodedState.Nonce != cookieNonceValue {
-			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
+		if req.decodedState.State != storedCookie.State {
+			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.State)
 		}
-		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI)
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI, storedCookie.CodeVerifier)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -484,6 +486,10 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		claims, err := oidcIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusUnauthorized, err.Error())
+		}
+		// the nonce claim binds the ID token to this authentication request
+		if claims.Nonce != storedCookie.Nonce {
+			return nil, utilerrors.NewBadRequest("incorrect value of nonce claim in the ID token")
 		}
 		if len(claims.Email) == 0 {
 			return nil, utilerrors.NewBadRequest("the token doesn't contain the mandatory \"email\" claim")
@@ -570,14 +576,13 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		scopes = append(scopes, "offline_access")
 	}
 
-	// pass nonce
-	nonce := rand.String(rand.IntnRange(10, 15))
-	rsp.nonce = nonce
+	// pass state, nonce and PKCE verifier
+	rsp.oauthState = handlerauth.NewOAuthState()
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
 	oidcState := OIDCState{
-		Nonce:     nonce,
+		State:     rsp.oauthState.State,
 		ClusterID: req.ClusterID,
 		ProjectID: req.ProjectID,
 		UserID:    req.UserID,
@@ -588,7 +593,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, rsp.oauthState.CodeVerifier, rsp.oauthState.Nonce, scopes...)
 
 	return rsp, nil
 }
@@ -654,14 +659,13 @@ type CreateOIDCKubeconfigReq struct {
 	encodedState string
 	decodedState OIDCState
 	phase        int
-	csrfCookie   *http.Cookie
 }
 
 // OIDCState holds data that are send and retrieved from OIDC provider.
 type OIDCState struct {
-	// nonce a random string that binds requests / responses of API server and OIDC provider
+	// State a random string that binds requests / responses of API server and OIDC provider
 	// see https://tools.ietf.org/html/rfc6749#section-10.12
-	Nonce     string `json:"nonce"`
+	State     string `json:"state"`
 	ClusterID string `json:"cluster_id"`
 	ProjectID string `json:"project_id"`
 	// UserID holds the ID of the user on behalf of which the request is being handled.
@@ -676,8 +680,8 @@ type createOIDCKubeconfigRsp struct {
 	phase int
 	// oidcKubeConfig holds not serialized kubeconfig
 	oidcKubeConfig *clientcmdapi.Config
-	// nonce holds an arbitrary number storied in cookie to prevent Cross-site Request Forgery attack.
-	nonce string
+	// oauthState holds the state, nonce and PKCE verifier stored in cookie.
+	oauthState handlerauth.OAuthState
 	// cookie received only with HTTPS, never with HTTP.
 	secureCookieMode bool
 	// secure cookie
@@ -690,18 +694,14 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 	// handles kubeconfig Generated PHASE
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
-		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
-		if err != nil {
-			return fmt.Errorf("the cookie can't be removed: %w", err)
-		}
+		handlerauth.ClearOAuthStateCookie(w, csrfCookieName, "", rsp.secureCookieMode)
 		return EncodeKubeconfig(c, w, &encodeKubeConfigResponse{clientCfg: rsp.oidcKubeConfig})
 	}
 
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
-	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
+	// and set cookie with state, nonce and PKCE verifier
+	err = handlerauth.SetOAuthStateCookie(w, csrfCookieName, "", rsp.oauthState, cookieMaxAge, rsp.secureCookieMode, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -717,19 +717,15 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 	// handles kubeconfig Generated PHASE
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
-		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
-		if err != nil {
-			return fmt.Errorf("the cookie can't be removed: %w", err)
-		}
+		handlerauth.ClearOAuthStateCookie(w, csrfCookieName, "", rsp.secureCookieMode)
 		handlerauth.OIDCCallbackSuccessResponse(w)
 		return nil
 	}
 
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
-	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
+	// and set cookie with state, nonce and PKCE verifier
+	err = handlerauth.SetOAuthStateCookie(w, csrfCookieName, "", rsp.oauthState, cookieMaxAge, rsp.secureCookieMode, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -771,7 +767,7 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected json encoded value: %v", err)
 		}
 		// cookie should be set in initial code phase
-		if req.csrfCookie, err = r.Cookie(csrfCookieName); err != nil {
+		if _, err := r.Cookie(csrfCookieName); err != nil {
 			return nil, utilerrors.NewBadRequest("cookie %q not set: %v", csrfCookieName, err)
 		}
 		req.phase = exchangeCodePhase
@@ -794,14 +790,6 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 	return req, nil
 }
 
-func getCookieNonce(cookie *http.Cookie, secCookie *securecookie.SecureCookie) (string, error) {
-	var value string
-	if err := secCookie.Decode(csrfCookieName, cookie.Value, &value); err != nil {
-		return "", utilerrors.NewBadRequest("incorrect value of %q cookie: %v", csrfCookieName, err)
-	}
-	return value, nil
-}
-
 // GetUserID implements UserGetter interface.
 func (r CreateOIDCKubeconfigReq) GetUserID() string {
 	return r.UserID
@@ -817,25 +805,6 @@ func (r CreateOIDCKubeconfigReq) GetSeedCluster() apiv1.SeedCluster {
 // GetProjectID implements ProjectGetter interface.
 func (r CreateOIDCKubeconfigReq) GetProjectID() string {
 	return r.ProjectID
-}
-
-// setCookie add cookie with random string value.
-func setCookie(w http.ResponseWriter, nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) error {
-	encoded, err := secCookie.Encode(csrfCookieName, nonce)
-	if err != nil {
-		return fmt.Errorf("the encode cookie failed: %w", err)
-	}
-	cookie := &http.Cookie{
-		Name:     csrfCookieName,
-		Value:    encoded,
-		MaxAge:   maxAge,
-		HttpOnly: true,
-		Secure:   secureMode,
-		SameSite: http.SameSiteLaxMode,
-	}
-
-	http.SetCookie(w, cookie)
-	return nil
 }
 
 func getClusterForOIDCEndpoint(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID string) (*kubermaticv1.Cluster, error) {
