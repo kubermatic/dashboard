@@ -111,7 +111,6 @@ func TestNewClusterSpec_MarshalJSON(t *testing.T) {
 							Username: valueToBeFiltered,
 							Password: valueToBeFiltered,
 						},
-						VMNetName: "vmNetName",
 						Datastore: "testDataStore",
 					},
 				},

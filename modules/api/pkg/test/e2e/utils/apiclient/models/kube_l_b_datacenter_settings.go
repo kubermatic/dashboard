@@ -18,6 +18,11 @@ import (
 // swagger:model KubeLBDatacenterSettings
 type KubeLBDatacenterSettings struct {
 
+	// DisableGatewayAPIProtection disables, for the user clusters of this datacenter, the policy that reserves
+	// the Gateway API CRDs for the kubeLB CCM, and stops KKP from removing the upstream Gateway API
+	// safe-upgrades policy. Clusters cannot re-enable it.
+	DisableGatewayAPIProtection bool `json:"disableGatewayAPIProtection,omitempty"`
+
 	// DisableIngressClass is used to disable the ingress class `kubelb` filter for kubeLB.
 	DisableIngressClass bool `json:"disableIngressClass,omitempty"`
 

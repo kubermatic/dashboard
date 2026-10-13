@@ -370,6 +370,12 @@ run_swagger() {
   # is not set for generating/verifying the Swagger spec.
   export GOFLAGS=
 
+  # Go 1.27 backs encoding/json with the v2 implementation, where json.RawMessage
+  # is an alias for jsontext.Value. go-swagger 0.30.x cannot handle *types.Alias
+  # and panics during codescan. Stick to the classic v1 implementation for as
+  # long as we pin go-swagger; remove this once go-swagger is upgraded.
+  export GOEXPERIMENT=nojsonv2
+
   go run github.com/go-swagger/go-swagger/cmd/swagger $@
 }
 

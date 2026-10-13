@@ -141,7 +141,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		DisplayAPIDocs:                   settings.DisplayAPIDocs,
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
-		EnableWebTerminal:                settings.EnableWebTerminal,
+		EnableWebTerminal:                settings.EnableWebTerminal, //nolint:staticcheck // deprecated, still served to dashboards that do not use webTerminalOptions yet
 		EnableShareCluster:               ptr.To[bool](settings.EnableShareCluster),
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		EnableClusterBackups:             settings.EnableClusterBackups,
