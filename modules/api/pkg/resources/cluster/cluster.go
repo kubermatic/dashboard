@@ -59,7 +59,7 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		HumanReadableName:                   apiCluster.Name,
 		Cloud:                               apiCluster.Spec.Cloud,
 		MachineNetworks:                     apiCluster.Spec.MachineNetworks,
-		OIDC:                                apiCluster.Spec.OIDC,
+		OIDC:                                apiCluster.Spec.OIDC, //nolint:staticcheck // still supported for backward compatibility until authenticationConfiguration is enforced
 		UpdateWindow:                        apiCluster.Spec.UpdateWindow,
 		Version:                             apiCluster.Spec.Version,
 		UsePodSecurityPolicyAdmissionPlugin: apiCluster.Spec.UsePodSecurityPolicyAdmissionPlugin,

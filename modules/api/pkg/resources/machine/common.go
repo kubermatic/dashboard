@@ -484,7 +484,7 @@ func GetHetznerProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 	}
 
 	config := &hetzner.RawConfig{
-		Datacenter: providerconfig.ConfigVarString{Value: dc.Spec.Hetzner.Datacenter},
+		Datacenter: providerconfig.ConfigVarString{Value: dc.Spec.Hetzner.Datacenter}, //nolint:staticcheck // machine-controller migrates this to location on admission when location is empty
 		Location:   providerconfig.ConfigVarString{Value: dc.Spec.Hetzner.Location},
 		Networks:   networks,
 		ServerType: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Hetzner.Type},
