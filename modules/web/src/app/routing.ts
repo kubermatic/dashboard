@@ -14,7 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
-import {AdminGuard} from '@core/services/auth/guard';
+import {AdminGuard, ProjectIDGuard} from '@core/services/auth/guard';
 import {Observable, of} from 'rxjs';
 import {DashboardComponent} from './dashboard/component';
 import {DynamicModule} from './dynamic/module-registry';
@@ -41,88 +41,107 @@ function createRouting(): Routes {
         {
           path: 'projects/:projectID/overview',
           loadChildren: () => import('./project-overview/module').then(m => m.ProjectOverviewModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/wizard',
           loadChildren: () => import('./wizard/module').then(m => m.WizardModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/external-cluster-wizard',
           loadChildren: () => import('./external-cluster-wizard/module').then(m => m.ExternalClusterModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/kubeone-wizard',
           loadChildren: () => import('./kubeone-wizard/module').then(m => m.KubeOneWizardModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/sshkeys',
           loadChildren: () => import('./sshkey/module').then(m => m.SSHKeyModule),
-          canActivate: [SSHKeyGuard],
+          canActivate: [ProjectIDGuard, SSHKeyGuard],
         },
         {
           path: 'projects/:projectID/members',
           loadChildren: () => import('./member/module').then(m => m.MemberModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/groups',
           loadChildren: () => import('./member/module').then(m => m.MemberModule),
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
           path: 'projects/:projectID/serviceaccounts',
           loadChildren: () => import('./serviceaccount/module').then(m => m.ServiceAccountModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/clusters',
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/externalclusters',
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/kubeoneclusters',
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/clustertemplates',
           loadChildren: () => import('./cluster-template/module').then(m => m.ClusterTemplateModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/backups',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/snapshots',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: 'projects/:projectID/restores',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+          canActivate: [ProjectIDGuard],
         },
         {
           path: `projects/:projectID/${View.ClusterBackup}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.ClusterSchedule}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.ClusterRestore}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.BackupStorageLocation}`,
           loadChildren: () => DynamicModule.ClusterBackups,
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
           path: `projects/:projectID/${View.KyvernoPolicies}`,
           loadChildren: () => DynamicModule.KyvernoPolicies,
+          canActivate: [ProjectIDGuard],
           canMatch: [EnterpriseEditionGuard],
         },
         {
