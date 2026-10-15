@@ -144,14 +144,16 @@ func (a *authHandler) callbackHandler() http.Handler {
 		redirectURI := a.getCallbackURI(r)
 		oidcTokens, err := a.oidcIssuerVerifier.Exchange(r.Context(), code, redirectURI, storedState.CodeVerifier)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to exchange code for tokens: %v", err), http.StatusInternalServerError)
+			log.Logger.Errorf("failed to exchange code for tokens: %v", err)
+			http.Error(w, "failed to exchange code for tokens", http.StatusInternalServerError)
 			return
 		}
 
 		// 5. Verify id_token and check email claim.
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), oidcTokens.IDToken)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusInternalServerError)
+			log.Logger.Errorf("failed to verify id_token: %v", err)
+			http.Error(w, "failed to verify id_token", http.StatusInternalServerError)
 			return
 		}
 
@@ -229,6 +231,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 2. Refresh tokens.
 		oidcTokens, err := a.oidcIssuerVerifier.RefreshAccessToken(r.Context(), refreshCookie.Value)
 		if err != nil {
+			log.Logger.Errorf("failed to refresh OIDC tokens: %v", err)
 			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "token refresh failed", http.StatusUnauthorized)
 			return
@@ -237,6 +240,7 @@ func (a *authHandler) refreshHandler() http.Handler {
 		// 3. Verify new id_token.
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), oidcTokens.IDToken)
 		if err != nil {
+			log.Logger.Errorf("failed to verify refreshed id_token: %v", err)
 			clearAuthCookies(w, r, oidcConfig.CookieSecureMode)
 			http.Error(w, "failed to verify refreshed id_token", http.StatusUnauthorized)
 			return
@@ -308,7 +312,8 @@ func (a *authHandler) logoutHandler() http.Handler {
 
 		claims, err := a.oidcIssuerVerifier.Verify(r.Context(), tokenValue)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to verify id_token: %v", err), http.StatusUnauthorized)
+			log.Logger.Debugf("failed to verify id_token on logout: %v", err)
+			http.Error(w, "failed to verify id_token", http.StatusUnauthorized)
 			return
 		}
 
@@ -319,7 +324,8 @@ func (a *authHandler) logoutHandler() http.Handler {
 
 		userInfo, err := a.userProvider.UserByEmail(r.Context(), claims.Email)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to get user info: %v", err), http.StatusInternalServerError)
+			log.Logger.Errorf("failed to get user info: %v", err)
+			http.Error(w, "failed to get user info", http.StatusInternalServerError)
 			return
 		}
 
@@ -334,7 +340,8 @@ func (a *authHandler) logoutHandler() http.Handler {
 		}
 
 		if err := a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry); err != nil {
-			http.Error(w, fmt.Sprintf("failed to invalidate token: %v", err), http.StatusInternalServerError)
+			log.Logger.Errorf("failed to invalidate token: %v", err)
+			http.Error(w, "failed to invalidate token", http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
