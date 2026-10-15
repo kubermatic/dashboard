@@ -192,9 +192,10 @@ func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI 
 }
 
 func (o *OpenIDClient) RefreshAccessToken(ctx context.Context, refreshToken string) (authtypes.OIDCToken, error) {
+	clientCtx := oidc.ClientContext(ctx, o.httpClient)
 	tok := &oauth2.Token{RefreshToken: refreshToken}
 	tokenSource := o.oauth2Config("").
-		TokenSource(ctx, tok)
+		TokenSource(clientCtx, tok)
 
 	tokens, err := tokenSource.Token()
 	if err != nil {
