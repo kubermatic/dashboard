@@ -132,7 +132,7 @@
     "js-beautify": "1.15.4",
     "json-server": "0.17.4",
     "license-check-and-add": "4.0.5",
-    "license-compliance": "3.0.1",
+    "license-compliance": "4.0.0",
     "lint-staged": "17.6.0",
     "ng2-mock-component": "0.2.0",
     "prettier": "^3.9.10",
