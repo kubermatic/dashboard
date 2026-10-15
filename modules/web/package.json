@@ -135,7 +135,7 @@
     "license-compliance": "3.0.1",
     "lint-staged": "17.6.0",
     "ng2-mock-component": "0.2.0",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "start-server-and-test": "3.0.12",
     "stream": "0.0.3",
     "stylelint": "16.26.1",
