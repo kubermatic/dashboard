@@ -20,13 +20,13 @@ ARG TARGETARCH
 LABEL maintainer="support@kubermatic.com"
 
 # Source: https://dl.k8s.io/release/stable-1.36.txt
-ENV KUBECTL_VERSION=v1.36.3
+ENV KUBECTL_VERSION=v1.36.5
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.21.4
+ENV HELM_VERSION=v3.22.0
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.4.36
+ENV K8SGPT_VERSION=v0.4.39
 
 # Source: https://github.com/derailed/k9s/releases
 ENV K9S_VERSION=v0.51.0
@@ -35,13 +35,13 @@ ENV K9S_VERSION=v0.51.0
 ENV KREW_VERSION=v0.5.0
 
 # Source: https://github.com/cilium/cilium-cli/releases
-ENV CILIUM_CLI_VERSION=v0.19.6
+ENV CILIUM_CLI_VERSION=v0.19.7
 
 # Source: https://github.com/cilium/hubble/releases
 ENV HUBBLE_VERSION=v1.19.4
 
 # Source: https://github.com/velero-io/velero/releases
-ENV VELERO_VERSION=v1.18.2
+ENV VELERO_VERSION=v1.18.4
 
 ENV USER=webshell
 ENV GROUP=webshell
