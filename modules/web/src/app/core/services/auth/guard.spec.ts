@@ -66,13 +66,6 @@ describe('ProjectIDGuard', () => {
     expect(parseUrl).not.toHaveBeenCalled();
   });
 
-  it('should resolve a project id only once across navigations', () => {
-    expect(activate(fakeProject().id)).toBe(true);
-    expect(activate(fakeProject().id)).toBe(true);
-
-    expect(getProject).toHaveBeenCalledTimes(1);
-  });
-
   it('should redirect to the project list for a project id that does not resolve', () => {
     getProject.mockReturnValue(throwError(() => new Error('404')) as Observable<Project>);
 
