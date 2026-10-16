@@ -53,9 +53,10 @@ describe('ProjectIDGuard', () => {
   });
 
   it('should redirect to the project list for an unusable project id', () => {
-    ['undefined', 'null', '', '  '].forEach(projectID => expect(activate(projectID)).toBe('/projects'));
+    const unusableProjectIDs = ['undefined', 'null', '', '  '];
+    unusableProjectIDs.forEach(projectID => expect(activate(projectID)).toBe('/projects'));
 
-    expect(parseUrl).toHaveBeenCalledTimes(4);
+    expect(parseUrl).toHaveBeenCalledTimes(unusableProjectIDs.length);
     expect(parseUrl).toHaveBeenCalledWith('/projects');
     expect(getProject).not.toHaveBeenCalled();
   });
