@@ -110,6 +110,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._screenWidth.next(event.target.innerWidth);
   }
 
+  get hasSelectedProject(): boolean {
+    return !!this._selectedProject?.id;
+  }
+
   getLinkClass(url: string): string {
     return this.checkUrl(url) ? 'active' : '';
   }
@@ -145,8 +149,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return isProjectAndUrlExists;
   }
 
-  getRouterLink(view: View): string {
-    return `/projects/${this._selectedProject.id}/${view}`;
+  getRouterLink(view: View): string | null {
+    return this.hasSelectedProject ? `/projects/${this._selectedProject.id}/${view}` : null;
   }
 
   getTooltip(view: View): string {
