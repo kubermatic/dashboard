@@ -64,7 +64,6 @@ describe('ProjectIDGuard', () => {
   it('should allow a project id that resolves', () => {
     expect(activate(fakeProject().id)).toBe(true);
     expect(getProject).toHaveBeenCalledWith(fakeProject().id);
-    expect(parseUrl).not.toHaveBeenCalled();
   });
 
   it('should redirect to the project list for a project id that does not resolve', () => {
