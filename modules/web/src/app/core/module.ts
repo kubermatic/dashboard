@@ -21,7 +21,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {HelpPanelComponent} from '@core/components/help-panel/component';
 import {AddonService} from '@core/services/addon';
 import {ApplicationService} from '@core/services/application';
-import {AdminGuard, AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {AdminGuard, AuthGuard, AuthzGuard, ProjectIDGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
@@ -100,6 +100,7 @@ const services = [
   AuthGuard,
   AuthzGuard,
   AdminGuard,
+  ProjectIDGuard,
   SSHKeyGuard,
   EnterpriseEditionGuard,
   DatacenterService,
