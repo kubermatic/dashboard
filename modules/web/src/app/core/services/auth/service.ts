@@ -77,7 +77,10 @@ export class Auth {
 
   logout(): Observable<LogoutResponse> {
     this._cancelRefresh();
-    return this._httpClient.post<LogoutResponse>(this._logoutUrl, null).pipe(catchError(() => of(null)));
+    // The origin lets the API send the user back to this hostname after logout.
+    return this._httpClient
+      .post<LogoutResponse>(this._logoutUrl, null, {params: {origin: window.location.origin}})
+      .pipe(catchError(() => of(null)));
   }
 
   private _scheduleRefresh(): void {
