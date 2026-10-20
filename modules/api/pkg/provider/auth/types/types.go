@@ -142,4 +142,6 @@ type OIDCConfiguration struct {
 	OfflineAccessAsScope bool
 	// SkipTLSVerify skip TLS verification for the token issuer
 	SkipTLSVerify bool
+	// AdditionalRedirectURIs are extra redirect URIs the dashboard login may use, e.g. for reverse proxies
+	AdditionalRedirectURIs []string
 }

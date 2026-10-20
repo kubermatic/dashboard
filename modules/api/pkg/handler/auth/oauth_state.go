@@ -36,6 +36,8 @@ type OAuthState struct {
 	Nonce string
 	// CodeVerifier is the PKCE verifier whose S256 challenge was sent to the OIDC provider.
 	CodeVerifier string
+	// RedirectURI is the redirect_uri sent to the OIDC provider, which the code exchange must repeat.
+	RedirectURI string
 }
 
 // NewOAuthState returns random state and nonce values and a PKCE code verifier.

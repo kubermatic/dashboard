@@ -49,13 +49,16 @@ const (
 // fakeVerifier implements authtypes.OIDCIssuerVerifier with per-test behavior
 // set via its fields.
 type fakeVerifier struct {
-	secureCookie     *securecookie.SecureCookie
-	cookieSecureMode bool
-	offlineAsScope   bool
-	redirectURI      string
+	secureCookie           *securecookie.SecureCookie
+	cookieSecureMode       bool
+	offlineAsScope         bool
+	redirectURI            string
+	additionalRedirectURIs []string
 
 	exchangeToken authtypes.OIDCToken
 	exchangeErr   error
+	// exchangedRedirectURI records the redirect URI the handler passed to Exchange.
+	exchangedRedirectURI string
 
 	refreshToken authtypes.OIDCToken
 	refreshErr   error
@@ -69,11 +72,12 @@ var _ authtypes.OIDCIssuerVerifier = &fakeVerifier{}
 
 func (f *fakeVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 	return &authtypes.OIDCConfiguration{
-		URL:                  "https://dex.example.com",
-		ClientID:             "kubermaticIssuer",
-		SecureCookie:         f.secureCookie,
-		CookieSecureMode:     f.cookieSecureMode,
-		OfflineAccessAsScope: f.offlineAsScope,
+		URL:                    "https://dex.example.com",
+		ClientID:               "kubermaticIssuer",
+		SecureCookie:           f.secureCookie,
+		CookieSecureMode:       f.cookieSecureMode,
+		OfflineAccessAsScope:   f.offlineAsScope,
+		AdditionalRedirectURIs: f.additionalRedirectURIs,
 	}
 }
 
@@ -94,7 +98,8 @@ func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifi
 	return "https://dex.example.com/auth?" + v.Encode()
 }
 
-func (f *fakeVerifier) Exchange(_ context.Context, _, _ string, _ ...string) (authtypes.OIDCToken, error) {
+func (f *fakeVerifier) Exchange(_ context.Context, _, redirectURI string, _ ...string) (authtypes.OIDCToken, error) {
+	f.exchangedRedirectURI = redirectURI
 	return f.exchangeToken, f.exchangeErr
 }
 
@@ -285,6 +290,100 @@ func TestLoginHandler(t *testing.T) {
 	// proves PKCE is wired correctly end to end.
 	if got, want := q.Get("code_challenge"), oauth2.S256ChallengeFromVerifier(stored.CodeVerifier); got != want {
 		t.Errorf("code_challenge %q does not match S256(verifier) %q", got, want)
+	}
+}
+
+// newOriginTestVerifier returns a verifier configured like a KKP installation that is also reachable
+// through reverse proxies on other hostnames.
+func newOriginTestVerifier(sc *securecookie.SecureCookie) *fakeVerifier {
+	return &fakeVerifier{
+		secureCookie: sc,
+		redirectURI:  "https://kkp.example.com",
+		additionalRedirectURIs: []string{
+			"https://kkp-proxy.example.com",
+			"https://kkp-internal.example.com:8443/api/v2/auth/callback",
+		},
+	}
+}
+
+func TestLoginHandlerOrigin(t *testing.T) {
+	testCases := []struct {
+		name                string
+		url                 string
+		expectedRedirectURI string
+	}{
+		{
+			name:                "no origin uses the configured redirect URI",
+			url:                 "https://kkp.example.com/api/v2/auth/login",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "origin of the configured redirect URI",
+			url:                 "https://kkp.example.com/api/v2/auth/login?origin=https://kkp.example.com",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "origin of an additional redirect URI",
+			url:                 "https://kkp-proxy.example.com/api/v2/auth/login?origin=https://kkp-proxy.example.com",
+			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "origin of an additional redirect URI with port and path",
+			url:                 "https://kkp-internal.example.com:8443/api/v2/auth/login?origin=https://kkp-internal.example.com:8443",
+			expectedRedirectURI: "https://kkp-internal.example.com:8443/api/v2/auth/callback",
+		},
+		{
+			name:                "origin not allowed falls back to the configured redirect URI",
+			url:                 "https://kkp.example.com/api/v2/auth/login?origin=https://evil.example.com",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "invalid origin falls back to the configured redirect URI",
+			url:                 "https://kkp.example.com/api/v2/auth/login?origin=https://kkp-proxy.example.com/evil",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "origin is ignored on loopback",
+			url:                 testLoginURL + "?origin=https://evil.example.com",
+			expectedRedirectURI: testCallbackURL,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			sc := newTestSecureCookie()
+			h := newTestHandler(newOriginTestVerifier(sc), nil, nil)
+
+			req := httptest.NewRequest(http.MethodGet, tc.url, nil)
+			rec := httptest.NewRecorder()
+			h.loginHandler().ServeHTTP(rec, req)
+
+			if rec.Code != http.StatusSeeOther {
+				t.Fatalf("expected status %d, got %d (body: %q)", http.StatusSeeOther, rec.Code, rec.Body.String())
+			}
+
+			// The redirect_uri sent to the OIDC provider and the one stored for the code exchange
+			// must both be the expected one.
+			u, err := url.Parse(rec.Header().Get("Location"))
+			if err != nil {
+				t.Fatalf("failed to parse redirect Location: %v", err)
+			}
+			if got := u.Query().Get("redirect_uri"); got != tc.expectedRedirectURI {
+				t.Errorf("expected redirect_uri %q, got %q", tc.expectedRedirectURI, got)
+			}
+
+			stateCookie := findCookie(rec.Result().Cookies(), oauthStateCookieName)
+			if stateCookie == nil {
+				t.Fatalf("expected %q cookie to be set", oauthStateCookieName)
+			}
+			var stored handlerauth.OAuthState
+			if err := sc.Decode(oauthStateCookieName, stateCookie.Value, &stored); err != nil {
+				t.Fatalf("failed to decode state cookie: %v", err)
+			}
+			if stored.RedirectURI != tc.expectedRedirectURI {
+				t.Errorf("expected stored RedirectURI %q, got %q", tc.expectedRedirectURI, stored.RedirectURI)
+			}
+		})
 	}
 }
 
@@ -846,4 +945,146 @@ func TestCallbackHandler(t *testing.T) {
 			t.Errorf("expected redirect to %q, got %q", "/", loc)
 		}
 	})
+}
+
+func TestCallbackHandlerRedirectURI(t *testing.T) {
+	futureExpiry := apiv1.NewTime(time.Now().Add(time.Hour))
+
+	testCases := []struct {
+		name                string
+		storedRedirectURI   string
+		expectedRedirectURI string
+	}{
+		{
+			name:                "uses the redirect URI stored at login",
+			storedRedirectURI:   "https://kkp-proxy.example.com/api/v2/auth/callback",
+			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/auth/callback",
+		},
+		{
+			name:                "state cookie without a redirect URI falls back to the request",
+			storedRedirectURI:   "",
+			expectedRedirectURI: testCallbackURL,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			sc := newTestSecureCookie()
+			verifier := newOriginTestVerifier(sc)
+			verifier.exchangeToken = authtypes.OIDCToken{IDToken: "fakeTokenId"}
+			verifier.verifyClaims = authtypes.TokenClaims{Email: "john@acme.com", Nonce: "nonce-abc", Expiry: futureExpiry}
+			h := newTestHandler(verifier, nil, nil)
+
+			cookie := encodeStateCookie(t, sc, handlerauth.OAuthState{
+				State:        "state-123",
+				Nonce:        "nonce-abc",
+				CodeVerifier: "verifier-xyz",
+				RedirectURI:  tc.storedRedirectURI,
+			})
+			rec := runCallback(h, cookie, "state=state-123&code=fakeCode")
+
+			if rec.Code != http.StatusSeeOther {
+				t.Fatalf("expected status %d, got %d (body: %q)", http.StatusSeeOther, rec.Code, rec.Body.String())
+			}
+			if verifier.exchangedRedirectURI != tc.expectedRedirectURI {
+				t.Errorf("expected Exchange with redirect URI %q, got %q", tc.expectedRedirectURI, verifier.exchangedRedirectURI)
+			}
+		})
+	}
+}
+
+func TestLogoutHandlerOrigin(t *testing.T) {
+	futureExpiry := apiv1.NewTime(time.Now().Add(time.Hour))
+	keycloakUIConfig := `{"oidc_logout_url": "https://keycloak.example.com/realms/kkp/protocol/openid-connect/logout", "oidc_provider": "keycloak"}`
+
+	testCases := []struct {
+		name     string
+		url      string
+		uiConfig string
+		// expectedRedirect is the redirect returned to the dashboard. When it is the provider's
+		// end-session endpoint, expectedPostLogoutRedirectURI is checked instead.
+		expectedRedirect              string
+		expectedPostLogoutRedirectURI string
+	}{
+		{
+			name:             "without oidc_logout_url, no origin redirects to the dashboard root",
+			url:              "https://kkp.example.com/api/v2/auth/logout",
+			expectedRedirect: "/",
+		},
+		{
+			name:             "without oidc_logout_url, the origin is not needed",
+			url:              "https://kkp-proxy.example.com/api/v2/auth/logout?origin=https://kkp-proxy.example.com",
+			expectedRedirect: "/",
+		},
+		{
+			name:                          "with oidc_logout_url, no origin returns to the configured host",
+			url:                           "https://kkp.example.com/api/v2/auth/logout",
+			uiConfig:                      keycloakUIConfig,
+			expectedPostLogoutRedirectURI: "https://kkp.example.com/",
+		},
+		{
+			name:                          "with oidc_logout_url, an allowed origin returns to that host",
+			url:                           "https://kkp-proxy.example.com/api/v2/auth/logout?origin=https://kkp-proxy.example.com",
+			uiConfig:                      keycloakUIConfig,
+			expectedPostLogoutRedirectURI: "https://kkp-proxy.example.com/",
+		},
+		{
+			name:                          "with oidc_logout_url, an origin that isn't allowed returns to the configured host",
+			url:                           "https://kkp.example.com/api/v2/auth/logout?origin=https://evil.example.com",
+			uiConfig:                      keycloakUIConfig,
+			expectedPostLogoutRedirectURI: "https://kkp.example.com/",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			verifier := newOriginTestVerifier(newTestSecureCookie())
+			verifier.verifyClaims = authtypes.TokenClaims{Email: "john@acme.com", Expiry: futureExpiry}
+			userProvider := &fakeUserProvider{
+				usersByEmail: map[string]*kubermaticv1.User{"john@acme.com": {}},
+			}
+			configGetter := func(context.Context) (*kubermaticv1.KubermaticConfiguration, error) {
+				return &kubermaticv1.KubermaticConfiguration{
+					Spec: kubermaticv1.KubermaticConfigurationSpec{UI: kubermaticv1.KubermaticUIConfiguration{Config: tc.uiConfig}},
+				}, nil
+			}
+			h := newTestHandler(verifier, userProvider, configGetter)
+
+			req := httptest.NewRequest(http.MethodPost, tc.url, nil)
+			req.AddCookie(&http.Cookie{Name: idTokenCookieName, Value: "fakeTokenId"})
+			rec := httptest.NewRecorder()
+			h.logoutHandler().ServeHTTP(rec, req)
+
+			// An origin that isn't allowed must not fail the logout.
+			if rec.Code != http.StatusOK {
+				t.Fatalf("expected status %d, got %d (body: %q)", http.StatusOK, rec.Code, rec.Body.String())
+			}
+			if len(userProvider.invalidatedTokens) != 1 {
+				t.Errorf("expected the token to be invalidated, got %v", userProvider.invalidatedTokens)
+			}
+
+			var resp map[string]string
+			if err := json.Unmarshal(rec.Body.Bytes(), &resp); err != nil {
+				t.Fatalf("failed to decode response: %v", err)
+			}
+
+			if tc.expectedPostLogoutRedirectURI == "" {
+				if resp["redirect"] != tc.expectedRedirect {
+					t.Errorf("expected redirect %q, got %q", tc.expectedRedirect, resp["redirect"])
+				}
+				return
+			}
+
+			u, err := url.Parse(resp["redirect"])
+			if err != nil {
+				t.Fatalf("failed to parse redirect %q: %v", resp["redirect"], err)
+			}
+			if got := u.Scheme + "://" + u.Host + u.Path; got != "https://keycloak.example.com/realms/kkp/protocol/openid-connect/logout" {
+				t.Errorf("expected the provider's end-session endpoint, got %q", got)
+			}
+			if got := u.Query().Get("post_logout_redirect_uri"); got != tc.expectedPostLogoutRedirectURI {
+				t.Errorf("expected post_logout_redirect_uri %q, got %q", tc.expectedPostLogoutRedirectURI, got)
+			}
+		})
+	}
 }
