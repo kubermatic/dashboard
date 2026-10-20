@@ -14,10 +14,12 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {PathParam} from '@core/services/params';
+import {ProjectService} from '@core/services/project';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {MemberUtils, Permission} from '@shared/utils/member';
-import {from, Observable} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {UserService} from '../user';
 import {Auth} from './service';
@@ -32,6 +34,39 @@ export class AdminGuard implements CanActivate {
   canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return this._userService.currentUser.pipe(
       map(user => (user.isAdmin ? true : this._router.parseUrl(View.Projects)))
+    );
+  }
+}
+
+const INVALID_PROJECT_IDS = new Set(['', 'undefined', 'null']);
+
+@Injectable()
+export class ProjectIDGuard implements CanActivate {
+  private _resolvedProjectID: string;
+
+  constructor(
+    private readonly _router: Router,
+    private readonly _projectService: ProjectService
+  ) {}
+
+  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean | UrlTree> {
+    const projectID = route.paramMap.get(PathParam.ProjectID)?.trim() ?? '';
+    const projectList = this._router.parseUrl(`/${View.Projects}`);
+
+    if (INVALID_PROJECT_IDS.has(projectID)) {
+      return of(projectList);
+    }
+
+    if (projectID === this._resolvedProjectID) {
+      return of(true);
+    }
+
+    return this._projectService.getProject(projectID).pipe(
+      map(() => {
+        this._resolvedProjectID = projectID;
+        return true;
+      }),
+      catchError(() => of(projectList))
     );
   }
 }
