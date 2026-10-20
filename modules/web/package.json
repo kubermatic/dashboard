@@ -123,7 +123,7 @@
     "eslint-plugin-compat": "6.2.1",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-rxjs": "5.0.3",
-    "gts": "5.3.1",
+    "gts": "7.0.0",
     "husky": "9.1.7",
     "jest": "30.5.2",
     "jest-canvas-mock": "^2.5.8",
