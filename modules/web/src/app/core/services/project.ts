@@ -106,6 +106,11 @@ export class ProjectService {
     return this._http.delete<Project>(url);
   }
 
+  getProject(projectID: string): Observable<Project> {
+    const url = `${this._restRoot}/projects/${projectID}`;
+    return this._http.get<Project>(url);
+  }
+
   searchProjects(query: string, displayAll: boolean): Observable<Project[]> {
     const url = `${this._restRoot}/projects?displayAll=${displayAll}&search=${encodeURIComponent(query)}`;
     return this._http.get<Project[]>(url).pipe(
@@ -156,7 +161,6 @@ export class ProjectService {
       return EMPTY;
     }
 
-    const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.get<Project>(url).pipe(catchError(() => of<Project>()));
+    return this.getProject(projectID).pipe(catchError(() => of<Project>()));
   }
 }
