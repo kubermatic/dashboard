@@ -58,6 +58,10 @@ API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-secret=$OIDC_ISSUER_CLIENT_S
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-redirect-uri=$OIDC_ISSUER_REDIRECT_URI"
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-cookie-hash-key=$OIDC_ISSUER_COOKIE_HASH_KEY"
 
+# The local dashboard (npm run start:local) runs on another host than -oidc-issuer-redirect-uri.
+OIDC_ISSUER_ADDITIONAL_REDIRECT_URIS="${OIDC_ISSUER_ADDITIONAL_REDIRECT_URIS-http://localhost:8000/api/v2/auth/callback}"
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-additional-redirect-uris=$OIDC_ISSUER_ADDITIONAL_REDIRECT_URIS"
+
 echodate "Starting API..."
 set -x
 ./_build/kubermatic-api $API_EXTRA_ARGS \

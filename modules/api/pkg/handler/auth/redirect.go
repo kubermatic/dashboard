@@ -27,8 +27,10 @@ import (
 // ErrOriginNotAllowed is returned when an origin matches none of the allowed redirect URLs.
 var ErrOriginNotAllowed = errors.New("origin does not match any allowed redirect URL")
 
-// AllowedOrigin returns origin in canonical form if its scheme, host and port match one of
-// allowedURLs. Only the scheme, host and port of allowedURLs are compared, their paths are ignored.
+// AllowedOrigin returns the scheme and host of the first allowedURLs entry whose scheme, host and
+// port match origin. They are compared in canonical form, paths are ignored. The entry is returned
+// as configured, e.g. with an explicit default port, since the OIDC provider compares redirect URIs
+// exactly.
 //
 // origin is client-controlled (the browser's window.location.origin), so it must never be used as
 // an OIDC redirect without passing this check: an IdP that accepts loose redirect URIs would
@@ -45,7 +47,7 @@ func AllowedOrigin(origin string, allowedURLs ...string) (string, error) {
 			continue
 		}
 		if canonicalOrigin(u) == want {
-			return want, nil
+			return u.Scheme + "://" + u.Host, nil
 		}
 	}
 

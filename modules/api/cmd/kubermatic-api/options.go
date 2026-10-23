@@ -177,8 +177,8 @@ func (o serverRunOptions) validate() error {
 		if err != nil {
 			return fmt.Errorf("invalid -oidc-issuer-additional-redirect-uris entry %q: %w", uri, err)
 		}
-		if (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" || u.RawQuery != "" || u.Fragment != "" {
-			return fmt.Errorf("invalid -oidc-issuer-additional-redirect-uris entry %q: must be an http(s) URL with a host and without query or fragment", uri)
+		if (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" || u.User != nil || u.RawQuery != "" || u.Fragment != "" {
+			return fmt.Errorf("invalid -oidc-issuer-additional-redirect-uris entry %q: must be an http(s) URL with a host and without user info, query or fragment", uri)
 		}
 	}
 
