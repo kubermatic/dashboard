@@ -73,16 +73,18 @@ limitations under the License.
     </ng-container>
   </km-autocomplete>
 
-  <mat-form-field fxFlex
-                  subscriptSizing="dynamic">
-    <mat-label>Datastore Cluster</mat-label>
-    <input matInput
-           [formControlName]="Controls.DatastoreCluster"
-           [name]="Controls.DatastoreCluster"
-           type="text"
-           autocomplete="off" />
-    <mat-hint>DatastoreCluster to be used for storing virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
-  </mat-form-field>
+  <km-autocomplete label="Datastore Cluster"
+                   subscriptSizing="dynamic"
+                   [formControlName]="Controls.DatastoreCluster"
+                   [isLoading]="isLoadingDatastoreClusters"
+                   [options]="datastoreClusters">
+    <ng-container hint>Datastore Cluster to be used for storing virtual machines. It is mutually exclusive with
+      Datastore field.@if (!hasRequiredCredentials()) {
+      <span>&nbsp;Enter
+        your credentials to load autocompletions.</span>
+      }
+    </ng-container>
+  </km-autocomplete>
 
   <mat-form-field fxFlex>
     <mat-label>Resource Pool</mat-label>
