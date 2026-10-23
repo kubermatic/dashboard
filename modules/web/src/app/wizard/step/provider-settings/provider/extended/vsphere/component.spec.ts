@@ -119,6 +119,13 @@ describe('VSphereProviderExtendedComponent', () => {
     component.form.get(component.Controls.DatastoreCluster).setValue({main: datastoreCluster});
   }
 
+  function resourcePoolField(): AutocompleteComponent {
+    return fixture.debugElement
+      .queryAll(By.directive(AutocompleteComponent))
+      .map(element => element.componentInstance as AutocompleteComponent)
+      .find(field => field.label === 'Resource Pool');
+  }
+
   function setBaseFolderPath(path: string): void {
     component.form.get(component.Controls.BaseFolderPath).setValue({main: path});
   }
@@ -178,5 +185,18 @@ describe('VSphereProviderExtendedComponent', () => {
 
     setDatastoreCluster('');
     expect(datastore.disabled).toBe(false);
+  });
+
+  it('should offer the loaded resource pools as options of the resource pool', () => {
+    component.resourcePools = ['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a'];
+    fixture.detectChanges();
+
+    expect(resourcePoolField().options).toEqual(['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a']);
+  });
+
+  it('should write the resource pool to the cluster spec', () => {
+    component.form.get(component.Controls.ResourcePool).setValue({main: '/DC0/host/cluster/Resources/pool-a'});
+
+    expect(clusterSpecService.cluster.spec.cloud.vsphere.resourcePool).toBe('/DC0/host/cluster/Resources/pool-a');
   });
 });

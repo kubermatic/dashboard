@@ -86,14 +86,15 @@ limitations under the License.
     </ng-container>
   </km-autocomplete>
 
-  <mat-form-field fxFlex>
-    <mat-label>Resource Pool</mat-label>
-    <input matInput
-           [formControlName]="Controls.ResourcePool"
-           [name]="Controls.ResourcePool"
-           type="text"
-           autocomplete="off" />
-  </mat-form-field>
+  <km-autocomplete label="Resource Pool"
+                   [formControlName]="Controls.ResourcePool"
+                   [isLoading]="isLoadingResourcePools"
+                   [options]="resourcePools">
+    <ng-container hint>@if (!hasRequiredCredentials()) {
+      <span>Enter your credentials to load autocompletions.</span>
+      }
+    </ng-container>
+  </km-autocomplete>
 
   <mat-card-header class="km-no-padding">
     <mat-card-title>Cluster Tags
