@@ -860,6 +860,12 @@ type VSphereDatastoreList struct {
 	Datastores []string `json:"datastores"`
 }
 
+// VSphereDatastoreClusterList is the object representing the vsphere datastore clusters.
+// swagger:model VSphereDatastoreClusterList
+type VSphereDatastoreClusterList struct {
+	DatastoreClusters []string `json:"datastoreClusters"`
+}
+
 // VSphereVMGroup is the object representing a vsphere VM Group.
 // swagger:model VSphereVMGroup
 type VSphereVMGroup struct {
