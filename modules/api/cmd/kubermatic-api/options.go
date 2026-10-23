@@ -20,7 +20,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"net/url"
 	"os"
+	"strings"
 
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
@@ -58,15 +60,16 @@ type serverRunOptions struct {
 	kubermaticConfiguration *kubermaticv1.KubermaticConfiguration
 
 	// OIDC configuration
-	oidcURL                        string
-	oidcAuthenticatorClientID      string
-	oidcIssuerClientID             string
-	oidcIssuerClientSecret         string
-	oidcIssuerRedirectURI          string
-	oidcIssuerCookieHashKey        string
-	oidcIssuerCookieSecureMode     bool
-	oidcSkipTLSVerify              bool
-	oidcIssuerOfflineAccessAsScope bool
+	oidcURL                          string
+	oidcAuthenticatorClientID        string
+	oidcIssuerClientID               string
+	oidcIssuerClientSecret           string
+	oidcIssuerRedirectURI            string
+	oidcIssuerAdditionalRedirectURIs []string
+	oidcIssuerCookieHashKey          string
+	oidcIssuerCookieSecureMode       bool
+	oidcSkipTLSVerify                bool
+	oidcIssuerOfflineAccessAsScope   bool
 
 	// service account configuration
 	serviceAccountSigningKey string
@@ -78,9 +81,10 @@ type serverRunOptions struct {
 func newServerRunOptions() (serverRunOptions, error) {
 	s := serverRunOptions{featureGates: features.FeatureGate{}}
 	var (
-		rawExposeStrategy string
-		caBundleFile      string
-		configFile        string
+		rawExposeStrategy                   string
+		rawOIDCIssuerAdditionalRedirectURIs string
+		caBundleFile                        string
+		configFile                          string
 	)
 
 	s.log = kubermaticlog.NewDefaultOptions()
@@ -99,6 +103,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.oidcIssuerClientID, "oidc-issuer-client-id", "", "Issuer client ID")
 	flag.StringVar(&s.oidcIssuerClientSecret, "oidc-issuer-client-secret", "", "OpenID client secret")
 	flag.StringVar(&s.oidcIssuerRedirectURI, "oidc-issuer-redirect-uri", "", "Callback URL for OpenID responses.")
+	flag.StringVar(&rawOIDCIssuerAdditionalRedirectURIs, "oidc-issuer-additional-redirect-uris", "", "Comma-separated list of additional URLs, besides -oidc-issuer-redirect-uri, the dashboard login may use for OpenID responses, e.g. when KKP is also reachable through reverse proxies on other hostnames. Only scheme, host and port are used.")
 	flag.StringVar(&s.oidcIssuerCookieHashKey, "oidc-issuer-cookie-hash-key", "", "Hash key authenticates the cookie value using HMAC. It is recommended to use a key with 32 or 64 bytes.")
 	flag.BoolVar(&s.oidcIssuerCookieSecureMode, "oidc-issuer-cookie-secure-mode", true, "When true cookie received only with HTTPS. Set false for local deployment with HTTP")
 	flag.BoolVar(&s.oidcIssuerOfflineAccessAsScope, "oidc-issuer-offline-access-as-scope", true, "Set it to false if OIDC provider requires to set \"access_type=offline\" query param when accessing the refresh token")
@@ -115,6 +120,12 @@ func newServerRunOptions() (serverRunOptions, error) {
 	s.exposeStrategy, validExposeStrategy = kubermaticv1.ExposeStrategyFromString(rawExposeStrategy)
 	if !validExposeStrategy {
 		return s, fmt.Errorf("--expose-strategy must be one of: %s, got %q", kubermaticv1.AllExposeStrategies, rawExposeStrategy)
+	}
+
+	for _, uri := range strings.Split(rawOIDCIssuerAdditionalRedirectURIs, ",") {
+		if uri = strings.TrimSpace(uri); uri != "" {
+			s.oidcIssuerAdditionalRedirectURIs = append(s.oidcIssuerAdditionalRedirectURIs, uri)
+		}
 	}
 
 	if configFile != "" {
@@ -137,13 +148,14 @@ func newServerRunOptions() (serverRunOptions, error) {
 	s.versions = kubermatic.GetVersions()
 
 	s.oidcIssuerConfiguration = &authtypes.OIDCConfiguration{
-		URL:                  s.oidcURL,
-		ClientID:             s.oidcIssuerClientID,
-		ClientSecret:         s.oidcIssuerClientSecret,
-		SecureCookie:         securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
-		CookieSecureMode:     s.oidcIssuerCookieSecureMode,
-		OfflineAccessAsScope: s.oidcIssuerOfflineAccessAsScope,
-		SkipTLSVerify:        s.oidcSkipTLSVerify,
+		URL:                    s.oidcURL,
+		ClientID:               s.oidcIssuerClientID,
+		ClientSecret:           s.oidcIssuerClientSecret,
+		SecureCookie:           securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
+		CookieSecureMode:       s.oidcIssuerCookieSecureMode,
+		OfflineAccessAsScope:   s.oidcIssuerOfflineAccessAsScope,
+		SkipTLSVerify:          s.oidcSkipTLSVerify,
+		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
 	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
@@ -158,6 +170,16 @@ func newServerRunOptions() (serverRunOptions, error) {
 func (o serverRunOptions) validate() error {
 	if err := serviceaccount.ValidateKey([]byte(o.serviceAccountSigningKey)); err != nil {
 		return fmt.Errorf("the service-account-signing-key is incorrect: %w", err)
+	}
+
+	for _, uri := range o.oidcIssuerAdditionalRedirectURIs {
+		u, err := url.Parse(uri)
+		if err != nil {
+			return fmt.Errorf("invalid -oidc-issuer-additional-redirect-uris entry %q: %w", uri, err)
+		}
+		if (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" || u.RawQuery != "" || u.Fragment != "" {
+			return fmt.Errorf("invalid -oidc-issuer-additional-redirect-uris entry %q: must be an http(s) URL with a host and without query or fragment", uri)
+		}
 	}
 
 	return nil
