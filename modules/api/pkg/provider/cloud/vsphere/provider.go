@@ -292,6 +292,41 @@ func GetDatastoreClusterList(ctx context.Context, dc *kubermaticv1.DatacenterSpe
 	return datastoreClusterList, nil
 }
 
+// GetResourcePoolList returns a slice of the resource pools of the datacenter from the passed cloudspec.
+// If the datacenter spec configures a cluster, only the resource pools of this cluster are returned.
+func GetResourcePoolList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]*object.ResourcePool, error) {
+	session, err := newSession(ctx, dc, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create vCenter session: %w", err)
+	}
+	defer session.Logout(ctx)
+
+	resourcePoolList, err := session.Finder.ResourcePoolList(ctx, "**")
+	if err != nil {
+		var notFoundErr *find.NotFoundError
+		if errors.As(err, &notFoundErr) {
+			return nil, nil
+		}
+
+		return nil, fmt.Errorf("couldn't retrieve resource pool list: %w", err)
+	}
+
+	if dc.Cluster == "" {
+		return resourcePoolList, nil
+	}
+
+	clusterPrefix := path.Join(session.Datacenter.InventoryPath, "host", dc.Cluster) + "/"
+
+	var clusterResourcePools []*object.ResourcePool
+	for _, resourcePool := range resourcePoolList {
+		if strings.HasPrefix(resourcePool.InventoryPath, clusterPrefix) {
+			clusterResourcePools = append(clusterResourcePools, resourcePool)
+		}
+	}
+
+	return clusterResourcePools, nil
+}
+
 // GetVMGroupsList returns a slice of Datastore of the datacenter from the passed cloudspec.
 func GetVMGroupsList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]VMGroup, error) {
 	session, err := newSession(ctx, dc, username, password, caBundle)

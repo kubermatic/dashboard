@@ -23077,6 +23077,61 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/vsphere/resourcepools": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists resource pools from vSphere datacenter.",
+        "operationId": "listProjectVSphereResourcePools",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereResourcePoolList",
+            "schema": {
+              "$ref": "#/definitions/VSphereResourcePoolList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/vsphere/tagcategories": {
       "get": {
         "produces": [
@@ -25756,6 +25811,54 @@
               "items": {
                 "$ref": "#/definitions/VSphereDatastoreList"
               }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/providers/vsphere/resourcepools": {
+      "get": {
+        "description": "Lists resource pools from vsphere datacenter",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "operationId": "listVSphereResourcePools",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereResourcePoolList",
+            "schema": {
+              "$ref": "#/definitions/VSphereResourcePoolList"
             }
           },
           "default": {
@@ -42960,6 +43063,20 @@
         "vmGroup": {
           "type": "string",
           "x-go-name": "VMGroup"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "VSphereResourcePoolList": {
+      "type": "object",
+      "title": "VSphereResourcePoolList is the object representing the vsphere resource pools.",
+      "properties": {
+        "resourcePools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ResourcePools"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"

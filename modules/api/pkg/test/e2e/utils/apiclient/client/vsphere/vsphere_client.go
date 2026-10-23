@@ -36,6 +36,8 @@ type ClientService interface {
 
 	ListProjectVSphereNetworks(params *ListProjectVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereNetworksOK, error)
 
+	ListProjectVSphereResourcePools(params *ListProjectVSphereResourcePoolsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereResourcePoolsOK, error)
+
 	ListProjectVSphereTagCategories(params *ListProjectVSphereTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagCategoriesOK, error)
 
 	ListProjectVSphereTagsForTagCategories(params *ListProjectVSphereTagsForTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagsForTagCategoriesOK, error)
@@ -49,6 +51,8 @@ type ClientService interface {
 	ListVSphereFoldersNoCredentialsV2(params *ListVSphereFoldersNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsV2OK, error)
 
 	ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsV2OK, error)
+
+	ListVSphereResourcePools(params *ListVSphereResourcePoolsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereResourcePoolsOK, error)
 
 	ListVSphereTagCategoriesNoCredentials(params *ListVSphereTagCategoriesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagCategoriesNoCredentialsOK, error)
 
@@ -210,6 +214,44 @@ func (a *Client) ListProjectVSphereNetworks(params *ListProjectVSphereNetworksPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectVSphereNetworksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVSphereResourcePools lists resource pools from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereResourcePools(params *ListProjectVSphereResourcePoolsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereResourcePools",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/resourcepools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereResourcePoolsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereResourcePoolsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -476,6 +518,44 @@ func (a *Client) ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksN
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVSphereNetworksNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereResourcePools Lists resource pools from vsphere datacenter
+*/
+func (a *Client) ListVSphereResourcePools(params *ListVSphereResourcePoolsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereResourcePoolsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereResourcePoolsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereResourcePools",
+		Method:             "GET",
+		PathPattern:        "/api/v2/providers/vsphere/resourcepools",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereResourcePoolsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereResourcePoolsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereResourcePoolsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
