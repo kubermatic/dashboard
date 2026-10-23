@@ -19,6 +19,7 @@ package common
 import (
 	"context"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -436,6 +437,55 @@ func TestValidateAuditWebhookBackendAllowed(t *testing.T) {
 			err := validateAuditWebhookBackendAllowed(tc.disabledDCs, tc.dcName, tc.oldAudit, tc.newAudit)
 			if (err != nil) != tc.wantErr {
 				t.Fatalf("validateAuditWebhookBackendAllowed() error = %v, wantErr = %v", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateApplications(t *testing.T) {
+	app := func(namespace string) apiv1.Application {
+		return apiv1.Application{Namespace: namespace}
+	}
+
+	testCases := []struct {
+		name    string
+		apps    []apiv1.Application
+		wantErr bool
+	}{
+		{
+			name: "no applications is allowed",
+			apps: nil,
+		},
+		{
+			name: "empty namespace is allowed and keeps the controller fallback",
+			apps: []apiv1.Application{app("")},
+		},
+		{
+			name: "valid DNS-1123 label is allowed",
+			apps: []apiv1.Application{app("apps")},
+		},
+		{
+			name:    "uppercase and underscore are rejected",
+			apps:    []apiv1.Application{app("Foo_Bar")},
+			wantErr: true,
+		},
+		{
+			name:    "namespace longer than 63 characters is rejected",
+			apps:    []apiv1.Application{app(strings.Repeat("a", 64))},
+			wantErr: true,
+		},
+		{
+			name:    "one invalid namespace among valid ones is rejected",
+			apps:    []apiv1.Application{app("apps"), app(""), app("Foo_Bar")},
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateApplications(tc.apps)
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("validateApplications() error = %v, wantErr = %v", err, tc.wantErr)
 			}
 		})
 	}
