@@ -302,6 +302,7 @@ func newOriginTestVerifier(sc *securecookie.SecureCookie) *fakeVerifier {
 		additionalRedirectURIs: []string{
 			"https://kkp-proxy.example.com",
 			"https://kkp-internal.example.com:8443/api/v2/auth/callback",
+			"https://kkp-port.example.com:443",
 		},
 	}
 }
@@ -333,6 +334,11 @@ func TestLoginHandlerOrigin(t *testing.T) {
 			expectedRedirectURI: "https://kkp-internal.example.com:8443/api/v2/auth/callback",
 		},
 		{
+			name:                "origin of an additional redirect URI with explicit default port keeps the port",
+			url:                 "https://kkp-port.example.com/api/v2/auth/login?origin=https://kkp-port.example.com",
+			expectedRedirectURI: "https://kkp-port.example.com:443/api/v2/auth/callback",
+		},
+		{
 			name:                "origin not allowed falls back to the configured redirect URI",
 			url:                 "https://kkp.example.com/api/v2/auth/login?origin=https://evil.example.com",
 			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
@@ -343,9 +349,9 @@ func TestLoginHandlerOrigin(t *testing.T) {
 			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 		{
-			name:                "origin is ignored on loopback",
+			name:                "localhost origin that is not allowed falls back to the configured redirect URI",
 			url:                 testLoginURL + "?origin=https://evil.example.com",
-			expectedRedirectURI: testCallbackURL,
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 	}
 
@@ -961,9 +967,9 @@ func TestCallbackHandlerRedirectURI(t *testing.T) {
 			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/auth/callback",
 		},
 		{
-			name:                "state cookie without a redirect URI falls back to the request",
+			name:                "state cookie without a redirect URI falls back to the configured one",
 			storedRedirectURI:   "",
-			expectedRedirectURI: testCallbackURL,
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 	}
 

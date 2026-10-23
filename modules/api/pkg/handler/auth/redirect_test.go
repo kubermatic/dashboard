@@ -30,6 +30,7 @@ func TestAllowedOrigin(t *testing.T) {
 		"https://kkp-internal.example.com:8443",
 		"http://kkp-http.example.com",
 		"https://[2001:db8::1]",
+		"https://KKP-Port.example.com:443/api/v2/auth/callback",
 		"not a url %%",
 		"ftp://kkp-ftp.example.com",
 	}
@@ -71,6 +72,12 @@ func TestAllowedOrigin(t *testing.T) {
 			origin:   "https://kkp-proxy.example.com:443",
 			allowed:  allowed,
 			expected: "https://kkp-proxy.example.com",
+		},
+		{
+			name:     "matched entry is returned as configured",
+			origin:   "https://kkp-port.example.com",
+			allowed:  allowed,
+			expected: "https://KKP-Port.example.com:443",
 		},
 		{
 			name:     "non-default port must match",
