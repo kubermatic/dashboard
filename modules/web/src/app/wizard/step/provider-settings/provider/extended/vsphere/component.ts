@@ -117,6 +117,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   isLoadingDatastores = false;
   datastoreClusters: string[] = [];
   isLoadingDatastoreClusters = false;
+  resourcePools: string[] = [];
+  isLoadingResourcePools = false;
   folders: VSphereFolder[] = [];
   folderPaths: string[] = [];
   folderLabel = FolderState.Empty;
@@ -248,6 +250,15 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .subscribe(datastoreClusters => {
         this.datastoreClusters = datastoreClusters;
         this._setIsLoadingDatastoreClusters(false);
+      });
+
+    merge(this._credentialsChanged, this._presets.presetChanges)
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(switchMap(_ => this._resourcePoolsObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(resourcePools => {
+        this.resourcePools = resourcePools;
+        this._setIsLoadingResourcePools(false);
       });
 
     merge(this._credentialsChanged, this._presets.presetChanges)
@@ -534,6 +545,40 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       );
   }
 
+  private _resourcePoolsObservable(): Observable<string[]> {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
+      .credential(this._presets.preset)
+      .datacenter(this._clusterSpecService.datacenter)
+      .resourcePools(() => this._setIsLoadingResourcePools(true))
+      .pipe(
+        map(resourcePools => _.sortBy(resourcePools, p => p.toLowerCase())),
+        catchError(() => {
+          this._clearResourcePools();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearResourcePools(): void {
+    this.resourcePools = [];
+    this.form.get(Controls.ResourcePool).setValue(AutocompleteInitialState);
+    this._setIsLoadingResourcePools(false);
+  }
+
+  private _setIsLoadingResourcePools(isLoading: boolean): void {
+    this.isLoadingResourcePools = isLoading;
+    this._cdr.detectChanges();
+  }
+
   private _clearDatastoreClusters(): void {
     this.datastoreClusters = [];
     this.form.get(Controls.DatastoreCluster).setValue(AutocompleteInitialState);
@@ -572,7 +617,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         cloud: {
           vsphere: {
             datastoreCluster: this.form.get(Controls.DatastoreCluster).value?.[AutocompleteControls.Main] ?? '',
-            resourcePool: this.form.get(Controls.ResourcePool).value,
+            resourcePool: this.form.get(Controls.ResourcePool).value?.[AutocompleteControls.Main] ?? '',
             basePath: this.form.get(Controls.BaseFolderPath).value?.[AutocompleteControls.Main] ?? '',
           } as VSphereCloudSpec,
         } as CloudSpec,

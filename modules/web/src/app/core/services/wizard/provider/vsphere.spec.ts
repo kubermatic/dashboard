@@ -71,4 +71,31 @@ describe('vSphere provider service', () => {
       httpMock.expectNone(r => r.url.endsWith('/datastoreclusters'));
     });
   });
+
+  describe('#resourcePools', () => {
+    it('should load the resource pools with the credentials as headers', () => {
+      let result: string[];
+      service
+        .username('user')
+        .password('pass')
+        .datacenter('dc')
+        .resourcePools()
+        .subscribe(resourcePools => (result = resourcePools));
+
+      const req = httpMock.expectOne(r => r.url.endsWith(`/projects/${projectID}/providers/vsphere/resourcepools`));
+      expect(req.request.method).toBe('GET');
+      expect(req.request.headers.get('Username')).toBe('user');
+      expect(req.request.headers.get('Password')).toBe('pass');
+      expect(req.request.headers.get('DatacenterName')).toBe('dc');
+      req.flush({resourcePools: ['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a']});
+
+      expect(result).toEqual(['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a']);
+    });
+
+    it('should not send a request without credentials', () => {
+      service.resourcePools().subscribe();
+
+      httpMock.expectNone(r => r.url.endsWith('/resourcepools'));
+    });
+  });
 });

@@ -16,6 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {VSphereTag} from '@app/shared/entity/node';
 import {
   VSphereDatastoreClusters,
+  VSphereResourcePools,
   VSphereDatastores,
   VSphereFolder,
   VSphereNetwork,
@@ -149,6 +150,21 @@ export class VSphere extends Provider {
     return this._http
       .get<VSphereDatastoreClusters>(url, {headers: this._headers})
       .pipe(map(datastoreClusters => datastoreClusters.datastoreClusters));
+  }
+
+  resourcePools(onLoadingCb: () => void = null): Observable<string[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/resourcepools`;
+    return this._http
+      .get<VSphereResourcePools>(url, {headers: this._headers})
+      .pipe(map(resourcePools => resourcePools.resourcePools));
   }
 
   vmGroups(onLoadingCb: () => void = null): Observable<VSphereVMGroup[]> {
