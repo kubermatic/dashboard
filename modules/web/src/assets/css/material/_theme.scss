@@ -112,8 +112,14 @@
         color: km-var($colors, wizard-step-active);
       }
     }
+  }
 
-    &.cdk-program-focused {
+  // Material sets a state layer background on the header that gets the focus programmatically (e.g. after "Next"
+  // in the wizards). It has the same specificity as `.mat-step-header.cdk-program-focused` and is injected later,
+  // so the stepper parent is needed for the override to win.
+  .mat-stepper-horizontal,
+  .mat-stepper-vertical {
+    .mat-step-header.cdk-program-focused {
       background-color: unset;
     }
   }
