@@ -14,6 +14,7 @@
 
 import {Component, forwardRef, Input, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
+import {SubscriptSizing} from '@angular/material/form-field';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 export const AutocompleteInitialState = {
@@ -50,6 +51,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() options: string[] = [];
   @Input() validators: ValidatorFn[] = [];
   @Input() disabled: boolean;
+  @Input() subscriptSizing: SubscriptSizing = 'fixed';
   controls = AutocompleteControls;
   isDropdownOpen: boolean;
   search: string = '';
