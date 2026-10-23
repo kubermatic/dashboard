@@ -19,7 +19,6 @@ package authflow
 import (
 	"encoding/json"
 	"fmt"
-	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -38,18 +37,9 @@ const (
 	callbackPath           = "/api/v2/auth/callback"
 )
 
-// isLocalHost reports whether the request's host is a loopback address (localhost or 127.0.0.1).
-func isLocalHost(r *http.Request) bool {
-	host := r.Host
-	if h, _, err := net.SplitHostPort(host); err == nil {
-		host = h
-	}
-	return host == "localhost" || host == "127.0.0.1"
-}
-
 // requestScheme returns the scheme to use when deriving a URL from the request.
-// Behind a TLS-terminating ingress r.TLS is nil, so this is only meaningful for
-// loopback (local dev) where there's no proxy in front.
+// Behind a TLS-terminating ingress r.TLS is nil, so this is only a fallback for
+// when no usable redirect URI is configured.
 func requestScheme(r *http.Request) string {
 	if r.TLS == nil {
 		return "http"
@@ -58,14 +48,10 @@ func requestScheme(r *http.Request) string {
 }
 
 // schemeAndHost decides which scheme + host to use for an outbound URL.
-// For loopback (local dev) it uses the request itself so the flow stays local.
-// Otherwise it uses --oidc-issuer-redirect-uri, which carries the correct https
+// It uses --oidc-issuer-redirect-uri, which carries the correct https
 // scheme even behind TLS-terminating ingress where r.TLS is always nil.
 // Falls back to the request if the redirect URI is missing or malformed.
 func (a *authHandler) schemeAndHost(r *http.Request) (scheme, host string) {
-	if isLocalHost(r) {
-		return requestScheme(r), r.Host
-	}
 	if uri, err := a.oidcIssuerVerifier.GetRedirectURI(callbackPath); err == nil {
 		if u, err := url.Parse(uri); err == nil && u.Host != "" {
 			return u.Scheme, u.Host
@@ -86,7 +72,7 @@ func (a *authHandler) getCallbackURI(r *http.Request) string {
 // otherwise getBaseURL as before.
 func (a *authHandler) getRequestBaseURL(r *http.Request) string {
 	origin := r.URL.Query().Get("origin")
-	if origin == "" || isLocalHost(r) {
+	if origin == "" {
 		return a.getBaseURL(r)
 	}
 
@@ -450,7 +436,7 @@ func chunkString(token string, chunkSize int) []string {
 	return chunks
 }
 
-// getBaseURL returns the scheme+host used for logout redirect URIs.
+// getBaseURL returns the scheme+host of --oidc-issuer-redirect-uri (or of the request, if none is configured).
 func (a *authHandler) getBaseURL(r *http.Request) string {
 	scheme, host := a.schemeAndHost(r)
 	return fmt.Sprintf("%s://%s", scheme, host)

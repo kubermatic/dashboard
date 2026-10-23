@@ -343,9 +343,9 @@ func TestLoginHandlerOrigin(t *testing.T) {
 			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 		{
-			name:                "origin is ignored on loopback",
+			name:                "localhost origin that is not allowed falls back to the configured redirect URI",
 			url:                 testLoginURL + "?origin=https://evil.example.com",
-			expectedRedirectURI: testCallbackURL,
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 	}
 
@@ -961,9 +961,9 @@ func TestCallbackHandlerRedirectURI(t *testing.T) {
 			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/auth/callback",
 		},
 		{
-			name:                "state cookie without a redirect URI falls back to the request",
+			name:                "state cookie without a redirect URI falls back to the configured one",
 			storedRedirectURI:   "",
-			expectedRedirectURI: testCallbackURL,
+			expectedRedirectURI: "https://kkp.example.com/api/v2/auth/callback",
 		},
 	}
 
