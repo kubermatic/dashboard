@@ -817,6 +817,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectVSphereDatastores())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/datastoreclusters").
+		Handler(r.listProjectVSphereDatastoreClusters())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/vsphere/vmgroups").
 		Handler(r.listProjectVSphereVMGroups())
 
@@ -1195,6 +1199,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/providers/vsphere/datastores").
 		Handler(r.listVSphereDatastores())
+
+	mux.Methods(http.MethodGet).
+		Path("/providers/vsphere/datastoreclusters").
+		Handler(r.listVSphereDatastoreClusters())
 
 	mux.Methods(http.MethodGet).
 		Path("/providers/vsphere/vmgroups").
@@ -5336,6 +5344,28 @@ func (r Routing) listVSphereDatastores() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/providers/vsphere/datastoreclusters vsphere listVSphereDatastoreClusters
+//
+// Lists datastore clusters from vsphere datacenter
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VSphereDatastoreClusterList
+func (r Routing) listVSphereDatastoreClusters() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereDatastoreClusterEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
+		provider.DecodeVSphereCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/providers/vsphere/vmgroups vsphere listVSphereVMGroups
 //
 // Lists VM Groups from vsphere datacenter
@@ -6833,6 +6863,28 @@ func (r Routing) listProjectVSphereDatastores() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/datastoreclusters vsphere listProjectVSphereDatastoreClusters
+//
+// Lists datastore clusters from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VSphereDatastoreClusterList
+func (r Routing) listProjectVSphereDatastoreClusters() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereDatastoreClusterEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
 		provider.DecodeVSphereProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
