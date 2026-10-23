@@ -1,6 +1,6 @@
 module k8c.io/dashboard/v2
 
-go 1.27.1
+go 1.27.3
 
 // follow repository deprecation
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34

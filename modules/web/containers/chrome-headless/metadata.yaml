@@ -18,4 +18,4 @@
 # After the release is published, bump the image references in a follow-up PR:
 # .prow/frontend.yaml in this repo and the coverage job in
 # kubermatic/infra prow/jobs/dashboard/dashboard-postsubmits-main.yaml.
-tag: "v1.11.0"
+tag: "v1.11.1"
