@@ -116,6 +116,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   datastores: string[] = [];
   isLoadingDatastores = false;
   folders: VSphereFolder[] = [];
+  folderPaths: string[] = [];
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
   tagCategories: VSphereTagCategory[] = [];
@@ -206,7 +207,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.BaseFolderPath)
       .valueChanges.pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((value: string) => this._enable(!value, Controls.Folder));
+      .subscribe((value: {main: string}) => this._enable(!value?.[AutocompleteControls.Main], Controls.Folder));
 
     merge(
       this.form.get(Controls.DatastoreCluster).valueChanges,
@@ -356,6 +357,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _loadFolders(folders: VSphereFolder[]): void {
     this.folders = folders;
+    this.folderPaths = folders.map(folder => folder.path);
 
     if (!_.isEmpty(this.folders)) {
       this.folderLabel = FolderState.Ready;
@@ -458,6 +460,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _clearFolders(): void {
     this.folders = [];
+    this.folderPaths = [];
     this.folderLabel = FolderState.Empty;
     this._folderCombobox.reset();
     this._cdr.detectChanges();
@@ -525,7 +528,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
           vsphere: {
             datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
             resourcePool: this.form.get(Controls.ResourcePool).value,
-            basePath: this.form.get(Controls.BaseFolderPath).value,
+            basePath: this.form.get(Controls.BaseFolderPath).value?.[AutocompleteControls.Main] ?? '',
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
