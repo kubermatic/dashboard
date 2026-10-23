@@ -123,6 +123,13 @@ describe('VSphereProviderExtendedComponent', () => {
     component.form.get(component.Controls.DatastoreCluster).setValue({main: datastoreCluster});
   }
 
+  function resourcePoolField(): AutocompleteComponent {
+    return fixture.debugElement
+      .queryAll(By.directive(AutocompleteComponent))
+      .map(element => element.componentInstance as AutocompleteComponent)
+      .find(field => field.label === 'Resource Pool');
+  }
+
   function setBaseFolderPath(path: string): void {
     component.form.get(component.Controls.BaseFolderPath).setValue({main: path});
   }
@@ -167,8 +174,33 @@ describe('VSphereProviderExtendedComponent', () => {
     expect(datastoreClusterField().options).toEqual(['/DC0/datastore/pod-a', '/DC0/datastore/pod-b']);
   });
 
-  describe('loading the datastore clusters', () => {
-    const isDatastoreClustersRequest = (request: {url: string}): boolean => request.url.endsWith('/datastoreclusters');
+  describe.each([
+    {
+      field: 'datastore clusters',
+      endpoint: '/datastoreclusters',
+      response: (values: string[]) => ({datastoreClusters: values}),
+      control: (): string => component.Controls.DatastoreCluster,
+      options: (): string[] => component.datastoreClusters,
+      setOptions: (values: string[]) => (component.datastoreClusters = values),
+      specValue: (): string => clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster,
+      values: ['/DC0/datastore/pod-b', '/DC0/datastore/Pod-c', '/DC0/datastore/pod-a'],
+      sorted: ['/DC0/datastore/pod-a', '/DC0/datastore/pod-b', '/DC0/datastore/Pod-c'],
+      typed: '/DC0/datastore/typed',
+    },
+    {
+      field: 'resource pools',
+      endpoint: '/resourcepools',
+      response: (values: string[]) => ({resourcePools: values}),
+      control: (): string => component.Controls.ResourcePool,
+      options: (): string[] => component.resourcePools,
+      setOptions: (values: string[]) => (component.resourcePools = values),
+      specValue: (): string => clusterSpecService.cluster.spec.cloud.vsphere.resourcePool,
+      values: ['/DC0/host/c/Resources/pool-b', '/DC0/host/c/Resources/Pool-c', '/DC0/host/c/Resources/pool-a'],
+      sorted: ['/DC0/host/c/Resources/pool-a', '/DC0/host/c/Resources/pool-b', '/DC0/host/c/Resources/Pool-c'],
+      typed: '/DC0/host/c/Resources/typed',
+    },
+  ])('loading the $field', ({endpoint, response, control, options, setOptions, specValue, values, sorted, typed}) => {
+    const isRequest = (request: {url: string}): boolean => request.url.endsWith(endpoint);
     let httpMock: HttpTestingController;
 
     beforeEach(() => {
@@ -185,41 +217,35 @@ describe('VSphereProviderExtendedComponent', () => {
       await new Promise(resolve => setTimeout(resolve, DEFAULT_DEBOUNCE_TIME_MS + DEBOUNCE_MARGIN_MS));
     }
 
-    it('should offer the sorted datastore clusters once the credentials are entered', async () => {
+    it('should offer the sorted options once the credentials are entered', async () => {
       await emitClusterChange(true);
 
-      httpMock
-        .expectOne(isDatastoreClustersRequest)
-        .flush({datastoreClusters: ['/DC0/datastore/pod-b', '/DC0/datastore/Pod-c', '/DC0/datastore/pod-a']});
+      httpMock.expectOne(isRequest).flush(response(values));
 
-      expect(component.datastoreClusters).toEqual([
-        '/DC0/datastore/pod-a',
-        '/DC0/datastore/pod-b',
-        '/DC0/datastore/Pod-c',
-      ]);
+      expect(options()).toEqual(sorted);
     });
 
     it('should drop the options but keep the typed value without credentials', async () => {
-      component.datastoreClusters = ['/DC0/datastore/pod-a'];
-      setDatastoreCluster('/DC0/datastore/typed');
+      setOptions([sorted[0]]);
+      component.form.get(control()).setValue({main: typed});
 
       await emitClusterChange(false);
 
-      httpMock.expectNone(isDatastoreClustersRequest);
-      expect(component.datastoreClusters).toEqual([]);
-      expect(clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster).toBe('/DC0/datastore/typed');
+      httpMock.expectNone(isRequest);
+      expect(options()).toEqual([]);
+      expect(specValue()).toBe(typed);
     });
 
-    it('should keep the typed value when the datastore clusters cannot be loaded', async () => {
-      component.datastoreClusters = ['/DC0/datastore/pod-a'];
-      setDatastoreCluster('/DC0/datastore/typed');
+    it('should keep the typed value when the options cannot be loaded', async () => {
+      setOptions([sorted[0]]);
+      component.form.get(control()).setValue({main: typed});
 
       await emitClusterChange(true);
-      httpMock.expectOne(isDatastoreClustersRequest).flush('error', {status: 500, statusText: 'Server Error'});
+      httpMock.expectOne(isRequest).flush('error', {status: 500, statusText: 'Server Error'});
 
-      expect(component.datastoreClusters).toEqual([]);
-      expect(component.form.get(component.Controls.DatastoreCluster).value).toEqual({main: '/DC0/datastore/typed'});
-      expect(clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster).toBe('/DC0/datastore/typed');
+      expect(options()).toEqual([]);
+      expect(component.form.get(control()).value).toEqual({main: typed});
+      expect(specValue()).toBe(typed);
     });
   });
 
@@ -238,5 +264,18 @@ describe('VSphereProviderExtendedComponent', () => {
 
     setDatastoreCluster('');
     expect(datastore.disabled).toBe(false);
+  });
+
+  it('should offer the loaded resource pools as options of the resource pool', () => {
+    component.resourcePools = ['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a'];
+    fixture.detectChanges();
+
+    expect(resourcePoolField().options).toEqual(['/DC0/host/cluster/Resources', '/DC0/host/cluster/Resources/pool-a']);
+  });
+
+  it('should write the resource pool to the cluster spec', () => {
+    component.form.get(component.Controls.ResourcePool).setValue({main: '/DC0/host/cluster/Resources/pool-a'});
+
+    expect(clusterSpecService.cluster.spec.cloud.vsphere.resourcePool).toBe('/DC0/host/cluster/Resources/pool-a');
   });
 });
