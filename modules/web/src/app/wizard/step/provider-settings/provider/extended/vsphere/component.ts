@@ -115,7 +115,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   isPresetSelected = false;
   datastores: string[] = [];
   isLoadingDatastores = false;
+  datastoreClusters: string[] = [];
+  isLoadingDatastoreClusters = false;
   folders: VSphereFolder[] = [];
+  folderPaths: string[] = [];
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
   tagCategories: VSphereTagCategory[] = [];
@@ -194,7 +197,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.DatastoreCluster)
       .valueChanges.pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(val => this._enable(!val, Controls.Datastore));
+      .subscribe((val: {main: string}) => this._enable(!val?.[AutocompleteControls.Main], Controls.Datastore));
 
     this.form
       .get(Controls.Folder)
@@ -206,7 +209,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.BaseFolderPath)
       .valueChanges.pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((value: string) => this._enable(!value, Controls.Folder));
+      .subscribe((value: {main: string}) => this._enable(!value?.[AutocompleteControls.Main], Controls.Folder));
 
     merge(
       this.form.get(Controls.DatastoreCluster).valueChanges,
@@ -236,6 +239,15 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .subscribe(([folders, networks]) => {
         this._loadFolders(folders);
         this._loadNetworks(networks);
+      });
+
+    merge(this._credentialsChanged, this._presets.presetChanges)
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(switchMap(_ => this._datastoreClustersObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datastoreClusters => {
+        this.datastoreClusters = datastoreClusters;
+        this._setIsLoadingDatastoreClusters(false);
       });
 
     merge(this._credentialsChanged, this._presets.presetChanges)
@@ -356,6 +368,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _loadFolders(folders: VSphereFolder[]): void {
     this.folders = folders;
+    this.folderPaths = folders.map(folder => folder.path);
 
     if (!_.isEmpty(this.folders)) {
       this.folderLabel = FolderState.Ready;
@@ -458,6 +471,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _clearFolders(): void {
     this.folders = [];
+    this.folderPaths = [];
     this.folderLabel = FolderState.Empty;
     this._folderCombobox.reset();
     this._cdr.detectChanges();
@@ -497,6 +511,40 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       );
   }
 
+  private _datastoreClustersObservable(): Observable<string[]> {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
+      .credential(this._presets.preset)
+      .datacenter(this._clusterSpecService.datacenter)
+      .datastoreClusters(() => this._setIsLoadingDatastoreClusters(true))
+      .pipe(
+        map(datastoreClusters => _.sortBy(datastoreClusters, d => d.toLowerCase())),
+        catchError(() => {
+          this._clearDatastoreClusters();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearDatastoreClusters(): void {
+    this.datastoreClusters = [];
+    this.form.get(Controls.DatastoreCluster).setValue(AutocompleteInitialState);
+    this._setIsLoadingDatastoreClusters(false);
+  }
+
+  private _setIsLoadingDatastoreClusters(isLoading: boolean): void {
+    this.isLoadingDatastoreClusters = isLoading;
+    this._cdr.detectChanges();
+  }
+
   private _clearDatastores(): void {
     this.datastores = [];
     this.form.get(Controls.Datastore).setValue(AutocompleteInitialState);
@@ -523,9 +571,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       spec: {
         cloud: {
           vsphere: {
-            datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
+            datastoreCluster: this.form.get(Controls.DatastoreCluster).value?.[AutocompleteControls.Main] ?? '',
             resourcePool: this.form.get(Controls.ResourcePool).value,
-            basePath: this.form.get(Controls.BaseFolderPath).value,
+            basePath: this.form.get(Controls.BaseFolderPath).value?.[AutocompleteControls.Main] ?? '',
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
