@@ -19,18 +19,23 @@ cd $(dirname "$0")/..
 source hack/lib.sh # for echodate / retry
 
 imageRef="${1:?image reference is required}" # e.g. quay.io/kubermatic/osm:v1.12.0
-repo="${imageRef%:*}"                        # quay.io/kubermatic/osm
+repo="${imageRef%@*}"                        # drop digest, if any
+if [[ "${repo##*/}" == *:* ]]; then          # tag only lives in the last path component
+  repo="${repo%:*}"                          # drop tag (keeps registry port intact)
+fi
 mkdir -p _dist/images
 
 # SBOM + attach for ONE concrete image digest
 sbom_for_digest() {
-  local digest="$1" # sha256:...
-  local suffix="$2" # "" for single-arch, "-amd64"/"-arm64v8" for multi-arch
+  local digest="$1" # sha256:... of the platform-specific image manifest (never the index)
+  local suffix="$2" # only used for the local SBOM filename: "" single-arch, "-amd64"/"-arm64" multi-arch
   local ref="$repo@$digest"
 
   # step 2: already has an SBOM? then do nothing
-  if oras discover --format json "$ref" |
-    jq -e '[.. | objects | select(.artifactType? == "application/spdx+json")] | length > 0' > /dev/null; then
+  # fetch first so registry/auth errors fail the script instead of reading as "no SBOM"
+  local referrers
+  referrers="$(retry 3 oras discover --format json "$ref")"
+  if jq -e '[.. | objects | select(.artifactType? == "application/spdx+json")] | length > 0' <<< "$referrers" > /dev/null; then
     echodate "SBOM already attached to $ref, skipping."
     return
   fi
