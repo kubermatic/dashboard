@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -59,6 +60,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
+	k8svalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 	"k8s.io/utils/ptr"
@@ -1236,6 +1238,9 @@ func ValidateClusterSpec(updateManager common.UpdateManager, body apiv1.CreateCl
 	if len(body.Cluster.Name) > 100 {
 		return errors.New("invalid cluster name: too long (greater than 100 characters)")
 	}
+	if err := validateApplications(body.Applications); err != nil {
+		return err
+	}
 
 	providerName, err := kubermaticv1helper.ClusterCloudProviderName(body.Cluster.Spec.Cloud)
 	if err != nil {
@@ -1471,6 +1476,18 @@ func buildEncryptionStatus(cluster *kubermaticv1.Cluster) *apiv1.EncryptionStatu
 	if cluster.Status.Encryption != nil {
 		return &apiv1.EncryptionStatus{
 			Phase: string(cluster.Status.Encryption.Phase),
+		}
+	}
+	return nil
+}
+
+func validateApplications(apps []apiv1.Application) error {
+	for i, app := range apps {
+		if app.Namespace == "" {
+			continue
+		}
+		if errs := k8svalidation.IsDNS1123Label(app.Namespace); len(errs) > 0 {
+			return fmt.Errorf("invalid namespace %q for application %d: %s", app.Namespace, i, strings.Join(errs, ", "))
 		}
 	}
 	return nil
