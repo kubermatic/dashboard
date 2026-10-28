@@ -2960,6 +2960,10 @@ type RoleUser struct {
 	Group                   string `json:"group"`
 	ServiceAccount          string `json:"serviceAccount"`
 	ServiceAccountNamespace string `json:"serviceAccountNamespace"`
+	// OIDCGroup marks Group as a group coming from the OIDC provider. When set, the groups prefix
+	// that the user cluster's kube-apiserver applies to OIDC groups (usually "oidc:") is added to
+	// the group name. Leave it unset for raw Kubernetes groups such as "system:serviceaccounts:<ns>".
+	OIDCGroup bool `json:"oidcGroup,omitempty"`
 }
 
 // ClusterRoleUser defines associated user with cluster role
@@ -2969,6 +2973,10 @@ type ClusterRoleUser struct {
 	Group                   string `json:"group"`
 	ServiceAccount          string `json:"serviceAccount"`
 	ServiceAccountNamespace string `json:"serviceAccountNamespace"`
+	// OIDCGroup marks Group as a group coming from the OIDC provider. When set, the groups prefix
+	// that the user cluster's kube-apiserver applies to OIDC groups (usually "oidc:") is added to
+	// the group name. Leave it unset for raw Kubernetes groups such as "system:serviceaccounts:<ns>".
+	OIDCGroup bool `json:"oidcGroup,omitempty"`
 }
 
 // Role defines RBAC role for the user cluster

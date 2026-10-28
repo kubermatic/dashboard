@@ -66,6 +66,7 @@ export class NamespaceBinding {
 export class CreateBinding {
   userEmail?: string;
   group?: string;
+  oidcGroup?: boolean;
 }
 
 export class Rules {
