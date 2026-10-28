@@ -112,8 +112,11 @@
         color: km-var($colors, wizard-step-active);
       }
     }
+  }
 
-    &.cdk-program-focused {
+  .mat-stepper-horizontal,
+  .mat-stepper-vertical {
+    .mat-step-header.cdk-program-focused {
       background-color: unset;
     }
   }
