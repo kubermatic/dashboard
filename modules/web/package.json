@@ -152,7 +152,7 @@
       "tmp": ">=0.2.4"
     },
     "monaco-editor": {
-      "dompurify": "3.4.16"
+      "dompurify": "3.4.17"
     },
     "license-compliance": {
       "joi": "17.13.8"
