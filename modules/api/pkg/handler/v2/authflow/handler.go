@@ -19,7 +19,6 @@ package authflow
 import (
 	"encoding/json"
 	"fmt"
-	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -31,25 +30,16 @@ import (
 )
 
 const (
-	// oauthStateCookieName is the short-lived encrypted cookie that carries the CSRF
-	// state token, nonce, and PKCE code verifier across the login → OIDC → callback cycle.
+	// oauthStateCookieName is the short-lived signed cookie that carries the CSRF
+	// state token, nonce, PKCE code verifier and redirect URI across the login → OIDC → callback cycle.
 	oauthStateCookieName   = "_oauth_state"
 	oauthStateCookieMaxAge = 300 // 5 minutes
 	callbackPath           = "/api/v2/auth/callback"
 )
 
-// isLocalHost reports whether the request's host is a loopback address (localhost or 127.0.0.1).
-func isLocalHost(r *http.Request) bool {
-	host := r.Host
-	if h, _, err := net.SplitHostPort(host); err == nil {
-		host = h
-	}
-	return host == "localhost" || host == "127.0.0.1"
-}
-
 // requestScheme returns the scheme to use when deriving a URL from the request.
-// Behind a TLS-terminating ingress r.TLS is nil, so this is only meaningful for
-// loopback (local dev) where there's no proxy in front.
+// Behind a TLS-terminating ingress r.TLS is nil, so this is only a fallback for
+// when no usable redirect URI is configured.
 func requestScheme(r *http.Request) string {
 	if r.TLS == nil {
 		return "http"
@@ -58,14 +48,10 @@ func requestScheme(r *http.Request) string {
 }
 
 // schemeAndHost decides which scheme + host to use for an outbound URL.
-// For loopback (local dev) it uses the request itself so the flow stays local.
-// Otherwise it uses --oidc-issuer-redirect-uri, which carries the correct https
+// It uses --oidc-issuer-redirect-uri, which carries the correct https
 // scheme even behind TLS-terminating ingress where r.TLS is always nil.
 // Falls back to the request if the redirect URI is missing or malformed.
 func (a *authHandler) schemeAndHost(r *http.Request) (scheme, host string) {
-	if isLocalHost(r) {
-		return requestScheme(r), r.Host
-	}
 	if uri, err := a.oidcIssuerVerifier.GetRedirectURI(callbackPath); err == nil {
 		if u, err := url.Parse(uri); err == nil && u.Host != "" {
 			return u.Scheme, u.Host
@@ -80,6 +66,30 @@ func (a *authHandler) getCallbackURI(r *http.Request) string {
 	return fmt.Sprintf("%s://%s%s", scheme, host, callbackPath)
 }
 
+// getRequestBaseURL returns the scheme+host the user started on, so users who reach KKP through a
+// reverse proxy on another hostname are sent back to it: the "origin" query param sent by the
+// dashboard if it matches --oidc-issuer-redirect-uri or --oidc-issuer-additional-redirect-uris,
+// otherwise getBaseURL as before.
+func (a *authHandler) getRequestBaseURL(r *http.Request) string {
+	origin := r.URL.Query().Get("origin")
+	if origin == "" {
+		return a.getBaseURL(r)
+	}
+
+	allowed := a.oidcIssuerVerifier.OIDCConfig().AdditionalRedirectURIs
+	if uri, err := a.oidcIssuerVerifier.GetRedirectURI(callbackPath); err == nil {
+		allowed = append([]string{uri}, allowed...)
+	}
+
+	origin, err := handlerauth.AllowedOrigin(origin, allowed...)
+	if err != nil {
+		log.Logger.Debugf("ignoring origin: %v", err)
+		return a.getBaseURL(r)
+	}
+
+	return origin
+}
+
 func (a *authHandler) loginHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		oidcConfig := a.oidcIssuerVerifier.OIDCConfig()
@@ -91,10 +101,12 @@ func (a *authHandler) loginHandler() http.Handler {
 			scopes = append(scopes, "offline_access")
 		}
 
-		redirectURI := a.getCallbackURI(r)
+		redirectURI := a.getRequestBaseURL(r) + callbackPath
+		oauthState.RedirectURI = redirectURI
+
 		authURL := a.oidcIssuerVerifier.AuthCodeURL(oauthState.State, oidcConfig.OfflineAccessAsScope, redirectURI, oauthState.CodeVerifier, oauthState.Nonce, scopes...)
 
-		// Store state, nonce, and PKCE verifier in a single signed cookie.
+		// Store state, nonce, PKCE verifier and redirect URI in a single signed cookie.
 		if err := handlerauth.SetOAuthStateCookie(w, oauthStateCookieName, "/", oauthState, oauthStateCookieMaxAge, oidcConfig.CookieSecureMode, oidcConfig.SecureCookie); err != nil {
 			http.Error(w, fmt.Sprintf("failed to encode state cookie: %v", err), http.StatusInternalServerError)
 			return
@@ -140,8 +152,12 @@ func (a *authHandler) callbackHandler() http.Handler {
 		// Clear the state cookie — it is one-time use.
 		handlerauth.ClearOAuthStateCookie(w, oauthStateCookieName, "/", oidcConfig.CookieSecureMode)
 
-		// 4. Exchange authorization code for tokens with PKCE code_verifier from the cookie.
-		redirectURI := a.getCallbackURI(r)
+		// 4. Exchange authorization code for tokens with PKCE code_verifier and redirect URI from the cookie.
+		// State cookies issued before the redirect URI was stored there fall back to the request.
+		redirectURI := storedState.RedirectURI
+		if redirectURI == "" {
+			redirectURI = a.getCallbackURI(r)
+		}
 		oidcTokens, err := a.oidcIssuerVerifier.Exchange(r.Context(), code, redirectURI, storedState.CodeVerifier)
 		if err != nil {
 			log.Logger.Errorf("failed to exchange code for tokens: %v", err)
@@ -336,7 +352,7 @@ func (a *authHandler) logoutHandler() http.Handler {
 		if err != nil {
 			log.Logger.Errorf("failed to get UI configurations: %v", err)
 		} else {
-			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, a.getBaseURL(r))
+			redirectPath = getOIDCProviderLogoutURL(kubermaticConfig, tokenValue, a.getRequestBaseURL(r))
 		}
 
 		if err := a.userProvider.InvalidateToken(r.Context(), userInfo, tokenValue, claims.Expiry); err != nil {
@@ -420,20 +436,24 @@ func chunkString(token string, chunkSize int) []string {
 	return chunks
 }
 
-// getBaseURL returns the scheme+host used for logout redirect URIs.
+// getBaseURL returns the scheme+host of --oidc-issuer-redirect-uri (or of the request, if none is configured).
 func (a *authHandler) getBaseURL(r *http.Request) string {
 	scheme, host := a.schemeAndHost(r)
 	return fmt.Sprintf("%s://%s", scheme, host)
 }
 
+// getOIDCProviderLogoutURL returns where the dashboard sends the user after logout. Without an
+// oidc_logout_url in the UI configuration it is the dashboard root, relative so the browser stays on
+// the hostname it is on. Otherwise it is the OIDC provider's end-session endpoint, which needs an
+// absolute URL (baseURL) to send the user back to afterwards.
 func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfiguration, token, baseURL string) string {
-	redirectPath := baseURL + "/"
+	const dashboardRoot = "/"
 	var uiConfig map[string]interface{}
 	if kubermaticConfig.Spec.UI.Config != "" {
 		err := json.Unmarshal([]byte(kubermaticConfig.Spec.UI.Config), &uiConfig)
 		if err != nil {
 			log.Logger.Errorf("failed to unmarshal UI configurations: %v", err)
-			return redirectPath
+			return dashboardRoot
 		}
 	}
 	if value, ok := uiConfig["oidc_logout_url"]; ok {
@@ -441,28 +461,29 @@ func getOIDCProviderLogoutURL(kubermaticConfig *kubermaticv1.KubermaticConfigura
 			oidcLogoutURL, err := url.Parse(oidcLogoutURLStr)
 			if err != nil {
 				log.Logger.Errorf("failed to create the OIDC Logout URL from UI configurations: %v", err)
-				return redirectPath
+				return dashboardRoot
 			}
 			oidcProvider, ok := uiConfig["oidc_provider"].(string)
 			if !ok {
 				log.Logger.Error("failed to get the OIDC Logout Provider from UI configurations")
-				return redirectPath
+				return dashboardRoot
 			}
+			postLogoutRedirectURI := baseURL + "/"
 			urlQuery := oidcLogoutURL.Query()
 
 			if strings.ToLower(oidcProvider) == "keycloak" {
-				urlQuery.Set("post_logout_redirect_uri", redirectPath)
+				urlQuery.Set("post_logout_redirect_uri", postLogoutRedirectURI)
 				urlQuery.Set("id_token_hint", token)
 			} else {
 				if urlQuery.Has("redirectUri") {
-					urlQuery.Set("redirectUri", redirectPath)
+					urlQuery.Set("redirectUri", postLogoutRedirectURI)
 				} else {
-					urlQuery.Set("redirect_uri", redirectPath)
+					urlQuery.Set("redirect_uri", postLogoutRedirectURI)
 				}
 			}
 			oidcLogoutURL.RawQuery = urlQuery.Encode()
 			return oidcLogoutURL.String()
 		}
 	}
-	return redirectPath
+	return dashboardRoot
 }

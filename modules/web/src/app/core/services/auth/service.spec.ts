@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {inject, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -20,6 +20,7 @@ import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {UserService} from '@core/services/user';
 import {CookieService} from 'ngx-cookie-service';
+import {of} from 'rxjs';
 import {PreviousRouteService} from '../previous-route';
 import {Auth} from './service';
 
@@ -41,5 +42,13 @@ describe('Auth', () => {
 
   it('should create auth service correctly', inject([Auth], (service: Auth) => {
     expect(service).toBeTruthy();
+  }));
+
+  it('should send the browser origin on logout', inject([Auth, HttpClient], (service: Auth, http: HttpClient) => {
+    const spyPost = jest.spyOn(http, 'post').mockReturnValue(of({redirect: '/'}));
+
+    service.logout().subscribe();
+
+    expect(spyPost).toHaveBeenCalledWith('/api/v2/auth/logout', null, {params: {origin: window.location.origin}});
   }));
 });
