@@ -118,15 +118,16 @@ export const REGION_ERROR_MESSAGE = 'Region must be a valid DNS name.';
 export const ENDPOINT_URL_ERROR_MESSAGE =
   'Endpoint URL must start with http:// or https:// and contain a valid DNS host.';
 export const BACKUP_DURATION_ERROR_MESSAGE =
-  'Duration must use hours, minutes and/or seconds in that order, with minutes and seconds below 60 ' +
-  'after a larger unit (e.g., 168h, 24h10m10s or 2m10s).';
+  'Duration must use days, hours, minutes and/or seconds in that order, with hours below 24 after days ' +
+  'and minutes and seconds below 60 after a larger unit (e.g., 7d, 24h10m10s or 2m10s).';
 export const BACKUP_EXPIRES_IN_HINT =
-  'Duration in hours, minutes and seconds (e.g., 168h or 24h10m10s). ' +
+  'Duration in days, hours, minutes and seconds (e.g., 7d, 168h or 24h10m10s). Days are stored as hours. ' +
   'The amount of time before this backup is eligible for garbage collection. If not specified, ' +
   'a default value of 30 days will be used.';
 export const BACKUP_SYNC_PERIOD_HINT =
-  'Duration in hours, minutes and seconds (e.g., 1h or 2m10s). ' +
-  'Defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.';
+  'Duration in days, hours, minutes and seconds (e.g., 1d, 1h or 2m10s). Days are stored as hours. ' +
+  'Defines how frequently to sync backup API objects from object storage. ' +
+  'A value of 0 uses the default of 30s.';
 
 // Per-cluster proxy tooltips
 export const PROXY_MODE_HINT = 'kube-proxy mode for in-cluster service routing.';
