@@ -124,7 +124,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   selectedTagCategory = '';
   tags: string[] = [];
   networks: string[] = [];
-  tagValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
+  // Angular's string PatternValidator anchored the pattern at the end, the chip validator does not.
+  tagValuesPattern = `${KUBERNETES_RESOURCE_NAME_PATTERN}$`;
   tagValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
 
