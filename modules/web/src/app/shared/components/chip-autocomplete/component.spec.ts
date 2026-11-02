@@ -45,7 +45,7 @@ function chipInputEvent(value: string): MatChipInputEvent {
 })
 class HostComponent {
   @ViewChild(ChipAutocompleteComponent) chips: ChipAutocompleteComponent;
-  readonly pattern = KUBERNETES_RESOURCE_NAME_PATTERN;
+  readonly pattern = `${KUBERNETES_RESOURCE_NAME_PATTERN}$`;
   predefinedTags: string[] = [];
   changed: string[] = [];
   form: FormGroup;
@@ -106,6 +106,20 @@ describe('ChipAutocompleteComponent', () => {
 
   it('should be invalid for tags that do not match the pattern', () => {
     host.chips.addTag(chipInputEvent('Not Valid'));
+    fixture.detectChanges();
+
+    expect(host.form.valid).toBe(false);
+  });
+
+  it('should be invalid for tags with an invalid suffix', () => {
+    host.chips.addTag(chipInputEvent('a!'));
+    fixture.detectChanges();
+
+    expect(host.form.valid).toBe(false);
+  });
+
+  it('should be invalid for tags ending with a dash', () => {
+    host.chips.addTag(chipInputEvent('a-'));
     fixture.detectChanges();
 
     expect(host.form.valid).toBe(false);
