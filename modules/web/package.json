@@ -80,7 +80,7 @@
     "browserslist": "^4.29.3",
     "buffer": "6.0.3",
     "core-js": "3.50.0",
-    "country-code-lookup": "0.1.5",
+    "country-code-lookup": "0.2.1",
     "cron-validator": "1.4.0",
     "flag-icons": "7.5.0",
     "git-describe": "4.1.1",
