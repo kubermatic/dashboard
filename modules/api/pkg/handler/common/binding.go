@@ -26,6 +26,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/kubermatic/v2/pkg/features"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -42,7 +43,7 @@ const (
 	NamespaceScope                   = "Namespace"
 )
 
-func BindUserToRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, roleUser apiv1.RoleUser, projectID, clusterID, roleID, namespace string) (interface{}, error) {
+func BindUserToRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, roleUser apiv1.RoleUser, projectID, clusterID, roleID, namespace string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
@@ -50,7 +51,7 @@ func BindUserToRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, err
 	}
 
-	roleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, cluster, roleUser.Group, roleUser.OIDCGroup)
+	roleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, oidcIssuerVerifier, cluster, roleUser.Group, roleUser.OIDCGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func BindUserToRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInf
 	return convertInternalRoleBindingToExternal(existingRoleBinding), nil
 }
 
-func BindUserToClusterRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, clusterRoleUser apiv1.ClusterRoleUser, projectID, clusterID, roleID string) (interface{}, error) {
+func BindUserToClusterRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, clusterRoleUser apiv1.ClusterRoleUser, projectID, clusterID, roleID string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
@@ -138,7 +139,7 @@ func BindUserToClusterRoleEndpoint(ctx context.Context, userInfoGetter provider.
 		return nil, err
 	}
 
-	clusterRoleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, cluster, clusterRoleUser.Group, clusterRoleUser.OIDCGroup)
+	clusterRoleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, oidcIssuerVerifier, cluster, clusterRoleUser.Group, clusterRoleUser.OIDCGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +217,7 @@ func BindUserToClusterRoleEndpoint(ctx context.Context, userInfoGetter provider.
 	return convertInternalClusterRoleBindingToExternal(existingClusterRoleBinding), nil
 }
 
-func UnbindUserFromRoleBindingEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, roleUser apiv1.RoleUser, projectID, clusterID, roleID, namespace string) (interface{}, error) {
+func UnbindUserFromRoleBindingEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, roleUser apiv1.RoleUser, projectID, clusterID, roleID, namespace string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
@@ -224,7 +225,7 @@ func UnbindUserFromRoleBindingEndpoint(ctx context.Context, userInfoGetter provi
 		return nil, err
 	}
 
-	roleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, cluster, roleUser.Group, roleUser.OIDCGroup)
+	roleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, oidcIssuerVerifier, cluster, roleUser.Group, roleUser.OIDCGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -278,7 +279,7 @@ func UnbindUserFromRoleBindingEndpoint(ctx context.Context, userInfoGetter provi
 	return convertInternalRoleBindingToExternal(binding), nil
 }
 
-func UnbindUserFromClusterRoleBindingEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, clusterRoleUser apiv1.ClusterRoleUser, projectID, clusterID, roleID string) (interface{}, error) {
+func UnbindUserFromClusterRoleBindingEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, clusterRoleUser apiv1.ClusterRoleUser, projectID, clusterID, roleID string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
@@ -286,7 +287,7 @@ func UnbindUserFromClusterRoleBindingEndpoint(ctx context.Context, userInfoGette
 		return nil, err
 	}
 
-	clusterRoleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, cluster, clusterRoleUser.Group, clusterRoleUser.OIDCGroup)
+	clusterRoleUser.Group, err = resolveGroupSubjectName(ctx, userInfoGetter, seedsGetter, featureGates, oidcIssuerVerifier, cluster, clusterRoleUser.Group, clusterRoleUser.OIDCGroup)
 	if err != nil {
 		return nil, err
 	}

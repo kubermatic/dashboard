@@ -72,13 +72,11 @@ limitations under the License.
       </mat-form-field>
       <div class="oidc-group-checkbox">
         <mat-checkbox [formControlName]="Controls.OIDCGroup"
-                      id="km-add-binding-dialog-oidc-group">OIDC group
+                      id="km-add-binding-dialog-oidc-group">
+          OIDC group
+          <i class="km-icon-info km-pointer"
+             matTooltip="Adds the OIDC groups prefix configured for this cluster to the group name. Uncheck for non-OIDC groups."></i>
         </mat-checkbox>
-        <div class="mat-hint">
-          When checked, the group is treated as a group from your OIDC provider and the cluster's OIDC
-          groups prefix (usually <code>oidc:</code>) is added to its name. Uncheck for Kubernetes groups
-          such as <code>system:serviceaccounts:&lt;namespace&gt;</code>.
-        </div>
       </div>
       }
       <mat-form-field fxFlex>
@@ -132,13 +130,11 @@ limitations under the License.
       </mat-form-field>
       <div class="oidc-group-checkbox">
         <mat-checkbox [formControlName]="Controls.OIDCGroup"
-                      id="km-add-binding-dialog-oidc-group">OIDC group
+                      id="km-add-binding-dialog-oidc-group">
+          OIDC group
+          <i class="km-icon-info km-pointer"
+             matTooltip="Adds the OIDC groups prefix configured for this cluster to the group name. Uncheck for non-OIDC groups."></i>
         </mat-checkbox>
-        <div class="mat-hint">
-          When checked, the group is treated as a group from your OIDC provider and the cluster's OIDC
-          groups prefix (usually <code>oidc:</code>) is added to its name. Uncheck for Kubernetes groups
-          such as <code>system:serviceaccounts:&lt;namespace&gt;</code>.
-        </div>
       </div>
       }
       <mat-form-field fxFlex>
