@@ -267,7 +267,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         .categoryTags(tagCategory)
         .pipe(take(1))
         .subscribe(tags => {
-          this.predefinedTagList = tags.map(t => t.name);
+          this.predefinedTagList = _.sortBy(
+            tags.map(t => t.name),
+            name => name.toLowerCase()
+          );
           this._cdr.detectChanges();
         });
     } else {
@@ -442,6 +445,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .credential(this._presets.preset)
       .datacenter(this._clusterSpecService.datacenter)
       .tagCategories(this._onTagCategoryLoading.bind(this))
+      .pipe(map(tagCategories => _.sortBy(tagCategories, c => c.name.toLowerCase())))
       .pipe(
         catchError(_ => {
           this._clearTagCategories();
