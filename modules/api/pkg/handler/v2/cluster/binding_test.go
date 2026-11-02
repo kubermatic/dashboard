@@ -32,6 +32,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
+	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -1228,6 +1229,95 @@ func TestBindOIDCGroupToRole(t *testing.T) {
 
 			if res.Code != tc.httpStatus {
 				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.expectedResponse)
+		})
+	}
+}
+
+func genAuthenticationConfigurationSecret(name, key, authConfig string) *corev1.Secret {
+	return &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      name,
+			Namespace: test.GenDefaultCluster().Status.NamespaceName,
+		},
+		Data: map[string][]byte{key: []byte(authConfig)},
+	}
+}
+
+func TestBindOIDCGroupWithAuthenticationConfiguration(t *testing.T) {
+	t.Parallel()
+
+	clusterWithCustomAuthConfig := test.GenDefaultCluster()
+	clusterWithCustomAuthConfig.Spec.AuthenticationConfiguration = &kubermaticv1.AuthenticationConfiguration{SecretName: "custom-auth", SecretKey: "config.yaml"}
+
+	testcases := []struct {
+		name             string
+		cluster          *kubermaticv1.Cluster
+		secret           *corev1.Secret
+		expectedResponse string
+	}{
+		{
+			name:    "scenario 1: prefix of the issuer's authenticator in the generated configuration",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, fmt.Sprintf(`
+jwt:
+- issuer: {url: https://other.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "other:"}
+- issuer: {url: %s}
+  claimMappings:
+    groups: {claim: groups, prefix: "corp:"}
+`, test.IssuerURL)),
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"corp:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+		},
+		{
+			name:    "scenario 2: prefix from the Secret referenced by the cluster",
+			cluster: clusterWithCustomAuthConfig,
+			secret: genAuthenticationConfigurationSecret("custom-auth", "config.yaml", `
+jwt:
+- issuer: {url: https://idp.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "custom:"}
+`),
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"custom:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+		},
+		{
+			name:    "scenario 3: stored verbatim when no authenticator matches the issuer",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, `
+jwt:
+- issuer: {url: https://a.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "a:"}
+- issuer: {url: https://b.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "b:"}
+`),
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			kubeObj := []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRole("role-1"),
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			}
+			kubermaticObj := append(test.GenDefaultKubermaticObjects(test.GenTestSeed(), tc.cluster), tc.secret)
+			req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/clusterroles/%s/clusterbindings", test.ProjectName, tc.cluster.Name, "role-1"), strings.NewReader(`{"group":"kubermatic:sig-api-ui","oidcGroup":true}`))
+			res := httptest.NewRecorder()
+
+			// OpenIDAuthPlugin is enabled so that the spec-based fallback would add "oidc:"; the Secret must win.
+			ep, _, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, kubeObj, nil, kubermaticObj, genOIDCKubermaticConfiguration(true), hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != http.StatusOK {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", http.StatusOK, res.Code, res.Body.String())
 			}
 			test.CompareWithResult(t, res, tc.expectedResponse)
 		})
