@@ -19,6 +19,7 @@ package common
 import (
 	"testing"
 
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
 )
@@ -115,4 +116,132 @@ func TestAddGroupsPrefix(t *testing.T) {
 			t.Errorf("addGroupsPrefix(%q, %q): expected %q, got %q", tc.prefix, tc.group, tc.expected, result)
 		}
 	}
+}
+
+func TestGroupsPrefixFromAuthenticationConfiguration(t *testing.T) {
+	t.Parallel()
+
+	const issuerURL = "https://kkp.example.com/dex"
+
+	testcases := []struct {
+		name           string
+		authConfig     string
+		expectedPrefix string
+	}{
+		{
+			name: "authenticator matching the issuer",
+			authConfig: `
+apiVersion: apiserver.config.k8s.io/v1
+kind: AuthenticationConfiguration
+jwt:
+- issuer:
+    url: https://other.example.com
+    audiences: [other]
+  claimMappings:
+    username: {claim: email, prefix: ""}
+    groups: {claim: groups, prefix: "other:"}
+- issuer:
+    url: https://kkp.example.com/dex/
+    audiences: [kubernetes]
+  claimMappings:
+    username: {claim: email, prefix: ""}
+    groups: {claim: groups, prefix: "oidc:"}
+`,
+			expectedPrefix: "oidc:",
+		},
+		{
+			name: "single authenticator with another issuer",
+			authConfig: `
+apiVersion: apiserver.config.k8s.io/v1beta1
+kind: AuthenticationConfiguration
+jwt:
+- issuer:
+    url: https://other.example.com
+    audiences: [other]
+  claimMappings:
+    username: {claim: email, prefix: ""}
+    groups: {claim: groups, prefix: "corp:"}
+`,
+			expectedPrefix: "corp:",
+		},
+		{
+			name: "several authenticators and none matches the issuer",
+			authConfig: `
+jwt:
+- issuer: {url: https://a.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "a:"}
+- issuer: {url: https://b.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "b:"}
+`,
+			expectedPrefix: "",
+		},
+		{
+			name: "groups mapped with a CEL expression",
+			authConfig: `
+jwt:
+- issuer: {url: https://kkp.example.com/dex}
+  claimMappings:
+    groups: {expression: '"oidc:" + claims.groups'}
+`,
+			expectedPrefix: "",
+		},
+		{
+			name: "groups claim without prefix",
+			authConfig: `
+jwt:
+- issuer: {url: https://kkp.example.com/dex}
+  claimMappings:
+    groups: {claim: groups}
+`,
+			expectedPrefix: "",
+		},
+		{
+			name:           "no JWT authenticators",
+			authConfig:     `apiVersion: apiserver.config.k8s.io/v1`,
+			expectedPrefix: "",
+		},
+		{
+			name:           "invalid configuration",
+			authConfig:     `jwt: [`,
+			expectedPrefix: "",
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			if prefix := groupsPrefixFromAuthenticationConfiguration([]byte(tc.authConfig), issuerURL); prefix != tc.expectedPrefix {
+				t.Fatalf("expected prefix %q, got %q", tc.expectedPrefix, prefix)
+			}
+		})
+	}
+}
+
+func TestOIDCIssuerURL(t *testing.T) {
+	t.Parallel()
+
+	verifier := fakeIssuerVerifier{url: "https://kkp.example.com/dex"}
+
+	if url := oidcIssuerURL(&kubermaticv1.Seed{}, verifier); url != "https://kkp.example.com/dex" {
+		t.Errorf("expected the API issuer, got %q", url)
+	}
+
+	seed := &kubermaticv1.Seed{Spec: kubermaticv1.SeedSpec{OIDCProviderConfiguration: &kubermaticv1.OIDCProviderConfiguration{IssuerURL: "https://seed.example.com/dex"}}}
+	if url := oidcIssuerURL(seed, verifier); url != "https://seed.example.com/dex" {
+		t.Errorf("expected the seed issuer, got %q", url)
+	}
+
+	if url := oidcIssuerURL(nil, nil); url != "" {
+		t.Errorf("expected no issuer, got %q", url)
+	}
+}
+
+type fakeIssuerVerifier struct {
+	authtypes.OIDCIssuerVerifier
+	url string
+}
+
+func (f fakeIssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
+	return &authtypes.OIDCConfiguration{URL: f.url}
 }
