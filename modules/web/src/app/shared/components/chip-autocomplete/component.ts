@@ -83,8 +83,10 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder = 'Select single or multiple values';
   @Input() required = false;
-  @Input() patternError = 'Invalid pattern';
-  @Input() pattern: string;
+  // The inputs are aliased like in ChipListComponent: a plain `pattern` input would also match Angular's
+  // PatternValidator directive (`[pattern][formControlName]`), which validates the whole array as a string.
+  @Input('kmPatternError') patternError = 'Invalid pattern';
+  @Input('kmPattern') pattern: string;
   @Output() onChange = new EventEmitter<string[]>();
   @ViewChild('tagInput') tagInput: ElementRef;
   private readonly _debounceTime = 250;
