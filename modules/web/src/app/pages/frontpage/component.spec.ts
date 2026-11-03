@@ -50,6 +50,10 @@ describe('FrontpageComponent', () => {
     expect(component).toBeTruthy();
   }));
 
+  it('should send the browser origin with the login URL', () => {
+    expect(component.loginURL).toBe(`/api/v2/auth/login?origin=${encodeURIComponent(window.location.origin)}`);
+  });
+
   it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');
     authService.isAuth = true;

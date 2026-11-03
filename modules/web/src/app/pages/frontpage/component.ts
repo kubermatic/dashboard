@@ -35,7 +35,8 @@ export class FrontpageComponent implements OnInit {
     private readonly _router: Router
   ) {}
 
-  readonly loginURL = `${environment.newRestRoot}/auth/login`;
+  // The origin lets the API send the user back to this hostname after login, e.g. behind a reverse proxy.
+  readonly loginURL = `${environment.newRestRoot}/auth/login?origin=${encodeURIComponent(window.location.origin)}`;
 
   get tagline(): string {
     return this._brandingService.getTagline();
