@@ -1255,6 +1255,7 @@ func TestBindOIDCGroupWithAuthenticationConfiguration(t *testing.T) {
 		name             string
 		cluster          *kubermaticv1.Cluster
 		secret           *corev1.Secret
+		httpStatus       int
 		expectedResponse string
 	}{
 		{
@@ -1269,6 +1270,7 @@ jwt:
   claimMappings:
     groups: {claim: groups, prefix: "corp:"}
 `, test.IssuerURL)),
+			httpStatus:       http.StatusOK,
 			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"corp:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
 		},
 		{
@@ -1280,10 +1282,11 @@ jwt:
   claimMappings:
     groups: {claim: groups, prefix: "custom:"}
 `),
+			httpStatus:       http.StatusOK,
 			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"custom:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
 		},
 		{
-			name:    "scenario 3: stored verbatim when no authenticator matches the issuer",
+			name:    "scenario 3: rejected when no authenticator matches the issuer",
 			cluster: test.GenDefaultCluster(),
 			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, `
 jwt:
@@ -1294,7 +1297,20 @@ jwt:
   claimMappings:
     groups: {claim: groups, prefix: "b:"}
 `),
-			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusBadRequest,
+			expectedResponse: `{"error":{"code":400,"message":"cannot determine the OIDC groups prefix of the cluster: none of the JWT authenticators matches the OIDC issuer \"url://dex\"; set the group name as the kube-apiserver sees it and disable the OIDC group option"}}`,
+		},
+		{
+			name:    "scenario 4: rejected when the groups are mapped with a CEL expression",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, `
+jwt:
+- issuer: {url: https://idp.example.com}
+  claimMappings:
+    groups: {expression: 'claims.groups.map(g, "corp:" + g)'}
+`),
+			httpStatus:       http.StatusBadRequest,
+			expectedResponse: `{"error":{"code":400,"message":"cannot determine the OIDC groups prefix of the cluster: the groups of the JWT authenticator for \"https://idp.example.com\" are mapped with a CEL expression; set the group name as the kube-apiserver sees it and disable the OIDC group option"}}`,
 		},
 	}
 
@@ -1308,7 +1324,7 @@ jwt:
 			req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/clusterroles/%s/clusterbindings", test.ProjectName, tc.cluster.Name, "role-1"), strings.NewReader(`{"group":"kubermatic:sig-api-ui","oidcGroup":true}`))
 			res := httptest.NewRecorder()
 
-			// OpenIDAuthPlugin is enabled so that the spec-based fallback would add "oidc:"; the Secret must win.
+			// The spec-based fallback would add "oidc:"; the Secret must win.
 			ep, _, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, kubeObj, nil, kubermaticObj, genOIDCKubermaticConfiguration(true), hack.NewTestRouting)
 			if err != nil {
 				t.Fatalf("failed to create test endpoint: %v", err)
@@ -1316,8 +1332,8 @@ jwt:
 
 			ep.ServeHTTP(res, req)
 
-			if res.Code != http.StatusOK {
-				t.Fatalf("Expected HTTP status code %d, got %d: %s", http.StatusOK, res.Code, res.Body.String())
+			if res.Code != tc.httpStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
 			}
 			test.CompareWithResult(t, res, tc.expectedResponse)
 		})

@@ -20,9 +20,8 @@ type RoleUser struct {
 	// group
 	Group string `json:"group,omitempty"`
 
-	// OIDCGroup marks Group as a group coming from the OIDC provider. When set, the groups prefix
-	// that the user cluster's kube-apiserver applies to OIDC groups (usually "oidc:") is added to
-	// the group name. Leave it unset for raw Kubernetes groups such as "system:serviceaccounts:<ns>".
+	// OIDCGroup adds the user cluster's OIDC groups prefix (e.g. "oidc:") to Group, unless Group already starts with it.
+	// The request is rejected if the prefix cannot be determined, e.g. when groups are mapped with a CEL expression.
 	OIDCGroup bool `json:"oidcGroup,omitempty"`
 
 	// service account

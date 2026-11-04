@@ -30696,7 +30696,7 @@
           "x-go-name": "Group"
         },
         "oidcGroup": {
-          "description": "OIDCGroup marks Group as a group coming from the OIDC provider. When set, the groups prefix\nthat the user cluster's kube-apiserver applies to OIDC groups (usually \"oidc:\") is added to\nthe group name. Leave it unset for raw Kubernetes groups such as \"system:serviceaccounts:\u003cns\u003e\".",
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.\nThe request is rejected if the prefix cannot be determined, e.g. when groups are mapped with a CEL expression.",
           "type": "boolean",
           "x-go-name": "OIDCGroup"
         },
@@ -40698,7 +40698,7 @@
           "x-go-name": "Group"
         },
         "oidcGroup": {
-          "description": "OIDCGroup marks Group as a group coming from the OIDC provider. When set, the groups prefix\nthat the user cluster's kube-apiserver applies to OIDC groups (usually \"oidc:\") is added to\nthe group name. Leave it unset for raw Kubernetes groups such as \"system:serviceaccounts:\u003cns\u003e\".",
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.\nThe request is rejected if the prefix cannot be determined, e.g. when groups are mapped with a CEL expression.",
           "type": "boolean",
           "x-go-name": "OIDCGroup"
         },
