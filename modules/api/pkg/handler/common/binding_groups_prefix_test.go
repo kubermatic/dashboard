@@ -127,6 +127,7 @@ func TestGroupsPrefixFromAuthenticationConfiguration(t *testing.T) {
 		name           string
 		authConfig     string
 		expectedPrefix string
+		expectedError  bool
 	}{
 		{
 			name: "authenticator matching the issuer",
@@ -175,7 +176,7 @@ jwt:
   claimMappings:
     groups: {claim: groups, prefix: "b:"}
 `,
-			expectedPrefix: "",
+			expectedError: true,
 		},
 		{
 			name: "groups mapped with a CEL expression",
@@ -185,7 +186,7 @@ jwt:
   claimMappings:
     groups: {expression: '"oidc:" + claims.groups'}
 `,
-			expectedPrefix: "",
+			expectedError: true,
 		},
 		{
 			name: "groups claim without prefix",
@@ -203,15 +204,24 @@ jwt:
 			expectedPrefix: "",
 		},
 		{
-			name:           "invalid configuration",
-			authConfig:     `jwt: [`,
-			expectedPrefix: "",
+			name:          "empty configuration",
+			authConfig:    "",
+			expectedError: true,
+		},
+		{
+			name:          "invalid configuration",
+			authConfig:    `jwt: [`,
+			expectedError: true,
 		},
 	}
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			if prefix := groupsPrefixFromAuthenticationConfiguration([]byte(tc.authConfig), issuerURL); prefix != tc.expectedPrefix {
+			prefix, err := groupsPrefixFromAuthenticationConfiguration([]byte(tc.authConfig), issuerURL)
+			if (err != nil) != tc.expectedError {
+				t.Fatalf("expected error: %v, got: %v", tc.expectedError, err)
+			}
+			if prefix != tc.expectedPrefix {
 				t.Fatalf("expected prefix %q, got %q", tc.expectedPrefix, prefix)
 			}
 		})
