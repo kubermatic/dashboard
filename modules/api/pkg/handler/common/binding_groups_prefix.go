@@ -17,6 +17,7 @@ limitations under the License.
 package common
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -29,6 +30,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -37,12 +39,10 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// defaultOIDCGroupsPrefix is the groups prefix KKP configures on the user cluster kube-apiserver
-// when the OpenIDAuthPlugin feature gate is enabled and no other authentication configuration is set.
+// defaultOIDCGroupsPrefix is the groups prefix KKP generates for the OpenIDAuthPlugin feature gate.
 const defaultOIDCGroupsPrefix = "oidc:"
 
-// resolveGroupSubjectName returns the group name to use for an RBAC subject. When oidcGroup is set,
-// the cluster's effective OIDC groups prefix is added, unless the name already carries it.
+// resolveGroupSubjectName adds the cluster's OIDC groups prefix to group when oidcGroup is set.
 func resolveGroupSubjectName(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, cluster *kubermaticv1.Cluster, group string, oidcGroup bool) (string, error) {
 	if group == "" || !oidcGroup {
 		return group, nil
@@ -69,16 +69,17 @@ func resolveGroupSubjectName(ctx context.Context, userInfoGetter provider.UserIn
 
 	prefix := effectiveGroupsPrefix(cluster, datacenter, seed, featureGates)
 	if found {
-		prefix = groupsPrefixFromAuthenticationConfiguration(authConfig, oidcIssuerURL(seed, oidcIssuerVerifier))
+		prefix, err = groupsPrefixFromAuthenticationConfiguration(authConfig, oidcIssuerURL(seed, oidcIssuerVerifier))
+		if err != nil {
+			return "", utilerrors.NewBadRequest("cannot determine the OIDC groups prefix of the cluster: %v; set the group name as the kube-apiserver sees it and disable the OIDC group option", err)
+		}
 	}
 
 	return addGroupsPrefix(prefix, group), nil
 }
 
-// getAuthenticationConfiguration reads the AuthenticationConfiguration the user cluster's
-// kube-apiserver is started with: the Secret referenced by the cluster, or else the one KKP
-// generates in the cluster namespace (which also carries a datacenter or seed level configuration).
-// found is false when the Secret does not exist yet, e.g. for a cluster that is still being created.
+// getAuthenticationConfiguration returns the AuthenticationConfiguration the cluster's kube-apiserver
+// is started with; found is false when its Secret does not exist.
 func getAuthenticationConfiguration(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster) ([]byte, bool, error) {
 	if cluster.Status.NamespaceName == "" {
 		return nil, false, nil
@@ -103,13 +104,18 @@ func getAuthenticationConfiguration(ctx context.Context, seedClient ctrlruntimec
 }
 
 // groupsPrefixFromAuthenticationConfiguration returns the groups prefix of the JWT authenticator for
-// issuerURL. When no authenticator matches and there is exactly one, that one is used. An empty prefix
-// is returned when the configuration cannot be parsed, the authenticator cannot be determined, or its
-// groups are mapped with a CEL expression, in which case the prefix (if any) is part of the expression.
-func groupsPrefixFromAuthenticationConfiguration(data []byte, issuerURL string) string {
+// issuerURL, or of the only JWT authenticator if none matches.
+func groupsPrefixFromAuthenticationConfiguration(data []byte, issuerURL string) (string, error) {
+	if len(bytes.TrimSpace(data)) == 0 {
+		return "", errors.New("the authentication configuration is empty")
+	}
+
 	authConfig := &apiserverv1.AuthenticationConfiguration{}
 	if err := yaml.Unmarshal(data, authConfig); err != nil {
-		return ""
+		return "", fmt.Errorf("failed to parse the authentication configuration: %w", err)
+	}
+	if len(authConfig.JWT) == 0 {
+		return "", nil
 	}
 
 	var authenticator *apiserverv1.JWTAuthenticator
@@ -123,19 +129,21 @@ func groupsPrefixFromAuthenticationConfiguration(data []byte, issuerURL string) 
 		authenticator = &authConfig.JWT[0]
 	}
 	if authenticator == nil {
-		return ""
+		return "", fmt.Errorf("none of the JWT authenticators matches the OIDC issuer %q", issuerURL)
 	}
 
 	groups := authenticator.ClaimMappings.Groups
-	if groups.Expression != "" || groups.Prefix == nil {
-		return ""
+	if groups.Expression != "" {
+		return "", fmt.Errorf("the groups of the JWT authenticator for %q are mapped with a CEL expression", authenticator.Issuer.URL)
+	}
+	if groups.Prefix == nil {
+		return "", nil
 	}
 
-	return *groups.Prefix
+	return *groups.Prefix, nil
 }
 
-// oidcIssuerURL returns the issuer users of the seed log in with: the seed's own OIDC provider if one
-// is configured, the API's default issuer (--oidc-url) otherwise.
+// oidcIssuerURL returns the seed's OIDC issuer, or the API's default one (--oidc-url).
 func oidcIssuerURL(seed *kubermaticv1.Seed, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) string {
 	if seed != nil && seed.Spec.OIDCProviderConfiguration != nil && seed.Spec.OIDCProviderConfiguration.IssuerURL != "" {
 		return seed.Spec.OIDCProviderConfiguration.IssuerURL
@@ -150,10 +158,8 @@ func sameIssuerURL(a, b string) bool {
 	return a != "" && b != "" && strings.TrimSuffix(a, "/") == strings.TrimSuffix(b, "/")
 }
 
-// effectiveGroupsPrefix derives the groups prefix from the cluster spec, for when the
-// AuthenticationConfiguration Secret does not exist yet. The precedence mirrors the
-// AuthenticationConfigurationReconciler in k8c.io/kubermatic/v2/pkg/resources/apiserver; a custom
-// AuthenticationConfiguration can only be resolved from its Secret, so an empty prefix is returned for it.
+// effectiveGroupsPrefix derives the groups prefix from the cluster spec when the AuthenticationConfiguration
+// Secret does not exist, following KKP's AuthenticationConfigurationReconciler.
 func effectiveGroupsPrefix(cluster *kubermaticv1.Cluster, datacenter *kubermaticv1.Datacenter, seed *kubermaticv1.Seed, featureGates features.FeatureGate) string {
 	oidcSettings := cluster.Spec.OIDC //nolint:staticcheck
 
