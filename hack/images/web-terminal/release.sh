@@ -54,4 +54,6 @@ docker buildx build ./hack/images/web-terminal \
   --push \
   --tag "$IMAGE"
 
+./hack/attach-image-sbom.sh "$IMAGE"
+
 echodate "Successfully built and pushed image for all architectures."

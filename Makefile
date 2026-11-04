@@ -70,6 +70,7 @@ build: web-build api-build
 
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
+	./hack/attach-image-sbom.sh $(REPO):$(IMAGE_TAG)
 	for TAG in $(ADDITIONAL_TAGS) ; do \
 		docker tag $(REPO):$(IMAGE_TAG) $(REPO):$$TAG ; \
 		docker push $(REPO):$$TAG ; \

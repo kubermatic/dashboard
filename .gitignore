@@ -1,6 +1,7 @@
 # Compiled output.
 /.angular/cache
 /dist
+_dist
 /tmp
 /dist-themes
 
