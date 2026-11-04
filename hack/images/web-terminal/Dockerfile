@@ -55,7 +55,7 @@ ENV HOME=$USER_HOME
 RUN addgroup -S ${GROUP}  && adduser -S ${USER} -h ${USER_HOME} -G ${GROUP}
 
 # ensure that we install a curl version that fixes CVE-2023-38545 and CVE-2023-38546.
-RUN apk add --no-cache -U \
+RUN apk upgrade --no-cache -U && apk add --no-cache \
   bash \
   bash-completion \
   ca-certificates \
