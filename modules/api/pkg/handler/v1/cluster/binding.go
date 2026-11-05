@@ -29,10 +29,12 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
+	"k8c.io/kubermatic/v2/pkg/features"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
-func BindUserToRoleEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func BindUserToRoleEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(roleUserReq)
 
@@ -40,11 +42,11 @@ func BindUserToRoleEndpoint(projectProvider provider.ProjectProvider, privileged
 			return nil, utilerrors.NewBadRequest("invalid request: %v", err)
 		}
 
-		return handlercommon.BindUserToRoleEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.Body, req.ProjectID, req.ClusterID, req.RoleID, req.Namespace)
+		return handlercommon.BindUserToRoleEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, featureGates, oidcIssuerVerifier, req.Body, req.ProjectID, req.ClusterID, req.RoleID, req.Namespace)
 	}
 }
 
-func UnbindUserFromRoleBindingEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func UnbindUserFromRoleBindingEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(roleUserReq)
 
@@ -52,7 +54,7 @@ func UnbindUserFromRoleBindingEndpoint(projectProvider provider.ProjectProvider,
 			return nil, utilerrors.NewBadRequest("invalid request: %v", err)
 		}
 
-		return handlercommon.UnbindUserFromRoleBindingEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.Body, req.ProjectID, req.ClusterID, req.RoleID, req.Namespace)
+		return handlercommon.UnbindUserFromRoleBindingEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, featureGates, oidcIssuerVerifier, req.Body, req.ProjectID, req.ClusterID, req.RoleID, req.Namespace)
 	}
 }
 
@@ -95,7 +97,7 @@ func ListRoleBindingEndpoint(projectProvider provider.ProjectProvider, privilege
 	}
 }
 
-func BindUserToClusterRoleEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func BindUserToClusterRoleEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(clusterRoleUserReq)
 
@@ -103,11 +105,11 @@ func BindUserToClusterRoleEndpoint(projectProvider provider.ProjectProvider, pri
 			return nil, utilerrors.NewBadRequest("invalid request: %v", err)
 		}
 
-		return handlercommon.BindUserToClusterRoleEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.Body, req.ProjectID, req.ClusterID, req.RoleID)
+		return handlercommon.BindUserToClusterRoleEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, featureGates, oidcIssuerVerifier, req.Body, req.ProjectID, req.ClusterID, req.RoleID)
 	}
 }
 
-func UnbindUserFromClusterRoleBindingEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func UnbindUserFromClusterRoleBindingEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(clusterRoleUserReq)
 
@@ -115,7 +117,7 @@ func UnbindUserFromClusterRoleBindingEndpoint(projectProvider provider.ProjectPr
 			return nil, utilerrors.NewBadRequest("invalid request: %v", err)
 		}
 
-		return handlercommon.UnbindUserFromClusterRoleBindingEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.Body, req.ProjectID, req.ClusterID, req.RoleID)
+		return handlercommon.UnbindUserFromClusterRoleBindingEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, featureGates, oidcIssuerVerifier, req.Body, req.ProjectID, req.ClusterID, req.RoleID)
 	}
 }
 
@@ -133,6 +135,9 @@ func (r roleUserReq) Validate() error {
 	}
 	if r.Body.UserEmail == "" && r.Body.Group == "" {
 		return fmt.Errorf("either user email or group must be set")
+	}
+	if r.Body.OIDCGroup && r.Body.Group == "" {
+		return fmt.Errorf("oidcGroup can only be used in conjunction with group")
 	}
 	return nil
 }
@@ -158,6 +163,9 @@ func (r clusterRoleUserReq) Validate() error {
 	}
 	if r.Body.UserEmail == "" && r.Body.Group == "" {
 		return fmt.Errorf("either user email or group must be set")
+	}
+	if r.Body.OIDCGroup && r.Body.Group == "" {
+		return fmt.Errorf("oidcGroup can only be used in conjunction with group")
 	}
 
 	return nil
