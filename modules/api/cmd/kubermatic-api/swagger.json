@@ -22848,6 +22848,61 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/vsphere/datastoreclusters": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists datastore clusters from vSphere datacenter.",
+        "operationId": "listProjectVSphereDatastoreClusters",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereDatastoreClusterList",
+            "schema": {
+              "$ref": "#/definitions/VSphereDatastoreClusterList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/vsphere/datastores": {
       "get": {
         "produces": [
@@ -25602,6 +25657,54 @@
             "description": "VMwareCloudDirectorTemplateList",
             "schema": {
               "$ref": "#/definitions/VMwareCloudDirectorTemplateList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/providers/vsphere/datastoreclusters": {
+      "get": {
+        "description": "Lists datastore clusters from vsphere datacenter",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "operationId": "listVSphereDatastoreClusters",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereDatastoreClusterList",
+            "schema": {
+              "$ref": "#/definitions/VSphereDatastoreClusterList"
             }
           },
           "default": {
@@ -42750,6 +42853,20 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "VSphereDatastoreClusterList": {
+      "type": "object",
+      "title": "VSphereDatastoreClusterList is the object representing the vsphere datastore clusters.",
+      "properties": {
+        "datastoreClusters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "DatastoreClusters"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "VSphereDatastoreList": {
       "type": "object",
