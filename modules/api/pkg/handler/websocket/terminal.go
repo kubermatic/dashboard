@@ -75,6 +75,30 @@ const (
 	webTerminalImage                   = resources.WEBTerminalImage
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 
+	// writableKubeconfigSetup runs before the shell starts. The kubeconfig secret is mounted read-only, so tools that
+	// store the current context or namespace in the kubeconfig (kubectl config set-context, kubens, kubectx) fail
+	// with "read-only file system". It keeps a writable copy on the terminal's storage and points KUBECONFIG at it.
+	// The copy's user is an exec credential plugin that reads the token from the mounted secret on every call, so
+	// the token refreshes done by checkTokenAndRefreshIfNeeded keep reaching kubectl. Listing both files in
+	// KUBECONFIG doesn't work: kubectl locks every file in the list before writing. If the setup fails, the shell
+	// keeps using the mounted kubeconfig as before.
+	writableKubeconfigSetup = `RO=` + webTerminalContainerKubeconfigPath + `
+DIR=/data/terminal/.kube
+if [ ! -s "$DIR/config" ]; then
+  mkdir -p "$DIR" &&
+  printf '%s\n' '#!/bin/sh' \
+    "t=\$(kubectl --kubeconfig=$RO config view --raw -o jsonpath='{.users[0].user.auth-provider.config.id-token}{.users[0].user.token}')" \
+    'printf "{\"apiVersion\":\"client.authentication.k8s.io/v1beta1\",\"kind\":\"ExecCredential\",\"status\":{\"token\":\"%s\"}}" "$t"' > "$DIR/token" &&
+  kubectl --kubeconfig="$RO" config view --raw --minify --flatten > "$DIR/config.tmp" &&
+  user=$(kubectl --kubeconfig="$DIR/config.tmp" config view -o jsonpath='{.users[0].name}') &&
+  kubectl --kubeconfig="$DIR/config.tmp" config unset "users.$user.auth-provider" > /dev/null &&
+  kubectl --kubeconfig="$DIR/config.tmp" config set-credentials "$user" --exec-api-version=client.authentication.k8s.io/v1beta1 \
+    --exec-command=/bin/sh --exec-arg="$DIR/token" > /dev/null &&
+  mv "$DIR/config.tmp" "$DIR/config"
+fi
+[ -s "$DIR/config" ] && export KUBECONFIG="$DIR/config"
+`
+
 	webTerminalCABundleVolume = "ca-bundle"
 	webTerminalCABundleDir    = "/etc/kubermatic/certs"
 	webTerminalCABundlePath   = webTerminalCABundleDir + "/" + resources.CABundleConfigMapKey
@@ -863,7 +887,7 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 		oidcIssuerVerifier,
 		kubeconfigSecret,
 		overwriteRegistry,
-		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
+		[]string{"bash", "-c", writableKubeconfigSetup + "cd /data/terminal && exec /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,
 			userEmailID:   userEmailID,
