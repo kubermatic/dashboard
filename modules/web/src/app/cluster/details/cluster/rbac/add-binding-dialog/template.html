@@ -62,6 +62,15 @@ limitations under the License.
             Group cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
           </mat-error>
         </mat-form-field>
+        <div class="oidc-group-checkbox"
+             *ngIf="subjectType === Kind.Group">
+          <mat-checkbox [formControlName]="Controls.OIDCGroup"
+                        id="km-add-binding-dialog-oidc-group">
+            OIDC group
+            <i class="km-icon-info km-pointer"
+               matTooltip="Adds the OIDC groups prefix configured for this cluster to the group name. Uncheck for non-OIDC groups."></i>
+          </mat-checkbox>
+        </div>
 
         <mat-form-field fxFlex>
           <mat-label>Role</mat-label>
@@ -105,6 +114,15 @@ limitations under the License.
             <strong>Required</strong>
           </mat-error>
         </mat-form-field>
+        <div class="oidc-group-checkbox"
+             *ngIf="subjectType === Kind.Group">
+          <mat-checkbox [formControlName]="Controls.OIDCGroup"
+                        id="km-add-binding-dialog-oidc-group">
+            OIDC group
+            <i class="km-icon-info km-pointer"
+               matTooltip="Adds the OIDC groups prefix configured for this cluster to the group name. Uncheck for non-OIDC groups."></i>
+          </mat-checkbox>
+        </div>
 
         <mat-form-field fxFlex>
           <mat-label>Role</mat-label>
