@@ -29,6 +29,7 @@ import {ErrorType} from '@app/shared/types/error-type';
 export enum Controls {
   Email = 'email',
   Group = 'group',
+  OIDCGroup = 'oidcGroup',
   Role = 'role',
   Namespace = 'namespace',
 }
@@ -88,6 +89,7 @@ export class AddBindingDialogComponent implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Email]: new FormControl('', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]),
       [Controls.Group]: new FormControl(''),
+      [Controls.OIDCGroup]: new FormControl(true),
       [Controls.Role]: new FormControl('', [Validators.required]),
       [Controls.Namespace]: new FormControl(''),
     });
@@ -196,6 +198,7 @@ export class AddBindingDialogComponent implements OnInit, OnDestroy {
     }
     if (this.form.controls.group.value) {
       clusterBinding.group = this.form.controls.group.value;
+      clusterBinding.oidcGroup = this.form.controls.oidcGroup.value;
     }
 
     return this._rbacService
@@ -210,6 +213,7 @@ export class AddBindingDialogComponent implements OnInit, OnDestroy {
     }
     if (this.form.controls.group.value) {
       namespaceBinding.group = this.form.controls.group.value;
+      namespaceBinding.oidcGroup = this.form.controls.oidcGroup.value;
     }
 
     return this._rbacService

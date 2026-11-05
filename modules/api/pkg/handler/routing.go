@@ -85,6 +85,7 @@ type Routing struct {
 	seedProvider                          provider.SeedProvider
 	resourceQuotaProvider                 provider.ResourceQuotaProvider
 	oidcIssuerVerifierGetter              provider.OIDCIssuerVerifierGetter
+	oidcIssuerVerifier                    authtypes.OIDCIssuerVerifier
 }
 
 // NewRouting creates a new Routing.
@@ -132,6 +133,7 @@ func NewRouting(routingParams RoutingParams, masterClient ctrlruntimeclient.Clie
 		seedProvider:                          routingParams.SeedProvider,
 		resourceQuotaProvider:                 routingParams.ResourceQuotaProvider,
 		oidcIssuerVerifierGetter:              routingParams.OIDCIssuerVerifierProviderGetter,
+		oidcIssuerVerifier:                    routingParams.OIDCIssuerVerifier,
 	}
 }
 
