@@ -433,6 +433,22 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  getOwners(owners: ProjectOwner[]): string {
+    return this.getOwnerNameArray(owners).slice(0, this._getVisibleOwnersCount(owners)).join(', ');
+  }
+
+  isMoreOwners(owners: ProjectOwner[]): boolean {
+    return this.getMoreOwnersCount(owners) > 0;
+  }
+
+  getMoreOwnersCount(owners: ProjectOwner[]): number {
+    return this.getOwnerNameArray(owners).length - this._getVisibleOwnersCount(owners);
+  }
+
+  getMoreOwners(owners: ProjectOwner[]): string {
+    return this.getOwnerNameArray(owners).slice(this._getVisibleOwnersCount(owners)).join(', ');
+  }
+
   getOwnerNameArray(owners: ProjectOwner[]): string[] {
     const ownerNameArray = [];
     for (const i in owners) {
@@ -443,42 +459,18 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return ownerNameArray;
   }
 
-  getOwnerString(owners: ProjectOwner[]): string {
-    return this.getOwnerNameArray(owners).join(', ');
-  }
-
-  getOwners(owners: ProjectOwner[]): string {
-    return this.isMoreOwners(owners)
-      ? this.getOwnerString(owners).substring(0, this._maxOwnersLen)
-      : this.getOwnerString(owners);
-  }
-
-  isMoreOwners(owners: ProjectOwner[]): boolean {
-    return this.getOwnerString(owners).length > this._maxOwnersLen;
-  }
-
-  getMoreOwnersCount(owners: ProjectOwner[]): number {
-    return this.isMoreOwners(owners)
-      ? owners.length - this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length
-      : 0;
-  }
-
-  getMoreOwners(owners: ProjectOwner[]): string {
-    // truncatedLength = number of displayed owner names
-    const truncatedLength = this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length;
-    // count = length of original owner names that are displayed
-    // (truncatedLength - 1) * 2 = additional number of separators (', ' = 2)
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    let count = (truncatedLength - 1) * 2;
-    for (let i = 0; i < truncatedLength; i++) {
-      count += owners[i].name.length;
+  private _getVisibleOwnersCount(owners: ProjectOwner[]): number {
+    const separator = ', ';
+    let length = 0;
+    let count = 0;
+    for (const name of this.getOwnerNameArray(owners)) {
+      length += (count ? separator.length : 0) + name.length;
+      if (length > this._maxOwnersLen && count) {
+        break;
+      }
+      count++;
     }
-    // if last displayed name is not complete, show it in tooltip
-    return count > this._maxOwnersLen
-      ? this.getOwnerNameArray(owners)
-          .slice(truncatedLength - 1, owners.length)
-          .join(', ')
-      : this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
+    return count;
   }
 
   getLabelsLength(project: Project): number {
