@@ -44,20 +44,21 @@ limitations under the License.
     <div *option="let folder">{{folder.path}}</div>
   </km-combobox>
 
-  <mat-form-field subscriptSizing="dynamic">
-    <mat-label>Base Folder Path</mat-label>
-    <input matInput
-           [formControlName]="Controls.BaseFolderPath"
-           [name]="Controls.BaseFolderPath"
-           type="text"
-           autocomplete="off" />
-    <mat-hint>Base folder path configures a vCenter folder path where KKP will
+  <km-autocomplete label="Base Folder Path"
+                   subscriptSizing="dynamic"
+                   [formControlName]="Controls.BaseFolderPath"
+                   [isLoading]="folderLabel === FolderState.Loading"
+                   [options]="folderPaths">
+    <ng-container hint>Base folder path configures a vCenter folder path where KKP will
       create an individual cluster folder. If the value is a relative path, it’s
       appended to root path (results in <code>/&lt;root path&gt;/&lt;base path&gt;/&lt;cluster
         folder to be created&gt;</code>). If it’s an absolute path it ignores the
       root path (<code>/&lt;base path&gt;/&lt;cluster folder to be created&gt;</code>).
-    </mat-hint>
-  </mat-form-field>
+      @if (!hasRequiredCredentials()) {
+      <span>&nbsp;Enter your credentials to load autocompletions.</span>
+      }
+    </ng-container>
+  </km-autocomplete>
 
   <km-autocomplete label="Datastore"
                    [formControlName]="Controls.Datastore"
@@ -72,7 +73,8 @@ limitations under the License.
     </ng-container>
   </km-autocomplete>
 
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex
+                  subscriptSizing="dynamic">
     <mat-label>Datastore Cluster</mat-label>
     <input matInput
            [formControlName]="Controls.DatastoreCluster"
