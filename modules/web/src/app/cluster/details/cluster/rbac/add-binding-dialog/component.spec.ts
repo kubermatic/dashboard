@@ -19,6 +19,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AddBindingDialogComponent, BindingType} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
+import {Kind} from '@shared/entity/rbac';
 import {SharedModule} from '@shared/module';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
@@ -35,9 +36,10 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 describe('AddBindingDialogComponent', () => {
   let fixture: ComponentFixture<AddBindingDialogComponent>;
   let component: AddBindingDialogComponent;
+  let rbacMock: Record<string, jest.Mock>;
 
   beforeEach(waitForAsync(() => {
-    const rbacMock = {
+    rbacMock = {
       getClusterRoleNames: jest.fn(),
       getNamespaceRoleNames: jest.fn(),
       createClusterBinding: jest.fn(),
@@ -106,6 +108,49 @@ describe('AddBindingDialogComponent', () => {
     expect(component.form.valid).toBeTruthy();
     discardPeriodicTasks();
   }));
+
+  it('should mark groups as OIDC groups by default', () => {
+    expect(component.form.controls.oidcGroup.value).toBe(true);
+  });
+
+  it('should send oidcGroup with the group for cluster bindings', () => {
+    component.subjectType = Kind.Group;
+    component.form.controls.group.setValue('kubermatic:sig-api-ui');
+    component.form.controls.role.setValue('role-1');
+    component.addClusterBinding().subscribe();
+
+    expect(rbacMock.createClusterBinding).toHaveBeenCalledWith(component.cluster.id, component.projectID, 'role-1', {
+      group: 'kubermatic:sig-api-ui',
+      oidcGroup: true,
+    });
+  });
+
+  it('should send oidcGroup false when the checkbox is unchecked', () => {
+    component.subjectType = Kind.Group;
+    component.form.controls.group.setValue('system:serviceaccounts:my-ns');
+    component.form.controls.oidcGroup.setValue(false);
+    component.form.controls.role.setValue('role-1');
+    component.form.controls.namespace.setValue('default');
+    component.addNamespaceBinding().subscribe();
+
+    expect(rbacMock.createNamespaceBinding).toHaveBeenCalledWith(
+      component.cluster.id,
+      component.projectID,
+      'role-1',
+      'default',
+      {group: 'system:serviceaccounts:my-ns', oidcGroup: false}
+    );
+  });
+
+  it('should not send oidcGroup for user bindings', () => {
+    component.form.controls.email.setValue('test@example.de');
+    component.form.controls.role.setValue('role-1');
+    component.addClusterBinding().subscribe();
+
+    expect(rbacMock.createClusterBinding).toHaveBeenCalledWith(component.cluster.id, component.projectID, 'role-1', {
+      userEmail: 'test@example.de',
+    });
+  });
 
   it('should get namespaces', () => {
     component.roles = fakeRoleNames();
