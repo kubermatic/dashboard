@@ -112,7 +112,7 @@ describe('ProjectComponent', () => {
 
   describe('owners truncation', () => {
     const owners = (...names: string[]): ProjectOwner[] =>
-      names.map(name => ({name, email: `${name.toLowerCase().replace(' ', '.')}@example.com`}));
+      names.map(name => ({name, email: `${name.toLowerCase().replaceAll(' ', '.')}@example.com`}));
 
     it('should cut on name boundaries and count hidden owners', () => {
       const hidden = ['John Doe', 'Jane Roe'];
