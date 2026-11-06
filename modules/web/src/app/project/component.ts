@@ -434,7 +434,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getOwners(owners: ProjectOwner[]): string {
-    return this.getOwnerNameArray(owners).slice(0, this._getVisibleOwnersCount(owners)).join(', ');
+    return this._getOwnerNameArray(owners).slice(0, this._getVisibleOwnersCount(owners)).join(', ');
   }
 
   isMoreOwners(owners: ProjectOwner[]): boolean {
@@ -442,29 +442,23 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getMoreOwnersCount(owners: ProjectOwner[]): number {
-    return this.getOwnerNameArray(owners).length - this._getVisibleOwnersCount(owners);
+    return (owners?.length ?? 0) - this._getVisibleOwnersCount(owners);
   }
 
   getMoreOwners(owners: ProjectOwner[]): string {
-    return this.getOwnerNameArray(owners).slice(this._getVisibleOwnersCount(owners)).join(', ');
+    return this._getOwnerNameArray(owners).slice(this._getVisibleOwnersCount(owners)).join(', ');
   }
 
-  getOwnerNameArray(owners: ProjectOwner[]): string[] {
-    const ownerNameArray = [];
-    for (const i in owners) {
-      if (Object.prototype.hasOwnProperty.call(owners, i)) {
-        ownerNameArray.push(owners[i].name);
-      }
-    }
-    return ownerNameArray;
+  private _getOwnerNameArray(owners: ProjectOwner[]): string[] {
+    return (owners ?? []).map(owner => owner.name);
   }
 
   private _getVisibleOwnersCount(owners: ProjectOwner[]): number {
     const separator = ', ';
     let length = 0;
     let count = 0;
-    for (const name of this.getOwnerNameArray(owners)) {
-      length += (count ? separator.length : 0) + name.length;
+    for (const owner of owners ?? []) {
+      length += (count ? separator.length : 0) + owner.name.length;
       if (length > this._maxOwnersLen && count) {
         break;
       }
