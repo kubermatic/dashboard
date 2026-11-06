@@ -124,10 +124,8 @@ limitations under the License.
                 class="km-project-item-owner">
               <span>{{getOwners(element.owners)}}</span>
               @if (isMoreOwners(element.owners)) {
-              <span [matTooltip]="getMoreOwners(element.owners)">...
-                @if (getMoreOwnersCount(element.owners) > 0) {
+              <span [matTooltip]="getMoreOwners(element.owners)"> ...
                 <span class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
-                }
               </span>
               }
             </td>
