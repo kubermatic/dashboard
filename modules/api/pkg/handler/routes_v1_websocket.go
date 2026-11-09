@@ -302,7 +302,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		defer ws.Close()
 
 		// Checking user active connections for project cluster
-		userProjectClusterUniqueKey := fmt.Sprintf("%s-%s-%s", projectID, clusterID, authenticatedUser.Email)
+		userProjectClusterUniqueKey := fmt.Sprintf("%s-%s-%s", projectID, clusterID, userEmailID)
 		if connectionsPerUser.getActiveConnections(userProjectClusterUniqueKey) >= maxNumberOfConnections {
 			log.Logger.Debug("reached the maximum number of terminal active connections for the user")
 			_ = wsh.SendMessage(ws, string(wsh.ConnectionPoolExceeded))
