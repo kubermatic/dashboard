@@ -542,9 +542,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		// Use lowercase email for secret name consistency
-		email := strings.ToLower(claims.Email)
-		if err := createKubeconfigSecret(ctx, client, oidcKubeCfg, email); err != nil {
+		if err := createKubeconfigSecret(ctx, client, oidcKubeCfg, claims.Email); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 		return rsp, nil
@@ -585,12 +583,17 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	return rsp, nil
 }
 
+// WebTerminalAppName is the value of the app label set on every resource that belongs
+// to a web terminal session: the pod, ConfigMap, cleanup Job and kubeconfig Secret.
+const WebTerminalAppName = "webterminal"
+
 func KubeconfigSecretName(userEmailID string) string {
 	return fmt.Sprintf("kubeconfig-%s", userEmailID)
 }
 
 func createKubeconfigSecret(ctx context.Context, client ctrlruntimeclient.Client, config *clientcmdapi.Config, email string) error {
 	// encode email address to unique ID for the secret name
+	email = strings.ToLower(email)
 	hasher := md5.New()
 	hasher.Write([]byte(email))
 	kubeconfigSecretName := KubeconfigSecretName(hex.EncodeToString(hasher.Sum(nil)))
@@ -616,8 +619,11 @@ func createKubeconfigSecret(ctx context.Context, client ctrlruntimeclient.Client
 func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, email string, secretData map[string][]byte, existingSecretName string) error {
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        name,
-			Namespace:   metav1.NamespaceSystem,
+			Name:      name,
+			Namespace: metav1.NamespaceSystem,
+			// the label marks the Secret as written by the web terminal, so leftovers
+			// can be cleaned up without touching user-created Secrets in kube-system
+			Labels:      map[string]string{resources.AppLabelKey: WebTerminalAppName},
 			Annotations: map[string]string{"user": email},
 		},
 		Type: corev1.SecretTypeOpaque,
