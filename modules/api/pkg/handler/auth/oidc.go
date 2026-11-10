@@ -120,6 +120,9 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	if rawEmail, found := claims["email"]; found {
 		oidcClaims.Email = rawEmail.(string)
 	}
+	if emailVerified, ok := claims["email_verified"].(bool); ok {
+		oidcClaims.EmailVerified = &emailVerified
+	}
 	if rawSub, found := claims["sub"]; found {
 		oidcClaims.Subject = rawSub.(string)
 	}

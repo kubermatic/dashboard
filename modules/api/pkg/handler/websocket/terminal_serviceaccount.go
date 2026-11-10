@@ -83,25 +83,28 @@ func (i *Impersonation) hash() string {
 // UnsupportedAuthenticationReason returns why the web terminal can't run as a ServiceAccount
 // on the given cluster, or an empty string if it can. The ServiceAccount impersonates the names
 // KKP's default authentication entry gives a user; with any other authentication configuration
-// the user's names in the cluster are not known.
-func UnsupportedAuthenticationReason(cluster *kubermaticv1.Cluster, seed *kubermaticv1.Seed) string {
+// the user's names in the cluster are not known. Without the default entry (OpenIDAuthPlugin
+// feature gate) the cluster does not accept KKP logins at all.
+func UnsupportedAuthenticationReason(cluster *kubermaticv1.Cluster, seed *kubermaticv1.Seed, defaultAuthenticationEnabled bool) string {
 	if cluster.Spec.IsAuthenticationConfigurationEnabled() {
 		return "the cluster uses its own AuthenticationConfiguration"
 	}
 	if cluster.Spec.OIDC.IssuerURL != "" && cluster.Spec.OIDC.ClientID != "" {
 		return "the cluster uses its own OIDC settings"
 	}
-	if seed == nil {
-		return ""
+	if seed != nil {
+		if seed.Spec.AuthenticationConfiguration != nil {
+			return "the seed sets an AuthenticationConfiguration"
+		}
+		if seed.Spec.OIDCProviderConfiguration != nil {
+			return "the seed uses its own OIDC provider"
+		}
+		if dc, ok := seed.Spec.Datacenters[cluster.Spec.Cloud.DatacenterName]; ok && dc.Spec.AuthenticationConfiguration != nil {
+			return "the datacenter sets an AuthenticationConfiguration"
+		}
 	}
-	if seed.Spec.AuthenticationConfiguration != nil {
-		return "the seed sets an AuthenticationConfiguration"
-	}
-	if seed.Spec.OIDCProviderConfiguration != nil {
-		return "the seed uses its own OIDC provider"
-	}
-	if dc, ok := seed.Spec.Datacenters[cluster.Spec.Cloud.DatacenterName]; ok && dc.Spec.AuthenticationConfiguration != nil {
-		return "the datacenter sets an AuthenticationConfiguration"
+	if !defaultAuthenticationEnabled {
+		return "user clusters do not accept KKP logins (OpenIDAuthPlugin feature gate is not enabled)"
 	}
 	return ""
 }

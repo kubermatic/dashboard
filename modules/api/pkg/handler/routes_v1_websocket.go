@@ -38,6 +38,7 @@ import (
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	kubermaticv1helper "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
@@ -217,7 +218,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 
-		authenticatedUser, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		authenticatedUser, emailVerified, err := verifyAuthorizationClaims(req, routing.tokenVerifiers, routing.tokenExtractors)
 		if err != nil {
 			log.Logger.Debug(err)
 			rejectTerminalRequest(w, utilerrors.NewNotAuthorized())
@@ -293,7 +294,12 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 				rejectTerminalRequest(w, err)
 				return
 			}
-			unsupportedAuthentication = wsh.UnsupportedAuthenticationReason(cluster, seed)
+			// The user cluster would not accept these logins, so the terminal must not act for them either.
+			if reason := unsupportedLoginReason(authenticatedUser.Email, emailVerified); reason != "" {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusForbidden, reason))
+				return
+			}
+			unsupportedAuthentication = wsh.UnsupportedAuthenticationReason(cluster, seed, routing.features.Enabled(features.OpenIDAuthPlugin))
 			impersonation = wsh.NewImpersonation(authenticatedUser.Email, authenticatedUser.Groups)
 		}
 
@@ -405,19 +411,38 @@ func (req terminalReq) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
+// unsupportedLoginReason returns why a login can't use the web terminal as a ServiceAccount, or
+// an empty string if it can. KKP's default authentication in a user cluster accepts neither
+// tokens of KKP service accounts nor tokens with an unverified email.
+func unsupportedLoginReason(email string, emailVerified *bool) string {
+	if kubermaticv1helper.IsProjectServiceAccount(email) {
+		return "Web Terminal is not available for service accounts"
+	}
+	if emailVerified != nil && !*emailVerified {
+		return "Web Terminal is not available for logins with an unverified email"
+	}
+	return ""
+}
+
 func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, error) {
+	user, _, err := verifyAuthorizationClaims(req, tokenVerifier, tokenExtractor)
+	return user, err
+}
+
+// verifyAuthorizationClaims also returns the email_verified claim, nil if the token does not have it.
+func verifyAuthorizationClaims(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, *bool, error) {
 	token, err := tokenExtractor.Extract(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	claims, err := tokenVerifier.Verify(req.Context(), token)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if claims.Subject == "" {
-		return nil, utilerrors.NewNotAuthorized()
+		return nil, nil, utilerrors.NewNotAuthorized()
 	}
 
 	user := &apiv1.User{
@@ -428,7 +453,7 @@ func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVe
 		Groups: claims.Groups,
 	}
 
-	return user, nil
+	return user, claims.EmailVerified, nil
 }
 
 func requestLoggingReader(websocket *websocket.Conn) {

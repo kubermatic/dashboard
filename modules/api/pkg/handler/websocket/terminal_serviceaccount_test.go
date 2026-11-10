@@ -186,12 +186,14 @@ func TestUnsupportedAuthenticationReason(t *testing.T) {
 	}
 
 	testcases := []struct {
-		name      string
-		cluster   *kubermaticv1.Cluster
-		seed      *kubermaticv1.Seed
-		supported bool
+		name                    string
+		cluster                 *kubermaticv1.Cluster
+		seed                    *kubermaticv1.Seed
+		noDefaultAuthentication bool
+		supported               bool
 	}{
 		{name: "default authentication", cluster: clusterInDC(nil), seed: seedWith(nil), supported: true},
+		{name: "default authentication is not enabled", cluster: clusterInDC(nil), seed: seedWith(nil), noDefaultAuthentication: true},
 		{
 			name:    "cluster with its own AuthenticationConfiguration",
 			cluster: clusterInDC(func(c *kubermaticv1.Cluster) { c.Spec.AuthenticationConfiguration = authConfig }),
@@ -235,7 +237,7 @@ func TestUnsupportedAuthenticationReason(t *testing.T) {
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			reason := UnsupportedAuthenticationReason(tc.cluster, tc.seed)
+			reason := UnsupportedAuthenticationReason(tc.cluster, tc.seed, !tc.noDefaultAuthentication)
 			assert.Equal(t, tc.supported, reason == "", "reason: %q", reason)
 		})
 	}
