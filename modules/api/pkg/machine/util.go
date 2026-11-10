@@ -55,6 +55,8 @@ var userNameMap = map[string]string{
 	"VMwareCloudDirector:ContainerLinux": "core",
 	"VMwareCloudDirector:Flatcar":        "core",
 	"VMwareCloudDirector:RHEL":           "cloud-user",
+	"Kubevirt:Ubuntu":                    "ubuntu",
+	"Kubevirt:Flatcar":                   "core",
 }
 
 // GetSSHUserName returns SSH login name for the provider and distribution.
