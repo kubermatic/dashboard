@@ -68,6 +68,7 @@ enum ErrorOperations {
   WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
+  WebTerminalAuthenticationUnsupported = 'WEBTERMINAL_AUTHENTICATION_UNSUPPORTED',
 }
 
 enum MessageTypes {
@@ -314,6 +315,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       } else {
         this.message = message;
       }
+    } else if (data === ErrorOperations.WebTerminalAuthenticationUnsupported) {
+      this.message =
+        'The web terminal is not available for this cluster, because the cluster uses a custom authentication configuration.';
     } else if (data === ErrorOperations.RefreshesLimitExceeded) {
       const clusterName = this.cluster && this.cluster.name;
       this._logToTerminal(

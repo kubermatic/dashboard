@@ -388,19 +388,28 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, impersonation *Impersonation, overwriteRegistry string, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
+	err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 		Namespace: metav1.NamespaceSystem,
 		Name:      userAppName,
-	}, pod); err != nil {
-		if !apierrors.IsNotFound(err) {
+	}, pod)
+	if err != nil && !apierrors.IsNotFound(err) {
+		return err
+	}
+	podExists := err == nil
+	if podExists && !podMatchesSession(pod, impersonation) {
+		// the pod was created for the other mode or for another identity, so replace it
+		if err := deleteWebTerminalPod(ctx, client, seedClient, userAppName, cluster.Name); err != nil {
 			return err
 		}
+		podExists = false
+	}
+	if !podExists {
 		// create NetworkPolicy, Pod and cleanup Job
-		if err := createOrUpdateResources(ctx, client, seedClient, userEmailID, userAppName, cluster, options, overwriteRegistry); err != nil {
+		if err := createOrUpdateResources(ctx, client, seedClient, userEmailID, userAppName, cluster, options, impersonation, overwriteRegistry); err != nil {
 			return err
 		}
 	}
@@ -447,7 +456,10 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 
 	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn)
 
-	go checkTokenAndRefreshIfNeeded(ctx, client, oidcIssuerVerifier, kubeconfigSecret, websocketConn)
+	// as a ServiceAccount the terminal has no OIDC token that needs to be refreshed
+	if impersonation == nil {
+		go checkTokenAndRefreshIfNeeded(ctx, client, oidcIssuerVerifier, kubeconfigSecret, websocketConn)
+	}
 
 	req := k8sClient.CoreV1().RESTClient().Post().
 		Resource("pods").
@@ -456,11 +468,12 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 		SubResource("exec")
 
 	req.VersionedParams(&corev1.PodExecOptions{
-		Command: cmd,
-		Stdin:   true,
-		Stdout:  true,
-		Stderr:  true,
-		TTY:     true,
+		Container: userAppName,
+		Command:   cmd,
+		Stdin:     true,
+		Stdout:    true,
+		Stderr:    true,
+		TTY:       true,
 	}, scheme.ParameterCodec)
 
 	exec, err := remotecommand.NewSPDYExecutor(cfg, http.MethodPost, req.URL())
@@ -482,7 +495,37 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 	return nil
 }
 
-func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, overwriteRegistry string) error {
+// deleteWebTerminalPod removes the web terminal pod and its cleanup Job and waits until both are gone,
+// so that they can be created again.
+func deleteWebTerminalPod(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userAppName, clusterID string) error {
+	pod := &corev1.Pod{ObjectMeta: metav1.ObjectMeta{Name: userAppName, Namespace: metav1.NamespaceSystem}}
+	if err := client.Delete(ctx, pod, ctrlruntimeclient.GracePeriodSeconds(0)); err != nil && !apierrors.IsNotFound(err) {
+		return err
+	}
+
+	job := &batchv1.Job{ObjectMeta: metav1.ObjectMeta{Name: fmt.Sprintf("cleanup-%s", userAppName), Namespace: fmt.Sprintf("cluster-%s", clusterID)}}
+	if err := seedClient.Delete(ctx, job, ctrlruntimeclient.PropagationPolicy(metav1.DeletePropagationBackground)); err != nil && !apierrors.IsNotFound(err) {
+		return err
+	}
+
+	if !WaitFor(ctx, 2*time.Second, timeout, func(ctx context.Context) bool {
+		podGone := apierrors.IsNotFound(client.Get(ctx, ctrlruntimeclient.ObjectKeyFromObject(pod), &corev1.Pod{}))
+		jobGone := apierrors.IsNotFound(seedClient.Get(ctx, ctrlruntimeclient.ObjectKeyFromObject(job), &batchv1.Job{}))
+		return podGone && jobGone
+	}) {
+		return fmt.Errorf("the previous WEB terminal Pod was not removed")
+	}
+
+	return nil
+}
+
+func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, impersonation *Impersonation, overwriteRegistry string) error {
+	if impersonation != nil {
+		if err := ensureServiceAccountResources(ctx, client, userAppName, impersonation); err != nil {
+			return err
+		}
+	}
+
 	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster, options)
 	if err != nil {
 		return err
@@ -497,7 +540,7 @@ func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntime
 		}
 	}
 
-	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID, options, overwriteRegistry)); err != nil {
+	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID, options, impersonation, overwriteRegistry)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
@@ -622,12 +665,13 @@ func genWebTerminalNetworkPolicy(userAppName string, cluster *kubermaticv1.Clust
 	}, nil
 }
 
-func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.WebTerminalOptions, overwriteRegistry string) *corev1.Pod {
+func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.WebTerminalOptions, impersonation *Impersonation, overwriteRegistry string) *corev1.Pod {
 	pod := &corev1.Pod{}
 	pod.Name = userAppName
 	pod.Namespace = metav1.NamespaceSystem
 	pod.Labels = map[string]string{
 		resources.AppLabelKey: appName,
+		modeLabelKey:          modeOIDC,
 	}
 	pod.Spec = corev1.PodSpec{}
 	pod.Spec.Volumes = getVolumes(userEmailID, userAppName)
@@ -664,6 +708,10 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 				AllowPrivilegeEscalation: resources.Bool(false),
 			},
 		},
+	}
+
+	if impersonation != nil {
+		applyServiceAccountMode(pod, userAppName, impersonation)
 	}
 
 	return pod
@@ -705,11 +753,16 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string,
 								fi
 								# user web terminal is already expired, so delete its resources.
 								# every delete runs, the Secret last; if any of them failed, exit as failed,
-								# so the job will be restarted to retry them
+								# so the job will be restarted to retry them.
+								# the ServiceAccount, ClusterRole and ClusterRoleBinding only exist if the
+								# web terminal ran as a ServiceAccount, the Secret only if it did not.
 								RC=0;
 								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
 								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
 								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM --timeout=60s --ignore-not-found || RC=1;
+								kubectl delete clusterrolebinding $USER_APP_NAME --ignore-not-found || RC=1;
+								kubectl delete clusterrole $USER_APP_NAME --ignore-not-found || RC=1;
+								kubectl delete serviceaccount $USER_APP_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
 								kubectl delete secret $KUBECONFIG_SECRET_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
 								exit $RC;`,
 							},
@@ -859,7 +912,7 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, impersonation *Impersonation, overwriteRegistry string) {
 	if err := startProcess(
 		ctx,
 		client,
@@ -871,6 +924,7 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 		options,
 		oidcIssuerVerifier,
 		kubeconfigSecret,
+		impersonation,
 		overwriteRegistry,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{

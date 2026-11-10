@@ -38,6 +38,7 @@ import (
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -82,7 +83,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, impersonation *wsh.Impersonation, overwriteRegistry string)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -282,6 +283,20 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
+		// As a ServiceAccount the web terminal impersonates the names KKP's default authentication
+		// gives the user, so it can't be used on clusters with another authentication configuration.
+		var impersonation *wsh.Impersonation
+		unsupportedAuthentication := ""
+		if routing.features.Enabled(features.WebTerminalServiceAccount) {
+			seed, err := seedForCluster(ctx, providers, clusterID)
+			if err != nil {
+				rejectTerminalRequest(w, err)
+				return
+			}
+			unsupportedAuthentication = wsh.UnsupportedAuthenticationReason(cluster, seed)
+			impersonation = wsh.NewImpersonation(authenticatedUser.Email, authenticatedUser.Groups)
+		}
+
 		userEmailID := wsh.EncodeUserEmailtoID(authenticatedUser.Email)
 		k8sClient, err := clusterProvider.GetAdminK8sClientForUserCluster(ctx, cluster)
 		if err != nil {
@@ -307,6 +322,13 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		}
 		defer ws.Close()
 
+		// refused after the upgrade, so that the dashboard can show the reason
+		if unsupportedAuthentication != "" {
+			log.Logger.Debugf("web terminal refused for cluster %s: %s", clusterID, unsupportedAuthentication)
+			_ = wsh.SendMessage(ws, string(wsh.WebTerminalAuthenticationUnsupported))
+			return
+		}
+
 		// Checking user active connections for project cluster
 		userProjectClusterUniqueKey := fmt.Sprintf("%s-%s-%s", projectID, clusterID, userEmailID)
 		if connectionsPerUser.getActiveConnections(userProjectClusterUniqueKey) >= maxNumberOfConnections {
@@ -317,8 +339,9 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		connectionsPerUser.increaseActiveConnections(userProjectClusterUniqueKey)
 		defer connectionsPerUser.decreaseActiveConnections(userProjectClusterUniqueKey)
 
+		// the kubeconfig Secret with the user's OIDC login only exists without the ServiceAccount mode
 		kubeconfigSecret := &corev1.Secret{}
-		if !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
+		if impersonation == nil && !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
 			if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 				Namespace: metav1.NamespaceSystem,
 				Name:      handlercommon.KubeconfigSecretName(userEmailID),
@@ -333,8 +356,29 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, overwriteRegistry)
+		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, impersonation, overwriteRegistry)
 	}
+}
+
+// seedForCluster returns the seed the given user cluster runs on.
+func seedForCluster(ctx context.Context, providers watcher.Providers, clusterID string) (*kubermaticv1.Seed, error) {
+	seeds, err := providers.SeedsGetter()
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
+	}
+	for _, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			continue
+		}
+		clusterProvider, err := providers.ClusterProviderGetter(seed)
+		if err != nil {
+			continue
+		}
+		if clusterProvider.IsCluster(ctx, clusterID) {
+			return seed, nil
+		}
+	}
+	return nil, utilerrors.NewNotFound("seed", clusterID)
 }
 
 // rejectTerminalRequest answers a terminal request that is refused before the websocket
@@ -380,7 +424,8 @@ func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVe
 		ObjectMeta: apiv1.ObjectMeta{
 			Name: claims.Name,
 		},
-		Email: claims.Email,
+		Email:  claims.Email,
+		Groups: claims.Groups,
 	}
 
 	return user, nil

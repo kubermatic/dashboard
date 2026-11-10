@@ -34,6 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/features"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -343,6 +344,44 @@ func TestTerminalRequestIsRejected(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, reqURL, strings.NewReader(""))
 			res := httptest.NewRecorder()
 			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			assert.Equal(t, tc.ExpectedHTTPStatus, res.Code)
+		})
+	}
+}
+
+// TestKubeconfigSecretEndpointWithServiceAccountMode checks that the endpoint that stores the
+// user's OIDC login in the user cluster is not served when the web terminal runs as a ServiceAccount.
+func TestKubeconfigSecretEndpointWithServiceAccountMode(t *testing.T) {
+	t.Parallel()
+	testcases := []struct {
+		Name               string
+		FeatureGates       map[string]bool
+		ExpectedHTTPStatus int
+	}{
+		{
+			Name:               "feature gate off: the endpoint starts the OIDC login",
+			ExpectedHTTPStatus: http.StatusSeeOther,
+		},
+		{
+			Name:               "feature gate on: the endpoint is not served",
+			FeatureGates:       map[string]bool{features.WebTerminalServiceAccount: true},
+			ExpectedHTTPStatus: http.StatusNotFound,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			reqURL := fmt.Sprintf("/api/v2/kubeconfig/secret?cluster_id=%s&project_id=%s&user_id=%s", test.ClusterID, test.GenDefaultProject().Name, test.GenDefaultUser().Name)
+			req := httptest.NewRequest(http.MethodGet, reqURL, strings.NewReader(""))
+			res := httptest.NewRecorder()
+			config := &kubermaticv1.KubermaticConfiguration{Spec: kubermaticv1.KubermaticConfigurationSpec{FeatureGates: tc.FeatureGates}}
+			ep, err := test.CreateTestEndpoint(*test.GenDefaultAPIUser(), nil, genTestKubeconfigKubermaticObjects(), config, hack.NewTestRouting)
 			if err != nil {
 				t.Fatalf("failed to create test endpoint: %v", err)
 			}

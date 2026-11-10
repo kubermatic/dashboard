@@ -72,12 +72,14 @@ import (
 	userclusterconfig "k8c.io/dashboard/v2/pkg/handler/v2/user_cluster_config"
 	"k8c.io/dashboard/v2/pkg/handler/v2/version"
 	"k8c.io/dashboard/v2/pkg/handler/v2/webterminal"
+	"k8c.io/kubermatic/v2/pkg/features"
 )
 
 // RegisterV2 declares all router paths for v2.
 func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
-	// Defines a set of HTTP endpoint for generating kubeconfig secret for a cluster that will contain OIDC tokens
-	if oidcKubeConfEndpoint {
+	// Defines a set of HTTP endpoint for generating kubeconfig secret for a cluster that will contain OIDC tokens.
+	// The Secret is only used by the web terminal, which doesn't need it when it runs as a ServiceAccount.
+	if oidcKubeConfEndpoint && !r.features.Enabled(features.WebTerminalServiceAccount) {
 		mux.Methods(http.MethodGet).
 			Path("/kubeconfig/secret").
 			Handler(r.createOIDCKubeconfigSecret())
