@@ -26,7 +26,6 @@ package clusterbackupschedule
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -44,8 +43,8 @@ import (
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/types"
-	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type cbsBody struct {
@@ -129,7 +128,7 @@ func DecodeCreateClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+	if err = clusterbackup.DecodeBody(r, &req.Body, "spec", "template", "ttl"); err != nil {
 		return nil, err
 	}
 	return req, nil
@@ -148,13 +147,34 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, err
 	}
 
-	scheduleList := &velerov1.ScheduleList{}
-	if err := client.List(ctx, scheduleList, ctrlruntimeclient.InNamespace(clusterbackup.UserClusterBackupNamespace)); err != nil {
+	items, err := clusterbackup.ListUnstructured(ctx, client, "ScheduleList")
+	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	var uiScheduleBackupList []clusterScheduleBackupUI
 
-	for _, item := range scheduleList.Items {
+	for _, raw := range items {
+		item := &velerov1.Schedule{}
+		if err := clusterbackup.FromUnstructured(raw, item); err != nil {
+			rawTTL, _, _ := unstructured.NestedString(raw.Object, "spec", "template", "ttl")
+			rawSchedule, _, _ := unstructured.NestedString(raw.Object, "spec", "schedule")
+			uiScheduleBackupList = append(uiScheduleBackupList, clusterScheduleBackupUI{
+				Name: raw.GetName(),
+				ID:   string(raw.GetUID()),
+				Spec: clusterScheduleBackupUISpec{
+					Schedule:  rawSchedule,
+					ClusterID: req.ClusterID,
+					TTL:       rawTTL,
+					Status:    string(velerov1.SchedulePhaseFailedValidation),
+					CreatedAt: apiv1.Time(raw.GetCreationTimestamp()),
+				},
+			})
+			continue
+		}
+		ttl := ""
+		if item.Spec.Template.TTL.Duration != 0 {
+			ttl = item.Spec.Template.TTL.Duration.String()
+		}
 		uiScheduleBackup := clusterScheduleBackupUI{
 			Name: item.Name,
 			ID:   string(item.GetUID()),
@@ -163,7 +183,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				IncludedNamespaces: item.Spec.Template.IncludedNamespaces,
 				StorageLocation:    item.Spec.Template.StorageLocation,
 				ClusterID:          req.ClusterID,
-				TTL:                item.Spec.Template.TTL.OpenAPISchemaFormat(),
+				TTL:                ttl,
 				Labels:             item.Spec.Template.LabelSelector,
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
