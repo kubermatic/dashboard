@@ -198,6 +198,35 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				HTTPStatus:   http.StatusForbidden,
 			},
 		},
+		{
+			Name:                      "scenario 9, the OIDC login email differs from the email of the user only in case",
+			ClusterID:                 test.ClusterID,
+			ProjectID:                 test.GenDefaultProject().Name,
+			UserID:                    test.GenDefaultUser().Name,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
+			ExistingObjects: []ctrlruntimeclient.Object{
+				&corev1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: kubernetes.NamespaceName(test.ClusterID),
+						Name:      "admin-kubeconfig",
+					},
+					Data: map[string][]byte{
+						"kubeconfig": []byte(test.GenerateTestKubeconfig(test.ClusterID, test.IDToken)),
+					},
+				},
+			},
+			ExpectedRedirectURI: testExpectedRedirectURI,
+			// test.GenAPIUser lowercases the email
+			ExistingAPIUser: &apiv1.User{
+				ObjectMeta: apiv1.ObjectMeta{ID: test.GenDefaultUser().Name, Name: "Bob"},
+				Email:      "Bob@Acme.com",
+			},
+			ExpectedExchangeCodePhase: ExpectedKubeconfigResp{
+				BodyResponse: "",
+				HTTPStatus:   http.StatusOK,
+			},
+		},
 	}
 
 	for _, tc := range testcases {
