@@ -33,6 +33,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -173,6 +174,59 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 				HTTPStatus:   http.StatusBadRequest,
 			},
 		},
+		{
+			Name:                      "scenario 7, the web terminal is disabled",
+			ClusterID:                 test.ClusterID,
+			ProjectID:                 test.GenDefaultProject().Name,
+			UserID:                    test.GenDefaultUser().Name,
+			HTTPStatusInitPhase:       http.StatusForbidden,
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjectsWithTerminal(false),
+			ExistingAPIUser:           test.GenDefaultAPIUser(),
+		},
+		{
+			Name:                      "scenario 8, exchange phase error: the OIDC login belongs to a different user than user_id",
+			ClusterID:                 test.ClusterID,
+			ProjectID:                 test.GenDefaultProject().Name,
+			UserID:                    test.GenDefaultUser().Name,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
+			ExpectedRedirectURI:       testExpectedRedirectURI,
+			// the identity provider login is done by John, not by the user in user_id
+			ExistingAPIUser: test.GenAPIUser("john", "john@acme.com"),
+			ExpectedExchangeCodePhase: ExpectedKubeconfigResp{
+				BodyResponse: "",
+				HTTPStatus:   http.StatusForbidden,
+			},
+		},
+		{
+			Name:                      "scenario 9, the OIDC login email differs from the email of the user only in case",
+			ClusterID:                 test.ClusterID,
+			ProjectID:                 test.GenDefaultProject().Name,
+			UserID:                    test.GenDefaultUser().Name,
+			HTTPStatusInitPhase:       http.StatusSeeOther,
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
+			ExistingObjects: []ctrlruntimeclient.Object{
+				&corev1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: kubernetes.NamespaceName(test.ClusterID),
+						Name:      "admin-kubeconfig",
+					},
+					Data: map[string][]byte{
+						"kubeconfig": []byte(test.GenerateTestKubeconfig(test.ClusterID, test.IDToken)),
+					},
+				},
+			},
+			ExpectedRedirectURI: testExpectedRedirectURI,
+			// test.GenAPIUser lowercases the email
+			ExistingAPIUser: &apiv1.User{
+				ObjectMeta: apiv1.ObjectMeta{ID: test.GenDefaultUser().Name, Name: "Bob"},
+				Email:      "Bob@Acme.com",
+			},
+			ExpectedExchangeCodePhase: ExpectedKubeconfigResp{
+				BodyResponse: "",
+				HTTPStatus:   http.StatusOK,
+			},
+		},
 	}
 
 	for _, tc := range testcases {
@@ -261,8 +315,57 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 	}
 }
 
+func TestTerminalRequestIsRejected(t *testing.T) {
+	t.Parallel()
+	testcases := []struct {
+		Name                      string
+		ExistingKubermaticObjects []ctrlruntimeclient.Object
+		ExistingAPIUser           *apiv1.User
+		ExpectedHTTPStatus        int
+	}{
+		{
+			Name:                      "the web terminal is disabled",
+			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjectsWithTerminal(false),
+			ExistingAPIUser:           test.GenDefaultAPIUser(),
+			ExpectedHTTPStatus:        http.StatusForbidden,
+		},
+		{
+			Name:                      "the user is not a member of the project",
+			ExistingKubermaticObjects: append(genTestKubeconfigKubermaticObjects(), test.GenUser("", "alice", "alice@acme.com")),
+			ExistingAPIUser:           test.GenAPIUser("alice", "alice@acme.com"),
+			ExpectedHTTPStatus:        http.StatusForbidden,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			reqURL := fmt.Sprintf("/api/v1/ws/projects/%s/clusters/%s/terminal", test.GenDefaultProject().Name, test.ClusterID)
+			req := httptest.NewRequest(http.MethodGet, reqURL, strings.NewReader(""))
+			res := httptest.NewRecorder()
+			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			assert.Equal(t, tc.ExpectedHTTPStatus, res.Code)
+		})
+	}
+}
+
 func genTestKubeconfigKubermaticObjects() []ctrlruntimeclient.Object {
+	return genTestKubeconfigKubermaticObjectsWithTerminal(true)
+}
+
+func genTestKubeconfigKubermaticObjectsWithTerminal(webTerminalEnabled bool) []ctrlruntimeclient.Object {
 	return []ctrlruntimeclient.Object{
+		&kubermaticv1.KubermaticSetting{
+			ObjectMeta: metav1.ObjectMeta{Name: kubermaticv1.GlobalSettingsName},
+			Spec: kubermaticv1.SettingSpec{
+				WebTerminalOptions: &kubermaticv1.WebTerminalOptions{Enabled: &webTerminalEnabled},
+			},
+		},
 		test.GenTestSeed(),
 		// add some project
 		test.GenDefaultProject(),
