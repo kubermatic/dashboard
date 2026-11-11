@@ -58,7 +58,7 @@ import (
 const (
 	END_OF_TRANSMISSION               = "\u0004"
 	timeout                           = 2 * time.Minute
-	appName                           = "webterminal"
+	appName                           = handlercommon.WebTerminalAppName
 	webTerminalStorage                = "web-terminal-storage"
 	webTerminalConfigVolume           = "web-terminal-config"
 	podLifetime                       = 30 * time.Minute
@@ -703,10 +703,15 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string,
 									sleep $REMAINING_TIME_SEC;
 									exit 1; # exit as failed, so the job will be restarted to check if the expiration was updated
 								fi
-								# user web terminal is already expired, so delete its resources
-								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM;
-								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM;
-								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM;`,
+								# user web terminal is already expired, so delete its resources.
+								# every delete runs, the Secret last; if any of them failed, exit as failed,
+								# so the job will be restarted to retry them
+								RC=0;
+								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
+								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
+								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM --timeout=60s --ignore-not-found || RC=1;
+								kubectl delete secret $KUBECONFIG_SECRET_NAME -n $NAMESPACE_SYSTEM --ignore-not-found || RC=1;
+								exit $RC;`,
 							},
 							Env: []corev1.EnvVar{
 								{
@@ -716,6 +721,10 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string,
 								{
 									Name:  "USER_APP_NAME",
 									Value: userAppName,
+								},
+								{
+									Name:  "KUBECONFIG_SECRET_NAME",
+									Value: handlercommon.KubeconfigSecretName(userEmailID),
 								},
 								{
 									Name:  "NAMESPACE_SYSTEM",
@@ -877,9 +886,11 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 	}
 }
 
+// EncodeUserEmailtoID returns the ID used in the names of the user's web terminal resources.
+// The email is lowercased to match the kubeconfig Secret name written by createKubeconfigSecret.
 func EncodeUserEmailtoID(email string) string {
 	hasher := md5.New()
-	hasher.Write([]byte(email))
+	hasher.Write([]byte(strings.ToLower(email)))
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
