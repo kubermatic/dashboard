@@ -10352,7 +10352,7 @@ func (r Routing) createOIDCKubeconfigSecret() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.UserInfoUnauthorized(r.userProjectMapper, r.userProvider),
 			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
-		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider)),
+		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
 		webterminal.DecodeCreateOIDCKubeconfig,
 		webterminal.EncodeOIDCKubeconfig,
 		append(r.defaultServerOptions(), httptransport.ServerErrorEncoder(handlerauth.OIDCCallbackErrorEncoder))...,
