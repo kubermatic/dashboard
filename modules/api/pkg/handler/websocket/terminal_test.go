@@ -83,7 +83,7 @@ func TestWebTerminalCleanupJobScript(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			cmd := exec.Command(bash, append(container.Command[1:], container.Args...)...)
+			cmd := exec.CommandContext(t.Context(), bash, append(container.Command[1:], container.Args...)...)
 			cmd.Env = append(os.Environ(), "PATH="+dir+":"+os.Getenv("PATH"))
 			for _, env := range container.Env {
 				cmd.Env = append(cmd.Env, env.Name+"="+env.Value)
