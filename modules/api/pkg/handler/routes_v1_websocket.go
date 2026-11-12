@@ -18,6 +18,7 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -215,37 +216,34 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 
-		// Check if the Web Terminal is enabled
-		settings, err := providers.SettingsProvider.GetGlobalSettings(ctx)
-		if err != nil {
-			log.Logger.Debug(utilerrors.New(http.StatusInternalServerError, "could not read global settings"))
-			return
-		}
-
-		// Check if Web Terminal is enabled via WebTerminalOptions
-		webTerminalEnabled := false
-		if settings.Spec.WebTerminalOptions != nil && settings.Spec.WebTerminalOptions.Enabled != nil {
-			webTerminalEnabled = *settings.Spec.WebTerminalOptions.Enabled
-		}
-
-		if !webTerminalEnabled {
-			log.Logger.Debug(utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings"))
-			return
-		}
-
 		authenticatedUser, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
 		if err != nil {
 			log.Logger.Debug(err)
+			rejectTerminalRequest(w, utilerrors.NewNotAuthorized())
+			return
+		}
+
+		// Check if the Web Terminal is enabled
+		settings, err := providers.SettingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			rejectTerminalRequest(w, utilerrors.New(http.StatusInternalServerError, "could not read global settings"))
+			return
+		}
+
+		if !handlercommon.IsWebTerminalEnabled(settings) {
+			rejectTerminalRequest(w, utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings"))
 			return
 		}
 
 		clusterID, err := common.DecodeClusterID(ctx, req)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 
 		projectReq, err := common.DecodeProjectRequest(ctx, req)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 		projectID := projectReq.(common.ProjectReq).ProjectID
@@ -256,11 +254,13 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 
 		clusterProvider, ctx, err := middleware.GetClusterProvider(ctx, request, providers.SeedsGetter, providers.ClusterProviderGetter)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 
 		oidcIssuerVerifier, err := middleware.GetOIDCIssuerVerifier(ctx, providers.ClusterProviderGetter, providers.OIDCIssuerVerifierGetter, providers.SeedsGetter, clusterID)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 
@@ -268,28 +268,34 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 
 		user, err := providers.UserProvider.UserByEmail(ctx, authenticatedUser.Email)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 		ctx = context.WithValue(ctx, middleware.ClusterProviderContextKey, clusterProvider)
 		ctx = context.WithValue(ctx, middleware.PrivilegedClusterProviderContextKey, privilegedClusterProvider)
 		ctx = context.WithValue(ctx, kubermaticcontext.UserCRContextKey, user)
 
+		// fails with HTTP 403 if the user is not a member of the project
 		cluster, err := handlercommon.GetCluster(ctx, providers.ProjectProvider, providers.PrivilegedProjectProvider, providers.UserInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 
 		userEmailID := wsh.EncodeUserEmailtoID(authenticatedUser.Email)
 		k8sClient, err := clusterProvider.GetAdminK8sClientForUserCluster(ctx, cluster)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 		cfg, err := clusterProvider.GetAdminClientConfigForUserCluster(ctx, cluster)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 		client, err := clusterProvider.GetAdminClientForUserCluster(ctx, cluster)
 		if err != nil {
+			rejectTerminalRequest(w, err)
 			return
 		}
 		seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
@@ -329,6 +335,20 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 
 		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, overwriteRegistry)
 	}
+}
+
+// rejectTerminalRequest answers a terminal request that is refused before the websocket
+// upgrade. Without it the handler would return without a response, which net/http sends
+// as HTTP 200.
+func rejectTerminalRequest(w http.ResponseWriter, err error) {
+	log.Logger.Debug(err)
+
+	code := http.StatusInternalServerError
+	var httpErr utilerrors.HTTPError
+	if errors.As(common.KubernetesErrorToHTTPError(err), &httpErr) {
+		code = httpErr.StatusCode()
+	}
+	http.Error(w, http.StatusText(code), code)
 }
 
 type terminalReq struct {

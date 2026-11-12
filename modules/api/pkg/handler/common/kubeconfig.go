@@ -438,10 +438,20 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	ctx context.Context,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
+	settingsProvider provider.SettingsProvider,
 	req CreateOIDCKubeconfigReq,
 ) (interface{}, error) {
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+
+	// the Secret is only used by the web terminal
+	settings, err := settingsProvider.GetGlobalSettings(ctx)
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, "could not read global settings")
+	}
+	if !IsWebTerminalEnabled(settings) {
+		return nil, utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings")
+	}
 
 	cluster, err := getClusterForOIDCEndpoint(ctx, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -479,6 +489,12 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		}
 		if len(claims.Email) == 0 {
 			return nil, utilerrors.NewBadRequest("the token doesn't contain the mandatory \"email\" claim")
+		}
+		// access to the cluster was checked for the user in user_id, so the stored
+		// login must belong to that user
+		userInfo := ctx.Value(middleware.UserInfoContextKey).(*provider.UserInfo)
+		if !strings.EqualFold(claims.Email, userInfo.Email) {
+			return nil, utilerrors.New(http.StatusForbidden, "the OIDC login does not belong to the user the web terminal was opened for")
 		}
 
 		adminKubeConfig, err := clusterProvider.GetAdminKubeconfigForUserCluster(ctx, cluster)
@@ -586,6 +602,12 @@ func CreateOIDCKubeconfigSecretEndpoint(
 // WebTerminalAppName is the value of the app label set on every resource that belongs
 // to a web terminal session: the pod, ConfigMap, cleanup Job and kubeconfig Secret.
 const WebTerminalAppName = "webterminal"
+
+// IsWebTerminalEnabled returns true if the web terminal is enabled in the global settings.
+func IsWebTerminalEnabled(settings *kubermaticv1.KubermaticSetting) bool {
+	options := settings.Spec.WebTerminalOptions
+	return options != nil && options.Enabled != nil && *options.Enabled
+}
 
 func KubeconfigSecretName(userEmailID string) string {
 	return fmt.Sprintf("kubeconfig-%s", userEmailID)
