@@ -62,6 +62,7 @@ type serverRunOptions struct {
 	// OIDC configuration
 	oidcURL                          string
 	oidcAuthenticatorClientID        string
+	oidcAuthenticatorClientSecret    string
 	oidcIssuerClientID               string
 	oidcIssuerClientSecret           string
 	oidcIssuerRedirectURI            string
@@ -100,6 +101,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.oidcURL, "oidc-url", "", "URL of the OpenID token issuer. Example: http://auth.int.kubermatic.io")
 	flag.BoolVar(&s.oidcSkipTLSVerify, "oidc-skip-tls-verify", false, "Skip TLS verification for the token issuer")
 	flag.StringVar(&s.oidcAuthenticatorClientID, "oidc-authenticator-client-id", "", "Authenticator client ID")
+	flag.StringVar(&s.oidcAuthenticatorClientSecret, "oidc-authenticator-client-secret", "", "Authenticator client secret, used by the dashboard login to exchange the authorization code and refresh tokens")
 	flag.StringVar(&s.oidcIssuerClientID, "oidc-issuer-client-id", "", "Issuer client ID")
 	flag.StringVar(&s.oidcIssuerClientSecret, "oidc-issuer-client-secret", "", "OpenID client secret")
 	flag.StringVar(&s.oidcIssuerRedirectURI, "oidc-issuer-redirect-uri", "", "Callback URL for OpenID responses.")
@@ -158,10 +160,17 @@ func newServerRunOptions() (serverRunOptions, error) {
 		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
+	// The authenticator is the OIDC client of the KKP dashboard login. Cookie, offline access and
+	// redirect settings are shared with the issuer, as both are served by the same API.
 	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
-		URL:           s.oidcURL,
-		ClientID:      s.oidcAuthenticatorClientID,
-		SkipTLSVerify: s.oidcSkipTLSVerify,
+		URL:                    s.oidcURL,
+		ClientID:               s.oidcAuthenticatorClientID,
+		ClientSecret:           s.oidcAuthenticatorClientSecret,
+		SecureCookie:           securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
+		CookieSecureMode:       s.oidcIssuerCookieSecureMode,
+		OfflineAccessAsScope:   s.oidcIssuerOfflineAccessAsScope,
+		SkipTLSVerify:          s.oidcSkipTLSVerify,
+		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
 	return s, nil
