@@ -1145,7 +1145,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listVMwareCloudDirectorComputePoliciesNoCredentials())
 
 	authflow.
-		NewAuthHandler(r.oidcIssuerVerifier, r.userProvider, r.kubermaticConfigGetter).
+		NewAuthHandler(r.oidcLoginVerifier, r.userProvider, r.kubermaticConfigGetter).
 		Install(mux)
 
 	kubernetesdashboard.

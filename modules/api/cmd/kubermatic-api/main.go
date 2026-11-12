@@ -186,11 +186,11 @@ func main() {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
 
-	tokenVerifiers, tokenExtractors, err := createAuthClients(options, providers)
+	tokenVerifiers, tokenExtractors, oidcLoginVerifier, err := createAuthClients(options, providers)
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, oidcLoginVerifier, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -497,10 +497,13 @@ func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oid
 	)
 }
 
-func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, error) {
+// createAuthClients creates the verifiers and extractors for incoming API requests. The OIDC part is the
+// authenticator, i.e. the OIDC client of the KKP dashboard login. It is returned as well, because the
+// dashboard login flow (authflow) uses the same client to issue and refresh the login tokens.
+func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, authtypes.OIDCIssuerVerifier, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcAuthenticatorConfiguration,
-		"",
+		options.oidcIssuerRedirectURI,
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewCookieHeaderBearerTokenExtractor("token"),
@@ -511,7 +514,7 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 	)
 
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create OIDC Authenticator: %w", err)
+		return nil, nil, nil, fmt.Errorf("failed to create OIDC Authenticator: %w", err)
 	}
 
 	jwtExtractorVerifier := auth.NewServiceAccountAuthClient(
@@ -522,13 +525,14 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 
 	tokenVerifiers := auth.NewTokenVerifierPlugins([]authtypes.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
 	tokenExtractors := auth.NewTokenExtractorPlugins([]authtypes.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
-	return tokenVerifiers, tokenExtractors, nil
+	return tokenVerifiers, tokenExtractors, oidcExtractorVerifier, nil
 }
 
 func createAPIHandler(
 	options serverRunOptions, prov providers,
 	tokenVerifiers authtypes.TokenVerifier,
 	tokenExtractors authtypes.TokenExtractor,
+	oidcLoginVerifier authtypes.OIDCIssuerVerifier,
 	mgr manager.Manager,
 	log *zap.SugaredLogger,
 ) (http.HandlerFunc, error) {
@@ -610,6 +614,7 @@ func createAPIHandler(
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
 		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
 		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
+		OIDCLoginVerifier:                              oidcLoginVerifier,
 		Versions:                                       options.versions,
 		CABundle:                                       options.caBundle.CertPool(),
 		Features:                                       options.featureGates,
