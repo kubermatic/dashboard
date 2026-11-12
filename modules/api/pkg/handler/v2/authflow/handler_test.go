@@ -73,7 +73,7 @@ var _ authtypes.OIDCIssuerVerifier = &fakeVerifier{}
 func (f *fakeVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 	return &authtypes.OIDCConfiguration{
 		URL:                    "https://dex.example.com",
-		ClientID:               "kubermaticIssuer",
+		ClientID:               testLoginClientID,
 		SecureCookie:           f.secureCookie,
 		CookieSecureMode:       f.cookieSecureMode,
 		OfflineAccessAsScope:   f.offlineAsScope,
@@ -83,7 +83,7 @@ func (f *fakeVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 
 func (f *fakeVerifier) AuthCodeURL(state string, _ bool, redirectURI, codeVerifier, nonce string, scopes ...string) string {
 	v := url.Values{}
-	v.Set("client_id", "kubermaticIssuer")
+	v.Set("client_id", testLoginClientID)
 	v.Set("redirect_uri", redirectURI)
 	v.Set("response_type", "code")
 	v.Set("state", state)

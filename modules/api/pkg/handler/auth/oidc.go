@@ -107,15 +107,14 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 		return authtypes.TokenClaims{}, err
 	}
 
+	// go-oidc only checks that our client ID is among the audiences; additional ones must be rejected too (OIDC Core 3.1.3.7).
+	if len(idToken.Audience) != 1 || idToken.Audience[0] != o.oidcConfig.ClientID {
+		return authtypes.TokenClaims{}, fmt.Errorf("oidc: expected the audience to be exactly %q, got %q", o.oidcConfig.ClientID, idToken.Audience)
+	}
+
 	claims := map[string]interface{}{}
 	err = idToken.Claims(&claims)
 	if err != nil {
-		return authtypes.TokenClaims{}, err
-	}
-
-	// go-oidc only checks that our client ID is one of the audiences. A token that is also meant for
-	// another client (e.g. the OIDC client User Clusters trust) must not be accepted here.
-	if err := checkAudience(idToken.Audience, claims["azp"], o.oidcConfig.ClientID); err != nil {
 		return authtypes.TokenClaims{}, err
 	}
 
@@ -149,25 +148,6 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	}
 
 	return oidcClaims, nil
-}
-
-// checkAudience makes sure the ID token was issued for exactly the given client.
-// OpenID Connect Core 1.0, section 3.1.3.7: the token must be rejected if it does not list the client as an
-// audience, or if it contains additional audiences the client does not trust. If an azp (authorized party)
-// claim is present, it must be the client as well.
-// See https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
-func checkAudience(audience []string, azp interface{}, clientID string) error {
-	if len(audience) != 1 || audience[0] != clientID {
-		return fmt.Errorf("oidc: expected the audience to be exactly %q, got %q", clientID, audience)
-	}
-
-	if azp != nil {
-		if azpStr, ok := azp.(string); !ok || azpStr != clientID {
-			return fmt.Errorf("oidc: expected the authorized party (azp) to be %q, got %v", clientID, azp)
-		}
-	}
-
-	return nil
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page

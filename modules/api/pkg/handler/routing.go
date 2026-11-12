@@ -237,10 +237,8 @@ type RoutingParams struct {
 	PrivilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	OIDCIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 	OIDCIssuerVerifier                             authtypes.OIDCIssuerVerifier
-	// OIDCLoginVerifier is the OIDC client of the KKP dashboard login, separate from the OIDCIssuerVerifier
-	// that issues the tokens for User Clusters.
-	OIDCLoginVerifier authtypes.OIDCIssuerVerifier
-	Versions          kubermatic.Versions
-	CABundle          *x509.CertPool
-	Features          features.FeatureGate
+	OIDCLoginVerifier                              authtypes.OIDCIssuerVerifier
+	Versions                                       kubermatic.Versions
+	CABundle                                       *x509.CertPool
+	Features                                       features.FeatureGate
 }
