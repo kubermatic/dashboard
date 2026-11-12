@@ -108,7 +108,7 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	}
 
 	// go-oidc only checks that our client ID is among the audiences; additional ones must be rejected too (OIDC Core 3.1.3.7).
-	if len(idToken.Audience) != 1 || idToken.Audience[0] != o.oidcConfig.ClientID {
+	if o.oidcConfig.StrictAudience && (len(idToken.Audience) != 1 || idToken.Audience[0] != o.oidcConfig.ClientID) {
 		return authtypes.TokenClaims{}, fmt.Errorf("oidc: expected the audience to be exactly %q, got %q", o.oidcConfig.ClientID, idToken.Audience)
 	}
 
