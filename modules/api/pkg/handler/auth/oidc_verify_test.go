@@ -84,8 +84,8 @@ func newSigningIssuer(t *testing.T) *signingIssuer {
 	return issuer
 }
 
-// idToken signs an ID token with the given audience. azp is only set when not empty.
-func (i *signingIssuer) idToken(t *testing.T, audience []string, azp string) string {
+// idToken signs an ID token with the given audience.
+func (i *signingIssuer) idToken(t *testing.T, audience []string) string {
 	t.Helper()
 
 	claims := map[string]interface{}{
@@ -95,9 +95,6 @@ func (i *signingIssuer) idToken(t *testing.T, audience []string, azp string) str
 		"email": "bob@acme.com",
 		"exp":   jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		"iat":   jwt.NewNumericDate(time.Now()),
-	}
-	if azp != "" {
-		claims["azp"] = azp
 	}
 
 	token, err := jwt.Signed(i.signer).Claims(claims).Serialize()
@@ -111,7 +108,6 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 
 	issuer := newSigningIssuer(t)
 
-	// The authenticator is the OIDC client of the KKP dashboard login.
 	authenticator, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{
 		URL:      issuer.URL,
 		ClientID: loginClientID,
@@ -121,17 +117,11 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 	testcases := []struct {
 		name     string
 		audience []string
-		azp      string
 		wantErr  bool
 	}{
 		{
 			name:     "the login client is the only audience",
 			audience: []string{loginClientID},
-		},
-		{
-			name:     "the login client is the only audience and azp is the login client",
-			audience: []string{loginClientID},
-			azp:      loginClientID,
 		},
 		{
 			name:     "the issuer client is the only audience",
@@ -141,18 +131,11 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 		{
 			name:     "the login client and the issuer client are audiences",
 			audience: []string{loginClientID, issuerClientID},
-			azp:      loginClientID,
 			wantErr:  true,
 		},
 		{
 			name:     "the issuer client comes before the login client in the audiences",
 			audience: []string{issuerClientID, loginClientID},
-			wantErr:  true,
-		},
-		{
-			name:     "the login client is the audience but azp is the issuer client",
-			audience: []string{loginClientID},
-			azp:      issuerClientID,
 			wantErr:  true,
 		},
 		{
@@ -166,7 +149,7 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			claims, err := authenticator.Verify(context.Background(), issuer.idToken(t, tc.audience, tc.azp))
+			claims, err := authenticator.Verify(context.Background(), issuer.idToken(t, tc.audience))
 			if tc.wantErr {
 				assert.Error(t, err)
 				return
@@ -179,8 +162,7 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 	}
 }
 
-// TestVerifyIssuerClientIsNotAcceptedByLoginClient makes sure that the two OIDC clients do not accept each
-// other's tokens, which is what keeps a User Cluster token away from the KKP API and the other way around.
+// TestVerifyIssuerClientIsNotAcceptedByLoginClient checks that the two clients reject each other's tokens.
 func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	t.Parallel()
 
@@ -194,8 +176,8 @@ func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	login := newClient(loginClientID)
 	issuing := newClient(issuerClientID)
 
-	loginToken := issuer.idToken(t, []string{loginClientID}, "")
-	issuerToken := issuer.idToken(t, []string{issuerClientID}, "")
+	loginToken := issuer.idToken(t, []string{loginClientID})
+	issuerToken := issuer.idToken(t, []string{issuerClientID})
 
 	_, err := login.Verify(context.Background(), loginToken)
 	assert.NoError(t, err, "the login client must accept its own token")

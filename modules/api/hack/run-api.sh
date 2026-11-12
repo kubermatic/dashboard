@@ -51,8 +51,8 @@ echodate "Preparing OIDCKubeCfgEndpoint feature..."
 OIDC_ISSUER_CLIENT_ID="${OIDC_ISSUER_CLIENT_ID:-$(vault kv get -field=oidc-issuer-client-id dev/seed-clusters/dev.kubermatic.io)}"
 OIDC_ISSUER_CLIENT_SECRET="${OIDC_ISSUER_CLIENT_SECRET:-$(vault kv get -field=oidc-issuer-client-secret dev/seed-clusters/dev.kubermatic.io)}"
 OIDC_ISSUER_REDIRECT_URI="${OIDC_ISSUER_REDIRECT_URI:-$(vault kv get -field=oidc-issuer-redirect-uri dev/seed-clusters/dev.kubermatic.io)}"
-# TODO: hardcoded until KKP passes spec.auth.clientSecret to the API. Override via the env var.
-OIDC_AUTHENTICATOR_CLIENT_SECRET="${OIDC_AUTHENTICATOR_CLIENT_SECRET:-REPLACE_WITH_KUBERMATIC_CLIENT_SECRET}"
+OIDC_AUTHENTICATOR_CLIENT_ID="${OIDC_AUTHENTICATOR_CLIENT_ID:-$(vault kv get -field=oidc-authenticator-client-id dev/seed-clusters/dev.kubermatic.io)}"
+OIDC_AUTHENTICATOR_CLIENT_SECRET="${OIDC_AUTHENTICATOR_CLIENT_SECRET:-$(vault kv get -field=oidc-authenticator-client-secret dev/seed-clusters/dev.kubermatic.io)}"
 OIDC_ISSUER_COOKIE_HASH_KEY="${OIDC_ISSUER_COOKIE_HASH_KEY:-$(vault kv get -field=oidc-issuer-cookie-hash-key dev/seed-clusters/dev.kubermatic.io)}"
 
 API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-id=$OIDC_ISSUER_CLIENT_ID"
@@ -75,7 +75,7 @@ set -x
   -prometheus-url=http://localhost:9090 \
   -address=127.0.0.1:8080 \
   -oidc-url=https://dev.kubermatic.io/dex \
-  -oidc-authenticator-client-id=kubermatic \
+  -oidc-authenticator-client-id="$OIDC_AUTHENTICATOR_CLIENT_ID" \
   -oidc-authenticator-client-secret="$OIDC_AUTHENTICATOR_CLIENT_SECRET" \
   -service-account-signing-key="$SERVICE_ACCOUNT_SIGNING_KEY" \
   -log-debug=$KUBERMATIC_DEBUG \

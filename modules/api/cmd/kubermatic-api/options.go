@@ -160,8 +160,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
-	// The authenticator is the OIDC client of the KKP dashboard login. Cookie, offline access and
-	// redirect settings are shared with the issuer, as both are served by the same API.
+	// The authenticator is the dashboard login client; cookie and redirect settings are shared with the issuer.
 	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
 		URL:                    s.oidcURL,
 		ClientID:               s.oidcAuthenticatorClientID,

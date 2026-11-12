@@ -378,9 +378,9 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
-	oidcIssuerVerifier, err := createOIDCClients(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
+	oidcIssuerVerifier, err := createOIDCIssuerClient(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
 	if err != nil {
-		log.Fatalw("failed to create an openid authenticator", zap.Any("issuer", options.oidcURL), zap.Any("oidcClientID", options.oidcAuthenticatorClientID), zap.Error(err))
+		log.Fatalw("failed to create an openid issuer client", zap.Any("issuer", options.oidcURL), zap.Any("oidcClientID", options.oidcIssuerClientID), zap.Error(err))
 	}
 
 	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
@@ -485,7 +485,8 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	}, nil
 }
 
-func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
+// createOIDCIssuerClient creates the OIDC client whose tokens User Clusters accept.
+func createOIDCIssuerClient(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
 		oidcIssuerConfiguration,
 		oidcIssuerRedirectURI,
@@ -497,9 +498,7 @@ func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oid
 	)
 }
 
-// createAuthClients creates the verifiers and extractors for incoming API requests. The OIDC part is the
-// authenticator, i.e. the OIDC client of the KKP dashboard login. It is returned as well, because the
-// dashboard login flow (authflow) uses the same client to issue and refresh the login tokens.
+// createAuthClients also returns the OIDC authenticator, as the dashboard login runs on the same client.
 func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, authtypes.OIDCIssuerVerifier, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcAuthenticatorConfiguration,
