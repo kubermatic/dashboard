@@ -109,8 +109,9 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 	issuer := newSigningIssuer(t)
 
 	authenticator, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{
-		URL:      issuer.URL,
-		ClientID: loginClientID,
+		URL:            issuer.URL,
+		ClientID:       loginClientID,
+		StrictAudience: true,
 	}, "", nil, nil)
 	require.NoError(t, err)
 
@@ -188,4 +189,23 @@ func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	assert.Error(t, err, "the login client (KKP API) must reject the User Cluster token")
 	_, err = issuing.Verify(context.Background(), loginToken)
 	assert.Error(t, err, "the issuer client must reject the login token")
+}
+
+// TestVerifyAdditionalAudiencesAreOptIn checks that only clients with StrictAudience reject additional audiences.
+func TestVerifyAdditionalAudiencesAreOptIn(t *testing.T) {
+	t.Parallel()
+
+	issuer := newSigningIssuer(t)
+	token := issuer.idToken(t, []string{issuerClientID, loginClientID})
+
+	newClient := func(strict bool) authtypes.OIDCIssuerVerifier {
+		client, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{URL: issuer.URL, ClientID: issuerClientID, StrictAudience: strict}, "", nil, nil)
+		require.NoError(t, err)
+		return client
+	}
+
+	_, err := newClient(false).Verify(context.Background(), token)
+	assert.NoError(t, err, "a client without StrictAudience accepts additional audiences")
+	_, err = newClient(true).Verify(context.Background(), token)
+	assert.Error(t, err, "a client with StrictAudience rejects additional audiences")
 }

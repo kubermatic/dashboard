@@ -124,6 +124,10 @@ func main() {
 	ctx := signals.SetupSignalHandler()
 	cli.Hello(log, "API", &options.versions)
 
+	if options.singleOIDCClient() {
+		log.Warnw("the dashboard login and the User Cluster logins share one OIDC client, configure a separate login client", "clientID", options.oidcAuthenticatorClientID)
+	}
+
 	if err := clusterv1alpha1.AddToScheme(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", clusterv1alpha1.SchemeGroupVersion), zap.Error(err))
 	}

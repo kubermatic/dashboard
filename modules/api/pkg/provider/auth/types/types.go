@@ -144,4 +144,6 @@ type OIDCConfiguration struct {
 	SkipTLSVerify bool
 	// AdditionalRedirectURIs are extra redirect URIs the dashboard login may use, e.g. for reverse proxies
 	AdditionalRedirectURIs []string
+	// StrictAudience rejects ID tokens that list any audience besides ClientID.
+	StrictAudience bool
 }

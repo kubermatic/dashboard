@@ -101,7 +101,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.oidcURL, "oidc-url", "", "URL of the OpenID token issuer. Example: http://auth.int.kubermatic.io")
 	flag.BoolVar(&s.oidcSkipTLSVerify, "oidc-skip-tls-verify", false, "Skip TLS verification for the token issuer")
 	flag.StringVar(&s.oidcAuthenticatorClientID, "oidc-authenticator-client-id", "", "Authenticator client ID")
-	flag.StringVar(&s.oidcAuthenticatorClientSecret, "oidc-authenticator-client-secret", "", "Authenticator client secret, used by the dashboard login to exchange the authorization code and refresh tokens")
+	flag.StringVar(&s.oidcAuthenticatorClientSecret, "oidc-authenticator-client-secret", "", "Authenticator client secret, used by the dashboard login to exchange the authorization code and refresh tokens. Defaults to the issuer client secret if both client IDs are equal.")
 	flag.StringVar(&s.oidcIssuerClientID, "oidc-issuer-client-id", "", "Issuer client ID")
 	flag.StringVar(&s.oidcIssuerClientSecret, "oidc-issuer-client-secret", "", "OpenID client secret")
 	flag.StringVar(&s.oidcIssuerRedirectURI, "oidc-issuer-redirect-uri", "", "Callback URL for OpenID responses.")
@@ -164,20 +164,47 @@ func newServerRunOptions() (serverRunOptions, error) {
 	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
 		URL:                    s.oidcURL,
 		ClientID:               s.oidcAuthenticatorClientID,
-		ClientSecret:           s.oidcAuthenticatorClientSecret,
+		ClientSecret:           s.authenticatorClientSecret(),
 		SecureCookie:           securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
 		CookieSecureMode:       s.oidcIssuerCookieSecureMode,
 		OfflineAccessAsScope:   s.oidcIssuerOfflineAccessAsScope,
 		SkipTLSVerify:          s.oidcSkipTLSVerify,
 		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
+		StrictAudience:         true,
 	}
 
 	return s, nil
 }
 
+// singleOIDCClient tells if the dashboard login and the User Cluster logins share one OIDC client.
+func (o serverRunOptions) singleOIDCClient() bool {
+	return o.oidcAuthenticatorClientID != "" && o.oidcAuthenticatorClientID == o.oidcIssuerClientID
+}
+
+// authenticatorClientSecret returns the secret of the dashboard login client. With a single OIDC client it
+// defaults to the issuer secret.
+func (o serverRunOptions) authenticatorClientSecret() string {
+	if o.oidcAuthenticatorClientSecret == "" && o.singleOIDCClient() {
+		return o.oidcIssuerClientSecret
+	}
+	return o.oidcAuthenticatorClientSecret
+}
+
+func (o serverRunOptions) validateOIDC() error {
+	if o.oidcAuthenticatorClientID != o.oidcIssuerClientID && o.oidcAuthenticatorClientSecret == "" {
+		return errors.New("-oidc-authenticator-client-secret is required when -oidc-authenticator-client-id differs from -oidc-issuer-client-id")
+	}
+
+	return nil
+}
+
 func (o serverRunOptions) validate() error {
 	if err := serviceaccount.ValidateKey([]byte(o.serviceAccountSigningKey)); err != nil {
 		return fmt.Errorf("the service-account-signing-key is incorrect: %w", err)
+	}
+
+	if err := o.validateOIDC(); err != nil {
+		return err
 	}
 
 	for _, uri := range o.oidcIssuerAdditionalRedirectURIs {
