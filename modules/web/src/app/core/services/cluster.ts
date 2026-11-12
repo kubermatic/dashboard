@@ -246,17 +246,17 @@ export class ClusterService {
   }
 
   getDashboardProxyURL(projectID: string, clusterID: string): string {
-    return `${this._newRestRoot}/dashboard/login?projectID=${projectID}&clusterID=${clusterID}`;
+    return `${this._newRestRoot}/dashboard/login?projectID=${projectID}&clusterID=${clusterID}&origin=${this._origin()}`;
   }
 
   getWebTerminalProxyURL(projectID: string, clusterID: string, userID: string): string {
-    return `${this._newRestRoot}/kubeconfig/secret?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}`;
+    return `${this._newRestRoot}/kubeconfig/secret?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}&origin=${this._origin()}`;
   }
 
   getShareKubeconfigURL(projectID: string, clusterID: string, userID: string, oidcKubeLogin = false): string {
     const location = this._location.endsWith('/') ? this._location : `${this._location}/`;
     const restRoot = this._restRoot.startsWith('/') ? this._restRoot.slice(1) : this._restRoot;
-    return `${location}${restRoot}/kubeconfig?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}&oidc_kubelogin_enabled=${oidcKubeLogin}`;
+    return `${location}${restRoot}/kubeconfig?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}&oidc_kubelogin_enabled=${oidcKubeLogin}&origin=${this._origin()}`;
   }
 
   externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
@@ -376,6 +376,11 @@ export class ClusterService {
   getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
     const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
     return this._http.get<CNIPluginVersions>(url);
+  }
+
+  // the origin lets the API send the OIDC provider's response back to this hostname
+  private _origin(): string {
+    return encodeURIComponent(this._location);
   }
 
   private _getClusters(projectID: string, showMachineDeploymentCount = false): Observable<ProjectClusterList> {

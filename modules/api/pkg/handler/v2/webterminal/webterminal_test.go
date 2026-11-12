@@ -742,3 +742,106 @@ func unmarshalState(rawState []byte) (handlercommon.OIDCState, error) {
 	}
 	return oidcState, nil
 }
+
+func TestCreateOIDCKubeconfigSecretRedirectURI(t *testing.T) {
+	t.Parallel()
+	const (
+		mainWithPort   = "https://kkp.example.com:443/api/v1/kubeconfig"
+		mainCustomPath = "https://kkp.example.com/custom/kubeconfig"
+	)
+
+	testcases := []struct {
+		name                string
+		redirectURI         string
+		origin              string
+		dropStoredRedirect  bool
+		expectedRedirectURI string
+	}{
+		{
+			name:                "no origin keeps the main hostname with explicit port",
+			redirectURI:         mainWithPort,
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/kubeconfig/secret",
+		},
+		{
+			name:                "main hostname origin keeps the main hostname with explicit port",
+			redirectURI:         mainWithPort,
+			origin:              "https://kkp.example.com",
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/kubeconfig/secret",
+		},
+		{
+			name:                "main hostname origin with a configured custom path",
+			redirectURI:         mainCustomPath,
+			origin:              "https://kkp.example.com",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/kubeconfig/secret",
+		},
+		{
+			name:                "additional origin redirects back to the proxy hostname",
+			redirectURI:         mainWithPort,
+			origin:              "https://kkp-proxy.example.com",
+			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/kubeconfig/secret",
+		},
+		{
+			name:                "unlisted origin keeps the main hostname",
+			redirectURI:         mainWithPort,
+			origin:              "https://evil.example.com",
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/kubeconfig/secret",
+		},
+		{
+			name:                "cookie without a redirect URI from before the upgrade uses the main hostname",
+			redirectURI:         mainWithPort,
+			dropStoredRedirect:  true,
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/kubeconfig/secret",
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			ep, clients, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, []ctrlruntimeclient.Object{
+				&corev1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: kubernetes.NamespaceName(test.ClusterID),
+						Name:      "admin-kubeconfig",
+					},
+					Data: map[string][]byte{
+						"kubeconfig": []byte(test.GenerateTestKubeconfig(test.ClusterID, test.IDToken)),
+					},
+				},
+			}, nil, genTestKubeconfigKubermaticObjects(), nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+			clients.FakeOIDCClient.SetRedirectURI(tc.redirectURI)
+			clients.FakeOIDCClient.SetAdditionalRedirectURIs("https://kkp-proxy.example.com")
+
+			reqURL := fmt.Sprintf("/api/v2/kubeconfig/secret?cluster_id=%s&project_id=%s&user_id=%s&origin=%s", test.ClusterID, test.GenDefaultProject().Name, test.GenDefaultUser().Name, url.QueryEscape(tc.origin))
+			res := httptest.NewRecorder()
+			ep.ServeHTTP(res, httptest.NewRequest(http.MethodGet, reqURL, nil))
+			if res.Code != http.StatusSeeOther {
+				t.Fatalf("expected status %d, got %d: %s", http.StatusSeeOther, res.Code, res.Body.String())
+			}
+
+			location, err := res.Result().Location()
+			if err != nil {
+				t.Fatalf("expected url for redirection: %v", err)
+			}
+			assert.Equal(t, tc.expectedRedirectURI, location.Query().Get("redirect_uri"))
+
+			cookie := test.GetCookie(res.Result().Cookies(), csrfCookieName)
+			if cookie == nil {
+				t.Fatalf("cookie %q not set", csrfCookieName)
+			}
+			if tc.dropStoredRedirect {
+				if cookie, err = test.WithoutStoredRedirectURI(cookie); err != nil {
+					t.Fatalf("failed to re-sign the state cookie: %v", err)
+				}
+			}
+
+			// the fake provider rejects a token request whose redirect_uri differs from the authorization request
+			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v2/kubeconfig/secret?code=%s&state=%s", test.AuthorizationCode, url.QueryEscape(location.Query().Get("state"))), nil)
+			req.AddCookie(cookie)
+			res = httptest.NewRecorder()
+			ep.ServeHTTP(res, req)
+			assert.Equal(t, http.StatusOK, res.Code, res.Body.String())
+		})
+	}
+}

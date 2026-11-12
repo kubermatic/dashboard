@@ -158,3 +158,103 @@ func TestLogin(t *testing.T) {
 		})
 	}
 }
+
+func TestLoginRedirectURI(t *testing.T) {
+	t.Parallel()
+	const mainWithPort = "https://kkp.example.com:443/api/v1/kubeconfig"
+
+	testcases := []struct {
+		name                string
+		redirectURI         string
+		origin              string
+		dropStoredRedirect  bool
+		expectedRedirectURI string
+	}{
+		{
+			name:                "no origin keeps the main hostname with explicit port",
+			redirectURI:         mainWithPort,
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/dashboard/login",
+		},
+		{
+			name:                "main hostname origin keeps the main hostname with explicit port",
+			redirectURI:         mainWithPort,
+			origin:              "https://kkp.example.com",
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/dashboard/login",
+		},
+		{
+			name:                "main hostname origin with a configured custom path",
+			redirectURI:         "https://kkp.example.com/custom/kubeconfig",
+			origin:              "https://kkp.example.com",
+			expectedRedirectURI: "https://kkp.example.com/api/v2/dashboard/login",
+		},
+		{
+			name:                "additional origin redirects back to the proxy hostname",
+			redirectURI:         mainWithPort,
+			origin:              "https://kkp-proxy.example.com",
+			expectedRedirectURI: "https://kkp-proxy.example.com/api/v2/dashboard/login",
+		},
+		{
+			name:                "unlisted origin keeps the main hostname",
+			redirectURI:         mainWithPort,
+			origin:              "https://evil.example.com",
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/dashboard/login",
+		},
+		{
+			name:                "cookie without a redirect URI from before the upgrade uses the main hostname",
+			redirectURI:         mainWithPort,
+			dropStoredRedirect:  true,
+			expectedRedirectURI: "https://kkp.example.com:443/api/v2/dashboard/login",
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			existingKubermaticObjects := []ctrlruntimeclient.Object{
+				test.GenTestSeed(),
+				test.GenDefaultProject(),
+				test.GenDefaultUser(),
+				test.GenDefaultOwnerBinding(),
+				test.GenCluster(test.ClusterID, "AbcCluster", test.GenDefaultProject().Name, test.DefaultCreationTimestamp()),
+				test.GenDefaultSettings(),
+			}
+			ep, clients, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, nil, nil, existingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+			clients.FakeOIDCClient.SetRedirectURI(tc.redirectURI)
+			clients.FakeOIDCClient.SetAdditionalRedirectURIs("https://kkp-proxy.example.com")
+
+			reqURL := fmt.Sprintf("/api/v2/dashboard/login?projectID=%s&clusterID=%s&origin=%s", test.GenDefaultProject().Name, test.ClusterID, url.QueryEscape(tc.origin))
+			res := httptest.NewRecorder()
+			ep.ServeHTTP(res, httptest.NewRequest(http.MethodGet, reqURL, nil))
+			if res.Code != http.StatusSeeOther {
+				t.Fatalf("expected status %d, got %d: %s", http.StatusSeeOther, res.Code, res.Body.String())
+			}
+
+			location, err := res.Result().Location()
+			if err != nil {
+				t.Fatalf("expected url for redirection: %v", err)
+			}
+			assert.Equal(t, tc.expectedRedirectURI, location.Query().Get("redirect_uri"))
+
+			cookie := test.GetCookie(res.Result().Cookies(), nonceCookieName)
+			if cookie == nil {
+				t.Fatalf("cookie %q not set", nonceCookieName)
+			}
+			if tc.dropStoredRedirect {
+				if cookie, err = test.WithoutStoredRedirectURI(cookie); err != nil {
+					t.Fatalf("failed to re-sign the state cookie: %v", err)
+				}
+			}
+
+			// the fake provider rejects a token request whose redirect_uri differs from the authorization request
+			callbackURL := fmt.Sprintf("/api/v2/dashboard/login?state=%s&code=%s", url.QueryEscape(location.Query().Get("state")), test.AuthorizationCode)
+			req := httptest.NewRequest(http.MethodGet, callbackURL, nil)
+			req.AddCookie(cookie)
+			res = httptest.NewRecorder()
+			ep.ServeHTTP(res, req)
+			assert.Equal(t, http.StatusSeeOther, res.Code, res.Body.String())
+		})
+	}
+}

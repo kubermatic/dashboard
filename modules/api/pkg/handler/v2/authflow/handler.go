@@ -68,26 +68,12 @@ func (a *authHandler) getCallbackURI(r *http.Request) string {
 
 // getRequestBaseURL returns the scheme+host the user started on, so users who reach KKP through a
 // reverse proxy on another hostname are sent back to it: the "origin" query param sent by the
-// dashboard if it matches --oidc-issuer-redirect-uri or --oidc-issuer-additional-redirect-uris,
-// otherwise getBaseURL as before.
+// dashboard if it matches --oidc-issuer-additional-redirect-uris, otherwise getBaseURL as before.
 func (a *authHandler) getRequestBaseURL(r *http.Request) string {
-	origin := r.URL.Query().Get("origin")
-	if origin == "" {
-		return a.getBaseURL(r)
+	if base := handlerauth.RedirectURIForOrigin(a.oidcIssuerVerifier, r.URL.Query().Get("origin"), ""); base != "" {
+		return base
 	}
-
-	allowed := a.oidcIssuerVerifier.OIDCConfig().AdditionalRedirectURIs
-	if uri, err := a.oidcIssuerVerifier.GetRedirectURI(callbackPath); err == nil {
-		allowed = append([]string{uri}, allowed...)
-	}
-
-	origin, err := handlerauth.AllowedOrigin(origin, allowed...)
-	if err != nil {
-		log.Logger.Debugf("ignoring origin: %v", err)
-		return a.getBaseURL(r)
-	}
-
-	return origin
+	return a.getBaseURL(r)
 }
 
 func (a *authHandler) loginHandler() http.Handler {

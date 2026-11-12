@@ -58,6 +58,33 @@ describe('ClusterService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('OIDC flow URLs', () => {
+    const origin = encodeURIComponent(window.location.origin);
+
+    it('should send the browser origin to the Kubernetes Dashboard login', () => {
+      expect(service.getDashboardProxyURL(mockProjectID, mockClusterID)).toBe(
+        `${newRestRoot}/dashboard/login?projectID=${mockProjectID}&clusterID=${mockClusterID}&origin=${origin}`
+      );
+    });
+
+    it('should send the browser origin to the web terminal kubeconfig login', () => {
+      expect(service.getWebTerminalProxyURL(mockProjectID, mockClusterID, 'user-id')).toBe(
+        `${newRestRoot}/kubeconfig/secret?project_id=${mockProjectID}&cluster_id=${mockClusterID}&user_id=user-id&origin=${origin}`
+      );
+    });
+
+    it('should build the share link on the browser origin and send that origin', () => {
+      const restRoot = environment.restRoot.replace(/^\//, '');
+      expect(service.getShareKubeconfigURL(mockProjectID, mockClusterID, 'user-id', true)).toBe(
+        `${window.location.origin}/${restRoot}/kubeconfig?project_id=${mockProjectID}&cluster_id=${mockClusterID}&user_id=user-id&oidc_kubelogin_enabled=true&origin=${origin}`
+      );
+    });
+
+    it('should not send the origin for the kubeconfig download', () => {
+      expect(service.getKubeconfigURL(mockProjectID, mockClusterID)).not.toContain('origin=');
+    });
+  });
+
   it('should dispatch correct URL with GET request when externalMachineDeploymentNodes() is called', () => {
     lastValueFrom(service.externalMachineDeploymentNodes(mockProjectID, mockClusterID, mockMachineDeploymentID));
     const req = httpController.expectOne(
