@@ -66,6 +66,7 @@ func (cp *UserClusterConfigProvider) UpdateAdmissionPluginsConfiguration(ctx con
 	}
 
 	existingConfig := &config.Items[0]
+	original := existingConfig.DeepCopy()
 	existingConfig.Spec.UserCluster.AdmissionPlugins = &kubermaticv1.AdmissionPluginsConfiguration{
 		EventRateLimit: &kubermaticv1.EventRateLimitPluginConfiguration{
 			Enabled:       plugins.EventRateLimit.Enabled,
@@ -73,7 +74,10 @@ func (cp *UserClusterConfigProvider) UpdateAdmissionPluginsConfiguration(ctx con
 			DefaultConfig: plugins.EventRateLimit.DefaultConfig,
 		},
 	}
-	if err := cp.privilegedClient.Update(ctx, existingConfig); err != nil {
+	// a patch instead of an update, so fields this API's KubermaticConfiguration type does not know
+	// (e.g. from a newer KKP) are not dropped; the optimistic lock makes concurrent writes conflict
+	patch := ctrlruntimeclient.MergeFromWithOptions(original, ctrlruntimeclient.MergeFromWithOptimisticLock{})
+	if err := cp.privilegedClient.Patch(ctx, existingConfig, patch); err != nil {
 		return nil, fmt.Errorf("failed to update AdmissionPluginsConfiguration in KubermaticConfiguration %q: %w", existingConfig.Name, err)
 	}
 	return existingConfig.Spec.UserCluster.AdmissionPlugins, nil
