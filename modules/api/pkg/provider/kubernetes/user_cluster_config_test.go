@@ -19,6 +19,7 @@ package kubernetes_test
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -124,6 +125,49 @@ func TestUpdateAdmissionPluginsConfigurationSendsOnlyChangedFields(t *testing.T)
 	}
 	if stored.Spec.UserCluster.AdmissionPlugins == nil || !*stored.Spec.UserCluster.AdmissionPlugins.EventRateLimit.Enabled {
 		t.Errorf("expected the stored EventRateLimit to be enabled, got %+v", stored.Spec.UserCluster.AdmissionPlugins)
+	}
+}
+
+func TestUpdateAdmissionPluginsConfigurationRemovesClearedFields(t *testing.T) {
+	existing := genKubermaticConfiguration()
+	existing.Spec.UserCluster.AdmissionPlugins = &kubermaticv1.AdmissionPluginsConfiguration{
+		EventRateLimit: &kubermaticv1.EventRateLimitPluginConfiguration{
+			Enabled: ptr.To(true),
+			DefaultConfig: &kubermaticv1.EventRateLimitConfig{
+				Server: &kubermaticv1.EventRateLimitConfigItem{QPS: 50, Burst: 100},
+			},
+		},
+	}
+
+	var patchBody []byte
+	client := fake.NewClientBuilder().
+		WithObjects(existing).
+		WithInterceptorFuncs(interceptor.Funcs{
+			Patch: func(ctx context.Context, c ctrlruntimeclient.WithWatch, obj ctrlruntimeclient.Object, patch ctrlruntimeclient.Patch, opts ...ctrlruntimeclient.PatchOption) error {
+				var err error
+				if patchBody, err = patch.Data(obj); err != nil {
+					return err
+				}
+				return c.Patch(ctx, obj, patch, opts...)
+			},
+		}).
+		Build()
+
+	// the request carries no defaultConfig, so the stored one must be removed
+	if _, err := newUserClusterConfigProvider(client).UpdateAdmissionPluginsConfiguration(context.Background(), &provider.UserInfo{IsAdmin: true}, eventRateLimitPlugins()); err != nil {
+		t.Fatalf("failed to update the admission plugins: %v", err)
+	}
+
+	if !strings.Contains(string(patchBody), `"defaultConfig":null`) {
+		t.Errorf("expected the patch to remove defaultConfig, got %s", patchBody)
+	}
+
+	stored := &kubermaticv1.KubermaticConfiguration{}
+	if err := client.Get(context.Background(), ctrlruntimeclient.ObjectKeyFromObject(existing), stored); err != nil {
+		t.Fatalf("failed to get the KubermaticConfiguration: %v", err)
+	}
+	if plugins := stored.Spec.UserCluster.AdmissionPlugins; plugins == nil || plugins.EventRateLimit == nil || plugins.EventRateLimit.DefaultConfig != nil {
+		t.Errorf("expected EventRateLimit without defaultConfig, got %+v", plugins)
 	}
 }
 
