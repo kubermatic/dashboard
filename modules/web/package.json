@@ -121,7 +121,7 @@
     "del": "8.0.1",
     "eslint": "8.57.1",
     "eslint-plugin-compat": "6.2.1",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "eslint-plugin-rxjs": "5.0.3",
     "gts": "5.3.1",
     "husky": "9.1.7",
