@@ -24,6 +24,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
@@ -187,25 +188,38 @@ func (o serverRunOptions) singleOIDCClient() bool {
 // userClusterClientIDs returns the client IDs that User Clusters trust: the issuer client and the issuer client
 // of every Seed. The login client must reject tokens that list one of them in their audience. It returns nil with
 // a single OIDC client, where login tokens are meant for User Clusters as well.
-func (o serverRunOptions) userClusterClientIDs(seedsGetter provider.SeedsGetter) auth.DeniedAudienceFunc {
+func (o serverRunOptions) userClusterClientIDs(seedsGetter provider.SeedsGetter, log *zap.SugaredLogger) auth.DeniedAudienceFunc {
 	if o.singleOIDCClient() {
 		return nil
 	}
 
+	// remembers the Seeds already warned about, so the warning is not logged on every request.
+	var warned sync.Map
+
+	// the Seeds getter takes no context, so ctx is unused.
 	return func(context.Context) (sets.Set[string], error) {
 		seeds, err := seedsGetter()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to list the Seeds: %w", err)
 		}
 
 		ids := sets.New[string]()
 		if o.oidcIssuerClientID != "" {
 			ids.Insert(o.oidcIssuerClientID)
 		}
-		for _, seed := range seeds {
-			if cfg := seed.Spec.OIDCProviderConfiguration; cfg != nil && cfg.IssuerClientID != "" {
-				ids.Insert(cfg.IssuerClientID)
+		for name, seed := range seeds {
+			cfg := seed.Spec.OIDCProviderConfiguration
+			if cfg == nil || cfg.IssuerClientID == "" {
+				continue
 			}
+			if cfg.IssuerClientID == o.oidcAuthenticatorClientID {
+				if _, loaded := warned.LoadOrStore(name, struct{}{}); !loaded {
+					log.Warnw("the Seed OIDC issuer client is the dashboard login client, login tokens are not checked against it",
+						"seed", name, "clientID", cfg.IssuerClientID)
+				}
+				continue
+			}
+			ids.Insert(cfg.IssuerClientID)
 		}
 
 		return ids, nil

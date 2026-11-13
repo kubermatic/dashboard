@@ -190,7 +190,7 @@ func main() {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
 
-	tokenVerifiers, tokenExtractors, oidcLoginVerifier, err := createAuthClients(options, providers)
+	tokenVerifiers, tokenExtractors, oidcLoginVerifier, err := createAuthClients(options, providers, log)
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
@@ -503,7 +503,7 @@ func createOIDCIssuerClient(oidcIssuerConfiguration *authtypes.OIDCConfiguration
 }
 
 // createAuthClients also returns the OIDC authenticator, as the dashboard login runs on the same client.
-func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, authtypes.OIDCIssuerVerifier, error) {
+func createAuthClients(options serverRunOptions, prov providers, log *zap.SugaredLogger) (authtypes.TokenVerifier, authtypes.TokenExtractor, authtypes.OIDCIssuerVerifier, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcAuthenticatorConfiguration,
 		options.oidcIssuerRedirectURI,
@@ -514,7 +514,7 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 			auth.NewCookieHeaderBearerMultiTokenExtractor("token"),
 		),
 		options.caBundle.CertPool(),
-		auth.WithDeniedAudience(options.userClusterClientIDs(prov.seedsGetter)),
+		auth.WithDeniedAudience(options.userClusterClientIDs(prov.seedsGetter, log), log),
 	)
 
 	if err != nil {

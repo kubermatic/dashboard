@@ -32,6 +32,8 @@ import (
 	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zaptest/observer"
 
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
@@ -88,8 +90,8 @@ func newSigningIssuer(t *testing.T) *signingIssuer {
 	return issuer
 }
 
-// idToken signs an ID token with the given audience.
-func (i *signingIssuer) idToken(t *testing.T, audience []string) string {
+// idToken signs an ID token with the given audience. An empty azp leaves the claim out.
+func (i *signingIssuer) idToken(t *testing.T, audience []string, azp string) string {
 	t.Helper()
 
 	claims := map[string]interface{}{
@@ -99,6 +101,9 @@ func (i *signingIssuer) idToken(t *testing.T, audience []string) string {
 		"email": "bob@acme.com",
 		"exp":   jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		"iat":   jwt.NewNumericDate(time.Now()),
+	}
+	if azp != "" {
+		claims["azp"] = azp
 	}
 
 	token, err := jwt.Signed(i.signer).Claims(claims).Serialize()
@@ -129,11 +134,12 @@ func TestVerifyDeniedAudience(t *testing.T) {
 	const seedIssuerClientID = "seedIssuer"
 
 	issuer := newSigningIssuer(t)
-	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID, seedIssuerClientID)))
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID, seedIssuerClientID), nil))
 
 	testcases := []struct {
 		name     string
 		audience []string
+		azp      string
 		wantErr  string
 	}{
 		{
@@ -141,27 +147,54 @@ func TestVerifyDeniedAudience(t *testing.T) {
 			audience: []string{loginClientID},
 		},
 		{
-			name:     "an unrelated audience next to the login client",
+			name:     "the login client is the only audience and azp is another client",
+			audience: []string{loginClientID},
+			azp:      "another",
+		},
+		{
+			name:     "an unrelated audience next to the login client, issued to the login client",
 			audience: []string{loginClientID, "another"},
+			azp:      loginClientID,
 		},
 		{
-			name:     "the issuer client next to the login client",
+			name:     "an unrelated audience next to the login client, issued to another client",
+			audience: []string{loginClientID, "another"},
+			azp:      "another",
+			wantErr:  `oidc: the token was issued to "another", not to "kubermatic"`,
+		},
+		{
+			name:     "an unrelated audience next to the login client, without azp",
+			audience: []string{loginClientID, "another"},
+			wantErr:  `oidc: the token has several audiences but no azp claim, expected "kubermatic"`,
+		},
+		{
+			name:     "the issuer client next to the login client, issued to the issuer client",
 			audience: []string{loginClientID, issuerClientID},
+			azp:      issuerClientID,
+			wantErr:  `oidc: the token was issued to "kubermaticIssuer", not to "kubermatic"`,
+		},
+		{
+			name:     "the issuer client next to the login client, issued to the login client",
+			audience: []string{loginClientID, issuerClientID},
+			azp:      loginClientID,
 			wantErr:  `the token lists the User Cluster OIDC client "kubermaticIssuer" in its audience`,
 		},
 		{
-			name:     "the issuer client before the login client",
+			name:     "the issuer client before the login client, issued to the login client",
 			audience: []string{issuerClientID, loginClientID},
+			azp:      loginClientID,
 			wantErr:  `the token lists the User Cluster OIDC client "kubermaticIssuer" in its audience`,
 		},
 		{
-			name:     "a Seed issuer client next to the login client",
+			name:     "a Seed issuer client next to the login client, issued to the login client",
 			audience: []string{loginClientID, "another", seedIssuerClientID},
+			azp:      loginClientID,
 			wantErr:  `the token lists the User Cluster OIDC client "seedIssuer" in its audience`,
 		},
 		{
 			name:     "the issuer client is the only audience",
 			audience: []string{issuerClientID},
+			azp:      issuerClientID,
 			wantErr:  "expected audience",
 		},
 		{
@@ -175,7 +208,7 @@ func TestVerifyDeniedAudience(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			claims, err := login.Verify(context.Background(), issuer.idToken(t, tc.audience))
+			claims, err := login.Verify(context.Background(), issuer.idToken(t, tc.audience, tc.azp))
 			if tc.wantErr != "" {
 				assert.ErrorContains(t, err, tc.wantErr)
 				return
@@ -188,12 +221,33 @@ func TestVerifyDeniedAudience(t *testing.T) {
 	}
 }
 
+// TestVerifyDeniedAudienceSkippedForOtherClients checks that the denied audiences are only read for tokens issued
+// to the login client.
+func TestVerifyDeniedAudienceSkippedForOtherClients(t *testing.T) {
+	t.Parallel()
+
+	issuer := newSigningIssuer(t)
+
+	var calls atomic.Int32
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(func(context.Context) (sets.Set[string], error) {
+		calls.Add(1)
+		return sets.New(issuerClientID), nil
+	}, nil))
+
+	_, err := login.Verify(context.Background(), issuer.idToken(t, []string{loginClientID, issuerClientID}, issuerClientID))
+	assert.Error(t, err)
+	_, err = login.Verify(context.Background(), issuer.idToken(t, []string{loginClientID, issuerClientID}, ""))
+	assert.Error(t, err)
+	assert.Zero(t, calls.Load())
+}
+
 // TestVerifyDeniedAudienceFailsClosed checks that tokens are rejected while the denied audiences are unknown,
-// and accepted again once they can be read.
+// and accepted again once they can be read. The real error is logged, not returned.
 func TestVerifyDeniedAudienceFailsClosed(t *testing.T) {
 	t.Parallel()
 
 	issuer := newSigningIssuer(t)
+	core, logs := observer.New(zap.ErrorLevel)
 
 	var failing atomic.Bool
 	failing.Store(true)
@@ -202,11 +256,17 @@ func TestVerifyDeniedAudienceFailsClosed(t *testing.T) {
 			return nil, errors.New("seeds are not available")
 		}
 		return sets.New(issuerClientID), nil
-	}))
-	token := issuer.idToken(t, []string{loginClientID, "another"})
+	}, zap.New(core).Sugar()))
+	token := issuer.idToken(t, []string{loginClientID, "another"}, loginClientID)
 
 	_, err := login.Verify(context.Background(), token)
-	assert.ErrorContains(t, err, "seeds are not available")
+	require.Error(t, err)
+	assert.Equal(t, "failed to verify the token audience", err.Error())
+	assert.NotContains(t, err.Error(), "seeds are not available")
+
+	entries := logs.All()
+	require.Len(t, entries, 1)
+	assert.Equal(t, "seeds are not available", entries[0].ContextMap()["error"])
 
 	failing.Store(false)
 	_, err = login.Verify(context.Background(), token)
@@ -214,20 +274,29 @@ func TestVerifyDeniedAudienceFailsClosed(t *testing.T) {
 }
 
 // TestVerifyWithoutDeniedAudience covers the issuer clients and the single OIDC client setup, which accept any
-// additional audience.
+// additional audience and any azp.
 func TestVerifyWithoutDeniedAudience(t *testing.T) {
 	t.Parallel()
 
 	issuer := newSigningIssuer(t)
-	client := issuer.newClient(t, issuerClientID)
 
-	for _, audience := range [][]string{
-		{issuerClientID},
-		{issuerClientID, "another"},
-		{loginClientID, issuerClientID},
-	} {
-		_, err := client.Verify(context.Background(), issuer.idToken(t, audience))
-		assert.NoError(t, err, "audience %q", audience)
+	for _, clientID := range []string{issuerClientID, loginClientID} {
+		client := issuer.newClient(t, clientID)
+
+		for _, tc := range []struct {
+			audience []string
+			azp      string
+		}{
+			{audience: []string{clientID}},
+			{audience: []string{clientID, "another"}},
+			{audience: []string{clientID, "another"}, azp: "another"},
+			{audience: []string{loginClientID, issuerClientID}},
+			{audience: []string{loginClientID, issuerClientID}, azp: issuerClientID},
+			{audience: []string{loginClientID, issuerClientID}, azp: loginClientID},
+		} {
+			_, err := client.Verify(context.Background(), issuer.idToken(t, tc.audience, tc.azp))
+			assert.NoError(t, err, "client %q, audience %q, azp %q", clientID, tc.audience, tc.azp)
+		}
 	}
 }
 
@@ -236,11 +305,11 @@ func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	t.Parallel()
 
 	issuer := newSigningIssuer(t)
-	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID)))
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID), nil))
 	issuing := issuer.newClient(t, issuerClientID)
 
-	loginToken := issuer.idToken(t, []string{loginClientID})
-	issuerToken := issuer.idToken(t, []string{issuerClientID})
+	loginToken := issuer.idToken(t, []string{loginClientID}, "")
+	issuerToken := issuer.idToken(t, []string{issuerClientID}, "")
 
 	_, err := login.Verify(context.Background(), loginToken)
 	assert.NoError(t, err, "the login client must accept its own token")
