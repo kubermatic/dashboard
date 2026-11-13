@@ -120,7 +120,10 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	if rawEmail, found := claims["email"]; found {
 		oidcClaims.Email = rawEmail.(string)
 	}
-	if emailVerified, ok := claims["email_verified"].(bool); ok {
+	// kube-apiserver rejects a token whose email_verified claim is present and anything but
+	// true, so a value that is not a boolean counts as not verified
+	if rawEmailVerified, found := claims["email_verified"]; found {
+		emailVerified, _ := rawEmailVerified.(bool)
 		oidcClaims.EmailVerified = &emailVerified
 	}
 	if rawSub, found := claims["sub"]; found {

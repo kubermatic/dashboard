@@ -21,13 +21,16 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"slices"
 	"strings"
 
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	"k8s.io/apimachinery/pkg/api/equality"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -47,13 +50,15 @@ const (
 	serviceAccountVolume   = "web-terminal-serviceaccount"
 	shellKubeconfigPath    = "/data/terminal/.kube/config"
 
-	// defaultGroupsPrefix is the prefix KKP's default authentication entry puts in front
-	// of the groups of an OIDC user in a user cluster.
-	defaultGroupsPrefix = "oidc:"
-
 	// WebTerminalAuthenticationUnsupported is sent when the web terminal runs as a ServiceAccount
 	// and the user cluster does not use KKP's default authentication.
 	WebTerminalAuthenticationUnsupported TerminalConnStatus = "WEBTERMINAL_AUTHENTICATION_UNSUPPORTED"
+	// WebTerminalAuthenticationDisabled is sent when the web terminal runs as a ServiceAccount
+	// and user clusters do not get KKP's default authentication (OpenIDAuthPlugin feature gate).
+	WebTerminalAuthenticationDisabled TerminalConnStatus = "WEBTERMINAL_AUTHENTICATION_DISABLED"
+	// WebTerminalEmailNotVerified is sent when the web terminal runs as a ServiceAccount
+	// and the email of the login is not verified.
+	WebTerminalEmailNotVerified TerminalConnStatus = "WEBTERMINAL_EMAIL_NOT_VERIFIED"
 )
 
 // Impersonation is the identity the web terminal acts as in the user cluster when it runs
@@ -69,8 +74,11 @@ type Impersonation struct {
 func NewImpersonation(email string, groups []string) *Impersonation {
 	impersonation := &Impersonation{User: email}
 	for _, group := range groups {
-		impersonation.Groups = append(impersonation.Groups, defaultGroupsPrefix+group)
+		impersonation.Groups = append(impersonation.Groups, handlercommon.DefaultOIDCGroupsPrefix+group)
 	}
+	// a token does not list the groups in a fixed order, and the same groups must give the same identity
+	slices.Sort(impersonation.Groups)
+	impersonation.Groups = slices.Compact(impersonation.Groups)
 	return impersonation
 }
 
@@ -80,16 +88,37 @@ func (i *Impersonation) hash() string {
 	return hex.EncodeToString(sum[:])
 }
 
-// UnsupportedAuthenticationReason returns why the web terminal can't run as a ServiceAccount
-// on the given cluster, or an empty string if it can. The ServiceAccount impersonates the names
-// KKP's default authentication entry gives a user; with any other authentication configuration
-// the user's names in the cluster are not known. Without the default entry (OpenIDAuthPlugin
-// feature gate) the cluster does not accept KKP logins at all.
-func UnsupportedAuthenticationReason(cluster *kubermaticv1.Cluster, seed *kubermaticv1.Seed, defaultAuthenticationEnabled bool) string {
+// ServiceAccountModeRefusal returns the status that tells the dashboard why the web terminal
+// can't run as a ServiceAccount for a login on the given cluster, together with the reason for
+// the log. The status is empty if it can.
+//
+// The ServiceAccount impersonates the names KKP's default authentication entry gives a user.
+// With any other authentication configuration the user's names in the cluster are not known,
+// and without the default entry (OpenIDAuthPlugin feature gate) the cluster does not accept
+// KKP logins at all. The default entry does not accept a login with an unverified email, so
+// the web terminal must not act for it either.
+func ServiceAccountModeRefusal(cluster *kubermaticv1.Cluster, seed *kubermaticv1.Seed, defaultAuthenticationEnabled bool, emailVerified *bool) (TerminalConnStatus, string) {
+	if reason := customAuthenticationReason(cluster, seed); reason != "" {
+		return WebTerminalAuthenticationUnsupported, reason
+	}
+	if !defaultAuthenticationEnabled {
+		return WebTerminalAuthenticationDisabled, "user clusters do not accept KKP logins (OpenIDAuthPlugin feature gate is not enabled)"
+	}
+	if emailVerified != nil && !*emailVerified {
+		return WebTerminalEmailNotVerified, "the email of the login is not verified"
+	}
+	return "", ""
+}
+
+// customAuthenticationReason returns which setting replaces KKP's default authentication entry
+// for the given cluster, or an empty string if none does.
+func customAuthenticationReason(cluster *kubermaticv1.Cluster, seed *kubermaticv1.Seed) string {
+	oidcSettings := cluster.Spec.OIDC //nolint:staticcheck
+
 	if cluster.Spec.IsAuthenticationConfigurationEnabled() {
 		return "the cluster uses its own AuthenticationConfiguration"
 	}
-	if cluster.Spec.OIDC.IssuerURL != "" && cluster.Spec.OIDC.ClientID != "" {
+	if oidcSettings.IssuerURL != "" && oidcSettings.ClientID != "" {
 		return "the cluster uses its own OIDC settings"
 	}
 	if seed != nil {
@@ -103,10 +132,17 @@ func UnsupportedAuthenticationReason(cluster *kubermaticv1.Cluster, seed *kuberm
 			return "the datacenter sets an AuthenticationConfiguration"
 		}
 	}
-	if !defaultAuthenticationEnabled {
-		return "user clusters do not accept KKP logins (OpenIDAuthPlugin feature gate is not enabled)"
-	}
 	return ""
+}
+
+// clusterAPIServerURL returns the address the web terminal reaches the kube-apiserver of the user
+// cluster at. It is the address of the kubeconfigs KKP hands out, which the OIDC mode uses as
+// well, so that the NetworkPolicy of the web terminal allows it with every expose strategy.
+func clusterAPIServerURL(cluster *kubermaticv1.Cluster) string {
+	if cluster.Status.Address.APIServerExternalAddress != "" {
+		return cluster.Status.Address.APIServerExternalAddress
+	}
+	return cluster.Status.Address.URL
 }
 
 func podMode(impersonation *Impersonation) string {
@@ -194,8 +230,9 @@ func genWebTerminalClusterRoleBinding(userAppName string) *rbacv1.ClusterRoleBin
 }
 
 // ensureServiceAccountResources creates the ServiceAccount of the session and the RBAC that
-// limits it to the session user. The ClusterRole is updated on every session start, so it
-// follows changes of the user's groups.
+// limits it to the session user. It runs for every connection: the ClusterRole follows changes
+// of the user's groups, and a binding that is as it should be is left alone, so that the
+// sessions of other connections of the user are not disturbed.
 func ensureServiceAccountResources(ctx context.Context, client ctrlruntimeclient.Client, userAppName string, impersonation *Impersonation) error {
 	if err := client.Create(ctx, genWebTerminalServiceAccount(userAppName)); err != nil && !apierrors.IsAlreadyExists(err) {
 		return fmt.Errorf("failed to create ServiceAccount: %w", err)
@@ -211,17 +248,49 @@ func ensureServiceAccountResources(ctx context.Context, client ctrlruntimeclient
 		}
 	}
 
-	if err := client.Create(ctx, genWebTerminalClusterRoleBinding(userAppName)); err != nil && !apierrors.IsAlreadyExists(err) {
+	binding := genWebTerminalClusterRoleBinding(userAppName)
+	existing := &rbacv1.ClusterRoleBinding{}
+	err := client.Get(ctx, ctrlruntimeclient.ObjectKeyFromObject(binding), existing)
+	if err != nil && !apierrors.IsNotFound(err) {
+		return fmt.Errorf("failed to get ClusterRoleBinding: %w", err)
+	}
+	if err == nil {
+		if equality.Semantic.DeepEqual(existing.RoleRef, binding.RoleRef) && equality.Semantic.DeepEqual(existing.Subjects, binding.Subjects) {
+			return nil
+		}
+		// A binding with this name must not keep other subjects or another role. Its roleRef
+		// can't be updated, so the binding is replaced.
+		if err := client.Delete(ctx, existing); err != nil && !apierrors.IsNotFound(err) {
+			return fmt.Errorf("failed to replace ClusterRoleBinding: %w", err)
+		}
+	}
+	if err := client.Create(ctx, binding); err != nil && !apierrors.IsAlreadyExists(err) {
 		return fmt.Errorf("failed to create ClusterRoleBinding: %w", err)
 	}
 
 	return nil
 }
 
+// deleteKubeconfigSecret removes the Secret with the user's OIDC login from the user cluster.
+// Only the OIDC mode of the web terminal uses that Secret.
+func deleteKubeconfigSecret(ctx context.Context, client ctrlruntimeclient.Client, userEmailID string) error {
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      handlercommon.KubeconfigSecretName(userEmailID),
+			Namespace: metav1.NamespaceSystem,
+		},
+	}
+	if err := client.Delete(ctx, secret); err != nil && !apierrors.IsNotFound(err) {
+		return fmt.Errorf("failed to delete the kubeconfig Secret: %w", err)
+	}
+	return nil
+}
+
 // proxyScript writes a kubeconfig for the ServiceAccount and starts kubectl proxy with it.
 // The kubeconfig points at the token file, which kubectl re-reads, so the proxy keeps working
 // when the token is rotated. An explicit kubeconfig is needed because kubectl does not fall back
-// to the in-cluster configuration when impersonation flags are set.
+// to the in-cluster configuration when impersonation flags are set. The kubeconfig has no server:
+// the address of the kube-apiserver is one of the arguments, see proxyCommand.
 // The reject paths are cleared because kubectl proxy rejects exec and attach by default.
 const proxyScript = `cat > /tmp/kubeconfig <<EOF
 apiVersion: v1
@@ -229,7 +298,6 @@ kind: Config
 clusters:
 - name: default
   cluster:
-    server: https://kubernetes.default.svc
     certificate-authority: ` + serviceAccountDir + `/ca.crt
 users:
 - name: default
@@ -244,10 +312,10 @@ current-context: default
 EOF
 exec kubectl proxy --kubeconfig=/tmp/kubeconfig --address=127.0.0.1 --port=8001 '--reject-paths=^$' "$@"`
 
-// proxyCommand passes the identity to impersonate as arguments of the script, so that
-// the names are never interpreted by the shell.
-func proxyCommand(impersonation *Impersonation) []string {
-	cmd := []string{"/bin/bash", "-c", proxyScript, proxyContainerName, "--as=" + impersonation.User}
+// proxyCommand passes the address of the kube-apiserver and the identity to impersonate as
+// arguments of the script, so that they are never interpreted by the shell.
+func proxyCommand(apiServerURL string, impersonation *Impersonation) []string {
+	cmd := []string{"/bin/bash", "-c", proxyScript, proxyContainerName, "--server=" + apiServerURL, "--as=" + impersonation.User}
 	for _, group := range impersonation.Groups {
 		cmd = append(cmd, "--as-group="+group)
 	}
@@ -257,7 +325,7 @@ func proxyCommand(impersonation *Impersonation) []string {
 // applyServiceAccountMode turns the web terminal pod into one that reaches the user cluster
 // through a kubectl proxy sidecar. Only the sidecar gets the ServiceAccount token; the shell
 // container gets a kubeconfig without credentials that points at the sidecar.
-func applyServiceAccountMode(pod *corev1.Pod, userAppName string, impersonation *Impersonation) {
+func applyServiceAccountMode(pod *corev1.Pod, userAppName, apiServerURL string, impersonation *Impersonation) {
 	pod.Labels[modeLabelKey] = modeServiceAccount
 	pod.Annotations = map[string]string{identityAnnotationKey: impersonation.hash()}
 	pod.Spec.ServiceAccountName = userAppName
@@ -270,7 +338,7 @@ func applyServiceAccountMode(pod *corev1.Pod, userAppName string, impersonation 
 			volumes = append(volumes, volume)
 		}
 	}
-	pod.Spec.Volumes = append(volumes, corev1.Volume{
+	volumes = append(volumes, corev1.Volume{
 		Name: serviceAccountVolume,
 		VolumeSource: corev1.VolumeSource{
 			Projected: &corev1.ProjectedVolumeSource{
@@ -299,6 +367,7 @@ func applyServiceAccountMode(pod *corev1.Pod, userAppName string, impersonation 
 			},
 		},
 	})
+	pod.Spec.Volumes = volumes
 
 	shell := &pod.Spec.Containers[0]
 	mounts := []corev1.VolumeMount{}
@@ -323,7 +392,7 @@ func applyServiceAccountMode(pod *corev1.Pod, userAppName string, impersonation 
 	pod.Spec.Containers = append(pod.Spec.Containers, corev1.Container{
 		Name:    proxyContainerName,
 		Image:   shell.Image,
-		Command: proxyCommand(impersonation),
+		Command: proxyCommand(apiServerURL, impersonation),
 		VolumeMounts: []corev1.VolumeMount{
 			{
 				Name:      serviceAccountVolume,

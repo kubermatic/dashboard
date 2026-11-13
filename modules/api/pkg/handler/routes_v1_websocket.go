@@ -119,7 +119,7 @@ func getProviders(r Routing) watcher.Providers {
 
 func getSettingsWatchHandler(writer WebsocketSettingsWriter, providers watcher.Providers, routing Routing) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		_, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		_, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			return
@@ -138,7 +138,7 @@ func getSettingsWatchHandler(writer WebsocketSettingsWriter, providers watcher.P
 
 func getUserWatchHandler(writer WebsocketUserWriter, providers watcher.Providers, routing Routing) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		user, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		user, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			return
@@ -218,7 +218,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 
-		authenticatedUser, emailVerified, err := verifyAuthorizationClaims(req, routing.tokenVerifiers, routing.tokenExtractors)
+		authenticatedUser, emailVerified, err := verifyAuthorizationClaims(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			rejectTerminalRequest(w, utilerrors.NewNotAuthorized())
@@ -285,21 +285,27 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		}
 
 		// As a ServiceAccount the web terminal impersonates the names KKP's default authentication
-		// gives the user, so it can't be used on clusters with another authentication configuration.
+		// gives the user, so it can only be used by logins and on clusters that authentication accepts.
 		var impersonation *wsh.Impersonation
-		unsupportedAuthentication := ""
+		var refusal wsh.TerminalConnStatus
+		refusalReason := ""
 		if routing.features.Enabled(features.WebTerminalServiceAccount) {
-			seed, err := seedForCluster(ctx, providers, clusterID)
+			// KKP's default authentication does not accept tokens of KKP service accounts
+			if kubermaticv1helper.IsProjectServiceAccount(authenticatedUser.Email) {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusForbidden, "Web Terminal is not available for service accounts"))
+				return
+			}
+			seeds, err := providers.SeedsGetter()
 			if err != nil {
-				rejectTerminalRequest(w, err)
+				rejectTerminalRequest(w, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err)))
 				return
 			}
-			// The user cluster would not accept these logins, so the terminal must not act for them either.
-			if reason := unsupportedLoginReason(authenticatedUser.Email, emailVerified); reason != "" {
-				rejectTerminalRequest(w, utilerrors.New(http.StatusForbidden, reason))
+			seed, ok := seeds[clusterProvider.GetSeedName()]
+			if !ok {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("Seed %q not found", clusterProvider.GetSeedName())))
 				return
 			}
-			unsupportedAuthentication = wsh.UnsupportedAuthenticationReason(cluster, seed, routing.features.Enabled(features.OpenIDAuthPlugin))
+			refusal, refusalReason = wsh.ServiceAccountModeRefusal(cluster, seed, routing.features.Enabled(features.OpenIDAuthPlugin), emailVerified)
 			impersonation = wsh.NewImpersonation(authenticatedUser.Email, authenticatedUser.Groups)
 		}
 
@@ -329,9 +335,9 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		defer ws.Close()
 
 		// refused after the upgrade, so that the dashboard can show the reason
-		if unsupportedAuthentication != "" {
-			log.Logger.Debugf("web terminal refused for cluster %s: %s", clusterID, unsupportedAuthentication)
-			_ = wsh.SendMessage(ws, string(wsh.WebTerminalAuthenticationUnsupported))
+		if refusal != "" {
+			log.Logger.Infof("web terminal refused for cluster %s: %s", clusterID, refusalReason)
+			_ = wsh.SendMessage(ws, string(refusal))
 			return
 		}
 
@@ -366,27 +372,6 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	}
 }
 
-// seedForCluster returns the seed the given user cluster runs on.
-func seedForCluster(ctx context.Context, providers watcher.Providers, clusterID string) (*kubermaticv1.Seed, error) {
-	seeds, err := providers.SeedsGetter()
-	if err != nil {
-		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
-	}
-	for _, seed := range seeds {
-		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
-			continue
-		}
-		clusterProvider, err := providers.ClusterProviderGetter(seed)
-		if err != nil {
-			continue
-		}
-		if clusterProvider.IsCluster(ctx, clusterID) {
-			return seed, nil
-		}
-	}
-	return nil, utilerrors.NewNotFound("seed", clusterID)
-}
-
 // rejectTerminalRequest answers a terminal request that is refused before the websocket
 // upgrade. Without it the handler would return without a response, which net/http sends
 // as HTTP 200.
@@ -411,26 +396,13 @@ func (req terminalReq) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-// unsupportedLoginReason returns why a login can't use the web terminal as a ServiceAccount, or
-// an empty string if it can. KKP's default authentication in a user cluster accepts neither
-// tokens of KKP service accounts nor tokens with an unverified email.
-func unsupportedLoginReason(email string, emailVerified *bool) string {
-	if kubermaticv1helper.IsProjectServiceAccount(email) {
-		return "Web Terminal is not available for service accounts"
-	}
-	if emailVerified != nil && !*emailVerified {
-		return "Web Terminal is not available for logins with an unverified email"
-	}
-	return ""
-}
-
-func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, error) {
-	user, _, err := verifyAuthorizationClaims(req, tokenVerifier, tokenExtractor)
+func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor, userProvider provider.UserProvider) (*apiv1.User, error) {
+	user, _, err := verifyAuthorizationClaims(req, tokenVerifier, tokenExtractor, userProvider)
 	return user, err
 }
 
 // verifyAuthorizationClaims also returns the email_verified claim, nil if the token does not have it.
-func verifyAuthorizationClaims(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, *bool, error) {
+func verifyAuthorizationClaims(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor, userProvider provider.UserProvider) (*apiv1.User, *bool, error) {
 	token, err := tokenExtractor.Extract(req)
 	if err != nil {
 		return nil, nil, err
@@ -443,6 +415,11 @@ func verifyAuthorizationClaims(req *http.Request, tokenVerifier authtypes.TokenV
 
 	if claims.Subject == "" {
 		return nil, nil, utilerrors.NewNotAuthorized()
+	}
+
+	// a token the user has logged out with is refused, as it is for the REST endpoints
+	if err := middleware.CheckBlockedTokens(req.Context(), claims.Email, token, userProvider); err != nil {
+		return nil, nil, err
 	}
 
 	user := &apiv1.User{
