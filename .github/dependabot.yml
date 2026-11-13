@@ -14,18 +14,263 @@
 
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: "modules/web/"
+  - package-ecosystem: gomod
+    directories:
+      - "/modules/api"
+      - "/modules/web"
+    target-branch: main
     schedule:
       interval: weekly
+      day: monday
     open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
     groups:
-      angular:
+      go-patches:
         patterns:
-          - "@angular*"
+          - "*"
+        update-types:
+          - "patch"
+    ignore:
+      - dependency-name: "go"
+      - dependency-name: "k8s.io/*"
+      - dependency-name: "sigs.k8s.io/*"
+      - dependency-name: "k8c.io/*"
+      - dependency-name: "github.com/vmware-tanzu/velero"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    commit-message:
+      prefix: "chore"
     labels:
       - dependencies
-      - docs/none
       - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: gomod
+    directories:
+      - "/modules/api"
+      - "/modules/web"
+    target-branch: release/v2.31
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      go-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    ignore:
+      - dependency-name: "go"
+      - dependency-name: "k8s.io/*"
+      - dependency-name: "sigs.k8s.io/*"
+      - dependency-name: "k8c.io/*"
+      - dependency-name: "github.com/vmware-tanzu/velero"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    commit-message:
+      prefix: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: gomod
+    directories:
+      - "/modules/api"
+      - "/modules/web"
+    target-branch: release/v2.30
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      go-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    ignore:
+      - dependency-name: "go"
+      - dependency-name: "k8s.io/*"
+      - dependency-name: "sigs.k8s.io/*"
+      - dependency-name: "k8c.io/*"
+      - dependency-name: "github.com/vmware-tanzu/velero"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    commit-message:
+      prefix: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: gomod
+    directories:
+      - "/modules/api"
+      - "/modules/web"
+    target-branch: release/v2.29
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      go-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    ignore:
+      - dependency-name: "go"
+      - dependency-name: "k8s.io/*"
+      - dependency-name: "sigs.k8s.io/*"
+      - dependency-name: "k8c.io/*"
+      - dependency-name: "github.com/vmware-tanzu/velero"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    commit-message:
+      prefix: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: npm
+    directory: "/modules/web"
+    target-branch: main
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      npm-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: npm
+    directory: "/modules/web"
+    target-branch: release/v2.31
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      npm-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: npm
+    directory: "/modules/web"
+    target-branch: release/v2.30
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      npm-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: npm
+    directory: "/modules/web"
+    target-branch: release/v2.29
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+        update-types: ["version-update:semver-patch"]
+    groups:
+      npm-patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
+      - test-issue/none
+      - ok-to-test
+
+  - package-ecosystem: docker
+    directories:
+      - "/"
+      - "/hack/images/web-terminal"
+      - "/modules/web/hack/development"
+      - "/modules/web/containers/custom-dashboard"
+      - "/modules/web/containers/chrome-headless"
+    target-branch: main
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    labels:
+      - dependencies
+      - release-note-none
+      - docs/none
       - test-issue/none
       - ok-to-test

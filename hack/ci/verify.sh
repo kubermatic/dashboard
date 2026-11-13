@@ -57,6 +57,7 @@ try() {
 
 try "Verify boilerplate" ./hack/verify-boilerplate.sh
 try "Spellcheck" make spellcheck
+try "Verify Dependabot branches" ./hack/verify-dependabot-branches.sh
 
 # -l        list files whose formatting differs from shfmt's
 # -d        error with a diff when the formatting differs
