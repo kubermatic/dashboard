@@ -21,6 +21,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"sync"
 
@@ -28,6 +29,7 @@ import (
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlerauth "k8c.io/dashboard/v2/pkg/handler/auth"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
@@ -100,6 +102,23 @@ type IssuerVerifier struct {
 	nonceClaimOverride string
 	// emailVerifiedClaim, when set, is returned as email_verified claim.
 	emailVerifiedClaim *bool
+	// authRedirectURI is the redirect_uri of the last AuthCodeURL call, which Exchange must repeat.
+	authRedirectURI        string
+	additionalRedirectURIs []string
+}
+
+// SetRedirectURI sets the configured redirect URI, like -oidc-issuer-redirect-uri.
+func (o *IssuerVerifier) SetRedirectURI(uri string) {
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.redirectURI = uri
+}
+
+// SetAdditionalRedirectURIs sets the additional redirect URIs, like -oidc-issuer-additional-redirect-uris.
+func (o *IssuerVerifier) SetAdditionalRedirectURIs(uris ...string) {
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.additionalRedirectURIs = uris
 }
 
 // SetNonceClaim makes Verify return the given nonce claim, simulating an ID token
@@ -147,6 +166,7 @@ func (o *IssuerVerifier) AuthCodeURL(state string, offlineAsScope bool, overwrit
 		opts = append(opts, oauth2.S256ChallengeOption(codeVerifier))
 	}
 	o.nonce = nonce
+	o.authRedirectURI = oauth2Config.RedirectURL
 	if nonce != "" {
 		opts = append(opts, oauth2.SetAuthURLParam("nonce", nonce))
 	}
@@ -182,9 +202,16 @@ func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectUR
 	}
 	o.lock.Lock()
 	challenge := o.codeChallenge
+	authRedirectURI := o.authRedirectURI
+	redirectURI := o.oauth2Config(overwriteRedirectURI).RedirectURL
 	o.lock.Unlock()
 	if verifier == "" || oauth2.S256ChallengeFromVerifier(verifier) != challenge {
 		return authtypes.OIDCToken{}, errors.New("invalid PKCE code_verifier")
+	}
+
+	// like a real provider, the token request must repeat the redirect_uri of the authorization request
+	if redirectURI != authRedirectURI {
+		return authtypes.OIDCToken{}, fmt.Errorf("redirect_uri %q does not match %q of the authorization request", redirectURI, authRedirectURI)
 	}
 
 	return authtypes.OIDCToken{
@@ -240,5 +267,35 @@ func (o *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 		ClientID:     o.clientID,
 		ClientSecret: o.clientSecret,
 		SecureCookie: fakeSecureCookie,
+		// for tests of reverse proxies on other hostnames
+		AdditionalRedirectURIs: o.additionalRedirectURIs,
 	}
+}
+
+// GetCookie returns the cookie with the given name, or nil.
+func GetCookie(cookies []*http.Cookie, name string) *http.Cookie {
+	for _, cookie := range cookies {
+		if cookie.Name == name {
+			return cookie
+		}
+	}
+	return nil
+}
+
+// WithoutStoredRedirectURI re-signs an OAuth state cookie without RedirectURI, like a cookie issued
+// before the redirect URI was stored in it.
+func WithoutStoredRedirectURI(cookie *http.Cookie) (*http.Cookie, error) {
+	req := httptest.NewRequestWithContext(context.Background(), http.MethodGet, "/", nil)
+	req.AddCookie(cookie)
+	state, err := handlerauth.GetOAuthStateCookie(req, cookie.Name, fakeSecureCookie)
+	if err != nil {
+		return nil, err
+	}
+	state.RedirectURI = ""
+
+	res := httptest.NewRecorder()
+	if err := handlerauth.SetOAuthStateCookie(res, cookie.Name, cookie.Path, state, cookie.MaxAge, cookie.Secure, fakeSecureCookie); err != nil {
+		return nil, err
+	}
+	return GetCookie(res.Result().Cookies(), cookie.Name), nil
 }

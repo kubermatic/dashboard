@@ -65,6 +65,8 @@ func OIDCIssuerVerifierProviderFactory(
 				CookieSecureMode:     cookieSecureMode,
 				OfflineAccessAsScope: offlineAccessAsScope,
 				SkipTLSVerify:        skipTLSVerify,
+				// the reverse proxy hostnames are the same for all Seeds
+				AdditionalRedirectURIs: defaultOIDCIssuerVerifier.OIDCConfig().AdditionalRedirectURIs,
 			},
 			oidcIssuerRedirectURI,
 			auth.NewCombinedExtractor(

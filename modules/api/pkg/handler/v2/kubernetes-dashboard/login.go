@@ -135,6 +135,10 @@ func (l *loginHandler) redirect(ctx context.Context, request interface{}) (respo
 	if err != nil {
 		return nil, err
 	}
+	oauthState.RedirectURI = handlerauth.RedirectURIForOrigin(oidcIssuerVerifier, loginRequest.URL.Query().Get("origin"), loginRequest.URL.Path)
+	if oauthState.RedirectURI != "" {
+		redirectURI = oauthState.RedirectURI
+	}
 
 	return &LoginResponse{
 		Request:          loginRequest.Request,
@@ -202,10 +206,12 @@ func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (r
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", state.State)
 	}
 
-	// get the redirect uri
-	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.URL.Path)
-	if err != nil {
-		return nil, err
+	// get the redirect uri, an empty stored one means the main hostname or a cookie from before the upgrade
+	redirectURI := storedCookie.RedirectURI
+	if redirectURI == "" {
+		if redirectURI, err = oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.URL.Path); err != nil {
+			return nil, err
+		}
 	}
 
 	token, err := l.exchange(ctx, oidcCallbackRequest.Code, redirectURI, storedCookie)
