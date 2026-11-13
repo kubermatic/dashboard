@@ -23,6 +23,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zaptest/observer"
 
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
@@ -165,14 +167,14 @@ func TestUserClusterClientIDs(t *testing.T) {
 		t.Parallel()
 
 		o := serverRunOptions{oidcAuthenticatorClientID: "kubermaticIssuer", oidcIssuerClientID: "kubermaticIssuer"}
-		assert.Nil(t, o.userClusterClientIDs(seedsGetter))
+		assert.Nil(t, o.userClusterClientIDs(seedsGetter, zap.NewNop().Sugar()))
 	})
 
 	t.Run("separate OIDC clients", func(t *testing.T) {
 		t.Parallel()
 
 		o := serverRunOptions{oidcAuthenticatorClientID: "kubermatic", oidcIssuerClientID: "kubermaticIssuer"}
-		denied := o.userClusterClientIDs(seedsGetter)
+		denied := o.userClusterClientIDs(seedsGetter, zap.NewNop().Sugar())
 		require.NotNil(t, denied)
 
 		ids, err := denied(context.Background())
@@ -186,10 +188,32 @@ func TestUserClusterClientIDs(t *testing.T) {
 		o := serverRunOptions{oidcAuthenticatorClientID: "kubermatic", oidcIssuerClientID: "kubermaticIssuer"}
 		denied := o.userClusterClientIDs(func() (map[string]*kubermaticv1.Seed, error) {
 			return nil, errors.New("cache not synced")
-		})
+		}, zap.NewNop().Sugar())
 		require.NotNil(t, denied)
 
 		_, err := denied(context.Background())
 		assert.ErrorContains(t, err, "cache not synced")
+	})
+
+	t.Run("a Seed uses the login client", func(t *testing.T) {
+		t.Parallel()
+
+		seeds := map[string]*kubermaticv1.Seed{
+			"europe": {Spec: kubermaticv1.SeedSpec{OIDCProviderConfiguration: &kubermaticv1.OIDCProviderConfiguration{IssuerClientID: "kubermatic"}}},
+			"asia":   {Spec: kubermaticv1.SeedSpec{OIDCProviderConfiguration: &kubermaticv1.OIDCProviderConfiguration{IssuerClientID: "asiaIssuer"}}},
+		}
+		core, logs := observer.New(zap.WarnLevel)
+		o := serverRunOptions{oidcAuthenticatorClientID: "kubermatic", oidcIssuerClientID: "kubermaticIssuer"}
+		denied := o.userClusterClientIDs(func() (map[string]*kubermaticv1.Seed, error) { return seeds, nil }, zap.New(core).Sugar())
+
+		for range 3 {
+			ids, err := denied(context.Background())
+			require.NoError(t, err)
+			assert.Equal(t, sets.New("kubermaticIssuer", "asiaIssuer"), ids)
+		}
+
+		entries := logs.All()
+		require.Len(t, entries, 1, "the warning must be logged once per Seed")
+		assert.Equal(t, "europe", entries[0].ContextMap()["seed"])
 	})
 }
