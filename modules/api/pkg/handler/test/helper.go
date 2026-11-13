@@ -327,6 +327,9 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	if err != nil {
 		return nil, nil, err
 	}
+	// the same fake issuer verifies the tokens of the requests and serves the OIDC flows,
+	// so that a test can set the claims for both
+	fakeOIDCClient := NewFakeOIDCClient(user)
 	var verifiers []authtypes.TokenVerifier
 	var extractors []authtypes.TokenExtractor
 	{
@@ -345,14 +348,12 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 			// because the tests don't send a token in the Header instead
 			// the client spits out a hardcoded value
 		} else {
-			fakeOIDCClient := NewFakeOIDCClient(user)
 			verifiers = append(verifiers, fakeOIDCClient)
 			extractors = append(extractors, fakeOIDCClient)
 		}
 	}
 	tokenVerifiers := auth.NewTokenVerifierPlugins(verifiers)
 	tokenExtractors := auth.NewTokenExtractorPlugins(extractors)
-	fakeOIDCClient := NewFakeOIDCClient(user)
 	fakeOIDCVerifierIssuerGetter := func(seed *kubermaticv1.Seed) (authtypes.OIDCIssuerVerifier, error) {
 		return fakeOIDCClient, nil
 	}

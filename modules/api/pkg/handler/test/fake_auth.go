@@ -98,6 +98,8 @@ type IssuerVerifier struct {
 	nonce         string
 	// nonceClaimOverride, when set, is returned as nonce claim instead of the requested nonce.
 	nonceClaimOverride string
+	// emailVerifiedClaim, when set, is returned as email_verified claim.
+	emailVerifiedClaim *bool
 }
 
 // SetNonceClaim makes Verify return the given nonce claim, simulating an ID token
@@ -106,6 +108,14 @@ func (o *IssuerVerifier) SetNonceClaim(nonce string) {
 	o.lock.Lock()
 	defer o.lock.Unlock()
 	o.nonceClaimOverride = nonce
+}
+
+// SetEmailVerifiedClaim makes Verify return the given email_verified claim. Without it the
+// token has no such claim.
+func (o *IssuerVerifier) SetEmailVerifiedClaim(emailVerified bool) {
+	o.lock.Lock()
+	defer o.lock.Unlock()
+	o.emailVerifiedClaim = &emailVerified
 }
 
 // Extractor knows how to extract the ID token from the request.
@@ -212,13 +222,15 @@ func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.To
 	if o.nonceClaimOverride != "" {
 		nonce = o.nonceClaimOverride
 	}
+	emailVerified := o.emailVerifiedClaim
 	o.lock.Unlock()
 	return authtypes.TokenClaims{
-		Email:   o.user.Email,
-		Subject: o.user.Email,
-		Name:    o.user.Name,
-		Groups:  []string{},
-		Nonce:   nonce,
+		Email:         o.user.Email,
+		EmailVerified: emailVerified,
+		Subject:       o.user.Email,
+		Name:          o.user.Name,
+		Groups:        []string{},
+		Nonce:         nonce,
 	}, nil
 }
 

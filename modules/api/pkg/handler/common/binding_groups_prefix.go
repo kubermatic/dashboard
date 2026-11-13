@@ -39,8 +39,8 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// defaultOIDCGroupsPrefix is the groups prefix KKP generates for the OpenIDAuthPlugin feature gate.
-const defaultOIDCGroupsPrefix = "oidc:"
+// DefaultOIDCGroupsPrefix is the groups prefix KKP generates for the OpenIDAuthPlugin feature gate.
+const DefaultOIDCGroupsPrefix = "oidc:"
 
 // resolveGroupSubjectName adds the cluster's OIDC groups prefix to group when oidcGroup is set.
 func resolveGroupSubjectName(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, featureGates features.FeatureGate, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, cluster *kubermaticv1.Cluster, group string, oidcGroup bool) (string, error) {
@@ -173,7 +173,7 @@ func effectiveGroupsPrefix(cluster *kubermaticv1.Cluster, datacenter *kubermatic
 	case oidcSettings.IssuerURL != "" && oidcSettings.ClientID != "":
 		return oidcSettings.GroupsPrefix
 	case featureGates.Enabled(features.OpenIDAuthPlugin):
-		return defaultOIDCGroupsPrefix
+		return DefaultOIDCGroupsPrefix
 	default:
 		return ""
 	}
