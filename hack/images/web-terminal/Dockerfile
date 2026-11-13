@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.23
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.24
 
 ARG BUILDPLATFORM
 ARG TARGETARCH
