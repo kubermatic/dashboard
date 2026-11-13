@@ -17,9 +17,16 @@ limitations under the License.
 package main
 
 import (
+	"context"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 func TestSingleOIDCClient(t *testing.T) {
@@ -142,4 +149,47 @@ func TestValidateOIDC(t *testing.T) {
 			assert.ErrorContains(t, err, tc.expectedErr)
 		})
 	}
+}
+
+func TestUserClusterClientIDs(t *testing.T) {
+	t.Parallel()
+
+	seeds := map[string]*kubermaticv1.Seed{
+		"europe": {Spec: kubermaticv1.SeedSpec{OIDCProviderConfiguration: &kubermaticv1.OIDCProviderConfiguration{IssuerClientID: "europeIssuer"}}},
+		"asia":   {Spec: kubermaticv1.SeedSpec{OIDCProviderConfiguration: &kubermaticv1.OIDCProviderConfiguration{}}},
+		"us":     {},
+	}
+	seedsGetter := func() (map[string]*kubermaticv1.Seed, error) { return seeds, nil }
+
+	t.Run("single OIDC client", func(t *testing.T) {
+		t.Parallel()
+
+		o := serverRunOptions{oidcAuthenticatorClientID: "kubermaticIssuer", oidcIssuerClientID: "kubermaticIssuer"}
+		assert.Nil(t, o.userClusterClientIDs(seedsGetter))
+	})
+
+	t.Run("separate OIDC clients", func(t *testing.T) {
+		t.Parallel()
+
+		o := serverRunOptions{oidcAuthenticatorClientID: "kubermatic", oidcIssuerClientID: "kubermaticIssuer"}
+		denied := o.userClusterClientIDs(seedsGetter)
+		require.NotNil(t, denied)
+
+		ids, err := denied(context.Background())
+		require.NoError(t, err)
+		assert.Equal(t, sets.New("kubermaticIssuer", "europeIssuer"), ids)
+	})
+
+	t.Run("listing the Seeds fails", func(t *testing.T) {
+		t.Parallel()
+
+		o := serverRunOptions{oidcAuthenticatorClientID: "kubermatic", oidcIssuerClientID: "kubermaticIssuer"}
+		denied := o.userClusterClientIDs(func() (map[string]*kubermaticv1.Seed, error) {
+			return nil, errors.New("cache not synced")
+		})
+		require.NotNil(t, denied)
+
+		_, err := denied(context.Background())
+		assert.ErrorContains(t, err, "cache not synced")
+	})
 }

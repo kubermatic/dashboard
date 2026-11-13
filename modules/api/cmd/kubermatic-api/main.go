@@ -514,6 +514,7 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 			auth.NewCookieHeaderBearerMultiTokenExtractor("token"),
 		),
 		options.caBundle.CertPool(),
+		auth.WithDeniedAudience(options.userClusterClientIDs(prov.seedsGetter)),
 	)
 
 	if err != nil {

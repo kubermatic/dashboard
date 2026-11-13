@@ -17,6 +17,7 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -28,6 +29,7 @@ import (
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
+	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
@@ -38,6 +40,8 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 type serverRunOptions struct {
@@ -170,7 +174,6 @@ func newServerRunOptions() (serverRunOptions, error) {
 		OfflineAccessAsScope:   s.oidcIssuerOfflineAccessAsScope,
 		SkipTLSVerify:          s.oidcSkipTLSVerify,
 		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
-		StrictAudience:         true,
 	}
 
 	return s, nil
@@ -179,6 +182,34 @@ func newServerRunOptions() (serverRunOptions, error) {
 // singleOIDCClient tells if the dashboard login and the User Cluster logins share one OIDC client.
 func (o serverRunOptions) singleOIDCClient() bool {
 	return o.oidcAuthenticatorClientID != "" && o.oidcAuthenticatorClientID == o.oidcIssuerClientID
+}
+
+// userClusterClientIDs returns the client IDs that User Clusters trust: the issuer client and the issuer client
+// of every Seed. The login client must reject tokens that list one of them in their audience. It returns nil with
+// a single OIDC client, where login tokens are meant for User Clusters as well.
+func (o serverRunOptions) userClusterClientIDs(seedsGetter provider.SeedsGetter) auth.DeniedAudienceFunc {
+	if o.singleOIDCClient() {
+		return nil
+	}
+
+	return func(context.Context) (sets.Set[string], error) {
+		seeds, err := seedsGetter()
+		if err != nil {
+			return nil, err
+		}
+
+		ids := sets.New[string]()
+		if o.oidcIssuerClientID != "" {
+			ids.Insert(o.oidcIssuerClientID)
+		}
+		for _, seed := range seeds {
+			if cfg := seed.Spec.OIDCProviderConfiguration; cfg != nil && cfg.IssuerClientID != "" {
+				ids.Insert(cfg.IssuerClientID)
+			}
+		}
+
+		return ids, nil
+	}
 }
 
 // authenticatorClientSecret returns the secret of the dashboard login client. With a single OIDC client it
