@@ -124,6 +124,10 @@ func main() {
 	ctx := signals.SetupSignalHandler()
 	cli.Hello(log, "API", &options.versions)
 
+	if options.singleOIDCClient() {
+		log.Warnw("the dashboard login and the User Cluster logins share one OIDC client, configure a separate login client", "clientID", options.oidcAuthenticatorClientID)
+	}
+
 	if err := clusterv1alpha1.AddToScheme(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", clusterv1alpha1.SchemeGroupVersion), zap.Error(err))
 	}
@@ -186,11 +190,11 @@ func main() {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
 
-	tokenVerifiers, tokenExtractors, err := createAuthClients(options, providers)
+	tokenVerifiers, tokenExtractors, oidcLoginVerifier, err := createAuthClients(options, providers, log)
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, oidcLoginVerifier, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -378,9 +382,9 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
-	oidcIssuerVerifier, err := createOIDCClients(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
+	oidcIssuerVerifier, err := createOIDCIssuerClient(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
 	if err != nil {
-		log.Fatalw("failed to create an openid authenticator", zap.Any("issuer", options.oidcURL), zap.Any("oidcClientID", options.oidcAuthenticatorClientID), zap.Error(err))
+		log.Fatalw("failed to create an openid issuer client", zap.Any("issuer", options.oidcURL), zap.Any("oidcClientID", options.oidcIssuerClientID), zap.Error(err))
 	}
 
 	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
@@ -485,7 +489,8 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	}, nil
 }
 
-func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
+// createOIDCIssuerClient creates the OIDC client whose tokens User Clusters accept.
+func createOIDCIssuerClient(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
 		oidcIssuerConfiguration,
 		oidcIssuerRedirectURI,
@@ -497,10 +502,11 @@ func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oid
 	)
 }
 
-func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, error) {
+// createAuthClients also returns the OIDC authenticator, as the dashboard login runs on the same client.
+func createAuthClients(options serverRunOptions, prov providers, log *zap.SugaredLogger) (authtypes.TokenVerifier, authtypes.TokenExtractor, authtypes.OIDCIssuerVerifier, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcAuthenticatorConfiguration,
-		"",
+		options.oidcIssuerRedirectURI,
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewCookieHeaderBearerTokenExtractor("token"),
@@ -508,10 +514,11 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 			auth.NewCookieHeaderBearerMultiTokenExtractor("token"),
 		),
 		options.caBundle.CertPool(),
+		auth.WithDeniedAudience(options.userClusterClientIDs(prov.seedsGetter, log), log),
 	)
 
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create OIDC Authenticator: %w", err)
+		return nil, nil, nil, fmt.Errorf("failed to create OIDC Authenticator: %w", err)
 	}
 
 	jwtExtractorVerifier := auth.NewServiceAccountAuthClient(
@@ -522,13 +529,14 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 
 	tokenVerifiers := auth.NewTokenVerifierPlugins([]authtypes.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
 	tokenExtractors := auth.NewTokenExtractorPlugins([]authtypes.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
-	return tokenVerifiers, tokenExtractors, nil
+	return tokenVerifiers, tokenExtractors, oidcExtractorVerifier, nil
 }
 
 func createAPIHandler(
 	options serverRunOptions, prov providers,
 	tokenVerifiers authtypes.TokenVerifier,
 	tokenExtractors authtypes.TokenExtractor,
+	oidcLoginVerifier authtypes.OIDCIssuerVerifier,
 	mgr manager.Manager,
 	log *zap.SugaredLogger,
 ) (http.HandlerFunc, error) {
@@ -610,6 +618,7 @@ func createAPIHandler(
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
 		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
 		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
+		OIDCLoginVerifier:                              oidcLoginVerifier,
 		Versions:                                       options.versions,
 		CABundle:                                       options.caBundle.CertPool(),
 		Features:                                       options.featureGates,

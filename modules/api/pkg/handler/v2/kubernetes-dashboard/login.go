@@ -235,7 +235,6 @@ func (l *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI 
 		return "", utilerrors.NewBadRequest("the refresh token is missing but required, try setting/unsetting \"oidc-offline-access-as-scope\" command line flag")
 	}
 
-	// claims, err := this.oidcIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
 	claims, err := oidcProvider.Verify(ctx, oidcTokens.IDToken)
 	if err != nil {
 		return "", utilerrors.New(http.StatusUnauthorized, err.Error())

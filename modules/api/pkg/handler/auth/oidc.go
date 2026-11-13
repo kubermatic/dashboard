@@ -29,10 +29,13 @@ import (
 	"time"
 
 	"github.com/coreos/go-oidc"
+	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 // OpenIDClient implements OIDCIssuerVerifier and TokenExtractorVerifier.
@@ -43,6 +46,26 @@ type OpenIDClient struct {
 	verifier       *oidc.IDTokenVerifier
 	provider       *oidc.Provider
 	httpClient     *http.Client
+	deniedAudience DeniedAudienceFunc
+	log            *zap.SugaredLogger
+}
+
+// DeniedAudienceFunc returns the client IDs that must not appear in the audience of an ID token.
+type DeniedAudienceFunc func(ctx context.Context) (sets.Set[string], error)
+
+// OpenIDClientOption configures an OpenIDClient.
+type OpenIDClientOption func(*OpenIDClient)
+
+// WithDeniedAudience makes Verify check ID tokens with more than one audience: their azp claim must be our
+// client ID and their audience must not list one of the client IDs returned by denied. Verify fails if denied
+// returns an error; the error is logged to log and not returned to the caller.
+func WithDeniedAudience(denied DeniedAudienceFunc, log *zap.SugaredLogger) OpenIDClientOption {
+	return func(o *OpenIDClient) {
+		o.deniedAudience = denied
+		if log != nil {
+			o.log = log
+		}
+	}
 }
 
 // NewOpenIDClient returns an authentication middleware which authenticates against an openID server.
@@ -52,6 +75,7 @@ func NewOpenIDClient(
 	redirectURI string,
 	extractor authtypes.TokenExtractor,
 	rootCertificates *x509.CertPool,
+	opts ...OpenIDClientOption,
 ) (authtypes.OIDCIssuerVerifier, error) {
 	ctx := context.Background()
 	tr := &http.Transport{
@@ -77,14 +101,20 @@ func NewOpenIDClient(
 		return nil, err
 	}
 
-	return &OpenIDClient{
+	o := &OpenIDClient{
 		tokenExtractor: extractor,
 		redirectURI:    redirectURI,
 		verifier:       p.Verifier(&oidc.Config{ClientID: oidcConfig.ClientID}),
 		provider:       p,
 		httpClient:     client,
 		oidcConfig:     oidcConfig,
-	}, nil
+		log:            zap.NewNop().Sugar(),
+	}
+	for _, opt := range opts {
+		opt(o)
+	}
+
+	return o, nil
 }
 
 // Extract knows how to extract the ID token from the request.
@@ -110,6 +140,10 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	claims := map[string]interface{}{}
 	err = idToken.Claims(&claims)
 	if err != nil {
+		return authtypes.TokenClaims{}, err
+	}
+
+	if err := o.verifyAudience(ctx, idToken.Audience, claims["azp"]); err != nil {
 		return authtypes.TokenClaims{}, err
 	}
 
@@ -143,6 +177,45 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	}
 
 	return oidcClaims, nil
+}
+
+// verifyAudience checks ID tokens with more than one audience. go-oidc only checks that our client ID is among
+// the audiences. OIDC Core 3.1.3.7 says to reject tokens with additional audiences the client does not trust, and,
+// when an extension such as Dex cross-client trust adds the azp claim, that the client SHOULD check azp is its own
+// client ID. We go further and require azp on every token with several audiences, so only tokens issued to us are
+// accepted. The untrusted audiences are the User Cluster clients: a token issued for both could be replayed against
+// User Clusters.
+func (o *OpenIDClient) verifyAudience(ctx context.Context, audience []string, azp interface{}) error {
+	// go-oidc already made sure our client ID is in the audience, so a single entry is always our own.
+	if o.deniedAudience == nil || len(audience) < 2 {
+		return nil
+	}
+
+	clientID := o.oidcConfig.ClientID
+	switch azp := azp.(type) {
+	case nil:
+		return fmt.Errorf("oidc: the token has several audiences but no azp claim, expected %q", clientID)
+	case string:
+		if azp != clientID {
+			return fmt.Errorf("oidc: the token was issued to %q, not to %q", azp, clientID)
+		}
+	default:
+		return fmt.Errorf("oidc: the token has an invalid azp claim, expected %q", clientID)
+	}
+
+	denied, err := o.deniedAudience(ctx)
+	if err != nil {
+		o.log.Errorw("failed to get the denied token audiences", zap.Error(err))
+		return errors.New("failed to verify the token audience")
+	}
+
+	for _, aud := range audience {
+		if aud != clientID && denied.Has(aud) {
+			return fmt.Errorf("oidc: the token lists the User Cluster OIDC client %q in its audience", aud)
+		}
+	}
+
+	return nil
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page

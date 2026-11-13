@@ -17,17 +17,20 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
+	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
@@ -38,6 +41,8 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 type serverRunOptions struct {
@@ -62,6 +67,7 @@ type serverRunOptions struct {
 	// OIDC configuration
 	oidcURL                          string
 	oidcAuthenticatorClientID        string
+	oidcAuthenticatorClientSecret    string
 	oidcIssuerClientID               string
 	oidcIssuerClientSecret           string
 	oidcIssuerRedirectURI            string
@@ -100,6 +106,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.oidcURL, "oidc-url", "", "URL of the OpenID token issuer. Example: http://auth.int.kubermatic.io")
 	flag.BoolVar(&s.oidcSkipTLSVerify, "oidc-skip-tls-verify", false, "Skip TLS verification for the token issuer")
 	flag.StringVar(&s.oidcAuthenticatorClientID, "oidc-authenticator-client-id", "", "Authenticator client ID")
+	flag.StringVar(&s.oidcAuthenticatorClientSecret, "oidc-authenticator-client-secret", "", "Authenticator client secret, used by the dashboard login to exchange the authorization code and refresh tokens. Defaults to the issuer client secret if both client IDs are equal.")
 	flag.StringVar(&s.oidcIssuerClientID, "oidc-issuer-client-id", "", "Issuer client ID")
 	flag.StringVar(&s.oidcIssuerClientSecret, "oidc-issuer-client-secret", "", "OpenID client secret")
 	flag.StringVar(&s.oidcIssuerRedirectURI, "oidc-issuer-redirect-uri", "", "Callback URL for OpenID responses.")
@@ -158,18 +165,91 @@ func newServerRunOptions() (serverRunOptions, error) {
 		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
+	// The authenticator is the dashboard login client; cookie and redirect settings are shared with the issuer.
 	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
-		URL:           s.oidcURL,
-		ClientID:      s.oidcAuthenticatorClientID,
-		SkipTLSVerify: s.oidcSkipTLSVerify,
+		URL:                    s.oidcURL,
+		ClientID:               s.oidcAuthenticatorClientID,
+		ClientSecret:           s.authenticatorClientSecret(),
+		SecureCookie:           securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
+		CookieSecureMode:       s.oidcIssuerCookieSecureMode,
+		OfflineAccessAsScope:   s.oidcIssuerOfflineAccessAsScope,
+		SkipTLSVerify:          s.oidcSkipTLSVerify,
+		AdditionalRedirectURIs: s.oidcIssuerAdditionalRedirectURIs,
 	}
 
 	return s, nil
 }
 
+// singleOIDCClient tells if the dashboard login and the User Cluster logins share one OIDC client.
+func (o serverRunOptions) singleOIDCClient() bool {
+	return o.oidcAuthenticatorClientID != "" && o.oidcAuthenticatorClientID == o.oidcIssuerClientID
+}
+
+// userClusterClientIDs returns the client IDs that User Clusters trust: the issuer client and the issuer client
+// of every Seed. The login client must reject tokens that list one of them in their audience. It returns nil with
+// a single OIDC client, where login tokens are meant for User Clusters as well.
+func (o serverRunOptions) userClusterClientIDs(seedsGetter provider.SeedsGetter, log *zap.SugaredLogger) auth.DeniedAudienceFunc {
+	if o.singleOIDCClient() {
+		return nil
+	}
+
+	// remembers the Seeds already warned about, so the warning is not logged on every request.
+	var warned sync.Map
+
+	// the Seeds getter takes no context, so ctx is unused.
+	return func(context.Context) (sets.Set[string], error) {
+		seeds, err := seedsGetter()
+		if err != nil {
+			return nil, fmt.Errorf("failed to list the Seeds: %w", err)
+		}
+
+		ids := sets.New[string]()
+		if o.oidcIssuerClientID != "" {
+			ids.Insert(o.oidcIssuerClientID)
+		}
+		for name, seed := range seeds {
+			cfg := seed.Spec.OIDCProviderConfiguration
+			if cfg == nil || cfg.IssuerClientID == "" {
+				continue
+			}
+			if cfg.IssuerClientID == o.oidcAuthenticatorClientID {
+				if _, loaded := warned.LoadOrStore(name, struct{}{}); !loaded {
+					log.Warnw("the Seed OIDC issuer client ID must differ from the dashboard login client ID, set a different spec.oidcProviderConfiguration.issuerClientID on this Seed",
+						"seed", name)
+				}
+				continue
+			}
+			ids.Insert(cfg.IssuerClientID)
+		}
+
+		return ids, nil
+	}
+}
+
+// authenticatorClientSecret returns the secret of the dashboard login client. With a single OIDC client it
+// defaults to the issuer secret.
+func (o serverRunOptions) authenticatorClientSecret() string {
+	if o.oidcAuthenticatorClientSecret == "" && o.singleOIDCClient() {
+		return o.oidcIssuerClientSecret
+	}
+	return o.oidcAuthenticatorClientSecret
+}
+
+func (o serverRunOptions) validateOIDC() error {
+	if o.oidcAuthenticatorClientID != o.oidcIssuerClientID && o.oidcAuthenticatorClientSecret == "" {
+		return errors.New("-oidc-authenticator-client-secret is required when -oidc-authenticator-client-id differs from -oidc-issuer-client-id")
+	}
+
+	return nil
+}
+
 func (o serverRunOptions) validate() error {
 	if err := serviceaccount.ValidateKey([]byte(o.serviceAccountSigningKey)); err != nil {
 		return fmt.Errorf("the service-account-signing-key is incorrect: %w", err)
+	}
+
+	if err := o.validateOIDC(); err != nil {
+		return err
 	}
 
 	for _, uri := range o.oidcIssuerAdditionalRedirectURIs {
