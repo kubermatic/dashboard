@@ -21,8 +21,10 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -33,6 +35,8 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 const (
@@ -103,46 +107,67 @@ func (i *signingIssuer) idToken(t *testing.T, audience []string) string {
 	return token
 }
 
-func TestVerifyRequiresExactAudience(t *testing.T) {
+// newClient creates an OIDC client for clientID against the issuer.
+func (i *signingIssuer) newClient(t *testing.T, clientID string, opts ...auth.OpenIDClientOption) authtypes.OIDCIssuerVerifier {
+	t.Helper()
+
+	client, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{URL: i.URL, ClientID: clientID}, "", nil, nil, opts...)
+	require.NoError(t, err)
+
+	return client
+}
+
+func deniedAudience(ids ...string) auth.DeniedAudienceFunc {
+	return func(context.Context) (sets.Set[string], error) {
+		return sets.New(ids...), nil
+	}
+}
+
+func TestVerifyDeniedAudience(t *testing.T) {
 	t.Parallel()
 
-	issuer := newSigningIssuer(t)
+	const seedIssuerClientID = "seedIssuer"
 
-	authenticator, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{
-		URL:            issuer.URL,
-		ClientID:       loginClientID,
-		StrictAudience: true,
-	}, "", nil, nil)
-	require.NoError(t, err)
+	issuer := newSigningIssuer(t)
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID, seedIssuerClientID)))
 
 	testcases := []struct {
 		name     string
 		audience []string
-		wantErr  bool
+		wantErr  string
 	}{
 		{
 			name:     "the login client is the only audience",
 			audience: []string{loginClientID},
 		},
 		{
+			name:     "an unrelated audience next to the login client",
+			audience: []string{loginClientID, "another"},
+		},
+		{
+			name:     "the issuer client next to the login client",
+			audience: []string{loginClientID, issuerClientID},
+			wantErr:  `the token lists the User Cluster OIDC client "kubermaticIssuer" in its audience`,
+		},
+		{
+			name:     "the issuer client before the login client",
+			audience: []string{issuerClientID, loginClientID},
+			wantErr:  `the token lists the User Cluster OIDC client "kubermaticIssuer" in its audience`,
+		},
+		{
+			name:     "a Seed issuer client next to the login client",
+			audience: []string{loginClientID, "another", seedIssuerClientID},
+			wantErr:  `the token lists the User Cluster OIDC client "seedIssuer" in its audience`,
+		},
+		{
 			name:     "the issuer client is the only audience",
 			audience: []string{issuerClientID},
-			wantErr:  true,
-		},
-		{
-			name:     "the login client and the issuer client are audiences",
-			audience: []string{loginClientID, issuerClientID},
-			wantErr:  true,
-		},
-		{
-			name:     "the issuer client comes before the login client in the audiences",
-			audience: []string{issuerClientID, loginClientID},
-			wantErr:  true,
+			wantErr:  "expected audience",
 		},
 		{
 			name:     "no audience",
 			audience: []string{},
-			wantErr:  true,
+			wantErr:  "expected audience",
 		},
 	}
 
@@ -150,9 +175,9 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			claims, err := authenticator.Verify(context.Background(), issuer.idToken(t, tc.audience))
-			if tc.wantErr {
-				assert.Error(t, err)
+			claims, err := login.Verify(context.Background(), issuer.idToken(t, tc.audience))
+			if tc.wantErr != "" {
+				assert.ErrorContains(t, err, tc.wantErr)
 				return
 			}
 
@@ -163,19 +188,56 @@ func TestVerifyRequiresExactAudience(t *testing.T) {
 	}
 }
 
+// TestVerifyDeniedAudienceFailsClosed checks that tokens are rejected while the denied audiences are unknown,
+// and accepted again once they can be read.
+func TestVerifyDeniedAudienceFailsClosed(t *testing.T) {
+	t.Parallel()
+
+	issuer := newSigningIssuer(t)
+
+	var failing atomic.Bool
+	failing.Store(true)
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(func(context.Context) (sets.Set[string], error) {
+		if failing.Load() {
+			return nil, errors.New("seeds are not available")
+		}
+		return sets.New(issuerClientID), nil
+	}))
+	token := issuer.idToken(t, []string{loginClientID, "another"})
+
+	_, err := login.Verify(context.Background(), token)
+	assert.ErrorContains(t, err, "seeds are not available")
+
+	failing.Store(false)
+	_, err = login.Verify(context.Background(), token)
+	assert.NoError(t, err, "the error must not be cached")
+}
+
+// TestVerifyWithoutDeniedAudience covers the issuer clients and the single OIDC client setup, which accept any
+// additional audience.
+func TestVerifyWithoutDeniedAudience(t *testing.T) {
+	t.Parallel()
+
+	issuer := newSigningIssuer(t)
+	client := issuer.newClient(t, issuerClientID)
+
+	for _, audience := range [][]string{
+		{issuerClientID},
+		{issuerClientID, "another"},
+		{loginClientID, issuerClientID},
+	} {
+		_, err := client.Verify(context.Background(), issuer.idToken(t, audience))
+		assert.NoError(t, err, "audience %q", audience)
+	}
+}
+
 // TestVerifyIssuerClientIsNotAcceptedByLoginClient checks that the two clients reject each other's tokens.
 func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	t.Parallel()
 
 	issuer := newSigningIssuer(t)
-
-	newClient := func(clientID string) authtypes.OIDCIssuerVerifier {
-		client, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{URL: issuer.URL, ClientID: clientID}, "", nil, nil)
-		require.NoError(t, err)
-		return client
-	}
-	login := newClient(loginClientID)
-	issuing := newClient(issuerClientID)
+	login := issuer.newClient(t, loginClientID, auth.WithDeniedAudience(deniedAudience(issuerClientID)))
+	issuing := issuer.newClient(t, issuerClientID)
 
 	loginToken := issuer.idToken(t, []string{loginClientID})
 	issuerToken := issuer.idToken(t, []string{issuerClientID})
@@ -189,23 +251,4 @@ func TestVerifyIssuerClientIsNotAcceptedByLoginClient(t *testing.T) {
 	assert.Error(t, err, "the login client (KKP API) must reject the User Cluster token")
 	_, err = issuing.Verify(context.Background(), loginToken)
 	assert.Error(t, err, "the issuer client must reject the login token")
-}
-
-// TestVerifyAdditionalAudiencesAreOptIn checks that only clients with StrictAudience reject additional audiences.
-func TestVerifyAdditionalAudiencesAreOptIn(t *testing.T) {
-	t.Parallel()
-
-	issuer := newSigningIssuer(t)
-	token := issuer.idToken(t, []string{issuerClientID, loginClientID})
-
-	newClient := func(strict bool) authtypes.OIDCIssuerVerifier {
-		client, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{URL: issuer.URL, ClientID: issuerClientID, StrictAudience: strict}, "", nil, nil)
-		require.NoError(t, err)
-		return client
-	}
-
-	_, err := newClient(false).Verify(context.Background(), token)
-	assert.NoError(t, err, "a client without StrictAudience accepts additional audiences")
-	_, err = newClient(true).Verify(context.Background(), token)
-	assert.Error(t, err, "a client with StrictAudience rejects additional audiences")
 }

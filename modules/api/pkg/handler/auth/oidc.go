@@ -33,6 +33,8 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 // OpenIDClient implements OIDCIssuerVerifier and TokenExtractorVerifier.
@@ -43,6 +45,21 @@ type OpenIDClient struct {
 	verifier       *oidc.IDTokenVerifier
 	provider       *oidc.Provider
 	httpClient     *http.Client
+	deniedAudience DeniedAudienceFunc
+}
+
+// DeniedAudienceFunc returns the client IDs that must not appear in the audience of an ID token.
+type DeniedAudienceFunc func(ctx context.Context) (sets.Set[string], error)
+
+// OpenIDClientOption configures an OpenIDClient.
+type OpenIDClientOption func(*OpenIDClient)
+
+// WithDeniedAudience makes Verify reject ID tokens that list one of the client IDs returned by denied
+// in their audience. Verify fails if denied returns an error.
+func WithDeniedAudience(denied DeniedAudienceFunc) OpenIDClientOption {
+	return func(o *OpenIDClient) {
+		o.deniedAudience = denied
+	}
 }
 
 // NewOpenIDClient returns an authentication middleware which authenticates against an openID server.
@@ -52,6 +69,7 @@ func NewOpenIDClient(
 	redirectURI string,
 	extractor authtypes.TokenExtractor,
 	rootCertificates *x509.CertPool,
+	opts ...OpenIDClientOption,
 ) (authtypes.OIDCIssuerVerifier, error) {
 	ctx := context.Background()
 	tr := &http.Transport{
@@ -77,14 +95,19 @@ func NewOpenIDClient(
 		return nil, err
 	}
 
-	return &OpenIDClient{
+	o := &OpenIDClient{
 		tokenExtractor: extractor,
 		redirectURI:    redirectURI,
 		verifier:       p.Verifier(&oidc.Config{ClientID: oidcConfig.ClientID}),
 		provider:       p,
 		httpClient:     client,
 		oidcConfig:     oidcConfig,
-	}, nil
+	}
+	for _, opt := range opts {
+		opt(o)
+	}
+
+	return o, nil
 }
 
 // Extract knows how to extract the ID token from the request.
@@ -107,9 +130,8 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 		return authtypes.TokenClaims{}, err
 	}
 
-	// go-oidc only checks that our client ID is among the audiences; additional ones must be rejected too (OIDC Core 3.1.3.7).
-	if o.oidcConfig.StrictAudience && (len(idToken.Audience) != 1 || idToken.Audience[0] != o.oidcConfig.ClientID) {
-		return authtypes.TokenClaims{}, fmt.Errorf("oidc: expected the audience to be exactly %q, got %q", o.oidcConfig.ClientID, idToken.Audience)
+	if err := o.verifyAudience(ctx, idToken.Audience); err != nil {
+		return authtypes.TokenClaims{}, err
 	}
 
 	claims := map[string]interface{}{}
@@ -148,6 +170,30 @@ func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.Toke
 	}
 
 	return oidcClaims, nil
+}
+
+// verifyAudience rejects tokens whose audience lists a denied client ID. go-oidc only checks that our client ID
+// is among the audiences, but OIDC Core 3.1.3.7 says to reject tokens with additional audiences the client does
+// not trust. For the login client these are the User Cluster clients: a token issued for both could be replayed
+// against User Clusters.
+func (o *OpenIDClient) verifyAudience(ctx context.Context, audience []string) error {
+	// go-oidc already made sure our client ID is in the audience, so a single entry is always our own.
+	if o.deniedAudience == nil || len(audience) < 2 {
+		return nil
+	}
+
+	denied, err := o.deniedAudience(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get the denied token audiences: %w", err)
+	}
+
+	for _, aud := range audience {
+		if aud != o.oidcConfig.ClientID && denied.Has(aud) {
+			return fmt.Errorf("oidc: the token lists the User Cluster OIDC client %q in its audience", aud)
+		}
+	}
+
+	return nil
 }
 
 // AuthCodeURL returns a URL to OpenID provider's consent page
