@@ -22,9 +22,11 @@ limitations under the License.
        fxLayoutAlign="center center"
        fxLayoutGap="8px">
     <i class="km-icon-terminal-placeholder i-60"></i>
+    @if (!isTerminalUnavailable) {
     <mat-spinner matSuffix
                  class="cent"
                  [diameter]="30" />
+    }
     <p>{{message}}</p>
   </div>
 </div>

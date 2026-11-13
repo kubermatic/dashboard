@@ -69,6 +69,8 @@ enum ErrorOperations {
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
   WebTerminalAuthenticationUnsupported = 'WEBTERMINAL_AUTHENTICATION_UNSUPPORTED',
+  WebTerminalAuthenticationDisabled = 'WEBTERMINAL_AUTHENTICATION_DISABLED',
+  WebTerminalEmailNotVerified = 'WEBTERMINAL_EMAIL_NOT_VERIFIED',
 }
 
 enum MessageTypes {
@@ -98,6 +100,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   isSessionExpiring: boolean;
   isTokenExpired: boolean;
   isLoadingTerminal = true;
+  // set when the terminal can't be started, so that the reason is shown instead of the loading spinner
+  isTerminalUnavailable = false;
   isDexAuthenticationPageOpened = false;
   showCloseButtonOnToolbar: boolean;
   showOpenInSeparateViewButtonOnToolbar: boolean;
@@ -168,6 +172,12 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
           this.terminal.options.cursorBlink = false;
         }
         this.isConnectionLost = true;
+        if (this.isLoadingTerminal && !this.isTerminalUnavailable) {
+          // the connection was closed before the terminal was started, for example because the request was refused
+          this._showTerminalUnavailable(
+            'The web terminal could not be opened. Try again later or contact your administrator.'
+          );
+        }
       });
 
     this._initializeTerminalOnSuccess.pipe(take(1)).subscribe(_ => {
@@ -313,11 +323,20 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       if (this.terminal) {
         this._logToTerminal(message);
       } else {
-        this.message = message;
+        this._showTerminalUnavailable(message);
       }
     } else if (data === ErrorOperations.WebTerminalAuthenticationUnsupported) {
-      this.message =
-        'The web terminal is not available for this cluster, because the cluster uses a custom authentication configuration.';
+      this._showTerminalUnavailable(
+        'The web terminal is not available for this cluster, because the cluster uses a custom authentication configuration.'
+      );
+    } else if (data === ErrorOperations.WebTerminalAuthenticationDisabled) {
+      this._showTerminalUnavailable(
+        'The web terminal is not available, because user clusters do not accept KKP logins. An administrator has to enable the OpenIDAuthPlugin feature gate.'
+      );
+    } else if (data === ErrorOperations.WebTerminalEmailNotVerified) {
+      this._showTerminalUnavailable(
+        'The web terminal is not available, because the email address of your login is not verified.'
+      );
     } else if (data === ErrorOperations.RefreshesLimitExceeded) {
       const clusterName = this.cluster && this.cluster.name;
       this._logToTerminal(
@@ -335,6 +354,11 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         this._keepConnectionAlive(MessageTypes.Pong);
       }
     }
+  }
+
+  private _showTerminalUnavailable(message: string): void {
+    this.message = message;
+    this.isTerminalUnavailable = true;
   }
 
   private _logToTerminal(message: string): void {
