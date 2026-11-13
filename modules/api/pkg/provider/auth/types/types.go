@@ -115,12 +115,14 @@ type OIDCToken struct {
 
 // TokenClaims holds various claims extracted from the id_token.
 type TokenClaims struct {
-	Name    string
-	Email   string
-	Subject string
-	Groups  []string
-	Nonce   string
-	Expiry  apiv1.Time
+	Name  string
+	Email string
+	// EmailVerified is the email_verified claim, nil if the token does not have it.
+	EmailVerified *bool
+	Subject       string
+	Groups        []string
+	Nonce         string
+	Expiry        apiv1.Time
 }
 
 // OIDCConfiguration is a struct that holds

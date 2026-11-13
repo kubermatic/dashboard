@@ -18,27 +18,38 @@ package auth_test
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"sync"
 	"testing"
+	"time"
 
+	"github.com/go-jose/go-jose/v4"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"golang.org/x/oauth2"
 
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
-// fakeIssuer is a minimal OIDC provider serving discovery and a token endpoint
-// that records the code_verifier it receives.
+const (
+	testClientID     = "kubermaticIssuer"
+	testSigningKeyID = "test"
+)
+
+// fakeIssuer is a minimal OIDC provider serving discovery, its signing key and a token
+// endpoint that records the code_verifier it receives.
 type fakeIssuer struct {
 	*httptest.Server
 
 	lock         sync.Mutex
 	codeVerifier string
+	signingKey   *rsa.PrivateKey
 }
 
 func newFakeIssuer(t *testing.T) *fakeIssuer {
@@ -68,9 +79,60 @@ func newFakeIssuer(t *testing.T) *fakeIssuer {
 			"id_token":     "id-token",
 		})
 	})
+	mux.HandleFunc("/keys", func(w http.ResponseWriter, _ *http.Request) {
+		keys := jose.JSONWebKeySet{}
+		if key := issuer.getSigningKey(); key != nil {
+			keys.Keys = append(keys.Keys, jose.JSONWebKey{Key: &key.PublicKey, KeyID: testSigningKeyID, Algorithm: string(jose.RS256), Use: "sig"})
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(keys)
+	})
 	issuer.Server = httptest.NewServer(mux)
 	t.Cleanup(issuer.Close)
 	return issuer
+}
+
+func (f *fakeIssuer) getSigningKey() *rsa.PrivateKey {
+	f.lock.Lock()
+	defer f.lock.Unlock()
+	return f.signingKey
+}
+
+// signIDToken returns an ID token of the issuer for the test client with the given extra claims.
+func (f *fakeIssuer) signIDToken(t *testing.T, extraClaims map[string]interface{}) string {
+	t.Helper()
+
+	f.lock.Lock()
+	if f.signingKey == nil {
+		key, err := rsa.GenerateKey(rand.Reader, 2048)
+		require.NoError(t, err)
+		f.signingKey = key
+	}
+	key := f.signingKey
+	f.lock.Unlock()
+
+	claims := map[string]interface{}{
+		"iss":   f.URL,
+		"aud":   testClientID,
+		"sub":   "bob",
+		"email": "bob@acme.com",
+		"iat":   time.Now().Unix(),
+		"exp":   time.Now().Add(time.Hour).Unix(),
+	}
+	for name, value := range extraClaims {
+		claims[name] = value
+	}
+	payload, err := json.Marshal(claims)
+	require.NoError(t, err)
+
+	signer, err := jose.NewSigner(jose.SigningKey{Algorithm: jose.RS256, Key: jose.JSONWebKey{Key: key, KeyID: testSigningKeyID}}, nil)
+	require.NoError(t, err)
+	signed, err := signer.Sign(payload)
+	require.NoError(t, err)
+	token, err := signed.CompactSerialize()
+	require.NoError(t, err)
+
+	return token
 }
 
 func (f *fakeIssuer) receivedCodeVerifier() string {
@@ -83,7 +145,7 @@ func newTestOpenIDClient(t *testing.T, issuer *fakeIssuer) authtypes.OIDCIssuerV
 	t.Helper()
 	client, err := auth.NewOpenIDClient(&authtypes.OIDCConfiguration{
 		URL:          issuer.URL,
-		ClientID:     "kubermaticIssuer",
+		ClientID:     testClientID,
 		ClientSecret: "secret",
 	}, "https://kkp.example.com/api/v1/kubeconfig", nil, nil)
 	if err != nil {
@@ -151,4 +213,38 @@ func TestExchangeSendsCodeVerifier(t *testing.T) {
 
 	assert.Equal(t, "verifier-xyz", issuer.receivedCodeVerifier())
 	assert.Equal(t, "id-token", token.IDToken)
+}
+
+// TestVerifyEmailVerifiedClaim checks that only a token without the email_verified claim, or with
+// the claim set to true, counts as a login with a verified email. kube-apiserver rejects every
+// other token when the username is the email.
+func TestVerifyEmailVerifiedClaim(t *testing.T) {
+	t.Parallel()
+	yes, no := true, false
+	testcases := []struct {
+		Name     string
+		Claims   map[string]interface{}
+		Expected *bool
+	}{
+		{Name: "token without the claim"},
+		{Name: "true", Claims: map[string]interface{}{"email_verified": true}, Expected: &yes},
+		{Name: "false", Claims: map[string]interface{}{"email_verified": false}, Expected: &no},
+		{Name: "a string", Claims: map[string]interface{}{"email_verified": "true"}, Expected: &no},
+		{Name: "a number", Claims: map[string]interface{}{"email_verified": 1}, Expected: &no},
+		{Name: "null", Claims: map[string]interface{}{"email_verified": nil}, Expected: &no},
+	}
+
+	issuer := newFakeIssuer(t)
+	client := newTestOpenIDClient(t, issuer)
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			t.Parallel()
+			claims, err := client.Verify(context.Background(), issuer.signIDToken(t, tc.Claims))
+			require.NoError(t, err)
+
+			assert.Equal(t, "bob@acme.com", claims.Email)
+			assert.Equal(t, tc.Expected, claims.EmailVerified)
+		})
+	}
 }

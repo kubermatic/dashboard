@@ -38,6 +38,8 @@ import (
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	kubermaticv1helper "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1/helper"
+	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -82,7 +84,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, impersonation *wsh.Impersonation, overwriteRegistry string)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -117,7 +119,7 @@ func getProviders(r Routing) watcher.Providers {
 
 func getSettingsWatchHandler(writer WebsocketSettingsWriter, providers watcher.Providers, routing Routing) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		_, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		_, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			return
@@ -136,7 +138,7 @@ func getSettingsWatchHandler(writer WebsocketSettingsWriter, providers watcher.P
 
 func getUserWatchHandler(writer WebsocketUserWriter, providers watcher.Providers, routing Routing) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		user, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		user, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			return
@@ -216,7 +218,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 
-		authenticatedUser, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
+		authenticatedUser, emailVerified, err := verifyAuthorizationClaims(req, routing.tokenVerifiers, routing.tokenExtractors, providers.UserProvider)
 		if err != nil {
 			log.Logger.Debug(err)
 			rejectTerminalRequest(w, utilerrors.NewNotAuthorized())
@@ -282,6 +284,31 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
+		// As a ServiceAccount the web terminal impersonates the names KKP's default authentication
+		// gives the user, so it can only be used by logins and on clusters that authentication accepts.
+		var impersonation *wsh.Impersonation
+		var refusal wsh.TerminalConnStatus
+		refusalReason := ""
+		if routing.features.Enabled(features.WebTerminalServiceAccount) {
+			// KKP's default authentication does not accept tokens of KKP service accounts
+			if kubermaticv1helper.IsProjectServiceAccount(authenticatedUser.Email) {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusForbidden, "Web Terminal is not available for service accounts"))
+				return
+			}
+			seeds, err := providers.SeedsGetter()
+			if err != nil {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err)))
+				return
+			}
+			seed, ok := seeds[clusterProvider.GetSeedName()]
+			if !ok {
+				rejectTerminalRequest(w, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("Seed %q not found", clusterProvider.GetSeedName())))
+				return
+			}
+			refusal, refusalReason = wsh.ServiceAccountModeRefusal(cluster, seed, routing.features.Enabled(features.OpenIDAuthPlugin), emailVerified)
+			impersonation = wsh.NewImpersonation(authenticatedUser.Email, authenticatedUser.Groups)
+		}
+
 		userEmailID := wsh.EncodeUserEmailtoID(authenticatedUser.Email)
 		k8sClient, err := clusterProvider.GetAdminK8sClientForUserCluster(ctx, cluster)
 		if err != nil {
@@ -307,6 +334,13 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		}
 		defer ws.Close()
 
+		// refused after the upgrade, so that the dashboard can show the reason
+		if refusal != "" {
+			log.Logger.Infof("web terminal refused for cluster %s: %s", clusterID, refusalReason)
+			_ = wsh.SendMessage(ws, string(refusal))
+			return
+		}
+
 		// Checking user active connections for project cluster
 		userProjectClusterUniqueKey := fmt.Sprintf("%s-%s-%s", projectID, clusterID, userEmailID)
 		if connectionsPerUser.getActiveConnections(userProjectClusterUniqueKey) >= maxNumberOfConnections {
@@ -317,8 +351,9 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		connectionsPerUser.increaseActiveConnections(userProjectClusterUniqueKey)
 		defer connectionsPerUser.decreaseActiveConnections(userProjectClusterUniqueKey)
 
+		// the kubeconfig Secret with the user's OIDC login only exists without the ServiceAccount mode
 		kubeconfigSecret := &corev1.Secret{}
-		if !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
+		if impersonation == nil && !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
 			if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 				Namespace: metav1.NamespaceSystem,
 				Name:      handlercommon.KubeconfigSecretName(userEmailID),
@@ -333,7 +368,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, overwriteRegistry)
+		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, oidcIssuerVerifier, kubeconfigSecret, impersonation, overwriteRegistry)
 	}
 }
 
@@ -361,29 +396,41 @@ func (req terminalReq) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, error) {
+func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor, userProvider provider.UserProvider) (*apiv1.User, error) {
+	user, _, err := verifyAuthorizationClaims(req, tokenVerifier, tokenExtractor, userProvider)
+	return user, err
+}
+
+// verifyAuthorizationClaims also returns the email_verified claim, nil if the token does not have it.
+func verifyAuthorizationClaims(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor, userProvider provider.UserProvider) (*apiv1.User, *bool, error) {
 	token, err := tokenExtractor.Extract(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	claims, err := tokenVerifier.Verify(req.Context(), token)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if claims.Subject == "" {
-		return nil, utilerrors.NewNotAuthorized()
+		return nil, nil, utilerrors.NewNotAuthorized()
+	}
+
+	// a token the user has logged out with is refused, as it is for the REST endpoints
+	if err := middleware.CheckBlockedTokens(req.Context(), claims.Email, token, userProvider); err != nil {
+		return nil, nil, err
 	}
 
 	user := &apiv1.User{
 		ObjectMeta: apiv1.ObjectMeta{
 			Name: claims.Name,
 		},
-		Email: claims.Email,
+		Email:  claims.Email,
+		Groups: claims.Groups,
 	}
 
-	return user, nil
+	return user, claims.EmailVerified, nil
 }
 
 func requestLoggingReader(websocket *websocket.Conn) {

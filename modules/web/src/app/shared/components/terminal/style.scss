@@ -42,6 +42,9 @@
 
   &.terminal-placeholder {
     background-color: white;
+
+    // the placeholder is white in every theme, so its text can't have the text color of the theme
+    color: #4d555c;
     height: 50vh;
     position: relative;
   }
