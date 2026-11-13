@@ -214,8 +214,8 @@ func (o serverRunOptions) userClusterClientIDs(seedsGetter provider.SeedsGetter,
 			}
 			if cfg.IssuerClientID == o.oidcAuthenticatorClientID {
 				if _, loaded := warned.LoadOrStore(name, struct{}{}); !loaded {
-					log.Warnw("the Seed OIDC issuer client is the dashboard login client, login tokens are not checked against it",
-						"seed", name, "clientID", cfg.IssuerClientID)
+					log.Warnw("the Seed OIDC issuer client ID must differ from the dashboard login client ID, set a different spec.oidcProviderConfiguration.issuerClientID on this Seed",
+						"seed", name)
 				}
 				continue
 			}
