@@ -28,8 +28,13 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/features"
+	"k8c.io/kubermatic/v2/pkg/resources"
 
+	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -1025,6 +1030,316 @@ func TestUnbindUserFromClusterRoleBinding(t *testing.T) {
 	}
 }
 
+func genOIDCKubermaticConfiguration(openIDAuthPlugin bool) *kubermaticv1.KubermaticConfiguration {
+	return &kubermaticv1.KubermaticConfiguration{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "kubermatic",
+			Namespace: resources.KubermaticNamespace,
+		},
+		Spec: kubermaticv1.KubermaticConfigurationSpec{
+			Versions: kubermaticv1.KubermaticVersioningConfiguration{
+				Versions: test.GenDefaultVersions(),
+			},
+			FeatureGates: map[string]bool{
+				features.OpenIDAuthPlugin: openIDAuthPlugin,
+			},
+		},
+	}
+}
+
+func TestBindOIDCGroupToClusterRole(t *testing.T) {
+	t.Parallel()
+
+	testcases := []struct {
+		name                   string
+		method                 string
+		body                   string
+		openIDAuthPlugin       bool
+		expectedResponse       string
+		httpStatus             int
+		existingKubernetesObjs []ctrlruntimeclient.Object
+	}{
+		{
+			name:             "scenario 1: OIDC group gets the oidc: prefix",
+			method:           http.MethodPost,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"oidc:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 2: group without oidcGroup is stored verbatim",
+			method:           http.MethodPost,
+			body:             `{"group":"system:serviceaccounts:my-ns"}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"system:serviceaccounts:my-ns"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 3: an already prefixed OIDC group is not prefixed twice",
+			method:           http.MethodPost,
+			body:             `{"group":"oidc:kubermatic:sig-api-ui","oidcGroup":true}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"oidc:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 4: OIDC group is stored verbatim when the cluster has no groups prefix",
+			method:           http.MethodPost,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			openIDAuthPlugin: false,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 5: duplicate check uses the prefixed name",
+			method:           http.MethodPost,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"error":{"code":400,"message":"group oidc:kubermatic:sig-api-ui already connected to the cluster role role-1"}}`,
+			httpStatus:       http.StatusBadRequest,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultGroupClusterRoleBinding("test", "role-1", "oidc:kubermatic:sig-api-ui"),
+			},
+		},
+		{
+			name:             "scenario 6: oidcGroup without group is rejected",
+			method:           http.MethodPost,
+			body:             `{"userEmail":"test@example.com","oidcGroup":true}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"error":{"code":400,"message":"invalid request: oidcGroup can only be used in conjunction with group"}}`,
+			httpStatus:       http.StatusBadRequest,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 7: unbind OIDC group by its unprefixed name",
+			method:           http.MethodDelete,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			openIDAuthPlugin: true,
+			expectedResponse: `{"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultGroupClusterRoleBinding("test", "role-1", "oidc:kubermatic:sig-api-ui"),
+			},
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			kubeObj := append([]ctrlruntimeclient.Object{test.GenDefaultClusterRole("role-1")}, tc.existingKubernetesObjs...)
+			kubermaticObj := test.GenDefaultKubermaticObjects(test.GenTestSeed(), test.GenDefaultCluster())
+			req := httptest.NewRequest(tc.method, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/clusterroles/%s/clusterbindings", test.ProjectName, test.GenDefaultCluster().Name, "role-1"), strings.NewReader(tc.body))
+			res := httptest.NewRecorder()
+
+			ep, _, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, kubeObj, nil, kubermaticObj, genOIDCKubermaticConfiguration(tc.openIDAuthPlugin), hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.httpStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.expectedResponse)
+		})
+	}
+}
+
+func TestBindOIDCGroupToRole(t *testing.T) {
+	t.Parallel()
+
+	testcases := []struct {
+		name                   string
+		method                 string
+		body                   string
+		expectedResponse       string
+		httpStatus             int
+		existingKubernetesObjs []ctrlruntimeclient.Object
+	}{
+		{
+			name:             "scenario 1: OIDC group gets the oidc: prefix",
+			method:           http.MethodPost,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			expectedResponse: `{"namespace":"default","subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"oidc:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultRoleBinding("test", "default", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 2: group without oidcGroup is stored verbatim",
+			method:           http.MethodPost,
+			body:             `{"group":"system:serviceaccounts:my-ns"}`,
+			expectedResponse: `{"namespace":"default","subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"system:serviceaccounts:my-ns"}],"roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultRoleBinding("test", "default", "role-1", "bob@acme.com"),
+			},
+		},
+		{
+			name:             "scenario 3: duplicate check uses the prefixed name",
+			method:           http.MethodPost,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			expectedResponse: `{"error":{"code":400,"message":"group oidc:kubermatic:sig-api-ui already connected to role role-1"}}`,
+			httpStatus:       http.StatusBadRequest,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultGroupRoleBinding("test", "default", "role-1", "oidc:kubermatic:sig-api-ui"),
+			},
+		},
+		{
+			name:             "scenario 4: unbind OIDC group by its unprefixed name",
+			method:           http.MethodDelete,
+			body:             `{"group":"kubermatic:sig-api-ui","oidcGroup":true}`,
+			expectedResponse: `{"namespace":"default","roleRefName":"role-1"}`,
+			httpStatus:       http.StatusOK,
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				test.GenDefaultGroupRoleBinding("test", "default", "role-1", "oidc:kubermatic:sig-api-ui"),
+			},
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			kubeObj := append([]ctrlruntimeclient.Object{test.GenDefaultRole("role-1", "default")}, tc.existingKubernetesObjs...)
+			kubermaticObj := test.GenDefaultKubermaticObjects(test.GenTestSeed(), test.GenDefaultCluster())
+			req := httptest.NewRequest(tc.method, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/roles/%s/%s/bindings", test.ProjectName, test.GenDefaultCluster().Name, "default", "role-1"), strings.NewReader(tc.body))
+			res := httptest.NewRecorder()
+
+			ep, _, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, kubeObj, nil, kubermaticObj, genOIDCKubermaticConfiguration(true), hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.httpStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.expectedResponse)
+		})
+	}
+}
+
+func genAuthenticationConfigurationSecret(name, key, authConfig string) *corev1.Secret {
+	return &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      name,
+			Namespace: test.GenDefaultCluster().Status.NamespaceName,
+		},
+		Data: map[string][]byte{key: []byte(authConfig)},
+	}
+}
+
+func TestBindOIDCGroupWithAuthenticationConfiguration(t *testing.T) {
+	t.Parallel()
+
+	clusterWithCustomAuthConfig := test.GenDefaultCluster()
+	clusterWithCustomAuthConfig.Spec.AuthenticationConfiguration = &kubermaticv1.AuthenticationConfiguration{SecretName: "custom-auth", SecretKey: "config.yaml"}
+
+	testcases := []struct {
+		name             string
+		cluster          *kubermaticv1.Cluster
+		secret           *corev1.Secret
+		httpStatus       int
+		expectedResponse string
+	}{
+		{
+			name:    "scenario 1: prefix of the issuer's authenticator in the generated configuration",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, fmt.Sprintf(`
+jwt:
+- issuer: {url: https://other.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "other:"}
+- issuer: {url: %s}
+  claimMappings:
+    groups: {claim: groups, prefix: "corp:"}
+`, test.IssuerURL)),
+			httpStatus:       http.StatusOK,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"corp:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+		},
+		{
+			name:    "scenario 2: prefix from the Secret referenced by the cluster",
+			cluster: clusterWithCustomAuthConfig,
+			secret: genAuthenticationConfigurationSecret("custom-auth", "config.yaml", `
+jwt:
+- issuer: {url: https://idp.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "custom:"}
+`),
+			httpStatus:       http.StatusOK,
+			expectedResponse: `{"subjects":[{"kind":"User","name":"bob@acme.com"},{"kind":"Group","apiGroup":"rbac.authorization.k8s.io","name":"custom:kubermatic:sig-api-ui"}],"roleRefName":"role-1"}`,
+		},
+		{
+			name:    "scenario 3: rejected when no authenticator matches the issuer",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, `
+jwt:
+- issuer: {url: https://a.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "a:"}
+- issuer: {url: https://b.example.com}
+  claimMappings:
+    groups: {claim: groups, prefix: "b:"}
+`),
+			httpStatus:       http.StatusBadRequest,
+			expectedResponse: `{"error":{"code":400,"message":"cannot determine the OIDC groups prefix of the cluster: none of the JWT authenticators matches the OIDC issuer \"url://dex\"; set the group name as the kube-apiserver sees it and disable the OIDC group option"}}`,
+		},
+		{
+			name:    "scenario 4: rejected when the groups are mapped with a CEL expression",
+			cluster: test.GenDefaultCluster(),
+			secret: genAuthenticationConfigurationSecret(resources.ApiserverAuthenticationConfigurationSecretName, resources.AuthenticationConfigurationKey, `
+jwt:
+- issuer: {url: https://idp.example.com}
+  claimMappings:
+    groups: {expression: 'claims.groups.map(g, "corp:" + g)'}
+`),
+			httpStatus:       http.StatusBadRequest,
+			expectedResponse: `{"error":{"code":400,"message":"cannot determine the OIDC groups prefix of the cluster: the groups of the JWT authenticator for \"https://idp.example.com\" are mapped with a CEL expression; set the group name as the kube-apiserver sees it and disable the OIDC group option"}}`,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			kubeObj := []ctrlruntimeclient.Object{
+				test.GenDefaultClusterRole("role-1"),
+				test.GenDefaultClusterRoleBinding("test", "role-1", "bob@acme.com"),
+			}
+			kubermaticObj := append(test.GenDefaultKubermaticObjects(test.GenTestSeed(), tc.cluster), tc.secret)
+			req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/clusterroles/%s/clusterbindings", test.ProjectName, tc.cluster.Name, "role-1"), strings.NewReader(`{"group":"kubermatic:sig-api-ui","oidcGroup":true}`))
+			res := httptest.NewRecorder()
+
+			// The spec-based fallback would add "oidc:"; the Secret must win.
+			ep, _, err := test.CreateTestEndpointAndGetClients(*test.GenDefaultAPIUser(), nil, kubeObj, nil, kubermaticObj, genOIDCKubermaticConfiguration(true), hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.httpStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
+			}
+			test.CompareWithResult(t, res, tc.expectedResponse)
+		})
+	}
+}
+
 func TestListRoleBinding(t *testing.T) {
 	t.Parallel()
 
@@ -1259,6 +1574,34 @@ func TestClusterRoleUserReqValidate(t *testing.T) {
 			expectedErrorMsg: "",
 		},
 		{
+			name:       "valid: OIDC group",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.ClusterRoleUser{
+				Group:     "someGroup",
+				OIDCGroup: true,
+			},
+			expectedErrorMsg: "",
+		},
+		{
+			name:       "invalid: oidcGroup can not be used with user email",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.ClusterRoleUser{
+				UserEmail: "test@example.com",
+				OIDCGroup: true,
+			},
+			expectedErrorMsg: "oidcGroup can only be used in conjunction with group",
+		},
+		{
+			name:       "invalid: oidcGroup can not be used with service account",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.ClusterRoleUser{
+				ServiceAccount:          "sa",
+				ServiceAccountNamespace: "default",
+				OIDCGroup:               true,
+			},
+			expectedErrorMsg: "oidcGroup can only be used in conjunction with group",
+		},
+		{
 			name:       "valid: service account",
 			projectReq: common.ProjectReq{ProjectID: "projectID"},
 			body: apiv1.ClusterRoleUser{
@@ -1391,6 +1734,34 @@ func TestRoleUserReqValidate(t *testing.T) {
 				Group: "someGroup",
 			},
 			expectedErrorMsg: "",
+		},
+		{
+			name:       "valid: OIDC group",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.RoleUser{
+				Group:     "someGroup",
+				OIDCGroup: true,
+			},
+			expectedErrorMsg: "",
+		},
+		{
+			name:       "invalid: oidcGroup can not be used with user email",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.RoleUser{
+				UserEmail: "test@example.com",
+				OIDCGroup: true,
+			},
+			expectedErrorMsg: "oidcGroup can only be used in conjunction with group",
+		},
+		{
+			name:       "invalid: oidcGroup can not be used with service account",
+			projectReq: common.ProjectReq{ProjectID: "projectID"},
+			body: apiv1.RoleUser{
+				ServiceAccount:          "sa",
+				ServiceAccountNamespace: "default",
+				OIDCGroup:               true,
+			},
+			expectedErrorMsg: "oidcGroup can only be used in conjunction with group",
 		},
 		{
 			name:       "valid: service account",
