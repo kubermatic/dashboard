@@ -24,6 +24,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {ProjectOwner} from '@shared/entity/project';
 import {SharedModule} from '@shared/module';
 import {NoopProjectDeleteDialogComponent} from '@test/components/noop-project-delete-dialog.component';
 import {fakeProject} from '@test/data/project';
@@ -108,4 +109,27 @@ describe('ProjectComponent', () => {
     expect(searchSpy).toHaveBeenCalledWith('new-project-1', false);
     expect(component.dataSource.data.length).toBe(1);
   }));
+
+  describe('owners truncation', () => {
+    const owners = (...names: string[]): ProjectOwner[] =>
+      names.map(name => ({name, email: `${name.toLowerCase().replaceAll(' ', '.')}@example.com`}));
+
+    it('should cut on name boundaries and count hidden owners', () => {
+      const hidden = ['John Doe', 'Jane Roe'];
+      const list = owners('Alice Walker', 'Bob Williams', ...hidden);
+
+      expect(component.getOwners(list)).toBe('Alice Walker, Bob Williams');
+      expect(component.isMoreOwners(list)).toBe(true);
+      expect(component.getMoreOwnersCount(list)).toBe(hidden.length);
+      expect(component.getMoreOwners(list)).toBe(hidden.join(', '));
+    });
+
+    it('should never cut the first owner', () => {
+      const list = owners('Christopher Bartholomew Smithson', 'John Doe');
+
+      expect(component.getOwners(list)).toBe('Christopher Bartholomew Smithson');
+      expect(component.getMoreOwnersCount(list)).toBe(1);
+      expect(component.getMoreOwners(list)).toBe('John Doe');
+    });
+  });
 });
