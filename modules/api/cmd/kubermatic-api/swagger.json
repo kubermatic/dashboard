@@ -31018,6 +31018,11 @@
           "type": "string",
           "x-go-name": "Group"
         },
+        "oidcGroup": {
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.\nThe request is rejected if the prefix cannot be determined, e.g. when groups are mapped with a CEL expression.",
+          "type": "boolean",
+          "x-go-name": "OIDCGroup"
+        },
         "serviceAccount": {
           "type": "string",
           "x-go-name": "ServiceAccount"
@@ -41182,6 +41187,11 @@
         "group": {
           "type": "string",
           "x-go-name": "Group"
+        },
+        "oidcGroup": {
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.\nThe request is rejected if the prefix cannot be determined, e.g. when groups are mapped with a CEL expression.",
+          "type": "boolean",
+          "x-go-name": "OIDCGroup"
         },
         "serviceAccount": {
           "type": "string",
