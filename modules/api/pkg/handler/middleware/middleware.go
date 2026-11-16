@@ -299,7 +299,7 @@ func TokenVerifier(tokenVerifier authtypes.TokenVerifier, userProvider provider.
 				Groups: claims.Groups,
 			}
 
-			if err := checkBlockedTokens(ctx, claims.Email, token, userProvider); err != nil {
+			if err := CheckBlockedTokens(ctx, claims.Email, token, userProvider); err != nil {
 				return nil, err
 			}
 
@@ -453,7 +453,8 @@ func getClusterProviderByClusterID(ctx context.Context, seeds map[string]*kuberm
 	return nil, ctx, utilerrors.NewNotFound("cluster-provider", clusterID)
 }
 
-func checkBlockedTokens(ctx context.Context, email, token string, userProvider provider.UserProvider) error {
+// CheckBlockedTokens returns an error if the user has invalidated the given token by logging out.
+func CheckBlockedTokens(ctx context.Context, email, token string, userProvider provider.UserProvider) error {
 	user, err := userProvider.UserByEmail(ctx, email)
 	if err != nil {
 		if !errors.Is(err, provider.ErrNotFound) {
