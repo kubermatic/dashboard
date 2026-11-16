@@ -308,7 +308,8 @@ func CreateOIDCKubeconfigEndpoint(
 		if req.decodedState.State != storedCookie.State {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.State)
 		}
-		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "", storedCookie.CodeVerifier)
+		// an empty RedirectURI (main hostname, or a cookie from before the upgrade) uses the default
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, storedCookie.RedirectURI, storedCookie.CodeVerifier)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -439,7 +440,8 @@ func CreateOIDCKubeconfigEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", rsp.oauthState.CodeVerifier, rsp.oauthState.Nonce, scopes...)
+	rsp.oauthState.RedirectURI = handlerauth.RedirectURIForOrigin(oidcIssuerVerifier, req.origin, req.request.URL.Path)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, rsp.oauthState.RedirectURI, rsp.oauthState.CodeVerifier, rsp.oauthState.Nonce, scopes...)
 
 	return rsp, nil
 }
@@ -484,6 +486,9 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		}
 		if req.decodedState.State != storedCookie.State {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.State)
+		}
+		if storedCookie.RedirectURI != "" {
+			redirectURI = storedCookie.RedirectURI
 		}
 		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI, storedCookie.CodeVerifier)
 		if err != nil {
@@ -607,6 +612,10 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
+	rsp.oauthState.RedirectURI = handlerauth.RedirectURIForOrigin(oidcIssuerVerifier, req.origin, req.request.URL.Path)
+	if rsp.oauthState.RedirectURI != "" {
+		redirectURI = rsp.oauthState.RedirectURI
+	}
 	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, rsp.oauthState.CodeVerifier, rsp.oauthState.Nonce, scopes...)
 
 	return rsp, nil
@@ -687,6 +696,8 @@ type CreateOIDCKubeconfigReq struct {
 	encodedState string
 	decodedState OIDCState
 	phase        int
+	// origin is the browser origin the flow started on, see handlerauth.RedirectURIForOrigin
+	origin string
 }
 
 // OIDCState holds data that are send and retrieved from OIDC provider.
@@ -811,6 +822,7 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 	req.ProjectID = r.URL.Query().Get("project_id")
 	req.UserID = r.URL.Query().Get("user_id")
 	req.OIDCKubeLoginEnabled = r.URL.Query().Get("oidc_kubelogin_enabled") == trueFlag
+	req.origin = r.URL.Query().Get("origin")
 	if len(req.ClusterID) == 0 || len(req.ProjectID) == 0 || len(req.UserID) == 0 {
 		return nil, errors.New("the following query parameters cluster_id, project_id, user_id are mandatory, please make sure that all are set")
 	}
