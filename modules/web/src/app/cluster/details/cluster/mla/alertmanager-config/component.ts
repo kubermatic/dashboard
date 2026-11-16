@@ -14,6 +14,7 @@
 
 import {Component, Inject, Input, OnChanges, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
+import {AppConfigService} from '@app/config.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -74,6 +75,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnChanges, OnDestroy
     private readonly _settingsService: SettingsService,
     private readonly _datacenterService: DatacenterService,
     private readonly _projectService: ProjectService,
+    private readonly _appConfigService: AppConfigService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -117,12 +119,14 @@ export class AlertmanagerConfigComponent implements OnInit, OnChanges, OnDestroy
   getLinkURL(type: string): string {
     const seed =
       !!this._seedSettings && !!this._seedSettings.seedDNSOverwrite ? this._seedSettings.seedDNSOverwrite : this._seed;
+    // reverse proxies on other hostnames may not serve the MLA hosts, so admins can pin the domain
+    const domain = this._appConfigService.getConfig()?.mla_links_domain || this._document.defaultView.location.hostname;
 
     switch (type) {
       case Type.Alertmanager:
-        return `https://${this._settings.mlaAlertmanagerPrefix}.${seed}.${this._document.defaultView.location.hostname}/${this.cluster.id}`;
+        return `https://${this._settings.mlaAlertmanagerPrefix}.${seed}.${domain}/${this.cluster.id}`;
       case Type.Grafana:
-        return `https://${this._settings.mlaGrafanaPrefix}.${seed}.${this._document.defaultView.location.hostname}/?orgId=${this._grafanaOrgId}`;
+        return `https://${this._settings.mlaGrafanaPrefix}.${seed}.${domain}/?orgId=${this._grafanaOrgId}`;
       default:
         return '';
     }

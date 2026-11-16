@@ -18,6 +18,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {SeedSettings} from '@shared/entity/datacenter';
 import {ProjectService} from '@app/core/services/project';
 import {CoreModule} from '@core/module';
 import {AddonService} from '@core/services/addon';
@@ -40,7 +41,7 @@ import {RouterStub} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {of} from 'rxjs';
-import {AlertmanagerConfigComponent} from './component';
+import {AlertmanagerConfigComponent, Type} from './component';
 
 describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
@@ -111,6 +112,42 @@ describe('AlertmanagerConfigComponent', () => {
     fixture.destroy();
     flush();
   }));
+
+  describe('MLA links', () => {
+    beforeEach(() => {
+      component['_settings'] = {
+        ...component['_settings'],
+        mlaAlertmanagerPrefix: 'alertmanager',
+        mlaGrafanaPrefix: 'grafana',
+      };
+      component['_seed'] = 'europe';
+      component['_grafanaOrgId'] = '7';
+      component['_seedSettings'] = {} as SeedSettings;
+    });
+
+    it('should build the links on the browser hostname by default', () => {
+      expect(component.getLinkURL(Type.Alertmanager)).toBe(
+        `https://alertmanager.europe.${window.location.hostname}/${component.cluster.id}`
+      );
+      expect(component.getLinkURL(Type.Grafana)).toBe(`https://grafana.europe.${window.location.hostname}/?orgId=7`);
+    });
+
+    it('should build the links on mla_links_domain when it is set', () => {
+      jest.spyOn(TestBed.inject(AppConfigService), 'getConfig').mockReturnValue({mla_links_domain: 'kkp.example.com'});
+
+      expect(component.getLinkURL(Type.Alertmanager)).toBe(
+        `https://alertmanager.europe.kkp.example.com/${component.cluster.id}`
+      );
+      expect(component.getLinkURL(Type.Grafana)).toBe('https://grafana.europe.kkp.example.com/?orgId=7');
+    });
+
+    it('should use the seed DNS overwrite with mla_links_domain', () => {
+      jest.spyOn(TestBed.inject(AppConfigService), 'getConfig').mockReturnValue({mla_links_domain: 'kkp.example.com'});
+      component['_seedSettings'] = {seedDNSOverwrite: 'eu'} as SeedSettings;
+
+      expect(component.getLinkURL(Type.Grafana)).toBe('https://grafana.eu.kkp.example.com/?orgId=7');
+    });
+  });
 
   describe('Grafana monitoring components warning', () => {
     const fakeApplication = (name: string): Application =>
