@@ -21,7 +21,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.25-node-22-kind-0.30-11
+        - image: quay.io/kubermatic/build:go-1.25-node-22-kind-0.30-13
           command:
             - ./hack/ci/verify.sh
           resources:
@@ -56,7 +56,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.25-node-22-kind-0.30-11
+        - image: quay.io/kubermatic/build:go-1.25-node-22-kind-0.30-13
           command:
             - ./hack/verify-chrome-headless-tag.sh
           resources:
