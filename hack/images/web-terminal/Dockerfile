@@ -12,27 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.19
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.23
 
 ARG BUILDPLATFORM
 ARG TARGETARCH
 
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.32.txt
-ENV KUBECTL_VERSION=v1.32.7
+# Source: https://dl.k8s.io/release/stable-1.34.txt
+ENV KUBECTL_VERSION=v1.34.13
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.17.4
+ENV HELM_VERSION=v3.22.1
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.4.22
+ENV K8SGPT_VERSION=v0.4.41
 
 # Source: https://github.com/derailed/k9s/releases
-ENV K9S_VERSION=v0.50.9
+ENV K9S_VERSION=v0.51.0
 
 # Source: https://github.com/kubernetes-sigs/krew/releases
-ENV KREW_VERSION=v0.4.5
+ENV KREW_VERSION=v0.5.0
 
 ENV USER=webshell
 ENV GROUP=webshell
@@ -46,7 +46,7 @@ ENV HOME=$USER_HOME
 RUN addgroup -S ${GROUP}  && adduser -S ${USER} -h ${USER_HOME} -G ${GROUP}
 
 # ensure that we install a curl version that fixes CVE-2023-38545 and CVE-2023-38546.
-RUN apk add --no-cache -U \
+RUN apk upgrade --no-cache -U && apk add --no-cache \
   bash \
   bash-completion \
   ca-certificates \
@@ -83,6 +83,7 @@ RUN curl -LO https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9
 RUN curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/krew-linux_${TARGETARCH}.tar.gz" && \
   tar -xzf krew-linux_${TARGETARCH}.tar.gz && \
   ./krew-linux_${TARGETARCH} install krew && \
+  rm -f krew-linux_${TARGETARCH} krew-linux_${TARGETARCH}.tar.gz && \
   echo "export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH" >> /root/.bashrc
 
 ENV PATH="/root/.krew/bin:$PATH"
