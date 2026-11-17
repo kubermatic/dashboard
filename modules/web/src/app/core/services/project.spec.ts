@@ -34,11 +34,16 @@ describe('ProjectService', () => {
   let httpController: HttpTestingController;
   let userSettings$: BehaviorSubject<UserSettings>;
 
-  const refreshInterval = new AppConfigMockService().getRefreshTimeBase() * 10;
+  const refreshTime = 10;
+  const slowRequestTicks = 2;
+  const refreshInterval = new AppConfigMockService().getRefreshTimeBase() * refreshTime;
   const projectsURL = (displayAll: boolean): string => `${environment.restRoot}/projects?displayAll=${displayAll}`;
 
   beforeEach(() => {
-    userSettings$ = new BehaviorSubject<UserSettings>({...DEFAULT_USER_SETTINGS_MOCK, displayAllProjectsForAdmin: false});
+    userSettings$ = new BehaviorSubject<UserSettings>({
+      ...DEFAULT_USER_SETTINGS_MOCK,
+      displayAllProjectsForAdmin: false,
+    });
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -78,7 +83,7 @@ describe('ProjectService', () => {
     tick();
     const slowRequest = httpController.expectOne(projectsURL(false));
 
-    tick(refreshInterval * 2);
+    tick(refreshInterval * slowRequestTicks);
 
     expect(slowRequest.cancelled).toBe(false);
     httpController.expectNone(projectsURL(false));
@@ -124,7 +129,7 @@ describe('ProjectService', () => {
     const myProjectsRequest = httpController.expectOne(projectsURL(false));
     const allProjectsRequest = httpController.expectOne(projectsURL(true));
 
-    tick(refreshInterval * 2);
+    tick(refreshInterval * slowRequestTicks);
 
     expect(myProjectsRequest.cancelled).toBe(false);
     expect(allProjectsRequest.cancelled).toBe(false);
