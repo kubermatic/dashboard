@@ -19,7 +19,7 @@ import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';
 import _, {differenceBy} from 'lodash';
 import {Subject, combineLatest, merge} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-project-selector',
@@ -35,7 +35,6 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
 
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _displayAllProjects: boolean;
-  private _projects: Project[];
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -46,15 +45,12 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     this._displayAllProjects = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
 
     combineLatest([this._projectService.projects, this._projectService.myProjects])
-      .pipe(
-        tap(([projects, myProjects]) => {
-          this._projects = projects;
-          this.myProjects = this._sortProjects(myProjects);
-        })
-      )
-      .pipe(tap(_ => (this.externalProjects = this._sortProjects(differenceBy(this._projects, this.myProjects, 'id')))))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._appendProject(this.selectedProject));
+      .subscribe(([projects, myProjects]) => {
+        this.myProjects = this._sortProjects(myProjects);
+        this.externalProjects = this._sortProjects(differenceBy(projects, myProjects, 'id'));
+        this._appendProject(this.selectedProject);
+      });
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
