@@ -58,7 +58,6 @@ func TestEffectiveGroupsPrefix(t *testing.T) {
 		},
 		{
 			name: "cluster OIDC settings use their own groups prefix",
-			//nolint:staticcheck
 			cluster: kubermaticv1.ClusterSpec{OIDC: kubermaticv1.OIDCSettings{
 				IssuerURL:    "https://dex.example.com",
 				ClientID:     "kubernetes",
@@ -69,7 +68,6 @@ func TestEffectiveGroupsPrefix(t *testing.T) {
 		},
 		{
 			name: "cluster OIDC settings without groups prefix",
-			//nolint:staticcheck
 			cluster: kubermaticv1.ClusterSpec{OIDC: kubermaticv1.OIDCSettings{
 				IssuerURL: "https://dex.example.com",
 				ClientID:  "kubernetes",
