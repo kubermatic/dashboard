@@ -161,7 +161,7 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 6: create a new GroupProjectBinding",
+			name:   "scenario 6: an owner creates a new GroupProjectBinding",
 			method: http.MethodPost,
 			url:    "/api/v2/projects/foo-ID/groupbindings",
 			body: `{
@@ -171,7 +171,7 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			existingAPIUser: testUser,
 			existingObjects: []ctrlruntimeclient.Object{
 				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
-				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenBinding("foo-ID", "bob@acme.com", "owners"),
 				test.APIUserToKubermaticUser(*testUser),
 			},
 			httpStatus: http.StatusCreated,
@@ -199,13 +199,13 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 8: delete an existing GroupProjectBinding",
+			name:            "scenario 8: an owner deletes an existing GroupProjectBinding",
 			method:          http.MethodDelete,
 			url:             "/api/v2/projects/foo-ID/groupbindings/foo-ID-xxxxxxxxxx",
 			existingAPIUser: testUser,
 			existingObjects: []ctrlruntimeclient.Object{
 				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
-				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenBinding("foo-ID", "bob@acme.com", "owners"),
 				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
 				test.APIUserToKubermaticUser(*testUser),
 			},
@@ -215,7 +215,7 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 9: patch an existing GroupProjectBinding",
+			name:   "scenario 9: an owner patches an existing GroupProjectBinding",
 			method: http.MethodPatch,
 			body: `{
 				"group": "testGroup",
@@ -225,7 +225,7 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			existingAPIUser: testUser,
 			existingObjects: []ctrlruntimeclient.Object{
 				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
-				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenBinding("foo-ID", "bob@acme.com", "owners"),
 				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
 				test.APIUserToKubermaticUser(*testUser),
 			},
@@ -245,7 +245,7 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			existingAPIUser: testUser,
 			existingObjects: []ctrlruntimeclient.Object{
 				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
-				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenBinding("foo-ID", "bob@acme.com", "owners"),
 				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
 				test.APIUserToKubermaticUser(*testUser),
 			},
@@ -272,6 +272,155 @@ func TestHandlerGroupProjectBindings(t *testing.T) {
 			validateResp: func(resp *httptest.ResponseRecorder) error {
 				return nil
 			},
+		},
+		{
+			name:   "scenario 12: an editor cannot create a GroupProjectBinding with role owners",
+			method: http.MethodPost,
+			url:    "/api/v2/projects/foo-ID/groupbindings",
+			body: `{
+				"role": "owners",
+				"group": "team-x"
+			}`,
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 13: an editor cannot create a GroupProjectBinding with role viewers",
+			method: http.MethodPost,
+			url:    "/api/v2/projects/foo-ID/groupbindings",
+			body: `{
+				"role": "viewers",
+				"group": "team-x"
+			}`,
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:            "scenario 14: an editor cannot delete a GroupProjectBinding",
+			method:          http.MethodDelete,
+			url:             "/api/v2/projects/foo-ID/groupbindings/foo-ID-xxxxxxxxxx",
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 15: an editor cannot patch a GroupProjectBinding",
+			method: http.MethodPatch,
+			body: `{
+				"group": "team-x",
+				"role": "owners"
+			}`,
+			url:             "/api/v2/projects/foo-ID/groupbindings/foo-ID-xxxxxxxxxx",
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "editors"),
+				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 16: a project manager cannot create a GroupProjectBinding",
+			method: http.MethodPost,
+			url:    "/api/v2/projects/foo-ID/groupbindings",
+			body: `{
+				"role": "viewers",
+				"group": "team-x"
+			}`,
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "projectmanagers"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 16a: a project manager patches a GroupProjectBinding",
+			method: http.MethodPatch,
+			body: `{
+				"group": "viewers-test",
+				"role": "editors"
+			}`,
+			url:             "/api/v2/projects/foo-ID/groupbindings/foo-ID-xxxxxxxxxx",
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "projectmanagers"),
+				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusOK,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:            "scenario 16b: a project manager deletes a GroupProjectBinding",
+			method:          http.MethodDelete,
+			url:             "/api/v2/projects/foo-ID/groupbindings/foo-ID-xxxxxxxxxx",
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenBinding("foo-ID", "bob@acme.com", "projectmanagers"),
+				test.GenGroupBinding("foo-ID", "viewers-test", "viewers"),
+				test.APIUserToKubermaticUser(*testUser),
+			},
+			httpStatus:   http.StatusOK,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 17: an owner through a group binding creates a GroupProjectBinding",
+			method: http.MethodPost,
+			url:    "/api/v2/projects/foo-ID/groupbindings",
+			body: `{
+				"role": "owners",
+				"group": "team-x"
+			}`,
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenGroupBinding("foo-ID", "team-owners", "owners"),
+				test.GenUserWithGroups("", "bob", "bob@acme.com", []string{"team-owners"}),
+			},
+			httpStatus:   http.StatusCreated,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
+		},
+		{
+			name:   "scenario 18: an editor through a group binding cannot create a GroupProjectBinding",
+			method: http.MethodPost,
+			url:    "/api/v2/projects/foo-ID/groupbindings",
+			body: `{
+				"role": "owners",
+				"group": "team-x"
+			}`,
+			existingAPIUser: testUser,
+			existingObjects: []ctrlruntimeclient.Object{
+				test.GenProject("foo", kubermaticv1.ProjectActive, test.DefaultCreationTimestamp()),
+				test.GenGroupBinding("foo-ID", "team-editors", "editors"),
+				test.GenUserWithGroups("", "bob", "bob@acme.com", []string{"team-editors"}),
+			},
+			httpStatus:   http.StatusForbidden,
+			validateResp: func(resp *httptest.ResponseRecorder) error { return nil },
 		},
 	}
 
