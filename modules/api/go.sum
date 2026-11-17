@@ -756,8 +756,8 @@ github.com/keybase/go-keychain v0.0.1 h1:way+bWYa6lDppZoZcgMbYsvC7GxljxrskdNInRt
 github.com/keybase/go-keychain v0.0.1/go.mod h1:PdEILRW3i9D8JcdM+FmY6RwkHGnhHxXwkPPMeUgOK1k=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/klauspost/compress v1.19.1 h1:VsB4HPswih7mmZ8WleSFQ75c/Ui1M4trX5oAsJnhSlk=
-github.com/klauspost/compress v1.19.1/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
+github.com/klauspost/compress v1.20.3 h1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4=
+github.com/klauspost/compress v1.20.3/go.mod h1:LUdAzn7YLVvxLpc7y3V1m40wESHTgc1422pwwBSKYuI=
 github.com/klauspost/cpuid/v2 v2.0.1/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/klauspost/cpuid/v2 v2.3.0 h1:S4CRMLnYUhGeDFDqkGriYKdfoFlDnMtqTiI/sFzhA9Y=
 github.com/klauspost/cpuid/v2 v2.3.0/go.mod h1:hqwkgyIinND0mEev00jJYCxPNVRVXFQeu1XKlok6oO0=
@@ -1637,10 +1637,10 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 k8c.io/kubeone v1.12.3 h1:b+dmLJDsofUiDHzyUmR512wXnF5LDDI1KpHsS/BTbrY=
 k8c.io/kubeone v1.12.3/go.mod h1:saB47KgCNP2028b/ZHZlNal1p7xHqmVfc3LSj+WOW/A=
-k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261113183647-a23662932b02 h1:t2RC1vCs0wyT1ablSqJ8J747BSJACjjt+lGciMA4PgM=
-k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261113183647-a23662932b02/go.mod h1:N/Ya7FuOoJTXAQiN+jAdmoqN3rcOR/jPmG2oj7D/5Bc=
-k8c.io/kubermatic/v2 v2.31.4-0.20261113183647-a23662932b02 h1:QGxniW9nKv4y22ff9zPrnUs6Us7oySPtWLhnnmWeX5Q=
-k8c.io/kubermatic/v2 v2.31.4-0.20261113183647-a23662932b02/go.mod h1:7C2pCSZX/bIBqr8WEJUEoJApjdGxViXtEWiIUvSqpzU=
+k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261116233721-6048ad58b9ba h1:vzfbhvqw4YMMLXL9FlMcTJzjXnyo+DHpce2baRMfyw4=
+k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261116233721-6048ad58b9ba/go.mod h1:N/Ya7FuOoJTXAQiN+jAdmoqN3rcOR/jPmG2oj7D/5Bc=
+k8c.io/kubermatic/v2 v2.31.4-0.20261116233721-6048ad58b9ba h1:h+aocsdN5AQfd50moY8emvUO8Udt0ncSq4AOw5Rl8xk=
+k8c.io/kubermatic/v2 v2.31.4-0.20261116233721-6048ad58b9ba/go.mod h1:D1R1aK5YjYkxFSm79gpRsM0creU+W8N3hURiixwDAVI=
 k8c.io/machine-controller/sdk v1.66.5 h1:T0edl1QRZT6TC5NMPaF7QWWVN6pd5q3vzOV1SOTFtl8=
 k8c.io/machine-controller/sdk v1.66.5/go.mod h1:LAgQCX3ebTLS/3O3GORhAt62FbBIMGK4/ra12cpH6IY=
 k8c.io/operating-system-manager v1.11.8 h1:cLRKMGW3icnSGoHR3p64uy9jUyvMscCwvKa6cZfqbrQ=

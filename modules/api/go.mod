@@ -69,8 +69,8 @@ require (
 	google.golang.org/api v0.301.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261113183647-a23662932b02
-	k8c.io/kubermatic/v2 v2.31.4-0.20261113183647-a23662932b02
+	k8c.io/kubermatic/sdk/v2 v2.31.3-0.20261116233721-6048ad58b9ba
+	k8c.io/kubermatic/v2 v2.31.4-0.20261116233721-6048ad58b9ba
 	k8c.io/machine-controller/sdk v1.66.5
 	k8c.io/operating-system-manager v1.11.8
 	k8c.io/reconciler v0.5.0
@@ -279,7 +279,7 @@ require (
 	github.com/jmespath/go-jmespath v0.4.1-0.20220621161143-b0104c826a24 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.19.1 // indirect
+	github.com/klauspost/compress v1.20.3 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
