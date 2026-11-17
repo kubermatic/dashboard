@@ -227,6 +227,10 @@ func CreateGroupProjectBinding(ctx context.Context, request interface{},
 		return nil, err
 	}
 
+	if err := requireBindingRole(userInfo, provider.OwnersRole); err != nil {
+		return nil, err
+	}
+
 	bindingName := fmt.Sprintf("%s-%s", kubermaticProject.Name, rand.String(10))
 	if err := bindingProvider.Create(ctx, userInfo, &kubermaticv1.GroupProjectBinding{
 		ObjectMeta: metav1.ObjectMeta{
@@ -280,6 +284,10 @@ func DeleteGroupProjectBinding(ctx context.Context, request interface{},
 	userInfo, err := getUserInfo(ctx, userInfoGetter, kubermaticProject.Name)
 	if err != nil {
 		return common.KubernetesErrorToHTTPError(err)
+	}
+
+	if err := requireBindingRole(userInfo, provider.OwnersRole, projectManagersRole); err != nil {
+		return err
 	}
 
 	if err := bindingProvider.Delete(ctx, userInfo, req.BindingName); err != nil {
@@ -355,6 +363,10 @@ func PatchGroupProjectBinding(ctx context.Context, request interface{},
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
+	if err := requireBindingRole(userInfo, provider.OwnersRole, projectManagersRole); err != nil {
+		return nil, err
+	}
+
 	originalBinding, err := bindingProvider.Get(ctx, userInfo, req.BindingName)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -405,4 +417,18 @@ func getUserInfo(ctx context.Context, userInfoGetter provider.UserInfoGetter, pr
 	}
 
 	return userInfo, err
+}
+
+// projectManagersRole is the project role that manages members but not clusters. The
+// provider package has no constant for it.
+const projectManagersRole = "projectmanagers"
+
+// requireBindingRole allows KKP admins and project members with one of the given roles.
+// Creating group bindings is for owners only, as the UI does it. Project managers keep
+// updating and deleting them, which RBAC already allowed them.
+func requireBindingRole(userInfo *provider.UserInfo, roles ...string) error {
+	if userInfo.IsAdmin || userInfo.Roles.HasAny(roles...) {
+		return nil
+	}
+	return utilerrors.New(http.StatusForbidden, fmt.Sprintf("only admins and project %s can manage group bindings", strings.Join(roles, ", ")))
 }
