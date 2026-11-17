@@ -22,7 +22,7 @@ import {environment} from '@environments/environment';
 import {Project, ProjectModel, ProjectStatus} from '@shared/entity/project';
 import {View} from '@shared/entity/common';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap, take} from 'rxjs/operators';
+import {catchError, exhaustMap, map, shareReplay, startWith, switchMap, take} from 'rxjs/operators';
 import _ from 'lodash';
 
 @Injectable()
@@ -62,9 +62,7 @@ export class ProjectService {
 
   get myProjects(): Observable<Project[]> {
     if (!this._myProjects$) {
-      this._myProjects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
-        .pipe(switchMap(_ => this._getProjects(false)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._myProjects$ = this._pollProjects(this.onProjectsUpdate, () => false);
     }
 
     return this._myProjects$;
@@ -82,10 +80,7 @@ export class ProjectService {
 
   get allProjects() {
     if (!this._allProjects$) {
-      this._allProjects$ = merge(this._refreshTimer$, this.onProjectsUpdate).pipe(
-        switchMap(_ => this._getProjects(true)),
-        shareReplay({refCount: true, bufferSize: 1})
-      );
+      this._allProjects$ = this._pollProjects(this.onProjectsUpdate, () => true);
     }
 
     return this._allProjects$;
@@ -130,9 +125,15 @@ export class ProjectService {
         : null
     );
 
-    this._projects$ = merge(this.onProjectsUpdate, this._refreshTimer$, this._displayAllChanged)
-      .pipe(switchMap(_ => this._getProjects(this._displayAll)))
-      .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    this._projects$ = this._pollProjects(merge(this.onProjectsUpdate, this._displayAllChanged), () => this._displayAll);
+  }
+
+  private _pollProjects(trigger$: Observable<unknown>, displayAll: () => boolean): Observable<Project[]> {
+    return trigger$.pipe(
+      startWith(null),
+      switchMap(_ => this._refreshTimer$.pipe(exhaustMap(_ => this._getProjects(displayAll())))),
+      shareReplay({refCount: true, bufferSize: 1})
+    );
   }
 
   private _getProjects(displayAll: boolean): Observable<Project[]> {
