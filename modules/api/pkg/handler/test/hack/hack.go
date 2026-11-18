@@ -162,6 +162,7 @@ func NewTestRouting(
 		PrivilegedIPAMPoolProviderGetter:               privilegedIPAMPoolProviderGetter,
 		PrivilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
 		OIDCIssuerVerifierProviderGetter:               fakeOIDCVerifierIssuerGetter,
+		OIDCIssuerVerifier:                             issuerVerifier,
 	}
 
 	r := handler.NewRouting(routingParams, masterClient)
