@@ -27,6 +27,10 @@ export class VSphereDatastores {
   datastores: string[];
 }
 
+export class VSphereDatastoreClusters {
+  datastoreClusters: string[];
+}
+
 export class VSphereTagCategory {
   name: string;
   id: string;

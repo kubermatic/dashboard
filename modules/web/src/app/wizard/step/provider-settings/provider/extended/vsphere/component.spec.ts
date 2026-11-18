@@ -108,6 +108,17 @@ describe('VSphereProviderExtendedComponent', () => {
       .find(field => field.label === 'Base Folder Path');
   }
 
+  function datastoreClusterField(): AutocompleteComponent {
+    return fixture.debugElement
+      .queryAll(By.directive(AutocompleteComponent))
+      .map(element => element.componentInstance as AutocompleteComponent)
+      .find(field => field.label === 'Datastore Cluster');
+  }
+
+  function setDatastoreCluster(datastoreCluster: string): void {
+    component.form.get(component.Controls.DatastoreCluster).setValue({main: datastoreCluster});
+  }
+
   function setBaseFolderPath(path: string): void {
     component.form.get(component.Controls.BaseFolderPath).setValue({main: path});
   }
@@ -143,5 +154,29 @@ describe('VSphereProviderExtendedComponent', () => {
 
     setBaseFolderPath('');
     expect(folder.disabled).toBe(false);
+  });
+
+  it('should offer the loaded datastore clusters as options of the datastore cluster', () => {
+    component.datastoreClusters = ['/DC0/datastore/pod-a', '/DC0/datastore/pod-b'];
+    fixture.detectChanges();
+
+    expect(datastoreClusterField().options).toEqual(['/DC0/datastore/pod-a', '/DC0/datastore/pod-b']);
+  });
+
+  it('should write the datastore cluster to the cluster spec', () => {
+    setDatastoreCluster('/DC0/datastore/pod-a');
+
+    expect(clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster).toBe('/DC0/datastore/pod-a');
+  });
+
+  it('should disable the datastore while a datastore cluster is set', () => {
+    const datastore = component.form.get(component.Controls.Datastore);
+    expect(datastore.disabled).toBe(false);
+
+    setDatastoreCluster('/DC0/datastore/pod-a');
+    expect(datastore.disabled).toBe(true);
+
+    setDatastoreCluster('');
+    expect(datastore.disabled).toBe(false);
   });
 });
