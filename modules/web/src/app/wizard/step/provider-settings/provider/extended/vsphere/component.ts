@@ -361,7 +361,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _loadFolders(folders: VSphereFolder[]): void {
     this.folders = folders;
-    this.folderPaths = folders.map(folder => folder.path);
+    this.folderPaths = _.sortBy(
+      folders.map(folder => folder.path),
+      path => path.toLowerCase()
+    );
 
     if (!_.isEmpty(this.folders)) {
       this.folderLabel = FolderState.Ready;

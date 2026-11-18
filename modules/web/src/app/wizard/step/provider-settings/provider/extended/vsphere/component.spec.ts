@@ -116,12 +116,12 @@ describe('VSphereProviderExtendedComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should offer the folder paths as options of the base folder path', () => {
-    component['_loadFolders']([{path: '/DC/vm/team-b'}, {path: '/DC/vm/team-a'}]);
+  it('should offer the folder paths as options of the base folder path, sorted', () => {
+    component['_loadFolders']([{path: '/DC/vm/team-b'}, {path: '/DC/vm/Team-c'}, {path: '/DC/vm/team-a'}]);
     fixture.detectChanges();
 
-    expect(component.folderPaths).toEqual(['/DC/vm/team-b', '/DC/vm/team-a']);
-    expect(baseFolderPathField().options).toEqual(['/DC/vm/team-b', '/DC/vm/team-a']);
+    expect(component.folderPaths).toEqual(['/DC/vm/team-a', '/DC/vm/team-b', '/DC/vm/Team-c']);
+    expect(baseFolderPathField().options).toEqual(['/DC/vm/team-a', '/DC/vm/team-b', '/DC/vm/Team-c']);
   });
 
   it('should not cut off the long hint of the base folder path', () => {
