@@ -43,6 +43,15 @@ func TestGetDatastoreClusterList(t *testing.T) {
 			datastoreClusters: 2,
 			expected:          []string{"/DC0/datastore/DC0_POD0", "/DC0/datastore/DC0_POD1"},
 		},
+		{
+			name:              "datastore clusters are sorted by their inventory path",
+			datastoreClusters: 11,
+			expected: []string{
+				"/DC0/datastore/DC0_POD0", "/DC0/datastore/DC0_POD1", "/DC0/datastore/DC0_POD10", "/DC0/datastore/DC0_POD2",
+				"/DC0/datastore/DC0_POD3", "/DC0/datastore/DC0_POD4", "/DC0/datastore/DC0_POD5", "/DC0/datastore/DC0_POD6",
+				"/DC0/datastore/DC0_POD7", "/DC0/datastore/DC0_POD8", "/DC0/datastore/DC0_POD9",
+			},
+		},
 	}
 
 	for _, tc := range testcases {

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"net/url"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/vmware/govmomi"
@@ -288,6 +289,11 @@ func GetDatastoreClusterList(ctx context.Context, dc *kubermaticv1.DatacenterSpe
 
 		return nil, fmt.Errorf("couldn't retrieve datastore cluster list: %w", err)
 	}
+
+	// The order of the vCenter is not stable, sort by path to get a deterministic result.
+	slices.SortFunc(datastoreClusterList, func(a, b *object.StoragePod) int {
+		return strings.Compare(a.InventoryPath, b.InventoryPath)
+	})
 
 	return datastoreClusterList, nil
 }
