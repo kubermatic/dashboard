@@ -20,6 +20,9 @@ type ClusterRoleUser struct {
 	// group
 	Group string `json:"group,omitempty"`
 
+	// OIDCGroup adds the user cluster's OIDC groups prefix (e.g. "oidc:") to Group, unless Group already starts with it.
+	OIDCGroup bool `json:"oidcGroup,omitempty"`
+
 	// service account
 	ServiceAccount string `json:"serviceAccount,omitempty"`
 

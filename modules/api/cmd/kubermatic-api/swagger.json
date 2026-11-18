@@ -30525,6 +30525,11 @@
           "type": "string",
           "x-go-name": "Group"
         },
+        "oidcGroup": {
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.",
+          "type": "boolean",
+          "x-go-name": "OIDCGroup"
+        },
         "serviceAccount": {
           "type": "string",
           "x-go-name": "ServiceAccount"
@@ -40260,6 +40265,11 @@
         "group": {
           "type": "string",
           "x-go-name": "Group"
+        },
+        "oidcGroup": {
+          "description": "OIDCGroup adds the user cluster's OIDC groups prefix (e.g. \"oidc:\") to Group, unless Group already starts with it.",
+          "type": "boolean",
+          "x-go-name": "OIDCGroup"
         },
         "serviceAccount": {
           "type": "string",
