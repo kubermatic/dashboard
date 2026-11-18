@@ -187,6 +187,19 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         this._setIsLoadingDatastores(false);
       });
 
+    this._clusterSpecService.clusterChanges
+      .pipe(
+        filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE),
+        debounceTime(this._debounceTime),
+        tap(_ => (!this.hasRequiredCredentials() ? this._clearDatastoreClusters() : null)),
+        switchMap(_ => this._datastoreClustersObservable()),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(datastoreClusters => {
+        this.datastoreClusters = datastoreClusters;
+        this._setIsLoadingDatastoreClusters(false);
+      });
+
     // Mutually exclusive fields
     this.form
       .get(Controls.Datastore)
@@ -240,15 +253,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .subscribe(([folders, networks]) => {
         this._loadFolders(folders);
         this._loadNetworks(networks);
-      });
-
-    merge(this._credentialsChanged, this._presets.presetChanges)
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(switchMap(_ => this._datastoreClustersObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datastoreClusters => {
-        this.datastoreClusters = datastoreClusters;
-        this._setIsLoadingDatastoreClusters(false);
       });
 
     merge(this._credentialsChanged, this._presets.presetChanges)
@@ -530,7 +534,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
           this._clusterSpecService.cluster.spec.cloud.vsphere.password
       )
-      .credential(this._presets.preset)
       .datacenter(this._clusterSpecService.datacenter)
       .datastoreClusters(() => this._setIsLoadingDatastoreClusters(true))
       .pipe(
@@ -542,9 +545,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       );
   }
 
+  // Unlike the datastore, the datastore cluster was a plain text field before the options were loaded, so
+  // a value typed by the user is kept when the options cannot be loaded.
   private _clearDatastoreClusters(): void {
     this.datastoreClusters = [];
-    this.form.get(Controls.DatastoreCluster).setValue(AutocompleteInitialState);
     this._setIsLoadingDatastoreClusters(false);
   }
 

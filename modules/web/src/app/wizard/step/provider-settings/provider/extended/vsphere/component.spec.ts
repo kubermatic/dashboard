@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {By} from '@angular/platform-browser';
@@ -43,11 +43,15 @@ import {ApplicationService} from '@core/services/application';
 import {PresetsService} from '@core/services/wizard/presets';
 import {WizardService} from '@core/services/wizard/wizard';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
+import {DEFAULT_DEBOUNCE_TIME_MS} from '@shared/constants/common';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {SharedModule} from '@shared/module';
 import {AuthMockService} from '@test/services/auth-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {VSphereProviderExtendedComponent} from './component';
+
+// Margin to wait for after the debounce time of the cluster changes.
+const DEBOUNCE_MARGIN_MS = 100;
 
 describe('VSphereProviderExtendedComponent', () => {
   let fixture: ComponentFixture<VSphereProviderExtendedComponent>;
@@ -56,7 +60,7 @@ describe('VSphereProviderExtendedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, NoopAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
+      imports: [BrowserModule, NoopAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientTestingModule],
       declarations: [VSphereProviderExtendedComponent],
       providers: [
         WizardService,
@@ -161,6 +165,62 @@ describe('VSphereProviderExtendedComponent', () => {
     fixture.detectChanges();
 
     expect(datastoreClusterField().options).toEqual(['/DC0/datastore/pod-a', '/DC0/datastore/pod-b']);
+  });
+
+  describe('loading the datastore clusters', () => {
+    const isDatastoreClustersRequest = (request: {url: string}): boolean => request.url.endsWith('/datastoreclusters');
+    let httpMock: HttpTestingController;
+
+    beforeEach(() => {
+      httpMock = TestBed.inject(HttpTestingController);
+    });
+
+    // The options are loaded after the debounce time of the cluster changes.
+    async function emitClusterChange(withCredentials: boolean): Promise<void> {
+      const vsphere = clusterSpecService.cluster.spec.cloud.vsphere;
+      vsphere.username = withCredentials ? 'user' : '';
+      vsphere.password = withCredentials ? 'pass' : '';
+      clusterSpecService.datacenter = 'dc';
+      clusterSpecService.clusterChanges.emit(clusterSpecService.cluster);
+      await new Promise(resolve => setTimeout(resolve, DEFAULT_DEBOUNCE_TIME_MS + DEBOUNCE_MARGIN_MS));
+    }
+
+    it('should offer the sorted datastore clusters once the credentials are entered', async () => {
+      await emitClusterChange(true);
+
+      httpMock
+        .expectOne(isDatastoreClustersRequest)
+        .flush({datastoreClusters: ['/DC0/datastore/pod-b', '/DC0/datastore/Pod-c', '/DC0/datastore/pod-a']});
+
+      expect(component.datastoreClusters).toEqual([
+        '/DC0/datastore/pod-a',
+        '/DC0/datastore/pod-b',
+        '/DC0/datastore/Pod-c',
+      ]);
+    });
+
+    it('should drop the options but keep the typed value without credentials', async () => {
+      component.datastoreClusters = ['/DC0/datastore/pod-a'];
+      setDatastoreCluster('/DC0/datastore/typed');
+
+      await emitClusterChange(false);
+
+      httpMock.expectNone(isDatastoreClustersRequest);
+      expect(component.datastoreClusters).toEqual([]);
+      expect(clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster).toBe('/DC0/datastore/typed');
+    });
+
+    it('should keep the typed value when the datastore clusters cannot be loaded', async () => {
+      component.datastoreClusters = ['/DC0/datastore/pod-a'];
+      setDatastoreCluster('/DC0/datastore/typed');
+
+      await emitClusterChange(true);
+      httpMock.expectOne(isDatastoreClustersRequest).flush('error', {status: 500, statusText: 'Server Error'});
+
+      expect(component.datastoreClusters).toEqual([]);
+      expect(component.form.get(component.Controls.DatastoreCluster).value).toEqual({main: '/DC0/datastore/typed'});
+      expect(clusterSpecService.cluster.spec.cloud.vsphere.datastoreCluster).toBe('/DC0/datastore/typed');
+    });
   });
 
   it('should write the datastore cluster to the cluster spec', () => {
