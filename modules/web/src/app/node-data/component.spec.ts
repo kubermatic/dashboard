@@ -201,6 +201,22 @@ describe('NodeDataComponent', () => {
       expect(component.isOperatingSystemAllowed(OperatingSystem.Ubuntu)).toBe(false);
     });
   });
+
+  describe('autoscaler min replicas', () => {
+    function setMinReplicas(value: number): void {
+      component.form.get(component.Controls.MinReplicas).setValue(value);
+    }
+
+    it('should accept zero', () => {
+      setMinReplicas(0);
+      expect(component.form.get(component.Controls.MinReplicas).valid).toBe(true);
+    });
+
+    it('should reject a negative value', () => {
+      setMinReplicas(-1);
+      expect(component.form.get(component.Controls.MinReplicas).hasError('min')).toBe(true);
+    });
+  });
 });
 
 describe('NodeDataComponent - OS settings merging', () => {

@@ -119,7 +119,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly OperatingSystem = OperatingSystem;
   readonly minReplicasCount = 0;
   readonly maxReplicasCount = 1000;
-  readonly autoscalerMinReplicasCount = 1;
+  readonly autoscalerMinReplicasCount = 0;
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
   readonly GENERATE_NAME_TOOLTIP = GENERATE_NAME_TOOLTIP;
 

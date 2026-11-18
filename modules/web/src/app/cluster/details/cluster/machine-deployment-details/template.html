@@ -78,7 +78,7 @@ limitations under the License.
             }
           </div>
         </km-property>
-        @if (machineDeployment.spec.minReplicas) {
+        @if (machineDeployment.spec.minReplicas != null) {
         <km-property>
           <div key>Min Replicas</div>
           <div value>

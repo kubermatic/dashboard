@@ -308,7 +308,7 @@ limitations under the License.
     </div>
     <km-number-stepper label="Min Replicas"
                        mode="all"
-                       hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
+                       hint="The minimum number of replicas for autoscaling. Minimum value can be 0."
                        [min]="autoscalerMinReplicasCount"
                        [max]="form.get(Controls.MaxReplicas).value  || maxReplicasCount"
                        [required]="form.get(Controls.MaxReplicas).value"
@@ -317,9 +317,9 @@ limitations under the License.
     <km-number-stepper label="Max Replicas"
                        mode="all"
                        hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
-                       [min]="form.get(Controls.MinReplicas).value || autoscalerMinReplicasCount"
+                       [min]="form.get(Controls.MinReplicas).value || 1"
                        [max]="maxReplicasCount"
-                       [required]="form.get(Controls.MinReplicas).value"
+                       [required]="form.get(Controls.MinReplicas).value != null"
                        [disabled]="isMinMaxReplicasDisabled()"
                        [formControlName]="Controls.MaxReplicas" />
     }

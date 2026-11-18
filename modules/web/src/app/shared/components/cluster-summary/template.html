@@ -912,10 +912,10 @@ limitations under the License.
                                  [value]="machineDeployment.spec.dynamicConfig" />
             }
 
-            @if (machineDeployment.spec.minReplicas; as minReplicas) {
+            @if (machineDeployment.spec.minReplicas != null) {
             <km-property>
               <div key>Min Replicas</div>
-              <div value>{{minReplicas}}</div>
+              <div value>{{machineDeployment.spec.minReplicas}}</div>
             </km-property>
             }
 
