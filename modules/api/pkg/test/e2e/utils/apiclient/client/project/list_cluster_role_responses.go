@@ -92,6 +92,11 @@ func (o *ListClusterRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list cluster role o k response
+func (o *ListClusterRoleOK) Code() int {
+	return 200
+}
+
 func (o *ListClusterRoleOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] listClusterRoleOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list cluster role unauthorized response
+func (o *ListClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClusterRoleUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] listClusterRoleUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list cluster role forbidden response
+func (o *ListClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *ListClusterRoleForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] listClusterRoleForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListClusterRoleDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list cluster role default response
-func (o *ListClusterRoleDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list cluster role default response has a 2xx status code
 func (o *ListClusterRoleDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListClusterRoleDefault) IsServerError() bool {
 // IsCode returns true when this list cluster role default response a status code equal to that given
 func (o *ListClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list cluster role default response
+func (o *ListClusterRoleDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListClusterRoleDefault) Error() string {

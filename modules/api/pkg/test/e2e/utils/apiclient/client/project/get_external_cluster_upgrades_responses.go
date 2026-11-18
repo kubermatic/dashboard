@@ -92,6 +92,11 @@ func (o *GetExternalClusterUpgradesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get external cluster upgrades o k response
+func (o *GetExternalClusterUpgradesOK) Code() int {
+	return 200
+}
+
 func (o *GetExternalClusterUpgradesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/upgrades][%d] getExternalClusterUpgradesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetExternalClusterUpgradesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get external cluster upgrades unauthorized response
+func (o *GetExternalClusterUpgradesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetExternalClusterUpgradesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/upgrades][%d] getExternalClusterUpgradesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetExternalClusterUpgradesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get external cluster upgrades forbidden response
+func (o *GetExternalClusterUpgradesForbidden) Code() int {
+	return 403
+}
+
 func (o *GetExternalClusterUpgradesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/upgrades][%d] getExternalClusterUpgradesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetExternalClusterUpgradesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get external cluster upgrades default response
-func (o *GetExternalClusterUpgradesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get external cluster upgrades default response has a 2xx status code
 func (o *GetExternalClusterUpgradesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetExternalClusterUpgradesDefault) IsServerError() bool {
 // IsCode returns true when this get external cluster upgrades default response a status code equal to that given
 func (o *GetExternalClusterUpgradesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get external cluster upgrades default response
+func (o *GetExternalClusterUpgradesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetExternalClusterUpgradesDefault) Error() string {

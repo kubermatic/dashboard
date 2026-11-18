@@ -92,6 +92,11 @@ func (o *ListConstraintsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list constraints o k response
+func (o *ListConstraintsOK) Code() int {
+	return 200
+}
+
 func (o *ListConstraintsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] listConstraintsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListConstraintsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list constraints unauthorized response
+func (o *ListConstraintsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListConstraintsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] listConstraintsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListConstraintsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list constraints forbidden response
+func (o *ListConstraintsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListConstraintsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] listConstraintsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListConstraintsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list constraints default response
-func (o *ListConstraintsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list constraints default response has a 2xx status code
 func (o *ListConstraintsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListConstraintsDefault) IsServerError() bool {
 // IsCode returns true when this list constraints default response a status code equal to that given
 func (o *ListConstraintsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list constraints default response
+func (o *ListConstraintsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListConstraintsDefault) Error() string {

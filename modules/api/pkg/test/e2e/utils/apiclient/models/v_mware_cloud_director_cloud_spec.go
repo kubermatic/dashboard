@@ -134,6 +134,11 @@ func (m *VMwareCloudDirectorCloudSpec) ContextValidate(ctx context.Context, form
 func (m *VMwareCloudDirectorCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
+
+		if swag.IsZero(m.CredentialsReference) { // not required
+			return nil
+		}
+
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")
@@ -150,6 +155,11 @@ func (m *VMwareCloudDirectorCloudSpec) contextValidateCredentialsReference(ctx c
 func (m *VMwareCloudDirectorCloudSpec) contextValidateCsi(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Csi != nil {
+
+		if swag.IsZero(m.Csi) { // not required
+			return nil
+		}
+
 		if err := m.Csi.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("csi")

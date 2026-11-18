@@ -92,6 +92,11 @@ func (o *UpdateAdminRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update admin rule group o k response
+func (o *UpdateAdminRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAdminRuleGroupOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateAdminRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update admin rule group unauthorized response
+func (o *UpdateAdminRuleGroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateAdminRuleGroupUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateAdminRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update admin rule group forbidden response
+func (o *UpdateAdminRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAdminRuleGroupForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateAdminRuleGroupDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update admin rule group default response
-func (o *UpdateAdminRuleGroupDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update admin rule group default response has a 2xx status code
 func (o *UpdateAdminRuleGroupDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateAdminRuleGroupDefault) IsServerError() bool {
 // IsCode returns true when this update admin rule group default response a status code equal to that given
 func (o *UpdateAdminRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update admin rule group default response
+func (o *UpdateAdminRuleGroupDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateAdminRuleGroupDefault) Error() string {

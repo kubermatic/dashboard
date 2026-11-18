@@ -92,6 +92,11 @@ func (o *ListSeedsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list seeds o k response
+func (o *ListSeedsOK) Code() int {
+	return 200
+}
+
 func (o *ListSeedsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/seeds][%d] listSeedsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListSeedsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list seeds unauthorized response
+func (o *ListSeedsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSeedsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/seeds][%d] listSeedsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListSeedsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list seeds forbidden response
+func (o *ListSeedsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSeedsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/seeds][%d] listSeedsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListSeedsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list seeds default response
-func (o *ListSeedsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list seeds default response has a 2xx status code
 func (o *ListSeedsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListSeedsDefault) IsServerError() bool {
 // IsCode returns true when this list seeds default response a status code equal to that given
 func (o *ListSeedsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list seeds default response
+func (o *ListSeedsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListSeedsDefault) Error() string {

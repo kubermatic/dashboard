@@ -93,6 +93,11 @@ func (o *UpdatePresetStatusOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update preset status o k response
+func (o *UpdatePresetStatusOK) Code() int {
+	return 200
+}
+
 func (o *UpdatePresetStatusOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusOK ", 200)
 }
@@ -142,6 +147,11 @@ func (o *UpdatePresetStatusUnauthorized) IsServerError() bool {
 // IsCode returns true when this update preset status unauthorized response a status code equal to that given
 func (o *UpdatePresetStatusUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the update preset status unauthorized response
+func (o *UpdatePresetStatusUnauthorized) Code() int {
+	return 401
 }
 
 func (o *UpdatePresetStatusUnauthorized) Error() string {
@@ -195,6 +205,11 @@ func (o *UpdatePresetStatusForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update preset status forbidden response
+func (o *UpdatePresetStatusForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdatePresetStatusForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusForbidden ", 403)
 }
@@ -226,11 +241,6 @@ type UpdatePresetStatusDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update preset status default response
-func (o *UpdatePresetStatusDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update preset status default response has a 2xx status code
 func (o *UpdatePresetStatusDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -254,6 +264,11 @@ func (o *UpdatePresetStatusDefault) IsServerError() bool {
 // IsCode returns true when this update preset status default response a status code equal to that given
 func (o *UpdatePresetStatusDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update preset status default response
+func (o *UpdatePresetStatusDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdatePresetStatusDefault) Error() string {

@@ -96,6 +96,11 @@ func (o *UpdateClusterTemplateCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the update cluster template created response
+func (o *UpdateClusterTemplateCreated) Code() int {
+	return 201
+}
+
 func (o *UpdateClusterTemplateCreated) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] updateClusterTemplateCreated  %+v", 201, o.Payload)
 }
@@ -158,6 +163,11 @@ func (o *UpdateClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update cluster template unauthorized response
+func (o *UpdateClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateClusterTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] updateClusterTemplateUnauthorized ", 401)
 }
@@ -209,6 +219,11 @@ func (o *UpdateClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update cluster template forbidden response
+func (o *UpdateClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateClusterTemplateForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] updateClusterTemplateForbidden ", 403)
 }
@@ -240,11 +255,6 @@ type UpdateClusterTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update cluster template default response
-func (o *UpdateClusterTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update cluster template default response has a 2xx status code
 func (o *UpdateClusterTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -268,6 +278,11 @@ func (o *UpdateClusterTemplateDefault) IsServerError() bool {
 // IsCode returns true when this update cluster template default response a status code equal to that given
 func (o *UpdateClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update cluster template default response
+func (o *UpdateClusterTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateClusterTemplateDefault) Error() string {
@@ -496,6 +511,11 @@ func (o *UpdateClusterTemplateBody) contextValidateApplications(ctx context.Cont
 	for i := 0; i < len(o.Applications); i++ {
 
 		if o.Applications[i] != nil {
+
+			if swag.IsZero(o.Applications[i]) { // not required
+				return nil
+			}
+
 			if err := o.Applications[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Body" + "." + "applications" + "." + strconv.Itoa(i))
@@ -516,6 +536,11 @@ func (o *UpdateClusterTemplateBody) contextValidateUserSSHKeys(ctx context.Conte
 	for i := 0; i < len(o.UserSSHKeys); i++ {
 
 		if o.UserSSHKeys[i] != nil {
+
+			if swag.IsZero(o.UserSSHKeys[i]) { // not required
+				return nil
+			}
+
 			if err := o.UserSSHKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Body" + "." + "userSshKeys" + "." + strconv.Itoa(i))
@@ -534,6 +559,11 @@ func (o *UpdateClusterTemplateBody) contextValidateUserSSHKeys(ctx context.Conte
 func (o *UpdateClusterTemplateBody) contextValidateCluster(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Cluster != nil {
+
+		if swag.IsZero(o.Cluster) { // not required
+			return nil
+		}
+
 		if err := o.Cluster.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "cluster")
@@ -550,6 +580,11 @@ func (o *UpdateClusterTemplateBody) contextValidateCluster(ctx context.Context, 
 func (o *UpdateClusterTemplateBody) contextValidateEncryptionAtRest(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.EncryptionAtRest != nil {
+
+		if swag.IsZero(o.EncryptionAtRest) { // not required
+			return nil
+		}
+
 		if err := o.EncryptionAtRest.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "encryptionAtRest")
@@ -566,6 +601,11 @@ func (o *UpdateClusterTemplateBody) contextValidateEncryptionAtRest(ctx context.
 func (o *UpdateClusterTemplateBody) contextValidateNodeDeployment(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.NodeDeployment != nil {
+
+		if swag.IsZero(o.NodeDeployment) { // not required
+			return nil
+		}
+
 		if err := o.NodeDeployment.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "nodeDeployment")

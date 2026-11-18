@@ -92,6 +92,11 @@ func (o *ListUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list user o k response
+func (o *ListUserOK) Code() int {
+	return 200
+}
+
 func (o *ListUserOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/users][%d] listUserOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListUserUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list user unauthorized response
+func (o *ListUserUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListUserUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/users][%d] listUserUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListUserForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list user forbidden response
+func (o *ListUserForbidden) Code() int {
+	return 403
+}
+
 func (o *ListUserForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/users][%d] listUserForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListUserDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list user default response
-func (o *ListUserDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list user default response has a 2xx status code
 func (o *ListUserDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListUserDefault) IsServerError() bool {
 // IsCode returns true when this list user default response a status code equal to that given
 func (o *ListUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list user default response
+func (o *ListUserDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListUserDefault) Error() string {

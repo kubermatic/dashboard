@@ -91,6 +91,11 @@ func (o *MigrateClusterToExternalCCMOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the migrate cluster to external c c m o k response
+func (o *MigrateClusterToExternalCCMOK) Code() int {
+	return 200
+}
+
 func (o *MigrateClusterToExternalCCMOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *MigrateClusterToExternalCCMUnauthorized) IsServerError() bool {
 // IsCode returns true when this migrate cluster to external c c m unauthorized response a status code equal to that given
 func (o *MigrateClusterToExternalCCMUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the migrate cluster to external c c m unauthorized response
+func (o *MigrateClusterToExternalCCMUnauthorized) Code() int {
+	return 401
 }
 
 func (o *MigrateClusterToExternalCCMUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *MigrateClusterToExternalCCMForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the migrate cluster to external c c m forbidden response
+func (o *MigrateClusterToExternalCCMForbidden) Code() int {
+	return 403
+}
+
 func (o *MigrateClusterToExternalCCMForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type MigrateClusterToExternalCCMDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the migrate cluster to external c c m default response
-func (o *MigrateClusterToExternalCCMDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this migrate cluster to external c c m default response has a 2xx status code
 func (o *MigrateClusterToExternalCCMDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *MigrateClusterToExternalCCMDefault) IsServerError() bool {
 // IsCode returns true when this migrate cluster to external c c m default response a status code equal to that given
 func (o *MigrateClusterToExternalCCMDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the migrate cluster to external c c m default response
+func (o *MigrateClusterToExternalCCMDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *MigrateClusterToExternalCCMDefault) Error() string {

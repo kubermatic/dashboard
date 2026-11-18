@@ -92,6 +92,11 @@ func (o *PatchClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch cluster o k response
+func (o *PatchClusterOK) Code() int {
+	return 200
+}
+
 func (o *PatchClusterOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch cluster unauthorized response
+func (o *PatchClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch cluster forbidden response
+func (o *PatchClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchClusterForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch cluster default response
-func (o *PatchClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch cluster default response has a 2xx status code
 func (o *PatchClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchClusterDefault) IsServerError() bool {
 // IsCode returns true when this patch cluster default response a status code equal to that given
 func (o *PatchClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch cluster default response
+func (o *PatchClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchClusterDefault) Error() string {

@@ -80,6 +80,11 @@ func (o *ListProjectAlibabaZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project alibaba zones o k response
+func (o *ListProjectAlibabaZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAlibabaZonesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/zones][%d] listProjectAlibabaZonesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectAlibabaZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project alibaba zones default response
-func (o *ListProjectAlibabaZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project alibaba zones default response has a 2xx status code
 func (o *ListProjectAlibabaZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectAlibabaZonesDefault) IsServerError() bool {
 // IsCode returns true when this list project alibaba zones default response a status code equal to that given
 func (o *ListProjectAlibabaZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project alibaba zones default response
+func (o *ListProjectAlibabaZonesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAlibabaZonesDefault) Error() string {

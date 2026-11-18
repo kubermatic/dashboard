@@ -80,6 +80,11 @@ func (o *ListProjectGCPZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project g c p zones o k response
+func (o *ListProjectGCPZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectGCPZonesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones][%d] listProjectGCPZonesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectGCPZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project g c p zones default response
-func (o *ListProjectGCPZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project g c p zones default response has a 2xx status code
 func (o *ListProjectGCPZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectGCPZonesDefault) IsServerError() bool {
 // IsCode returns true when this list project g c p zones default response a status code equal to that given
 func (o *ListProjectGCPZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project g c p zones default response
+func (o *ListProjectGCPZonesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectGCPZonesDefault) Error() string {

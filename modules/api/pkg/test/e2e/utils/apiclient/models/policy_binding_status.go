@@ -100,6 +100,11 @@ func (m *PolicyBindingStatus) contextValidateConditions(ctx context.Context, for
 	for i := 0; i < len(m.Conditions); i++ {
 
 		if m.Conditions[i] != nil {
+
+			if swag.IsZero(m.Conditions[i]) { // not required
+				return nil
+			}
+
 			if err := m.Conditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("conditions" + "." + strconv.Itoa(i))

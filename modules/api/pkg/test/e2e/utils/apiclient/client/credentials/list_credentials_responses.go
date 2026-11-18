@@ -80,6 +80,11 @@ func (o *ListCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list credentials o k response
+func (o *ListCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentialsOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list credentials default response
-func (o *ListCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list credentials default response has a 2xx status code
 func (o *ListCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list credentials default response a status code equal to that given
 func (o *ListCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list credentials default response
+func (o *ListCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListCredentialsDefault) Error() string {

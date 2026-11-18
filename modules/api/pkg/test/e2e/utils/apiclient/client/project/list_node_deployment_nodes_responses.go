@@ -92,6 +92,11 @@ func (o *ListNodeDeploymentNodesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list node deployment nodes o k response
+func (o *ListNodeDeploymentNodesOK) Code() int {
+	return 200
+}
+
 func (o *ListNodeDeploymentNodesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes][%d] listNodeDeploymentNodesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListNodeDeploymentNodesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list node deployment nodes unauthorized response
+func (o *ListNodeDeploymentNodesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListNodeDeploymentNodesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes][%d] listNodeDeploymentNodesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListNodeDeploymentNodesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list node deployment nodes forbidden response
+func (o *ListNodeDeploymentNodesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListNodeDeploymentNodesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes][%d] listNodeDeploymentNodesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListNodeDeploymentNodesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list node deployment nodes default response
-func (o *ListNodeDeploymentNodesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list node deployment nodes default response has a 2xx status code
 func (o *ListNodeDeploymentNodesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListNodeDeploymentNodesDefault) IsServerError() bool {
 // IsCode returns true when this list node deployment nodes default response a status code equal to that given
 func (o *ListNodeDeploymentNodesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list node deployment nodes default response
+func (o *ListNodeDeploymentNodesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListNodeDeploymentNodesDefault) Error() string {

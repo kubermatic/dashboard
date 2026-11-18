@@ -91,6 +91,11 @@ func (o *DeleteRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete rule group o k response
+func (o *DeleteRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *DeleteRuleGroupOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] deleteRuleGroupOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteRuleGroupUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete rule group unauthorized response a status code equal to that given
 func (o *DeleteRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete rule group unauthorized response
+func (o *DeleteRuleGroupUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteRuleGroupUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete rule group forbidden response
+func (o *DeleteRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteRuleGroupForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] deleteRuleGroupForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteRuleGroupDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete rule group default response
-func (o *DeleteRuleGroupDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete rule group default response has a 2xx status code
 func (o *DeleteRuleGroupDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteRuleGroupDefault) IsServerError() bool {
 // IsCode returns true when this delete rule group default response a status code equal to that given
 func (o *DeleteRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete rule group default response
+func (o *DeleteRuleGroupDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteRuleGroupDefault) Error() string {

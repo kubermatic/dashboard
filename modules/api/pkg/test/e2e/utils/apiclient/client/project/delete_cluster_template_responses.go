@@ -91,6 +91,11 @@ func (o *DeleteClusterTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete cluster template o k response
+func (o *DeleteClusterTemplateOK) Code() int {
+	return 200
+}
+
 func (o *DeleteClusterTemplateOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteClusterTemplateUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete cluster template unauthorized response a status code equal to that given
 func (o *DeleteClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete cluster template unauthorized response
+func (o *DeleteClusterTemplateUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteClusterTemplateUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete cluster template forbidden response
+func (o *DeleteClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteClusterTemplateForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteClusterTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete cluster template default response
-func (o *DeleteClusterTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete cluster template default response has a 2xx status code
 func (o *DeleteClusterTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteClusterTemplateDefault) IsServerError() bool {
 // IsCode returns true when this delete cluster template default response a status code equal to that given
 func (o *DeleteClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete cluster template default response
+func (o *DeleteClusterTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteClusterTemplateDefault) Error() string {

@@ -91,6 +91,11 @@ func (o *DeleteSSHKeyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete Ssh key o k response
+func (o *DeleteSSHKeyOK) Code() int {
+	return 200
+}
+
 func (o *DeleteSSHKeyOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteSSHKeyUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete Ssh key unauthorized response a status code equal to that given
 func (o *DeleteSSHKeyUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete Ssh key unauthorized response
+func (o *DeleteSSHKeyUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteSSHKeyUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteSSHKeyForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete Ssh key forbidden response
+func (o *DeleteSSHKeyForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteSSHKeyForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteSSHKeyDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete SSH key default response
-func (o *DeleteSSHKeyDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete SSH key default response has a 2xx status code
 func (o *DeleteSSHKeyDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteSSHKeyDefault) IsServerError() bool {
 // IsCode returns true when this delete SSH key default response a status code equal to that given
 func (o *DeleteSSHKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete SSH key default response
+func (o *DeleteSSHKeyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteSSHKeyDefault) Error() string {

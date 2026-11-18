@@ -78,6 +78,11 @@ func (m *EncryptionConfiguration) ContextValidate(ctx context.Context, formats s
 func (m *EncryptionConfiguration) contextValidateSecretbox(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Secretbox != nil {
+
+		if swag.IsZero(m.Secretbox) { // not required
+			return nil
+		}
+
 		if err := m.Secretbox.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("secretbox")

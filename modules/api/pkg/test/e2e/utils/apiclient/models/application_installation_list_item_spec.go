@@ -102,6 +102,11 @@ func (m *ApplicationInstallationListItemSpec) ContextValidate(ctx context.Contex
 func (m *ApplicationInstallationListItemSpec) contextValidateApplicationRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ApplicationRef != nil {
+
+		if swag.IsZero(m.ApplicationRef) { // not required
+			return nil
+		}
+
 		if err := m.ApplicationRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("applicationRef")
@@ -118,6 +123,11 @@ func (m *ApplicationInstallationListItemSpec) contextValidateApplicationRef(ctx 
 func (m *ApplicationInstallationListItemSpec) contextValidateNamespace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Namespace != nil {
+
+		if swag.IsZero(m.Namespace) { // not required
+			return nil
+		}
+
 		if err := m.Namespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespace")

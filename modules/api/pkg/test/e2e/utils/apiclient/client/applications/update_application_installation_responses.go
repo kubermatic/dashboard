@@ -92,6 +92,11 @@ func (o *UpdateApplicationInstallationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update application installation o k response
+func (o *UpdateApplicationInstallationOK) Code() int {
+	return 200
+}
+
 func (o *UpdateApplicationInstallationOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateApplicationInstallationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update application installation unauthorized response
+func (o *UpdateApplicationInstallationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateApplicationInstallationUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateApplicationInstallationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update application installation forbidden response
+func (o *UpdateApplicationInstallationForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateApplicationInstallationForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateApplicationInstallationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update application installation default response
-func (o *UpdateApplicationInstallationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update application installation default response has a 2xx status code
 func (o *UpdateApplicationInstallationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateApplicationInstallationDefault) IsServerError() bool {
 // IsCode returns true when this update application installation default response a status code equal to that given
 func (o *UpdateApplicationInstallationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update application installation default response
+func (o *UpdateApplicationInstallationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateApplicationInstallationDefault) Error() string {

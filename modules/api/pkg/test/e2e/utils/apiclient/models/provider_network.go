@@ -118,6 +118,11 @@ func (m *ProviderNetwork) contextValidateVPCs(ctx context.Context, formats strfm
 	for i := 0; i < len(m.VPCs); i++ {
 
 		if m.VPCs[i] != nil {
+
+			if swag.IsZero(m.VPCs[i]) { // not required
+				return nil
+			}
+
 			if err := m.VPCs[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("vpcs" + "." + strconv.Itoa(i))
@@ -136,6 +141,11 @@ func (m *ProviderNetwork) contextValidateVPCs(ctx context.Context, formats strfm
 func (m *ProviderNetwork) contextValidateNetworkPolicy(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NetworkPolicy != nil {
+
+		if swag.IsZero(m.NetworkPolicy) { // not required
+			return nil
+		}
+
 		if err := m.NetworkPolicy.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("networkPolicy")

@@ -92,6 +92,11 @@ func (o *GetAllowedRegistryOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get allowed registry o k response
+func (o *GetAllowedRegistryOK) Code() int {
+	return 200
+}
+
 func (o *GetAllowedRegistryOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries/{allowed_registry}][%d] getAllowedRegistryOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get allowed registry unauthorized response
+func (o *GetAllowedRegistryUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetAllowedRegistryUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries/{allowed_registry}][%d] getAllowedRegistryUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get allowed registry forbidden response
+func (o *GetAllowedRegistryForbidden) Code() int {
+	return 403
+}
+
 func (o *GetAllowedRegistryForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries/{allowed_registry}][%d] getAllowedRegistryForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetAllowedRegistryDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get allowed registry default response
-func (o *GetAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get allowed registry default response has a 2xx status code
 func (o *GetAllowedRegistryDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetAllowedRegistryDefault) IsServerError() bool {
 // IsCode returns true when this get allowed registry default response a status code equal to that given
 func (o *GetAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get allowed registry default response
+func (o *GetAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetAllowedRegistryDefault) Error() string {

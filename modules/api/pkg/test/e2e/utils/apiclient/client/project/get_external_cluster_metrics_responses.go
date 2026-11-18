@@ -92,6 +92,11 @@ func (o *GetExternalClusterMetricsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get external cluster metrics o k response
+func (o *GetExternalClusterMetricsOK) Code() int {
+	return 200
+}
+
 func (o *GetExternalClusterMetricsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/metrics][%d] getExternalClusterMetricsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetExternalClusterMetricsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get external cluster metrics unauthorized response
+func (o *GetExternalClusterMetricsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetExternalClusterMetricsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/metrics][%d] getExternalClusterMetricsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetExternalClusterMetricsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get external cluster metrics forbidden response
+func (o *GetExternalClusterMetricsForbidden) Code() int {
+	return 403
+}
+
 func (o *GetExternalClusterMetricsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/metrics][%d] getExternalClusterMetricsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetExternalClusterMetricsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get external cluster metrics default response
-func (o *GetExternalClusterMetricsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get external cluster metrics default response has a 2xx status code
 func (o *GetExternalClusterMetricsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetExternalClusterMetricsDefault) IsServerError() bool {
 // IsCode returns true when this get external cluster metrics default response a status code equal to that given
 func (o *GetExternalClusterMetricsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get external cluster metrics default response
+func (o *GetExternalClusterMetricsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetExternalClusterMetricsDefault) Error() string {

@@ -146,6 +146,11 @@ func (m *AuditSidecarSettings) contextValidateExtraEnvs(ctx context.Context, for
 	for i := 0; i < len(m.ExtraEnvs); i++ {
 
 		if m.ExtraEnvs[i] != nil {
+
+			if swag.IsZero(m.ExtraEnvs[i]) { // not required
+				return nil
+			}
+
 			if err := m.ExtraEnvs[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("extraEnvs" + "." + strconv.Itoa(i))
@@ -164,6 +169,11 @@ func (m *AuditSidecarSettings) contextValidateExtraEnvs(ctx context.Context, for
 func (m *AuditSidecarSettings) contextValidateConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Config != nil {
+
+		if swag.IsZero(m.Config) { // not required
+			return nil
+		}
+
 		if err := m.Config.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("config")
@@ -180,6 +190,11 @@ func (m *AuditSidecarSettings) contextValidateConfig(ctx context.Context, format
 func (m *AuditSidecarSettings) contextValidateResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resources != nil {
+
+		if swag.IsZero(m.Resources) { // not required
+			return nil
+		}
+
 		if err := m.Resources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("resources")

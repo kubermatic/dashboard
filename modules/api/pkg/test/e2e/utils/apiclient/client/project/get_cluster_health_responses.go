@@ -92,6 +92,11 @@ func (o *GetClusterHealthOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster health o k response
+func (o *GetClusterHealthOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterHealthOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetClusterHealthUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster health unauthorized response
+func (o *GetClusterHealthUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterHealthUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetClusterHealthForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster health forbidden response
+func (o *GetClusterHealthForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterHealthForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetClusterHealthDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster health default response
-func (o *GetClusterHealthDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster health default response has a 2xx status code
 func (o *GetClusterHealthDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetClusterHealthDefault) IsServerError() bool {
 // IsCode returns true when this get cluster health default response a status code equal to that given
 func (o *GetClusterHealthDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster health default response
+func (o *GetClusterHealthDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterHealthDefault) Error() string {

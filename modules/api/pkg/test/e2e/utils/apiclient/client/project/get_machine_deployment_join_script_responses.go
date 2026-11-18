@@ -92,6 +92,11 @@ func (o *GetMachineDeploymentJoinScriptOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get machine deployment join script o k response
+func (o *GetMachineDeploymentJoinScriptOK) Code() int {
+	return 200
+}
+
 func (o *GetMachineDeploymentJoinScriptOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetMachineDeploymentJoinScriptUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get machine deployment join script unauthorized response
+func (o *GetMachineDeploymentJoinScriptUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetMachineDeploymentJoinScriptUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetMachineDeploymentJoinScriptForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get machine deployment join script forbidden response
+func (o *GetMachineDeploymentJoinScriptForbidden) Code() int {
+	return 403
+}
+
 func (o *GetMachineDeploymentJoinScriptForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetMachineDeploymentJoinScriptDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get machine deployment join script default response
-func (o *GetMachineDeploymentJoinScriptDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get machine deployment join script default response has a 2xx status code
 func (o *GetMachineDeploymentJoinScriptDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetMachineDeploymentJoinScriptDefault) IsServerError() bool {
 // IsCode returns true when this get machine deployment join script default response a status code equal to that given
 func (o *GetMachineDeploymentJoinScriptDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get machine deployment join script default response
+func (o *GetMachineDeploymentJoinScriptDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetMachineDeploymentJoinScriptDefault) Error() string {

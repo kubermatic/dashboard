@@ -97,6 +97,11 @@ func (o *DeletePresetOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete preset o k response
+func (o *DeletePresetOK) Code() int {
+	return 200
+}
+
 func (o *DeletePresetOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}][%d] deletePresetOK ", 200)
 }
@@ -146,6 +151,11 @@ func (o *DeletePresetUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete preset unauthorized response a status code equal to that given
 func (o *DeletePresetUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete preset unauthorized response
+func (o *DeletePresetUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeletePresetUnauthorized) Error() string {
@@ -199,6 +209,11 @@ func (o *DeletePresetForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete preset forbidden response
+func (o *DeletePresetForbidden) Code() int {
+	return 403
+}
+
 func (o *DeletePresetForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}][%d] deletePresetForbidden ", 403)
 }
@@ -250,6 +265,11 @@ func (o *DeletePresetNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the delete preset not found response
+func (o *DeletePresetNotFound) Code() int {
+	return 404
+}
+
 func (o *DeletePresetNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}][%d] deletePresetNotFound ", 404)
 }
@@ -281,11 +301,6 @@ type DeletePresetDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete preset default response
-func (o *DeletePresetDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete preset default response has a 2xx status code
 func (o *DeletePresetDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -309,6 +324,11 @@ func (o *DeletePresetDefault) IsServerError() bool {
 // IsCode returns true when this delete preset default response a status code equal to that given
 func (o *DeletePresetDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete preset default response
+func (o *DeletePresetDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeletePresetDefault) Error() string {

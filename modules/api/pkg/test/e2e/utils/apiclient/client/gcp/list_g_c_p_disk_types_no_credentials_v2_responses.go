@@ -80,6 +80,11 @@ func (o *ListGCPDiskTypesNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g c p disk types no credentials v2 o k response
+func (o *ListGCPDiskTypesNoCredentialsV2OK) Code() int {
+	return 200
+}
+
 func (o *ListGCPDiskTypesNoCredentialsV2OK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/disktypes][%d] listGCPDiskTypesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListGCPDiskTypesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g c p disk types no credentials v2 default response
-func (o *ListGCPDiskTypesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g c p disk types no credentials v2 default response has a 2xx status code
 func (o *ListGCPDiskTypesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListGCPDiskTypesNoCredentialsV2Default) IsServerError() bool {
 // IsCode returns true when this list g c p disk types no credentials v2 default response a status code equal to that given
 func (o *ListGCPDiskTypesNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list g c p disk types no credentials v2 default response
+func (o *ListGCPDiskTypesNoCredentialsV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *ListGCPDiskTypesNoCredentialsV2Default) Error() string {

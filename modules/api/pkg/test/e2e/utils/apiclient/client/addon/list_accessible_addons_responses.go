@@ -92,6 +92,11 @@ func (o *ListAccessibleAddonsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list accessible addons o k response
+func (o *ListAccessibleAddonsOK) Code() int {
+	return 200
+}
+
 func (o *ListAccessibleAddonsOK) Error() string {
 	return fmt.Sprintf("[POST /api/v1/addons][%d] listAccessibleAddonsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListAccessibleAddonsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list accessible addons unauthorized response
+func (o *ListAccessibleAddonsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAccessibleAddonsUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/addons][%d] listAccessibleAddonsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListAccessibleAddonsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list accessible addons forbidden response
+func (o *ListAccessibleAddonsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAccessibleAddonsForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/addons][%d] listAccessibleAddonsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListAccessibleAddonsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list accessible addons default response
-func (o *ListAccessibleAddonsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list accessible addons default response has a 2xx status code
 func (o *ListAccessibleAddonsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListAccessibleAddonsDefault) IsServerError() bool {
 // IsCode returns true when this list accessible addons default response a status code equal to that given
 func (o *ListAccessibleAddonsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list accessible addons default response
+func (o *ListAccessibleAddonsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAccessibleAddonsDefault) Error() string {

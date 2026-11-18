@@ -92,6 +92,11 @@ func (o *GetDefaultClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get default cluster o k response
+func (o *GetDefaultClusterOK) Code() int {
+	return 200
+}
+
 func (o *GetDefaultClusterOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetDefaultClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get default cluster unauthorized response
+func (o *GetDefaultClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetDefaultClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetDefaultClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get default cluster forbidden response
+func (o *GetDefaultClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *GetDefaultClusterForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetDefaultClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get default cluster default response
-func (o *GetDefaultClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get default cluster default response has a 2xx status code
 func (o *GetDefaultClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetDefaultClusterDefault) IsServerError() bool {
 // IsCode returns true when this get default cluster default response a status code equal to that given
 func (o *GetDefaultClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get default cluster default response
+func (o *GetDefaultClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetDefaultClusterDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *CreateRuleGroupCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create rule group created response
+func (o *CreateRuleGroupCreated) Code() int {
+	return 201
+}
+
 func (o *CreateRuleGroupCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] createRuleGroupCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create rule group unauthorized response
+func (o *CreateRuleGroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateRuleGroupUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] createRuleGroupUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create rule group forbidden response
+func (o *CreateRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateRuleGroupForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] createRuleGroupForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateRuleGroupDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create rule group default response
-func (o *CreateRuleGroupDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create rule group default response has a 2xx status code
 func (o *CreateRuleGroupDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateRuleGroupDefault) IsServerError() bool {
 // IsCode returns true when this create rule group default response a status code equal to that given
 func (o *CreateRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create rule group default response
+func (o *CreateRuleGroupDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateRuleGroupDefault) Error() string {

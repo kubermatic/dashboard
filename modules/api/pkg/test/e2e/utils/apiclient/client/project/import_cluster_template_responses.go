@@ -97,6 +97,11 @@ func (o *ImportClusterTemplateCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the import cluster template created response
+func (o *ImportClusterTemplateCreated) Code() int {
+	return 201
+}
+
 func (o *ImportClusterTemplateCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/import][%d] importClusterTemplateCreated  %+v", 201, o.Payload)
 }
@@ -159,6 +164,11 @@ func (o *ImportClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the import cluster template unauthorized response
+func (o *ImportClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ImportClusterTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/import][%d] importClusterTemplateUnauthorized ", 401)
 }
@@ -210,6 +220,11 @@ func (o *ImportClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the import cluster template forbidden response
+func (o *ImportClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *ImportClusterTemplateForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/import][%d] importClusterTemplateForbidden ", 403)
 }
@@ -241,11 +256,6 @@ type ImportClusterTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the import cluster template default response
-func (o *ImportClusterTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this import cluster template default response has a 2xx status code
 func (o *ImportClusterTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -269,6 +279,11 @@ func (o *ImportClusterTemplateDefault) IsServerError() bool {
 // IsCode returns true when this import cluster template default response a status code equal to that given
 func (o *ImportClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the import cluster template default response
+func (o *ImportClusterTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ImportClusterTemplateDefault) Error() string {
@@ -522,6 +537,11 @@ func (o *ImportClusterTemplateBody) contextValidateApplications(ctx context.Cont
 	for i := 0; i < len(o.Applications); i++ {
 
 		if o.Applications[i] != nil {
+
+			if swag.IsZero(o.Applications[i]) { // not required
+				return nil
+			}
+
 			if err := o.Applications[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Body" + "." + "applications" + "." + strconv.Itoa(i))
@@ -542,6 +562,11 @@ func (o *ImportClusterTemplateBody) contextValidateUserSSHKeys(ctx context.Conte
 	for i := 0; i < len(o.UserSSHKeys); i++ {
 
 		if o.UserSSHKeys[i] != nil {
+
+			if swag.IsZero(o.UserSSHKeys[i]) { // not required
+				return nil
+			}
+
 			if err := o.UserSSHKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Body" + "." + "userSshKeys" + "." + strconv.Itoa(i))
@@ -560,6 +585,11 @@ func (o *ImportClusterTemplateBody) contextValidateUserSSHKeys(ctx context.Conte
 func (o *ImportClusterTemplateBody) contextValidateCluster(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Cluster != nil {
+
+		if swag.IsZero(o.Cluster) { // not required
+			return nil
+		}
+
 		if err := o.Cluster.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "cluster")
@@ -576,6 +606,11 @@ func (o *ImportClusterTemplateBody) contextValidateCluster(ctx context.Context, 
 func (o *ImportClusterTemplateBody) contextValidateNodeDeployment(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.NodeDeployment != nil {
+
+		if swag.IsZero(o.NodeDeployment) { // not required
+			return nil
+		}
+
 		if err := o.NodeDeployment.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "nodeDeployment")

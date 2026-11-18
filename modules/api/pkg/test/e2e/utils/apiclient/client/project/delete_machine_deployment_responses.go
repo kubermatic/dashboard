@@ -91,6 +91,11 @@ func (o *DeleteMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete machine deployment o k response
+func (o *DeleteMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *DeleteMachineDeploymentOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteMachineDeploymentOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteMachineDeploymentUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete machine deployment unauthorized response a status code equal to that given
 func (o *DeleteMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete machine deployment unauthorized response
+func (o *DeleteMachineDeploymentUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteMachineDeploymentUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete machine deployment forbidden response
+func (o *DeleteMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteMachineDeploymentForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete machine deployment default response
-func (o *DeleteMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete machine deployment default response has a 2xx status code
 func (o *DeleteMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this delete machine deployment default response a status code equal to that given
 func (o *DeleteMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete machine deployment default response
+func (o *DeleteMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteMachineDeploymentDefault) Error() string {

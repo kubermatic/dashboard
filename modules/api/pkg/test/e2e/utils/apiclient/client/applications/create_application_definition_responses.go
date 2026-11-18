@@ -92,6 +92,11 @@ func (o *CreateApplicationDefinitionCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create application definition created response
+func (o *CreateApplicationDefinitionCreated) Code() int {
+	return 201
+}
+
 func (o *CreateApplicationDefinitionCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create application definition unauthorized response
+func (o *CreateApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateApplicationDefinitionUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create application definition forbidden response
+func (o *CreateApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateApplicationDefinitionForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateApplicationDefinitionDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create application definition default response
-func (o *CreateApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create application definition default response has a 2xx status code
 func (o *CreateApplicationDefinitionDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateApplicationDefinitionDefault) IsServerError() bool {
 // IsCode returns true when this create application definition default response a status code equal to that given
 func (o *CreateApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create application definition default response
+func (o *CreateApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateApplicationDefinitionDefault) Error() string {

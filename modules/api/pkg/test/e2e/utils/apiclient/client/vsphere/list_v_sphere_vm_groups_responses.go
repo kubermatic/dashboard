@@ -80,6 +80,11 @@ func (o *ListVSphereVMGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v sphere Vm groups o k response
+func (o *ListVSphereVMGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListVSphereVMGroupsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVmGroupsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListVSphereVMGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v sphere VM groups default response
-func (o *ListVSphereVMGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v sphere VM groups default response has a 2xx status code
 func (o *ListVSphereVMGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListVSphereVMGroupsDefault) IsServerError() bool {
 // IsCode returns true when this list v sphere VM groups default response a status code equal to that given
 func (o *ListVSphereVMGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list v sphere VM groups default response
+func (o *ListVSphereVMGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVSphereVMGroupsDefault) Error() string {

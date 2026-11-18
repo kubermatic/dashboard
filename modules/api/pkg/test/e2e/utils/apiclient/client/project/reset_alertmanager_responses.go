@@ -91,6 +91,11 @@ func (o *ResetAlertmanagerOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the reset alertmanager o k response
+func (o *ResetAlertmanagerOK) Code() int {
+	return 200
+}
+
 func (o *ResetAlertmanagerOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *ResetAlertmanagerUnauthorized) IsServerError() bool {
 // IsCode returns true when this reset alertmanager unauthorized response a status code equal to that given
 func (o *ResetAlertmanagerUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the reset alertmanager unauthorized response
+func (o *ResetAlertmanagerUnauthorized) Code() int {
+	return 401
 }
 
 func (o *ResetAlertmanagerUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *ResetAlertmanagerForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the reset alertmanager forbidden response
+func (o *ResetAlertmanagerForbidden) Code() int {
+	return 403
+}
+
 func (o *ResetAlertmanagerForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type ResetAlertmanagerDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the reset alertmanager default response
-func (o *ResetAlertmanagerDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this reset alertmanager default response has a 2xx status code
 func (o *ResetAlertmanagerDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *ResetAlertmanagerDefault) IsServerError() bool {
 // IsCode returns true when this reset alertmanager default response a status code equal to that given
 func (o *ResetAlertmanagerDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the reset alertmanager default response
+func (o *ResetAlertmanagerDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ResetAlertmanagerDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *AddServiceAccountToProjectCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the add service account to project created response
+func (o *AddServiceAccountToProjectCreated) Code() int {
+	return 201
+}
+
 func (o *AddServiceAccountToProjectCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts][%d] addServiceAccountToProjectCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *AddServiceAccountToProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the add service account to project unauthorized response
+func (o *AddServiceAccountToProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *AddServiceAccountToProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts][%d] addServiceAccountToProjectUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *AddServiceAccountToProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the add service account to project forbidden response
+func (o *AddServiceAccountToProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *AddServiceAccountToProjectForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts][%d] addServiceAccountToProjectForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type AddServiceAccountToProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the add service account to project default response
-func (o *AddServiceAccountToProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this add service account to project default response has a 2xx status code
 func (o *AddServiceAccountToProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *AddServiceAccountToProjectDefault) IsServerError() bool {
 // IsCode returns true when this add service account to project default response a status code equal to that given
 func (o *AddServiceAccountToProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the add service account to project default response
+func (o *AddServiceAccountToProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *AddServiceAccountToProjectDefault) Error() string {

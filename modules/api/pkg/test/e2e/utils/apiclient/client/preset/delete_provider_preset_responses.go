@@ -91,6 +91,11 @@ func (o *DeleteProviderPresetOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete provider preset o k response
+func (o *DeleteProviderPresetOK) Code() int {
+	return 200
+}
+
 func (o *DeleteProviderPresetOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/providers/{provider_name}/presets/{preset_name}][%d] deleteProviderPresetOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteProviderPresetUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete provider preset unauthorized response a status code equal to that given
 func (o *DeleteProviderPresetUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete provider preset unauthorized response
+func (o *DeleteProviderPresetUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteProviderPresetUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteProviderPresetForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete provider preset forbidden response
+func (o *DeleteProviderPresetForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteProviderPresetForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/providers/{provider_name}/presets/{preset_name}][%d] deleteProviderPresetForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteProviderPresetDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete provider preset default response
-func (o *DeleteProviderPresetDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete provider preset default response has a 2xx status code
 func (o *DeleteProviderPresetDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteProviderPresetDefault) IsServerError() bool {
 // IsCode returns true when this delete provider preset default response a status code equal to that given
 func (o *DeleteProviderPresetDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete provider preset default response
+func (o *DeleteProviderPresetDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteProviderPresetDefault) Error() string {

@@ -91,6 +91,11 @@ func (o *DeleteNodeDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete node deployment o k response
+func (o *DeleteNodeDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *DeleteNodeDeploymentOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteNodeDeploymentUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete node deployment unauthorized response a status code equal to that given
 func (o *DeleteNodeDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete node deployment unauthorized response
+func (o *DeleteNodeDeploymentUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteNodeDeploymentUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteNodeDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete node deployment forbidden response
+func (o *DeleteNodeDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteNodeDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteNodeDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete node deployment default response
-func (o *DeleteNodeDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete node deployment default response has a 2xx status code
 func (o *DeleteNodeDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteNodeDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this delete node deployment default response a status code equal to that given
 func (o *DeleteNodeDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete node deployment default response
+func (o *DeleteNodeDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteNodeDeploymentDefault) Error() string {

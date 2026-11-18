@@ -91,6 +91,11 @@ func (m *ConstraintStatus) contextValidateViolations(ctx context.Context, format
 	for i := 0; i < len(m.Violations); i++ {
 
 		if m.Violations[i] != nil {
+
+			if swag.IsZero(m.Violations[i]) { // not required
+				return nil
+			}
+
 			if err := m.Violations[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("violations" + "." + strconv.Itoa(i))

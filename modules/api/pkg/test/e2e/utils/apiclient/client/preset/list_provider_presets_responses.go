@@ -92,6 +92,11 @@ func (o *ListProviderPresetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list provider presets o k response
+func (o *ListProviderPresetsOK) Code() int {
+	return 200
+}
+
 func (o *ListProviderPresetsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *ListProviderPresetsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list provider presets unauthorized response
+func (o *ListProviderPresetsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProviderPresetsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *ListProviderPresetsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list provider presets forbidden response
+func (o *ListProviderPresetsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProviderPresetsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type ListProviderPresetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list provider presets default response
-func (o *ListProviderPresetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list provider presets default response has a 2xx status code
 func (o *ListProviderPresetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *ListProviderPresetsDefault) IsServerError() bool {
 // IsCode returns true when this list provider presets default response a status code equal to that given
 func (o *ListProviderPresetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list provider presets default response
+func (o *ListProviderPresetsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProviderPresetsDefault) Error() string {

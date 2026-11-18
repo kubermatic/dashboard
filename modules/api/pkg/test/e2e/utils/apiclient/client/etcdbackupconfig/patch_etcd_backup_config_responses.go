@@ -92,6 +92,11 @@ func (o *PatchEtcdBackupConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch etcd backup config o k response
+func (o *PatchEtcdBackupConfigOK) Code() int {
+	return 200
+}
+
 func (o *PatchEtcdBackupConfigOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs/{ebc_id}][%d] patchEtcdBackupConfigOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchEtcdBackupConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch etcd backup config unauthorized response
+func (o *PatchEtcdBackupConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchEtcdBackupConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs/{ebc_id}][%d] patchEtcdBackupConfigUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchEtcdBackupConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch etcd backup config forbidden response
+func (o *PatchEtcdBackupConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchEtcdBackupConfigForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs/{ebc_id}][%d] patchEtcdBackupConfigForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchEtcdBackupConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch etcd backup config default response
-func (o *PatchEtcdBackupConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch etcd backup config default response has a 2xx status code
 func (o *PatchEtcdBackupConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchEtcdBackupConfigDefault) IsServerError() bool {
 // IsCode returns true when this patch etcd backup config default response a status code equal to that given
 func (o *PatchEtcdBackupConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch etcd backup config default response
+func (o *PatchEtcdBackupConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchEtcdBackupConfigDefault) Error() string {

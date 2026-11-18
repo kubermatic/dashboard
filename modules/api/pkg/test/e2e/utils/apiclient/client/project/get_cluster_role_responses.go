@@ -92,6 +92,11 @@ func (o *GetClusterRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster role o k response
+func (o *GetClusterRoleOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterRoleOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{role_id}][%d] getClusterRoleOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster role unauthorized response
+func (o *GetClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterRoleUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{role_id}][%d] getClusterRoleUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster role forbidden response
+func (o *GetClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterRoleForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{role_id}][%d] getClusterRoleForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetClusterRoleDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster role default response
-func (o *GetClusterRoleDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster role default response has a 2xx status code
 func (o *GetClusterRoleDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetClusterRoleDefault) IsServerError() bool {
 // IsCode returns true when this get cluster role default response a status code equal to that given
 func (o *GetClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster role default response
+func (o *GetClusterRoleDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterRoleDefault) Error() string {

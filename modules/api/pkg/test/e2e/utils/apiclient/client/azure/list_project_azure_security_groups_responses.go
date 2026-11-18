@@ -80,6 +80,11 @@ func (o *ListProjectAzureSecurityGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project azure security groups o k response
+func (o *ListProjectAzureSecurityGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAzureSecurityGroupsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/securitygroups][%d] listProjectAzureSecurityGroupsOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListProjectAzureSecurityGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project azure security groups default response
-func (o *ListProjectAzureSecurityGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project azure security groups default response has a 2xx status code
 func (o *ListProjectAzureSecurityGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListProjectAzureSecurityGroupsDefault) IsServerError() bool {
 // IsCode returns true when this list project azure security groups default response a status code equal to that given
 func (o *ListProjectAzureSecurityGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project azure security groups default response
+func (o *ListProjectAzureSecurityGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAzureSecurityGroupsDefault) Error() string {

@@ -80,6 +80,11 @@ func (o *ListAlibabaVSwitchesNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list alibaba v switches no credentials v2 o k response
+func (o *ListAlibabaVSwitchesNoCredentialsV2OK) Code() int {
+	return 200
+}
+
 func (o *ListAlibabaVSwitchesNoCredentialsV2OK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListAlibabaVSwitchesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list alibaba v switches no credentials v2 default response
-func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list alibaba v switches no credentials v2 default response has a 2xx status code
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListAlibabaVSwitchesNoCredentialsV2Default) IsServerError() bool {
 // IsCode returns true when this list alibaba v switches no credentials v2 default response a status code equal to that given
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list alibaba v switches no credentials v2 default response
+func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Error() string {

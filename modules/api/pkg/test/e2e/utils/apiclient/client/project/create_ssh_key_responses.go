@@ -92,6 +92,11 @@ func (o *CreateSSHKeyCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create Ssh key created response
+func (o *CreateSSHKeyCreated) Code() int {
+	return 201
+}
+
 func (o *CreateSSHKeyCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateSSHKeyUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create Ssh key unauthorized response
+func (o *CreateSSHKeyUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateSSHKeyUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateSSHKeyForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create Ssh key forbidden response
+func (o *CreateSSHKeyForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateSSHKeyForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateSSHKeyDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create SSH key default response
-func (o *CreateSSHKeyDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create SSH key default response has a 2xx status code
 func (o *CreateSSHKeyDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateSSHKeyDefault) IsServerError() bool {
 // IsCode returns true when this create SSH key default response a status code equal to that given
 func (o *CreateSSHKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create SSH key default response
+func (o *CreateSSHKeyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateSSHKeyDefault) Error() string {

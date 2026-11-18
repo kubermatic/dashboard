@@ -92,6 +92,11 @@ func (o *CreateConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create constraint o k response
+func (o *CreateConstraintOK) Code() int {
+	return 200
+}
+
 func (o *CreateConstraintOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] createConstraintOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create constraint unauthorized response
+func (o *CreateConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateConstraintUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] createConstraintUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create constraint forbidden response
+func (o *CreateConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateConstraintForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints][%d] createConstraintForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateConstraintDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create constraint default response
-func (o *CreateConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create constraint default response has a 2xx status code
 func (o *CreateConstraintDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateConstraintDefault) IsServerError() bool {
 // IsCode returns true when this create constraint default response a status code equal to that given
 func (o *CreateConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create constraint default response
+func (o *CreateConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateConstraintDefault) Error() string {

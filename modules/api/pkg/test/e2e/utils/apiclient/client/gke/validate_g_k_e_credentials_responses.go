@@ -79,6 +79,11 @@ func (o *ValidateGKECredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the validate g k e credentials o k response
+func (o *ValidateGKECredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ValidateGKECredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/gke/validatecredentials][%d] validateGKECredentialsOK ", 200)
 }
@@ -110,11 +115,6 @@ type ValidateGKECredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the validate g k e credentials default response
-func (o *ValidateGKECredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this validate g k e credentials default response has a 2xx status code
 func (o *ValidateGKECredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -138,6 +138,11 @@ func (o *ValidateGKECredentialsDefault) IsServerError() bool {
 // IsCode returns true when this validate g k e credentials default response a status code equal to that given
 func (o *ValidateGKECredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the validate g k e credentials default response
+func (o *ValidateGKECredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ValidateGKECredentialsDefault) Error() string {

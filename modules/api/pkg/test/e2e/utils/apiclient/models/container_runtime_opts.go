@@ -87,6 +87,11 @@ func (m *ContainerRuntimeOpts) ContextValidate(ctx context.Context, formats strf
 func (m *ContainerRuntimeOpts) contextValidateContainerdRegistryMirrors(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ContainerdRegistryMirrors != nil {
+
+		if swag.IsZero(m.ContainerdRegistryMirrors) { // not required
+			return nil
+		}
+
 		if err := m.ContainerdRegistryMirrors.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("containerdRegistryMirrors")

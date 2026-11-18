@@ -92,6 +92,11 @@ func (o *ListExternalClusterNodesMetricsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list external cluster nodes metrics o k response
+func (o *ListExternalClusterNodesMetricsOK) Code() int {
+	return 200
+}
+
 func (o *ListExternalClusterNodesMetricsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodesmetrics][%d] listExternalClusterNodesMetricsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListExternalClusterNodesMetricsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list external cluster nodes metrics unauthorized response
+func (o *ListExternalClusterNodesMetricsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListExternalClusterNodesMetricsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodesmetrics][%d] listExternalClusterNodesMetricsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListExternalClusterNodesMetricsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list external cluster nodes metrics forbidden response
+func (o *ListExternalClusterNodesMetricsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListExternalClusterNodesMetricsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodesmetrics][%d] listExternalClusterNodesMetricsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListExternalClusterNodesMetricsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list external cluster nodes metrics default response
-func (o *ListExternalClusterNodesMetricsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list external cluster nodes metrics default response has a 2xx status code
 func (o *ListExternalClusterNodesMetricsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListExternalClusterNodesMetricsDefault) IsServerError() bool {
 // IsCode returns true when this list external cluster nodes metrics default response a status code equal to that given
 func (o *ListExternalClusterNodesMetricsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list external cluster nodes metrics default response
+func (o *ListExternalClusterNodesMetricsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListExternalClusterNodesMetricsDefault) Error() string {

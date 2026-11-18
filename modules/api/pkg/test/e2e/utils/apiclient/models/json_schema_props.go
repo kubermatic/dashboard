@@ -667,6 +667,10 @@ func (m *JSONSchemaProps) ContextValidate(ctx context.Context, formats strfmt.Re
 
 func (m *JSONSchemaProps) contextValidateDollarSchema(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.DollarSchema) { // not required
+		return nil
+	}
+
 	if err := m.DollarSchema.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("$schema")
@@ -684,6 +688,11 @@ func (m *JSONSchemaProps) contextValidateAllOf(ctx context.Context, formats strf
 	for i := 0; i < len(m.AllOf); i++ {
 
 		if m.AllOf[i] != nil {
+
+			if swag.IsZero(m.AllOf[i]) { // not required
+				return nil
+			}
+
 			if err := m.AllOf[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("allOf" + "." + strconv.Itoa(i))
@@ -704,6 +713,11 @@ func (m *JSONSchemaProps) contextValidateAnyOf(ctx context.Context, formats strf
 	for i := 0; i < len(m.AnyOf); i++ {
 
 		if m.AnyOf[i] != nil {
+
+			if swag.IsZero(m.AnyOf[i]) { // not required
+				return nil
+			}
+
 			if err := m.AnyOf[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("anyOf" + "." + strconv.Itoa(i))
@@ -724,6 +738,11 @@ func (m *JSONSchemaProps) contextValidateOneOf(ctx context.Context, formats strf
 	for i := 0; i < len(m.OneOf); i++ {
 
 		if m.OneOf[i] != nil {
+
+			if swag.IsZero(m.OneOf[i]) { // not required
+				return nil
+			}
+
 			if err := m.OneOf[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("oneOf" + "." + strconv.Itoa(i))
@@ -772,6 +791,11 @@ func (m *JSONSchemaProps) contextValidateProperties(ctx context.Context, formats
 func (m *JSONSchemaProps) contextValidateAdditionalItems(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AdditionalItems != nil {
+
+		if swag.IsZero(m.AdditionalItems) { // not required
+			return nil
+		}
+
 		if err := m.AdditionalItems.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("additionalItems")
@@ -788,6 +812,11 @@ func (m *JSONSchemaProps) contextValidateAdditionalItems(ctx context.Context, fo
 func (m *JSONSchemaProps) contextValidateAdditionalProperties(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AdditionalProperties != nil {
+
+		if swag.IsZero(m.AdditionalProperties) { // not required
+			return nil
+		}
+
 		if err := m.AdditionalProperties.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("additionalProperties")
@@ -803,6 +832,10 @@ func (m *JSONSchemaProps) contextValidateAdditionalProperties(ctx context.Contex
 
 func (m *JSONSchemaProps) contextValidateDefinitions(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Definitions) { // not required
+		return nil
+	}
+
 	if err := m.Definitions.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("definitions")
@@ -816,6 +849,10 @@ func (m *JSONSchemaProps) contextValidateDefinitions(ctx context.Context, format
 }
 
 func (m *JSONSchemaProps) contextValidateDependencies(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Dependencies) { // not required
+		return nil
+	}
 
 	if err := m.Dependencies.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -832,6 +869,11 @@ func (m *JSONSchemaProps) contextValidateDependencies(ctx context.Context, forma
 func (m *JSONSchemaProps) contextValidateExternalDocs(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ExternalDocs != nil {
+
+		if swag.IsZero(m.ExternalDocs) { // not required
+			return nil
+		}
+
 		if err := m.ExternalDocs.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("externalDocs")
@@ -848,6 +890,11 @@ func (m *JSONSchemaProps) contextValidateExternalDocs(ctx context.Context, forma
 func (m *JSONSchemaProps) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Items != nil {
+
+		if swag.IsZero(m.Items) { // not required
+			return nil
+		}
+
 		if err := m.Items.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("items")
@@ -864,6 +911,11 @@ func (m *JSONSchemaProps) contextValidateItems(ctx context.Context, formats strf
 func (m *JSONSchemaProps) contextValidateNot(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Not != nil {
+
+		if swag.IsZero(m.Not) { // not required
+			return nil
+		}
+
 		if err := m.Not.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("not")

@@ -85,6 +85,11 @@ func (o *LogoutCurrentUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the logout current user o k response
+func (o *LogoutCurrentUserOK) Code() int {
+	return 200
+}
+
 func (o *LogoutCurrentUserOK) Error() string {
 	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserOK ", 200)
 }
@@ -136,6 +141,11 @@ func (o *LogoutCurrentUserUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the logout current user unauthorized response
+func (o *LogoutCurrentUserUnauthorized) Code() int {
+	return 401
+}
+
 func (o *LogoutCurrentUserUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserUnauthorized ", 401)
 }
@@ -167,11 +177,6 @@ type LogoutCurrentUserDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the logout current user default response
-func (o *LogoutCurrentUserDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this logout current user default response has a 2xx status code
 func (o *LogoutCurrentUserDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -195,6 +200,11 @@ func (o *LogoutCurrentUserDefault) IsServerError() bool {
 // IsCode returns true when this logout current user default response a status code equal to that given
 func (o *LogoutCurrentUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the logout current user default response
+func (o *LogoutCurrentUserDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *LogoutCurrentUserDefault) Error() string {

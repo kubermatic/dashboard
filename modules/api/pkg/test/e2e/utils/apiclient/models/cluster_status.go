@@ -131,6 +131,11 @@ func (m *ClusterStatus) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *ClusterStatus) contextValidateEncryption(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Encryption != nil {
+
+		if swag.IsZero(m.Encryption) { // not required
+			return nil
+		}
+
 		if err := m.Encryption.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("encryption")
@@ -146,6 +151,10 @@ func (m *ClusterStatus) contextValidateEncryption(ctx context.Context, formats s
 
 func (m *ClusterStatus) contextValidateExternalCCMMigration(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.ExternalCCMMigration) { // not required
+		return nil
+	}
+
 	if err := m.ExternalCCMMigration.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("externalCCMMigration")
@@ -159,6 +168,10 @@ func (m *ClusterStatus) contextValidateExternalCCMMigration(ctx context.Context,
 }
 
 func (m *ClusterStatus) contextValidateVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Version) { // not required
+		return nil
+	}
 
 	if err := m.Version.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

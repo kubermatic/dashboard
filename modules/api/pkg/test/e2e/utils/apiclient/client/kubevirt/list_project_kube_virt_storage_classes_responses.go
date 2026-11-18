@@ -80,6 +80,11 @@ func (o *ListProjectKubeVirtStorageClassesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project kube virt storage classes o k response
+func (o *ListProjectKubeVirtStorageClassesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectKubeVirtStorageClassesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses][%d] listProjectKubeVirtStorageClassesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectKubeVirtStorageClassesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project kube virt storage classes default response
-func (o *ListProjectKubeVirtStorageClassesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project kube virt storage classes default response has a 2xx status code
 func (o *ListProjectKubeVirtStorageClassesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectKubeVirtStorageClassesDefault) IsServerError() bool {
 // IsCode returns true when this list project kube virt storage classes default response a status code equal to that given
 func (o *ListProjectKubeVirtStorageClassesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project kube virt storage classes default response
+func (o *ListProjectKubeVirtStorageClassesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectKubeVirtStorageClassesDefault) Error() string {

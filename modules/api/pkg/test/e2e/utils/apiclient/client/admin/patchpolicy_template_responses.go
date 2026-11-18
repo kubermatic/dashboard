@@ -92,6 +92,11 @@ func (o *PatchpolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patchpolicy template o k response
+func (o *PatchpolicyTemplateOK) Code() int {
+	return 200
+}
+
 func (o *PatchpolicyTemplateOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchpolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patchpolicy template unauthorized response
+func (o *PatchpolicyTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchpolicyTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchpolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patchpolicy template forbidden response
+func (o *PatchpolicyTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchpolicyTemplateForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchpolicyTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patchpolicy template default response
-func (o *PatchpolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patchpolicy template default response has a 2xx status code
 func (o *PatchpolicyTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchpolicyTemplateDefault) IsServerError() bool {
 // IsCode returns true when this patchpolicy template default response a status code equal to that given
 func (o *PatchpolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patchpolicy template default response
+func (o *PatchpolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchpolicyTemplateDefault) Error() string {

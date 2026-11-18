@@ -95,6 +95,11 @@ func (o *CreateProjectCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create project created response
+func (o *CreateProjectCreated) Code() int {
+	return 201
+}
+
 func (o *CreateProjectCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects][%d] createProjectCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *CreateProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create project unauthorized response
+func (o *CreateProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects][%d] createProjectUnauthorized ", 401)
 }
@@ -208,6 +218,11 @@ func (o *CreateProjectConflict) IsCode(code int) bool {
 	return code == 409
 }
 
+// Code gets the status code for the create project conflict response
+func (o *CreateProjectConflict) Code() int {
+	return 409
+}
+
 func (o *CreateProjectConflict) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects][%d] createProjectConflict ", 409)
 }
@@ -239,11 +254,6 @@ type CreateProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create project default response
-func (o *CreateProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create project default response has a 2xx status code
 func (o *CreateProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -267,6 +277,11 @@ func (o *CreateProjectDefault) IsServerError() bool {
 // IsCode returns true when this create project default response a status code equal to that given
 func (o *CreateProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create project default response
+func (o *CreateProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateProjectDefault) Error() string {
@@ -362,6 +377,11 @@ func (o *CreateProjectBody) ContextValidate(ctx context.Context, formats strfmt.
 func (o *CreateProjectBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
+
+		if swag.IsZero(o.Spec) { // not required
+			return nil
+		}
+
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "Spec")

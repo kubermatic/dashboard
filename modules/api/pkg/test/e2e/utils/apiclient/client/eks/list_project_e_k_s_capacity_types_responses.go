@@ -92,6 +92,11 @@ func (o *ListProjectEKSCapacityTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s capacity types o k response
+func (o *ListProjectEKSCapacityTypesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSCapacityTypesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/capacitytypes][%d] listProjectEKSCapacityTypesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectEKSCapacityTypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s capacity types unauthorized response
+func (o *ListProjectEKSCapacityTypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSCapacityTypesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/capacitytypes][%d] listProjectEKSCapacityTypesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectEKSCapacityTypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s capacity types forbidden response
+func (o *ListProjectEKSCapacityTypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSCapacityTypesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/capacitytypes][%d] listProjectEKSCapacityTypesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListProjectEKSCapacityTypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project e k s capacity types default response
-func (o *ListProjectEKSCapacityTypesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project e k s capacity types default response has a 2xx status code
 func (o *ListProjectEKSCapacityTypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectEKSCapacityTypesDefault) IsServerError() bool {
 // IsCode returns true when this list project e k s capacity types default response a status code equal to that given
 func (o *ListProjectEKSCapacityTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project e k s capacity types default response
+func (o *ListProjectEKSCapacityTypesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectEKSCapacityTypesDefault) Error() string {

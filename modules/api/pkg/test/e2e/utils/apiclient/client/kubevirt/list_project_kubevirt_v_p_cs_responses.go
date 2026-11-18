@@ -80,6 +80,11 @@ func (o *ListProjectKubevirtVPCsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project kubevirt v p cs o k response
+func (o *ListProjectKubevirtVPCsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectKubevirtVPCsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs][%d] listProjectKubevirtVPCsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectKubevirtVPCsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project kubevirt v p cs default response
-func (o *ListProjectKubevirtVPCsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project kubevirt v p cs default response has a 2xx status code
 func (o *ListProjectKubevirtVPCsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectKubevirtVPCsDefault) IsServerError() bool {
 // IsCode returns true when this list project kubevirt v p cs default response a status code equal to that given
 func (o *ListProjectKubevirtVPCsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project kubevirt v p cs default response
+func (o *ListProjectKubevirtVPCsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectKubevirtVPCsDefault) Error() string {

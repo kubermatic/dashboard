@@ -80,6 +80,11 @@ func (o *ListKubeVirtInstancetypesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list kube virt instancetypes no credentials o k response
+func (o *ListKubeVirtInstancetypesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListKubeVirtInstancetypesNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes][%d] listKubeVirtInstancetypesNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListKubeVirtInstancetypesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list kube virt instancetypes no credentials default response
-func (o *ListKubeVirtInstancetypesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list kube virt instancetypes no credentials default response has a 2xx status code
 func (o *ListKubeVirtInstancetypesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListKubeVirtInstancetypesNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list kube virt instancetypes no credentials default response a status code equal to that given
 func (o *ListKubeVirtInstancetypesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list kube virt instancetypes no credentials default response
+func (o *ListKubeVirtInstancetypesNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListKubeVirtInstancetypesNoCredentialsDefault) Error() string {

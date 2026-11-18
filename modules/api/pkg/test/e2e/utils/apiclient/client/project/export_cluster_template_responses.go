@@ -92,6 +92,11 @@ func (o *ExportClusterTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the export cluster template o k response
+func (o *ExportClusterTemplateOK) Code() int {
+	return 200
+}
+
 func (o *ExportClusterTemplateOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *ExportClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the export cluster template unauthorized response
+func (o *ExportClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ExportClusterTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *ExportClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the export cluster template forbidden response
+func (o *ExportClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *ExportClusterTemplateForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type ExportClusterTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the export cluster template default response
-func (o *ExportClusterTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this export cluster template default response has a 2xx status code
 func (o *ExportClusterTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *ExportClusterTemplateDefault) IsServerError() bool {
 // IsCode returns true when this export cluster template default response a status code equal to that given
 func (o *ExportClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the export cluster template default response
+func (o *ExportClusterTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ExportClusterTemplateDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *ListProjectEtcdBackupConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project etcd backup config o k response
+func (o *ListProjectEtcdBackupConfigOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEtcdBackupConfigOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectEtcdBackupConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project etcd backup config unauthorized response
+func (o *ListProjectEtcdBackupConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEtcdBackupConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectEtcdBackupConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project etcd backup config forbidden response
+func (o *ListProjectEtcdBackupConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEtcdBackupConfigForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListProjectEtcdBackupConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project etcd backup config default response
-func (o *ListProjectEtcdBackupConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project etcd backup config default response has a 2xx status code
 func (o *ListProjectEtcdBackupConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectEtcdBackupConfigDefault) IsServerError() bool {
 // IsCode returns true when this list project etcd backup config default response a status code equal to that given
 func (o *ListProjectEtcdBackupConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project etcd backup config default response
+func (o *ListProjectEtcdBackupConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectEtcdBackupConfigDefault) Error() string {

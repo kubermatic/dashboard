@@ -92,6 +92,11 @@ func (o *ListMachineDeploymentsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list machine deployments o k response
+func (o *ListMachineDeploymentsOK) Code() int {
+	return 200
+}
+
 func (o *ListMachineDeploymentsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] listMachineDeploymentsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListMachineDeploymentsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list machine deployments unauthorized response
+func (o *ListMachineDeploymentsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMachineDeploymentsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] listMachineDeploymentsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListMachineDeploymentsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list machine deployments forbidden response
+func (o *ListMachineDeploymentsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMachineDeploymentsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] listMachineDeploymentsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListMachineDeploymentsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list machine deployments default response
-func (o *ListMachineDeploymentsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list machine deployments default response has a 2xx status code
 func (o *ListMachineDeploymentsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListMachineDeploymentsDefault) IsServerError() bool {
 // IsCode returns true when this list machine deployments default response a status code equal to that given
 func (o *ListMachineDeploymentsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list machine deployments default response
+func (o *ListMachineDeploymentsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListMachineDeploymentsDefault) Error() string {

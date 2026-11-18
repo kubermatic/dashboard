@@ -91,6 +91,11 @@ func (o *DeleteClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete cluster o k response
+func (o *DeleteClusterOK) Code() int {
+	return 200
+}
+
 func (o *DeleteClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] deleteClusterOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteClusterUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete cluster unauthorized response a status code equal to that given
 func (o *DeleteClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete cluster unauthorized response
+func (o *DeleteClusterUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteClusterUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete cluster forbidden response
+func (o *DeleteClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteClusterForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] deleteClusterForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete cluster default response
-func (o *DeleteClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete cluster default response has a 2xx status code
 func (o *DeleteClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteClusterDefault) IsServerError() bool {
 // IsCode returns true when this delete cluster default response a status code equal to that given
 func (o *DeleteClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete cluster default response
+func (o *DeleteClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteClusterDefault) Error() string {

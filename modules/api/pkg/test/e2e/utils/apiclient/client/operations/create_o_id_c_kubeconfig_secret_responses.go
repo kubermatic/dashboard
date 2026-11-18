@@ -97,6 +97,11 @@ func (o *CreateOIDCKubeconfigSecretOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret o k response
+func (o *CreateOIDCKubeconfigSecretOK) Code() int {
+	return 200
+}
+
 func (o *CreateOIDCKubeconfigSecretOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretOK ", 200)
 }
@@ -146,6 +151,11 @@ func (o *CreateOIDCKubeconfigSecretCreated) IsServerError() bool {
 // IsCode returns true when this create o Id c kubeconfig secret created response a status code equal to that given
 func (o *CreateOIDCKubeconfigSecretCreated) IsCode(code int) bool {
 	return code == 201
+}
+
+// Code gets the status code for the create o Id c kubeconfig secret created response
+func (o *CreateOIDCKubeconfigSecretCreated) Code() int {
+	return 201
 }
 
 func (o *CreateOIDCKubeconfigSecretCreated) Error() string {
@@ -199,6 +209,11 @@ func (o *CreateOIDCKubeconfigSecretUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret unauthorized response
+func (o *CreateOIDCKubeconfigSecretUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateOIDCKubeconfigSecretUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretUnauthorized ", 401)
 }
@@ -250,6 +265,11 @@ func (o *CreateOIDCKubeconfigSecretForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret forbidden response
+func (o *CreateOIDCKubeconfigSecretForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOIDCKubeconfigSecretForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretForbidden ", 403)
 }
@@ -281,11 +301,6 @@ type CreateOIDCKubeconfigSecretDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create o ID c kubeconfig secret default response
-func (o *CreateOIDCKubeconfigSecretDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create o ID c kubeconfig secret default response has a 2xx status code
 func (o *CreateOIDCKubeconfigSecretDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -309,6 +324,11 @@ func (o *CreateOIDCKubeconfigSecretDefault) IsServerError() bool {
 // IsCode returns true when this create o ID c kubeconfig secret default response a status code equal to that given
 func (o *CreateOIDCKubeconfigSecretDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create o ID c kubeconfig secret default response
+func (o *CreateOIDCKubeconfigSecretDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateOIDCKubeconfigSecretDefault) Error() string {

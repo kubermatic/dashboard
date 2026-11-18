@@ -104,6 +104,11 @@ func (o *UpdateProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update project o k response
+func (o *UpdateProjectOK) Code() int {
+	return 200
+}
+
 func (o *UpdateProjectOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectOK  %+v", 200, o.Payload)
 }
@@ -166,6 +171,11 @@ func (o *UpdateProjectBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the update project bad request response
+func (o *UpdateProjectBadRequest) Code() int {
+	return 400
+}
+
 func (o *UpdateProjectBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectBadRequest ", 400)
 }
@@ -215,6 +225,11 @@ func (o *UpdateProjectNotFound) IsServerError() bool {
 // IsCode returns true when this update project not found response a status code equal to that given
 func (o *UpdateProjectNotFound) IsCode(code int) bool {
 	return code == 404
+}
+
+// Code gets the status code for the update project not found response
+func (o *UpdateProjectNotFound) Code() int {
+	return 404
 }
 
 func (o *UpdateProjectNotFound) Error() string {
@@ -268,6 +283,11 @@ func (o *UpdateProjectInternalServerError) IsCode(code int) bool {
 	return code == 500
 }
 
+// Code gets the status code for the update project internal server error response
+func (o *UpdateProjectInternalServerError) Code() int {
+	return 500
+}
+
 func (o *UpdateProjectInternalServerError) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectInternalServerError ", 500)
 }
@@ -319,6 +339,11 @@ func (o *UpdateProjectNotImplemented) IsCode(code int) bool {
 	return code == 501
 }
 
+// Code gets the status code for the update project not implemented response
+func (o *UpdateProjectNotImplemented) Code() int {
+	return 501
+}
+
 func (o *UpdateProjectNotImplemented) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotImplemented ", 501)
 }
@@ -350,11 +375,6 @@ type UpdateProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update project default response
-func (o *UpdateProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update project default response has a 2xx status code
 func (o *UpdateProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -378,6 +398,11 @@ func (o *UpdateProjectDefault) IsServerError() bool {
 // IsCode returns true when this update project default response a status code equal to that given
 func (o *UpdateProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update project default response
+func (o *UpdateProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateProjectDefault) Error() string {

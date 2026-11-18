@@ -92,6 +92,11 @@ func (o *GetGroupProjectBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get group project binding o k response
+func (o *GetGroupProjectBindingOK) Code() int {
+	return 200
+}
+
 func (o *GetGroupProjectBindingOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] getGroupProjectBindingOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get group project binding unauthorized response
+func (o *GetGroupProjectBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetGroupProjectBindingUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] getGroupProjectBindingUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get group project binding forbidden response
+func (o *GetGroupProjectBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *GetGroupProjectBindingForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] getGroupProjectBindingForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetGroupProjectBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get group project binding default response
-func (o *GetGroupProjectBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get group project binding default response has a 2xx status code
 func (o *GetGroupProjectBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetGroupProjectBindingDefault) IsServerError() bool {
 // IsCode returns true when this get group project binding default response a status code equal to that given
 func (o *GetGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get group project binding default response
+func (o *GetGroupProjectBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetGroupProjectBindingDefault) Error() string {

@@ -80,6 +80,11 @@ func (o *ListKubevirtImagesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list kubevirt images o k response
+func (o *ListKubevirtImagesOK) Code() int {
+	return 200
+}
+
 func (o *ListKubevirtImagesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/dc/{dc}/images][%d] listKubevirtImagesOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListKubevirtImagesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list kubevirt images default response
-func (o *ListKubevirtImagesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list kubevirt images default response has a 2xx status code
 func (o *ListKubevirtImagesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListKubevirtImagesDefault) IsServerError() bool {
 // IsCode returns true when this list kubevirt images default response a status code equal to that given
 func (o *ListKubevirtImagesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list kubevirt images default response
+func (o *ListKubevirtImagesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListKubevirtImagesDefault) Error() string {

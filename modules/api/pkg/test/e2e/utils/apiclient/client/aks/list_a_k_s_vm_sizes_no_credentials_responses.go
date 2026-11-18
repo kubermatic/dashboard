@@ -92,6 +92,11 @@ func (o *ListAKSVMSizesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list a k s Vm sizes no credentials o k response
+func (o *ListAKSVMSizesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListAKSVMSizesNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/aks/vmsizes][%d] listAKSVmSizesNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListAKSVMSizesNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list a k s Vm sizes no credentials unauthorized response
+func (o *ListAKSVMSizesNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAKSVMSizesNoCredentialsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/aks/vmsizes][%d] listAKSVmSizesNoCredentialsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListAKSVMSizesNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list a k s Vm sizes no credentials forbidden response
+func (o *ListAKSVMSizesNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAKSVMSizesNoCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/aks/vmsizes][%d] listAKSVmSizesNoCredentialsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListAKSVMSizesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list a k s VM sizes no credentials default response
-func (o *ListAKSVMSizesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list a k s VM sizes no credentials default response has a 2xx status code
 func (o *ListAKSVMSizesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListAKSVMSizesNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list a k s VM sizes no credentials default response a status code equal to that given
 func (o *ListAKSVMSizesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list a k s VM sizes no credentials default response
+func (o *ListAKSVMSizesNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAKSVMSizesNoCredentialsDefault) Error() string {

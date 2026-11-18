@@ -91,6 +91,11 @@ func (o *DeleteDefaultConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete default constraint o k response
+func (o *DeleteDefaultConstraintOK) Code() int {
+	return 200
+}
+
 func (o *DeleteDefaultConstraintOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/constraints/{constraint_name}][%d] deleteDefaultConstraintOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteDefaultConstraintUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete default constraint unauthorized response a status code equal to that given
 func (o *DeleteDefaultConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete default constraint unauthorized response
+func (o *DeleteDefaultConstraintUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteDefaultConstraintUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteDefaultConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete default constraint forbidden response
+func (o *DeleteDefaultConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteDefaultConstraintForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/constraints/{constraint_name}][%d] deleteDefaultConstraintForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteDefaultConstraintDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete default constraint default response
-func (o *DeleteDefaultConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete default constraint default response has a 2xx status code
 func (o *DeleteDefaultConstraintDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteDefaultConstraintDefault) IsServerError() bool {
 // IsCode returns true when this delete default constraint default response a status code equal to that given
 func (o *DeleteDefaultConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete default constraint default response
+func (o *DeleteDefaultConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteDefaultConstraintDefault) Error() string {

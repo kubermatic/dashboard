@@ -91,6 +91,11 @@ func (o *DeleteAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete admission plugin o k response
+func (o *DeleteAdmissionPluginOK) Code() int {
+	return 200
+}
+
 func (o *DeleteAdmissionPluginOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteAdmissionPluginUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete admission plugin unauthorized response a status code equal to that given
 func (o *DeleteAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete admission plugin unauthorized response
+func (o *DeleteAdmissionPluginUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteAdmissionPluginUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete admission plugin forbidden response
+func (o *DeleteAdmissionPluginForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAdmissionPluginForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteAdmissionPluginDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete admission plugin default response
-func (o *DeleteAdmissionPluginDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete admission plugin default response has a 2xx status code
 func (o *DeleteAdmissionPluginDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteAdmissionPluginDefault) IsServerError() bool {
 // IsCode returns true when this delete admission plugin default response a status code equal to that given
 func (o *DeleteAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete admission plugin default response
+func (o *DeleteAdmissionPluginDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteAdmissionPluginDefault) Error() string {

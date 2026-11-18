@@ -80,6 +80,11 @@ func (o *ListVMwareCloudDirectorStorageProfilesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director storage profiles o k response
+func (o *ListVMwareCloudDirectorStorageProfilesOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorStorageProfilesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListVMwareCloudDirectorStorageProfilesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director storage profiles default response
-func (o *ListVMwareCloudDirectorStorageProfilesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director storage profiles default response has a 2xx status code
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListVMwareCloudDirectorStorageProfilesDefault) IsServerError() bool {
 // IsCode returns true when this list v mware cloud director storage profiles default response a status code equal to that given
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list v mware cloud director storage profiles default response
+func (o *ListVMwareCloudDirectorStorageProfilesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) Error() string {

@@ -91,6 +91,11 @@ func (o *DeleteResourceQuotaOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete resource quota o k response
+func (o *DeleteResourceQuotaOK) Code() int {
+	return 200
+}
+
 func (o *DeleteResourceQuotaOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/quotas/{quota_name}][%d] deleteResourceQuotaOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteResourceQuotaUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete resource quota unauthorized response a status code equal to that given
 func (o *DeleteResourceQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete resource quota unauthorized response
+func (o *DeleteResourceQuotaUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteResourceQuotaUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteResourceQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete resource quota forbidden response
+func (o *DeleteResourceQuotaForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteResourceQuotaForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/quotas/{quota_name}][%d] deleteResourceQuotaForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteResourceQuotaDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete resource quota default response
-func (o *DeleteResourceQuotaDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete resource quota default response has a 2xx status code
 func (o *DeleteResourceQuotaDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteResourceQuotaDefault) IsServerError() bool {
 // IsCode returns true when this delete resource quota default response a status code equal to that given
 func (o *DeleteResourceQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete resource quota default response
+func (o *DeleteResourceQuotaDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteResourceQuotaDefault) Error() string {

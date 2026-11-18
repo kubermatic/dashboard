@@ -80,6 +80,11 @@ func (o *ListAzureSubnetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list azure subnets o k response
+func (o *ListAzureSubnetsOK) Code() int {
+	return 200
+}
+
 func (o *ListAzureSubnetsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnetsOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListAzureSubnetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list azure subnets default response
-func (o *ListAzureSubnetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list azure subnets default response has a 2xx status code
 func (o *ListAzureSubnetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListAzureSubnetsDefault) IsServerError() bool {
 // IsCode returns true when this list azure subnets default response a status code equal to that given
 func (o *ListAzureSubnetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list azure subnets default response
+func (o *ListAzureSubnetsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAzureSubnetsDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *GetMeteringReportOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get metering report o k response
+func (o *GetMeteringReportOK) Code() int {
+	return 200
+}
+
 func (o *GetMeteringReportOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports/{report_name}][%d] getMeteringReportOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetMeteringReportUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get metering report unauthorized response
+func (o *GetMeteringReportUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetMeteringReportUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports/{report_name}][%d] getMeteringReportUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetMeteringReportForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get metering report forbidden response
+func (o *GetMeteringReportForbidden) Code() int {
+	return 403
+}
+
 func (o *GetMeteringReportForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports/{report_name}][%d] getMeteringReportForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetMeteringReportDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get metering report default response
-func (o *GetMeteringReportDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get metering report default response has a 2xx status code
 func (o *GetMeteringReportDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetMeteringReportDefault) IsServerError() bool {
 // IsCode returns true when this get metering report default response a status code equal to that given
 func (o *GetMeteringReportDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get metering report default response
+func (o *GetMeteringReportDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetMeteringReportDefault) Error() string {

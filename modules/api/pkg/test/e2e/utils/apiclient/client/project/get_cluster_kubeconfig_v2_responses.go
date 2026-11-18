@@ -92,6 +92,11 @@ func (o *GetClusterKubeconfigV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster kubeconfig v2 o k response
+func (o *GetClusterKubeconfigV2OK) Code() int {
+	return 200
+}
+
 func (o *GetClusterKubeconfigV2OK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigV2OK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetClusterKubeconfigV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster kubeconfig v2 unauthorized response
+func (o *GetClusterKubeconfigV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterKubeconfigV2Unauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigV2Unauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetClusterKubeconfigV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster kubeconfig v2 forbidden response
+func (o *GetClusterKubeconfigV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterKubeconfigV2Forbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigV2Forbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetClusterKubeconfigV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster kubeconfig v2 default response
-func (o *GetClusterKubeconfigV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster kubeconfig v2 default response has a 2xx status code
 func (o *GetClusterKubeconfigV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetClusterKubeconfigV2Default) IsServerError() bool {
 // IsCode returns true when this get cluster kubeconfig v2 default response a status code equal to that given
 func (o *GetClusterKubeconfigV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster kubeconfig v2 default response
+func (o *GetClusterKubeconfigV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterKubeconfigV2Default) Error() string {

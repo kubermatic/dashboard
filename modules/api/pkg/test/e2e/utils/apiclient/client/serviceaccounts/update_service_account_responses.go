@@ -92,6 +92,11 @@ func (o *UpdateServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update service account o k response
+func (o *UpdateServiceAccountOK) Code() int {
+	return 200
+}
+
 func (o *UpdateServiceAccountOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update service account unauthorized response
+func (o *UpdateServiceAccountUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateServiceAccountUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update service account forbidden response
+func (o *UpdateServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateServiceAccountForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateServiceAccountDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update service account default response
-func (o *UpdateServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update service account default response has a 2xx status code
 func (o *UpdateServiceAccountDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateServiceAccountDefault) IsServerError() bool {
 // IsCode returns true when this update service account default response a status code equal to that given
 func (o *UpdateServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update service account default response
+func (o *UpdateServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateServiceAccountDefault) Error() string {

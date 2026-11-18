@@ -94,6 +94,11 @@ func (o *PatchGroupProjectBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch group project binding o k response
+func (o *PatchGroupProjectBindingOK) Code() int {
+	return 200
+}
+
 func (o *PatchGroupProjectBindingOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingOK  %+v", 200, o.Payload)
 }
@@ -156,6 +161,11 @@ func (o *PatchGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch group project binding unauthorized response
+func (o *PatchGroupProjectBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchGroupProjectBindingUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingUnauthorized ", 401)
 }
@@ -207,6 +217,11 @@ func (o *PatchGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch group project binding forbidden response
+func (o *PatchGroupProjectBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchGroupProjectBindingForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingForbidden ", 403)
 }
@@ -238,11 +253,6 @@ type PatchGroupProjectBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch group project binding default response
-func (o *PatchGroupProjectBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch group project binding default response has a 2xx status code
 func (o *PatchGroupProjectBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -266,6 +276,11 @@ func (o *PatchGroupProjectBindingDefault) IsServerError() bool {
 // IsCode returns true when this patch group project binding default response a status code equal to that given
 func (o *PatchGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch group project binding default response
+func (o *PatchGroupProjectBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchGroupProjectBindingDefault) Error() string {

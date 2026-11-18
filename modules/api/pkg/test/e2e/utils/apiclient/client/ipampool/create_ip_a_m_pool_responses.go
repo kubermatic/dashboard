@@ -91,6 +91,11 @@ func (o *CreateIPAMPoolCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create Ip a m pool created response
+func (o *CreateIPAMPoolCreated) Code() int {
+	return 201
+}
+
 func (o *CreateIPAMPoolCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolCreated ", 201)
 }
@@ -140,6 +145,11 @@ func (o *CreateIPAMPoolUnauthorized) IsServerError() bool {
 // IsCode returns true when this create Ip a m pool unauthorized response a status code equal to that given
 func (o *CreateIPAMPoolUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the create Ip a m pool unauthorized response
+func (o *CreateIPAMPoolUnauthorized) Code() int {
+	return 401
 }
 
 func (o *CreateIPAMPoolUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *CreateIPAMPoolForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create Ip a m pool forbidden response
+func (o *CreateIPAMPoolForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateIPAMPoolForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type CreateIPAMPoolDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create IP a m pool default response
-func (o *CreateIPAMPoolDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create IP a m pool default response has a 2xx status code
 func (o *CreateIPAMPoolDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *CreateIPAMPoolDefault) IsServerError() bool {
 // IsCode returns true when this create IP a m pool default response a status code equal to that given
 func (o *CreateIPAMPoolDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create IP a m pool default response
+func (o *CreateIPAMPoolDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateIPAMPoolDefault) Error() string {

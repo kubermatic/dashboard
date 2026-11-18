@@ -92,6 +92,11 @@ func (o *GetProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get project o k response
+func (o *GetProjectOK) Code() int {
+	return 200
+}
+
 func (o *GetProjectOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get project unauthorized response
+func (o *GetProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetProjectConflict) IsCode(code int) bool {
 	return code == 409
 }
 
+// Code gets the status code for the get project conflict response
+func (o *GetProjectConflict) Code() int {
+	return 409
+}
+
 func (o *GetProjectConflict) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectConflict ", 409)
 }
@@ -236,11 +251,6 @@ type GetProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get project default response
-func (o *GetProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get project default response has a 2xx status code
 func (o *GetProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetProjectDefault) IsServerError() bool {
 // IsCode returns true when this get project default response a status code equal to that given
 func (o *GetProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get project default response
+func (o *GetProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetProjectDefault) Error() string {

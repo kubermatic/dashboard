@@ -91,6 +91,11 @@ func (o *DetachSSHKeyFromClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the detach Ssh key from cluster o k response
+func (o *DetachSSHKeyFromClusterOK) Code() int {
+	return 200
+}
+
 func (o *DetachSSHKeyFromClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DetachSSHKeyFromClusterUnauthorized) IsServerError() bool {
 // IsCode returns true when this detach Ssh key from cluster unauthorized response a status code equal to that given
 func (o *DetachSSHKeyFromClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the detach Ssh key from cluster unauthorized response
+func (o *DetachSSHKeyFromClusterUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DetachSSHKeyFromClusterUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DetachSSHKeyFromClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the detach Ssh key from cluster forbidden response
+func (o *DetachSSHKeyFromClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *DetachSSHKeyFromClusterForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DetachSSHKeyFromClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the detach SSH key from cluster default response
-func (o *DetachSSHKeyFromClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this detach SSH key from cluster default response has a 2xx status code
 func (o *DetachSSHKeyFromClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DetachSSHKeyFromClusterDefault) IsServerError() bool {
 // IsCode returns true when this detach SSH key from cluster default response a status code equal to that given
 func (o *DetachSSHKeyFromClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the detach SSH key from cluster default response
+func (o *DetachSSHKeyFromClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DetachSSHKeyFromClusterDefault) Error() string {

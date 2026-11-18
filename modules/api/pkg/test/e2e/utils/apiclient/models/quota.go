@@ -99,6 +99,11 @@ func (m *Quota) contextValidateAccelerators(ctx context.Context, formats strfmt.
 	for i := 0; i < len(m.Accelerators); i++ {
 
 		if m.Accelerators[i] != nil {
+
+			if swag.IsZero(m.Accelerators[i]) { // not required
+				return nil
+			}
+
 			if err := m.Accelerators[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("accelerators" + "." + strconv.Itoa(i))

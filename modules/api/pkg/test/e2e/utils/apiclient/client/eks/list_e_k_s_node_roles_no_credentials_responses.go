@@ -92,6 +92,11 @@ func (o *ListEKSNodeRolesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s node roles no credentials o k response
+func (o *ListEKSNodeRolesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSNodeRolesNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/noderoles][%d] listEKSNodeRolesNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEKSNodeRolesNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s node roles no credentials unauthorized response
+func (o *ListEKSNodeRolesNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSNodeRolesNoCredentialsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/noderoles][%d] listEKSNodeRolesNoCredentialsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEKSNodeRolesNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s node roles no credentials forbidden response
+func (o *ListEKSNodeRolesNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSNodeRolesNoCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/noderoles][%d] listEKSNodeRolesNoCredentialsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEKSNodeRolesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s node roles no credentials default response
-func (o *ListEKSNodeRolesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s node roles no credentials default response has a 2xx status code
 func (o *ListEKSNodeRolesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEKSNodeRolesNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list e k s node roles no credentials default response a status code equal to that given
 func (o *ListEKSNodeRolesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s node roles no credentials default response
+func (o *ListEKSNodeRolesNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSNodeRolesNoCredentialsDefault) Error() string {

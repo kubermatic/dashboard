@@ -86,6 +86,11 @@ func (o *PatchCurrentUserReadAnnouncementsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch current user read announcements o k response
+func (o *PatchCurrentUserReadAnnouncementsOK) Code() int {
+	return 200
+}
+
 func (o *PatchCurrentUserReadAnnouncementsOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *PatchCurrentUserReadAnnouncementsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch current user read announcements unauthorized response
+func (o *PatchCurrentUserReadAnnouncementsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchCurrentUserReadAnnouncementsUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsUnauthorized ", 401)
 }
@@ -179,11 +189,6 @@ type PatchCurrentUserReadAnnouncementsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch current user read announcements default response
-func (o *PatchCurrentUserReadAnnouncementsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch current user read announcements default response has a 2xx status code
 func (o *PatchCurrentUserReadAnnouncementsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -207,6 +212,11 @@ func (o *PatchCurrentUserReadAnnouncementsDefault) IsServerError() bool {
 // IsCode returns true when this patch current user read announcements default response a status code equal to that given
 func (o *PatchCurrentUserReadAnnouncementsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch current user read announcements default response
+func (o *PatchCurrentUserReadAnnouncementsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchCurrentUserReadAnnouncementsDefault) Error() string {

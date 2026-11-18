@@ -80,6 +80,11 @@ func (o *ListProjectVMwareCloudDirectorTemplatesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project v mware cloud director templates o k response
+func (o *ListProjectVMwareCloudDirectorTemplatesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectVMwareCloudDirectorTemplatesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplatesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectVMwareCloudDirectorTemplatesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project v mware cloud director templates default response
-func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project v mware cloud director templates default response has a 2xx status code
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectVMwareCloudDirectorTemplatesDefault) IsServerError() bool {
 // IsCode returns true when this list project v mware cloud director templates default response a status code equal to that given
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project v mware cloud director templates default response
+func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Error() string {
