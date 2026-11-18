@@ -309,6 +309,8 @@ func GetResourcePoolList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSp
 
 	resourcePoolList, err := session.Finder.ResourcePoolList(ctx, "**")
 	if err != nil {
+		// The finder reports "not found" when the account can see no resource pool at all. That is an
+		// empty list, not an error: an unknown datacenter has already failed in newSession.
 		var notFoundErr *find.NotFoundError
 		if errors.As(err, &notFoundErr) {
 			return nil, nil
@@ -316,6 +318,11 @@ func GetResourcePoolList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSp
 
 		return nil, fmt.Errorf("couldn't retrieve resource pool list: %w", err)
 	}
+
+	// The order of the vCenter is not stable, sort by path to get a deterministic result.
+	slices.SortFunc(resourcePoolList, func(a, b *object.ResourcePool) int {
+		return strings.Compare(a.InventoryPath, b.InventoryPath)
+	})
 
 	if dc.Cluster == "" {
 		return resourcePoolList, nil
