@@ -38,3 +38,25 @@ that nobody asked for.
   sweeps) unless the issue explicitly asks for them
 - post generated status updates or review comments in issues; the
   communication channels are for the human operating the agent
+
+## KKP Dashboard
+
+Angular web UI + Go REST API for Kubermatic Kubernetes Platform (KKP). Monorepo with two independent modules.
+
+### Monorepo Layout
+
+- [hack/AGENTS.md](hack/AGENTS.md) — CI scripts, boilerplate templates, shared shell utilities
+- [modules/web/AGENTS.md](modules/web/AGENTS.md) — Angular SPA + Go server (own go.mod, package.json, Makefile)
+- [modules/api/AGENTS.md](modules/api/AGENTS.md) — Go REST API server (own go.mod, Makefile)
+
+### CE/EE Editions
+
+Both modules support Community Edition (CE) and Enterprise Edition (EE) builds. Default is EE. Set `KUBERMATIC_EDITION=ce` for CE builds. See each module's AGENTS.md for edition details.
+
+### Copyright
+
+New files need license headers. Use boilerplate templates in `hack/boilerplate/` (separate `ce/` and `ee/` dirs).
+
+### Documentation
+
+Official KKP docs: https://docs.kubermatic.com/kubermatic/
