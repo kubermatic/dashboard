@@ -86,8 +86,8 @@ require (
 	google.golang.org/api v0.301.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.12.3
-	k8c.io/kubermatic/sdk/v2 v2.31.1-0.20261116220721-9d9be566d563
-	k8c.io/kubermatic/v2 v2.31.1-0.20261116220721-9d9be566d563
+	k8c.io/kubermatic/sdk/v2 v2.31.1-0.20261119123626-e9f2d67517c4
+	k8c.io/kubermatic/v2 v2.31.1-0.20261119123626-e9f2d67517c4
 	k8c.io/machine-controller/sdk v1.66.5
 	k8c.io/operating-system-manager v1.11.4
 	k8c.io/reconciler v0.5.0
