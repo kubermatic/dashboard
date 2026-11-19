@@ -121,6 +121,11 @@ func (m *PolicyTemplateSpec) ContextValidate(ctx context.Context, formats strfmt
 func (m *PolicyTemplateSpec) contextValidateTarget(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Target != nil {
+
+		if swag.IsZero(m.Target) { // not required
+			return nil
+		}
+
 		if err := m.Target.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("target")

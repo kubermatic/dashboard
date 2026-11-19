@@ -92,6 +92,11 @@ func (o *ListOperatingSystemProfilesForClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list operating system profiles for cluster o k response
+func (o *ListOperatingSystemProfilesForClusterOK) Code() int {
+	return 200
+}
+
 func (o *ListOperatingSystemProfilesForClusterOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListOperatingSystemProfilesForClusterUnauthorized) IsCode(code int) boo
 	return code == 401
 }
 
+// Code gets the status code for the list operating system profiles for cluster unauthorized response
+func (o *ListOperatingSystemProfilesForClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListOperatingSystemProfilesForClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list operating system profiles for cluster forbidden response
+func (o *ListOperatingSystemProfilesForClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *ListOperatingSystemProfilesForClusterForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListOperatingSystemProfilesForClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list operating system profiles for cluster default response
-func (o *ListOperatingSystemProfilesForClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list operating system profiles for cluster default response has a 2xx status code
 func (o *ListOperatingSystemProfilesForClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListOperatingSystemProfilesForClusterDefault) IsServerError() bool {
 // IsCode returns true when this list operating system profiles for cluster default response a status code equal to that given
 func (o *ListOperatingSystemProfilesForClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list operating system profiles for cluster default response
+func (o *ListOperatingSystemProfilesForClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) Error() string {

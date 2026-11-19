@@ -92,6 +92,11 @@ func (o *RestartMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the restart machine deployment o k response
+func (o *RestartMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *RestartMachineDeploymentOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] restartMachineDeploymentOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *RestartMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the restart machine deployment unauthorized response
+func (o *RestartMachineDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *RestartMachineDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] restartMachineDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *RestartMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the restart machine deployment forbidden response
+func (o *RestartMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *RestartMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] restartMachineDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type RestartMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the restart machine deployment default response
-func (o *RestartMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this restart machine deployment default response has a 2xx status code
 func (o *RestartMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *RestartMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this restart machine deployment default response a status code equal to that given
 func (o *RestartMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the restart machine deployment default response
+func (o *RestartMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *RestartMachineDeploymentDefault) Error() string {

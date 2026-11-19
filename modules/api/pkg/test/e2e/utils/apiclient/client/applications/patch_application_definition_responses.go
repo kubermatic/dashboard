@@ -92,6 +92,11 @@ func (o *PatchApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch application definition o k response
+func (o *PatchApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *PatchApplicationDefinitionOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch application definition unauthorized response
+func (o *PatchApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchApplicationDefinitionUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch application definition forbidden response
+func (o *PatchApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchApplicationDefinitionForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchApplicationDefinitionDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch application definition default response
-func (o *PatchApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch application definition default response has a 2xx status code
 func (o *PatchApplicationDefinitionDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchApplicationDefinitionDefault) IsServerError() bool {
 // IsCode returns true when this patch application definition default response a status code equal to that given
 func (o *PatchApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch application definition default response
+func (o *PatchApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchApplicationDefinitionDefault) Error() string {

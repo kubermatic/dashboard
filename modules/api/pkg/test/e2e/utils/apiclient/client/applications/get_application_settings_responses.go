@@ -92,6 +92,11 @@ func (o *GetApplicationSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get application settings o k response
+func (o *GetApplicationSettingsOK) Code() int {
+	return 200
+}
+
 func (o *GetApplicationSettingsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/applicationsettings][%d] getApplicationSettingsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetApplicationSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get application settings unauthorized response
+func (o *GetApplicationSettingsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetApplicationSettingsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/applicationsettings][%d] getApplicationSettingsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetApplicationSettingsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get application settings forbidden response
+func (o *GetApplicationSettingsForbidden) Code() int {
+	return 403
+}
+
 func (o *GetApplicationSettingsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/applicationsettings][%d] getApplicationSettingsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetApplicationSettingsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get application settings default response
-func (o *GetApplicationSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get application settings default response has a 2xx status code
 func (o *GetApplicationSettingsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetApplicationSettingsDefault) IsServerError() bool {
 // IsCode returns true when this get application settings default response a status code equal to that given
 func (o *GetApplicationSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get application settings default response
+func (o *GetApplicationSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetApplicationSettingsDefault) Error() string {

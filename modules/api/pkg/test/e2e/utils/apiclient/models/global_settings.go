@@ -561,6 +561,11 @@ func (m *GlobalSettings) contextValidateStaticLabels(ctx context.Context, format
 	for i := 0; i < len(m.StaticLabels); i++ {
 
 		if m.StaticLabels[i] != nil {
+
+			if swag.IsZero(m.StaticLabels[i]) { // not required
+				return nil
+			}
+
 			if err := m.StaticLabels[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("staticLabels" + "." + strconv.Itoa(i))
@@ -579,6 +584,11 @@ func (m *GlobalSettings) contextValidateStaticLabels(ctx context.Context, format
 func (m *GlobalSettings) contextValidateAnnotations(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Annotations != nil {
+
+		if swag.IsZero(m.Annotations) { // not required
+			return nil
+		}
+
 		if err := m.Annotations.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("annotations")
@@ -595,6 +605,11 @@ func (m *GlobalSettings) contextValidateAnnotations(ctx context.Context, formats
 func (m *GlobalSettings) contextValidateCleanupOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CleanupOptions != nil {
+
+		if swag.IsZero(m.CleanupOptions) { // not required
+			return nil
+		}
+
 		if err := m.CleanupOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cleanupOptions")
@@ -611,6 +626,11 @@ func (m *GlobalSettings) contextValidateCleanupOptions(ctx context.Context, form
 func (m *GlobalSettings) contextValidateClusterBackupOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ClusterBackupOptions != nil {
+
+		if swag.IsZero(m.ClusterBackupOptions) { // not required
+			return nil
+		}
+
 		if err := m.ClusterBackupOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clusterBackupOptions")
@@ -641,6 +661,11 @@ func (m *GlobalSettings) contextValidateCustomLinks(ctx context.Context, formats
 func (m *GlobalSettings) contextValidateDefaultQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultQuota != nil {
+
+		if swag.IsZero(m.DefaultQuota) { // not required
+			return nil
+		}
+
 		if err := m.DefaultQuota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("defaultQuota")
@@ -657,6 +682,11 @@ func (m *GlobalSettings) contextValidateDefaultQuota(ctx context.Context, format
 func (m *GlobalSettings) contextValidateMachineDeploymentOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MachineDeploymentOptions != nil {
+
+		if swag.IsZero(m.MachineDeploymentOptions) { // not required
+			return nil
+		}
+
 		if err := m.MachineDeploymentOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("machineDeploymentOptions")
@@ -673,6 +703,11 @@ func (m *GlobalSettings) contextValidateMachineDeploymentOptions(ctx context.Con
 func (m *GlobalSettings) contextValidateMachineDeploymentVMResourceQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MachineDeploymentVMResourceQuota != nil {
+
+		if swag.IsZero(m.MachineDeploymentVMResourceQuota) { // not required
+			return nil
+		}
+
 		if err := m.MachineDeploymentVMResourceQuota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("machineDeploymentVMResourceQuota")
@@ -689,6 +724,11 @@ func (m *GlobalSettings) contextValidateMachineDeploymentVMResourceQuota(ctx con
 func (m *GlobalSettings) contextValidateMlaOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MlaOptions != nil {
+
+		if swag.IsZero(m.MlaOptions) { // not required
+			return nil
+		}
+
 		if err := m.MlaOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mlaOptions")
@@ -705,6 +745,11 @@ func (m *GlobalSettings) contextValidateMlaOptions(ctx context.Context, formats 
 func (m *GlobalSettings) contextValidateNotifications(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Notifications != nil {
+
+		if swag.IsZero(m.Notifications) { // not required
+			return nil
+		}
+
 		if err := m.Notifications.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("notifications")
@@ -721,6 +766,11 @@ func (m *GlobalSettings) contextValidateNotifications(ctx context.Context, forma
 func (m *GlobalSettings) contextValidateOpaOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OpaOptions != nil {
+
+		if swag.IsZero(m.OpaOptions) { // not required
+			return nil
+		}
+
 		if err := m.OpaOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("opaOptions")
@@ -737,6 +787,11 @@ func (m *GlobalSettings) contextValidateOpaOptions(ctx context.Context, formats 
 func (m *GlobalSettings) contextValidateProviderConfiguration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ProviderConfiguration != nil {
+
+		if swag.IsZero(m.ProviderConfiguration) { // not required
+			return nil
+		}
+
 		if err := m.ProviderConfiguration.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("providerConfiguration")
@@ -753,6 +808,11 @@ func (m *GlobalSettings) contextValidateProviderConfiguration(ctx context.Contex
 func (m *GlobalSettings) contextValidateWebTerminalOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.WebTerminalOptions != nil {
+
+		if swag.IsZero(m.WebTerminalOptions) { // not required
+			return nil
+		}
+
 		if err := m.WebTerminalOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("webTerminalOptions")

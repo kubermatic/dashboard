@@ -91,6 +91,11 @@ func (o *CreateOrUpdateMeteringConfigurationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create or update metering configurations o k response
+func (o *CreateOrUpdateMeteringConfigurationsOK) Code() int {
+	return 200
+}
+
 func (o *CreateOrUpdateMeteringConfigurationsOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations][%d] createOrUpdateMeteringConfigurationsOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *CreateOrUpdateMeteringConfigurationsUnauthorized) IsServerError() bool 
 // IsCode returns true when this create or update metering configurations unauthorized response a status code equal to that given
 func (o *CreateOrUpdateMeteringConfigurationsUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the create or update metering configurations unauthorized response
+func (o *CreateOrUpdateMeteringConfigurationsUnauthorized) Code() int {
+	return 401
 }
 
 func (o *CreateOrUpdateMeteringConfigurationsUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *CreateOrUpdateMeteringConfigurationsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create or update metering configurations forbidden response
+func (o *CreateOrUpdateMeteringConfigurationsForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOrUpdateMeteringConfigurationsForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations][%d] createOrUpdateMeteringConfigurationsForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type CreateOrUpdateMeteringConfigurationsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create or update metering configurations default response
-func (o *CreateOrUpdateMeteringConfigurationsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create or update metering configurations default response has a 2xx status code
 func (o *CreateOrUpdateMeteringConfigurationsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *CreateOrUpdateMeteringConfigurationsDefault) IsServerError() bool {
 // IsCode returns true when this create or update metering configurations default response a status code equal to that given
 func (o *CreateOrUpdateMeteringConfigurationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create or update metering configurations default response
+func (o *CreateOrUpdateMeteringConfigurationsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateOrUpdateMeteringConfigurationsDefault) Error() string {

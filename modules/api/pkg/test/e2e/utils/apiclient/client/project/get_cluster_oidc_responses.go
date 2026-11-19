@@ -92,6 +92,11 @@ func (o *GetClusterOidcOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster oidc o k response
+func (o *GetClusterOidcOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterOidcOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetClusterOidcUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster oidc unauthorized response
+func (o *GetClusterOidcUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterOidcUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetClusterOidcForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster oidc forbidden response
+func (o *GetClusterOidcForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterOidcForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetClusterOidcDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster oidc default response
-func (o *GetClusterOidcDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster oidc default response has a 2xx status code
 func (o *GetClusterOidcDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetClusterOidcDefault) IsServerError() bool {
 // IsCode returns true when this get cluster oidc default response a status code equal to that given
 func (o *GetClusterOidcDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster oidc default response
+func (o *GetClusterOidcDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterOidcDefault) Error() string {

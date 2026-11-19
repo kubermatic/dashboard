@@ -91,6 +91,11 @@ func (o *PatchIPAMPoolOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch Ip a m pool o k response
+func (o *PatchIPAMPoolOK) Code() int {
+	return 200
+}
+
 func (o *PatchIPAMPoolOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] patchIpAMPoolOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *PatchIPAMPoolUnauthorized) IsServerError() bool {
 // IsCode returns true when this patch Ip a m pool unauthorized response a status code equal to that given
 func (o *PatchIPAMPoolUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the patch Ip a m pool unauthorized response
+func (o *PatchIPAMPoolUnauthorized) Code() int {
+	return 401
 }
 
 func (o *PatchIPAMPoolUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *PatchIPAMPoolForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch Ip a m pool forbidden response
+func (o *PatchIPAMPoolForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchIPAMPoolForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] patchIpAMPoolForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type PatchIPAMPoolDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch IP a m pool default response
-func (o *PatchIPAMPoolDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch IP a m pool default response has a 2xx status code
 func (o *PatchIPAMPoolDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *PatchIPAMPoolDefault) IsServerError() bool {
 // IsCode returns true when this patch IP a m pool default response a status code equal to that given
 func (o *PatchIPAMPoolDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch IP a m pool default response
+func (o *PatchIPAMPoolDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchIPAMPoolDefault) Error() string {

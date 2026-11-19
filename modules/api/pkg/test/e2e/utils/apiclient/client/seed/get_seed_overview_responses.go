@@ -92,6 +92,11 @@ func (o *GetSeedOverviewOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get seed overview o k response
+func (o *GetSeedOverviewOK) Code() int {
+	return 200
+}
+
 func (o *GetSeedOverviewOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetSeedOverviewUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get seed overview unauthorized response
+func (o *GetSeedOverviewUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetSeedOverviewUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetSeedOverviewForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get seed overview forbidden response
+func (o *GetSeedOverviewForbidden) Code() int {
+	return 403
+}
+
 func (o *GetSeedOverviewForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetSeedOverviewDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get seed overview default response
-func (o *GetSeedOverviewDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get seed overview default response has a 2xx status code
 func (o *GetSeedOverviewDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetSeedOverviewDefault) IsServerError() bool {
 // IsCode returns true when this get seed overview default response a status code equal to that given
 func (o *GetSeedOverviewDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get seed overview default response
+func (o *GetSeedOverviewDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetSeedOverviewDefault) Error() string {

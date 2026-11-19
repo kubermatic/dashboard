@@ -92,6 +92,11 @@ func (o *PatchAllowedRegistryOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch allowed registry o k response
+func (o *PatchAllowedRegistryOK) Code() int {
+	return 200
+}
+
 func (o *PatchAllowedRegistryOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch allowed registry unauthorized response
+func (o *PatchAllowedRegistryUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchAllowedRegistryUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch allowed registry forbidden response
+func (o *PatchAllowedRegistryForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchAllowedRegistryForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchAllowedRegistryDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch allowed registry default response
-func (o *PatchAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch allowed registry default response has a 2xx status code
 func (o *PatchAllowedRegistryDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchAllowedRegistryDefault) IsServerError() bool {
 // IsCode returns true when this patch allowed registry default response a status code equal to that given
 func (o *PatchAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch allowed registry default response
+func (o *PatchAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchAllowedRegistryDefault) Error() string {

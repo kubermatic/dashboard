@@ -687,6 +687,11 @@ func (m *ClusterSpec) contextValidateMachineNetworks(ctx context.Context, format
 	for i := 0; i < len(m.MachineNetworks); i++ {
 
 		if m.MachineNetworks[i] != nil {
+
+			if swag.IsZero(m.MachineNetworks[i]) { // not required
+				return nil
+			}
+
 			if err := m.MachineNetworks[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("machineNetworks" + "." + strconv.Itoa(i))
@@ -705,6 +710,11 @@ func (m *ClusterSpec) contextValidateMachineNetworks(ctx context.Context, format
 func (m *ClusterSpec) contextValidateAPIServerAllowedIPRanges(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.APIServerAllowedIPRanges != nil {
+
+		if swag.IsZero(m.APIServerAllowedIPRanges) { // not required
+			return nil
+		}
+
 		if err := m.APIServerAllowedIPRanges.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("apiServerAllowedIPRanges")
@@ -721,6 +731,11 @@ func (m *ClusterSpec) contextValidateAPIServerAllowedIPRanges(ctx context.Contex
 func (m *ClusterSpec) contextValidateAuditLogging(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AuditLogging != nil {
+
+		if swag.IsZero(m.AuditLogging) { // not required
+			return nil
+		}
+
 		if err := m.AuditLogging.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("auditLogging")
@@ -737,6 +752,11 @@ func (m *ClusterSpec) contextValidateAuditLogging(ctx context.Context, formats s
 func (m *ClusterSpec) contextValidateBackupConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BackupConfig != nil {
+
+		if swag.IsZero(m.BackupConfig) { // not required
+			return nil
+		}
+
 		if err := m.BackupConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("backupConfig")
@@ -753,6 +773,11 @@ func (m *ClusterSpec) contextValidateBackupConfig(ctx context.Context, formats s
 func (m *ClusterSpec) contextValidateCloud(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Cloud != nil {
+
+		if swag.IsZero(m.Cloud) { // not required
+			return nil
+		}
+
 		if err := m.Cloud.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloud")
@@ -769,6 +794,11 @@ func (m *ClusterSpec) contextValidateCloud(ctx context.Context, formats strfmt.R
 func (m *ClusterSpec) contextValidateClusterNetwork(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ClusterNetwork != nil {
+
+		if swag.IsZero(m.ClusterNetwork) { // not required
+			return nil
+		}
+
 		if err := m.ClusterNetwork.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clusterNetwork")
@@ -785,6 +815,11 @@ func (m *ClusterSpec) contextValidateClusterNetwork(ctx context.Context, formats
 func (m *ClusterSpec) contextValidateCniPlugin(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CniPlugin != nil {
+
+		if swag.IsZero(m.CniPlugin) { // not required
+			return nil
+		}
+
 		if err := m.CniPlugin.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cniPlugin")
@@ -801,6 +836,11 @@ func (m *ClusterSpec) contextValidateCniPlugin(ctx context.Context, formats strf
 func (m *ClusterSpec) contextValidateComponentsOverride(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ComponentsOverride != nil {
+
+		if swag.IsZero(m.ComponentsOverride) { // not required
+			return nil
+		}
+
 		if err := m.ComponentsOverride.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("componentsOverride")
@@ -817,6 +857,11 @@ func (m *ClusterSpec) contextValidateComponentsOverride(ctx context.Context, for
 func (m *ClusterSpec) contextValidateEncryptionConfiguration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EncryptionConfiguration != nil {
+
+		if swag.IsZero(m.EncryptionConfiguration) { // not required
+			return nil
+		}
+
 		if err := m.EncryptionConfiguration.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("encryptionConfiguration")
@@ -833,6 +878,11 @@ func (m *ClusterSpec) contextValidateEncryptionConfiguration(ctx context.Context
 func (m *ClusterSpec) contextValidateEventRateLimitConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EventRateLimitConfig != nil {
+
+		if swag.IsZero(m.EventRateLimitConfig) { // not required
+			return nil
+		}
+
 		if err := m.EventRateLimitConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("eventRateLimitConfig")
@@ -847,6 +897,10 @@ func (m *ClusterSpec) contextValidateEventRateLimitConfig(ctx context.Context, f
 }
 
 func (m *ClusterSpec) contextValidateExposeStrategy(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ExposeStrategy) { // not required
+		return nil
+	}
 
 	if err := m.ExposeStrategy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -863,6 +917,11 @@ func (m *ClusterSpec) contextValidateExposeStrategy(ctx context.Context, formats
 func (m *ClusterSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubelb != nil {
+
+		if swag.IsZero(m.Kubelb) { // not required
+			return nil
+		}
+
 		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubelb")
@@ -879,6 +938,11 @@ func (m *ClusterSpec) contextValidateKubelb(ctx context.Context, formats strfmt.
 func (m *ClusterSpec) contextValidateKubernetesDashboard(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.KubernetesDashboard != nil {
+
+		if swag.IsZero(m.KubernetesDashboard) { // not required
+			return nil
+		}
+
 		if err := m.KubernetesDashboard.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubernetesDashboard")
@@ -895,6 +959,11 @@ func (m *ClusterSpec) contextValidateKubernetesDashboard(ctx context.Context, fo
 func (m *ClusterSpec) contextValidateKyverno(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kyverno != nil {
+
+		if swag.IsZero(m.Kyverno) { // not required
+			return nil
+		}
+
 		if err := m.Kyverno.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kyverno")
@@ -911,6 +980,11 @@ func (m *ClusterSpec) contextValidateKyverno(ctx context.Context, formats strfmt
 func (m *ClusterSpec) contextValidateMla(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Mla != nil {
+
+		if swag.IsZero(m.Mla) { // not required
+			return nil
+		}
+
 		if err := m.Mla.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mla")
@@ -927,6 +1001,11 @@ func (m *ClusterSpec) contextValidateMla(ctx context.Context, formats strfmt.Reg
 func (m *ClusterSpec) contextValidateOidc(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Oidc != nil {
+
+		if swag.IsZero(m.Oidc) { // not required
+			return nil
+		}
+
 		if err := m.Oidc.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("oidc")
@@ -943,6 +1022,11 @@ func (m *ClusterSpec) contextValidateOidc(ctx context.Context, formats strfmt.Re
 func (m *ClusterSpec) contextValidateOpaIntegration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OpaIntegration != nil {
+
+		if swag.IsZero(m.OpaIntegration) { // not required
+			return nil
+		}
+
 		if err := m.OpaIntegration.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("opaIntegration")
@@ -959,6 +1043,11 @@ func (m *ClusterSpec) contextValidateOpaIntegration(ctx context.Context, formats
 func (m *ClusterSpec) contextValidateServiceAccount(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ServiceAccount != nil {
+
+		if swag.IsZero(m.ServiceAccount) { // not required
+			return nil
+		}
+
 		if err := m.ServiceAccount.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("serviceAccount")
@@ -975,6 +1064,11 @@ func (m *ClusterSpec) contextValidateServiceAccount(ctx context.Context, formats
 func (m *ClusterSpec) contextValidateUpdateWindow(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateWindow != nil {
+
+		if swag.IsZero(m.UpdateWindow) { // not required
+			return nil
+		}
+
 		if err := m.UpdateWindow.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateWindow")
@@ -989,6 +1083,10 @@ func (m *ClusterSpec) contextValidateUpdateWindow(ctx context.Context, formats s
 }
 
 func (m *ClusterSpec) contextValidateVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Version) { // not required
+		return nil
+	}
 
 	if err := m.Version.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

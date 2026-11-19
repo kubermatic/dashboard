@@ -73,6 +73,11 @@ func (m *ClusterComponentSettings) ContextValidate(ctx context.Context, formats 
 func (m *ClusterComponentSettings) contextValidateOperatingSystemManager(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OperatingSystemManager != nil {
+
+		if swag.IsZero(m.OperatingSystemManager) { // not required
+			return nil
+		}
+
 		if err := m.OperatingSystemManager.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("operatingSystemManager")

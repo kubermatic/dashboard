@@ -92,6 +92,11 @@ func (o *ListApplicationInstallationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list application installations o k response
+func (o *ListApplicationInstallationsOK) Code() int {
+	return 200
+}
+
 func (o *ListApplicationInstallationsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] listApplicationInstallationsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListApplicationInstallationsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list application installations unauthorized response
+func (o *ListApplicationInstallationsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListApplicationInstallationsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] listApplicationInstallationsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListApplicationInstallationsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list application installations forbidden response
+func (o *ListApplicationInstallationsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListApplicationInstallationsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] listApplicationInstallationsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListApplicationInstallationsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list application installations default response
-func (o *ListApplicationInstallationsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list application installations default response has a 2xx status code
 func (o *ListApplicationInstallationsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListApplicationInstallationsDefault) IsServerError() bool {
 // IsCode returns true when this list application installations default response a status code equal to that given
 func (o *ListApplicationInstallationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list application installations default response
+func (o *ListApplicationInstallationsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListApplicationInstallationsDefault) Error() string {

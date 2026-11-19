@@ -92,6 +92,11 @@ func (o *GetDCForSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get d c for seed o k response
+func (o *GetDCForSeedOK) Code() int {
+	return 200
+}
+
 func (o *GetDCForSeedOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetDCForSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get d c for seed unauthorized response
+func (o *GetDCForSeedUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetDCForSeedUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetDCForSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get d c for seed forbidden response
+func (o *GetDCForSeedForbidden) Code() int {
+	return 403
+}
+
 func (o *GetDCForSeedForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetDCForSeedDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get d c for seed default response
-func (o *GetDCForSeedDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get d c for seed default response has a 2xx status code
 func (o *GetDCForSeedDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetDCForSeedDefault) IsServerError() bool {
 // IsCode returns true when this get d c for seed default response a status code equal to that given
 func (o *GetDCForSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get d c for seed default response
+func (o *GetDCForSeedDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetDCForSeedDefault) Error() string {

@@ -72,6 +72,11 @@ func (m *TinkerbellImageSources) ContextValidate(ctx context.Context, formats st
 func (m *TinkerbellImageSources) contextValidateHTTP(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HTTP != nil {
+
+		if swag.IsZero(m.HTTP) { // not required
+			return nil
+		}
+
 		if err := m.HTTP.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("http")

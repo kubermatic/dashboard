@@ -86,6 +86,11 @@ func (o *GetCurrentUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get current user o k response
+func (o *GetCurrentUserOK) Code() int {
+	return 200
+}
+
 func (o *GetCurrentUserOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *GetCurrentUserUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get current user unauthorized response
+func (o *GetCurrentUserUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetCurrentUserUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserUnauthorized ", 401)
 }
@@ -179,11 +189,6 @@ type GetCurrentUserDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get current user default response
-func (o *GetCurrentUserDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get current user default response has a 2xx status code
 func (o *GetCurrentUserDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -207,6 +212,11 @@ func (o *GetCurrentUserDefault) IsServerError() bool {
 // IsCode returns true when this get current user default response a status code equal to that given
 func (o *GetCurrentUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get current user default response
+func (o *GetCurrentUserDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetCurrentUserDefault) Error() string {

@@ -80,6 +80,11 @@ func (o *GetKubermaticVersionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get kubermatic version o k response
+func (o *GetKubermaticVersionOK) Code() int {
+	return 200
+}
+
 func (o *GetKubermaticVersionOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/version][%d] getKubermaticVersionOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type GetKubermaticVersionDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get kubermatic version default response
-func (o *GetKubermaticVersionDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get kubermatic version default response has a 2xx status code
 func (o *GetKubermaticVersionDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *GetKubermaticVersionDefault) IsServerError() bool {
 // IsCode returns true when this get kubermatic version default response a status code equal to that given
 func (o *GetKubermaticVersionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get kubermatic version default response
+func (o *GetKubermaticVersionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetKubermaticVersionDefault) Error() string {

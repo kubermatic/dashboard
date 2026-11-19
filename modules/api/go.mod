@@ -48,16 +48,16 @@ require (
 	github.com/digitalocean/godo v1.145.0
 	github.com/embik/nutanix-client-go v0.1.0
 	github.com/evanphx/json-patch v5.9.11+incompatible
-	github.com/go-jose/go-jose/v4 v4.1.6
+	github.com/go-jose/go-jose/v4 v4.1.9
 	github.com/go-kit/kit v0.13.0
 	github.com/go-kit/log v0.2.1
 	github.com/go-logr/zapr v1.3.0
-	github.com/go-openapi/errors v0.22.8
-	github.com/go-openapi/runtime v0.33.0
-	github.com/go-openapi/strfmt v0.27.0
+	github.com/go-openapi/errors v0.22.9
+	github.com/go-openapi/runtime v0.33.4
+	github.com/go-openapi/strfmt v0.27.4
 	github.com/go-openapi/swag v0.27.1
-	github.com/go-openapi/validate v0.26.1
-	github.com/go-swagger/go-swagger v0.30.3
+	github.com/go-openapi/validate v1.0.1
+	github.com/go-swagger/go-swagger v0.30.5
 	github.com/go-test/deep v1.1.2
 	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
@@ -67,18 +67,18 @@ require (
 	github.com/gorilla/securecookie v1.1.2
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/hetznercloud/hcloud-go v1.59.2
-	github.com/kubeovn/kube-ovn v1.13.11
+	github.com/kubeovn/kube-ovn v1.13.15
 	github.com/minio/minio-go/v7 v7.0.100
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20250429231206-7a3c70aae2a1 // v0.9.0+
-	github.com/open-policy-agent/gatekeeper/v3 v3.19.1
+	github.com/open-policy-agent/gatekeeper/v3 v3.19.3
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.24.0
+	github.com/prometheus/client_golang v1.24.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.12.1
 	github.com/vmware-tanzu/velero v1.18.4
-	github.com/vmware/go-vcloud-director/v2 v2.26.1
+	github.com/vmware/go-vcloud-director/v2 v2.26.2
 	github.com/vmware/govmomi v0.50.0
 	go.anx.io/go-anxcloud v0.7.9
 	go.uber.org/zap v1.28.0
@@ -101,7 +101,7 @@ require (
 	k8s.io/kubectl v0.37.0
 	k8s.io/metrics v0.37.0
 	k8s.io/utils v0.0.0-20260707023825-cf1189d6abe3
-	kubevirt.io/api v1.4.0
+	kubevirt.io/api v1.4.1
 	kubevirt.io/containerized-data-importer-api v1.62.0
 	sigs.k8s.io/controller-runtime v0.25.0
 	sigs.k8s.io/controller-tools v0.22.0
@@ -113,6 +113,7 @@ require (
 	cloud.google.com/go/auth v0.24.1-0.20261001053825-dbc26066f70a // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.3.0 // indirect
 	cloud.google.com/go/compute/metadata v0.10.0 // indirect
+	cloud.google.com/go/longrunning v1.2.0 // indirect
 	cuelabs.dev/go/oci/ociregistry v0.0.0-20251212221603-3adeb8663819 // indirect
 	cuelang.org/go v0.16.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
@@ -222,22 +223,22 @@ require (
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-logr/zerologr v1.2.3 // indirect
-	github.com/go-openapi/analysis v0.25.5 // indirect
+	github.com/go-openapi/analysis v1.0.1 // indirect
 	github.com/go-openapi/inflect v0.21.0 // indirect
-	github.com/go-openapi/jsonpointer v1.0.0 // indirect
-	github.com/go-openapi/jsonreference v1.0.0 // indirect
-	github.com/go-openapi/loads v0.25.0 // indirect
-	github.com/go-openapi/runtime/server-middleware v0.30.0 // indirect
-	github.com/go-openapi/spec v0.22.9 // indirect
-	github.com/go-openapi/swag/conv v0.27.3 // indirect
-	github.com/go-openapi/swag/fileutils v0.27.3 // indirect
-	github.com/go-openapi/swag/jsonutils v0.27.3 // indirect
-	github.com/go-openapi/swag/loading v0.27.3 // indirect
-	github.com/go-openapi/swag/mangling v0.27.3 // indirect
-	github.com/go-openapi/swag/pools v0.27.3 // indirect
-	github.com/go-openapi/swag/stringutils v0.27.3 // indirect
-	github.com/go-openapi/swag/typeutils v0.27.3 // indirect
-	github.com/go-openapi/swag/yamlutils v0.27.3 // indirect
+	github.com/go-openapi/jsonpointer v1.0.2 // indirect
+	github.com/go-openapi/jsonreference v1.0.3 // indirect
+	github.com/go-openapi/loads v0.25.3 // indirect
+	github.com/go-openapi/runtime/server-middleware v0.33.4 // indirect
+	github.com/go-openapi/spec v1.0.1 // indirect
+	github.com/go-openapi/swag/conv v0.29.2 // indirect
+	github.com/go-openapi/swag/fileutils v0.29.2 // indirect
+	github.com/go-openapi/swag/jsonutils v0.29.2 // indirect
+	github.com/go-openapi/swag/loading v0.29.2 // indirect
+	github.com/go-openapi/swag/mangling v0.29.2 // indirect
+	github.com/go-openapi/swag/pools v0.29.2 // indirect
+	github.com/go-openapi/swag/stringutils v0.29.2 // indirect
+	github.com/go-openapi/swag/typeutils v0.29.2 // indirect
+	github.com/go-openapi/swag/yamlutils v0.29.2 // indirect
 	github.com/go-piv/piv-go/v2 v2.6.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gobuffalo/flect v1.0.3 // indirect
@@ -317,7 +318,7 @@ require (
 	github.com/nutanix-cloud-native/prism-go-client v0.5.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
 	github.com/oklog/run v1.1.0 // indirect
-	github.com/oklog/ulid/v2 v2.1.1 // indirect
+	github.com/oklog/ulid/v2 v2.1.2 // indirect
 	github.com/oleiade/reflections v1.1.0 // indirect
 	github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852 // indirect
 	github.com/open-policy-agent/opa v1.14.1 // indirect
@@ -334,7 +335,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
-	github.com/prometheus/common v0.70.0 // indirect
+	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	github.com/protocolbuffers/txtpbfmt v0.0.0-20260217160748-a481f6a22f94 // indirect
 	github.com/r3labs/diff v1.1.0 // indirect
@@ -420,7 +421,7 @@ require (
 	k8s.io/component-base v0.37.0 // indirect
 	k8s.io/gengo/v2 v2.0.0-20260408192533-25e2208e0dc3 // indirect
 	k8s.io/kube-aggregator v0.37.0 // indirect
-	k8s.io/kube-openapi v0.31.8 // indirect
+	k8s.io/kube-openapi v0.31.10 // indirect
 	k8s.io/kube-proxy v0.33.4 // indirect
 	k8s.io/kubelet v0.33.4 // indirect
 	k8s.io/pod-security-admission v0.34.1 // indirect

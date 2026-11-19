@@ -80,6 +80,11 @@ func (o *ListVMwareCloudDirectorCatalogsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director catalogs no credentials o k response
+func (o *ListVMwareCloudDirectorCatalogsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorCatalogsNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/catalogs][%d] listVMwareCloudDirectorCatalogsNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListVMwareCloudDirectorCatalogsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director catalogs no credentials default response
-func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director catalogs no credentials default response has a 2xx status code
 func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) IsServerError() bo
 // IsCode returns true when this list v mware cloud director catalogs no credentials default response a status code equal to that given
 func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list v mware cloud director catalogs no credentials default response
+func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVMwareCloudDirectorCatalogsNoCredentialsDefault) Error() string {

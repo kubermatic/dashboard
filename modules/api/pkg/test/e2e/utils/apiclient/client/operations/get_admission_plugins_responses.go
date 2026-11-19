@@ -86,6 +86,11 @@ func (o *GetAdmissionPluginsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get admission plugins o k response
+func (o *GetAdmissionPluginsOK) Code() int {
+	return 200
+}
+
 func (o *GetAdmissionPluginsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admission/plugins/{version}][%d] getAdmissionPluginsOK  %+v", 200, o.Payload)
 }
@@ -146,6 +151,11 @@ func (o *GetAdmissionPluginsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get admission plugins unauthorized response
+func (o *GetAdmissionPluginsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetAdmissionPluginsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admission/plugins/{version}][%d] getAdmissionPluginsUnauthorized ", 401)
 }
@@ -177,11 +187,6 @@ type GetAdmissionPluginsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get admission plugins default response
-func (o *GetAdmissionPluginsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get admission plugins default response has a 2xx status code
 func (o *GetAdmissionPluginsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -205,6 +210,11 @@ func (o *GetAdmissionPluginsDefault) IsServerError() bool {
 // IsCode returns true when this get admission plugins default response a status code equal to that given
 func (o *GetAdmissionPluginsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get admission plugins default response
+func (o *GetAdmissionPluginsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetAdmissionPluginsDefault) Error() string {

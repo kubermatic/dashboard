@@ -92,6 +92,11 @@ func (o *ListMachineDeploymentNodesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list machine deployment nodes o k response
+func (o *ListMachineDeploymentNodesOK) Code() int {
+	return 200
+}
+
 func (o *ListMachineDeploymentNodesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListMachineDeploymentNodesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list machine deployment nodes unauthorized response
+func (o *ListMachineDeploymentNodesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMachineDeploymentNodesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListMachineDeploymentNodesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list machine deployment nodes forbidden response
+func (o *ListMachineDeploymentNodesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMachineDeploymentNodesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListMachineDeploymentNodesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list machine deployment nodes default response
-func (o *ListMachineDeploymentNodesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list machine deployment nodes default response has a 2xx status code
 func (o *ListMachineDeploymentNodesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListMachineDeploymentNodesDefault) IsServerError() bool {
 // IsCode returns true when this list machine deployment nodes default response a status code equal to that given
 func (o *ListMachineDeploymentNodesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list machine deployment nodes default response
+func (o *ListMachineDeploymentNodesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListMachineDeploymentNodesDefault) Error() string {

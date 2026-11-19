@@ -92,6 +92,11 @@ func (o *PatchPolicyBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch policy binding o k response
+func (o *PatchPolicyBindingOK) Code() int {
+	return 200
+}
+
 func (o *PatchPolicyBindingOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}][%d] patchPolicyBindingOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchPolicyBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch policy binding unauthorized response
+func (o *PatchPolicyBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchPolicyBindingUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}][%d] patchPolicyBindingUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchPolicyBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch policy binding forbidden response
+func (o *PatchPolicyBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchPolicyBindingForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}][%d] patchPolicyBindingForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchPolicyBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch policy binding default response
-func (o *PatchPolicyBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch policy binding default response has a 2xx status code
 func (o *PatchPolicyBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchPolicyBindingDefault) IsServerError() bool {
 // IsCode returns true when this patch policy binding default response a status code equal to that given
 func (o *PatchPolicyBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch policy binding default response
+func (o *PatchPolicyBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchPolicyBindingDefault) Error() string {

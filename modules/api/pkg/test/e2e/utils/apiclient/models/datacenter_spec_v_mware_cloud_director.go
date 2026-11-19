@@ -83,6 +83,10 @@ func (m *DatacenterSpecVMwareCloudDirector) ContextValidate(ctx context.Context,
 
 func (m *DatacenterSpecVMwareCloudDirector) contextValidateTemplates(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Templates) { // not required
+		return nil
+	}
+
 	if err := m.Templates.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("templates")

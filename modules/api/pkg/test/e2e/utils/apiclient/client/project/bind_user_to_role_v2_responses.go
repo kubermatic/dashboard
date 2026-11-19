@@ -92,6 +92,11 @@ func (o *BindUserToRoleV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the bind user to role v2 o k response
+func (o *BindUserToRoleV2OK) Code() int {
+	return 200
+}
+
 func (o *BindUserToRoleV2OK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] bindUserToRoleV2OK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *BindUserToRoleV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the bind user to role v2 unauthorized response
+func (o *BindUserToRoleV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *BindUserToRoleV2Unauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] bindUserToRoleV2Unauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *BindUserToRoleV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the bind user to role v2 forbidden response
+func (o *BindUserToRoleV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *BindUserToRoleV2Forbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] bindUserToRoleV2Forbidden ", 403)
 }
@@ -236,11 +251,6 @@ type BindUserToRoleV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the bind user to role v2 default response
-func (o *BindUserToRoleV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this bind user to role v2 default response has a 2xx status code
 func (o *BindUserToRoleV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *BindUserToRoleV2Default) IsServerError() bool {
 // IsCode returns true when this bind user to role v2 default response a status code equal to that given
 func (o *BindUserToRoleV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the bind user to role v2 default response
+func (o *BindUserToRoleV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *BindUserToRoleV2Default) Error() string {

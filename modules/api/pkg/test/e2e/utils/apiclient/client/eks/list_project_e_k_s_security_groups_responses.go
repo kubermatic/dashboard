@@ -92,6 +92,11 @@ func (o *ListProjectEKSSecurityGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s security groups o k response
+func (o *ListProjectEKSSecurityGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSSecurityGroupsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/securitygroups][%d] listProjectEKSSecurityGroupsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectEKSSecurityGroupsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s security groups unauthorized response
+func (o *ListProjectEKSSecurityGroupsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSSecurityGroupsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/securitygroups][%d] listProjectEKSSecurityGroupsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectEKSSecurityGroupsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s security groups forbidden response
+func (o *ListProjectEKSSecurityGroupsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSSecurityGroupsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/securitygroups][%d] listProjectEKSSecurityGroupsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListProjectEKSSecurityGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project e k s security groups default response
-func (o *ListProjectEKSSecurityGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project e k s security groups default response has a 2xx status code
 func (o *ListProjectEKSSecurityGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectEKSSecurityGroupsDefault) IsServerError() bool {
 // IsCode returns true when this list project e k s security groups default response a status code equal to that given
 func (o *ListProjectEKSSecurityGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project e k s security groups default response
+func (o *ListProjectEKSSecurityGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectEKSSecurityGroupsDefault) Error() string {

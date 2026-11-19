@@ -91,6 +91,11 @@ func (o *CreateOrUpdateBackupCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create or update backup credentials o k response
+func (o *CreateOrUpdateBackupCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *CreateOrUpdateBackupCredentialsOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *CreateOrUpdateBackupCredentialsUnauthorized) IsServerError() bool {
 // IsCode returns true when this create or update backup credentials unauthorized response a status code equal to that given
 func (o *CreateOrUpdateBackupCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the create or update backup credentials unauthorized response
+func (o *CreateOrUpdateBackupCredentialsUnauthorized) Code() int {
+	return 401
 }
 
 func (o *CreateOrUpdateBackupCredentialsUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *CreateOrUpdateBackupCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create or update backup credentials forbidden response
+func (o *CreateOrUpdateBackupCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOrUpdateBackupCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type CreateOrUpdateBackupCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create or update backup credentials default response
-func (o *CreateOrUpdateBackupCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create or update backup credentials default response has a 2xx status code
 func (o *CreateOrUpdateBackupCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *CreateOrUpdateBackupCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this create or update backup credentials default response a status code equal to that given
 func (o *CreateOrUpdateBackupCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create or update backup credentials default response
+func (o *CreateOrUpdateBackupCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateOrUpdateBackupCredentialsDefault) Error() string {

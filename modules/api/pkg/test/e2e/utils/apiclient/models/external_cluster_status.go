@@ -103,6 +103,11 @@ func (m *ExternalClusterStatus) ContextValidate(ctx context.Context, formats str
 func (m *ExternalClusterStatus) contextValidateAks(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Aks != nil {
+
+		if swag.IsZero(m.Aks) { // not required
+			return nil
+		}
+
 		if err := m.Aks.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("aks")
@@ -117,6 +122,10 @@ func (m *ExternalClusterStatus) contextValidateAks(ctx context.Context, formats 
 }
 
 func (m *ExternalClusterStatus) contextValidateState(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.State) { // not required
+		return nil
+	}
 
 	if err := m.State.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

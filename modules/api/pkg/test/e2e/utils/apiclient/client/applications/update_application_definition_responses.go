@@ -92,6 +92,11 @@ func (o *UpdateApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update application definition o k response
+func (o *UpdateApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *UpdateApplicationDefinitionOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update application definition unauthorized response
+func (o *UpdateApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateApplicationDefinitionUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update application definition forbidden response
+func (o *UpdateApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateApplicationDefinitionForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateApplicationDefinitionDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update application definition default response
-func (o *UpdateApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update application definition default response has a 2xx status code
 func (o *UpdateApplicationDefinitionDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateApplicationDefinitionDefault) IsServerError() bool {
 // IsCode returns true when this update application definition default response a status code equal to that given
 func (o *UpdateApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update application definition default response
+func (o *UpdateApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateApplicationDefinitionDefault) Error() string {

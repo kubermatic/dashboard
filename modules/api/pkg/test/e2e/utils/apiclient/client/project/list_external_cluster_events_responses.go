@@ -92,6 +92,11 @@ func (o *ListExternalClusterEventsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list external cluster events o k response
+func (o *ListExternalClusterEventsOK) Code() int {
+	return 200
+}
+
 func (o *ListExternalClusterEventsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListExternalClusterEventsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list external cluster events unauthorized response
+func (o *ListExternalClusterEventsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListExternalClusterEventsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListExternalClusterEventsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list external cluster events forbidden response
+func (o *ListExternalClusterEventsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListExternalClusterEventsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListExternalClusterEventsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list external cluster events default response
-func (o *ListExternalClusterEventsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list external cluster events default response has a 2xx status code
 func (o *ListExternalClusterEventsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListExternalClusterEventsDefault) IsServerError() bool {
 // IsCode returns true when this list external cluster events default response a status code equal to that given
 func (o *ListExternalClusterEventsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list external cluster events default response
+func (o *ListExternalClusterEventsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListExternalClusterEventsDefault) Error() string {

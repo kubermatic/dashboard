@@ -103,6 +103,10 @@ func (m *IPAMPoolDatacenterSettings) ContextValidate(ctx context.Context, format
 
 func (m *IPAMPoolDatacenterSettings) contextValidatePoolCidr(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.PoolCidr) { // not required
+		return nil
+	}
+
 	if err := m.PoolCidr.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("poolCidr")
@@ -116,6 +120,10 @@ func (m *IPAMPoolDatacenterSettings) contextValidatePoolCidr(ctx context.Context
 }
 
 func (m *IPAMPoolDatacenterSettings) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Type) { // not required
+		return nil
+	}
 
 	if err := m.Type.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

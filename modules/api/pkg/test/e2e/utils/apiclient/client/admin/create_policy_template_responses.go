@@ -92,6 +92,11 @@ func (o *CreatePolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create policy template o k response
+func (o *CreatePolicyTemplateOK) Code() int {
+	return 200
+}
+
 func (o *CreatePolicyTemplateOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreatePolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create policy template unauthorized response
+func (o *CreatePolicyTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreatePolicyTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreatePolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create policy template forbidden response
+func (o *CreatePolicyTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *CreatePolicyTemplateForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreatePolicyTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create policy template default response
-func (o *CreatePolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create policy template default response has a 2xx status code
 func (o *CreatePolicyTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreatePolicyTemplateDefault) IsServerError() bool {
 // IsCode returns true when this create policy template default response a status code equal to that given
 func (o *CreatePolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create policy template default response
+func (o *CreatePolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreatePolicyTemplateDefault) Error() string {

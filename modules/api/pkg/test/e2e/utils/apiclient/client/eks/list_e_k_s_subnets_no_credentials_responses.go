@@ -92,6 +92,11 @@ func (o *ListEKSSubnetsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s subnets no credentials o k response
+func (o *ListEKSSubnetsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSSubnetsNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEKSSubnetsNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s subnets no credentials unauthorized response
+func (o *ListEKSSubnetsNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSSubnetsNoCredentialsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEKSSubnetsNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s subnets no credentials forbidden response
+func (o *ListEKSSubnetsNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSSubnetsNoCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEKSSubnetsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s subnets no credentials default response
-func (o *ListEKSSubnetsNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s subnets no credentials default response has a 2xx status code
 func (o *ListEKSSubnetsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEKSSubnetsNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list e k s subnets no credentials default response a status code equal to that given
 func (o *ListEKSSubnetsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s subnets no credentials default response
+func (o *ListEKSSubnetsNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSSubnetsNoCredentialsDefault) Error() string {

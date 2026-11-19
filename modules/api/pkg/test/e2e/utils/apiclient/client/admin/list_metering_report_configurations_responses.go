@@ -92,6 +92,11 @@ func (o *ListMeteringReportConfigurationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list metering report configurations o k response
+func (o *ListMeteringReportConfigurationsOK) Code() int {
+	return 200
+}
+
 func (o *ListMeteringReportConfigurationsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListMeteringReportConfigurationsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list metering report configurations unauthorized response
+func (o *ListMeteringReportConfigurationsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMeteringReportConfigurationsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListMeteringReportConfigurationsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list metering report configurations forbidden response
+func (o *ListMeteringReportConfigurationsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMeteringReportConfigurationsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListMeteringReportConfigurationsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list metering report configurations default response
-func (o *ListMeteringReportConfigurationsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list metering report configurations default response has a 2xx status code
 func (o *ListMeteringReportConfigurationsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListMeteringReportConfigurationsDefault) IsServerError() bool {
 // IsCode returns true when this list metering report configurations default response a status code equal to that given
 func (o *ListMeteringReportConfigurationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list metering report configurations default response
+func (o *ListMeteringReportConfigurationsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListMeteringReportConfigurationsDefault) Error() string {

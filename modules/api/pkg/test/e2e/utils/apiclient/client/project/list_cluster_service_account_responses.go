@@ -92,6 +92,11 @@ func (o *ListClusterServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list cluster service account o k response
+func (o *ListClusterServiceAccountOK) Code() int {
+	return 200
+}
+
 func (o *ListClusterServiceAccountOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListClusterServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list cluster service account unauthorized response
+func (o *ListClusterServiceAccountUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClusterServiceAccountUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListClusterServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list cluster service account forbidden response
+func (o *ListClusterServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *ListClusterServiceAccountForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListClusterServiceAccountDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list cluster service account default response
-func (o *ListClusterServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list cluster service account default response has a 2xx status code
 func (o *ListClusterServiceAccountDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListClusterServiceAccountDefault) IsServerError() bool {
 // IsCode returns true when this list cluster service account default response a status code equal to that given
 func (o *ListClusterServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list cluster service account default response
+func (o *ListClusterServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListClusterServiceAccountDefault) Error() string {

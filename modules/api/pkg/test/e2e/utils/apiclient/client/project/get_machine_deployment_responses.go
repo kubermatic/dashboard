@@ -92,6 +92,11 @@ func (o *GetMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get machine deployment o k response
+func (o *GetMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *GetMachineDeploymentOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getMachineDeploymentOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get machine deployment unauthorized response
+func (o *GetMachineDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetMachineDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getMachineDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get machine deployment forbidden response
+func (o *GetMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *GetMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getMachineDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get machine deployment default response
-func (o *GetMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get machine deployment default response has a 2xx status code
 func (o *GetMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this get machine deployment default response a status code equal to that given
 func (o *GetMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get machine deployment default response
+func (o *GetMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetMachineDeploymentDefault) Error() string {

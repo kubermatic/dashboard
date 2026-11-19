@@ -95,6 +95,11 @@ func (o *CreateDCCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create d c created response
+func (o *CreateDCCreated) Code() int {
+	return 201
+}
+
 func (o *CreateDCCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *CreateDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create d c unauthorized response
+func (o *CreateDCUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateDCUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCUnauthorized ", 401)
 }
@@ -208,6 +218,11 @@ func (o *CreateDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create d c forbidden response
+func (o *CreateDCForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateDCForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCForbidden ", 403)
 }
@@ -239,11 +254,6 @@ type CreateDCDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create d c default response
-func (o *CreateDCDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create d c default response has a 2xx status code
 func (o *CreateDCDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -267,6 +277,11 @@ func (o *CreateDCDefault) IsServerError() bool {
 // IsCode returns true when this create d c default response a status code equal to that given
 func (o *CreateDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create d c default response
+func (o *CreateDCDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateDCDefault) Error() string {
@@ -356,6 +371,11 @@ func (o *CreateDCBody) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (o *CreateDCBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
+
+		if swag.IsZero(o.Spec) { // not required
+			return nil
+		}
+
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "spec")

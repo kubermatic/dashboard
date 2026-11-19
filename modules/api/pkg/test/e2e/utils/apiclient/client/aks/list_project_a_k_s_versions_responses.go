@@ -80,6 +80,11 @@ func (o *ListProjectAKSVersionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project a k s versions o k response
+func (o *ListProjectAKSVersionsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAKSVersionsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/versions][%d] listProjectAKSVersionsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectAKSVersionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project a k s versions default response
-func (o *ListProjectAKSVersionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project a k s versions default response has a 2xx status code
 func (o *ListProjectAKSVersionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectAKSVersionsDefault) IsServerError() bool {
 // IsCode returns true when this list project a k s versions default response a status code equal to that given
 func (o *ListProjectAKSVersionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project a k s versions default response
+func (o *ListProjectAKSVersionsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAKSVersionsDefault) Error() string {

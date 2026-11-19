@@ -91,6 +91,11 @@ func (o *DeleteExternalClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete external cluster o k response
+func (o *DeleteExternalClusterOK) Code() int {
+	return 200
+}
+
 func (o *DeleteExternalClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteExternalClusterUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete external cluster unauthorized response a status code equal to that given
 func (o *DeleteExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete external cluster unauthorized response
+func (o *DeleteExternalClusterUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteExternalClusterUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete external cluster forbidden response
+func (o *DeleteExternalClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteExternalClusterForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteExternalClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete external cluster default response
-func (o *DeleteExternalClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete external cluster default response has a 2xx status code
 func (o *DeleteExternalClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteExternalClusterDefault) IsServerError() bool {
 // IsCode returns true when this delete external cluster default response a status code equal to that given
 func (o *DeleteExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete external cluster default response
+func (o *DeleteExternalClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteExternalClusterDefault) Error() string {

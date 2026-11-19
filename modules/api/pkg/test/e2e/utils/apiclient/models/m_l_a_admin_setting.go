@@ -102,6 +102,11 @@ func (m *MLAAdminSetting) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *MLAAdminSetting) contextValidateLoggingRateLimits(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.LoggingRateLimits != nil {
+
+		if swag.IsZero(m.LoggingRateLimits) { // not required
+			return nil
+		}
+
 		if err := m.LoggingRateLimits.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("loggingRateLimits")
@@ -118,6 +123,11 @@ func (m *MLAAdminSetting) contextValidateLoggingRateLimits(ctx context.Context, 
 func (m *MLAAdminSetting) contextValidateMonitoringRateLimits(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MonitoringRateLimits != nil {
+
+		if swag.IsZero(m.MonitoringRateLimits) { // not required
+			return nil
+		}
+
 		if err := m.MonitoringRateLimits.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("monitoringRateLimits")

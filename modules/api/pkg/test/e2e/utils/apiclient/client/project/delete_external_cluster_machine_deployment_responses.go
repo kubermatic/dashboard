@@ -91,6 +91,11 @@ func (o *DeleteExternalClusterMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete external cluster machine deployment o k response
+func (o *DeleteExternalClusterMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *DeleteExternalClusterMachineDeploymentOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteExternalClusterMachineDeploymentUnauthorized) IsServerError() boo
 // IsCode returns true when this delete external cluster machine deployment unauthorized response a status code equal to that given
 func (o *DeleteExternalClusterMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete external cluster machine deployment unauthorized response
+func (o *DeleteExternalClusterMachineDeploymentUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteExternalClusterMachineDeploymentUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteExternalClusterMachineDeploymentForbidden) IsCode(code int) bool 
 	return code == 403
 }
 
+// Code gets the status code for the delete external cluster machine deployment forbidden response
+func (o *DeleteExternalClusterMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteExternalClusterMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteExternalClusterMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete external cluster machine deployment default response
-func (o *DeleteExternalClusterMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete external cluster machine deployment default response has a 2xx status code
 func (o *DeleteExternalClusterMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteExternalClusterMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this delete external cluster machine deployment default response a status code equal to that given
 func (o *DeleteExternalClusterMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete external cluster machine deployment default response
+func (o *DeleteExternalClusterMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteExternalClusterMachineDeploymentDefault) Error() string {

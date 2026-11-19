@@ -92,6 +92,11 @@ func (o *CreateExternalClusterCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create external cluster created response
+func (o *CreateExternalClusterCreated) Code() int {
+	return 201
+}
+
 func (o *CreateExternalClusterCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/kubernetes/clusters][%d] createExternalClusterCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create external cluster unauthorized response
+func (o *CreateExternalClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateExternalClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/kubernetes/clusters][%d] createExternalClusterUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create external cluster forbidden response
+func (o *CreateExternalClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateExternalClusterForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/kubernetes/clusters][%d] createExternalClusterForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateExternalClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create external cluster default response
-func (o *CreateExternalClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create external cluster default response has a 2xx status code
 func (o *CreateExternalClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateExternalClusterDefault) IsServerError() bool {
 // IsCode returns true when this create external cluster default response a status code equal to that given
 func (o *CreateExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create external cluster default response
+func (o *CreateExternalClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateExternalClusterDefault) Error() string {

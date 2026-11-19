@@ -92,6 +92,11 @@ func (o *CreateConstraintTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create constraint template o k response
+func (o *CreateConstraintTemplateOK) Code() int {
+	return 200
+}
+
 func (o *CreateConstraintTemplateOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/constrainttemplates][%d] createConstraintTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateConstraintTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create constraint template unauthorized response
+func (o *CreateConstraintTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateConstraintTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/constrainttemplates][%d] createConstraintTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateConstraintTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create constraint template forbidden response
+func (o *CreateConstraintTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateConstraintTemplateForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/constrainttemplates][%d] createConstraintTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateConstraintTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create constraint template default response
-func (o *CreateConstraintTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create constraint template default response has a 2xx status code
 func (o *CreateConstraintTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateConstraintTemplateDefault) IsServerError() bool {
 // IsCode returns true when this create constraint template default response a status code equal to that given
 func (o *CreateConstraintTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create constraint template default response
+func (o *CreateConstraintTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateConstraintTemplateDefault) Error() string {

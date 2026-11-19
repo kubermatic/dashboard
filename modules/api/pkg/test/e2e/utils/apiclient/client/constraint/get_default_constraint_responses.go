@@ -92,6 +92,11 @@ func (o *GetDefaultConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get default constraint o k response
+func (o *GetDefaultConstraintOK) Code() int {
+	return 200
+}
+
 func (o *GetDefaultConstraintOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints/{constraint_name}][%d] getDefaultConstraintOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetDefaultConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get default constraint unauthorized response
+func (o *GetDefaultConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetDefaultConstraintUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints/{constraint_name}][%d] getDefaultConstraintUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetDefaultConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get default constraint forbidden response
+func (o *GetDefaultConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *GetDefaultConstraintForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints/{constraint_name}][%d] getDefaultConstraintForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetDefaultConstraintDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get default constraint default response
-func (o *GetDefaultConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get default constraint default response has a 2xx status code
 func (o *GetDefaultConstraintDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetDefaultConstraintDefault) IsServerError() bool {
 // IsCode returns true when this get default constraint default response a status code equal to that given
 func (o *GetDefaultConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get default constraint default response
+func (o *GetDefaultConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetDefaultConstraintDefault) Error() string {

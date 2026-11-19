@@ -80,6 +80,11 @@ func (o *ListVMwareCloudDirectorTemplatesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director templates o k response
+func (o *ListVMwareCloudDirectorTemplatesOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorTemplatesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListVMwareCloudDirectorTemplatesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director templates default response
-func (o *ListVMwareCloudDirectorTemplatesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director templates default response has a 2xx status code
 func (o *ListVMwareCloudDirectorTemplatesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListVMwareCloudDirectorTemplatesDefault) IsServerError() bool {
 // IsCode returns true when this list v mware cloud director templates default response a status code equal to that given
 func (o *ListVMwareCloudDirectorTemplatesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list v mware cloud director templates default response
+func (o *ListVMwareCloudDirectorTemplatesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVMwareCloudDirectorTemplatesDefault) Error() string {

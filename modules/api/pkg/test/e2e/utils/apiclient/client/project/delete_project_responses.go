@@ -91,6 +91,11 @@ func (o *DeleteProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete project o k response
+func (o *DeleteProjectOK) Code() int {
+	return 200
+}
+
 func (o *DeleteProjectOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}][%d] deleteProjectOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteProjectUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete project unauthorized response a status code equal to that given
 func (o *DeleteProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete project unauthorized response
+func (o *DeleteProjectUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteProjectUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete project forbidden response
+func (o *DeleteProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteProjectForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}][%d] deleteProjectForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete project default response
-func (o *DeleteProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete project default response has a 2xx status code
 func (o *DeleteProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteProjectDefault) IsServerError() bool {
 // IsCode returns true when this delete project default response a status code equal to that given
 func (o *DeleteProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete project default response
+func (o *DeleteProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteProjectDefault) Error() string {

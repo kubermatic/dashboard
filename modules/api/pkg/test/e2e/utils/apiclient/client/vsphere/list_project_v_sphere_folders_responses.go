@@ -80,6 +80,11 @@ func (o *ListProjectVSphereFoldersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project v sphere folders o k response
+func (o *ListProjectVSphereFoldersOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectVSphereFoldersOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFoldersOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectVSphereFoldersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project v sphere folders default response
-func (o *ListProjectVSphereFoldersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project v sphere folders default response has a 2xx status code
 func (o *ListProjectVSphereFoldersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectVSphereFoldersDefault) IsServerError() bool {
 // IsCode returns true when this list project v sphere folders default response a status code equal to that given
 func (o *ListProjectVSphereFoldersDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project v sphere folders default response
+func (o *ListProjectVSphereFoldersDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectVSphereFoldersDefault) Error() string {

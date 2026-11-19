@@ -92,6 +92,11 @@ func (o *CreateEtcdBackupConfigCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create etcd backup config created response
+func (o *CreateEtcdBackupConfigCreated) Code() int {
+	return 201
+}
+
 func (o *CreateEtcdBackupConfigCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs][%d] createEtcdBackupConfigCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateEtcdBackupConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create etcd backup config unauthorized response
+func (o *CreateEtcdBackupConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateEtcdBackupConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs][%d] createEtcdBackupConfigUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateEtcdBackupConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create etcd backup config forbidden response
+func (o *CreateEtcdBackupConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateEtcdBackupConfigForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs][%d] createEtcdBackupConfigForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateEtcdBackupConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create etcd backup config default response
-func (o *CreateEtcdBackupConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create etcd backup config default response has a 2xx status code
 func (o *CreateEtcdBackupConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateEtcdBackupConfigDefault) IsServerError() bool {
 // IsCode returns true when this create etcd backup config default response a status code equal to that given
 func (o *CreateEtcdBackupConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create etcd backup config default response
+func (o *CreateEtcdBackupConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateEtcdBackupConfigDefault) Error() string {

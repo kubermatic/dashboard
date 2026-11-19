@@ -92,6 +92,11 @@ func (o *PatchConstraintTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch constraint template o k response
+func (o *PatchConstraintTemplateOK) Code() int {
+	return 200
+}
+
 func (o *PatchConstraintTemplateOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/constrainttemplates/{ct_name}][%d] patchConstraintTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchConstraintTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch constraint template unauthorized response
+func (o *PatchConstraintTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchConstraintTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/constrainttemplates/{ct_name}][%d] patchConstraintTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchConstraintTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch constraint template forbidden response
+func (o *PatchConstraintTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchConstraintTemplateForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/constrainttemplates/{ct_name}][%d] patchConstraintTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchConstraintTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch constraint template default response
-func (o *PatchConstraintTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch constraint template default response has a 2xx status code
 func (o *PatchConstraintTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchConstraintTemplateDefault) IsServerError() bool {
 // IsCode returns true when this patch constraint template default response a status code equal to that given
 func (o *PatchConstraintTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch constraint template default response
+func (o *PatchConstraintTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchConstraintTemplateDefault) Error() string {

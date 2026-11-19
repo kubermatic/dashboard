@@ -91,6 +91,11 @@ func (o *DeleteMeteringReportConfigurationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete metering report configuration o k response
+func (o *DeleteMeteringReportConfigurationOK) Code() int {
+	return 200
+}
+
 func (o *DeleteMeteringReportConfigurationOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/metering/configurations/reports/{name}][%d] deleteMeteringReportConfigurationOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteMeteringReportConfigurationUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete metering report configuration unauthorized response a status code equal to that given
 func (o *DeleteMeteringReportConfigurationUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete metering report configuration unauthorized response
+func (o *DeleteMeteringReportConfigurationUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteMeteringReportConfigurationUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteMeteringReportConfigurationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete metering report configuration forbidden response
+func (o *DeleteMeteringReportConfigurationForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteMeteringReportConfigurationForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/metering/configurations/reports/{name}][%d] deleteMeteringReportConfigurationForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteMeteringReportConfigurationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete metering report configuration default response
-func (o *DeleteMeteringReportConfigurationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete metering report configuration default response has a 2xx status code
 func (o *DeleteMeteringReportConfigurationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteMeteringReportConfigurationDefault) IsServerError() bool {
 // IsCode returns true when this delete metering report configuration default response a status code equal to that given
 func (o *DeleteMeteringReportConfigurationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete metering report configuration default response
+func (o *DeleteMeteringReportConfigurationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteMeteringReportConfigurationDefault) Error() string {

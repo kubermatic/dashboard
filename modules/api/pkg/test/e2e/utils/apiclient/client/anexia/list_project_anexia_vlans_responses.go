@@ -80,6 +80,11 @@ func (o *ListProjectAnexiaVlansOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project anexia vlans o k response
+func (o *ListProjectAnexiaVlansOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAnexiaVlansOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlansOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectAnexiaVlansDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project anexia vlans default response
-func (o *ListProjectAnexiaVlansDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project anexia vlans default response has a 2xx status code
 func (o *ListProjectAnexiaVlansDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectAnexiaVlansDefault) IsServerError() bool {
 // IsCode returns true when this list project anexia vlans default response a status code equal to that given
 func (o *ListProjectAnexiaVlansDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project anexia vlans default response
+func (o *ListProjectAnexiaVlansDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAnexiaVlansDefault) Error() string {

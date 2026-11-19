@@ -92,6 +92,11 @@ func (o *ListGKEClusterSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e cluster sizes o k response
+func (o *ListGKEClusterSizesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEClusterSizesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListGKEClusterSizesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list g k e cluster sizes unauthorized response
+func (o *ListGKEClusterSizesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListGKEClusterSizesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListGKEClusterSizesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list g k e cluster sizes forbidden response
+func (o *ListGKEClusterSizesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListGKEClusterSizesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListGKEClusterSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g k e cluster sizes default response
-func (o *ListGKEClusterSizesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g k e cluster sizes default response has a 2xx status code
 func (o *ListGKEClusterSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListGKEClusterSizesDefault) IsServerError() bool {
 // IsCode returns true when this list g k e cluster sizes default response a status code equal to that given
 func (o *ListGKEClusterSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list g k e cluster sizes default response
+func (o *ListGKEClusterSizesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListGKEClusterSizesDefault) Error() string {

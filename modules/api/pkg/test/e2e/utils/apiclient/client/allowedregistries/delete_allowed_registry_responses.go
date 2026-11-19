@@ -91,6 +91,11 @@ func (o *DeleteAllowedRegistryOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete allowed registry o k response
+func (o *DeleteAllowedRegistryOK) Code() int {
+	return 200
+}
+
 func (o *DeleteAllowedRegistryOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteAllowedRegistryUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete allowed registry unauthorized response a status code equal to that given
 func (o *DeleteAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete allowed registry unauthorized response
+func (o *DeleteAllowedRegistryUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteAllowedRegistryUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete allowed registry forbidden response
+func (o *DeleteAllowedRegistryForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAllowedRegistryForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteAllowedRegistryDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete allowed registry default response
-func (o *DeleteAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete allowed registry default response has a 2xx status code
 func (o *DeleteAllowedRegistryDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteAllowedRegistryDefault) IsServerError() bool {
 // IsCode returns true when this delete allowed registry default response a status code equal to that given
 func (o *DeleteAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete allowed registry default response
+func (o *DeleteAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteAllowedRegistryDefault) Error() string {

@@ -86,6 +86,11 @@ func (o *GetCurrentUserSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get current user settings o k response
+func (o *GetCurrentUserSettingsOK) Code() int {
+	return 200
+}
+
 func (o *GetCurrentUserSettingsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *GetCurrentUserSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get current user settings unauthorized response
+func (o *GetCurrentUserSettingsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetCurrentUserSettingsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsUnauthorized ", 401)
 }
@@ -179,11 +189,6 @@ type GetCurrentUserSettingsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get current user settings default response
-func (o *GetCurrentUserSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get current user settings default response has a 2xx status code
 func (o *GetCurrentUserSettingsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -207,6 +212,11 @@ func (o *GetCurrentUserSettingsDefault) IsServerError() bool {
 // IsCode returns true when this get current user settings default response a status code equal to that given
 func (o *GetCurrentUserSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get current user settings default response
+func (o *GetCurrentUserSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetCurrentUserSettingsDefault) Error() string {

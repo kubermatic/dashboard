@@ -92,6 +92,11 @@ func (o *ListMachineDeploymentNodesEventsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list machine deployment nodes events o k response
+func (o *ListMachineDeploymentNodesEventsOK) Code() int {
+	return 200
+}
+
 func (o *ListMachineDeploymentNodesEventsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listMachineDeploymentNodesEventsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListMachineDeploymentNodesEventsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list machine deployment nodes events unauthorized response
+func (o *ListMachineDeploymentNodesEventsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMachineDeploymentNodesEventsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listMachineDeploymentNodesEventsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListMachineDeploymentNodesEventsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list machine deployment nodes events forbidden response
+func (o *ListMachineDeploymentNodesEventsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMachineDeploymentNodesEventsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listMachineDeploymentNodesEventsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListMachineDeploymentNodesEventsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list machine deployment nodes events default response
-func (o *ListMachineDeploymentNodesEventsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list machine deployment nodes events default response has a 2xx status code
 func (o *ListMachineDeploymentNodesEventsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListMachineDeploymentNodesEventsDefault) IsServerError() bool {
 // IsCode returns true when this list machine deployment nodes events default response a status code equal to that given
 func (o *ListMachineDeploymentNodesEventsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list machine deployment nodes events default response
+func (o *ListMachineDeploymentNodesEventsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListMachineDeploymentNodesEventsDefault) Error() string {

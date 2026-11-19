@@ -92,6 +92,11 @@ func (o *UpdateAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update admission plugin o k response
+func (o *UpdateAdmissionPluginOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAdmissionPluginOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update admission plugin unauthorized response
+func (o *UpdateAdmissionPluginUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateAdmissionPluginUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update admission plugin forbidden response
+func (o *UpdateAdmissionPluginForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAdmissionPluginForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateAdmissionPluginDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update admission plugin default response
-func (o *UpdateAdmissionPluginDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update admission plugin default response has a 2xx status code
 func (o *UpdateAdmissionPluginDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateAdmissionPluginDefault) IsServerError() bool {
 // IsCode returns true when this update admission plugin default response a status code equal to that given
 func (o *UpdateAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update admission plugin default response
+func (o *UpdateAdmissionPluginDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateAdmissionPluginDefault) Error() string {

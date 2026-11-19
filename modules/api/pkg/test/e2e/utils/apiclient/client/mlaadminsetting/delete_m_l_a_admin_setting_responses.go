@@ -91,6 +91,11 @@ func (o *DeleteMLAAdminSettingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete m l a admin setting o k response
+func (o *DeleteMLAAdminSettingOK) Code() int {
+	return 200
+}
+
 func (o *DeleteMLAAdminSettingOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteMLAAdminSettingUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete m l a admin setting unauthorized response a status code equal to that given
 func (o *DeleteMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete m l a admin setting unauthorized response
+func (o *DeleteMLAAdminSettingUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteMLAAdminSettingUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete m l a admin setting forbidden response
+func (o *DeleteMLAAdminSettingForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteMLAAdminSettingForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteMLAAdminSettingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete m l a admin setting default response
-func (o *DeleteMLAAdminSettingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete m l a admin setting default response has a 2xx status code
 func (o *DeleteMLAAdminSettingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteMLAAdminSettingDefault) IsServerError() bool {
 // IsCode returns true when this delete m l a admin setting default response a status code equal to that given
 func (o *DeleteMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete m l a admin setting default response
+func (o *DeleteMLAAdminSettingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteMLAAdminSettingDefault) Error() string {

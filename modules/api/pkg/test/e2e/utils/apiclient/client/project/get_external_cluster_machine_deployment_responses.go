@@ -92,6 +92,11 @@ func (o *GetExternalClusterMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get external cluster machine deployment o k response
+func (o *GetExternalClusterMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *GetExternalClusterMachineDeploymentOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getExternalClusterMachineDeploymentOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetExternalClusterMachineDeploymentUnauthorized) IsCode(code int) bool 
 	return code == 401
 }
 
+// Code gets the status code for the get external cluster machine deployment unauthorized response
+func (o *GetExternalClusterMachineDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetExternalClusterMachineDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getExternalClusterMachineDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetExternalClusterMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get external cluster machine deployment forbidden response
+func (o *GetExternalClusterMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *GetExternalClusterMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] getExternalClusterMachineDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetExternalClusterMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get external cluster machine deployment default response
-func (o *GetExternalClusterMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get external cluster machine deployment default response has a 2xx status code
 func (o *GetExternalClusterMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetExternalClusterMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this get external cluster machine deployment default response a status code equal to that given
 func (o *GetExternalClusterMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get external cluster machine deployment default response
+func (o *GetExternalClusterMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetExternalClusterMachineDeploymentDefault) Error() string {

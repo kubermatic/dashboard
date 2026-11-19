@@ -91,6 +91,11 @@ func (o *DeleteServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete service account o k response
+func (o *DeleteServiceAccountOK) Code() int {
+	return 200
+}
+
 func (o *DeleteServiceAccountOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteServiceAccountUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete service account unauthorized response a status code equal to that given
 func (o *DeleteServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete service account unauthorized response
+func (o *DeleteServiceAccountUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteServiceAccountUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete service account forbidden response
+func (o *DeleteServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteServiceAccountForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteServiceAccountDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete service account default response
-func (o *DeleteServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete service account default response has a 2xx status code
 func (o *DeleteServiceAccountDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteServiceAccountDefault) IsServerError() bool {
 // IsCode returns true when this delete service account default response a status code equal to that given
 func (o *DeleteServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete service account default response
+func (o *DeleteServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteServiceAccountDefault) Error() string {

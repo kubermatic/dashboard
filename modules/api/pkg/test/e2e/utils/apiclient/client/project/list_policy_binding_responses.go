@@ -92,6 +92,11 @@ func (o *ListPolicyBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list policy binding o k response
+func (o *ListPolicyBindingOK) Code() int {
+	return 200
+}
+
 func (o *ListPolicyBindingOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings][%d] listPolicyBindingOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListPolicyBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list policy binding unauthorized response
+func (o *ListPolicyBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListPolicyBindingUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings][%d] listPolicyBindingUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListPolicyBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list policy binding forbidden response
+func (o *ListPolicyBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *ListPolicyBindingForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings][%d] listPolicyBindingForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListPolicyBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list policy binding default response
-func (o *ListPolicyBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list policy binding default response has a 2xx status code
 func (o *ListPolicyBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListPolicyBindingDefault) IsServerError() bool {
 // IsCode returns true when this list policy binding default response a status code equal to that given
 func (o *ListPolicyBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list policy binding default response
+func (o *ListPolicyBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListPolicyBindingDefault) Error() string {

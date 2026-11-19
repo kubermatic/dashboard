@@ -92,6 +92,11 @@ func (o *GetUsersForProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get users for project o k response
+func (o *GetUsersForProjectOK) Code() int {
+	return 200
+}
+
 func (o *GetUsersForProjectOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetUsersForProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get users for project unauthorized response
+func (o *GetUsersForProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetUsersForProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetUsersForProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get users for project forbidden response
+func (o *GetUsersForProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *GetUsersForProjectForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetUsersForProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get users for project default response
-func (o *GetUsersForProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get users for project default response has a 2xx status code
 func (o *GetUsersForProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetUsersForProjectDefault) IsServerError() bool {
 // IsCode returns true when this get users for project default response a status code equal to that given
 func (o *GetUsersForProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get users for project default response
+func (o *GetUsersForProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetUsersForProjectDefault) Error() string {

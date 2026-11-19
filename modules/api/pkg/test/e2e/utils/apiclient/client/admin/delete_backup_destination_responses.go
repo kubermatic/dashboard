@@ -91,6 +91,11 @@ func (o *DeleteBackupDestinationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete backup destination o k response
+func (o *DeleteBackupDestinationOK) Code() int {
+	return 200
+}
+
 func (o *DeleteBackupDestinationOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteBackupDestinationUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete backup destination unauthorized response a status code equal to that given
 func (o *DeleteBackupDestinationUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete backup destination unauthorized response
+func (o *DeleteBackupDestinationUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteBackupDestinationUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteBackupDestinationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete backup destination forbidden response
+func (o *DeleteBackupDestinationForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteBackupDestinationForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteBackupDestinationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete backup destination default response
-func (o *DeleteBackupDestinationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete backup destination default response has a 2xx status code
 func (o *DeleteBackupDestinationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteBackupDestinationDefault) IsServerError() bool {
 // IsCode returns true when this delete backup destination default response a status code equal to that given
 func (o *DeleteBackupDestinationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete backup destination default response
+func (o *DeleteBackupDestinationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteBackupDestinationDefault) Error() string {

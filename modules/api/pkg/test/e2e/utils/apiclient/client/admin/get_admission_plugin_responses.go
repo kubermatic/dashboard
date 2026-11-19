@@ -92,6 +92,11 @@ func (o *GetAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get admission plugin o k response
+func (o *GetAdmissionPluginOK) Code() int {
+	return 200
+}
+
 func (o *GetAdmissionPluginOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get admission plugin unauthorized response
+func (o *GetAdmissionPluginUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetAdmissionPluginUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get admission plugin forbidden response
+func (o *GetAdmissionPluginForbidden) Code() int {
+	return 403
+}
+
 func (o *GetAdmissionPluginForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetAdmissionPluginDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get admission plugin default response
-func (o *GetAdmissionPluginDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get admission plugin default response has a 2xx status code
 func (o *GetAdmissionPluginDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetAdmissionPluginDefault) IsServerError() bool {
 // IsCode returns true when this get admission plugin default response a status code equal to that given
 func (o *GetAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get admission plugin default response
+func (o *GetAdmissionPluginDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetAdmissionPluginDefault) Error() string {

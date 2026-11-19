@@ -92,6 +92,11 @@ func (o *EditUserInProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the edit user in project o k response
+func (o *EditUserInProjectOK) Code() int {
+	return 200
+}
+
 func (o *EditUserInProjectOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *EditUserInProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the edit user in project unauthorized response
+func (o *EditUserInProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *EditUserInProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *EditUserInProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the edit user in project forbidden response
+func (o *EditUserInProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *EditUserInProjectForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type EditUserInProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the edit user in project default response
-func (o *EditUserInProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this edit user in project default response has a 2xx status code
 func (o *EditUserInProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *EditUserInProjectDefault) IsServerError() bool {
 // IsCode returns true when this edit user in project default response a status code equal to that given
 func (o *EditUserInProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the edit user in project default response
+func (o *EditUserInProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *EditUserInProjectDefault) Error() string {

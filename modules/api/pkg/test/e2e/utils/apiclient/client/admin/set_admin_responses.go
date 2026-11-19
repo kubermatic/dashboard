@@ -92,6 +92,11 @@ func (o *SetAdminOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the set admin o k response
+func (o *SetAdminOK) Code() int {
+	return 200
+}
+
 func (o *SetAdminOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *SetAdminUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the set admin unauthorized response
+func (o *SetAdminUnauthorized) Code() int {
+	return 401
+}
+
 func (o *SetAdminUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *SetAdminForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the set admin forbidden response
+func (o *SetAdminForbidden) Code() int {
+	return 403
+}
+
 func (o *SetAdminForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type SetAdminDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the set admin default response
-func (o *SetAdminDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this set admin default response has a 2xx status code
 func (o *SetAdminDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *SetAdminDefault) IsServerError() bool {
 // IsCode returns true when this set admin default response a status code equal to that given
 func (o *SetAdminDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the set admin default response
+func (o *SetAdminDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *SetAdminDefault) Error() string {

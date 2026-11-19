@@ -114,6 +114,11 @@ func (m *AzureNodeSpec) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *AzureNodeSpec) contextValidateSecurityProfile(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SecurityProfile != nil {
+
+		if swag.IsZero(m.SecurityProfile) { // not required
+			return nil
+		}
+
 		if err := m.SecurityProfile.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("securityProfile")

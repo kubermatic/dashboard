@@ -138,6 +138,10 @@ func (m *NetworkDefaults) ContextValidate(ctx context.Context, formats strfmt.Re
 
 func (m *NetworkDefaults) contextValidateClusterExposeStrategy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.ClusterExposeStrategy) { // not required
+		return nil
+	}
+
 	if err := m.ClusterExposeStrategy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("clusterExposeStrategy")
@@ -153,6 +157,11 @@ func (m *NetworkDefaults) contextValidateClusterExposeStrategy(ctx context.Conte
 func (m *NetworkDefaults) contextValidateIPV4(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.IPV4 != nil {
+
+		if swag.IsZero(m.IPV4) { // not required
+			return nil
+		}
+
 		if err := m.IPV4.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ipv4")
@@ -169,6 +178,11 @@ func (m *NetworkDefaults) contextValidateIPV4(ctx context.Context, formats strfm
 func (m *NetworkDefaults) contextValidateIPV6(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.IPV6 != nil {
+
+		if swag.IsZero(m.IPV6) { // not required
+			return nil
+		}
+
 		if err := m.IPV6.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ipv6")

@@ -92,6 +92,11 @@ func (o *PatchGatekeeperConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch gatekeeper config o k response
+func (o *PatchGatekeeperConfigOK) Code() int {
+	return 200
+}
+
 func (o *PatchGatekeeperConfigOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] patchGatekeeperConfigOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchGatekeeperConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch gatekeeper config unauthorized response
+func (o *PatchGatekeeperConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchGatekeeperConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] patchGatekeeperConfigUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchGatekeeperConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch gatekeeper config forbidden response
+func (o *PatchGatekeeperConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchGatekeeperConfigForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] patchGatekeeperConfigForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchGatekeeperConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch gatekeeper config default response
-func (o *PatchGatekeeperConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch gatekeeper config default response has a 2xx status code
 func (o *PatchGatekeeperConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchGatekeeperConfigDefault) IsServerError() bool {
 // IsCode returns true when this patch gatekeeper config default response a status code equal to that given
 func (o *PatchGatekeeperConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch gatekeeper config default response
+func (o *PatchGatekeeperConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchGatekeeperConfigDefault) Error() string {

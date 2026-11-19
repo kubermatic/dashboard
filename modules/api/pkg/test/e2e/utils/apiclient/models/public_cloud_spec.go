@@ -255,6 +255,11 @@ func (m *PublicCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *PublicCloudSpec) contextValidateAws(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Aws != nil {
+
+		if swag.IsZero(m.Aws) { // not required
+			return nil
+		}
+
 		if err := m.Aws.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("aws")
@@ -271,6 +276,11 @@ func (m *PublicCloudSpec) contextValidateAws(ctx context.Context, formats strfmt
 func (m *PublicCloudSpec) contextValidateAzure(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Azure != nil {
+
+		if swag.IsZero(m.Azure) { // not required
+			return nil
+		}
+
 		if err := m.Azure.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("azure")
@@ -287,6 +297,11 @@ func (m *PublicCloudSpec) contextValidateAzure(ctx context.Context, formats strf
 func (m *PublicCloudSpec) contextValidateGcp(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Gcp != nil {
+
+		if swag.IsZero(m.Gcp) { // not required
+			return nil
+		}
+
 		if err := m.Gcp.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("gcp")
@@ -303,6 +318,11 @@ func (m *PublicCloudSpec) contextValidateGcp(ctx context.Context, formats strfmt
 func (m *PublicCloudSpec) contextValidateKubevirt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubevirt != nil {
+
+		if swag.IsZero(m.Kubevirt) { // not required
+			return nil
+		}
+
 		if err := m.Kubevirt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubevirt")
@@ -319,6 +339,11 @@ func (m *PublicCloudSpec) contextValidateKubevirt(ctx context.Context, formats s
 func (m *PublicCloudSpec) contextValidateOpenstack(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Openstack != nil {
+
+		if swag.IsZero(m.Openstack) { // not required
+			return nil
+		}
+
 		if err := m.Openstack.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openstack")
@@ -335,6 +360,11 @@ func (m *PublicCloudSpec) contextValidateOpenstack(ctx context.Context, formats 
 func (m *PublicCloudSpec) contextValidateVmwareclouddirector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Vmwareclouddirector != nil {
+
+		if swag.IsZero(m.Vmwareclouddirector) { // not required
+			return nil
+		}
+
 		if err := m.Vmwareclouddirector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmwareclouddirector")

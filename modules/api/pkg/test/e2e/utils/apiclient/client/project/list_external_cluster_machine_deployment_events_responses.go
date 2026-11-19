@@ -92,6 +92,11 @@ func (o *ListExternalClusterMachineDeploymentEventsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list external cluster machine deployment events o k response
+func (o *ListExternalClusterMachineDeploymentEventsOK) Code() int {
+	return 200
+}
+
 func (o *ListExternalClusterMachineDeploymentEventsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listExternalClusterMachineDeploymentEventsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListExternalClusterMachineDeploymentEventsUnauthorized) IsCode(code int
 	return code == 401
 }
 
+// Code gets the status code for the list external cluster machine deployment events unauthorized response
+func (o *ListExternalClusterMachineDeploymentEventsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListExternalClusterMachineDeploymentEventsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listExternalClusterMachineDeploymentEventsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListExternalClusterMachineDeploymentEventsForbidden) IsCode(code int) b
 	return code == 403
 }
 
+// Code gets the status code for the list external cluster machine deployment events forbidden response
+func (o *ListExternalClusterMachineDeploymentEventsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListExternalClusterMachineDeploymentEventsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes/events][%d] listExternalClusterMachineDeploymentEventsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListExternalClusterMachineDeploymentEventsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list external cluster machine deployment events default response
-func (o *ListExternalClusterMachineDeploymentEventsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list external cluster machine deployment events default response has a 2xx status code
 func (o *ListExternalClusterMachineDeploymentEventsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListExternalClusterMachineDeploymentEventsDefault) IsServerError() bool
 // IsCode returns true when this list external cluster machine deployment events default response a status code equal to that given
 func (o *ListExternalClusterMachineDeploymentEventsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list external cluster machine deployment events default response
+func (o *ListExternalClusterMachineDeploymentEventsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListExternalClusterMachineDeploymentEventsDefault) Error() string {

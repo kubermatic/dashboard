@@ -72,6 +72,11 @@ func (m *KyvernoControllerSettings) ContextValidate(ctx context.Context, formats
 func (m *KyvernoControllerSettings) contextValidateResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resources != nil {
+
+		if swag.IsZero(m.Resources) { // not required
+			return nil
+		}
+
 		if err := m.Resources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("resources")

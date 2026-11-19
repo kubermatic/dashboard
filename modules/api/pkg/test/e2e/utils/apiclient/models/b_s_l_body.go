@@ -75,6 +75,11 @@ func (m *BSLBody) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 func (m *BSLBody) contextValidateBslSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BslSpec != nil {
+
+		if swag.IsZero(m.BslSpec) { // not required
+			return nil
+		}
+
 		if err := m.BslSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("bslSpec")

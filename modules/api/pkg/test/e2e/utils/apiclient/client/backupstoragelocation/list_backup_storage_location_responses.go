@@ -92,6 +92,11 @@ func (o *ListBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list backup storage location o k response
+func (o *ListBackupStorageLocationOK) Code() int {
+	return 200
+}
+
 func (o *ListBackupStorageLocationOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] listBackupStorageLocationOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *ListBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list backup storage location unauthorized response
+func (o *ListBackupStorageLocationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListBackupStorageLocationUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] listBackupStorageLocationUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *ListBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list backup storage location forbidden response
+func (o *ListBackupStorageLocationForbidden) Code() int {
+	return 403
+}
+
 func (o *ListBackupStorageLocationForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] listBackupStorageLocationForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type ListBackupStorageLocationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list backup storage location default response
-func (o *ListBackupStorageLocationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list backup storage location default response has a 2xx status code
 func (o *ListBackupStorageLocationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *ListBackupStorageLocationDefault) IsServerError() bool {
 // IsCode returns true when this list backup storage location default response a status code equal to that given
 func (o *ListBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list backup storage location default response
+func (o *ListBackupStorageLocationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListBackupStorageLocationDefault) Error() string {

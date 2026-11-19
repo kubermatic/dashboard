@@ -91,6 +91,11 @@ func (o *DeleteAddonV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete addon v2 o k response
+func (o *DeleteAddonV2OK) Code() int {
+	return 200
+}
+
 func (o *DeleteAddonV2OK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2OK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteAddonV2Unauthorized) IsServerError() bool {
 // IsCode returns true when this delete addon v2 unauthorized response a status code equal to that given
 func (o *DeleteAddonV2Unauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete addon v2 unauthorized response
+func (o *DeleteAddonV2Unauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteAddonV2Unauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteAddonV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete addon v2 forbidden response
+func (o *DeleteAddonV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAddonV2Forbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Forbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteAddonV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete addon v2 default response
-func (o *DeleteAddonV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete addon v2 default response has a 2xx status code
 func (o *DeleteAddonV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteAddonV2Default) IsServerError() bool {
 // IsCode returns true when this delete addon v2 default response a status code equal to that given
 func (o *DeleteAddonV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete addon v2 default response
+func (o *DeleteAddonV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteAddonV2Default) Error() string {

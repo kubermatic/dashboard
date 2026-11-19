@@ -92,6 +92,11 @@ func (o *ListAddonsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list addons o k response
+func (o *ListAddonsOK) Code() int {
+	return 200
+}
+
 func (o *ListAddonsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] listAddonsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListAddonsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list addons unauthorized response
+func (o *ListAddonsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAddonsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] listAddonsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListAddonsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list addons forbidden response
+func (o *ListAddonsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAddonsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] listAddonsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListAddonsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list addons default response
-func (o *ListAddonsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list addons default response has a 2xx status code
 func (o *ListAddonsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListAddonsDefault) IsServerError() bool {
 // IsCode returns true when this list addons default response a status code equal to that given
 func (o *ListAddonsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list addons default response
+func (o *ListAddonsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAddonsDefault) Error() string {

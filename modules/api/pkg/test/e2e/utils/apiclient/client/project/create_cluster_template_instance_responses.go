@@ -94,6 +94,11 @@ func (o *CreateClusterTemplateInstanceCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create cluster template instance created response
+func (o *CreateClusterTemplateInstanceCreated) Code() int {
+	return 201
+}
+
 func (o *CreateClusterTemplateInstanceCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/{template_id}/instances][%d] createClusterTemplateInstanceCreated  %+v", 201, o.Payload)
 }
@@ -156,6 +161,11 @@ func (o *CreateClusterTemplateInstanceUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create cluster template instance unauthorized response
+func (o *CreateClusterTemplateInstanceUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateClusterTemplateInstanceUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/{template_id}/instances][%d] createClusterTemplateInstanceUnauthorized ", 401)
 }
@@ -207,6 +217,11 @@ func (o *CreateClusterTemplateInstanceForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create cluster template instance forbidden response
+func (o *CreateClusterTemplateInstanceForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateClusterTemplateInstanceForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clustertemplates/{template_id}/instances][%d] createClusterTemplateInstanceForbidden ", 403)
 }
@@ -238,11 +253,6 @@ type CreateClusterTemplateInstanceDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create cluster template instance default response
-func (o *CreateClusterTemplateInstanceDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create cluster template instance default response has a 2xx status code
 func (o *CreateClusterTemplateInstanceDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -266,6 +276,11 @@ func (o *CreateClusterTemplateInstanceDefault) IsServerError() bool {
 // IsCode returns true when this create cluster template instance default response a status code equal to that given
 func (o *CreateClusterTemplateInstanceDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create cluster template instance default response
+func (o *CreateClusterTemplateInstanceDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateClusterTemplateInstanceDefault) Error() string {

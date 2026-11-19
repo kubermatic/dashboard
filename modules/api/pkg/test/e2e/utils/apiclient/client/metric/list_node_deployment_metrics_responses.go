@@ -92,6 +92,11 @@ func (o *ListNodeDeploymentMetricsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list node deployment metrics o k response
+func (o *ListNodeDeploymentMetricsOK) Code() int {
+	return 200
+}
+
 func (o *ListNodeDeploymentMetricsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListNodeDeploymentMetricsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list node deployment metrics unauthorized response
+func (o *ListNodeDeploymentMetricsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListNodeDeploymentMetricsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListNodeDeploymentMetricsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list node deployment metrics forbidden response
+func (o *ListNodeDeploymentMetricsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListNodeDeploymentMetricsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListNodeDeploymentMetricsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list node deployment metrics default response
-func (o *ListNodeDeploymentMetricsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list node deployment metrics default response has a 2xx status code
 func (o *ListNodeDeploymentMetricsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListNodeDeploymentMetricsDefault) IsServerError() bool {
 // IsCode returns true when this list node deployment metrics default response a status code equal to that given
 func (o *ListNodeDeploymentMetricsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list node deployment metrics default response
+func (o *ListNodeDeploymentMetricsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListNodeDeploymentMetricsDefault) Error() string {

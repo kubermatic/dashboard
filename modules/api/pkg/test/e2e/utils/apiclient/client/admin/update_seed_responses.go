@@ -95,6 +95,11 @@ func (o *UpdateSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update seed o k response
+func (o *UpdateSeedOK) Code() int {
+	return 200
+}
+
 func (o *UpdateSeedOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/seeds/{seed_name}][%d] updateSeedOK  %+v", 200, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *UpdateSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update seed unauthorized response
+func (o *UpdateSeedUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateSeedUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/seeds/{seed_name}][%d] updateSeedUnauthorized ", 401)
 }
@@ -208,6 +218,11 @@ func (o *UpdateSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update seed forbidden response
+func (o *UpdateSeedForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateSeedForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/admin/seeds/{seed_name}][%d] updateSeedForbidden ", 403)
 }
@@ -239,11 +254,6 @@ type UpdateSeedDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update seed default response
-func (o *UpdateSeedDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update seed default response has a 2xx status code
 func (o *UpdateSeedDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -267,6 +277,11 @@ func (o *UpdateSeedDefault) IsServerError() bool {
 // IsCode returns true when this update seed default response a status code equal to that given
 func (o *UpdateSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update seed default response
+func (o *UpdateSeedDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateSeedDefault) Error() string {
@@ -359,6 +374,11 @@ func (o *UpdateSeedBody) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (o *UpdateSeedBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
+
+		if swag.IsZero(o.Spec) { // not required
+			return nil
+		}
+
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "spec")

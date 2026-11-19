@@ -91,6 +91,11 @@ func (o *DeleteAddonOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete addon o k response
+func (o *DeleteAddonOK) Code() int {
+	return 200
+}
+
 func (o *DeleteAddonOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteAddonUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete addon unauthorized response a status code equal to that given
 func (o *DeleteAddonUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete addon unauthorized response
+func (o *DeleteAddonUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteAddonUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteAddonForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete addon forbidden response
+func (o *DeleteAddonForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAddonForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteAddonDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete addon default response
-func (o *DeleteAddonDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete addon default response has a 2xx status code
 func (o *DeleteAddonDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteAddonDefault) IsServerError() bool {
 // IsCode returns true when this delete addon default response a status code equal to that given
 func (o *DeleteAddonDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete addon default response
+func (o *DeleteAddonDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteAddonDefault) Error() string {

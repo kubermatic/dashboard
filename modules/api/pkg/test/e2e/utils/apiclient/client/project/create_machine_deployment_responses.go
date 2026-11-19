@@ -92,6 +92,11 @@ func (o *CreateMachineDeploymentCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create machine deployment created response
+func (o *CreateMachineDeploymentCreated) Code() int {
+	return 201
+}
+
 func (o *CreateMachineDeploymentCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] createMachineDeploymentCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create machine deployment unauthorized response
+func (o *CreateMachineDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateMachineDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] createMachineDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create machine deployment forbidden response
+func (o *CreateMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateMachineDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments][%d] createMachineDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateMachineDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create machine deployment default response
-func (o *CreateMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create machine deployment default response has a 2xx status code
 func (o *CreateMachineDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateMachineDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this create machine deployment default response a status code equal to that given
 func (o *CreateMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create machine deployment default response
+func (o *CreateMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateMachineDeploymentDefault) Error() string {

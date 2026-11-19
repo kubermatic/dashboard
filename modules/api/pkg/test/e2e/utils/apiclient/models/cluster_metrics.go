@@ -105,6 +105,11 @@ func (m *ClusterMetrics) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *ClusterMetrics) contextValidateControlPlane(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ControlPlane != nil {
+
+		if swag.IsZero(m.ControlPlane) { // not required
+			return nil
+		}
+
 		if err := m.ControlPlane.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("controlPlane")
@@ -121,6 +126,11 @@ func (m *ClusterMetrics) contextValidateControlPlane(ctx context.Context, format
 func (m *ClusterMetrics) contextValidateNodes(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Nodes != nil {
+
+		if swag.IsZero(m.Nodes) { // not required
+			return nil
+		}
+
 		if err := m.Nodes.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodes")

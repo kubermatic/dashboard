@@ -80,6 +80,11 @@ func (o *ListProjectOpenstackImagesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project openstack images o k response
+func (o *ListProjectOpenstackImagesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectOpenstackImagesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/images][%d] listProjectOpenstackImagesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectOpenstackImagesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project openstack images default response
-func (o *ListProjectOpenstackImagesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project openstack images default response has a 2xx status code
 func (o *ListProjectOpenstackImagesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectOpenstackImagesDefault) IsServerError() bool {
 // IsCode returns true when this list project openstack images default response a status code equal to that given
 func (o *ListProjectOpenstackImagesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project openstack images default response
+func (o *ListProjectOpenstackImagesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectOpenstackImagesDefault) Error() string {

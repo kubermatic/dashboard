@@ -91,6 +91,11 @@ func (o *DeleteApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete application definition o k response
+func (o *DeleteApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *DeleteApplicationDefinitionOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteApplicationDefinitionUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete application definition unauthorized response a status code equal to that given
 func (o *DeleteApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete application definition unauthorized response
+func (o *DeleteApplicationDefinitionUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteApplicationDefinitionUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete application definition forbidden response
+func (o *DeleteApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteApplicationDefinitionForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteApplicationDefinitionDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete application definition default response
-func (o *DeleteApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete application definition default response has a 2xx status code
 func (o *DeleteApplicationDefinitionDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteApplicationDefinitionDefault) IsServerError() bool {
 // IsCode returns true when this delete application definition default response a status code equal to that given
 func (o *DeleteApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete application definition default response
+func (o *DeleteApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteApplicationDefinitionDefault) Error() string {

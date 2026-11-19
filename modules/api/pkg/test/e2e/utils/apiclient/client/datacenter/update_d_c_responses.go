@@ -95,6 +95,11 @@ func (o *UpdateDCOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update d c o k response
+func (o *UpdateDCOK) Code() int {
+	return 200
+}
+
 func (o *UpdateDCOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/seed/{seed_name}/dc/{dc}][%d] updateDCOK  %+v", 200, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *UpdateDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update d c unauthorized response
+func (o *UpdateDCUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateDCUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/seed/{seed_name}/dc/{dc}][%d] updateDCUnauthorized ", 401)
 }
@@ -208,6 +218,11 @@ func (o *UpdateDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update d c forbidden response
+func (o *UpdateDCForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateDCForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/seed/{seed_name}/dc/{dc}][%d] updateDCForbidden ", 403)
 }
@@ -239,11 +254,6 @@ type UpdateDCDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update d c default response
-func (o *UpdateDCDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update d c default response has a 2xx status code
 func (o *UpdateDCDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -267,6 +277,11 @@ func (o *UpdateDCDefault) IsServerError() bool {
 // IsCode returns true when this update d c default response a status code equal to that given
 func (o *UpdateDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update d c default response
+func (o *UpdateDCDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateDCDefault) Error() string {
@@ -356,6 +371,11 @@ func (o *UpdateDCBody) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (o *UpdateDCBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
+
+		if swag.IsZero(o.Spec) { // not required
+			return nil
+		}
+
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "spec")

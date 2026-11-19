@@ -92,6 +92,11 @@ func (o *ListEKSRegionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s regions o k response
+func (o *ListEKSRegionsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSRegionsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEKSRegionsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s regions unauthorized response
+func (o *ListEKSRegionsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSRegionsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEKSRegionsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s regions forbidden response
+func (o *ListEKSRegionsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSRegionsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEKSRegionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s regions default response
-func (o *ListEKSRegionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s regions default response has a 2xx status code
 func (o *ListEKSRegionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEKSRegionsDefault) IsServerError() bool {
 // IsCode returns true when this list e k s regions default response a status code equal to that given
 func (o *ListEKSRegionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s regions default response
+func (o *ListEKSRegionsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSRegionsDefault) Error() string {

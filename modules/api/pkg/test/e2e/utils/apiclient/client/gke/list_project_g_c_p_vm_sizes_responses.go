@@ -80,6 +80,11 @@ func (o *ListProjectGCPVMSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project g c p Vm sizes o k response
+func (o *ListProjectGCPVMSizesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectGCPVMSizesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/vmsizes][%d] listProjectGCPVmSizesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectGCPVMSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project g c p VM sizes default response
-func (o *ListProjectGCPVMSizesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project g c p VM sizes default response has a 2xx status code
 func (o *ListProjectGCPVMSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectGCPVMSizesDefault) IsServerError() bool {
 // IsCode returns true when this list project g c p VM sizes default response a status code equal to that given
 func (o *ListProjectGCPVMSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project g c p VM sizes default response
+func (o *ListProjectGCPVMSizesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectGCPVMSizesDefault) Error() string {

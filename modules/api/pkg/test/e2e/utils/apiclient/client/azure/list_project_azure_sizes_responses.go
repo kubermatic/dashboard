@@ -80,6 +80,11 @@ func (o *ListProjectAzureSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project azure sizes o k response
+func (o *ListProjectAzureSizesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAzureSizesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/sizes][%d] listProjectAzureSizesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectAzureSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project azure sizes default response
-func (o *ListProjectAzureSizesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project azure sizes default response has a 2xx status code
 func (o *ListProjectAzureSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectAzureSizesDefault) IsServerError() bool {
 // IsCode returns true when this list project azure sizes default response a status code equal to that given
 func (o *ListProjectAzureSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project azure sizes default response
+func (o *ListProjectAzureSizesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAzureSizesDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *CreateClusterRoleCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create cluster role created response
+func (o *CreateClusterRoleCreated) Code() int {
+	return 201
+}
+
 func (o *CreateClusterRoleCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create cluster role unauthorized response
+func (o *CreateClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateClusterRoleUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create cluster role forbidden response
+func (o *CreateClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateClusterRoleForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateClusterRoleDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create cluster role default response
-func (o *CreateClusterRoleDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create cluster role default response has a 2xx status code
 func (o *CreateClusterRoleDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateClusterRoleDefault) IsServerError() bool {
 // IsCode returns true when this create cluster role default response a status code equal to that given
 func (o *CreateClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create cluster role default response
+func (o *CreateClusterRoleDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateClusterRoleDefault) Error() string {

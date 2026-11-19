@@ -165,6 +165,11 @@ func (m *KyvernoSettings) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *KyvernoSettings) contextValidateAdmissionController(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AdmissionController != nil {
+
+		if swag.IsZero(m.AdmissionController) { // not required
+			return nil
+		}
+
 		if err := m.AdmissionController.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("admissionController")
@@ -181,6 +186,11 @@ func (m *KyvernoSettings) contextValidateAdmissionController(ctx context.Context
 func (m *KyvernoSettings) contextValidateBackgroundController(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BackgroundController != nil {
+
+		if swag.IsZero(m.BackgroundController) { // not required
+			return nil
+		}
+
 		if err := m.BackgroundController.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("backgroundController")
@@ -197,6 +207,11 @@ func (m *KyvernoSettings) contextValidateBackgroundController(ctx context.Contex
 func (m *KyvernoSettings) contextValidateCleanupController(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CleanupController != nil {
+
+		if swag.IsZero(m.CleanupController) { // not required
+			return nil
+		}
+
 		if err := m.CleanupController.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cleanupController")
@@ -213,6 +228,11 @@ func (m *KyvernoSettings) contextValidateCleanupController(ctx context.Context, 
 func (m *KyvernoSettings) contextValidateReportsController(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ReportsController != nil {
+
+		if swag.IsZero(m.ReportsController) { // not required
+			return nil
+		}
+
 		if err := m.ReportsController.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("reportsController")

@@ -92,6 +92,11 @@ func (o *PatchNodeDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch node deployment o k response
+func (o *PatchNodeDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *PatchNodeDeploymentOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] patchNodeDeploymentOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchNodeDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch node deployment unauthorized response
+func (o *PatchNodeDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchNodeDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] patchNodeDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchNodeDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch node deployment forbidden response
+func (o *PatchNodeDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchNodeDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] patchNodeDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchNodeDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch node deployment default response
-func (o *PatchNodeDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch node deployment default response has a 2xx status code
 func (o *PatchNodeDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchNodeDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this patch node deployment default response a status code equal to that given
 func (o *PatchNodeDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch node deployment default response
+func (o *PatchNodeDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchNodeDeploymentDefault) Error() string {

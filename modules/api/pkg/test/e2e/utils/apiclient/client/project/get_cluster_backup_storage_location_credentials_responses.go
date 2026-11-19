@@ -92,6 +92,11 @@ func (o *GetClusterBackupStorageLocationCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster backup storage location credentials o k response
+func (o *GetClusterBackupStorageLocationCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterBackupStorageLocationCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials][%d] getClusterBackupStorageLocationCredentialsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetClusterBackupStorageLocationCredentialsUnauthorized) IsCode(code int
 	return code == 401
 }
 
+// Code gets the status code for the get cluster backup storage location credentials unauthorized response
+func (o *GetClusterBackupStorageLocationCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterBackupStorageLocationCredentialsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials][%d] getClusterBackupStorageLocationCredentialsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetClusterBackupStorageLocationCredentialsForbidden) IsCode(code int) b
 	return code == 403
 }
 
+// Code gets the status code for the get cluster backup storage location credentials forbidden response
+func (o *GetClusterBackupStorageLocationCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterBackupStorageLocationCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials][%d] getClusterBackupStorageLocationCredentialsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetClusterBackupStorageLocationCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster backup storage location credentials default response
-func (o *GetClusterBackupStorageLocationCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster backup storage location credentials default response has a 2xx status code
 func (o *GetClusterBackupStorageLocationCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetClusterBackupStorageLocationCredentialsDefault) IsServerError() bool
 // IsCode returns true when this get cluster backup storage location credentials default response a status code equal to that given
 func (o *GetClusterBackupStorageLocationCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster backup storage location credentials default response
+func (o *GetClusterBackupStorageLocationCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterBackupStorageLocationCredentialsDefault) Error() string {

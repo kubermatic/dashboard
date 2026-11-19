@@ -92,6 +92,11 @@ func (o *AddUserToProjectCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the add user to project created response
+func (o *AddUserToProjectCreated) Code() int {
+	return 201
+}
+
 func (o *AddUserToProjectCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *AddUserToProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the add user to project unauthorized response
+func (o *AddUserToProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *AddUserToProjectUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *AddUserToProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the add user to project forbidden response
+func (o *AddUserToProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *AddUserToProjectForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type AddUserToProjectDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the add user to project default response
-func (o *AddUserToProjectDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this add user to project default response has a 2xx status code
 func (o *AddUserToProjectDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *AddUserToProjectDefault) IsServerError() bool {
 // IsCode returns true when this add user to project default response a status code equal to that given
 func (o *AddUserToProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the add user to project default response
+func (o *AddUserToProjectDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *AddUserToProjectDefault) Error() string {

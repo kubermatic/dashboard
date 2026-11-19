@@ -122,6 +122,11 @@ func (m *EtcdBackupConfigStatus) contextValidateConditions(ctx context.Context, 
 	for i := 0; i < len(m.Conditions); i++ {
 
 		if m.Conditions[i] != nil {
+
+			if swag.IsZero(m.Conditions[i]) { // not required
+				return nil
+			}
+
 			if err := m.Conditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("conditions" + "." + strconv.Itoa(i))
@@ -142,6 +147,11 @@ func (m *EtcdBackupConfigStatus) contextValidateCurrentBackups(ctx context.Conte
 	for i := 0; i < len(m.CurrentBackups); i++ {
 
 		if m.CurrentBackups[i] != nil {
+
+			if swag.IsZero(m.CurrentBackups[i]) { // not required
+				return nil
+			}
+
 			if err := m.CurrentBackups[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("lastBackups" + "." + strconv.Itoa(i))

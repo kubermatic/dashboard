@@ -92,6 +92,11 @@ func (o *CreateBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create backup storage location o k response
+func (o *CreateBackupStorageLocationOK) Code() int {
+	return 200
+}
+
 func (o *CreateBackupStorageLocationOK) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] createBackupStorageLocationOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create backup storage location unauthorized response
+func (o *CreateBackupStorageLocationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateBackupStorageLocationUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] createBackupStorageLocationUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create backup storage location forbidden response
+func (o *CreateBackupStorageLocationForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateBackupStorageLocationForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] createBackupStorageLocationForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateBackupStorageLocationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create backup storage location default response
-func (o *CreateBackupStorageLocationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create backup storage location default response has a 2xx status code
 func (o *CreateBackupStorageLocationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateBackupStorageLocationDefault) IsServerError() bool {
 // IsCode returns true when this create backup storage location default response a status code equal to that given
 func (o *CreateBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create backup storage location default response
+func (o *CreateBackupStorageLocationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateBackupStorageLocationDefault) Error() string {

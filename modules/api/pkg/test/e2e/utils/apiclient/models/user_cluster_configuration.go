@@ -72,6 +72,11 @@ func (m *UserClusterConfiguration) ContextValidate(ctx context.Context, formats 
 func (m *UserClusterConfiguration) contextValidateAdmissionPlugins(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AdmissionPlugins != nil {
+
+		if swag.IsZero(m.AdmissionPlugins) { // not required
+			return nil
+		}
+
 		if err := m.AdmissionPlugins.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("admissionPlugins")
