@@ -28,6 +28,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ListProjectVSphereDatastoreClusters(params *ListProjectVSphereDatastoreClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereDatastoreClustersOK, error)
+
 	ListProjectVSphereDatastores(params *ListProjectVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereDatastoresOK, error)
 
 	ListProjectVSphereFolders(params *ListProjectVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereFoldersOK, error)
@@ -39,6 +41,8 @@ type ClientService interface {
 	ListProjectVSphereTagsForTagCategories(params *ListProjectVSphereTagsForTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagsForTagCategoriesOK, error)
 
 	ListProjectVSphereVMGroups(params *ListProjectVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereVMGroupsOK, error)
+
+	ListVSphereDatastoreClusters(params *ListVSphereDatastoreClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoreClustersOK, error)
 
 	ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error)
 
@@ -55,6 +59,44 @@ type ClientService interface {
 	ListVSphereVMGroupsNoCredentials(params *ListVSphereVMGroupsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsNoCredentialsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+ListProjectVSphereDatastoreClusters lists datastore clusters from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereDatastoreClusters(params *ListProjectVSphereDatastoreClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereDatastoreClustersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereDatastoreClustersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereDatastoreClusters",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/datastoreclusters",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereDatastoreClustersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereDatastoreClustersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereDatastoreClustersDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -282,6 +324,44 @@ func (a *Client) ListProjectVSphereVMGroups(params *ListProjectVSphereVMGroupsPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectVSphereVMGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereDatastoreClusters Lists datastore clusters from vsphere datacenter
+*/
+func (a *Client) ListVSphereDatastoreClusters(params *ListVSphereDatastoreClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoreClustersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereDatastoreClustersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereDatastoreClusters",
+		Method:             "GET",
+		PathPattern:        "/api/v2/providers/vsphere/datastoreclusters",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereDatastoreClustersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereDatastoreClustersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereDatastoreClustersDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
