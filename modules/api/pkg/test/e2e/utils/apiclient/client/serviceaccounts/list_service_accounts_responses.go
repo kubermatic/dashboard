@@ -92,6 +92,11 @@ func (o *ListServiceAccountsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list service accounts o k response
+func (o *ListServiceAccountsOK) Code() int {
+	return 200
+}
+
 func (o *ListServiceAccountsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListServiceAccountsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list service accounts unauthorized response
+func (o *ListServiceAccountsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListServiceAccountsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListServiceAccountsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list service accounts forbidden response
+func (o *ListServiceAccountsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListServiceAccountsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListServiceAccountsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list service accounts default response
-func (o *ListServiceAccountsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list service accounts default response has a 2xx status code
 func (o *ListServiceAccountsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListServiceAccountsDefault) IsServerError() bool {
 // IsCode returns true when this list service accounts default response a status code equal to that given
 func (o *ListServiceAccountsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list service accounts default response
+func (o *ListServiceAccountsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListServiceAccountsDefault) Error() string {

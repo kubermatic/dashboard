@@ -92,6 +92,11 @@ func (o *ListEtcdRestoreOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list etcd restore o k response
+func (o *ListEtcdRestoreOK) Code() int {
+	return 200
+}
+
 func (o *ListEtcdRestoreOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] listEtcdRestoreOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEtcdRestoreUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list etcd restore unauthorized response
+func (o *ListEtcdRestoreUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEtcdRestoreUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] listEtcdRestoreUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEtcdRestoreForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list etcd restore forbidden response
+func (o *ListEtcdRestoreForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEtcdRestoreForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] listEtcdRestoreForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEtcdRestoreDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list etcd restore default response
-func (o *ListEtcdRestoreDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list etcd restore default response has a 2xx status code
 func (o *ListEtcdRestoreDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEtcdRestoreDefault) IsServerError() bool {
 // IsCode returns true when this list etcd restore default response a status code equal to that given
 func (o *ListEtcdRestoreDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list etcd restore default response
+func (o *ListEtcdRestoreDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEtcdRestoreDefault) Error() string {

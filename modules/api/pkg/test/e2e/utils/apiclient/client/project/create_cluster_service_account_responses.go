@@ -92,6 +92,11 @@ func (o *CreateClusterServiceAccountCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create cluster service account created response
+func (o *CreateClusterServiceAccountCreated) Code() int {
+	return 201
+}
+
 func (o *CreateClusterServiceAccountCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] createClusterServiceAccountCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateClusterServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create cluster service account unauthorized response
+func (o *CreateClusterServiceAccountUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateClusterServiceAccountUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] createClusterServiceAccountUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateClusterServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create cluster service account forbidden response
+func (o *CreateClusterServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateClusterServiceAccountForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] createClusterServiceAccountForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateClusterServiceAccountDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create cluster service account default response
-func (o *CreateClusterServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create cluster service account default response has a 2xx status code
 func (o *CreateClusterServiceAccountDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateClusterServiceAccountDefault) IsServerError() bool {
 // IsCode returns true when this create cluster service account default response a status code equal to that given
 func (o *CreateClusterServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create cluster service account default response
+func (o *CreateClusterServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateClusterServiceAccountDefault) Error() string {

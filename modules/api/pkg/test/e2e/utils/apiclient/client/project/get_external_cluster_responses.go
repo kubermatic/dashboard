@@ -92,6 +92,11 @@ func (o *GetExternalClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get external cluster o k response
+func (o *GetExternalClusterOK) Code() int {
+	return 200
+}
+
 func (o *GetExternalClusterOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] getExternalClusterOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get external cluster unauthorized response
+func (o *GetExternalClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetExternalClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] getExternalClusterUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get external cluster forbidden response
+func (o *GetExternalClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *GetExternalClusterForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] getExternalClusterForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetExternalClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get external cluster default response
-func (o *GetExternalClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get external cluster default response has a 2xx status code
 func (o *GetExternalClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetExternalClusterDefault) IsServerError() bool {
 // IsCode returns true when this get external cluster default response a status code equal to that given
 func (o *GetExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get external cluster default response
+func (o *GetExternalClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetExternalClusterDefault) Error() string {

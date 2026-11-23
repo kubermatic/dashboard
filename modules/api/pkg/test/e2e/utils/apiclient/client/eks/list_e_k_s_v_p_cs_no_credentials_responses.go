@@ -92,6 +92,11 @@ func (o *ListEKSVPCsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s v p cs no credentials o k response
+func (o *ListEKSVPCsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSVPCsNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/vpcs][%d] listEKSVPCsNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEKSVPCsNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s v p cs no credentials unauthorized response
+func (o *ListEKSVPCsNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSVPCsNoCredentialsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/vpcs][%d] listEKSVPCsNoCredentialsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEKSVPCsNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s v p cs no credentials forbidden response
+func (o *ListEKSVPCsNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSVPCsNoCredentialsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/vpcs][%d] listEKSVPCsNoCredentialsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEKSVPCsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s v p cs no credentials default response
-func (o *ListEKSVPCsNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s v p cs no credentials default response has a 2xx status code
 func (o *ListEKSVPCsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEKSVPCsNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list e k s v p cs no credentials default response a status code equal to that given
 func (o *ListEKSVPCsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s v p cs no credentials default response
+func (o *ListEKSVPCsNoCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSVPCsNoCredentialsDefault) Error() string {

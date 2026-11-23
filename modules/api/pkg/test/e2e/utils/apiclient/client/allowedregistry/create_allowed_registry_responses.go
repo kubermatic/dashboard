@@ -92,6 +92,11 @@ func (o *CreateAllowedRegistryCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create allowed registry created response
+func (o *CreateAllowedRegistryCreated) Code() int {
+	return 201
+}
+
 func (o *CreateAllowedRegistryCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create allowed registry unauthorized response
+func (o *CreateAllowedRegistryUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateAllowedRegistryUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create allowed registry forbidden response
+func (o *CreateAllowedRegistryForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateAllowedRegistryForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateAllowedRegistryDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create allowed registry default response
-func (o *CreateAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create allowed registry default response has a 2xx status code
 func (o *CreateAllowedRegistryDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateAllowedRegistryDefault) IsServerError() bool {
 // IsCode returns true when this create allowed registry default response a status code equal to that given
 func (o *CreateAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create allowed registry default response
+func (o *CreateAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateAllowedRegistryDefault) Error() string {

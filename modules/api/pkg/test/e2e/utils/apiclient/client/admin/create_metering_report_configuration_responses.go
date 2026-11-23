@@ -93,6 +93,11 @@ func (o *CreateMeteringReportConfigurationCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create metering report configuration created response
+func (o *CreateMeteringReportConfigurationCreated) Code() int {
+	return 201
+}
+
 func (o *CreateMeteringReportConfigurationCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationCreated ", 201)
 }
@@ -142,6 +147,11 @@ func (o *CreateMeteringReportConfigurationUnauthorized) IsServerError() bool {
 // IsCode returns true when this create metering report configuration unauthorized response a status code equal to that given
 func (o *CreateMeteringReportConfigurationUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the create metering report configuration unauthorized response
+func (o *CreateMeteringReportConfigurationUnauthorized) Code() int {
+	return 401
 }
 
 func (o *CreateMeteringReportConfigurationUnauthorized) Error() string {
@@ -195,6 +205,11 @@ func (o *CreateMeteringReportConfigurationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create metering report configuration forbidden response
+func (o *CreateMeteringReportConfigurationForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateMeteringReportConfigurationForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationForbidden ", 403)
 }
@@ -226,11 +241,6 @@ type CreateMeteringReportConfigurationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create metering report configuration default response
-func (o *CreateMeteringReportConfigurationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create metering report configuration default response has a 2xx status code
 func (o *CreateMeteringReportConfigurationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -254,6 +264,11 @@ func (o *CreateMeteringReportConfigurationDefault) IsServerError() bool {
 // IsCode returns true when this create metering report configuration default response a status code equal to that given
 func (o *CreateMeteringReportConfigurationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create metering report configuration default response
+func (o *CreateMeteringReportConfigurationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateMeteringReportConfigurationDefault) Error() string {

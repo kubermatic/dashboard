@@ -80,6 +80,11 @@ func (o *ListProjectAKSResourceGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project a k s resource groups o k response
+func (o *ListProjectAKSResourceGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAKSResourceGroupsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroupsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectAKSResourceGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project a k s resource groups default response
-func (o *ListProjectAKSResourceGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project a k s resource groups default response has a 2xx status code
 func (o *ListProjectAKSResourceGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectAKSResourceGroupsDefault) IsServerError() bool {
 // IsCode returns true when this list project a k s resource groups default response a status code equal to that given
 func (o *ListProjectAKSResourceGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project a k s resource groups default response
+func (o *ListProjectAKSResourceGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAKSResourceGroupsDefault) Error() string {

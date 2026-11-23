@@ -92,6 +92,11 @@ func (o *ListEKSCapacityTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s capacity types o k response
+func (o *ListEKSCapacityTypesOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSCapacityTypesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListEKSCapacityTypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s capacity types unauthorized response
+func (o *ListEKSCapacityTypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSCapacityTypesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListEKSCapacityTypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s capacity types forbidden response
+func (o *ListEKSCapacityTypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSCapacityTypesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListEKSCapacityTypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s capacity types default response
-func (o *ListEKSCapacityTypesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s capacity types default response has a 2xx status code
 func (o *ListEKSCapacityTypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListEKSCapacityTypesDefault) IsServerError() bool {
 // IsCode returns true when this list e k s capacity types default response a status code equal to that given
 func (o *ListEKSCapacityTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s capacity types default response
+func (o *ListEKSCapacityTypesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSCapacityTypesDefault) Error() string {

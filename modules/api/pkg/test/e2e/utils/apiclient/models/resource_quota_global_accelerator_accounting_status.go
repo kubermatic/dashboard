@@ -121,6 +121,11 @@ func (m *ResourceQuotaGlobalAcceleratorAccountingStatus) contextValidateBlockers
 	for i := 0; i < len(m.Blockers); i++ {
 
 		if m.Blockers[i] != nil {
+
+			if swag.IsZero(m.Blockers[i]) { // not required
+				return nil
+			}
+
 			if err := m.Blockers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("blockers" + "." + strconv.Itoa(i))

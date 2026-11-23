@@ -99,6 +99,10 @@ func (m *GCPSubnetwork) ContextValidate(ctx context.Context, formats strfmt.Regi
 
 func (m *GCPSubnetwork) contextValidateIPFamily(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.IPFamily) { // not required
+		return nil
+	}
+
 	if err := m.IPFamily.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("ipFamily")

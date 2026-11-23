@@ -91,6 +91,11 @@ func (o *DeleteGroupProjectBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete group project binding o k response
+func (o *DeleteGroupProjectBindingOK) Code() int {
+	return 200
+}
+
 func (o *DeleteGroupProjectBindingOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteGroupProjectBindingUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete group project binding unauthorized response a status code equal to that given
 func (o *DeleteGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete group project binding unauthorized response
+func (o *DeleteGroupProjectBindingUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteGroupProjectBindingUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete group project binding forbidden response
+func (o *DeleteGroupProjectBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteGroupProjectBindingForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteGroupProjectBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete group project binding default response
-func (o *DeleteGroupProjectBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete group project binding default response has a 2xx status code
 func (o *DeleteGroupProjectBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteGroupProjectBindingDefault) IsServerError() bool {
 // IsCode returns true when this delete group project binding default response a status code equal to that given
 func (o *DeleteGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete group project binding default response
+func (o *DeleteGroupProjectBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteGroupProjectBindingDefault) Error() string {

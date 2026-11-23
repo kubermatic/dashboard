@@ -80,6 +80,11 @@ func (o *ListProjectGKEZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project g k e zones o k response
+func (o *ListProjectGKEZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectGKEZonesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZonesOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListProjectGKEZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project g k e zones default response
-func (o *ListProjectGKEZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project g k e zones default response has a 2xx status code
 func (o *ListProjectGKEZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListProjectGKEZonesDefault) IsServerError() bool {
 // IsCode returns true when this list project g k e zones default response a status code equal to that given
 func (o *ListProjectGKEZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project g k e zones default response
+func (o *ListProjectGKEZonesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectGKEZonesDefault) Error() string {

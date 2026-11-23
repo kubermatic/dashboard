@@ -92,6 +92,11 @@ func (o *UnbindUserFromRoleBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the unbind user from role binding o k response
+func (o *UnbindUserFromRoleBindingOK) Code() int {
+	return 200
+}
+
 func (o *UnbindUserFromRoleBindingOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] unbindUserFromRoleBindingOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UnbindUserFromRoleBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the unbind user from role binding unauthorized response
+func (o *UnbindUserFromRoleBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UnbindUserFromRoleBindingUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] unbindUserFromRoleBindingUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UnbindUserFromRoleBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the unbind user from role binding forbidden response
+func (o *UnbindUserFromRoleBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *UnbindUserFromRoleBindingForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}/bindings][%d] unbindUserFromRoleBindingForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UnbindUserFromRoleBindingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the unbind user from role binding default response
-func (o *UnbindUserFromRoleBindingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this unbind user from role binding default response has a 2xx status code
 func (o *UnbindUserFromRoleBindingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UnbindUserFromRoleBindingDefault) IsServerError() bool {
 // IsCode returns true when this unbind user from role binding default response a status code equal to that given
 func (o *UnbindUserFromRoleBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the unbind user from role binding default response
+func (o *UnbindUserFromRoleBindingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UnbindUserFromRoleBindingDefault) Error() string {

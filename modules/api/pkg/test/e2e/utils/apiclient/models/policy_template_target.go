@@ -102,6 +102,11 @@ func (m *PolicyTemplateTarget) ContextValidate(ctx context.Context, formats strf
 func (m *PolicyTemplateTarget) contextValidateClusterSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ClusterSelector != nil {
+
+		if swag.IsZero(m.ClusterSelector) { // not required
+			return nil
+		}
+
 		if err := m.ClusterSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clusterSelector")
@@ -118,6 +123,11 @@ func (m *PolicyTemplateTarget) contextValidateClusterSelector(ctx context.Contex
 func (m *PolicyTemplateTarget) contextValidateProjectSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ProjectSelector != nil {
+
+		if swag.IsZero(m.ProjectSelector) { // not required
+			return nil
+		}
+
 		if err := m.ProjectSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("projectSelector")

@@ -92,6 +92,11 @@ func (o *GetEtcdRestoreOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get etcd restore o k response
+func (o *GetEtcdRestoreOK) Code() int {
+	return 200
+}
+
 func (o *GetEtcdRestoreOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] getEtcdRestoreOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetEtcdRestoreUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get etcd restore unauthorized response
+func (o *GetEtcdRestoreUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetEtcdRestoreUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] getEtcdRestoreUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetEtcdRestoreForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get etcd restore forbidden response
+func (o *GetEtcdRestoreForbidden) Code() int {
+	return 403
+}
+
 func (o *GetEtcdRestoreForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] getEtcdRestoreForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetEtcdRestoreDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get etcd restore default response
-func (o *GetEtcdRestoreDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get etcd restore default response has a 2xx status code
 func (o *GetEtcdRestoreDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetEtcdRestoreDefault) IsServerError() bool {
 // IsCode returns true when this get etcd restore default response a status code equal to that given
 func (o *GetEtcdRestoreDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get etcd restore default response
+func (o *GetEtcdRestoreDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetEtcdRestoreDefault) Error() string {

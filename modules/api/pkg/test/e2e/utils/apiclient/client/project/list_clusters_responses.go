@@ -92,6 +92,11 @@ func (o *ListClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list clusters o k response
+func (o *ListClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListClustersOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] listClustersOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListClustersUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list clusters unauthorized response
+func (o *ListClustersUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClustersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] listClustersUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListClustersForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list clusters forbidden response
+func (o *ListClustersForbidden) Code() int {
+	return 403
+}
+
 func (o *ListClustersForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] listClustersForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListClustersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list clusters default response
-func (o *ListClustersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list clusters default response has a 2xx status code
 func (o *ListClustersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListClustersDefault) IsServerError() bool {
 // IsCode returns true when this list clusters default response a status code equal to that given
 func (o *ListClustersDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list clusters default response
+func (o *ListClustersDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListClustersDefault) Error() string {

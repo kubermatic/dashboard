@@ -181,6 +181,11 @@ func (m *NodeStatus) contextValidateAddresses(ctx context.Context, formats strfm
 	for i := 0; i < len(m.Addresses); i++ {
 
 		if m.Addresses[i] != nil {
+
+			if swag.IsZero(m.Addresses[i]) { // not required
+				return nil
+			}
+
 			if err := m.Addresses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("addresses" + "." + strconv.Itoa(i))
@@ -199,6 +204,11 @@ func (m *NodeStatus) contextValidateAddresses(ctx context.Context, formats strfm
 func (m *NodeStatus) contextValidateAllocatable(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Allocatable != nil {
+
+		if swag.IsZero(m.Allocatable) { // not required
+			return nil
+		}
+
 		if err := m.Allocatable.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("allocatable")
@@ -215,6 +225,11 @@ func (m *NodeStatus) contextValidateAllocatable(ctx context.Context, formats str
 func (m *NodeStatus) contextValidateCapacity(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Capacity != nil {
+
+		if swag.IsZero(m.Capacity) { // not required
+			return nil
+		}
+
 		if err := m.Capacity.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("capacity")
@@ -231,6 +246,11 @@ func (m *NodeStatus) contextValidateCapacity(ctx context.Context, formats strfmt
 func (m *NodeStatus) contextValidateNodeInfo(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NodeInfo != nil {
+
+		if swag.IsZero(m.NodeInfo) { // not required
+			return nil
+		}
+
 		if err := m.NodeInfo.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodeInfo")

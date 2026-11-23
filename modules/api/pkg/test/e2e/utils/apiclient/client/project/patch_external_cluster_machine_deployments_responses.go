@@ -92,6 +92,11 @@ func (o *PatchExternalClusterMachineDeploymentsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch external cluster machine deployments o k response
+func (o *PatchExternalClusterMachineDeploymentsOK) Code() int {
+	return 200
+}
+
 func (o *PatchExternalClusterMachineDeploymentsOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchExternalClusterMachineDeploymentsUnauthorized) IsCode(code int) bo
 	return code == 401
 }
 
+// Code gets the status code for the patch external cluster machine deployments unauthorized response
+func (o *PatchExternalClusterMachineDeploymentsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchExternalClusterMachineDeploymentsUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchExternalClusterMachineDeploymentsForbidden) IsCode(code int) bool 
 	return code == 403
 }
 
+// Code gets the status code for the patch external cluster machine deployments forbidden response
+func (o *PatchExternalClusterMachineDeploymentsForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchExternalClusterMachineDeploymentsForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchExternalClusterMachineDeploymentsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch external cluster machine deployments default response
-func (o *PatchExternalClusterMachineDeploymentsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch external cluster machine deployments default response has a 2xx status code
 func (o *PatchExternalClusterMachineDeploymentsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchExternalClusterMachineDeploymentsDefault) IsServerError() bool {
 // IsCode returns true when this patch external cluster machine deployments default response a status code equal to that given
 func (o *PatchExternalClusterMachineDeploymentsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch external cluster machine deployments default response
+func (o *PatchExternalClusterMachineDeploymentsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchExternalClusterMachineDeploymentsDefault) Error() string {

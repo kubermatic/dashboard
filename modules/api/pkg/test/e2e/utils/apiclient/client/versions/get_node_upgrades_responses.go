@@ -92,6 +92,11 @@ func (o *GetNodeUpgradesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get node upgrades o k response
+func (o *GetNodeUpgradesOK) Code() int {
+	return 200
+}
+
 func (o *GetNodeUpgradesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/upgrades/node][%d] getNodeUpgradesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetNodeUpgradesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get node upgrades unauthorized response
+func (o *GetNodeUpgradesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetNodeUpgradesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/upgrades/node][%d] getNodeUpgradesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetNodeUpgradesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get node upgrades forbidden response
+func (o *GetNodeUpgradesForbidden) Code() int {
+	return 403
+}
+
 func (o *GetNodeUpgradesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/upgrades/node][%d] getNodeUpgradesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetNodeUpgradesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get node upgrades default response
-func (o *GetNodeUpgradesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get node upgrades default response has a 2xx status code
 func (o *GetNodeUpgradesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetNodeUpgradesDefault) IsServerError() bool {
 // IsCode returns true when this get node upgrades default response a status code equal to that given
 func (o *GetNodeUpgradesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get node upgrades default response
+func (o *GetNodeUpgradesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetNodeUpgradesDefault) Error() string {

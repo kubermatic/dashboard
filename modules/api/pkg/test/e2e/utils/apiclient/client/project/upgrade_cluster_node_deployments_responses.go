@@ -91,6 +91,11 @@ func (o *UpgradeClusterNodeDeploymentsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the upgrade cluster node deployments o k response
+func (o *UpgradeClusterNodeDeploymentsOK) Code() int {
+	return 200
+}
+
 func (o *UpgradeClusterNodeDeploymentsOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *UpgradeClusterNodeDeploymentsUnauthorized) IsServerError() bool {
 // IsCode returns true when this upgrade cluster node deployments unauthorized response a status code equal to that given
 func (o *UpgradeClusterNodeDeploymentsUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the upgrade cluster node deployments unauthorized response
+func (o *UpgradeClusterNodeDeploymentsUnauthorized) Code() int {
+	return 401
 }
 
 func (o *UpgradeClusterNodeDeploymentsUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *UpgradeClusterNodeDeploymentsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the upgrade cluster node deployments forbidden response
+func (o *UpgradeClusterNodeDeploymentsForbidden) Code() int {
+	return 403
+}
+
 func (o *UpgradeClusterNodeDeploymentsForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type UpgradeClusterNodeDeploymentsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the upgrade cluster node deployments default response
-func (o *UpgradeClusterNodeDeploymentsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this upgrade cluster node deployments default response has a 2xx status code
 func (o *UpgradeClusterNodeDeploymentsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *UpgradeClusterNodeDeploymentsDefault) IsServerError() bool {
 // IsCode returns true when this upgrade cluster node deployments default response a status code equal to that given
 func (o *UpgradeClusterNodeDeploymentsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the upgrade cluster node deployments default response
+func (o *UpgradeClusterNodeDeploymentsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpgradeClusterNodeDeploymentsDefault) Error() string {

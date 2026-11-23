@@ -92,6 +92,11 @@ func (o *ListVersionsByProviderOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list versions by provider o k response
+func (o *ListVersionsByProviderOK) Code() int {
+	return 200
+}
+
 func (o *ListVersionsByProviderOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListVersionsByProviderUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list versions by provider unauthorized response
+func (o *ListVersionsByProviderUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListVersionsByProviderUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListVersionsByProviderForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list versions by provider forbidden response
+func (o *ListVersionsByProviderForbidden) Code() int {
+	return 403
+}
+
 func (o *ListVersionsByProviderForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListVersionsByProviderDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list versions by provider default response
-func (o *ListVersionsByProviderDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list versions by provider default response has a 2xx status code
 func (o *ListVersionsByProviderDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListVersionsByProviderDefault) IsServerError() bool {
 // IsCode returns true when this list versions by provider default response a status code equal to that given
 func (o *ListVersionsByProviderDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list versions by provider default response
+func (o *ListVersionsByProviderDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVersionsByProviderDefault) Error() string {

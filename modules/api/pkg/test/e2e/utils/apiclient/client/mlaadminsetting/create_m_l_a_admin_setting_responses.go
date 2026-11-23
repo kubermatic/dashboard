@@ -92,6 +92,11 @@ func (o *CreateMLAAdminSettingCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create m l a admin setting created response
+func (o *CreateMLAAdminSettingCreated) Code() int {
+	return 201
+}
+
 func (o *CreateMLAAdminSettingCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] createMLAAdminSettingCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create m l a admin setting unauthorized response
+func (o *CreateMLAAdminSettingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateMLAAdminSettingUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] createMLAAdminSettingUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create m l a admin setting forbidden response
+func (o *CreateMLAAdminSettingForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateMLAAdminSettingForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] createMLAAdminSettingForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateMLAAdminSettingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create m l a admin setting default response
-func (o *CreateMLAAdminSettingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create m l a admin setting default response has a 2xx status code
 func (o *CreateMLAAdminSettingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateMLAAdminSettingDefault) IsServerError() bool {
 // IsCode returns true when this create m l a admin setting default response a status code equal to that given
 func (o *CreateMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create m l a admin setting default response
+func (o *CreateMLAAdminSettingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateMLAAdminSettingDefault) Error() string {

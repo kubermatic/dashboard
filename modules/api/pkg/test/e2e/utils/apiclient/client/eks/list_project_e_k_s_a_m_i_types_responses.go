@@ -92,6 +92,11 @@ func (o *ListProjectEKSAMITypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s a m i types o k response
+func (o *ListProjectEKSAMITypesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSAMITypesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectEKSAMITypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s a m i types unauthorized response
+func (o *ListProjectEKSAMITypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSAMITypesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectEKSAMITypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s a m i types forbidden response
+func (o *ListProjectEKSAMITypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSAMITypesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListProjectEKSAMITypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project e k s a m i types default response
-func (o *ListProjectEKSAMITypesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project e k s a m i types default response has a 2xx status code
 func (o *ListProjectEKSAMITypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectEKSAMITypesDefault) IsServerError() bool {
 // IsCode returns true when this list project e k s a m i types default response a status code equal to that given
 func (o *ListProjectEKSAMITypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project e k s a m i types default response
+func (o *ListProjectEKSAMITypesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectEKSAMITypesDefault) Error() string {

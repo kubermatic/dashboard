@@ -92,6 +92,11 @@ func (o *GetAdminRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get admin rule group o k response
+func (o *GetAdminRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *GetAdminRuleGroupOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] getAdminRuleGroupOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetAdminRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get admin rule group unauthorized response
+func (o *GetAdminRuleGroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetAdminRuleGroupUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] getAdminRuleGroupUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetAdminRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get admin rule group forbidden response
+func (o *GetAdminRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *GetAdminRuleGroupForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] getAdminRuleGroupForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetAdminRuleGroupDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get admin rule group default response
-func (o *GetAdminRuleGroupDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get admin rule group default response has a 2xx status code
 func (o *GetAdminRuleGroupDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetAdminRuleGroupDefault) IsServerError() bool {
 // IsCode returns true when this get admin rule group default response a status code equal to that given
 func (o *GetAdminRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get admin rule group default response
+func (o *GetAdminRuleGroupDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetAdminRuleGroupDefault) Error() string {

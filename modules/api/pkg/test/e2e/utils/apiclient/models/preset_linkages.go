@@ -122,6 +122,11 @@ func (m *PresetLinkages) contextValidateClusterTemplates(ctx context.Context, fo
 	for i := 0; i < len(m.ClusterTemplates); i++ {
 
 		if m.ClusterTemplates[i] != nil {
+
+			if swag.IsZero(m.ClusterTemplates[i]) { // not required
+				return nil
+			}
+
 			if err := m.ClusterTemplates[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("clusterTemplates" + "." + strconv.Itoa(i))
@@ -142,6 +147,11 @@ func (m *PresetLinkages) contextValidateClusters(ctx context.Context, formats st
 	for i := 0; i < len(m.Clusters); i++ {
 
 		if m.Clusters[i] != nil {
+
+			if swag.IsZero(m.Clusters[i]) { // not required
+				return nil
+			}
+
 			if err := m.Clusters[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("clusters" + "." + strconv.Itoa(i))

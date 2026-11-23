@@ -80,6 +80,11 @@ func (o *ListEKSSubnetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s subnets o k response
+func (o *ListEKSSubnetsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSSubnetsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/eks/subnets][%d] listEKSSubnetsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListEKSSubnetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s subnets default response
-func (o *ListEKSSubnetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s subnets default response has a 2xx status code
 func (o *ListEKSSubnetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListEKSSubnetsDefault) IsServerError() bool {
 // IsCode returns true when this list e k s subnets default response a status code equal to that given
 func (o *ListEKSSubnetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s subnets default response
+func (o *ListEKSSubnetsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSSubnetsDefault) Error() string {

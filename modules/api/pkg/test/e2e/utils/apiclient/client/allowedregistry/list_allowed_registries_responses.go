@@ -92,6 +92,11 @@ func (o *ListAllowedRegistriesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list allowed registries o k response
+func (o *ListAllowedRegistriesOK) Code() int {
+	return 200
+}
+
 func (o *ListAllowedRegistriesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries][%d] listAllowedRegistriesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListAllowedRegistriesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list allowed registries unauthorized response
+func (o *ListAllowedRegistriesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAllowedRegistriesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries][%d] listAllowedRegistriesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListAllowedRegistriesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list allowed registries forbidden response
+func (o *ListAllowedRegistriesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAllowedRegistriesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/allowedregistries][%d] listAllowedRegistriesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListAllowedRegistriesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list allowed registries default response
-func (o *ListAllowedRegistriesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list allowed registries default response has a 2xx status code
 func (o *ListAllowedRegistriesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListAllowedRegistriesDefault) IsServerError() bool {
 // IsCode returns true when this list allowed registries default response a status code equal to that given
 func (o *ListAllowedRegistriesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list allowed registries default response
+func (o *ListAllowedRegistriesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAllowedRegistriesDefault) Error() string {

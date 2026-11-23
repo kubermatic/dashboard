@@ -80,6 +80,11 @@ func (o *ListVMwareCloudDirectorNetworksOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director networks o k response
+func (o *ListVMwareCloudDirectorNetworksOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorNetworksOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/networks][%d] listVMwareCloudDirectorNetworksOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListVMwareCloudDirectorNetworksDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director networks default response
-func (o *ListVMwareCloudDirectorNetworksDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director networks default response has a 2xx status code
 func (o *ListVMwareCloudDirectorNetworksDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListVMwareCloudDirectorNetworksDefault) IsServerError() bool {
 // IsCode returns true when this list v mware cloud director networks default response a status code equal to that given
 func (o *ListVMwareCloudDirectorNetworksDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list v mware cloud director networks default response
+func (o *ListVMwareCloudDirectorNetworksDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListVMwareCloudDirectorNetworksDefault) Error() string {

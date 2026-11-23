@@ -94,6 +94,11 @@ func (o *CreateResourceQuotaCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create resource quota created response
+func (o *CreateResourceQuotaCreated) Code() int {
+	return 201
+}
+
 func (o *CreateResourceQuotaCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaCreated ", 201)
 }
@@ -143,6 +148,11 @@ func (o *CreateResourceQuotaUnauthorized) IsServerError() bool {
 // IsCode returns true when this create resource quota unauthorized response a status code equal to that given
 func (o *CreateResourceQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the create resource quota unauthorized response
+func (o *CreateResourceQuotaUnauthorized) Code() int {
+	return 401
 }
 
 func (o *CreateResourceQuotaUnauthorized) Error() string {
@@ -196,6 +206,11 @@ func (o *CreateResourceQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create resource quota forbidden response
+func (o *CreateResourceQuotaForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateResourceQuotaForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaForbidden ", 403)
 }
@@ -227,11 +242,6 @@ type CreateResourceQuotaDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create resource quota default response
-func (o *CreateResourceQuotaDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create resource quota default response has a 2xx status code
 func (o *CreateResourceQuotaDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -255,6 +265,11 @@ func (o *CreateResourceQuotaDefault) IsServerError() bool {
 // IsCode returns true when this create resource quota default response a status code equal to that given
 func (o *CreateResourceQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create resource quota default response
+func (o *CreateResourceQuotaDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateResourceQuotaDefault) Error() string {
@@ -347,6 +362,11 @@ func (o *CreateResourceQuotaBody) ContextValidate(ctx context.Context, formats s
 func (o *CreateResourceQuotaBody) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Quota != nil {
+
+		if swag.IsZero(o.Quota) { // not required
+			return nil
+		}
+
 		if err := o.Quota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "quota")

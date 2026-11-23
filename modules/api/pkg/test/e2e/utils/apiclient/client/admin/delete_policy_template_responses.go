@@ -91,6 +91,11 @@ func (o *DeletePolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete policy template o k response
+func (o *DeletePolicyTemplateOK) Code() int {
+	return 200
+}
+
 func (o *DeletePolicyTemplateOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeletePolicyTemplateUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete policy template unauthorized response a status code equal to that given
 func (o *DeletePolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete policy template unauthorized response
+func (o *DeletePolicyTemplateUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeletePolicyTemplateUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeletePolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete policy template forbidden response
+func (o *DeletePolicyTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *DeletePolicyTemplateForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeletePolicyTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete policy template default response
-func (o *DeletePolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete policy template default response has a 2xx status code
 func (o *DeletePolicyTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeletePolicyTemplateDefault) IsServerError() bool {
 // IsCode returns true when this delete policy template default response a status code equal to that given
 func (o *DeletePolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete policy template default response
+func (o *DeletePolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeletePolicyTemplateDefault) Error() string {

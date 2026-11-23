@@ -92,6 +92,11 @@ func (o *ListIPAMPoolsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list Ip a m pools o k response
+func (o *ListIPAMPoolsOK) Code() int {
+	return 200
+}
+
 func (o *ListIPAMPoolsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListIPAMPoolsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list Ip a m pools unauthorized response
+func (o *ListIPAMPoolsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListIPAMPoolsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListIPAMPoolsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list Ip a m pools forbidden response
+func (o *ListIPAMPoolsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListIPAMPoolsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListIPAMPoolsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list IP a m pools default response
-func (o *ListIPAMPoolsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list IP a m pools default response has a 2xx status code
 func (o *ListIPAMPoolsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListIPAMPoolsDefault) IsServerError() bool {
 // IsCode returns true when this list IP a m pools default response a status code equal to that given
 func (o *ListIPAMPoolsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list IP a m pools default response
+func (o *ListIPAMPoolsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListIPAMPoolsDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *BindUserToClusterRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the bind user to cluster role o k response
+func (o *BindUserToClusterRoleOK) Code() int {
+	return 200
+}
+
 func (o *BindUserToClusterRoleOK) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *BindUserToClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the bind user to cluster role unauthorized response
+func (o *BindUserToClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *BindUserToClusterRoleUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *BindUserToClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the bind user to cluster role forbidden response
+func (o *BindUserToClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *BindUserToClusterRoleForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type BindUserToClusterRoleDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the bind user to cluster role default response
-func (o *BindUserToClusterRoleDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this bind user to cluster role default response has a 2xx status code
 func (o *BindUserToClusterRoleDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *BindUserToClusterRoleDefault) IsServerError() bool {
 // IsCode returns true when this bind user to cluster role default response a status code equal to that given
 func (o *BindUserToClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the bind user to cluster role default response
+func (o *BindUserToClusterRoleDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *BindUserToClusterRoleDefault) Error() string {

@@ -84,6 +84,11 @@ func (m *ObjectStorageLocation) ContextValidate(ctx context.Context, formats str
 func (m *ObjectStorageLocation) contextValidateCaCertRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CaCertRef != nil {
+
+		if swag.IsZero(m.CaCertRef) { // not required
+			return nil
+		}
+
 		if err := m.CaCertRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("caCertRef")

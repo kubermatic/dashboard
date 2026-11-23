@@ -72,6 +72,11 @@ func (m *AdmissionPluginsConfiguration) ContextValidate(ctx context.Context, for
 func (m *AdmissionPluginsConfiguration) contextValidateEventRateLimit(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EventRateLimit != nil {
+
+		if swag.IsZero(m.EventRateLimit) { // not required
+			return nil
+		}
+
 		if err := m.EventRateLimit.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("eventRateLimit")

@@ -92,6 +92,11 @@ func (o *PatchAddonOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch addon o k response
+func (o *PatchAddonOK) Code() int {
+	return 200
+}
+
 func (o *PatchAddonOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchAddonUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch addon unauthorized response
+func (o *PatchAddonUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchAddonUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchAddonForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch addon forbidden response
+func (o *PatchAddonForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchAddonForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchAddonDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch addon default response
-func (o *PatchAddonDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch addon default response has a 2xx status code
 func (o *PatchAddonDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchAddonDefault) IsServerError() bool {
 // IsCode returns true when this patch addon default response a status code equal to that given
 func (o *PatchAddonDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch addon default response
+func (o *PatchAddonDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchAddonDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *ListProjectPresetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project presets o k response
+func (o *ListProjectPresetsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectPresetsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *ListProjectPresetsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project presets unauthorized response
+func (o *ListProjectPresetsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectPresetsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *ListProjectPresetsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project presets forbidden response
+func (o *ListProjectPresetsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectPresetsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type ListProjectPresetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project presets default response
-func (o *ListProjectPresetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project presets default response has a 2xx status code
 func (o *ListProjectPresetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *ListProjectPresetsDefault) IsServerError() bool {
 // IsCode returns true when this list project presets default response a status code equal to that given
 func (o *ListProjectPresetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project presets default response
+func (o *ListProjectPresetsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectPresetsDefault) Error() string {

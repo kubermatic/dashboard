@@ -92,6 +92,11 @@ func (o *UpdateAdmissionPluginsConfigurationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update admission plugins configuration o k response
+func (o *UpdateAdmissionPluginsConfigurationOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAdmissionPluginsConfigurationOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/userclusterconfig/admissionplugins][%d] updateAdmissionPluginsConfigurationOK  %+v", 200, o.Payload)
 }
@@ -153,6 +158,11 @@ func (o *UpdateAdmissionPluginsConfigurationUnauthorized) IsServerError() bool {
 // IsCode returns true when this update admission plugins configuration unauthorized response a status code equal to that given
 func (o *UpdateAdmissionPluginsConfigurationUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the update admission plugins configuration unauthorized response
+func (o *UpdateAdmissionPluginsConfigurationUnauthorized) Code() int {
+	return 401
 }
 
 func (o *UpdateAdmissionPluginsConfigurationUnauthorized) Error() string {
@@ -218,6 +228,11 @@ func (o *UpdateAdmissionPluginsConfigurationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update admission plugins configuration forbidden response
+func (o *UpdateAdmissionPluginsConfigurationForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAdmissionPluginsConfigurationForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v2/userclusterconfig/admissionplugins][%d] updateAdmissionPluginsConfigurationForbidden  %+v", 403, o.Payload)
 }
@@ -260,11 +275,6 @@ type UpdateAdmissionPluginsConfigurationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update admission plugins configuration default response
-func (o *UpdateAdmissionPluginsConfigurationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update admission plugins configuration default response has a 2xx status code
 func (o *UpdateAdmissionPluginsConfigurationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -288,6 +298,11 @@ func (o *UpdateAdmissionPluginsConfigurationDefault) IsServerError() bool {
 // IsCode returns true when this update admission plugins configuration default response a status code equal to that given
 func (o *UpdateAdmissionPluginsConfigurationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update admission plugins configuration default response
+func (o *UpdateAdmissionPluginsConfigurationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateAdmissionPluginsConfigurationDefault) Error() string {

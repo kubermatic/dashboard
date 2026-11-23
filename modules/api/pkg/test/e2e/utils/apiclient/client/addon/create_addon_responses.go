@@ -92,6 +92,11 @@ func (o *CreateAddonCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create addon created response
+func (o *CreateAddonCreated) Code() int {
+	return 201
+}
+
 func (o *CreateAddonCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] createAddonCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateAddonUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create addon unauthorized response
+func (o *CreateAddonUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateAddonUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] createAddonUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateAddonForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create addon forbidden response
+func (o *CreateAddonForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateAddonForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons][%d] createAddonForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateAddonDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create addon default response
-func (o *CreateAddonDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create addon default response has a 2xx status code
 func (o *CreateAddonDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateAddonDefault) IsServerError() bool {
 // IsCode returns true when this create addon default response a status code equal to that given
 func (o *CreateAddonDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create addon default response
+func (o *CreateAddonDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateAddonDefault) Error() string {

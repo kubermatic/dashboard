@@ -92,6 +92,11 @@ func (o *CreateNodeDeploymentCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create node deployment created response
+func (o *CreateNodeDeploymentCreated) Code() int {
+	return 201
+}
+
 func (o *CreateNodeDeploymentCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateNodeDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create node deployment unauthorized response
+func (o *CreateNodeDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateNodeDeploymentUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateNodeDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create node deployment forbidden response
+func (o *CreateNodeDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateNodeDeploymentForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateNodeDeploymentDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create node deployment default response
-func (o *CreateNodeDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create node deployment default response has a 2xx status code
 func (o *CreateNodeDeploymentDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateNodeDeploymentDefault) IsServerError() bool {
 // IsCode returns true when this create node deployment default response a status code equal to that given
 func (o *CreateNodeDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create node deployment default response
+func (o *CreateNodeDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateNodeDeploymentDefault) Error() string {

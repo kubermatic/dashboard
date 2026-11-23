@@ -91,6 +91,11 @@ func (o *DeleteDCOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete d c o k response
+func (o *DeleteDCOK) Code() int {
+	return 200
+}
+
 func (o *DeleteDCOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteDCUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete d c unauthorized response a status code equal to that given
 func (o *DeleteDCUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete d c unauthorized response
+func (o *DeleteDCUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteDCUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete d c forbidden response
+func (o *DeleteDCForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteDCForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteDCDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete d c default response
-func (o *DeleteDCDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete d c default response has a 2xx status code
 func (o *DeleteDCDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteDCDefault) IsServerError() bool {
 // IsCode returns true when this delete d c default response a status code equal to that given
 func (o *DeleteDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete d c default response
+func (o *DeleteDCDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteDCDefault) Error() string {

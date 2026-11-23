@@ -92,6 +92,11 @@ func (o *ListMeteringReportsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list metering reports o k response
+func (o *ListMeteringReportsOK) Code() int {
+	return 200
+}
+
 func (o *ListMeteringReportsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports][%d] listMeteringReportsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListMeteringReportsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list metering reports unauthorized response
+func (o *ListMeteringReportsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMeteringReportsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports][%d] listMeteringReportsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListMeteringReportsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list metering reports forbidden response
+func (o *ListMeteringReportsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMeteringReportsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/metering/reports][%d] listMeteringReportsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListMeteringReportsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list metering reports default response
-func (o *ListMeteringReportsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list metering reports default response has a 2xx status code
 func (o *ListMeteringReportsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListMeteringReportsDefault) IsServerError() bool {
 // IsCode returns true when this list metering reports default response a status code equal to that given
 func (o *ListMeteringReportsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list metering reports default response
+func (o *ListMeteringReportsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListMeteringReportsDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *ListProjectEtcdRestoreOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project etcd restore o k response
+func (o *ListProjectEtcdRestoreOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEtcdRestoreOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdrestores][%d] listProjectEtcdRestoreOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectEtcdRestoreUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project etcd restore unauthorized response
+func (o *ListProjectEtcdRestoreUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEtcdRestoreUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdrestores][%d] listProjectEtcdRestoreUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectEtcdRestoreForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project etcd restore forbidden response
+func (o *ListProjectEtcdRestoreForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEtcdRestoreForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdrestores][%d] listProjectEtcdRestoreForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListProjectEtcdRestoreDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project etcd restore default response
-func (o *ListProjectEtcdRestoreDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project etcd restore default response has a 2xx status code
 func (o *ListProjectEtcdRestoreDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectEtcdRestoreDefault) IsServerError() bool {
 // IsCode returns true when this list project etcd restore default response a status code equal to that given
 func (o *ListProjectEtcdRestoreDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project etcd restore default response
+func (o *ListProjectEtcdRestoreDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectEtcdRestoreDefault) Error() string {

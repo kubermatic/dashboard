@@ -92,6 +92,11 @@ func (o *GetClusterEventsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster events v2 o k response
+func (o *GetClusterEventsV2OK) Code() int {
+	return 200
+}
+
 func (o *GetClusterEventsV2OK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/events][%d] getClusterEventsV2OK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetClusterEventsV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster events v2 unauthorized response
+func (o *GetClusterEventsV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterEventsV2Unauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/events][%d] getClusterEventsV2Unauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetClusterEventsV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster events v2 forbidden response
+func (o *GetClusterEventsV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterEventsV2Forbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/events][%d] getClusterEventsV2Forbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetClusterEventsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster events v2 default response
-func (o *GetClusterEventsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster events v2 default response has a 2xx status code
 func (o *GetClusterEventsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetClusterEventsV2Default) IsServerError() bool {
 // IsCode returns true when this get cluster events v2 default response a status code equal to that given
 func (o *GetClusterEventsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster events v2 default response
+func (o *GetClusterEventsV2Default) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterEventsV2Default) Error() string {

@@ -92,6 +92,11 @@ func (o *ListAKSNodePoolModesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list a k s node pool modes o k response
+func (o *ListAKSNodePoolModesOK) Code() int {
+	return 200
+}
+
 func (o *ListAKSNodePoolModesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListAKSNodePoolModesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list a k s node pool modes unauthorized response
+func (o *ListAKSNodePoolModesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAKSNodePoolModesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListAKSNodePoolModesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list a k s node pool modes forbidden response
+func (o *ListAKSNodePoolModesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAKSNodePoolModesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListAKSNodePoolModesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list a k s node pool modes default response
-func (o *ListAKSNodePoolModesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list a k s node pool modes default response has a 2xx status code
 func (o *ListAKSNodePoolModesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListAKSNodePoolModesDefault) IsServerError() bool {
 // IsCode returns true when this list a k s node pool modes default response a status code equal to that given
 func (o *ListAKSNodePoolModesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list a k s node pool modes default response
+func (o *ListAKSNodePoolModesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListAKSNodePoolModesDefault) Error() string {

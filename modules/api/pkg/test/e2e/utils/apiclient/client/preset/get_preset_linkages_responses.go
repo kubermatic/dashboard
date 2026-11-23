@@ -98,6 +98,11 @@ func (o *GetPresetLinkagesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get preset linkages o k response
+func (o *GetPresetLinkagesOK) Code() int {
+	return 200
+}
+
 func (o *GetPresetLinkagesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/linkages][%d] getPresetLinkagesOK  %+v", 200, o.Payload)
 }
@@ -160,6 +165,11 @@ func (o *GetPresetLinkagesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get preset linkages unauthorized response
+func (o *GetPresetLinkagesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetPresetLinkagesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/linkages][%d] getPresetLinkagesUnauthorized ", 401)
 }
@@ -209,6 +219,11 @@ func (o *GetPresetLinkagesForbidden) IsServerError() bool {
 // IsCode returns true when this get preset linkages forbidden response a status code equal to that given
 func (o *GetPresetLinkagesForbidden) IsCode(code int) bool {
 	return code == 403
+}
+
+// Code gets the status code for the get preset linkages forbidden response
+func (o *GetPresetLinkagesForbidden) Code() int {
+	return 403
 }
 
 func (o *GetPresetLinkagesForbidden) Error() string {
@@ -262,6 +277,11 @@ func (o *GetPresetLinkagesNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the get preset linkages not found response
+func (o *GetPresetLinkagesNotFound) Code() int {
+	return 404
+}
+
 func (o *GetPresetLinkagesNotFound) Error() string {
 	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/linkages][%d] getPresetLinkagesNotFound ", 404)
 }
@@ -293,11 +313,6 @@ type GetPresetLinkagesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get preset linkages default response
-func (o *GetPresetLinkagesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get preset linkages default response has a 2xx status code
 func (o *GetPresetLinkagesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -321,6 +336,11 @@ func (o *GetPresetLinkagesDefault) IsServerError() bool {
 // IsCode returns true when this get preset linkages default response a status code equal to that given
 func (o *GetPresetLinkagesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get preset linkages default response
+func (o *GetPresetLinkagesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetPresetLinkagesDefault) Error() string {

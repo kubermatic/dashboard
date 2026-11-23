@@ -168,6 +168,11 @@ func (m *GKEAutoprovisioningNodePoolDefaults) ContextValidate(ctx context.Contex
 func (m *GKEAutoprovisioningNodePoolDefaults) contextValidateManagement(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Management != nil {
+
+		if swag.IsZero(m.Management) { // not required
+			return nil
+		}
+
 		if err := m.Management.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("management")
@@ -184,6 +189,11 @@ func (m *GKEAutoprovisioningNodePoolDefaults) contextValidateManagement(ctx cont
 func (m *GKEAutoprovisioningNodePoolDefaults) contextValidateShieldedInstanceConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ShieldedInstanceConfig != nil {
+
+		if swag.IsZero(m.ShieldedInstanceConfig) { // not required
+			return nil
+		}
+
 		if err := m.ShieldedInstanceConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("shieldedInstanceConfig")
@@ -200,6 +210,11 @@ func (m *GKEAutoprovisioningNodePoolDefaults) contextValidateShieldedInstanceCon
 func (m *GKEAutoprovisioningNodePoolDefaults) contextValidateUpgradeSettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpgradeSettings != nil {
+
+		if swag.IsZero(m.UpgradeSettings) { // not required
+			return nil
+		}
+
 		if err := m.UpgradeSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("upgradeSettings")

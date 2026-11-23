@@ -92,6 +92,11 @@ func (o *ListGKEClusterZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e cluster zones o k response
+func (o *ListGKEClusterZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEClusterZonesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListGKEClusterZonesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list g k e cluster zones unauthorized response
+func (o *ListGKEClusterZonesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListGKEClusterZonesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListGKEClusterZonesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list g k e cluster zones forbidden response
+func (o *ListGKEClusterZonesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListGKEClusterZonesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListGKEClusterZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g k e cluster zones default response
-func (o *ListGKEClusterZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g k e cluster zones default response has a 2xx status code
 func (o *ListGKEClusterZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListGKEClusterZonesDefault) IsServerError() bool {
 // IsCode returns true when this list g k e cluster zones default response a status code equal to that given
 func (o *ListGKEClusterZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list g k e cluster zones default response
+func (o *ListGKEClusterZonesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListGKEClusterZonesDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *UpdateMLAAdminSettingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update m l a admin setting o k response
+func (o *UpdateMLAAdminSettingOK) Code() int {
+	return 200
+}
+
 func (o *UpdateMLAAdminSettingOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *UpdateMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update m l a admin setting unauthorized response
+func (o *UpdateMLAAdminSettingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateMLAAdminSettingUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *UpdateMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update m l a admin setting forbidden response
+func (o *UpdateMLAAdminSettingForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateMLAAdminSettingForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type UpdateMLAAdminSettingDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the update m l a admin setting default response
-func (o *UpdateMLAAdminSettingDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this update m l a admin setting default response has a 2xx status code
 func (o *UpdateMLAAdminSettingDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *UpdateMLAAdminSettingDefault) IsServerError() bool {
 // IsCode returns true when this update m l a admin setting default response a status code equal to that given
 func (o *UpdateMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the update m l a admin setting default response
+func (o *UpdateMLAAdminSettingDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *UpdateMLAAdminSettingDefault) Error() string {

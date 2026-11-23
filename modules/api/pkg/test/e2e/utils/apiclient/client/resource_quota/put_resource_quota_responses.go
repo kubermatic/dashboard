@@ -91,6 +91,11 @@ func (o *PutResourceQuotaOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the put resource quota o k response
+func (o *PutResourceQuotaOK) Code() int {
+	return 200
+}
+
 func (o *PutResourceQuotaOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *PutResourceQuotaUnauthorized) IsServerError() bool {
 // IsCode returns true when this put resource quota unauthorized response a status code equal to that given
 func (o *PutResourceQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the put resource quota unauthorized response
+func (o *PutResourceQuotaUnauthorized) Code() int {
+	return 401
 }
 
 func (o *PutResourceQuotaUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *PutResourceQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the put resource quota forbidden response
+func (o *PutResourceQuotaForbidden) Code() int {
+	return 403
+}
+
 func (o *PutResourceQuotaForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type PutResourceQuotaDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the put resource quota default response
-func (o *PutResourceQuotaDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this put resource quota default response has a 2xx status code
 func (o *PutResourceQuotaDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *PutResourceQuotaDefault) IsServerError() bool {
 // IsCode returns true when this put resource quota default response a status code equal to that given
 func (o *PutResourceQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the put resource quota default response
+func (o *PutResourceQuotaDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PutResourceQuotaDefault) Error() string {

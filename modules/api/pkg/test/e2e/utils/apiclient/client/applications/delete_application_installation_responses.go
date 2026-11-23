@@ -91,6 +91,11 @@ func (o *DeleteApplicationInstallationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete application installation o k response
+func (o *DeleteApplicationInstallationOK) Code() int {
+	return 200
+}
+
 func (o *DeleteApplicationInstallationOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteApplicationInstallationUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete application installation unauthorized response a status code equal to that given
 func (o *DeleteApplicationInstallationUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete application installation unauthorized response
+func (o *DeleteApplicationInstallationUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteApplicationInstallationUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteApplicationInstallationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete application installation forbidden response
+func (o *DeleteApplicationInstallationForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteApplicationInstallationForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteApplicationInstallationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete application installation default response
-func (o *DeleteApplicationInstallationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete application installation default response has a 2xx status code
 func (o *DeleteApplicationInstallationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteApplicationInstallationDefault) IsServerError() bool {
 // IsCode returns true when this delete application installation default response a status code equal to that given
 func (o *DeleteApplicationInstallationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete application installation default response
+func (o *DeleteApplicationInstallationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteApplicationInstallationDefault) Error() string {

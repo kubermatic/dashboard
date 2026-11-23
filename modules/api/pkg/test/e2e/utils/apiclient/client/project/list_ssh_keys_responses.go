@@ -92,6 +92,11 @@ func (o *ListSSHKeysOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list Ssh keys o k response
+func (o *ListSSHKeysOK) Code() int {
+	return 200
+}
+
 func (o *ListSSHKeysOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListSSHKeysUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list Ssh keys unauthorized response
+func (o *ListSSHKeysUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSSHKeysUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListSSHKeysForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list Ssh keys forbidden response
+func (o *ListSSHKeysForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSSHKeysForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListSSHKeysDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list SSH keys default response
-func (o *ListSSHKeysDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list SSH keys default response has a 2xx status code
 func (o *ListSSHKeysDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListSSHKeysDefault) IsServerError() bool {
 // IsCode returns true when this list SSH keys default response a status code equal to that given
 func (o *ListSSHKeysDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list SSH keys default response
+func (o *ListSSHKeysDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListSSHKeysDefault) Error() string {

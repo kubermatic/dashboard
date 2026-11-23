@@ -72,6 +72,11 @@ func (m *ClusterOSMControllerSettings) ContextValidate(ctx context.Context, form
 func (m *ClusterOSMControllerSettings) contextValidateProxy(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Proxy != nil {
+
+		if swag.IsZero(m.Proxy) { // not required
+			return nil
+		}
+
 		if err := m.Proxy.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("proxy")

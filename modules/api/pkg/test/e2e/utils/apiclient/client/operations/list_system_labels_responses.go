@@ -92,6 +92,11 @@ func (o *ListSystemLabelsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list system labels o k response
+func (o *ListSystemLabelsOK) Code() int {
+	return 200
+}
+
 func (o *ListSystemLabelsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListSystemLabelsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list system labels unauthorized response
+func (o *ListSystemLabelsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSystemLabelsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListSystemLabelsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list system labels forbidden response
+func (o *ListSystemLabelsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSystemLabelsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListSystemLabelsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list system labels default response
-func (o *ListSystemLabelsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list system labels default response has a 2xx status code
 func (o *ListSystemLabelsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListSystemLabelsDefault) IsServerError() bool {
 // IsCode returns true when this list system labels default response a status code equal to that given
 func (o *ListSystemLabelsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list system labels default response
+func (o *ListSystemLabelsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListSystemLabelsDefault) Error() string {

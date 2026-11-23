@@ -92,6 +92,11 @@ func (o *ListNamespaceOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list namespace o k response
+func (o *ListNamespaceOK) Code() int {
+	return 200
+}
+
 func (o *ListNamespaceOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListNamespaceUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list namespace unauthorized response
+func (o *ListNamespaceUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListNamespaceUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListNamespaceForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list namespace forbidden response
+func (o *ListNamespaceForbidden) Code() int {
+	return 403
+}
+
 func (o *ListNamespaceForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListNamespaceDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list namespace default response
-func (o *ListNamespaceDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list namespace default response has a 2xx status code
 func (o *ListNamespaceDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListNamespaceDefault) IsServerError() bool {
 // IsCode returns true when this list namespace default response a status code equal to that given
 func (o *ListNamespaceDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list namespace default response
+func (o *ListNamespaceDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListNamespaceDefault) Error() string {

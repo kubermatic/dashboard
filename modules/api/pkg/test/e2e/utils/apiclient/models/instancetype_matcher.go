@@ -95,6 +95,10 @@ func (m *InstancetypeMatcher) ContextValidate(ctx context.Context, formats strfm
 
 func (m *InstancetypeMatcher) contextValidateInferFromVolumeFailurePolicy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.InferFromVolumeFailurePolicy) { // not required
+		return nil
+	}
+
 	if err := m.InferFromVolumeFailurePolicy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("inferFromVolumeFailurePolicy")

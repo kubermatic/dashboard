@@ -92,6 +92,11 @@ func (o *GatesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the gates o k response
+func (o *GatesOK) Code() int {
+	return 200
+}
+
 func (o *GatesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/featuregates][%d] gatesOK  %+v", 200, o.Payload)
 }
@@ -153,6 +158,11 @@ func (o *GatesUnauthorized) IsServerError() bool {
 // IsCode returns true when this gates unauthorized response a status code equal to that given
 func (o *GatesUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the gates unauthorized response
+func (o *GatesUnauthorized) Code() int {
+	return 401
 }
 
 func (o *GatesUnauthorized) Error() string {
@@ -218,6 +228,11 @@ func (o *GatesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the gates forbidden response
+func (o *GatesForbidden) Code() int {
+	return 403
+}
+
 func (o *GatesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/featuregates][%d] gatesForbidden  %+v", 403, o.Payload)
 }
@@ -260,11 +275,6 @@ type GatesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the gates default response
-func (o *GatesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this gates default response has a 2xx status code
 func (o *GatesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -288,6 +298,11 @@ func (o *GatesDefault) IsServerError() bool {
 // IsCode returns true when this gates default response a status code equal to that given
 func (o *GatesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the gates default response
+func (o *GatesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GatesDefault) Error() string {

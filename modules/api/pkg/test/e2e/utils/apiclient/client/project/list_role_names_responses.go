@@ -92,6 +92,11 @@ func (o *ListRoleNamesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list role names o k response
+func (o *ListRoleNamesOK) Code() int {
+	return 200
+}
+
 func (o *ListRoleNamesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/rolenames][%d] listRoleNamesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListRoleNamesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list role names unauthorized response
+func (o *ListRoleNamesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListRoleNamesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/rolenames][%d] listRoleNamesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListRoleNamesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list role names forbidden response
+func (o *ListRoleNamesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListRoleNamesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/rolenames][%d] listRoleNamesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListRoleNamesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list role names default response
-func (o *ListRoleNamesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list role names default response has a 2xx status code
 func (o *ListRoleNamesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListRoleNamesDefault) IsServerError() bool {
 // IsCode returns true when this list role names default response a status code equal to that given
 func (o *ListRoleNamesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list role names default response
+func (o *ListRoleNamesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListRoleNamesDefault) Error() string {

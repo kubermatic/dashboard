@@ -92,6 +92,11 @@ func (o *GetKubermaticCustomLinksOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get kubermatic custom links o k response
+func (o *GetKubermaticCustomLinksOK) Code() int {
+	return 200
+}
+
 func (o *GetKubermaticCustomLinksOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *GetKubermaticCustomLinksUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get kubermatic custom links unauthorized response
+func (o *GetKubermaticCustomLinksUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetKubermaticCustomLinksUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *GetKubermaticCustomLinksForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get kubermatic custom links forbidden response
+func (o *GetKubermaticCustomLinksForbidden) Code() int {
+	return 403
+}
+
 func (o *GetKubermaticCustomLinksForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type GetKubermaticCustomLinksDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get kubermatic custom links default response
-func (o *GetKubermaticCustomLinksDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get kubermatic custom links default response has a 2xx status code
 func (o *GetKubermaticCustomLinksDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *GetKubermaticCustomLinksDefault) IsServerError() bool {
 // IsCode returns true when this get kubermatic custom links default response a status code equal to that given
 func (o *GetKubermaticCustomLinksDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get kubermatic custom links default response
+func (o *GetKubermaticCustomLinksDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetKubermaticCustomLinksDefault) Error() string {

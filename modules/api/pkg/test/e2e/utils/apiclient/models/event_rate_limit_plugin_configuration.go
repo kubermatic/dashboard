@@ -86,6 +86,11 @@ func (m *EventRateLimitPluginConfiguration) ContextValidate(ctx context.Context,
 func (m *EventRateLimitPluginConfiguration) contextValidateDefaultConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultConfig != nil {
+
+		if swag.IsZero(m.DefaultConfig) { // not required
+			return nil
+		}
+
 		if err := m.DefaultConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("defaultConfig")

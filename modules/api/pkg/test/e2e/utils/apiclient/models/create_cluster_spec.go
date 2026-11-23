@@ -172,6 +172,11 @@ func (m *CreateClusterSpec) contextValidateApplications(ctx context.Context, for
 	for i := 0; i < len(m.Applications); i++ {
 
 		if m.Applications[i] != nil {
+
+			if swag.IsZero(m.Applications[i]) { // not required
+				return nil
+			}
+
 			if err := m.Applications[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("applications" + "." + strconv.Itoa(i))
@@ -190,6 +195,11 @@ func (m *CreateClusterSpec) contextValidateApplications(ctx context.Context, for
 func (m *CreateClusterSpec) contextValidateCluster(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Cluster != nil {
+
+		if swag.IsZero(m.Cluster) { // not required
+			return nil
+		}
+
 		if err := m.Cluster.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cluster")
@@ -206,6 +216,11 @@ func (m *CreateClusterSpec) contextValidateCluster(ctx context.Context, formats 
 func (m *CreateClusterSpec) contextValidateEncryptionAtRest(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EncryptionAtRest != nil {
+
+		if swag.IsZero(m.EncryptionAtRest) { // not required
+			return nil
+		}
+
 		if err := m.EncryptionAtRest.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("encryptionAtRest")
@@ -222,6 +237,11 @@ func (m *CreateClusterSpec) contextValidateEncryptionAtRest(ctx context.Context,
 func (m *CreateClusterSpec) contextValidateNodeDeployment(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NodeDeployment != nil {
+
+		if swag.IsZero(m.NodeDeployment) { // not required
+			return nil
+		}
+
 		if err := m.NodeDeployment.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodeDeployment")

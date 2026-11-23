@@ -92,6 +92,11 @@ func (o *ListProjectsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list projects o k response
+func (o *ListProjectsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListProjectsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list projects unauthorized response
+func (o *ListProjectsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListProjectsConflict) IsCode(code int) bool {
 	return code == 409
 }
 
+// Code gets the status code for the list projects conflict response
+func (o *ListProjectsConflict) Code() int {
+	return 409
+}
+
 func (o *ListProjectsConflict) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsConflict ", 409)
 }
@@ -234,11 +249,6 @@ type ListProjectsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list projects default response
-func (o *ListProjectsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list projects default response has a 2xx status code
 func (o *ListProjectsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListProjectsDefault) IsServerError() bool {
 // IsCode returns true when this list projects default response a status code equal to that given
 func (o *ListProjectsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list projects default response
+func (o *ListProjectsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectsDefault) Error() string {

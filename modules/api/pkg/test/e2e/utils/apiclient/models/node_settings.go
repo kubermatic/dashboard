@@ -143,6 +143,11 @@ func (m *NodeSettings) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *NodeSettings) contextValidateContainerdRegistryMirrors(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ContainerdRegistryMirrors != nil {
+
+		if swag.IsZero(m.ContainerdRegistryMirrors) { // not required
+			return nil
+		}
+
 		if err := m.ContainerdRegistryMirrors.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("containerdRegistryMirrors")
@@ -158,6 +163,10 @@ func (m *NodeSettings) contextValidateContainerdRegistryMirrors(ctx context.Cont
 
 func (m *NodeSettings) contextValidateHTTPProxy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.HTTPProxy) { // not required
+		return nil
+	}
+
 	if err := m.HTTPProxy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("httpProxy")
@@ -171,6 +180,10 @@ func (m *NodeSettings) contextValidateHTTPProxy(ctx context.Context, formats str
 }
 
 func (m *NodeSettings) contextValidateNoProxy(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.NoProxy) { // not required
+		return nil
+	}
 
 	if err := m.NoProxy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

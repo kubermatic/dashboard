@@ -91,6 +91,11 @@ func (o *DeleteAdminRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete admin rule group o k response
+func (o *DeleteAdminRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *DeleteAdminRuleGroupOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] deleteAdminRuleGroupOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteAdminRuleGroupUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete admin rule group unauthorized response a status code equal to that given
 func (o *DeleteAdminRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete admin rule group unauthorized response
+func (o *DeleteAdminRuleGroupUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteAdminRuleGroupUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteAdminRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete admin rule group forbidden response
+func (o *DeleteAdminRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAdminRuleGroupForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] deleteAdminRuleGroupForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteAdminRuleGroupDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete admin rule group default response
-func (o *DeleteAdminRuleGroupDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete admin rule group default response has a 2xx status code
 func (o *DeleteAdminRuleGroupDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteAdminRuleGroupDefault) IsServerError() bool {
 // IsCode returns true when this delete admin rule group default response a status code equal to that given
 func (o *DeleteAdminRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete admin rule group default response
+func (o *DeleteAdminRuleGroupDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteAdminRuleGroupDefault) Error() string {

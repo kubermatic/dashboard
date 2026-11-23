@@ -91,6 +91,11 @@ func (o *DeleteRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete role o k response
+func (o *DeleteRoleOK) Code() int {
+	return 200
+}
+
 func (o *DeleteRoleOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] deleteRoleOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteRoleUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete role unauthorized response a status code equal to that given
 func (o *DeleteRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete role unauthorized response
+func (o *DeleteRoleUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteRoleUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete role forbidden response
+func (o *DeleteRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteRoleForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] deleteRoleForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteRoleDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete role default response
-func (o *DeleteRoleDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete role default response has a 2xx status code
 func (o *DeleteRoleDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteRoleDefault) IsServerError() bool {
 // IsCode returns true when this delete role default response a status code equal to that given
 func (o *DeleteRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete role default response
+func (o *DeleteRoleDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteRoleDefault) Error() string {

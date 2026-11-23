@@ -80,6 +80,11 @@ func (o *GetMasterVersionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get master versions o k response
+func (o *GetMasterVersionsOK) Code() int {
+	return 200
+}
+
 func (o *GetMasterVersionsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersionsOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type GetMasterVersionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get master versions default response
-func (o *GetMasterVersionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get master versions default response has a 2xx status code
 func (o *GetMasterVersionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *GetMasterVersionsDefault) IsServerError() bool {
 // IsCode returns true when this get master versions default response a status code equal to that given
 func (o *GetMasterVersionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get master versions default response
+func (o *GetMasterVersionsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetMasterVersionsDefault) Error() string {

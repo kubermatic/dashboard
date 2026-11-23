@@ -137,6 +137,10 @@ func (m *Condition) ContextValidate(ctx context.Context, formats strfmt.Registry
 
 func (m *Condition) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Status) { // not required
+		return nil
+	}
+
 	if err := m.Status.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("status")

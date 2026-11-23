@@ -195,6 +195,10 @@ func (m *ClusterNetworkingConfig) ContextValidate(ctx context.Context, formats s
 
 func (m *ClusterNetworkingConfig) contextValidateIPFamily(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.IPFamily) { // not required
+		return nil
+	}
+
 	if err := m.IPFamily.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("ipFamily")
@@ -210,6 +214,11 @@ func (m *ClusterNetworkingConfig) contextValidateIPFamily(ctx context.Context, f
 func (m *ClusterNetworkingConfig) contextValidateIpvs(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ipvs != nil {
+
+		if swag.IsZero(m.Ipvs) { // not required
+			return nil
+		}
+
 		if err := m.Ipvs.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ipvs")
@@ -226,6 +235,11 @@ func (m *ClusterNetworkingConfig) contextValidateIpvs(ctx context.Context, forma
 func (m *ClusterNetworkingConfig) contextValidatePods(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Pods != nil {
+
+		if swag.IsZero(m.Pods) { // not required
+			return nil
+		}
+
 		if err := m.Pods.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("pods")
@@ -242,6 +256,11 @@ func (m *ClusterNetworkingConfig) contextValidatePods(ctx context.Context, forma
 func (m *ClusterNetworkingConfig) contextValidateServices(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Services != nil {
+
+		if swag.IsZero(m.Services) { // not required
+			return nil
+		}
+
 		if err := m.Services.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("services")

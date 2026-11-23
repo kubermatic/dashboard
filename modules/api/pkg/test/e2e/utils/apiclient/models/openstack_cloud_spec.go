@@ -271,6 +271,11 @@ func (m *OpenstackCloudSpec) contextValidateLoadBalancerClasses(ctx context.Cont
 	for i := 0; i < len(m.LoadBalancerClasses); i++ {
 
 		if m.LoadBalancerClasses[i] != nil {
+
+			if swag.IsZero(m.LoadBalancerClasses[i]) { // not required
+				return nil
+			}
+
 			if err := m.LoadBalancerClasses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
@@ -289,6 +294,11 @@ func (m *OpenstackCloudSpec) contextValidateLoadBalancerClasses(ctx context.Cont
 func (m *OpenstackCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
+
+		if swag.IsZero(m.CredentialsReference) { // not required
+			return nil
+		}
+
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")
@@ -305,6 +315,11 @@ func (m *OpenstackCloudSpec) contextValidateCredentialsReference(ctx context.Con
 func (m *OpenstackCloudSpec) contextValidateNodePortsAllowedIPRanges(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NodePortsAllowedIPRanges != nil {
+
+		if swag.IsZero(m.NodePortsAllowedIPRanges) { // not required
+			return nil
+		}
+
 		if err := m.NodePortsAllowedIPRanges.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodePortsAllowedIPRanges")

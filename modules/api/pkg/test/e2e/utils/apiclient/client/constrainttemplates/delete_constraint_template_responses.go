@@ -91,6 +91,11 @@ func (o *DeleteConstraintTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete constraint template o k response
+func (o *DeleteConstraintTemplateOK) Code() int {
+	return 200
+}
+
 func (o *DeleteConstraintTemplateOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/constrainttemplates/{ct_name}][%d] deleteConstraintTemplateOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteConstraintTemplateUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete constraint template unauthorized response a status code equal to that given
 func (o *DeleteConstraintTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete constraint template unauthorized response
+func (o *DeleteConstraintTemplateUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteConstraintTemplateUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteConstraintTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete constraint template forbidden response
+func (o *DeleteConstraintTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteConstraintTemplateForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/constrainttemplates/{ct_name}][%d] deleteConstraintTemplateForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteConstraintTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete constraint template default response
-func (o *DeleteConstraintTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete constraint template default response has a 2xx status code
 func (o *DeleteConstraintTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteConstraintTemplateDefault) IsServerError() bool {
 // IsCode returns true when this delete constraint template default response a status code equal to that given
 func (o *DeleteConstraintTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete constraint template default response
+func (o *DeleteConstraintTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteConstraintTemplateDefault) Error() string {

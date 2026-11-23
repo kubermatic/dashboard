@@ -80,6 +80,11 @@ func (o *ListEKSClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s clusters o k response
+func (o *ListEKSClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSClustersOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClustersOK  %+v", 200, o.Payload)
 }
@@ -120,11 +125,6 @@ type ListEKSClustersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s clusters default response
-func (o *ListEKSClustersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s clusters default response has a 2xx status code
 func (o *ListEKSClustersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -148,6 +148,11 @@ func (o *ListEKSClustersDefault) IsServerError() bool {
 // IsCode returns true when this list e k s clusters default response a status code equal to that given
 func (o *ListEKSClustersDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list e k s clusters default response
+func (o *ListEKSClustersDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListEKSClustersDefault) Error() string {

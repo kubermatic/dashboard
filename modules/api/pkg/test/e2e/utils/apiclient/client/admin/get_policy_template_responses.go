@@ -92,6 +92,11 @@ func (o *GetPolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get policy template o k response
+func (o *GetPolicyTemplateOK) Code() int {
+	return 200
+}
+
 func (o *GetPolicyTemplateOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetPolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get policy template unauthorized response
+func (o *GetPolicyTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetPolicyTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetPolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get policy template forbidden response
+func (o *GetPolicyTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *GetPolicyTemplateForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetPolicyTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get policy template default response
-func (o *GetPolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get policy template default response has a 2xx status code
 func (o *GetPolicyTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetPolicyTemplateDefault) IsServerError() bool {
 // IsCode returns true when this get policy template default response a status code equal to that given
 func (o *GetPolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get policy template default response
+func (o *GetPolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetPolicyTemplateDefault) Error() string {

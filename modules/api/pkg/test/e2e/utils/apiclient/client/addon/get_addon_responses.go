@@ -92,6 +92,11 @@ func (o *GetAddonOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get addon o k response
+func (o *GetAddonOK) Code() int {
+	return 200
+}
+
 func (o *GetAddonOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] getAddonOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetAddonUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get addon unauthorized response
+func (o *GetAddonUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetAddonUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] getAddonUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetAddonForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get addon forbidden response
+func (o *GetAddonForbidden) Code() int {
+	return 403
+}
+
 func (o *GetAddonForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] getAddonForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetAddonDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get addon default response
-func (o *GetAddonDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get addon default response has a 2xx status code
 func (o *GetAddonDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetAddonDefault) IsServerError() bool {
 // IsCode returns true when this get addon default response a status code equal to that given
 func (o *GetAddonDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get addon default response
+func (o *GetAddonDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetAddonDefault) Error() string {

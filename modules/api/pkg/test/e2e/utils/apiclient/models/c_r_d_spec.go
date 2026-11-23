@@ -102,6 +102,11 @@ func (m *CRDSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 func (m *CRDSpec) contextValidateNames(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Names != nil {
+
+		if swag.IsZero(m.Names) { // not required
+			return nil
+		}
+
 		if err := m.Names.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("names")
@@ -118,6 +123,11 @@ func (m *CRDSpec) contextValidateNames(ctx context.Context, formats strfmt.Regis
 func (m *CRDSpec) contextValidateValidation(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Validation != nil {
+
+		if swag.IsZero(m.Validation) { // not required
+			return nil
+		}
+
 		if err := m.Validation.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("validation")

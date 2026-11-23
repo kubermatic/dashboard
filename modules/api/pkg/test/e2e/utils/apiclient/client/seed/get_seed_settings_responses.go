@@ -92,6 +92,11 @@ func (o *GetSeedSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get seed settings o k response
+func (o *GetSeedSettingsOK) Code() int {
+	return 200
+}
+
 func (o *GetSeedSettingsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetSeedSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get seed settings unauthorized response
+func (o *GetSeedSettingsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetSeedSettingsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetSeedSettingsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get seed settings forbidden response
+func (o *GetSeedSettingsForbidden) Code() int {
+	return 403
+}
+
 func (o *GetSeedSettingsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetSeedSettingsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get seed settings default response
-func (o *GetSeedSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get seed settings default response has a 2xx status code
 func (o *GetSeedSettingsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetSeedSettingsDefault) IsServerError() bool {
 // IsCode returns true when this get seed settings default response a status code equal to that given
 func (o *GetSeedSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get seed settings default response
+func (o *GetSeedSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetSeedSettingsDefault) Error() string {

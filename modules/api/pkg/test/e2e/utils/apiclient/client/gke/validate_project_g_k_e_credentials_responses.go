@@ -79,6 +79,11 @@ func (o *ValidateProjectGKECredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the validate project g k e credentials o k response
+func (o *ValidateProjectGKECredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ValidateProjectGKECredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentialsOK ", 200)
 }
@@ -110,11 +115,6 @@ type ValidateProjectGKECredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the validate project g k e credentials default response
-func (o *ValidateProjectGKECredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this validate project g k e credentials default response has a 2xx status code
 func (o *ValidateProjectGKECredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -138,6 +138,11 @@ func (o *ValidateProjectGKECredentialsDefault) IsServerError() bool {
 // IsCode returns true when this validate project g k e credentials default response a status code equal to that given
 func (o *ValidateProjectGKECredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the validate project g k e credentials default response
+func (o *ValidateProjectGKECredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ValidateProjectGKECredentialsDefault) Error() string {

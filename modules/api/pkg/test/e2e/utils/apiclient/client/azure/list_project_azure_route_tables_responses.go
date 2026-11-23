@@ -80,6 +80,11 @@ func (o *ListProjectAzureRouteTablesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project azure route tables o k response
+func (o *ListProjectAzureRouteTablesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAzureRouteTablesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/routetables][%d] listProjectAzureRouteTablesOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type ListProjectAzureRouteTablesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project azure route tables default response
-func (o *ListProjectAzureRouteTablesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project azure route tables default response has a 2xx status code
 func (o *ListProjectAzureRouteTablesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *ListProjectAzureRouteTablesDefault) IsServerError() bool {
 // IsCode returns true when this list project azure route tables default response a status code equal to that given
 func (o *ListProjectAzureRouteTablesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list project azure route tables default response
+func (o *ListProjectAzureRouteTablesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListProjectAzureRouteTablesDefault) Error() string {

@@ -92,6 +92,11 @@ func (o *ListSSHKeysAssignedToClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list Ssh keys assigned to cluster o k response
+func (o *ListSSHKeysAssignedToClusterOK) Code() int {
+	return 200
+}
+
 func (o *ListSSHKeysAssignedToClusterOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys][%d] listSshKeysAssignedToClusterOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListSSHKeysAssignedToClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list Ssh keys assigned to cluster unauthorized response
+func (o *ListSSHKeysAssignedToClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSSHKeysAssignedToClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys][%d] listSshKeysAssignedToClusterUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListSSHKeysAssignedToClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list Ssh keys assigned to cluster forbidden response
+func (o *ListSSHKeysAssignedToClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSSHKeysAssignedToClusterForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys][%d] listSshKeysAssignedToClusterForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListSSHKeysAssignedToClusterDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list SSH keys assigned to cluster default response
-func (o *ListSSHKeysAssignedToClusterDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list SSH keys assigned to cluster default response has a 2xx status code
 func (o *ListSSHKeysAssignedToClusterDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListSSHKeysAssignedToClusterDefault) IsServerError() bool {
 // IsCode returns true when this list SSH keys assigned to cluster default response a status code equal to that given
 func (o *ListSSHKeysAssignedToClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list SSH keys assigned to cluster default response
+func (o *ListSSHKeysAssignedToClusterDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListSSHKeysAssignedToClusterDefault) Error() string {

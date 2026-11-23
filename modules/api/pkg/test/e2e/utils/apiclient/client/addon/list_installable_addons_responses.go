@@ -92,6 +92,11 @@ func (o *ListInstallableAddonsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list installable addons o k response
+func (o *ListInstallableAddonsOK) Code() int {
+	return 200
+}
+
 func (o *ListInstallableAddonsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListInstallableAddonsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list installable addons unauthorized response
+func (o *ListInstallableAddonsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListInstallableAddonsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListInstallableAddonsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list installable addons forbidden response
+func (o *ListInstallableAddonsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListInstallableAddonsForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListInstallableAddonsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list installable addons default response
-func (o *ListInstallableAddonsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list installable addons default response has a 2xx status code
 func (o *ListInstallableAddonsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListInstallableAddonsDefault) IsServerError() bool {
 // IsCode returns true when this list installable addons default response a status code equal to that given
 func (o *ListInstallableAddonsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list installable addons default response
+func (o *ListInstallableAddonsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListInstallableAddonsDefault) Error() string {

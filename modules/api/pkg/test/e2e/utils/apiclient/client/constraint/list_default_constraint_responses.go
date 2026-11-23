@@ -92,6 +92,11 @@ func (o *ListDefaultConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list default constraint o k response
+func (o *ListDefaultConstraintOK) Code() int {
+	return 200
+}
+
 func (o *ListDefaultConstraintOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListDefaultConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list default constraint unauthorized response
+func (o *ListDefaultConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListDefaultConstraintUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListDefaultConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list default constraint forbidden response
+func (o *ListDefaultConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *ListDefaultConstraintForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListDefaultConstraintDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list default constraint default response
-func (o *ListDefaultConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list default constraint default response has a 2xx status code
 func (o *ListDefaultConstraintDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListDefaultConstraintDefault) IsServerError() bool {
 // IsCode returns true when this list default constraint default response a status code equal to that given
 func (o *ListDefaultConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list default constraint default response
+func (o *ListDefaultConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListDefaultConstraintDefault) Error() string {

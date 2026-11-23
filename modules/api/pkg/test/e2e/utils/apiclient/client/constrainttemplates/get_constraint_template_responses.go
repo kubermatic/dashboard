@@ -92,6 +92,11 @@ func (o *GetConstraintTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get constraint template o k response
+func (o *GetConstraintTemplateOK) Code() int {
+	return 200
+}
+
 func (o *GetConstraintTemplateOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constrainttemplates/{ct_name}][%d] getConstraintTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetConstraintTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get constraint template unauthorized response
+func (o *GetConstraintTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetConstraintTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constrainttemplates/{ct_name}][%d] getConstraintTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetConstraintTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get constraint template forbidden response
+func (o *GetConstraintTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *GetConstraintTemplateForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/constrainttemplates/{ct_name}][%d] getConstraintTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetConstraintTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get constraint template default response
-func (o *GetConstraintTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get constraint template default response has a 2xx status code
 func (o *GetConstraintTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetConstraintTemplateDefault) IsServerError() bool {
 // IsCode returns true when this get constraint template default response a status code equal to that given
 func (o *GetConstraintTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get constraint template default response
+func (o *GetConstraintTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetConstraintTemplateDefault) Error() string {

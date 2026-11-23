@@ -91,6 +91,11 @@ func (o *RevokeClusterAdminTokenOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the revoke cluster admin token o k response
+func (o *RevokeClusterAdminTokenOK) Code() int {
+	return 200
+}
+
 func (o *RevokeClusterAdminTokenOK) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *RevokeClusterAdminTokenUnauthorized) IsServerError() bool {
 // IsCode returns true when this revoke cluster admin token unauthorized response a status code equal to that given
 func (o *RevokeClusterAdminTokenUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the revoke cluster admin token unauthorized response
+func (o *RevokeClusterAdminTokenUnauthorized) Code() int {
+	return 401
 }
 
 func (o *RevokeClusterAdminTokenUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *RevokeClusterAdminTokenForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the revoke cluster admin token forbidden response
+func (o *RevokeClusterAdminTokenForbidden) Code() int {
+	return 403
+}
+
 func (o *RevokeClusterAdminTokenForbidden) Error() string {
 	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type RevokeClusterAdminTokenDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the revoke cluster admin token default response
-func (o *RevokeClusterAdminTokenDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this revoke cluster admin token default response has a 2xx status code
 func (o *RevokeClusterAdminTokenDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *RevokeClusterAdminTokenDefault) IsServerError() bool {
 // IsCode returns true when this revoke cluster admin token default response a status code equal to that given
 func (o *RevokeClusterAdminTokenDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the revoke cluster admin token default response
+func (o *RevokeClusterAdminTokenDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *RevokeClusterAdminTokenDefault) Error() string {

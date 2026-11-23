@@ -238,6 +238,11 @@ func (m *KubevirtCloudSpec) contextValidatePreAllocatedDataVolumes(ctx context.C
 	for i := 0; i < len(m.PreAllocatedDataVolumes); i++ {
 
 		if m.PreAllocatedDataVolumes[i] != nil {
+
+			if swag.IsZero(m.PreAllocatedDataVolumes[i]) { // not required
+				return nil
+			}
+
 			if err := m.PreAllocatedDataVolumes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("preAllocatedDataVolumes" + "." + strconv.Itoa(i))
@@ -258,6 +263,11 @@ func (m *KubevirtCloudSpec) contextValidateStorageClasses(ctx context.Context, f
 	for i := 0; i < len(m.StorageClasses); i++ {
 
 		if m.StorageClasses[i] != nil {
+
+			if swag.IsZero(m.StorageClasses[i]) { // not required
+				return nil
+			}
+
 			if err := m.StorageClasses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("storageClasses" + "." + strconv.Itoa(i))
@@ -278,6 +288,11 @@ func (m *KubevirtCloudSpec) contextValidateVolumeSnapshotClasses(ctx context.Con
 	for i := 0; i < len(m.VolumeSnapshotClasses); i++ {
 
 		if m.VolumeSnapshotClasses[i] != nil {
+
+			if swag.IsZero(m.VolumeSnapshotClasses[i]) { // not required
+				return nil
+			}
+
 			if err := m.VolumeSnapshotClasses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("volumeSnapshotClasses" + "." + strconv.Itoa(i))
@@ -296,6 +311,11 @@ func (m *KubevirtCloudSpec) contextValidateVolumeSnapshotClasses(ctx context.Con
 func (m *KubevirtCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
+
+		if swag.IsZero(m.CredentialsReference) { // not required
+			return nil
+		}
+
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")
@@ -312,6 +332,11 @@ func (m *KubevirtCloudSpec) contextValidateCredentialsReference(ctx context.Cont
 func (m *KubevirtCloudSpec) contextValidateCsiDriverOperator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CsiDriverOperator != nil {
+
+		if swag.IsZero(m.CsiDriverOperator) { // not required
+			return nil
+		}
+
 		if err := m.CsiDriverOperator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("csiDriverOperator")

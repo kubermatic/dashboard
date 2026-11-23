@@ -111,6 +111,11 @@ func (m *MLASettings) ContextValidate(ctx context.Context, formats strfmt.Regist
 func (m *MLASettings) contextValidateLoggingResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.LoggingResources != nil {
+
+		if swag.IsZero(m.LoggingResources) { // not required
+			return nil
+		}
+
 		if err := m.LoggingResources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("loggingResources")
@@ -127,6 +132,11 @@ func (m *MLASettings) contextValidateLoggingResources(ctx context.Context, forma
 func (m *MLASettings) contextValidateMonitoringResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MonitoringResources != nil {
+
+		if swag.IsZero(m.MonitoringResources) { // not required
+			return nil
+		}
+
 		if err := m.MonitoringResources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("monitoringResources")

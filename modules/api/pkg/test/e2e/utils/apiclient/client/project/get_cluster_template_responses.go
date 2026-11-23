@@ -92,6 +92,11 @@ func (o *GetClusterTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster template o k response
+func (o *GetClusterTemplateOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterTemplateOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] getClusterTemplateOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *GetClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster template unauthorized response
+func (o *GetClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterTemplateUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] getClusterTemplateUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *GetClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster template forbidden response
+func (o *GetClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterTemplateForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] getClusterTemplateForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type GetClusterTemplateDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster template default response
-func (o *GetClusterTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster template default response has a 2xx status code
 func (o *GetClusterTemplateDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *GetClusterTemplateDefault) IsServerError() bool {
 // IsCode returns true when this get cluster template default response a status code equal to that given
 func (o *GetClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster template default response
+func (o *GetClusterTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterTemplateDefault) Error() string {

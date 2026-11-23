@@ -92,6 +92,11 @@ func (o *CreateGatekeeperConfigCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create gatekeeper config created response
+func (o *CreateGatekeeperConfigCreated) Code() int {
+	return 201
+}
+
 func (o *CreateGatekeeperConfigCreated) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] createGatekeeperConfigCreated  %+v", 201, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *CreateGatekeeperConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create gatekeeper config unauthorized response
+func (o *CreateGatekeeperConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateGatekeeperConfigUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] createGatekeeperConfigUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *CreateGatekeeperConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create gatekeeper config forbidden response
+func (o *CreateGatekeeperConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateGatekeeperConfigForbidden) Error() string {
 	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] createGatekeeperConfigForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type CreateGatekeeperConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the create gatekeeper config default response
-func (o *CreateGatekeeperConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this create gatekeeper config default response has a 2xx status code
 func (o *CreateGatekeeperConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *CreateGatekeeperConfigDefault) IsServerError() bool {
 // IsCode returns true when this create gatekeeper config default response a status code equal to that given
 func (o *CreateGatekeeperConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the create gatekeeper config default response
+func (o *CreateGatekeeperConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *CreateGatekeeperConfigDefault) Error() string {

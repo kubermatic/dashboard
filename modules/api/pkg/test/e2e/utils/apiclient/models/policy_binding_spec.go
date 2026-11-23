@@ -102,6 +102,11 @@ func (m *PolicyBindingSpec) ContextValidate(ctx context.Context, formats strfmt.
 func (m *PolicyBindingSpec) contextValidateKyvernoPolicyNamespace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.KyvernoPolicyNamespace != nil {
+
+		if swag.IsZero(m.KyvernoPolicyNamespace) { // not required
+			return nil
+		}
+
 		if err := m.KyvernoPolicyNamespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kyvernoPolicyNamespace")
@@ -118,6 +123,11 @@ func (m *PolicyBindingSpec) contextValidateKyvernoPolicyNamespace(ctx context.Co
 func (m *PolicyBindingSpec) contextValidatePolicyTemplateRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PolicyTemplateRef != nil {
+
+		if swag.IsZero(m.PolicyTemplateRef) { // not required
+			return nil
+		}
+
 		if err := m.PolicyTemplateRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("policyTemplateRef")

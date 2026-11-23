@@ -92,6 +92,11 @@ func (o *PatchDCOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch d c o k response
+func (o *PatchDCOK) Code() int {
+	return 200
+}
+
 func (o *PatchDCOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCOK  %+v", 200, o.Payload)
 }
@@ -154,6 +159,11 @@ func (o *PatchDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch d c unauthorized response
+func (o *PatchDCUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchDCUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *PatchDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch d c forbidden response
+func (o *PatchDCForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchDCForbidden) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCForbidden ", 403)
 }
@@ -236,11 +251,6 @@ type PatchDCDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch d c default response
-func (o *PatchDCDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch d c default response has a 2xx status code
 func (o *PatchDCDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +274,11 @@ func (o *PatchDCDefault) IsServerError() bool {
 // IsCode returns true when this patch d c default response a status code equal to that given
 func (o *PatchDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch d c default response
+func (o *PatchDCDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchDCDefault) Error() string {

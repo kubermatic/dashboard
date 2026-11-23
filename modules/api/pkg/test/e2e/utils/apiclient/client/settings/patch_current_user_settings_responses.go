@@ -86,6 +86,11 @@ func (o *PatchCurrentUserSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch current user settings o k response
+func (o *PatchCurrentUserSettingsOK) Code() int {
+	return 200
+}
+
 func (o *PatchCurrentUserSettingsOK) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *PatchCurrentUserSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch current user settings unauthorized response
+func (o *PatchCurrentUserSettingsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchCurrentUserSettingsUnauthorized) Error() string {
 	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsUnauthorized ", 401)
 }
@@ -179,11 +189,6 @@ type PatchCurrentUserSettingsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the patch current user settings default response
-func (o *PatchCurrentUserSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this patch current user settings default response has a 2xx status code
 func (o *PatchCurrentUserSettingsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -207,6 +212,11 @@ func (o *PatchCurrentUserSettingsDefault) IsServerError() bool {
 // IsCode returns true when this patch current user settings default response a status code equal to that given
 func (o *PatchCurrentUserSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the patch current user settings default response
+func (o *PatchCurrentUserSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PatchCurrentUserSettingsDefault) Error() string {

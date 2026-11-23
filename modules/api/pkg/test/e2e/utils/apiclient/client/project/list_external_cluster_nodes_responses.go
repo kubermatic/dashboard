@@ -92,6 +92,11 @@ func (o *ListExternalClusterNodesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list external cluster nodes o k response
+func (o *ListExternalClusterNodesOK) Code() int {
+	return 200
+}
+
 func (o *ListExternalClusterNodesOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodes][%d] listExternalClusterNodesOK  %+v", 200, o.Payload)
 }
@@ -152,6 +157,11 @@ func (o *ListExternalClusterNodesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list external cluster nodes unauthorized response
+func (o *ListExternalClusterNodesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListExternalClusterNodesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodes][%d] listExternalClusterNodesUnauthorized ", 401)
 }
@@ -203,6 +213,11 @@ func (o *ListExternalClusterNodesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list external cluster nodes forbidden response
+func (o *ListExternalClusterNodesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListExternalClusterNodesForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/nodes][%d] listExternalClusterNodesForbidden ", 403)
 }
@@ -234,11 +249,6 @@ type ListExternalClusterNodesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list external cluster nodes default response
-func (o *ListExternalClusterNodesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list external cluster nodes default response has a 2xx status code
 func (o *ListExternalClusterNodesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -262,6 +272,11 @@ func (o *ListExternalClusterNodesDefault) IsServerError() bool {
 // IsCode returns true when this list external cluster nodes default response a status code equal to that given
 func (o *ListExternalClusterNodesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the list external cluster nodes default response
+func (o *ListExternalClusterNodesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *ListExternalClusterNodesDefault) Error() string {

@@ -91,6 +91,11 @@ func (o *DeleteEtcdBackupConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete etcd backup config o k response
+func (o *DeleteEtcdBackupConfigOK) Code() int {
+	return 200
+}
+
 func (o *DeleteEtcdBackupConfigOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs/{ebc_id}][%d] deleteEtcdBackupConfigOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteEtcdBackupConfigUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete etcd backup config unauthorized response a status code equal to that given
 func (o *DeleteEtcdBackupConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete etcd backup config unauthorized response
+func (o *DeleteEtcdBackupConfigUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteEtcdBackupConfigUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteEtcdBackupConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete etcd backup config forbidden response
+func (o *DeleteEtcdBackupConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteEtcdBackupConfigForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdbackupconfigs/{ebc_id}][%d] deleteEtcdBackupConfigForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteEtcdBackupConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete etcd backup config default response
-func (o *DeleteEtcdBackupConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete etcd backup config default response has a 2xx status code
 func (o *DeleteEtcdBackupConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteEtcdBackupConfigDefault) IsServerError() bool {
 // IsCode returns true when this delete etcd backup config default response a status code equal to that given
 func (o *DeleteEtcdBackupConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete etcd backup config default response
+func (o *DeleteEtcdBackupConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteEtcdBackupConfigDefault) Error() string {

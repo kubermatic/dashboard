@@ -91,6 +91,11 @@ func (o *DeleteGatekeeperConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete gatekeeper config o k response
+func (o *DeleteGatekeeperConfigOK) Code() int {
+	return 200
+}
+
 func (o *DeleteGatekeeperConfigOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigOK ", 200)
 }
@@ -140,6 +145,11 @@ func (o *DeleteGatekeeperConfigUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete gatekeeper config unauthorized response a status code equal to that given
 func (o *DeleteGatekeeperConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the delete gatekeeper config unauthorized response
+func (o *DeleteGatekeeperConfigUnauthorized) Code() int {
+	return 401
 }
 
 func (o *DeleteGatekeeperConfigUnauthorized) Error() string {
@@ -193,6 +203,11 @@ func (o *DeleteGatekeeperConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete gatekeeper config forbidden response
+func (o *DeleteGatekeeperConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteGatekeeperConfigForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigForbidden ", 403)
 }
@@ -224,11 +239,6 @@ type DeleteGatekeeperConfigDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the delete gatekeeper config default response
-func (o *DeleteGatekeeperConfigDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this delete gatekeeper config default response has a 2xx status code
 func (o *DeleteGatekeeperConfigDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -252,6 +262,11 @@ func (o *DeleteGatekeeperConfigDefault) IsServerError() bool {
 // IsCode returns true when this delete gatekeeper config default response a status code equal to that given
 func (o *DeleteGatekeeperConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the delete gatekeeper config default response
+func (o *DeleteGatekeeperConfigDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *DeleteGatekeeperConfigDefault) Error() string {
