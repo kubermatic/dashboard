@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"net/url"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/vmware/govmomi"
@@ -268,6 +269,33 @@ func GetDatastoreList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSpher
 	}
 
 	return datastoreList, nil
+}
+
+// GetDatastoreClusterList returns a slice of the datastore clusters (storage pods) of the datacenter from the passed cloudspec.
+// Many datacenters do not have any datastore cluster, which results in an empty list and not in an error.
+func GetDatastoreClusterList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]*object.StoragePod, error) {
+	session, err := newSession(ctx, dc, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create vCenter session: %w", err)
+	}
+	defer session.Logout(ctx)
+
+	datastoreClusterList, err := session.Finder.DatastoreClusterList(ctx, "*")
+	if err != nil {
+		var notFoundErr *find.NotFoundError
+		if errors.As(err, &notFoundErr) {
+			return nil, nil
+		}
+
+		return nil, fmt.Errorf("couldn't retrieve datastore cluster list: %w", err)
+	}
+
+	// The order of the vCenter is not stable, sort by path to get a deterministic result.
+	slices.SortFunc(datastoreClusterList, func(a, b *object.StoragePod) int {
+		return strings.Compare(a.InventoryPath, b.InventoryPath)
+	})
+
+	return datastoreClusterList, nil
 }
 
 // GetVMGroupsList returns a slice of Datastore of the datacenter from the passed cloudspec.
