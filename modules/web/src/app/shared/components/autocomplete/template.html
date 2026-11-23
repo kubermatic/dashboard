@@ -16,7 +16,8 @@ limitations under the License.
 
 <form [formGroup]="form">
   <mat-form-field fxFlex
-                  [ngClass]="{'km-pointer': options}">
+                  [ngClass]="{'km-pointer': options}"
+                  [subscriptSizing]="subscriptSizing">
     <mat-label>{{label}}</mat-label>
     <input type="text"
            matInput
