@@ -260,6 +260,12 @@ km-wizard {
     transform: none !important;
     transition: none;
 
+    // Material only removes `mat-stepper-animating` on `transitionend` of the disabled transform
+    // transition, so the class sticks and would clip the current step content (`overflow: hidden`).
+    &.mat-horizontal-stepper-content-current {
+      overflow: visible;
+    }
+
     &[aria-expanded='false'] {
       width: 0;
     }
